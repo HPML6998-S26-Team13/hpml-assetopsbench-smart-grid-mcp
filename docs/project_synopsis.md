@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Written April 2, 2026. Read time: ~8 minutes.*
+*Last updated April 5, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -51,8 +51,10 @@ An AI agent (powered by an LLM like Llama-3 or GPT-4) is given a maintenance sce
 and must use these tools to resolve it. The benchmark measures whether the agent picks
 the right tools, calls them correctly, and reaches the right conclusion.
 
-Currently, AssetOpsBench only has scenarios for a few asset types (chillers, turbines).
-Our job is to add a new one.
+AssetOpsBench currently has 467 scenarios across 6 HuggingFace subsets on
+[HuggingFace](https://huggingface.co/datasets/ibm-research/AssetOpsBench) (chillers, AHUs,
+compressors, hydraulic pumps, bearings, boilers). Our job is to add a 7th: Smart Grid
+power transformers.
 
 ## Background: What is MCP?
 
@@ -64,10 +66,10 @@ a structured request to an "MCP server," which executes the tool and returns res
 Think of it like a USB standard for AI tools -- any LLM that speaks MCP can use any MCP
 server, regardless of who built either one.
 
-For our project, this means wrapping AssetOpsBench's tool domains (IoT, TSFM) as MCP
-servers so that any LLM can call them through a standardized interface. This adds a
-communication layer (JSON-RPC serialization/deserialization) that has performance
-implications -- which is exactly what HPML wants us to measure and optimize.
+For our project, this means wrapping all four AssetOpsBench tool domains (IoT, TSFM,
+FMSR, WO) as MCP servers so that any LLM can call them through a standardized interface.
+This adds a communication layer (JSON-RPC serialization/deserialization) that has
+performance implications -- which is exactly what HPML wants us to measure and optimize.
 
 ## Background: What are Smart Grid transformers?
 
@@ -96,12 +98,23 @@ We extend AssetOpsBench by:
 2. **Wrapping four AssetOpsBench tool domains** (IoT, TSFM, FMSR, WO) as MCP servers
 3. **Profiling the LLM agent inference pipeline** end-to-end when executing scenarios
    through MCP
+4. **Comparing two orchestration paradigms** -- Agent-as-Tool (ReAct-based, with
+   reflection) and Plan-Execute (planner decomposes, executors run sequentially) -- on
+   end-to-end multi-domain scenarios. Per Dhaval's lecture: Agent-as-Tool wins benchmarks
+   (reflection gives self-correction) but Plan-Execute is preferred in practice
+   (predictable resources, visibility, no infinite loops). IBM focuses on improving
+   Plan-Execute. Exploratory direction: a hybrid with reflection checkpoints.
 
-We use **Llama-3-8B** served via **vLLM** on GPU infrastructure, profile with **PyTorch
+We use **Llama-3.1-8B-Instruct** served via **vLLM** on GPU infrastructure, profile with **PyTorch
 Profiler**, and apply 2-3 optimization techniques:
 - INT8 quantization (reduce model size and inference latency)
 - KV-cache tuning (optimize memory for multi-turn tool-calling conversations)
 - Batched tool-call scheduling (reduce round-trip overhead)
+
+We also compare MCP-mediated tool calling against the existing direct function call
+approach (AssetOpsBench's current ReAct-based implementation) to quantify the actual
+cost of the standardization layer. This addresses a live industry debate about whether
+MCP's interoperability benefits justify its overhead for simple tool-calling patterns.
 
 We report before/after comparisons with full **WandB** experiment tracking.
 
@@ -117,25 +130,39 @@ profiling and optimization.
 
 | Name | Role | Key strength |
 |---|---|---|
-| **Alex Xin** | Project point of contact, report, WandB, scenario design | 12+ yrs production data systems, project management |
-| **Akshat Bhandari** | LLM agent pipeline, evaluation, profiling | Published ML research (EACL 2026), multi-agent systems |
-| **Tanisha Rathod** | MCP servers, cloud infrastructure, optimizations | Distributed systems at Caterpillar, AWS/SageMaker |
-| **Aaron Fan** | Smart Grid data pipeline, IoT MCP server, profiling | EE background, power systems research, embedded systems |
+| **Alex Xin** | Project coordination, profiling analysis, report writing | 12+ yrs production data systems, project management |
+| **Akshat Bhandari** | Scenario design, evaluation harness, agent pipeline | Published ML research (EACL 2026), multi-agent systems |
+| **Tanisha Rathod** | MCP server implementation (all domains), dataset compilation, Overleaf | Distributed systems at Caterpillar, AWS/SageMaker |
+| **Aaron Fan** | Scenario design, compute plan + infrastructure, data pipeline | EE background, power systems research, embedded systems |
 
-## Current status (April 2, 2026)
+## Related Work
 
-- Problem statement finalized
+- **FailureSensorIQ** (NeurIPS 2025): benchmarks sensor-failure reasoning, tests whether
+  LLMs reason about sensors/assets/failure modes beyond data-driven correlations. Directly
+  relevant to our FMSR domain.
+- **"Why Do Multi-Agent LLM Systems Fail?"** (arXiv 2503.13657, Berkeley): failure taxonomy
+  for multi-agent systems — specification, inter-agent, and task verification failures.
+  Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
+  clarification" errors (10% of failures).
+
+## Current status (April 5, 2026)
+
+- Problem statement finalized (four contributions: scenarios, MCP servers, profiling, orchestration comparison)
+- Full research proposal drafted and shared with mentor via Overleaf (NeurIPS 2026 template)
+- Mentor endorsed NeurIPS 2026 Datasets & Benchmarks submission (abstract May 4, paper May 6)
+- Fork synced with upstream AssetOpsBench (48 new commits including src/workflow/ -> src/agent/ rename)
 - GitHub repo set up (private): github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp
 - WandB team created: wandb.ai/assetopsbench-smartgrid
 - 5 candidate datasets identified (3 CC0, 2 restricted license)
-- AssetOpsBench forked and reviewed
+- AssetOpsBench forked and reviewed; scenario structure and evaluation harness understood
 - MCP documentation reviewed
-- Mentor contacted; he's responded and wants to see depth + Overleaf doc
+- Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
+- WatsonX API key requested (needed for LLM-as-Judge evaluation with Llama-4-Maverick-17B)
 - **Mid-point report due Monday April 6** (5-slide PowerPoint)
 - **Final deadline: May 4** (presentation + report + code)
 
-We are behind relative to other teams -- Dhaval noted many teams are already in the
-implementation phase. We're entering implementation this week.
+Entering implementation phase this week. MCP server development, scenario
+authoring, and evaluation harness setup are all in progress.
 
 ## Key links
 

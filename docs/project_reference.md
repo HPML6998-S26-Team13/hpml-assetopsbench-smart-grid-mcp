@@ -32,14 +32,16 @@ All projects must include:
 |---|---|---|
 | Project proposal | (submitted Feb 22) | 5% |
 | Code + profiling + docs + reproducibility | GitHub repo, Python/Jupyter | 25% |
+| GitHub commit tracking | Individual participation evaluated via commit history | (part of 25%) |
 | WandB experiments + dashboard | wandb.ai link | 20% |
-| Technical contributions + methodology + analysis | -- | 25% |
-| Final presentation | PowerPoint (class template) | 10% |
+| Technical contributions, novelty, performance methodology, analysis of results | -- | 25% |
+| Final presentation + Q/A | PowerPoint (class template) | 10% |
 | Final report | LaTeX (IEEE format, Overleaf) | 15% |
-| Bonus: open-source PR, blog post, novel results | -- | up to 10% |
+| Bonus: blog post, open-source PR, novel/publishable results, public repos | -- | up to 10% |
 
 ## Final Report Sections (Required)
 
+**Class final report (IEEE format):**
 - Abstract
 - Introduction (background and motivation)
 - Models and Data Description
@@ -48,11 +50,35 @@ All projects must include:
 - Experimental Results (before/after, visualizations)
 - Conclusion (findings, limitations, future work)
 
+**NeurIPS 2026 Datasets & Benchmarks submission (stretch goal, 9 pages max):**
+- Abstract
+- Introduction and Problems in the Current Systems
+- Our Ideas and Plan (contributions)
+- System Design (architecture, orchestration, optimization)
+- Evaluation Plan (metrics, baselines, methodology)
+- Implementation Roadmap
+- Core Integration Plan (dataset documentation, reproducibility)
+- References
+
+### Section Mapping: Class Report <-> NeurIPS 2026
+
+| Class (IEEE) | NeurIPS 2026 | Notes |
+|---|---|---|
+| Abstract | Abstract | Same content, NeurIPS limited to 1 paragraph |
+| Introduction | Introduction + Our Ideas and Plan | NeurIPS splits motivation from contributions |
+| Models and Data Description | System Design + Core Integration Plan | NeurIPS separates architecture from dataset docs |
+| Training and Profiling Methodology | System Design (Sec 3.3) | Optimization techniques section |
+| Performance Tuning Methodology | System Design (Sec 3.3) | Same section, different framing |
+| Experimental Results | Evaluation Plan + Results | NeurIPS: plan first, results section added later |
+| Conclusion | Conclusion | Same, NeurIPS emphasizes reproducibility |
+| -- | Implementation Roadmap | NeurIPS-only, shows project timeline |
+| -- | References | Both require refs, NeurIPS has specific citation style |
+
 ## Team Strengths
 
-| Name | UNI | Primary Strengths |
-|---|---|---|
-| Alex Xin | wax1 | Production data systems, agentic AI, project management |
-| Akshat Bhandari | ab6174 | Multi-agent LLM systems, evaluation harnesses, published VLM research |
-| Tanisha Rathod | tr2828 | Distributed systems, AWS/SageMaker, high-perf APIs, LoRA |
-| Aaron Fan | af3623 | Real-time embedded systems, EE background (power systems), low-level APIs |
+| Name | UNI | Role | Key Strengths |
+|---|---|---|---|
+| Alex Xin | wax1 | Project coordination, profiling analysis, report writing | Production data systems, agentic AI, project management |
+| Akshat Bhandari | ab6174 | Scenario design, evaluation harness, agent pipeline | Multi-agent LLM systems, evaluation harnesses, published VLM research |
+| Tanisha Rathod | tr2828 | MCP server implementation (all domains), dataset compilation, Overleaf | Distributed systems, AWS/SageMaker, high-perf APIs, LoRA |
+| Aaron Fan | af3623 | Scenario design, compute plan + infrastructure, data pipeline | Real-time embedded systems, EE background (power systems), low-level APIs |

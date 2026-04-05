@@ -38,7 +38,7 @@ Dhaval's latest email (same day) noted that many other teams are already in the 
     * Tanisha -- MCP server implementation (all domains), dataset compilation, Overleaf
     * Aaron -- scenario design, compute plan + infrastructure, data pipeline
 
-* **Weekly meetings:** Tuesdays 2:30 PM ET (primary). Alternative: Wednesdays ~1 PM or Thursdays. Adjusted from Wednesday to accommodate Akshat/Aaron class schedules.
+* **Weekly meetings:** Tuesdays 2:45 PM ET (primary). Alternative: Wednesdays ~1 PM or Thursdays. Adjusted from Wednesday to accommodate Akshat/Aaron class schedules.
 
 ### Action Items
 
@@ -50,17 +50,19 @@ Dhaval's latest email (same day) noted that many other teams are already in the 
 - [ ] Team: Fork AssetOpsBench, clone, run `uv sync` + unit tests to verify install
 
 **By Sun Apr 5:**
-- [ ] Alex: Incorporate any Dhaval feedback from Overleaf into problem statement, iterate
-- [ ] Alex: Finalize mid-point PowerPoint with team input
 - [ ] Akshat: Get AssetOpsBench evaluation harness running end-to-end
 - [ ] Akshat: Draft first 5-10 Smart Grid transformer scenarios following existing format
-- [ ] Tanisha: Begin MCP server skeleton for at least one domain (IoT or FMSR)
 - [ ] Aaron: Commit compute plan to `docs/compute_plan.md` -- GPU needs per project phase, Insomnia vs GCP recommendation
-- [ ] Team: Mid-point PowerPoint submitted to Courseworks by Mon Apr 6 11:59pm
+- [ ] Tanisha: Begin MCP server skeleton for at least one domain (IoT or FMSR)
+- [ ] Alex: Incorporate any Dhaval feedback from Overleaf into problem statement, iterate
+- [ ] Alex: Finalize mid-point PowerPoint with team input
+
+**By Mon Apr 6:**
+- [ ] Team: Mid-point PowerPoint submitted by Alex to Courseworks by Mon Apr 6 11:59pm
 
 **By Tue Apr 7 (next meeting):**
 - [ ] Akshat: Have scenario format validated against AssetOpsBench structure
+- [ ] Aaron: Insomnia or GCP environment ready for first inference run
 - [ ] Tanisha: IoT MCP server functional (can list assets, get sensor readings from dataset)
 - [ ] Tanisha: Dataset integration -- common key linking across the CC0 datasets
-- [ ] Aaron: Insomnia or GCP environment ready for first inference run
 - [ ] Team: WatsonX API key obtained and shared (or fallback plan identified)

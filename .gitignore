@@ -11,6 +11,7 @@ build/
 venv/
 .venv/
 env/
+*.lock
 
 # IDE
 .vscode/
@@ -38,3 +39,10 @@ wandb/
 # Secrets
 .env
 *.key
+
+# Agents
+CLAUDE.md
+AGENTS.md
+*claude*
+*codex*
+.agent-sessions/
