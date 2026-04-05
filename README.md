@@ -64,7 +64,7 @@ pip install -r requirements.txt
 
 ## Experiment Tracking
 
-WandB dashboard: *(link to be added)*
+WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Key Dates
 

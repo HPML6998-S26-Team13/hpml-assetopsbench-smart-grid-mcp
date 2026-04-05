@@ -9,7 +9,7 @@
 
 We extend IBM's AssetOpsBench industrial AI agent benchmark by (1) creating 30+
 maintenance scenarios for Smart Grid transformers using publicly available Kaggle
-telemetry data, (2) wrapping two AssetOpsBench tool domains (IoT and TSFM) as MCP
+telemetry data, (2) wrapping four AssetOpsBench tool domains (IoT, TSFM, FMSR, WO) as MCP
 servers, and (3) conducting a systematic performance study of LLM agent inference when
 executing these scenarios through the MCP protocol.
 
