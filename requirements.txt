@@ -1,0 +1,25 @@
+# Core
+torch>=2.0
+transformers
+datasets
+huggingface-hub
+
+# Serving
+vllm
+
+# MCP
+mcp
+
+# Profiling and tracking
+wandb
+tensorboard
+
+# Data
+pandas
+numpy
+matplotlib
+seaborn
+
+# Utilities
+tqdm
+pyyaml

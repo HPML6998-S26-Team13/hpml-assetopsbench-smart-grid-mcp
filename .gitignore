@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Data (large files -- track with git-lfs or download separately)
+data/raw/
+*.csv
+*.parquet
+*.jsonl
+
+# Profiling traces (large)
+profiling/traces/
+*.pt.trace.json
+
+# WandB
+wandb/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Private notes
+notes/
+
+# Secrets
+.env
+*.key
