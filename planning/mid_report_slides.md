@@ -57,34 +57,36 @@ Alex Xin (wax1), Akshat Bhandari (ab6174), Tanisha Rathod (tr2828), Aaron Fan (a
 **WandB:** https://wandb.ai/assetopsbench-smartgrid
 
 **Results obtained so far:**
-- Finalized problem statement combining Proposals 1 and 4 from mentor (MCP standardization + Smart Grid scenario generation)
-- Held intro meeting with mentor Dr. Dhaval Patel (Mar 5); aligned on scope and constraints
-- Problem statement and full research proposal drafted and shared with mentor via Overleaf
+- Held intro meeting with mentor Dr. Dhaval Patel; aligned on scope and constraints
 - Forked AssetOpsBench; reviewed scenario structure, evaluation harness, and MCP server patterns
+- Finalized problem statement combining Proposals 1 and 4 from mentor (MCP standardization + Smart Grid scenario generation)
 - Identified and documented 5 candidate Kaggle datasets covering all 4 agent domains (IoT, FMSR, TSFM, WO)
-- Confirmed compute infrastructure: Insomnia cluster (6x H100, ~100x A6000) + $500 GCP credits/person
 - Set up GitHub repo with scaffolded project structure, CI (Black formatting), documentation
 - Set up WandB team project for experiment tracking
-- Requested WatsonX API access for running AssetOpsBench evaluation pipeline
+- Problem statement and full research proposal drafted and shared with mentor via Overleaf
+- Data pipeline + 6 processed Kaggle datasets landed in `data/processed/`
+- Confirmed compute infrastructure: Insomnia cluster (6x H100, ~100x A6000) + $500 GCP credits/person
+- MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO)
+- Compute plan committed (GPU needs per phase, Insomnia vs GCP)
+- WatsonX API access verified; Maverick-17B (judge) and Llama-3.3-70B (scaling) benchmarked end-to-end
 
 ---
 
 ## Slide 4: Work in Progress
 
-- Implementing four MCP servers (IoT, FMSR, TSFM, WO) for Smart Grid transformer data
+- Filling in MCP server implementations for all four domains (IoT, FMSR, TSFM, WO)
 - Designing and authoring first batch of Smart Grid scenarios (targeting 15+ by Apr 13, 30+ by Apr 27)
 - Synthesizing common `transformer_id` key across datasets to enable cross-domain scenarios
 - Getting AssetOpsBench evaluation harness running end-to-end with existing scenarios
 - Deploying Llama-3.1-8B-Instruct via vLLM on Insomnia cluster for baseline inference runs
 - Preparing profiling methodology: PyTorch Profiler instrumentation for tool-call latency, GPU utilization, memory bandwidth
 - Designing orchestration comparison: Agent-as-Tool vs Plan-Execute on end-to-end scenarios
-- Awaiting WatsonX API key for access to Llama-4-Maverick-17B judge model
+- Finalizing two-repo strategy: team repo for R&D, AssetOpsBench fork as staging area for eventual upstream PR contribution
 
 ---
 
 ## Slide 5: Blockers and Limitations
 
-- **WatsonX API access pending:** Required for running AssetOpsBench's LLM-as-Judge evaluation (Llama-4-Maverick-17B). We've registered on Codabench and contacted our mentor directly. Without it, we can still build and test MCP servers and scenarios, but cannot run the official evaluation pipeline.
 - **No single dataset covers all agent domains:** We need to combine 3-5 Kaggle datasets using a synthesized key. Ensuring cross-domain consistency (e.g., a transformer's sensor data aligns with its fault history) requires careful data engineering, e.g. creating a fleet of N fictional transformers spanning all 4 agentic domains, mapped to specific attributes accordingly.
 - **Licensing restrictions on 2 of 5 datasets:** Transformer Health Index (ODbL) and Current & Voltage Monitoring (author copyright) may not be redistributable in an open-source PR. We plan to use only CC0 datasets for any public contribution.
 - **Insomnia H100 time limit:** 2-hour session cap on H100 nodes. Mitigated by using A6000 or A100 for most work; H100 reserved for final profiling comparisons if needed.

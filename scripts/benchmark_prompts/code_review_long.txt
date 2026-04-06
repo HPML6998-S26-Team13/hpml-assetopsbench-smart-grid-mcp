@@ -1,0 +1,163 @@
+You are a senior software engineer performing a code review on a new MCP server implementation for a smart-grid asset operations benchmark. The code below is a first draft of an IoT MCP server that wraps AssetOpsBench's existing IoT tools so they can be called via the Model Context Protocol. Review the code for correctness, error handling, security, MCP protocol compliance, and maintainability. Be specific: cite line-level issues, suggest concrete fixes, and flag any violations of MCP conventions. Rate the overall quality (1-10) and list the top three blockers that must be fixed before merge.
+
+```python
+# mcp_servers/iot/server.py
+import json
+import asyncio
+from pathlib import Path
+from typing import Any
+
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+
+import pandas as pd
+
+# Global state (loaded once at startup)
+DATA_DIR = Path("/data/smart_grid/iot")
+ASSETS_CACHE: dict[str, Any] = {}
+SENSOR_CACHE: dict[str, pd.DataFrame] = {}
+
+server = Server("smart-grid-iot")
+
+
+def load_assets():
+    """Load the asset inventory from disk into memory."""
+    global ASSETS_CACHE
+    asset_file = DATA_DIR / "assets.json"
+    with open(asset_file) as f:
+        ASSETS_CACHE = json.load(f)
+    print(f"Loaded {len(ASSETS_CACHE)} assets")
+
+
+def load_sensor_data(transformer_id: str) -> pd.DataFrame:
+    """Load sensor time-series for a given transformer."""
+    if transformer_id in SENSOR_CACHE:
+        return SENSOR_CACHE[transformer_id]
+    path = DATA_DIR / f"sensors/{transformer_id}.csv"
+    df = pd.read_csv(path)
+    SENSOR_CACHE[transformer_id] = df
+    return df
+
+
+@server.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="list_assets",
+            description="List all transformer assets in the fleet",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
+            name="get_sensor_readings",
+            description="Get sensor readings for a transformer",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "transformer_id": {"type": "string"},
+                    "start": {"type": "string"},
+                    "end": {"type": "string"},
+                },
+                "required": ["transformer_id"],
+            },
+        ),
+        Tool(
+            name="get_fault_history",
+            description="Get historical fault records for a transformer",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "transformer_id": {"type": "string"},
+                    "limit": {"type": "integer"},
+                },
+                "required": ["transformer_id"],
+            },
+        ),
+    ]
+
+
+@server.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    if name == "list_assets":
+        if not ASSETS_CACHE:
+            load_assets()
+        result = list(ASSETS_CACHE.values())
+        return [TextContent(type="text", text=json.dumps(result))]
+
+    elif name == "get_sensor_readings":
+        tid = arguments["transformer_id"]
+        df = load_sensor_data(tid)
+        start = arguments.get("start")
+        end = arguments.get("end")
+        if start:
+            df = df[df["timestamp"] >= start]
+        if end:
+            df = df[df["timestamp"] <= end]
+        # Return as JSON
+        return [TextContent(type="text", text=df.to_json(orient="records"))]
+
+    elif name == "get_fault_history":
+        tid = arguments["transformer_id"]
+        limit = arguments.get("limit", 10)
+        fault_file = DATA_DIR / f"faults/{tid}.json"
+        with open(fault_file) as f:
+            faults = json.load(f)
+        return [TextContent(type="text", text=json.dumps(faults[:limit]))]
+
+    else:
+        return [TextContent(type="text", text=f"Unknown tool: {name}")]
+
+
+async def main():
+    load_assets()
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read, write):
+        await server.run(read, write, server.create_initialization_options())
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Also review this helper module that the server depends on:
+
+```python
+# mcp_servers/iot/helpers.py
+import pandas as pd
+from datetime import datetime
+
+
+def compute_rolling_stats(df: pd.DataFrame, window: int = 60) -> dict:
+    """Compute rolling statistics over a sensor dataframe."""
+    stats = {}
+    for col in df.columns:
+        if col == "timestamp":
+            continue
+        stats[col + "_mean"] = df[col].rolling(window).mean().iloc[-1]
+        stats[col + "_std"] = df[col].rolling(window).std().iloc[-1]
+        stats[col + "_max"] = df[col].rolling(window).max().iloc[-1]
+    return stats
+
+
+def parse_timestamp(ts: str) -> datetime:
+    """Parse an ISO8601 timestamp."""
+    return datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
+
+
+def filter_by_fault_severity(faults: list, min_severity: int) -> list:
+    """Filter faults by severity threshold."""
+    result = []
+    for f in faults:
+        if f["severity"] >= min_severity:
+            result.append(f)
+    return result
+```
+
+Please provide a thorough review covering:
+1. Correctness bugs (e.g., timestamp comparison on strings, missing error handling, race conditions)
+2. Security issues (path traversal via transformer_id, arbitrary file reads)
+3. Performance concerns (unbounded cache growth, full-file loads on every request)
+4. MCP protocol compliance (error responses, schema completeness, return types)
+5. Maintainability (global state, tight coupling, missing tests)
+6. Specific line-level fixes with code examples where helpful
+
+Be direct and don't waste space on pleasantries. Focus on what must change before merge.

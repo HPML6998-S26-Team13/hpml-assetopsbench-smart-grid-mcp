@@ -10,6 +10,9 @@ vllm
 # MCP
 mcp
 
+# WatsonX.ai (LLM-as-Judge, scaling comparison)
+ibm-watsonx-ai
+
 # Profiling and tracking
 wandb
 tensorboard

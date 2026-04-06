@@ -110,16 +110,19 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 
-*Last updated: Apr 5, 2026*
+*Last updated: Apr 6, 2026*
 
 - [x] Problem statement finalized (four contributions)
 - [x] Research proposal drafted and shared with mentor via Overleaf
 - [x] GitHub repo scaffolded, WandB team created
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
 - [x] Compute confirmed (Insomnia cluster + GCP credits)
-- [ ] WatsonX API key (requested, awaiting access -- needed for LLM-as-Judge)
-- [ ] Single team fork of AssetOpsBench (pending mentor guidance)
-- [ ] MCP server implementation (in progress)
+- [x] Compute plan committed (`docs/compute_plan.md`)
+- [x] WatsonX API access received and verified (6 Llama models available; Maverick-17B and Llama-3.3-70B benchmarked end-to-end -- see `docs/watsonx_access.md`)
+- [x] Single team fork of AssetOpsBench (defaulting to `eggrollofchaos/hpml-assetopsbench-smart-grid-mcp`; mentor hasn't formally weighed in but team is committing here)
+- [x] Data pipeline + processed Kaggle datasets landed (`data/processed/` with asset_metadata, dga_records, failure_modes, fault_records, rul_labels, sensor_readings)
+- [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO)
+- [ ] MCP server implementations (fleshing out skeletons)
 - [ ] Smart Grid scenario authoring (in progress)
 - [ ] Baseline profiling on GPU infrastructure
 

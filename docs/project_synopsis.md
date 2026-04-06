@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Last updated April 5, 2026. Read time: ~10 minutes.*
+*Last updated April 6, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -145,7 +145,7 @@ profiling and optimization.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 5, 2026)
+## Current status (April 6, 2026)
 
 - Problem statement finalized (four contributions: scenarios, MCP servers, profiling, orchestration comparison)
 - Full research proposal drafted and shared with mentor via Overleaf (NeurIPS 2026 template)
@@ -157,12 +157,15 @@ profiling and optimization.
 - AssetOpsBench forked and reviewed; scenario structure and evaluation harness understood
 - MCP documentation reviewed
 - Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
-- WatsonX API key requested (needed for LLM-as-Judge evaluation with Llama-4-Maverick-17B)
+- Compute plan committed (`docs/compute_plan.md`) mapping GPU needs per project phase
+- WatsonX API access received from mentor and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked (`docs/watsonx_access.md`)
+- Data pipeline scripts + processed Kaggle datasets landed (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings)
+- MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class
 - **Mid-point report due Monday April 6** (5-slide PowerPoint)
 - **Final deadline: May 4** (presentation + report + code)
 
-Entering implementation phase this week. MCP server development, scenario
-authoring, and evaluation harness setup are all in progress.
+Entering implementation phase this week. MCP server implementations (fleshing out the
+new skeletons), scenario authoring, and evaluation harness setup are all in progress.
 
 ## Key links
 

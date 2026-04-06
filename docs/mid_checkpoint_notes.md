@@ -37,11 +37,14 @@ are tracked with WandB. Evaluation uses AssetOpsBench's LLM-as-Judge pipeline
 - Identified and documented 5 candidate Kaggle datasets covering all 4 agent domains
 - Verified compute infrastructure access (Insomnia cluster: 6x H100, ~100x A6000; plus $500 GCP credits/person)
 - Read MCP documentation and understand protocol architecture
-- Requested WatsonX API access for LLM-as-Judge evaluation pipeline
+- Compute plan committed documenting GPU needs per phase and Insomnia vs GCP recommendation (`docs/compute_plan.md`)
+- Received WatsonX API access from mentor, verified 6 Llama foundation models available, benchmarked Maverick-17B (~80 tok/s steady) and Llama-3.3-70B (~34 tok/s) end-to-end against a realistic code review prompt (`docs/watsonx_access.md`)
+- Data pipeline scripts landed along with processed Kaggle datasets (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings)
+- MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on shared base class
 
 ### In Progress
 
-- Implementing four MCP servers (IoT, FMSR, TSFM, WO) for Smart Grid transformer data
+- Fleshing out four MCP server implementations on top of the skeletons
 - Creating initial Smart Grid transformer scenarios following AssetOpsBench format
 - Synthesizing common `transformer_id` key across datasets for cross-domain scenarios
 - Getting AssetOpsBench evaluation harness running end-to-end
@@ -146,7 +149,6 @@ Related work:
 
 | Risk | Mitigation |
 |---|---|
-| WatsonX API key not granted in time | Use open-source judge model locally or defer evaluation to later phase |
 | Smart Grid data quality insufficient for realistic scenarios | Multiple Kaggle datasets identified as fallbacks; can synthesize additional data |
 | Llama-3.1-8B-Instruct insufficient for complex tool-calling | Compare against API-based WatsonX runs with larger models |
 | MCP overhead too small to meaningfully optimize | The "direct vs MCP" comparison is a valid finding either way |
