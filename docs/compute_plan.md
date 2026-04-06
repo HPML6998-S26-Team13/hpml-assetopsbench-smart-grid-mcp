@@ -140,8 +140,8 @@ for evaluation is large; prefer WatsonX API if available, otherwise run on GCP A
 |-------|-----------|------|---------|
 | Llama-3.1-8B-Instruct | FP16 | ~16 GB | A6000 (48 GB), L40/L40S (48 GB), H100 (80 GB) |
 | Llama-3.1-8B-Instruct | INT8 | ~8 GB | All GPUs |
-| Llama-3.3-70B (optional scaling) | FP16 | ~140 GB | 2x H100 (160 GB) or 4x A6000 (192 GB) |
-| Llama-4-Maverick-17B (judge) | FP16 | ~34 GB | A6000 (48 GB), H100 (80 GB), A100-80GB |
+| Llama-3.3-70B (optional scaling) | FP16 | ~140 GB | WatsonX API (preferred) |
+| Llama-4-Maverick-17B (judge) | FP16 | ~34 GB | WatsonX API (preferred) |
 
 ---
 
@@ -153,7 +153,7 @@ for evaluation is large; prefer WatsonX API if available, otherwise run on GCP A
 | **Scaling comparison** | Insomnia H100 (`short` partition), 1-2 sessions only |
 | **Long-running / unattended jobs** | GCP A100-40GB spot (~$1.81/hr) |
 | **LLM-as-Judge (Maverick-17B)** | WatsonX API (preferred) or GCP A100-80GB spot |
-| **Large model (70B, optional)** | 2x H100 on Insomnia or 4x A6000 (tensor parallel) |
+| **Large model (70B, optional)** | WatsonX API (preferred) |
 | **Insomnia queues full** | GCP A100-40GB spot as overflow |
 
 ### Why Insomnia over GCP
