@@ -1,0 +1,381 @@
+% =============================================================================
+% Smart Grid MCP — Data Pipeline Documentation
+% =============================================================================
+% Describes how the five Kaggle datasets are downloaded, reconciled on a
+% synthetic transformer_id key, and processed into the six CSVs consumed
+% by the four MCP servers.
+%
+% Intended audience: team members, paper reviewers, open-source contributors.
+% Suitable for inclusion as an appendix in the NeurIPS / IEEE final report.
+% =============================================================================
+
+\section{Data Pipeline}
+\label{sec:data-pipeline}
+
+\subsection{Source Datasets}
+\label{sec:datasets}
+
+We draw from five publicly available Kaggle datasets covering the four
+AssetOpsBench agent domains (IoT, FMSR, TSFM, WO) for power transformers.
+Table~\ref{tab:datasets} summarises their properties.
+
+\begin{table}[h]
+\centering
+\caption{Source datasets used in the Smart Grid benchmark extension.}
+\label{tab:datasets}
+\begin{tabular}{lllll}
+\hline
+\textbf{Dataset} & \textbf{Rows} & \textbf{Domain} & \textbf{License} & \textbf{Key challenge} \\
+\hline
+Power Transformers FDD \& RUL~\cite{fddrul}
+  & 3{,}000 files $\times$ 420 & TSFM, IoT & CC0 & Normalised; no timestamps \\
+DGA Fault Classification~\cite{dga}
+  & 201 & FMSR & CC0 & No asset ID \\
+Transformer Health Index~\cite{healthindex}
+  & 470 & FMSR & ODbL & No asset ID \\
+Current \& Voltage Monitoring~\cite{monitoring}
+  & 19{,}352 & IoT, TSFM & \copyright\ Authors & Single transformer \\
+Smart Grid Fault Records~\cite{faultrecords}
+  & 506 & WO & CC0 & No asset ID \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent
+Only datasets licensed CC0 will be included in the open-source pull request
+to AssetOpsBench.  The ODbL (Open Database License) and author-copyright
+datasets are used locally for development and will not be redistributed.
+
+\subsubsection{FDD \& RUL Dataset}
+
+The Power Transformers FDD \& RUL dataset contains 3{,}000 per-transformer
+time-series files, each with 420 time steps and four dissolved-gas columns
+(\texttt{H2}, \texttt{CO}, \texttt{C2H4}, \texttt{C2H2}).  Values are
+normalised gas-concentration ratios rather than raw ppm measurements.
+
+Separate label files (\texttt{labels\_fdd\_train.csv},
+\texttt{labels\_rul\_train.csv}) provide per-file fault category and remaining
+useful life (RUL) estimates.  The fault category is an integer in $\{1, 2, 3,
+4\}$, where 1 denotes normal operation and 4 denotes a serious fault.  RUL
+values range from 362 to 1{,}093 (units: days).  The training split contains
+2{,}100 files; the test split contains 900.
+
+\subsubsection{DGA Fault Classification Dataset}
+
+Contains 201 dissolved-gas analysis (DGA) records with raw gas concentrations
+in ppm (\texttt{H2}, \texttt{CH4}, \texttt{C2H6}, \texttt{C2H4},
+\texttt{C2H2}) and a textual fault-type label.  The seven observed fault types
+are: \emph{Arc discharge}, \emph{Spark discharge},
+\emph{High-temperature overheating}, \emph{Low-temperature overheating},
+\emph{Partial discharge}, \emph{Low/Middle-temperature overheating}, and
+\emph{Middle-temperature overheating}.  All 201 records represent faulty
+transformers; there are no normal-operation examples.
+
+\subsubsection{Transformer Health Index Dataset}
+
+Contains 470 records with expanded gas columns (additionally \texttt{Nitrogen},
+\texttt{Oxigen}, \texttt{DBDS}, \texttt{Power factor}, \texttt{Interfacial V},
+\texttt{Dielectric rigidity}, \texttt{Water content}) and a scalar
+\texttt{Health index} (range 13.4–95.2; higher is healthier).  This dataset is
+used to source DGA records for healthy transformers, since the DGA Fault
+Classification dataset contains only faulty examples.
+
+\subsubsection{Current \& Voltage Monitoring Dataset}
+
+Five CSV files capturing real time-series measurements from a single
+transformer over approximately 2019–2020.  Relevant tables:
+\begin{itemize}
+  \item \texttt{Overview.csv} (20{,}316 rows): oil temperature index (OTI),
+        winding temperature index (WTI), ambient temperature (ATI), oil level
+        (OLI).
+  \item \texttt{CurrentVoltage.csv} (19{,}352 rows): per-phase voltages
+        (VL1, VL2, VL3) and currents (IL1, IL2, IL3) in V and A.
+  \item \texttt{Power.csv}, \texttt{PowerFactor.csv}, \texttt{TotalPower.csv}:
+        power, THD, and energy metrics.
+\end{itemize}
+
+\subsubsection{Smart Grid Fault Records Dataset}
+
+Contains 506 fault event records with attributes including fault type, location
+(latitude/longitude), voltage, current, power load, temperature, weather
+condition, maintenance status, component health, fault duration, and downtime.
+This dataset has no asset identifier and covers grid-level events rather than
+individual transformer units.
+
+\subsection{The Shared-Key Problem}
+\label{sec:shared-key}
+
+A fundamental challenge in assembling this benchmark is that the five source
+datasets are entirely \emph{disjoint}: they originate from different research
+groups, cover different physical assets, and share no common identifier.  The
+AssetOpsBench multi-domain scenario format requires that a single agent call
+tools from multiple domains (IoT, FMSR, TSFM, WO) for the \emph{same} asset
+within one task trajectory.  This is impossible without a join key.
+
+We resolve this by synthesising a \texttt{transformer\_id} key (\texttt{T-001}
+through \texttt{T-020}) and assigning rows from each source dataset to
+transformer IDs using the principled strategy described in
+Section~\ref{sec:id-strategy}.  This approach is consistent with how
+AssetOpsBench handles other domains where data from multiple disparate sources
+must be reconciled \cite{assetopsbench}.
+
+\subsection{Transformer Selection Strategy}
+\label{sec:id-strategy}
+
+We select 20 representative transformers from the FDD \& RUL training set,
+stratified across four health tiers, to ensure the benchmark covers the full
+range of operating conditions an agent may encounter in production:
+
+\begin{table}[h]
+\centering
+\caption{Transformer health tiers and selection criteria.}
+\label{tab:tiers}
+\begin{tabular}{lllll}
+\hline
+\textbf{Tier} & \textbf{IDs} & \textbf{FDD Cat.} & \textbf{RUL} & \textbf{Count} \\
+\hline
+Healthy (long life)  & T-001 – T-005 & 1 & $\geq$ 1{,}093 days & 5 \\
+Healthy (aging)      & T-006 – T-010 & 1 & $\leq$ 560 days & 5 \\
+Minor/moderate fault & T-011 – T-015 & 2–3 & mixed & 5 \\
+Serious fault        & T-016 – T-020 & 4 & mixed & 5 \\
+\hline
+\end{tabular}
+\end{table}
+
+\noindent
+Each transformer ID is anchored to one FDD \& RUL training file, which provides
+420 time steps of dissolved-gas time-series data and an authoritative RUL label.
+
+\subsection{Processed Output Files}
+\label{sec:outputs}
+
+The pipeline (\texttt{data/build\_processed.py}) produces six CSV files in
+\texttt{data/processed/}, one per MCP server domain.  Table~\ref{tab:outputs}
+summarises them; detailed schemas follow.
+
+\begin{table}[h]
+\centering
+\caption{Processed output files and their MCP server consumers.}
+\label{tab:outputs}
+\begin{tabular}{llll}
+\hline
+\textbf{File} & \textbf{Rows} & \textbf{MCP Server} & \textbf{Primary Source} \\
+\hline
+\texttt{asset\_metadata.csv} & 20 & IoT & Synthetic + FDD labels \\
+\texttt{sensor\_readings.csv} & 96{,}485 & IoT, TSFM & FDD time-series + Monitoring \\
+\texttt{failure\_modes.csv} & 7 & FMSR & DGA labels (curated) \\
+\texttt{dga\_records.csv} & 20 & FMSR & DGA + Health Index \\
+\texttt{rul\_labels.csv} & 620 & TSFM & FDD RUL labels \\
+\texttt{fault\_records.csv} & 506 & WO & Fault Records \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{\texttt{asset\_metadata.csv}}
+
+One row per transformer.  Static nameplate attributes (manufacturer, location,
+voltage class, rating) are randomly sampled from representative real-world
+values because none of the source datasets include nameplate data.
+\texttt{health\_status} (0 = healthy, 1 = degraded, 2 = critical) is derived
+from the FDD category; \texttt{rul\_days} is taken directly from the FDD \& RUL
+label file.
+
+\begin{verbatim}
+transformer_id, name, manufacturer, location, voltage_class,
+rating_kva, install_date, age_years, health_status,
+fdd_category, rul_days, in_service
+\end{verbatim}
+
+\subsubsection{\texttt{sensor\_readings.csv}}
+
+Long-format time-series with one row per (transformer, timestamp, sensor).
+Contains 96{,}485 rows from two sub-pipelines:
+
+\paragraph{FDD \& RUL sub-pipeline (all 20 transformers).}
+The four gas columns (\texttt{H2}, \texttt{CO}, \texttt{C2H4}, \texttt{C2H2})
+from each transformer's time-series file are extracted and scaled from
+normalised ratios to physically plausible ppm values using empirical scale
+factors derived from the DGA Fault Classification dataset
+(Table~\ref{tab:scale}).  Each of the 420 time steps is assigned a synthetic
+daily timestamp starting 2024-01-01.
+
+\begin{table}[h]
+\centering
+\caption{Scale factors applied to FDD \& RUL normalised gas values.}
+\label{tab:scale}
+\begin{tabular}{lll}
+\hline
+\textbf{Gas} & \textbf{Scale factor} & \textbf{Resulting range (approx.)} \\
+\hline
+H2   & 50{,}000 & 100–200 ppm \\
+CO   & 20{,}000 & 200–600 ppm \\
+C2H4 & 5{,}000  & 5–25 ppm \\
+C2H2 & 1{,}000  & 0.1–1 ppm \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Real monitoring sub-pipeline (T-001 only).}
+Oil temperature (OTI), winding temperature (WTI), per-phase voltage (VL1), and
+per-phase current (IL1) are extracted from the Current \& Voltage Monitoring
+dataset and assigned to T-001.  Zero-padded initialisation rows are dropped.
+This provides T-001 with real measured temperature and electrical readings
+alongside its FDD gas data, enabling richer IoT scenarios.
+
+\begin{verbatim}
+transformer_id, timestamp, sensor_id, value, unit, source
+\end{verbatim}
+
+Sensor IDs follow the convention \texttt{dga\_\{gas\}\_ppm} for dissolved-gas
+readings and \texttt{\{measurement\}\_\{unit\}} for electrical readings
+(e.g.\ \texttt{oil\_temp\_c}, \texttt{voltage\_l1\_v}).
+
+\subsubsection{\texttt{failure\_modes.csv}}
+
+A static catalogue of seven fault types, curated from the unique labels in the
+DGA Fault Classification dataset and enriched with IEC 60599 standard codes,
+associated key gases, severity ratings, and recommended maintenance actions.
+This catalogue is used by the FMSR server to answer diagnostic queries such as
+``which sensors are elevated for arc discharge?''
+
+\begin{verbatim}
+failure_mode_id, name, dga_label, description, severity,
+iec_code, key_gases, recommended_action
+\end{verbatim}
+
+\subsubsection{\texttt{dga\_records.csv}}
+
+One DGA gas-concentration snapshot per transformer, representing the most
+recent analysis result.  Healthy transformers (T-001–T-010) are sourced from
+the highest-scoring rows of the Health Index dataset; faulty transformers are
+sourced from the DGA Fault Classification dataset, matched to the transformer's
+health tier:
+
+\begin{itemize}
+  \item Minor fault (T-011–T-015): low/middle-temperature overheating and
+        partial discharge records.
+  \item Serious fault (T-016–T-020): arc discharge, spark discharge, and
+        high-temperature overheating records.
+\end{itemize}
+
+\begin{verbatim}
+transformer_id, sample_date, dissolved_h2_ppm, dissolved_ch4_ppm,
+dissolved_c2h2_ppm, dissolved_c2h4_ppm, dissolved_c2h6_ppm,
+dissolved_co_ppm, dissolved_co2_ppm, fault_label, source_dataset
+\end{verbatim}
+
+\subsubsection{\texttt{rul\_labels.csv}}
+
+Daily RUL and health index estimates for each transformer over the 30-day
+window (2024-01-01 to 2024-01-31).  The terminal RUL value (day 30) is taken
+directly from \texttt{labels\_rul\_train.csv}; earlier days are back-filled
+assuming linear degradation at one RUL-day per calendar day.  The health index
+is normalised by the dataset maximum (1{,}093 days).
+
+\begin{verbatim}
+transformer_id, timestamp, rul_days, health_index, fdd_category
+\end{verbatim}
+
+\subsubsection{\texttt{fault\_records.csv}}
+
+All 506 rows from the Smart Grid Fault Records dataset, each assigned a
+\texttt{transformer\_id} via weighted random sampling.  Transformers in higher
+fault tiers receive proportionally more fault events:
+
+\begin{table}[h]
+\centering
+\caption{Fault record assignment weights by health tier.}
+\label{tab:weights}
+\begin{tabular}{ll}
+\hline
+\textbf{Tier} & \textbf{Relative weight} \\
+\hline
+Healthy (long life)  & 0.5 \\
+Healthy (aging)      & 1.0 \\
+Minor/moderate fault & 2.0 \\
+Serious fault        & 3.5 \\
+\hline
+\end{tabular}
+\end{table}
+
+Column names are normalised from the original dataset's mixed-case, spaced
+format to snake\_case for consistency with the other processed files.
+
+\begin{verbatim}
+transformer_id, fault_id, fault_type, location, voltage_v,
+current_a, power_load_mw, temperature_c, wind_speed_kmh,
+weather_condition, maintenance_status, component_health,
+duration_hrs, downtime_hrs
+\end{verbatim}
+
+\subsection{Limitations and Assumptions}
+\label{sec:limitations}
+
+\begin{enumerate}
+
+\item \textbf{Synthetic join key.}  The \texttt{transformer\_id} linkage is
+constructed rather than observed.  This is a deliberate trade-off: it allows
+multi-domain scenarios while being transparent about the data provenance.  We
+document the full mapping in \texttt{data/build\_processed.py} so that
+scenarios can be reproduced or re-stratified.
+
+\item \textbf{Normalised gas scaling.}  The FDD \& RUL dataset stores gas
+concentrations as normalised ratios rather than ppm.  The scale factors in
+Table~\ref{tab:scale} were derived by aligning median FDD values to the median
+DGA ppm values for the same gases.  They are physically plausible but
+approximate; they do not affect the relative ordering of transformers or the
+trends within a time-series.
+
+\item \textbf{Nameplate metadata.}  No source dataset includes transformer
+nameplate data (manufacturer, rating, location).  These fields are sampled from
+realistic value sets and are primarily intended to support the IoT server's
+\texttt{get\_asset\_metadata} tool; they have no bearing on quantitative
+evaluation.
+
+\item \textbf{Single real transformer.}  The Current \& Voltage Monitoring
+dataset captures readings from one physical transformer.  Its time-series is
+assigned to T-001 to enrich that unit's sensor profile.  The remaining 19
+transformers do not have real electrical monitoring data.
+
+\item \textbf{DGA healthy examples.}  The DGA Fault Classification dataset
+contains only faulty examples.  Healthy DGA records are drawn from the
+Transformer Health Index dataset, which uses overlapping but not identical gas
+columns (no CH4 column; includes nitrogen, oxygen, DBDS, and others).  Missing
+values are set to zero.
+
+\item \textbf{RUL linearity.}  The 30-day RUL time series is generated by
+linear back-fill from the label file's terminal value.  True degradation is
+non-linear, but this is sufficient for the TSFM server's forecasting scenarios
+during development.  When the full 420-step FDD time-series is available, the
+TSFM server will use the actual sensor trajectory.
+
+\end{enumerate}
+
+\subsection{Reproducibility}
+\label{sec:reproducibility}
+
+The pipeline is fully deterministic given the same random seed
+(\texttt{SEED=42}).  All raw data is downloaded via the Kaggle API
+(\texttt{data/build\_processed.py}); raw files are gitignored.
+To reproduce:
+
+\begin{verbatim}
+# 1. Set Kaggle credentials
+echo '{"username":"<user>","key":"<key>"}' > ~/.kaggle/kaggle.json
+chmod 600 ~/.kaggle/kaggle.json
+
+# 2. Download raw data
+python3 data/download_raw.py        # (downloads via Kaggle API)
+
+# 3. Build processed CSVs
+python3 data/build_processed.py
+
+# 4. (Optional) generate synthetic sample data for offline testing
+python3 data/generate_synthetic.py
+\end{verbatim}
+
+\noindent
+A standalone synthetic generator (\texttt{data/generate\_synthetic.py})
+produces structurally identical CSVs without any Kaggle download, using
+normally-distributed values parameterised by health tier.  This is used for
+CI testing and offline MCP server development.
