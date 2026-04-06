@@ -1,0 +1,8 @@
+failure_mode_id,name,dga_label,description,severity,iec_code,key_gases,recommended_action
+FM-001,Partial Discharge,Partial discharge,Low-energy discharge within insulation voids. Generates mainly H2 and CH4.,low,PD,"H2,CH4",Monitor closely; schedule inspection within 90 days.
+FM-002,Low-Temperature Overheating (< 300°C),Low-temperature overheating,Thermal fault in core laminations or due to sustained overload. Elevated CH4 and C2H4.,medium,T1,"CH4,C2H4",Reduce load; inspect within 30 days.
+FM-003,Low/Middle-Temperature Overheating (< 700°C),Low/Middle-temperature overheating,Thermal fault in conductors or connections. High C2H4 relative to C2H6.,medium,T2,"C2H4,C2H6",De-energize and inspect within 7 days.
+FM-004,Middle-Temperature Overheating,Middle-temperature overheating,Medium thermal fault with high C2H4 and C2H6.,high,T2,"C2H4,C2H6",De-energize and inspect within 48 hours.
+FM-005,High-Temperature Overheating (> 700°C),High-temperature overheating,Severe winding conductor overheating. Very high C2H4 and C2H6.,critical,T3,"C2H4,C2H6,H2",Immediate de-energization required.
+FM-006,Spark Discharge,Spark discharge,Low-energy electrical sparking in oil. Elevated C2H2 and H2.,high,D1,"C2H2,H2",De-energize and inspect within 48 hours.
+FM-007,Arc Discharge,Arc discharge,High-energy arcing causing severe oil decomposition. Very high C2H2 and H2.,critical,D2,"C2H2,H2,C2H4",Immediate de-energization and emergency inspection.

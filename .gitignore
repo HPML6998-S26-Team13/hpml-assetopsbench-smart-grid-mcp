@@ -25,6 +25,7 @@ data/raw/
 *.csv
 *.parquet
 *.jsonl
+!data/processed/*.csv
 
 # Profiling traces (large)
 profiling/traces/
