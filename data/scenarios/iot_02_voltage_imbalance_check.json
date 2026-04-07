@@ -1,0 +1,23 @@
+{
+  "id": "SGT-002",
+  "type": "IoT",
+  "text": "For transformer T-014, check the last 24 hours of phase voltages and report whether any phase imbalance above 3% occurred.",
+  "category": "Condition Monitoring",
+  "characteristic_form": "The answer should compute or reference phase-voltage imbalance over the requested window, state whether any event exceeded 3%, and include when the peak imbalance occurred.",
+  "asset_id": "T-014",
+  "expected_tools": [
+    "iot.get_sensor_readings"
+  ],
+  "ground_truth": {
+    "threshold_percent": 3,
+    "must_include": [
+      "max imbalance",
+      "time of exceedance or no exceedance",
+      "clear yes/no decision"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "IoT"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "SGT-004",
+  "type": "FMSR",
+  "text": "Transformer T-018 has a sudden hydrogen increase relative to baseline. Determine the likely root cause class and recommend one confirmatory measurement.",
+  "category": "Root Cause Analysis",
+  "characteristic_form": "The answer should classify the likely failure/root-cause class from gas behavior and propose one concrete confirmatory measurement or inspection step.",
+  "asset_id": "T-018",
+  "expected_tools": [
+    "fmsr.get_failure_modes",
+    "fmsr.get_failure_sensor_mapping"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "root cause class",
+      "one confirmatory test"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

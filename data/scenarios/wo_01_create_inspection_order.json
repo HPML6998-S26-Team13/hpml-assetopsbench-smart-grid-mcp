@@ -1,0 +1,23 @@
+{
+  "id": "SGT-007",
+  "type": "WO",
+  "text": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+  "category": "Work Order Generation",
+  "characteristic_form": "The answer should produce a structured work order containing asset ID, task summary, priority, required technician skill set, and estimated downtime.",
+  "asset_id": "T-013",
+  "expected_tools": [
+    "wo.generate_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "work order payload",
+      "priority",
+      "required skills",
+      "downtime estimate"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "WO"
+  ]
+}

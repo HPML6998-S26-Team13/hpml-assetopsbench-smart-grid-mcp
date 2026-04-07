@@ -1,0 +1,23 @@
+{
+  "id": "SGT-003",
+  "type": "FMSR",
+  "text": "Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "The answer should map DGA evidence to a primary fault mode and provide at least one alternative candidate with rationale grounded in gas patterns or known fault mapping.",
+  "asset_id": "T-012",
+  "expected_tools": [
+    "fmsr.get_failure_modes",
+    "fmsr.get_failure_sensor_mapping"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "primary fault mode",
+      "secondary candidate",
+      "evidence-based justification"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

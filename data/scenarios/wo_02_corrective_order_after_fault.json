@@ -1,0 +1,22 @@
+{
+  "id": "SGT-008",
+  "type": "WO",
+  "text": "Given repeated fault indicators on transformer T-017, generate a corrective work order with emergency priority if safety risk is high; otherwise set high priority and justify.",
+  "category": "Maintenance Decision",
+  "characteristic_form": "The answer should include a risk-aware priority decision (emergency or high), rationale tied to fault indicators, and a complete corrective work order description.",
+  "asset_id": "T-017",
+  "expected_tools": [
+    "wo.generate_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "priority decision",
+      "justification",
+      "corrective tasks"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ]
+}

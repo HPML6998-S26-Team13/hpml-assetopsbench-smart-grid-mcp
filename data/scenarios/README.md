@@ -4,17 +4,23 @@ Smart Grid transformer maintenance scenarios, following the AssetOpsBench scenar
 
 ## Format
 
-Scenarios follow AssetOpsBench's existing schema (JSON, one per file). Each scenario specifies:
+Scenarios follow AssetOpsBench's existing utterance schema with required keys:
 
-- `scenario_id` — unique identifier
-- `asset_id` — which fictional transformer (T-001–T-020, see `data/processed/asset_metadata.csv`)
-- `prompt` — the user instruction given to the agent
-- `expected_tools` — which MCP tool calls the agent should make, in rough sequence
-- `ground_truth` — the correct answer or action (for LLM-as-Judge scoring)
+- `id` — unique identifier
+- `type` — domain label (`IoT`, `FMSR`, `TSFM`, `WO`, or empty for mixed/general)
+- `text` — user instruction for the agent
+- `category` — task category label
+- `characteristic_form` — objective expected answer pattern for grading
+
+For Smart Grid authoring in this repo, we keep additional optional keys:
+
+- `asset_id` — fictional transformer ID (`T-001` to `T-020`)
+- `expected_tools` — expected MCP tools in rough order
+- `ground_truth` — checkable target answer/action
 - `difficulty` — easy / medium / hard
-- `domain_tags` — which of IoT, FMSR, TSFM, WO are exercised
+- `domain_tags` — exercised domains (`IoT`, `FMSR`, `TSFM`, `WO`)
 
-See the upstream AssetOpsBench repo (`src/agent/scenarios/`) for reference examples from existing asset domains.
+See the upstream AssetOpsBench structure in `src/scenarios/local/vibration_utterance.json` and `aobench/scenario-server/src/scenario_server/handlers/*.py` (which consume `id`, `type`, `text`, `category`, `characteristic_form`).
 
 ## Targets
 

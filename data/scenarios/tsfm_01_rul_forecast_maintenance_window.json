@@ -1,0 +1,22 @@
+{
+  "id": "SGT-005",
+  "type": "TSFM",
+  "text": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "category": "Remaining Useful Life",
+  "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
+  "asset_id": "T-016",
+  "expected_tools": [
+    "tsfm.forecasting"
+  ],
+  "ground_truth": {
+    "decision_window_days": 180,
+    "must_include": [
+      "rul_days_estimate",
+      "go/no-go recommendation"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "TSFM"
+  ]
+}
