@@ -9,6 +9,9 @@ Usage:
 
     # Run a multi-trial latency benchmark:
     .venv/bin/python scripts/verify_watsonx.py --benchmark --trials 5 --max-tokens 128
+
+Author: Wei Alexander Xin (wax1)
+Team 13 / District 1101 — HPML SmartGridBench
 """
 
 import argparse

@@ -49,8 +49,9 @@ srun --partition=short --gres=gpu:A6000:2 --mem=128G --time=02:00:00 --pty bash
 # Interactive: 1x H100 for scaling comparison
 srun --partition=short --gres=gpu:h100:1 --mem=64G --time=02:00:00 --pty bash
 
-# Batch job (recommended for profiling runs)
-sbatch profiling_job.sh
+# Batch job example (recommended for profiling runs)
+# Note: profiling wrapper scripts will live in profiling/scripts/ once authored in W3.
+sbatch profiling/scripts/run_profile.sh
 ```
 
 ---

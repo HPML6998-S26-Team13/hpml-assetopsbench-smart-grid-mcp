@@ -1,9 +1,9 @@
 # MCP-Based Industrial Agent Benchmarking for Smart Grid Operations
 
-**COMS E6998: High Performance Machine Learning -- Final Project**
+**COMS E6998: High Performance Machine Learning -- Final Project**  
 Columbia University, Spring 2026
 
-**Team 13 / District 1101:** Alex Xin (wax1), Akshat Bhandari (ab6174), Tanisha Rathod (tr2828), Aaron Fan (af3623)
+**Team 13 / District 1101:** Akshat Bhandari (ab6174), Aaron Fan (af3623), Tanisha Rathod (tr2828), Wei Alexander Xin (wax1)  
 **Mentor:** Dr. Dhaval Patel, IBM Research
 
 ## Overview
@@ -57,29 +57,40 @@ via WatsonX API to assess scaling effects.
 ```
 .
 ├── README.md
-├── requirements.txt
-├── data/                         # Smart Grid datasets and scenario definitions
-│   ├── raw/                      # Raw Kaggle data
-│   ├── processed/                # Cleaned data for scenario generation
-│   └── scenarios/                # Generated AssetOpsBench scenarios
-├── mcp_servers/                  # MCP server implementations
-│   ├── iot_server/               # IoT telemetry (sensor readings, asset metadata)
-│   ├── tsfm_server/              # Time-series forecasting and anomaly detection
-│   ├── fmsr_server/              # Failure mode to sensor relation mapping
-│   └── wo_server/                # Work order creation and prioritization
-├── benchmarks/                   # Benchmark scripts and configurations
-│   ├── baseline/                 # Baseline (no optimization) runs
-│   └── optimized/                # Runs with optimization techniques applied
-├── profiling/                    # PyTorch Profiler traces and analysis
-├── notebooks/                    # Jupyter notebooks for analysis and visualization
-├── docs/                         # Project documentation
-│   ├── project_reference.md      # Class requirements, grading, mentor guidance
-│   ├── project_synopsis.md       # Cold-start project overview with domain background
-│   ├── roadmap.md            	  # Timeline, work distribution, problem statement
-│   └── mid_checkpoint_notes.md   # Mid-point long-form reference notes
-├── planning/                     # Meeting agendas and notes
-├── results/                      # Experiment results and figures
-└── .github/workflows/            # CI (Black formatting check)
+├── README.md                     # This file — project overview, current status, structure
+├── requirements.txt              # Python dependencies (ibm-watsonx-ai, pandas, etc)
+├── .github/workflows/            # CI (Black formatting check)
+│
+├── data/                         # Data pipeline + processed datasets — see data/README.md
+│   ├── build_processed.py        #   Downloads + joins 5 Kaggle datasets via synthesized transformer_id
+│   ├── generate_synthetic.py     #   Offline synthetic equivalent (no Kaggle needed)
+│   ├── processed/                #   6 joined CSVs tracked in git (asset_metadata, dga_records, …)
+│   ├── scenarios/                #   AssetOpsBench-format scenario files — see data/scenarios/README.md
+│   └── raw/                      #   GITIGNORED raw Kaggle downloads
+│
+├── mcp_servers/                  # 4 MCP servers on shared base — see mcp_servers/README.md
+│   ├── base.py                   #   Shared data loader + utilities
+│   ├── iot_server/               #   Sensor reads, asset metadata
+│   ├── fmsr_server/              #   Failure search, IEC 60599 Rogers Ratio DGA analysis
+│   ├── tsfm_server/              #   RUL forecast, z-score anomaly, OLS trend
+│   └── wo_server/                #   Work order CRUD, downtime estimation
+│
+├── scripts/                      # Utility scripts
+│   ├── verify_watsonx.py         #   WatsonX access verification + latency benchmarking
+│   └── benchmark_prompts/        #   Prompt templates for latency tests
+│
+├── benchmarks/                   # Raw latency/throughput runs — see benchmarks/README.md
+│   ├── baseline/                 #   Pre-optimization (direct Python, MCP baseline)
+│   └── optimized/                #   Post-optimization (int8, kv_cache, batched)
+│
+├── notebooks/                    # Jupyter notebooks — see notebooks/README.md
+├── profiling/                    # PyTorch Profiler + Nsight — see profiling/README.md
+├── results/                      # Curated metrics + figures — see results/README.md
+│
+├── docs/                         # Living authored documentation — see docs/README.md
+├── planning/                     # Meeting agendas + working notes
+└── reports/                      # Frozen deliverables (PDFs, PPTXs) — see reports/README.md
+    └── archive/                  #   Superseded drafts
 ```
 
 ## Setup
@@ -110,21 +121,29 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 
-*Last updated: Apr 6, 2026*
+*Last updated: Apr 7, 2026 — Week 1 complete, mid-point submitted, now in implementation phase.*
 
+**Week 1 (complete):**
 - [x] Problem statement finalized (four contributions)
-- [x] Research proposal drafted and shared with mentor via Overleaf
-- [x] GitHub repo scaffolded, WandB team created
+- [x] Research proposal drafted and shared with mentor via Overleaf; mentor endorsed NeurIPS 2026 Datasets & Benchmarks track
+- [x] GitHub repo scaffolded, WandB team created, **repo now public** (Apr 7)
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
-- [x] Compute confirmed (Insomnia cluster + GCP credits)
-- [x] Compute plan committed (`docs/compute_plan.md`)
-- [x] WatsonX API access received and verified (6 Llama models available; Maverick-17B and Llama-3.3-70B benchmarked end-to-end -- see `docs/watsonx_access.md`)
-- [x] Single team fork of AssetOpsBench (defaulting to `eggrollofchaos/hpml-assetopsbench-smart-grid-mcp`; mentor hasn't formally weighed in but team is committing here)
-- [x] Data pipeline + processed Kaggle datasets landed (`data/processed/` with asset_metadata, dga_records, failure_modes, fault_records, rul_labels, sensor_readings)
-- [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO)
-- [ ] MCP server implementations (fleshing out skeletons)
-- [ ] Smart Grid scenario authoring (in progress)
-- [ ] Baseline profiling on GPU infrastructure
+- [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/compute_plan.md`)
+- [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end — 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/watsonx_access.md`)
+- [x] Data pipeline + processed Kaggle datasets landed (`data/processed/` with asset_metadata, dga_records, failure_modes, fault_records, rul_labels, sensor_readings — 97k+ rows, synthesized `transformer_id` key across 20 transformers)
+- [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast, anomaly detection, work-order CRUD)
+- [x] `docs/data_pipeline.tex` paper section drafted
+- [x] **Mid-point report submitted** (`reports/2026-04-06_midpoint_submission.pdf`) to Courseworks on Mon Apr 6
+
+**Week 2 (in progress, Apr 7-13):**
+- [ ] MCP server implementations: hardening, tests, harness integration on top of skeletons
+- [ ] Smart Grid scenario authoring (target: 15+ validated by Apr 13)
+- [ ] AssetOpsBench evaluation harness running end-to-end with existing scenarios
+- [ ] Deploy Llama-3.1-8B-Instruct via vLLM on Insomnia for baseline inference runs
+- [ ] First baseline agent trajectory through MCP
+- [ ] Profiling methodology: PyTorch Profiler instrumentation planned
+
+**Open question awaiting mentor reply:** is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside vanilla Agent-as-Tool and vanilla Plan-Execute?
 
 ## Key Dates
 
@@ -146,6 +165,10 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [Weights & Biases](https://wandb.ai/site)
 
 See also: [docs/project_reference.md](docs/project_reference.md) for class requirements, grading, and mentor guidance.
+
+## Acknowledgments
+
+We acknowledge the use of AI tools, including Claude, during the development of this project.
 
 ## License
 

@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Last updated April 6, 2026. Read time: ~10 minutes.*
+*Last updated April 7, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -130,10 +130,10 @@ profiling and optimization.
 
 | Name | Role | Key strength |
 |---|---|---|
-| **Alex Xin** | Project coordination, profiling analysis, report writing | 12+ yrs production data systems, project management |
 | **Akshat Bhandari** | Scenario design, evaluation harness, agent pipeline | Published ML research (EACL 2026), multi-agent systems |
-| **Tanisha Rathod** | MCP server implementation (all domains), dataset compilation, Overleaf | Distributed systems at Caterpillar, AWS/SageMaker |
-| **Aaron Fan** | Scenario design, compute plan + infrastructure, data pipeline | EE background, power systems research, embedded systems |
+| **Aaron Fan** | Compute plan + infrastructure, profiling environment, runbook | EE background, power systems research, embedded systems |
+| **Tanisha Rathod** | MCP server implementation (all domains), data pipeline, Overleaf | Distributed systems at Caterpillar, AWS/SageMaker |
+| **Wei Alexander Xin** | Project coordination, profiling analysis, report writing, WatsonX setup | 12+ yrs production data systems, project management |
 
 ## Related Work
 
@@ -145,27 +145,35 @@ profiling and optimization.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 6, 2026)
+## Current status (April 7, 2026)
 
+**Week 1 complete. Mid-point report submitted Apr 6. Now in implementation phase.**
+
+Completed:
 - Problem statement finalized (four contributions: scenarios, MCP servers, profiling, orchestration comparison)
 - Full research proposal drafted and shared with mentor via Overleaf (NeurIPS 2026 template)
 - Mentor endorsed NeurIPS 2026 Datasets & Benchmarks submission (abstract May 4, paper May 6)
-- Fork synced with upstream AssetOpsBench (48 new commits including src/workflow/ -> src/agent/ rename)
-- GitHub repo set up (private): github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp
+- Fork synced with upstream AssetOpsBench (new VibrationAgent, AgentRunner ABC, `src/workflow/` → `src/agent/` rename)
+- GitHub repo **public** as of April 7, 2026: [eggrollofchaos/hpml-assetopsbench-smart-grid-mcp](https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp)
 - WandB team created: wandb.ai/assetopsbench-smartgrid
 - 5 candidate datasets identified (3 CC0, 2 restricted license)
-- AssetOpsBench forked and reviewed; scenario structure and evaluation harness understood
-- MCP documentation reviewed
 - Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
 - Compute plan committed (`docs/compute_plan.md`) mapping GPU needs per project phase
-- WatsonX API access received from mentor and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked (`docs/watsonx_access.md`)
-- Data pipeline scripts + processed Kaggle datasets landed (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings)
-- MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class
-- **Mid-point report due Monday April 6** (5-slide PowerPoint)
-- **Final deadline: May 4** (presentation + report + code)
+- WatsonX API access received from mentor Apr 5 and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked at interactive speeds (`docs/watsonx_access.md`)
+- Data pipeline scripts + processed Kaggle datasets landed (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings — 97k+ rows with synthesized `transformer_id` key spanning 20 transformers across 4 health tiers)
+- MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast + z-score anomaly detection + OLS trend, work-order CRUD)
+- Paper-ready `docs/data_pipeline.tex` section drafted
+- **Mid-point report submitted** to Courseworks on Monday April 6 (see `reports/2026-04-06_midpoint_submission.pdf`)
 
-Entering implementation phase this week. MCP server implementations (fleshing out the
-new skeletons), scenario authoring, and evaluation harness setup are all in progress.
+In progress (Week 2, Apr 7-13):
+- Fleshing out MCP server implementations on top of the skeletons (hardening, tests, harness integration)
+- Authoring first batch of Smart Grid scenarios (target: 15+ by Apr 13)
+- Getting AssetOpsBench evaluation harness running end-to-end with existing scenarios
+- Deploying Llama-3.1-8B-Instruct via vLLM on Insomnia for baseline inference runs
+- Preparing profiling methodology: PyTorch Profiler instrumentation for tool-call latency, GPU utilization, memory bandwidth
+- Open question awaiting mentor reply: is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside AaT and PE?
+
+**Final deadline: May 4** (presentation + report + code)
 
 ## Key links
 
@@ -178,11 +186,9 @@ new skeletons), scenario authoring, and evaluation harness setup are all in prog
 ## Timeline at a glance
 
 ```
-Apr 1-2     Setup, align, contact mentor
-Apr 3-6     Mid-checkpoint report, start implementation
-Apr 7-13    MCP servers + 15+ scenarios + baseline runs
-Apr 14-20   Baseline profiling on GPU infrastructure
-Apr 21-27   Apply optimizations, complete 30+ scenarios
-Apr 28-May3 Final report + presentation + open-source PR
-May 4       SUBMIT
+Week 2 (Apr 7-13)    MCP servers + 15+ scenarios + baseline runs
+Week 3 (Apr 14-20)   Baseline profiling on GPU infrastructure
+Week 4 (Apr 21-27)   Apply optimizations, complete 30+ scenarios
+Week 5 (Apr 28-May3) Final report + presentation + open-source PR
+May 4                SUBMIT
 ```

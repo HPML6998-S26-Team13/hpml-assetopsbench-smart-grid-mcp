@@ -1,7 +1,7 @@
 # WatsonX.ai Access
 
-*Last updated: April 5, 2026*
-*Verified by: Alex*
+*Last updated: April 5, 2026*  
+*Verified by: Wei Alexander Xin*
 
 ## Overview
 

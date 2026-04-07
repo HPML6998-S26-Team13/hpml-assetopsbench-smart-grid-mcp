@@ -1,6 +1,6 @@
 # Repository Strategy
 
-*Last updated: April 6, 2026 — pending team finalization on April 7 call*
+*Last updated: April 7, 2026 — team repo is now public*
 
 ## Two repos, two purposes
 
@@ -52,7 +52,6 @@ AssetOpsBench.
 | `docs/watsonx_access.md` (project-specific access route) | yes | no |
 | `docs/mid_checkpoint_notes.md`, `roadmap.md`, `project_synopsis.md` | yes | no |
 | `scripts/verify_watsonx.py`, `scripts/benchmark_prompts/` | yes | no |
-| `codex_mcp_prompts/` | yes | no |
 | `.env` (credentials) | gitignored | gitignored |
 
 ## Workflow

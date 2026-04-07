@@ -1,8 +1,8 @@
 # Mid-Point Progress Report (Long-form notes) -- Team 13 / District 1101
 
-**Project:** MCP-Based Industrial Agent Benchmarking for Smart Grid Operations
-**Date:** April 6, 2026
-**Team:** Alex Xin (wax1), Akshat Bhandari (ab6174), Tanisha Rathod (tr2828), Aaron Fan (af3623)
+**Project:** MCP-Based Industrial Agent Benchmarking for Smart Grid Operations  
+**Date:** April 6, 2026  
+**Team:** Akshat Bhandari (ab6174), Aaron Fan (af3623), Tanisha Rathod (tr2828), Wei Alexander Xin (wax1)  
 **Mentor:** Dr. Dhaval Patel, IBM Research
 
 ## Problem Statement
