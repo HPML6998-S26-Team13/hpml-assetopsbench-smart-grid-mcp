@@ -27,6 +27,12 @@ data/raw/
 *.jsonl
 !data/processed/*.csv
 
+# Slurm logs
+logs/*.out
+
+# Models (large, downloaded on cluster)
+models/
+
 # Profiling traces (large)
 profiling/traces/
 *.pt.trace.json

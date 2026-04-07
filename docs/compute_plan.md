@@ -18,6 +18,11 @@ unattended jobs that exceed the `short` partition time limit.
 
 ## 1. Insomnia Cluster (Primary)
 
+**Login:** `ssh af3623@insomnia.rcs.columbia.edu` (SSH key auth + Duo 2FA required)
+**Setup:** `bash scripts/setup_insomnia.sh` (one-time env + model download)
+**Serve:** `sbatch scripts/vllm_serve.sh` (launches vLLM on A6000)
+**Test:** `bash scripts/test_inference.sh <node> 8000` (validates from login node)
+
 ### Available GPUs
 
 | GPU | VRAM | Per Node | Nodes | Total GPUs | Partition(s) |
