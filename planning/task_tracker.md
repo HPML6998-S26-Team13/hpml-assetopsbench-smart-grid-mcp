@@ -1,9 +1,13 @@
 # SmartGridBench Task Tracker
 
-*Canonical task tracker for the SmartGridBench project. Last updated: April 7, 2026.*
-*Weeks: W2 = Apr 7-13, W3 = Apr 14-20, W4 = Apr 21-27, W5 = Apr 28-May 3.*
+*Canonical task tracker for the SmartGridBench project. Last updated: April 8, 2026.*
+*Weeks: W1 = Mar 31-Apr 6, W2 = Apr 7-13, W3 = Apr 14-20, W4 = Apr 21-27, W5 = Apr 28-May 4, FW = May 5+.*
+*Roadmap view note: In the GitHub Projects board, `Iteration` is the primary timeline field. Every task, including completed work, stays assigned to the week it was due so the roadmap remains readable historically. `Priority` uses `P0` for critical-path or deadline-driven work, `P1` for important supporting work, and `P2` for stretch/future work.*
+*Execution note: for exact task definitions, deliverables, dependencies, and coordination handoffs, see [`task_specs.md`](./task_specs.md). A task remains open until it is merged into the canonical repo or otherwise independently verified; local-only work counts as in progress, not done.*
 
 ## Done
+
+### W1 (Mar 31-Apr 6) — Foundations + midpoint checkpoint
 
 - [x] Fork AssetOpsBench, clone, run `uv sync` + unit tests (Team)
 - [x] Draft mid-point PowerPoint, 5-slide template (Alex)
@@ -31,13 +35,31 @@
 - [x] `docs/data_pipeline.tex` — paper-ready LaTeX section on dataset schemas, shared-key strategy, output schemas, limitations, reproducibility (Tanisha) — Apr 6
 - [x] `docs/dataset_visualization.png` — sample/smoke-test visualization confirming data pipeline output is well-formed (6 panels: H2 over time, C2H2 arcing indicator, RUL window, RUL distribution by tier, DGA gas snapshot, fault records by tier) (Tanisha) — Apr 6. **Note:** image is a static snapshot (no tracked generator script in repo). Follow-up: commit a generator notebook into `notebooks/`, or accept as static.
 - [x] Submit mid-point PowerPoint to Courseworks (Alex) — Mon Apr 6 11:59pm
+
+### W2 (Apr 7-13) — Public release cleanup
+
 - [x] Team repo made public + docs reorganization for public release (Alex) — Apr 7
+
+## Milestones
+
+- [x] Mid-point report submitted — Apr 6
+- [x] Team repo public — Apr 7
+- [ ] W2 foundation stack ready (serving, profiling harness, hardened MCP servers, 15+ validated scenarios) — Apr 13
+- [ ] Experiment 1 completed (MCP overhead) — Apr 20
+- [ ] Experiment 2 completed (orchestration comparison) — Apr 27
+- [ ] Final class deliverables ready (report + deck + code) — May 4
+- [ ] NeurIPS 2026 abstract submitted — May 4
+- [ ] NeurIPS 2026 full paper submitted — May 6
 
 ## In Progress
 
-- [ ] Get AssetOpsBench evaluation harness running end-to-end (Akshat) — was due Sun Apr 5
-- [ ] Draft first 5-10 Smart Grid transformer scenarios (Akshat) — was due Sun Apr 5
-- [ ] **NeurIPS 2026 paper.** Drafting in NeurIPS Datasets & Benchmarks Track format, then back-porting to IEEE template for the class final report. Same content, two output formats — no double work. Abstract due May 4, full paper due May 6. Class report due May 4 (back-ported). Started Apr 7.
+- [ ] Replay local Smart Grid scenario files onto canonical `team13/main` and push first batch (Akshat)
+- [ ] Replay local benchmark / harness README work onto canonical `team13/main` and push (Akshat)
+- [ ] Get AssetOpsBench evaluation harness running end-to-end on the canonical branch (Akshat)
+- [ ] Draft first 5-10 Smart Grid transformer scenarios and commit them to the canonical repo (Akshat)
+- [ ] Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct (Aaron)
+- [ ] Validate all four MCP servers with the benchmark Llama path, not only Claude Desktop (Tanisha)
+- [ ] NeurIPS 2026 paper — draft in NeurIPS format first, then back-port to IEEE final report (Alex)
 
 ## Backlog
 
@@ -45,74 +67,75 @@
 
 **Foundation (Tier 1 — must complete to unblock everything else):**
 
-- [ ] Insomnia/vLLM environment up + Llama-3.1-8B-Instruct serving (Aaron)
-- [ ] Profiling harness scripts — PyTorch Profiler + Nsight wrappers (Aaron)
-- [ ] Slurm batch script template (Aaron)
-- [ ] Complete IoT MCP server hardening + tests + harness integration (Tanisha) — skeleton exists with list_assets, get_asset_metadata, list_sensors, get_sensor_readings
-- [ ] Complete TSFM MCP server hardening + tests (Tanisha) — skeleton exists with get_rul, forecast_rul, detect_anomalies, trend_analysis
-- [ ] Complete FMSR MCP server hardening + tests (Tanisha) — skeleton exists with list/search failure modes, get_sensor_correlation, get_dga_record, analyze_dga (Rogers Ratio)
-- [ ] Complete WO MCP server hardening + tests (Tanisha) — skeleton exists with fault records + work-order CRUD + estimate_downtime
-- [ ] Investigate WO server architectural pattern (Tanisha, lecture insight) — should `wo_server` expose code-execution-style tools rather than CRUD-style? Per Dhaval's lecture, the upstream WO agent is architecturally a coding agent.
-- [ ] WandB instrumentation in MCP servers + agent pipeline; metrics schema definition (Alex)
-- [ ] Reach 15+ validated Smart Grid scenarios (Akshat)
-- [ ] Validate scenario format against AssetOpsBench structure (Akshat)
-- [ ] 6-dimension LLM-as-Judge scoring in eval harness (Akshat, lecture insight) — implement the 6 scoring dimensions from the AssetOpsBench paper
-- [ ] First baseline agent trajectory through MCP — the integration moment (Akshat + Tanisha + Alex)
-- [ ] Team members pull latest, install `ibm-watsonx-ai` into their `.venv`, run verify script (Team)
-- [ ] First end-to-end judge call using Maverick-17B on a real agent trajectory (Akshat)
+- [ ] Generic Slurm experiment template for benchmark jobs (Aaron)
+- [ ] Profiling capture wrappers — PyTorch Profiler around benchmark runs (Aaron)
+- [ ] Profiling capture wrappers — Nsight / `nvidia-smi` / GPU utilization collection (Aaron)
+- [ ] Complete IoT MCP server hardening + tests + harness contract (Tanisha)
+- [ ] Complete TSFM MCP server hardening + tests + harness contract (Tanisha)
+- [ ] Complete FMSR MCP server hardening + tests + harness contract (Tanisha)
+- [ ] Complete WO MCP server hardening + tests + harness contract (Tanisha)
+- [ ] WO server architecture review against Dhaval's “WO agent is a coding agent” guidance (Tanisha)
+- [ ] Reach 15+ validated Smart Grid scenarios in the canonical repo (Akshat)
+- [ ] Validate Smart Grid scenario format against AssetOpsBench schema and conventions (Akshat)
+- [ ] Real-world scenario validation plan (Akshat)
+- [ ] 6-dimension LLM-as-Judge scoring in eval harness (Akshat)
+- [ ] First baseline agent trajectory through MCP end-to-end (Akshat)
+- [ ] First end-to-end judge call using Maverick-17B on a real trajectory (Akshat)
+- [ ] WandB metrics schema definition for servers, trajectories, and experiment cells (Alex)
+- [ ] WandB instrumentation in MCP servers and agent pipeline (Alex)
+- [ ] Wire Agent-as-Tool orchestration to the team's MCP servers (Alex)
+- [ ] Wire Plan-Execute orchestration to the team's MCP servers (Alex)
+- [ ] Follow up with Dhaval on hybrid orchestration novelty and Smart Grid scenario realism / validation criteria (Alex)
+- [ ] Each team member sync canonical `team13/main`, install `ibm-watsonx-ai` into `.venv`, and run the verify script locally (Team)
 - [ ] Set up WandB project with initial experiment logs (Team)
 
 ### W3 (Apr 14-20) — Baseline profiling + experimental design
 
-- [ ] Wire Agent-as-Tool + Plan-Execute orchestrations to team's MCP servers (Alex)
-- [ ] Hybrid orchestration prototype implementation (Alex) — conditional on mentor novelty check reply
-- [ ] Self-Ask integration (~10 LOC) in all 3 orchestrations (Alex, lecture insight) — addresses "Fail to Ask for Clarification" failures per Berkeley failure paper
-- [ ] Run Experiment 1 (MCP overhead): 3 conditions × N scenarios — Aaron writes profiling capture, Alex owns experiment design + analysis
-  - [ ] Direct Python calls (existing AssetOpsBench)
-  - [ ] MCP baseline (our servers, unoptimized)
-  - [ ] MCP optimized (after tuning)
-- [ ] Notebook 02: latency analysis — MCP overhead cost breakdown (Alex)
-- [ ] Integrate WandB logging into profiling pipeline (Aaron + Alex)
+- [ ] Hybrid orchestration prototype implementation (Alex)
+- [ ] Self-Ask integration (~10 LOC) in all 3 orchestrations (Alex)
+- [ ] Run Experiment 1 profiling captures (Direct vs MCP-baseline vs MCP-optimized) and publish raw artifacts for analysis (Aaron)
+- [ ] Notebook 02: latency analysis — MCP overhead experiment design, parsing, and writeup (Alex)
+- [ ] Integrate WandB logging into profiling pipeline (Aaron)
 - [ ] First WandB experiment logs live (Team)
+- [ ] Knowledge Plugin: encode IEC 60599 + IEEE C57 transformer engineering standards as a structured knowledge document the scenario-gen LLM can consume (Tanisha)
+- [ ] Auto-scenario generation prototype — first generated Smart Grid scenario batch from Kaggle data + Knowledge Plugin (Aaron)
+- [ ] Quality evaluation methodology: LLM-as-Judge against hand-crafted reference set, with circularity handling (Alex)
 
 ### W4 (Apr 21-27) — Optimizations + orchestration comparison
 
 - [ ] Apply INT8 quantization via vLLM (Aaron)
 - [ ] KV-cache tuning experiments (Aaron)
 - [ ] Batched tool-call scheduling implementation (Akshat)
-- [ ] Run Experiment 2 (Orchestration comparison): 3 orchestrations × N multi-domain scenarios on MCP-baseline — AaT vs PE vs Hybrid (Alex)
-- [ ] Reach 30+ scenarios (Akshat + Team)
+- [ ] Run Experiment 2 (Orchestration comparison): 3 orchestrations × N multi-domain scenarios on MCP-baseline (Alex)
+- [ ] Reach 30+ scenarios (Akshat)
 - [ ] Notebook 03: orchestration comparison (Alex)
-- [ ] Failure mode taxonomy analysis (Alex, lecture insight) — apply Berkeley failure paper categories (Specification / Inter-Agent / Task Verification) to our experiment results
+- [ ] Failure taxonomy classification + evidence table (Alex)
+- [ ] Failure taxonomy visuals + mitigation plan (Alex)
+- [ ] Implement chosen mitigation(s) from failure taxonomy analysis (Alex)
+- [ ] Re-run affected benchmark cells after mitigation and compare before/after (Alex)
 - [ ] Collect before/after profiling data across all metrics (Alex)
-- [ ] Runbook: consolidate all setup + experiment reproduction steps into `docs/runbook.md` (Aaron + Akshat)
+- [ ] Runbook section: infrastructure / serving / Slurm / profiling setup (`docs/runbook.md`) (Aaron)
+- [ ] Runbook section: eval harness / scenario execution / judge reproduction (`docs/runbook.md`) (Akshat)
 - [ ] GCP fallback setup instructions — how to spin up A100 instance if Insomnia is down (Aaron)
+- [ ] Auto-scenario generation scale-up — refine pipeline and expand generated scenario set (Aaron)
+- [ ] Validate auto-generated scenarios against hand-crafted reference set (Akshat)
+- [ ] Comparative analysis: hand-crafted vs auto-generated scenarios on agent performance, in notebook 04 (Alex)
+- [ ] Reach 50+ scenarios total in canonical repo (manual + auto-generated) (Akshat)
 
 ### W5 (Apr 28-May 3) — Report + presentation
 
-- [ ] NeurIPS draft — Alex sole author, drafting in Datasets & Benchmarks Track format
+- [ ] NeurIPS draft — Datasets & Benchmarks Track format (Alex)
 - [ ] Class final report — back-ported from NeurIPS draft to IEEE template (Alex)
-- [ ] Content brief: Methodology + Data section facts, 1-page bullet list (Tanisha → Alex)
-- [ ] Content brief: Scenarios + Eval section facts (Akshat → Alex)
-- [ ] Content brief: Infrastructure + Profiling section facts (Aaron → Alex)
+- [ ] Content brief: Methodology + Data + MCP server facts, 1-page bullet list (Tanisha)
+- [ ] Content brief: Scenarios + Eval + judge facts, 1-page bullet list (Akshat)
+- [ ] Content brief: Infrastructure + Profiling + serving facts, 1-page bullet list (Aaron)
 - [ ] Final presentation deck (Alex)
 - [ ] WandB dashboard polish (Team)
 - [ ] Open-source PR to AssetOpsBench (Team)
-- [ ] NeurIPS 2026 abstract (Alex) — due May 4
-- [ ] NeurIPS 2026 full paper submission (Alex primary, Team support?) — due May 6
+- [ ] NeurIPS 2026 abstract (Alex)
+- [ ] NeurIPS 2026 full paper submission (Alex)
 - [ ] Runbook final review — verify all experiments are reproducible from doc (Team)
-
-## Stretch — Problem Statement B / Future Work
-
-Conditional on Apr 14 go/no-go: activated only if Tier 1 W2 work is on track.
-
-- [ ] Auto-scenario generation pipeline — LLM agent consuming Kaggle data + Knowledge Plugin → novel scenarios (Aaron) — ~2 weeks. Substantive engineering ownership.
-- [ ] Knowledge Plugin: encode IEC 60599 + IEEE C57 transformer engineering standards as a structured knowledge document the scenario-gen LLM can consume (Tanisha) — ~1 week
-- [ ] Quality evaluation methodology: LLM-as-Judge against hand-crafted reference set, with circularity handling (Alex) — ~3-4 days
-- [ ] Comparative analysis: hand-crafted vs auto-generated scenarios on agent performance, in notebook 04 (Alex)
-- [ ] Validate auto-generated scenarios against hand-crafted reference set (Akshat) — light pickup, only if W2 has caught up
-- [ ] Paper section on PS B methodology + circularity discussion (Alex)
-- [ ] Reach 50+ scenarios total (manual + auto-generated)
+- [ ] Paper section on Problem Statement B methodology + circularity discussion (Alex)
 
 ## Blocked
 
@@ -124,6 +147,7 @@ Conditional on Apr 14 go/no-go: activated only if Tier 1 W2 work is on track.
 - Final deadline: May 4 (presentation + report + code)
 - Weekly meetings: Tuesdays 2:45 PM ET
 - AssetOpsBench has 467 scenarios across 6 HuggingFace subsets (152 original + 315 newer); our contribution is the 7th asset domain (Smart Grid transformers)
+- Problem Statement B / scenario-generation work is activated and scheduled across W3-W5, not parked as stretch.
 - Two experimental tracks: Experiment 1 (MCP overhead, 3 conditions) and Experiment 2 (Orchestration comparison, 3 orchestrations on MCP-baseline). 5 unique cells total. See [`../docs/execution_plan.md`](../docs/execution_plan.md) for the full operational plan with task dependency map and benchmarking workflow.
 
 ---
