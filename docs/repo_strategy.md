@@ -1,100 +1,75 @@
 # Repository Strategy
 
-*Last updated: April 7, 2026 — team repo is now public*
+*Last updated: April 9, 2026 - team13 repo is canonical*
 
-## Two repos, two purposes
+## Canonical repo layout
 
-We work out of two related repositories:
+We now use three code/document surfaces for different purposes:
 
-### 1. Team repo (this one): `eggrollofchaos/hpml-assetopsbench-smart-grid-mcp`
+### 1. Canonical collaboration repo: `HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp`
 
-Day-to-day project work and team coordination. This is where everyone pushes
-and where the bulk of activity happens during the project.
+This is the team repo and the source of truth for all shared project work.
+`team13/main` is the canonical branch. GitHub Projects, planning docs, MCP
+server code, scenarios, benchmark scripts, and public-facing project docs all
+live here.
 
-**Contents:**
-- Internal planning and coordination docs (`docs/`, `planning/`)
-- Mid-report drafts and meeting notes
-- Compute plan, WatsonX setup docs, internal tooling
-- MCP server implementations (work-in-progress)
-- Smart Grid scenario authoring (work-in-progress)
-- Data pipeline + processed datasets
-- Profiling code, benchmark prompts
-- Class-project-specific configuration and credentials (gitignored)
+### 2. Personal mirror: `eggrollofchaos/hpml-assetopsbench-smart-grid-mcp`
 
-### 2. PR staging: `eggrollofchaos/AssetOpsBench`
+This repo mirrors the canonical team repo after pushes land on `team13/main`.
+It exists as a backup / personal mirror, not as the planning or collaboration
+surface. Day-to-day work should not branch from this mirror.
 
-Alex's existing fork of IBM/AssetOpsBench, with `upstream` configured to track
-IBM's main. This is the eventual home for our open-source contribution back to
-AssetOpsBench.
+### 3. Upstream PR staging fork: `eggrollofchaos/AssetOpsBench`
 
-**Contents (when we get there):**
-- A feature branch (e.g., `smartgrid-mcp`) containing only the PR-bound subset:
-  - MCP server implementations (final, cleaned up)
-  - Smart Grid scenario JSON files
-  - Data pipeline scripts (`data/build_processed.py`, `data/generate_synthetic.py`)
-  - Loader / download scripts for the processed Kaggle datasets
-  - A short "Smart Grid extension" doc explaining the new asset class
-- Stays in sync with `upstream/main` via periodic
-  `git fetch upstream && git merge upstream/main`
+This is the eventual staging area for the open-source contribution back to IBM's
+AssetOpsBench. We will copy only the PR-bound subset here once the Smart Grid
+extension stabilizes.
+
+## Private notes repo
+
+Alex also keeps private planning notes in the local class repo at:
+
+`~/coding/Classes/COMS-E6998/Final Project/`
+
+That repo is for private prep notes, meeting prep, and personal status tracking.
+It is not the canonical source for shared team code or shared task state.
 
 ## What goes where
 
-| Item | Team repo | Fork |
-|---|---|---|
-| MCP server implementations (during dev) | yes | no (until W4-W5) |
-| MCP server implementations (final, for PR) | yes | yes (cherry-picked) |
-| Smart Grid scenarios | yes | yes (cherry-picked at end) |
-| Data pipeline scripts | yes | yes (cherry-picked at end) |
-| Processed Kaggle CSVs | yes | TBD (full data vs download scripts vs LFS) |
-| Mid-report drafts (PPT, MD) | yes | no |
-| `planning/` (internal coordination) | yes | no |
-| `docs/compute_plan.md` (Insomnia/GCP-specific) | yes | no |
-| `docs/watsonx_access.md` (project-specific access route) | yes | no |
-| `docs/mid_checkpoint_notes.md`, `roadmap.md`, `project_synopsis.md` | yes | no |
-| `scripts/verify_watsonx.py`, `scripts/benchmark_prompts/` | yes | no |
-| `.env` (credentials) | gitignored | gitignored |
+| Item | team13 canonical repo | personal mirror | AssetOpsBench fork |
+|---|---|---|---|
+| MCP server implementations | yes | mirrored copy | later, PR-bound subset only |
+| Smart Grid scenarios | yes | mirrored copy | later, PR-bound subset only |
+| Data pipeline scripts | yes | mirrored copy | later, PR-bound subset only |
+| Processed CSVs and project-specific artifacts | yes | mirrored copy | likely no, or replaced with loaders / generators |
+| Shared planning docs and call notes | yes | mirrored copy | no |
+| Private prep notes and personal status docs | no | no | no |
+| WatsonX setup, compute notes, benchmark prompts | yes | mirrored copy | mostly no |
 
-## Workflow
+## Day-to-day workflow
 
-1. **Day-to-day:** push to the team repo as usual.
-2. **Periodic upstream sync:** roughly weekly, sync `eggrollofchaos/AssetOpsBench`
-   with `upstream/main` to stay current with IBM's changes (e.g., recent
-   `src/workflow/` → `src/agent/` rename).
-3. **Closer to W4-W5:** when MCP servers and scenarios are stable, copy /
-   cherry-pick the PR-bound subset into a feature branch on the fork. Clean up,
-   test against upstream, and PR from there.
+1. Treat `team13/main` as canonical.
+2. Push to `team13` first.
+3. Mirror the same commit to `origin` after the canonical push succeeds.
+4. Keep local planning notes or rough prep material in the personal class repo until
+   they are ready to become shared documentation.
+5. Near W5, stage the clean upstream contribution in `eggrollofchaos/AssetOpsBench`
+   against `upstream/main`.
 
-## Why two repos instead of one
+## Practical git guidance
 
-**Pros of separation:**
-- Internal team docs (planning, mid-report drafts, compute plans, WatsonX setup,
-  Codex review notes) never risk leaking into the upstream PR
-- The fork stays clean — `git diff upstream/main fork/smartgrid-mcp` is exactly
-  what we're contributing
-- Periodic upstream sync on the fork is safe — no merge conflicts with our
-  internal docs
-- We can keep the team repo around as a "how we built it" record after the
-  upstream PR merges, useful for the final report and the NeurIPS submission
+- Local `main` should track `team13/main`.
+- `remote.pushDefault` should point at `team13`.
+- Plain `git push` should update the canonical team repo first.
+- After a successful canonical push, mirror to `origin/main`.
+- If history is rewritten on `main`, teammates should reset local `main` to
+  `team13/main` and replay any in-flight work from feature branches.
 
-**Cons of separation:**
-- Two URLs to remember, slight context-switching cost
-- When we're ready to PR, we have to copy code over to the fork (some manual
-  work)
-- Potential for the two repos to drift if we're not careful about which one
-  has the canonical version of MCP server code
+## Why this split works
 
-**Mitigations:**
-- Treat the team repo as canonical for MCP server code during development
-- Only copy to the fork close to PR-submission time, when the code is stable
-- Use `git diff` between the two before PR to confirm parity
-
-## Open questions
-
-To finalize on the April 7 call:
-
-- Confirm all four team members are on board with the two-repo split (vs
-  single-repo with subdirectory split)
-- Decide who owns the periodic upstream sync on the fork
-- Decide how to handle processed Kaggle CSV files in the upstream PR
-  (full data via Git LFS vs download scripts vs reference loaders)
-- Decide who runs the eventual cleanup + PR submission near W5
+- The canonical team repo stays understandable for the whole team.
+- The personal mirror remains a safety copy, not a second source of truth.
+- The IBM fork stays clean until we are ready to upstream only the subset that
+  belongs in AssetOpsBench.
+- The private class repo can hold candid status notes and prep material without
+  polluting the shared repo.

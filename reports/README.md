@@ -24,4 +24,4 @@ Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or oth
 - **Naming:** `YYYY-MM-DD_<what>.<ext>` — date-prefixed so `ls` orders them chronologically.
 - **No edits after the fact.** If a shipped deliverable needs a correction, create a new dated file — don't overwrite history.
 - **Drafts and working versions go to `archive/`** at the time the final version is created, so the top-level only ever shows what's currently authoritative.
-- **Source files (LaTeX, Markdown, Keynote) live elsewhere** — `docs/data_pipeline.tex` for paper-ready LaTeX sections, `planning/mid_report_slides.md` for slide content. `reports/` only holds the rendered outputs.
+- **Source files (LaTeX, Markdown, Keynote) live elsewhere** - `docs/data_pipeline.tex` for paper-ready LaTeX sections, `planning/archive/mid_report_slides.md` for the archived midpoint slide source. `reports/` only holds the rendered outputs.

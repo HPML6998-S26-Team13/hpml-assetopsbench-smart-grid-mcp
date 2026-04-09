@@ -106,7 +106,7 @@ via WatsonX API to assess scaling effects.
 ### Installation
 
 ```bash
-git clone https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp.git
+git clone https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
 cd hpml-assetopsbench-smart-grid-mcp
 pip install -r requirements.txt
 ```
@@ -121,7 +121,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 
-*Last updated: Apr 7, 2026 — Week 1 complete, mid-point submitted, now in implementation phase.*
+*Last updated: Apr 9, 2026 - W2 foundation work in progress, planning system reset complete.*
 
 **Week 1 (complete):**
 - [x] Problem statement finalized (four contributions)
@@ -136,12 +136,18 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] **Mid-point report submitted** (`reports/2026-04-06_midpoint_submission.pdf`) to Courseworks on Mon Apr 6
 
 **Week 2 (in progress, Apr 7-13):**
-- [ ] MCP server implementations: hardening, tests, harness integration on top of skeletons
-- [ ] Smart Grid scenario authoring (target: 15+ validated by Apr 13)
-- [ ] AssetOpsBench evaluation harness running end-to-end with existing scenarios
-- [ ] Deploy Llama-3.1-8B-Instruct via vLLM on Insomnia for baseline inference runs
-- [ ] First baseline agent trajectory through MCP
-- [ ] Profiling methodology: PyTorch Profiler instrumentation planned
+- [x] GitHub Projects reset as the canonical planning surface, with weekly iterations, workstream parent issues, and delivery-gate milestones
+- [ ] Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct
+- [ ] AssetOpsBench evaluation harness running end-to-end on the canonical repo
+- [ ] Smart Grid MCP validation through the benchmark Llama path, not only Claude Desktop
+- [ ] First 15+ Smart Grid scenarios committed and validated in the canonical repo
+- [ ] First Smart Grid end-to-end MCP trajectory and first judge-scored artifact
+
+**Committed W3-W5 tracks:**
+- Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
+- Experiment 2: orchestration comparison and failure analysis
+- Problem Statement B extension: scenario generation pipeline, Knowledge Plugin, and validation methodology
+- NeurIPS 2026 draft first, then back-port to the class IEEE report format
 
 **Open question awaiting mentor reply:** is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside vanilla Agent-as-Tool and vanilla Plan-Execute?
 
@@ -151,8 +157,8 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 |---|---|
 | Mon Apr 6 | Mid-point report due (Courseworks, 11:59pm) |
 | Sun May 4 | Final presentation + project due |
-| Sun May 4 | NeurIPS 2026 Datasets & Benchmarks abstract deadline (stretch) |
-| Wed May 6 | NeurIPS 2026 full submission deadline (stretch) |
+| Sun May 4 | NeurIPS 2026 Datasets & Benchmarks abstract deadline |
+| Wed May 6 | NeurIPS 2026 full submission deadline |
 
 ## References and Resources
 

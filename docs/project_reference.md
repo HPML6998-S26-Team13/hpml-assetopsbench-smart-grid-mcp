@@ -50,7 +50,7 @@ All projects must include:
 - Experimental Results (before/after, visualizations)
 - Conclusion (findings, limitations, future work)
 
-**NeurIPS 2026 Datasets & Benchmarks submission (stretch goal, 9 pages max):**
+**NeurIPS 2026 Datasets & Benchmarks submission (parallel target, 9 pages max):**
 - Abstract
 - Introduction and Problems in the Current Systems
 - Our Ideas and Plan (contributions)
@@ -78,7 +78,7 @@ All projects must include:
 
 | Name | UNI | Role | Key Strengths |
 |---|---|---|---|
-| Alex Xin | wax1 | Project coordination, profiling analysis, report writing | Production data systems, agentic AI, project management |
-| Akshat Bhandari | ab6174 | Scenario design, evaluation harness, agent pipeline | Multi-agent LLM systems, evaluation harnesses, published VLM research |
-| Tanisha Rathod | tr2828 | MCP server implementation (all domains), dataset compilation, Overleaf | Distributed systems, AWS/SageMaker, high-perf APIs, LoRA |
-| Aaron Fan | af3623 | Scenario design, compute plan + infrastructure, data pipeline | Real-time embedded systems, EE background (power systems), low-level APIs |
+| Alex Xin | wax1 | Project management, experiment design, profiling analysis, report writing | Production data systems, agentic AI, project management |
+| Akshat Bhandari | ab6174 | Scenario design, evaluation harness, judge integration | Multi-agent LLM systems, evaluation harnesses, published VLM research |
+| Tanisha Rathod | tr2828 | MCP server implementation, data pipeline, Knowledge Plugin | Distributed systems, AWS/SageMaker, high-perf APIs, LoRA |
+| Aaron Fan | af3623 | Serving infrastructure, profiling capture, scenario-generation pipeline | Real-time embedded systems, EE background (power systems), low-level APIs |

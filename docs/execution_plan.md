@@ -1,6 +1,6 @@
 # Execution Plan: W2-W5
 
-*Last updated: April 7, 2026*
+*Last updated: April 9, 2026*
 
 How the team executes the remaining ~4 weeks of work, organized in two parts:
 
@@ -16,13 +16,13 @@ How the team executes the remaining ~4 weeks of work, organized in two parts:
 ### Critical path
 
 ```
-Insomnia/vLLM up           ┐
-MCP server hardening       ├──► First baseline trajectory ──► All experiment runs ──► Analysis ──► Paper
-Eval harness end-to-end    │
-WandB instrumentation      ┘
+Insomnia/vLLM up                 ┐
+MCP server hardening             ├──► First end-to-end ladder ──► All experiment runs ──► Analysis ──► Paper
+Eval harness end-to-end          │
+WandB instrumentation + schema   ┘
 ```
 
-The four foundation tasks above form a single bottleneck: **all four must complete before any benchmark runs can start**. Each is owned by a different person, so they can run in parallel during W2 — but downstream work is blocked until the slowest of the four lands.
+The four foundation tasks above form a single bottleneck: **all four must complete before any benchmark runs can start**. Each is owned by a different person, so they can run in parallel during W2, but downstream work is blocked until the slowest of the four lands.
 
 ### Task tiers
 
@@ -30,13 +30,13 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 
 | Task | Owner | Blocked by | Blocks |
 |---|---|---|---|
-| Insomnia/vLLM environment up + Llama-3.1-8B-Instruct serving | Aaron | (nothing) | All local GPU work, all experiment runs |
+| Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct | Aaron | (nothing) | All local GPU work, all experiment runs |
 | MCP server hardening (4 servers, tests, edge cases) | Tanisha | (nothing) | Eval harness integration, all benchmarks |
-| Eval harness end-to-end on existing scenarios | Akshat | Tanisha's hardened MCP, Aaron's vLLM | All benchmarks, all scoring |
+| Run one existing benchmark scenario end-to-end on the canonical stack | Akshat | Tanisha's hardened MCP, Aaron's vLLM | All benchmarks, all scoring |
 | 15+ Smart Grid scenarios authored | Akshat | (nothing — can write in parallel) | All benchmarks (the test set) |
 | Profiling harness scripts (PyTorch Profiler wrappers) | Aaron | vLLM up | Experiment 1 capture |
 | WandB instrumentation (metrics schema in MCP servers + eval harness) | Alex | Tanisha's MCP, Akshat's harness | All experiment logging |
-| Slurm batch script template | Aaron | vLLM, harness, MCP, WandB | Async benchmarking |
+| Generic Slurm experiment template | Aaron | vLLM, harness, MCP, WandB | Async benchmarking |
 
 #### Tier 2 — Experimental design (W2-W3, depends on Tier 1)
 
@@ -46,7 +46,8 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 | Hybrid orchestration prototype implementation | Alex | Tier 1 + mentor novelty check reply | Experiment 2 condition Z |
 | Self-Ask integration (~10 LOC, addresses "Fail to Ask for Clarification" failures) | Alex | Alex's orchestrations exist | Quality of all 3 conditions |
 | 6-dimension LLM-as-Judge scoring in eval harness | Akshat | Eval harness running | Final scoring of all runs |
-| First baseline trajectory through MCP (the integration moment) | Akshat + Tanisha + Alex | All Tier 1 done | Confidence to start Tier 3 |
+| First Smart Grid scenario runs end-to-end through MCP with trajectory artifact captured | Akshat | All Tier 1 done | Confidence to start Tier 3 |
+| First judge-scored trajectory lands with logs / artifacts using Maverick-17B | Akshat | First Smart Grid trajectory + judge wiring | Confidence to start Tier 3 |
 
 #### Tier 3 — Benchmark execution (W3-W4, fully async, anyone can submit)
 
@@ -65,7 +66,10 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 |---|---|---|---|
 | Notebook 02: latency analysis (MCP overhead) | Alex | Experiment 1 results in WandB | Paper section on overhead |
 | Notebook 03: orchestration comparison | Alex | Experiment 2 results in WandB | Paper section on orchestration |
-| Failure mode taxonomy analysis (Berkeley failure paper applied to our results) | Alex | Experiment 2 results | Paper analysis section |
+| Failure taxonomy classification + evidence table | Alex | Experiment 2 results | Failure analysis section |
+| Failure taxonomy visuals + mitigation plan | Alex | Classification table | Mitigation implementation |
+| Implement chosen mitigation(s), including Self-Ask if selected | Alex | Mitigation plan | Before/after reruns |
+| Re-run affected benchmark cells and compare before/after | Alex | Mitigation implementation | Final analysis section |
 
 #### Tier 5 — Writing (W4-W5, Alex drives, others contribute facts)
 
@@ -80,9 +84,14 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 ### Critical-path implications
 
 - **Tier 1 is the bottleneck.** Until all four foundation tasks land, no benchmark runs can start. Three of the four are owned by different people, so they can progress in parallel — but the slowest sets the schedule.
-- **The first baseline trajectory** (Akshat + Tanisha + Alex jointly verifying that an agent can run a scenario end-to-end through MCP) is the integration moment that unlocks all experiment runs. It requires all four Tier 1 tasks to be done.
+- **The first end-to-end ladder** is now explicit:
+  1. one existing benchmark scenario runs on the canonical stack
+  2. one Smart Grid scenario runs end-to-end through MCP with a saved trajectory artifact
+  3. one judge-scored trajectory lands with logs / artifacts
+  This replaces the earlier vague "first baseline trajectory" milestone and is the integration moment that unlocks all experiment runs.
 - **Tier 3 can run in parallel and async** — once the foundation is in place, multiple experiment cells can be submitted as independent Slurm jobs, each running unattended.
 - **Tier 5 (writing) can begin during Tier 3** — Alex can draft outline, intro, methodology, related work in parallel with experiments running. Only Results and Discussion need to wait for Tier 4 analysis.
+- **Problem Statement B is now committed work**, not a stretch toggle. It runs in parallel across W3-W5: Tanisha owns the Knowledge Plugin, Aaron owns the generation pipeline, Akshat owns validation, and Alex owns evaluation methodology plus the write-up.
 
 ---
 
@@ -198,6 +207,6 @@ Once the template works for one cell, every other cell is just a different confi
 
 ## Open questions
 
-- **Mentor novelty check on Hybrid orchestration** — pending response. If green-lit, Hybrid is added as Experiment 2 cell Z. If not, Experiment 2 reduces to 2 cells (AaT vs PE) and the total grid is 4 cells.
-- **Problem Statement B / Future Work stretch track** (auto-scenario generation pipeline) — go/no-go decision deferred to the April 14 call. Activated only if Tier 1 is on track and someone has the bandwidth to own the pipeline.
-- **First baseline trajectory date** — depends on Tier 1 completion. Target: by end of W2 (April 13). This is the integration milestone everything else depends on.
+- **Mentor novelty check on Hybrid orchestration** - pending response. If green-lit, Hybrid is added as Experiment 2 cell Z. If not, Experiment 2 reduces to 2 cells (AaT vs PE) and the total grid is 4 cells.
+- **Scenario realism validation** - Akshat can validate schema and format, but Dhaval still needs to sanity-check whether the scenarios read like real transformer maintenance work.
+- **First end-to-end ladder date** - still depends on Tier 1 completion. Target remains by end of W2 (April 13).

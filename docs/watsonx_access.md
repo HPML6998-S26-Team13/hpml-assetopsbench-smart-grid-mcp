@@ -10,9 +10,9 @@ accessing IBM-hosted Llama models. This document describes what's available, how
 set up access locally, and how we plan to use it in the project.
 
 **Repo location:** Everything in this doc (`.env`, `.venv/`, `scripts/verify_watsonx.py`)
-lives in the single team repo at https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp.
-We're operating on a single-team-repo model (not per-person forks). If you have a
-different local checkout, point it at the same upstream.
+lives in the canonical team repo at [HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp).
+Alex's personal repo is now only a mirror. If you have a different local checkout,
+point it at the canonical `team13/main` branch before treating it as source of truth.
 
 ## Setup
 

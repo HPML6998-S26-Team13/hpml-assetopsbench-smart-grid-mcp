@@ -157,4 +157,4 @@ Related work:
 
 ## Repository
 
-https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp
+https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp

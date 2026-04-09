@@ -53,7 +53,7 @@ Akshat Bhandari (ab6174), Aaron Fan (af3623), Tanisha Rathod (tr2828), Wei Alexa
 
 ## Slide 3: Current Progress
 
-**GitHub:** https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp
+**GitHub:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp
 
 **WandB:** https://wandb.ai/assetopsbench-smartgrid
 

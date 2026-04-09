@@ -1,6 +1,6 @@
 # Documentation Index
 
-Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project — domain background, setup guides, architecture notes, methodology. Planning artifacts (roadmap, meeting agendas, working notes) live in [`../planning/`](../planning/). Frozen deliverables (shipped PDFs, slide decks) live in [`../reports/`](../reports/).
+Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Planning artifacts (roadmap, meeting agendas, working notes) live in [`../planning/`](../planning/). Frozen deliverables (shipped PDFs, slide decks) live in [`../reports/`](../reports/). Historical supporting notes that are no longer live move into [`archive/`](archive/).
 
 ## Document index
 
@@ -12,15 +12,15 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 | [`compute_plan.md`](compute_plan.md) | Phase-by-phase GPU allocation across Insomnia (H100, A6000) and $500/person GCP budget, hardware strategy decisions | You need to spin up an environment or pick a GPU for a workload |
 | [`watsonx_access.md`](watsonx_access.md) | WatsonX API setup walkthrough, available models, usage patterns, latency benchmark results (Maverick vs 70B) | You need to onboard your local `.venv` to hit the hosted Llama models |
 | [`repo_strategy.md`](repo_strategy.md) | Team repo vs AssetOpsBench fork split, what lives where, public-repo hygiene, gitignored items | You're trying to figure out where to put new code or what should/shouldn't be committed |
-| [`mid_checkpoint_notes.md`](mid_checkpoint_notes.md) | Long-form reference notes backing the mid-point submission (Apr 6) | You want the detailed narrative behind the 5-slide mid-point deck |
 | [`data_pipeline.tex`](data_pipeline.tex) | Paper-ready LaTeX section describing dataset schemas, shared-key strategy, output formats, reproducibility | You're writing the paper/report and need the data-pipeline section |
 | [`dataset_visualization.png`](dataset_visualization.png) | 6-panel sample visualization of the processed datasets (smoke test / sanity check, not a reproducible artifact) | You want to eyeball what the processed data looks like |
 | [`hpml_datasets.pdf`](hpml_datasets.pdf) | Tanisha's reference writeup on the 5 Kaggle source datasets (formats, row counts, licensing) | You need background on where the data came from |
 | `images/` | Inline figures referenced by the `.md` files | — |
+| `archive/` | Historical docs that were once live but are now frozen reference artifacts | You need provenance, not the current operating picture |
 
 ## Related directories
 
-- [`../planning/`](../planning/) — Meeting agendas, working notes, and the canonical task tracker. **Start with [`../planning/task_tracker.md`](../planning/task_tracker.md)** for current task state across all weeks (Done / In Progress / Backlog by week / Stretch).
+- [`../planning/`](../planning/) — Meeting agendas, working notes, and archived planning snapshots. Current task state now lives in the [GitHub Project](https://github.com/orgs/HPML6998-S26-Team13/projects/1/views/1); historical tracker/spec snapshots live in [`../planning/archive/task_tracker.md`](../planning/archive/task_tracker.md) and [`../planning/archive/task_specs.md`](../planning/archive/task_specs.md).
 - [`../reports/`](../reports/) — Frozen deliverables (mid-point submission PDF, proposal PDFs, draft archive).
 
 ## Conventions

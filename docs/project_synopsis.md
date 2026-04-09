@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Last updated April 7, 2026. Read time: ~10 minutes.*
+*Last updated April 9, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -130,10 +130,10 @@ profiling and optimization.
 
 | Name | Role | Key strength |
 |---|---|---|
-| **Akshat Bhandari** | Scenario design, evaluation harness, agent pipeline | Published ML research (EACL 2026), multi-agent systems |
-| **Aaron Fan** | Compute plan + infrastructure, profiling environment, runbook | EE background, power systems research, embedded systems |
-| **Tanisha Rathod** | MCP server implementation (all domains), data pipeline, Overleaf | Distributed systems at Caterpillar, AWS/SageMaker |
-| **Wei Alexander Xin** | Project coordination, profiling analysis, report writing, WatsonX setup | 12+ yrs production data systems, project management |
+| **Akshat Bhandari** | Scenario design, evaluation harness, judge integration | Published ML research (EACL 2026), multi-agent systems |
+| **Aaron Fan** | Serving infrastructure, profiling capture, Problem Statement B generation pipeline | EE background, power systems research, embedded systems |
+| **Tanisha Rathod** | MCP server implementation (all domains), data pipeline, Knowledge Plugin | Distributed systems at Caterpillar, AWS/SageMaker |
+| **Wei Alexander Xin** | Project management, experiment design, profiling analysis, paper writing, WatsonX setup | 12+ yrs production data systems, project management |
 
 ## Related Work
 
@@ -145,16 +145,16 @@ profiling and optimization.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 7, 2026)
+## Current status (April 9, 2026)
 
-**Week 1 complete. Mid-point report submitted Apr 6. Now in implementation phase.**
+**Week 1 is complete, the mid-point was submitted Apr 6, and Week 2 is now focused on foundation bring-up plus planning cleanup.**
 
 Completed:
 - Problem statement finalized (four contributions: scenarios, MCP servers, profiling, orchestration comparison)
 - Full research proposal drafted and shared with mentor via Overleaf (NeurIPS 2026 template)
 - Mentor endorsed NeurIPS 2026 Datasets & Benchmarks submission (abstract May 4, paper May 6)
 - Fork synced with upstream AssetOpsBench (new VibrationAgent, AgentRunner ABC, `src/workflow/` → `src/agent/` rename)
-- GitHub repo **public** as of April 7, 2026: [eggrollofchaos/hpml-assetopsbench-smart-grid-mcp](https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp)
+- Canonical GitHub repo is now the org repo: [HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp)
 - WandB team created: wandb.ai/assetopsbench-smartgrid
 - 5 candidate datasets identified (3 CC0, 2 restricted license)
 - Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
@@ -164,14 +164,24 @@ Completed:
 - MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast + z-score anomaly detection + OLS trend, work-order CRUD)
 - Paper-ready `docs/data_pipeline.tex` section drafted
 - **Mid-point report submitted** to Courseworks on Monday April 6 (see `reports/2026-04-06_midpoint_submission.pdf`)
+- GitHub Projects reset as the canonical planning surface, with weekly iterations, workstream parent issues, and delivery-gate milestones
 
 In progress (Week 2, Apr 7-13):
-- Fleshing out MCP server implementations on top of the skeletons (hardening, tests, harness integration)
-- Authoring first batch of Smart Grid scenarios (target: 15+ by Apr 13)
-- Getting AssetOpsBench evaluation harness running end-to-end with existing scenarios
-- Deploying Llama-3.1-8B-Instruct via vLLM on Insomnia for baseline inference runs
-- Preparing profiling methodology: PyTorch Profiler instrumentation for tool-call latency, GPU utilization, memory bandwidth
-- Open question awaiting mentor reply: is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside AaT and PE?
+- Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct
+- MCP server hardening, tests, and benchmark-path validation
+- AssetOpsBench evaluation harness running end-to-end on the canonical repo
+- First 15+ Smart Grid scenarios committed and validated
+- First Smart Grid end-to-end MCP trajectory and first judge-scored artifact
+- WandB metrics schema plus first experiment logs
+
+Committed W3-W5 workstreams:
+- Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
+- Experiment 2: orchestration comparison and failure analysis
+- Problem Statement B extension: generation pipeline, Knowledge Plugin, and validation methodology
+- Paper flow: NeurIPS draft first, then class-report back-port
+
+Open question awaiting mentor reply:
+- Is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside AaT and PE?
 
 **Final deadline: May 4** (presentation + report + code)
 
@@ -179,7 +189,7 @@ In progress (Week 2, Apr 7-13):
 
 - AssetOpsBench: https://github.com/IBM/AssetOpsBench
 - MCP: https://modelcontextprotocol.io/
-- Our repo: https://github.com/eggrollofchaos/hpml-assetopsbench-smart-grid-mcp
+- Our repo: https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp
 - WandB: https://wandb.ai/assetopsbench-smartgrid
 - Mentor: Dr. Dhaval Patel (pateldha@us.ibm.com)
 
