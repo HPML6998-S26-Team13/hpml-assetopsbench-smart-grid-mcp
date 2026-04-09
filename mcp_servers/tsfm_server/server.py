@@ -57,6 +57,7 @@ def _get_readings() -> pd.DataFrame:
 # Tools
 # ---------------------------------------------------------------------------
 
+
 @mcp.tool()
 def get_rul(transformer_id: str) -> dict:
     """
@@ -93,10 +94,10 @@ def get_rul(transformer_id: str) -> dict:
 
     return {
         "transformer_id": transformer_id,
-        "as_of_date":     str(latest["timestamp"].date()),
-        "rul_days":       rul_days,
-        "health_index":   round(float(latest["health_index"]), 4),
-        "fdd_category":   int(latest["fdd_category"]),
+        "as_of_date": str(latest["timestamp"].date()),
+        "rul_days": rul_days,
+        "health_index": round(float(latest["health_index"]), 4),
+        "fdd_category": int(latest["fdd_category"]),
         "interpretation": interpretation,
     }
 
@@ -128,17 +129,19 @@ def forecast_rul(transformer_id: str, horizon_days: int = 30) -> dict:
 
     # Linear model: assume 1 RUL-day consumed per calendar day
     projected_rul = max(0, current_rul - horizon_days)
-    forecast_date = pd.to_datetime(latest["timestamp"]) + pd.Timedelta(days=horizon_days)
-    projected_hi  = round(min(1.0, projected_rul / 1093.0), 4)
+    forecast_date = pd.to_datetime(latest["timestamp"]) + pd.Timedelta(
+        days=horizon_days
+    )
+    projected_hi = round(min(1.0, projected_rul / 1093.0), 4)
 
     return {
-        "transformer_id":       transformer_id,
-        "current_rul_days":     current_rul,
-        "forecast_date":        str(forecast_date.date()),
-        "projected_rul_days":   projected_rul,
+        "transformer_id": transformer_id,
+        "current_rul_days": current_rul,
+        "forecast_date": str(forecast_date.date()),
+        "projected_rul_days": projected_rul,
         "projected_health_index": projected_hi,
-        "confidence":           "low — linear baseline; replace with TSFM inference",
-        "method":               "linear_degradation_baseline",
+        "confidence": "low — linear baseline; replace with TSFM inference",
+        "method": "linear_degradation_baseline",
     }
 
 
@@ -167,19 +170,22 @@ def detect_anomalies(
         with timestamp, value, z_score).
     """
     df = _get_readings()
-    subset = df[
-        (df["transformer_id"] == transformer_id) &
-        (df["sensor_id"] == sensor_id)
-    ].copy().sort_values("timestamp")
+    subset = (
+        df[(df["transformer_id"] == transformer_id) & (df["sensor_id"] == sensor_id)]
+        .copy()
+        .sort_values("timestamp")
+    )
 
     if subset.empty:
-        return {"error": f"No readings for transformer='{transformer_id}' "
-                         f"sensor='{sensor_id}'."}
+        return {
+            "error": f"No readings for transformer='{transformer_id}' "
+            f"sensor='{sensor_id}'."
+        }
 
     vals = subset["value"].astype(float)
     rolling_mean = vals.rolling(window_size, min_periods=1).mean()
-    rolling_std  = vals.rolling(window_size, min_periods=1).std().fillna(1e-9)
-    z_scores     = ((vals - rolling_mean) / rolling_std).abs()
+    rolling_std = vals.rolling(window_size, min_periods=1).std().fillna(1e-9)
+    z_scores = ((vals - rolling_mean) / rolling_std).abs()
 
     anomaly_mask = z_scores > z_threshold
     anomalies_df = subset[anomaly_mask][["timestamp", "value"]].copy()
@@ -191,14 +197,14 @@ def detect_anomalies(
         row["timestamp"] = str(row["timestamp"])
 
     return {
-        "transformer_id":    transformer_id,
-        "sensor_id":         sensor_id,
-        "window_size":       window_size,
-        "z_threshold":       z_threshold,
-        "total_readings":    len(subset),
-        "anomaly_count":     int(anomaly_mask.sum()),
-        "anomaly_rate_pct":  round(100 * anomaly_mask.mean(), 2),
-        "anomalies":         anomalies,
+        "transformer_id": transformer_id,
+        "sensor_id": sensor_id,
+        "window_size": window_size,
+        "z_threshold": z_threshold,
+        "total_readings": len(subset),
+        "anomaly_count": int(anomaly_mask.sum()),
+        "anomaly_rate_pct": round(100 * anomaly_mask.mean(), 2),
+        "anomalies": anomalies,
     }
 
 
@@ -229,13 +235,14 @@ def trend_analysis(
     """
     df = _get_readings()
     subset = df[
-        (df["transformer_id"] == transformer_id) &
-        (df["sensor_id"] == sensor_id)
+        (df["transformer_id"] == transformer_id) & (df["sensor_id"] == sensor_id)
     ].copy()
 
     if subset.empty:
-        return {"error": f"No readings for transformer='{transformer_id}' "
-                         f"sensor='{sensor_id}'."}
+        return {
+            "error": f"No readings for transformer='{transformer_id}' "
+            f"sensor='{sensor_id}'."
+        }
 
     subset["timestamp"] = pd.to_datetime(subset["timestamp"])
     if start_time:
@@ -245,20 +252,22 @@ def trend_analysis(
 
     subset = subset.sort_values("timestamp")
     if len(subset) < 2:
-        return {"error": "Not enough readings in the specified window for trend analysis."}
+        return {
+            "error": "Not enough readings in the specified window for trend analysis."
+        }
 
     # Convert timestamps to numeric (days since first reading)
-    t0   = subset["timestamp"].iloc[0]
+    t0 = subset["timestamp"].iloc[0]
     days = (subset["timestamp"] - t0).dt.total_seconds() / 86400
     vals = subset["value"].astype(float)
 
     # OLS: slope and R²
     coeffs = np.polyfit(days, vals, 1)
-    slope  = float(coeffs[0])
-    y_hat  = np.polyval(coeffs, days)
+    slope = float(coeffs[0])
+    y_hat = np.polyval(coeffs, days)
     ss_res = float(np.sum((vals - y_hat) ** 2))
     ss_tot = float(np.sum((vals - vals.mean()) ** 2))
-    r2     = 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
+    r2 = 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
 
     # Direction: stable if slope < 1% of mean per day
     mean_val = float(vals.mean())
@@ -272,16 +281,16 @@ def trend_analysis(
 
     return {
         "transformer_id": transformer_id,
-        "sensor_id":      sensor_id,
-        "num_readings":   len(subset),
-        "start_time":     str(subset["timestamp"].iloc[0]),
-        "end_time":       str(subset["timestamp"].iloc[-1]),
-        "mean_value":     round(mean_val, 4),
-        "min_value":      round(float(vals.min()), 4),
-        "max_value":      round(float(vals.max()), 4),
-        "slope_per_day":  round(slope, 6),
-        "direction":      direction,
-        "r_squared":      round(r2, 4),
+        "sensor_id": sensor_id,
+        "num_readings": len(subset),
+        "start_time": str(subset["timestamp"].iloc[0]),
+        "end_time": str(subset["timestamp"].iloc[-1]),
+        "mean_value": round(mean_val, 4),
+        "min_value": round(float(vals.min()), 4),
+        "max_value": round(float(vals.max()), 4),
+        "slope_per_day": round(slope, 6),
+        "direction": direction,
+        "r_squared": round(r2, 4),
     }
 
 

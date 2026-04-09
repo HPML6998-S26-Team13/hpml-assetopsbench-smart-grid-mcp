@@ -64,12 +64,18 @@ def _get_dga_records() -> pd.DataFrame:
 _ROGERS_TABLE = [
     # (R1_range, R2_range, R3_range) → (code, description)
     # Each range is (min_inclusive, max_exclusive); None = no bound.
-    ((0.1,  1.0), (0,   0.1), (0,   1.0), "PD",  "Partial Discharge"),
-    ((0.1,  1.0), (0.1, 3.0), (0,   1.0), "D1",  "Low-Energy Electrical Discharge"),
-    ((0.1,  1.0), (0.1, 3.0), (1.0, None),"D2",  "High-Energy Electrical Discharge (Arcing)"),
-    ((0.1,  1.0), (0,   0.1), (1.0, 3.0), "T1",  "Thermal Fault < 300°C"),
-    ((1.0,  3.0), (0,   0.1), (1.0, 3.0), "T2",  "Thermal Fault 300–700°C"),
-    ((3.0,  None),(0,   0.1), (3.0, None),"T3",  "Thermal Fault > 700°C"),
+    ((0.1, 1.0), (0, 0.1), (0, 1.0), "PD", "Partial Discharge"),
+    ((0.1, 1.0), (0.1, 3.0), (0, 1.0), "D1", "Low-Energy Electrical Discharge"),
+    (
+        (0.1, 1.0),
+        (0.1, 3.0),
+        (1.0, None),
+        "D2",
+        "High-Energy Electrical Discharge (Arcing)",
+    ),
+    ((0.1, 1.0), (0, 0.1), (1.0, 3.0), "T1", "Thermal Fault < 300°C"),
+    ((1.0, 3.0), (0, 0.1), (1.0, 3.0), "T2", "Thermal Fault 300–700°C"),
+    ((3.0, None), (0, 0.1), (3.0, None), "T3", "Thermal Fault > 700°C"),
 ]
 
 
@@ -81,32 +87,40 @@ def _in_range(value: float, lo, hi) -> bool:
     return True
 
 
-def _rogers_ratio(h2: float, ch4: float, c2h2: float,
-                  c2h4: float, c2h6: float) -> dict:
+def _rogers_ratio(h2: float, ch4: float, c2h2: float, c2h4: float, c2h6: float) -> dict:
     """Apply Rogers Ratio method; return IEC code and description."""
     # Avoid division by zero
-    r1 = ch4  / h2    if h2   > 0 else 0.0
-    r2 = c2h2 / c2h4  if c2h4 > 0 else 0.0
-    r3 = c2h4 / c2h6  if c2h6 > 0 else 0.0
+    r1 = ch4 / h2 if h2 > 0 else 0.0
+    r2 = c2h2 / c2h4 if c2h4 > 0 else 0.0
+    r3 = c2h4 / c2h6 if c2h6 > 0 else 0.0
 
     for r1_range, r2_range, r3_range, code, description in _ROGERS_TABLE:
-        if (_in_range(r1, *r1_range) and
-            _in_range(r2, *r2_range) and
-            _in_range(r3, *r3_range)):
-            return {"iec_code": code, "diagnosis": description,
-                    "r1_ch4_h2": round(r1, 4),
-                    "r2_c2h2_c2h4": round(r2, 4),
-                    "r3_c2h4_c2h6": round(r3, 4)}
+        if (
+            _in_range(r1, *r1_range)
+            and _in_range(r2, *r2_range)
+            and _in_range(r3, *r3_range)
+        ):
+            return {
+                "iec_code": code,
+                "diagnosis": description,
+                "r1_ch4_h2": round(r1, 4),
+                "r2_c2h2_c2h4": round(r2, 4),
+                "r3_c2h4_c2h6": round(r3, 4),
+            }
 
-    return {"iec_code": "N",  "diagnosis": "Normal / Inconclusive",
-            "r1_ch4_h2": round(r1, 4),
-            "r2_c2h2_c2h4": round(r2, 4),
-            "r3_c2h4_c2h6": round(r3, 4)}
+    return {
+        "iec_code": "N",
+        "diagnosis": "Normal / Inconclusive",
+        "r1_ch4_h2": round(r1, 4),
+        "r2_c2h2_c2h4": round(r2, 4),
+        "r3_c2h4_c2h6": round(r3, 4),
+    }
 
 
 # ---------------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------------
+
 
 @mcp.tool()
 def list_failure_modes() -> list[dict]:
@@ -118,8 +132,16 @@ def list_failure_modes() -> list[dict]:
         key_gases, recommended_action.
     """
     df = _get_failure_modes()
-    return df[["failure_mode_id", "name", "severity", "iec_code",
-               "key_gases", "recommended_action"]].to_dict(orient="records")
+    return df[
+        [
+            "failure_mode_id",
+            "name",
+            "severity",
+            "iec_code",
+            "key_gases",
+            "recommended_action",
+        ]
+    ].to_dict(orient="records")
 
 
 @mcp.tool()
@@ -137,14 +159,22 @@ def search_failure_modes(query: str) -> list[dict]:
     df = _get_failure_modes()
     q = query.lower()
     mask = (
-        df["name"].str.lower().str.contains(q, na=False) |
-        df["description"].str.lower().str.contains(q, na=False) |
-        df["key_gases"].str.lower().str.contains(q, na=False) |
-        df["iec_code"].str.lower().str.contains(q, na=False) |
-        df["dga_label"].str.lower().str.contains(q, na=False)
+        df["name"].str.lower().str.contains(q, na=False)
+        | df["description"].str.lower().str.contains(q, na=False)
+        | df["key_gases"].str.lower().str.contains(q, na=False)
+        | df["iec_code"].str.lower().str.contains(q, na=False)
+        | df["dga_label"].str.lower().str.contains(q, na=False)
     )
-    return df[mask][["failure_mode_id", "name", "severity", "iec_code",
-                     "key_gases", "recommended_action"]].to_dict(orient="records")
+    return df[mask][
+        [
+            "failure_mode_id",
+            "name",
+            "severity",
+            "iec_code",
+            "key_gases",
+            "recommended_action",
+        ]
+    ].to_dict(orient="records")
 
 
 @mcp.tool()
@@ -224,8 +254,11 @@ def analyze_dga(
     """
     result = _rogers_ratio(h2, ch4, c2h2, c2h4, c2h6)
     result["input_gases"] = {
-        "h2_ppm": h2, "ch4_ppm": ch4, "c2h2_ppm": c2h2,
-        "c2h4_ppm": c2h4, "c2h6_ppm": c2h6,
+        "h2_ppm": h2,
+        "ch4_ppm": ch4,
+        "c2h2_ppm": c2h2,
+        "c2h4_ppm": c2h4,
+        "c2h6_ppm": c2h6,
     }
     if transformer_id:
         result["transformer_id"] = transformer_id

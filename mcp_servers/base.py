@@ -31,6 +31,7 @@ DATA_DIR = REPO_ROOT / "data" / "processed"
 # IoT domain
 # ---------------------------------------------------------------------------
 
+
 def load_asset_metadata() -> pd.DataFrame:
     """
     Load static asset metadata (transformer ID, location, manufacturer,
@@ -64,6 +65,7 @@ def load_sensor_readings() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # FMSR domain
 # ---------------------------------------------------------------------------
+
 
 def load_failure_modes() -> pd.DataFrame:
     """
@@ -99,6 +101,7 @@ def load_dga_records() -> pd.DataFrame:
 # TSFM domain
 # ---------------------------------------------------------------------------
 
+
 def load_rul_labels() -> pd.DataFrame:
     """
     Load remaining-useful-life (RUL) ground-truth labels per transformer.
@@ -117,6 +120,7 @@ def load_rul_labels() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # WO domain
 # ---------------------------------------------------------------------------
+
 
 def load_fault_records() -> pd.DataFrame:
     """
@@ -137,6 +141,7 @@ def load_fault_records() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
 
 def _require(path: Path) -> None:
     """Raise a clear error if a processed data file hasn't been created yet."""

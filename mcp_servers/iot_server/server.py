@@ -54,6 +54,7 @@ def _get_readings() -> pd.DataFrame:
 # Tools
 # ---------------------------------------------------------------------------
 
+
 @mcp.tool()
 def list_assets(health_status: int | None = None) -> list[dict]:
     """
@@ -71,8 +72,16 @@ def list_assets(health_status: int | None = None) -> list[dict]:
     if health_status is not None:
         df = df[df["health_status"] == health_status]
 
-    return df[["transformer_id", "name", "location", "health_status",
-               "rul_days", "in_service"]].to_dict(orient="records")
+    return df[
+        [
+            "transformer_id",
+            "name",
+            "location",
+            "health_status",
+            "rul_days",
+            "in_service",
+        ]
+    ].to_dict(orient="records")
 
 
 @mcp.tool()
@@ -114,9 +123,7 @@ def list_sensors(transformer_id: str) -> list[dict]:
         return [{"error": f"No sensor data found for '{transformer_id}'."}]
 
     summary = (
-        subset.groupby(["sensor_id", "unit"])
-        .size()
-        .reset_index(name="num_readings")
+        subset.groupby(["sensor_id", "unit"]).size().reset_index(name="num_readings")
     )
     return summary.to_dict(orient="records")
 
@@ -147,13 +154,16 @@ def get_sensor_readings(
     """
     df = _get_readings()
     subset = df[
-        (df["transformer_id"] == transformer_id) &
-        (df["sensor_id"] == sensor_id)
+        (df["transformer_id"] == transformer_id) & (df["sensor_id"] == sensor_id)
     ].copy()
 
     if subset.empty:
-        return [{"error": f"No readings found for transformer='{transformer_id}' "
-                          f"sensor='{sensor_id}'."}]
+        return [
+            {
+                "error": f"No readings found for transformer='{transformer_id}' "
+                f"sensor='{sensor_id}'."
+            }
+        ]
 
     # Ensure timestamp column is datetime
     subset["timestamp"] = pd.to_datetime(subset["timestamp"])
@@ -165,9 +175,11 @@ def get_sensor_readings(
 
     subset = subset.sort_values("timestamp").head(min(limit, 1000))
 
-    return subset[["timestamp", "value", "unit"]].assign(
-        timestamp=subset["timestamp"].dt.isoformat()
-    ).to_dict(orient="records")
+    return (
+        subset[["timestamp", "value", "unit"]]
+        .assign(timestamp=subset["timestamp"].dt.isoformat())
+        .to_dict(orient="records")
+    )
 
 
 # ---------------------------------------------------------------------------

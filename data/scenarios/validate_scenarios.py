@@ -2,7 +2,6 @@ import csv
 import json
 from pathlib import Path
 
-
 REQUIRED_KEYS = {"id", "type", "text", "category", "characteristic_form"}
 ALLOWED_TYPES = {"", "IoT", "FMSR", "TSFM", "WO"}
 
@@ -10,11 +9,7 @@ ALLOWED_TYPES = {"", "IoT", "FMSR", "TSFM", "WO"}
 def load_valid_asset_ids(asset_csv: Path) -> set[str]:
     with asset_csv.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
-        return {
-            row["transformer_id"]
-            for row in reader
-            if row.get("transformer_id")
-        }
+        return {row["transformer_id"] for row in reader if row.get("transformer_id")}
 
 
 def validate_file(path: Path, valid_asset_ids: set[str]) -> list[str]:
@@ -36,9 +31,7 @@ def validate_file(path: Path, valid_asset_ids: set[str]) -> list[str]:
         if not isinstance(type_value, str):
             errors.append(f"{path.name}: 'type' must be a string")
         elif type_value not in ALLOWED_TYPES:
-            errors.append(
-                f"{path.name}: 'type' must be one of {sorted(ALLOWED_TYPES)}"
-            )
+            errors.append(f"{path.name}: 'type' must be one of {sorted(ALLOWED_TYPES)}")
 
     for field in ["text", "category", "characteristic_form"]:
         if field in payload and not isinstance(payload[field], str):

@@ -44,14 +44,14 @@ _work_orders: dict[str, dict] = {}
 
 # Downtime estimates (hours) by fault severity — derived from dataset statistics
 _DOWNTIME_ESTIMATES = {
-    "low":      {"min": 2,  "max": 6,  "typical": 4},
-    "medium":   {"min": 6,  "max": 16, "typical": 8},
-    "high":     {"min": 16, "max": 48, "typical": 24},
-    "critical": {"min": 48, "max": 120,"typical": 72},
+    "low": {"min": 2, "max": 6, "typical": 4},
+    "medium": {"min": 6, "max": 16, "typical": 8},
+    "high": {"min": 16, "max": 48, "typical": 24},
+    "critical": {"min": 48, "max": 120, "typical": 72},
 }
 
 _VALID_PRIORITIES = {"low", "medium", "high", "critical"}
-_VALID_STATUSES   = {"open", "in_progress", "resolved", "closed"}
+_VALID_STATUSES = {"open", "in_progress", "resolved", "closed"}
 
 
 def _get_fault_records() -> pd.DataFrame:
@@ -64,6 +64,7 @@ def _get_fault_records() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------------
+
 
 @mcp.tool()
 def list_fault_records(
@@ -143,8 +144,10 @@ def create_work_order(
         created_at, assigned_technician (null until assigned).
     """
     if priority not in _VALID_PRIORITIES:
-        return {"error": f"Invalid priority '{priority}'. "
-                         f"Must be one of: {sorted(_VALID_PRIORITIES)}"}
+        return {
+            "error": f"Invalid priority '{priority}'. "
+            f"Must be one of: {sorted(_VALID_PRIORITIES)}"
+        }
 
     if estimated_downtime_hours is None:
         est = _DOWNTIME_ESTIMATES.get(priority, _DOWNTIME_ESTIMATES["medium"])
@@ -152,16 +155,16 @@ def create_work_order(
 
     wo_id = f"WO-{uuid.uuid4().hex[:8].upper()}"
     wo = {
-        "work_order_id":           wo_id,
-        "transformer_id":          transformer_id,
-        "issue_description":       issue_description,
-        "priority":                priority,
-        "fault_type":              fault_type,
-        "status":                  "open",
+        "work_order_id": wo_id,
+        "transformer_id": transformer_id,
+        "issue_description": issue_description,
+        "priority": priority,
+        "fault_type": fault_type,
+        "status": "open",
         "estimated_downtime_hours": estimated_downtime_hours,
-        "created_at":              datetime.utcnow().isoformat() + "Z",
-        "assigned_technician":     None,
-        "notes":                   [],
+        "created_at": datetime.utcnow().isoformat() + "Z",
+        "assigned_technician": None,
+        "notes": [],
     }
     _work_orders[wo_id] = wo
     return wo
@@ -224,24 +227,30 @@ def update_work_order(
 
     if status is not None:
         if status not in _VALID_STATUSES:
-            return {"error": f"Invalid status '{status}'. "
-                             f"Must be one of: {sorted(_VALID_STATUSES)}"}
+            return {
+                "error": f"Invalid status '{status}'. "
+                f"Must be one of: {sorted(_VALID_STATUSES)}"
+            }
         wo["status"] = status
 
     if priority is not None:
         if priority not in _VALID_PRIORITIES:
-            return {"error": f"Invalid priority '{priority}'. "
-                             f"Must be one of: {sorted(_VALID_PRIORITIES)}"}
+            return {
+                "error": f"Invalid priority '{priority}'. "
+                f"Must be one of: {sorted(_VALID_PRIORITIES)}"
+            }
         wo["priority"] = priority
 
     if assigned_technician is not None:
         wo["assigned_technician"] = assigned_technician
 
     if note:
-        wo["notes"].append({
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "text": note,
-        })
+        wo["notes"].append(
+            {
+                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "text": note,
+            }
+        )
 
     return wo
 
@@ -270,18 +279,20 @@ def estimate_downtime(
         source.
     """
     if severity not in _VALID_PRIORITIES:
-        return {"error": f"Invalid severity '{severity}'. "
-                         f"Must be one of: {sorted(_VALID_PRIORITIES)}"}
+        return {
+            "error": f"Invalid severity '{severity}'. "
+            f"Must be one of: {sorted(_VALID_PRIORITIES)}"
+        }
 
     est = _DOWNTIME_ESTIMATES[severity]
     return {
-        "transformer_id":          transformer_id,
-        "severity":                severity,
-        "fault_type":              fault_type,
-        "estimated_min_hours":     est["min"],
-        "estimated_max_hours":     est["max"],
+        "transformer_id": transformer_id,
+        "severity": severity,
+        "fault_type": fault_type,
+        "estimated_min_hours": est["min"],
+        "estimated_max_hours": est["max"],
         "estimated_typical_hours": est["typical"],
-        "source":                  "dataset_statistics_baseline",
+        "source": "dataset_statistics_baseline",
     }
 
 
