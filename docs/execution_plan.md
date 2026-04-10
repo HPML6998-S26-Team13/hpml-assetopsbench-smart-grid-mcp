@@ -35,7 +35,7 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 | Run one existing benchmark scenario end-to-end on the canonical stack | Akshat | Tanisha's hardened MCP, Aaron's vLLM | All benchmarks, all scoring |
 | 15+ Smart Grid scenarios authored | Akshat | (nothing — can write in parallel) | All benchmarks (the test set) |
 | Profiling harness scripts (PyTorch Profiler wrappers) | Aaron | vLLM up | Experiment 1 capture |
-| WandB instrumentation (metrics schema in MCP servers + eval harness) | Alex | Tanisha's MCP, Akshat's harness | All experiment logging |
+| WandB instrumentation (metrics schema in MCP servers + eval harness; schema in `docs/wandb_schema.md`) | Alex | Tanisha's MCP, Akshat's harness | All experiment logging |
 | Generic Slurm experiment template | Aaron | vLLM, harness, MCP, WandB | Async benchmarking |
 
 #### Tier 2 — Experimental design (W2-W3, depends on Tier 1)
@@ -131,6 +131,10 @@ Once Tier 1 setup is in place, running an experiment cell is **submit-and-walk-a
    computes statistics, generates figures.
 
 NOBODY was online during steps 3-5.
+
+All WandB config / summary fields for that run should conform to
+`docs/wandb_schema.md`, so the benchmark config, run logs, and exported results
+stay joinable.
 ```
 
 ### Role clarifications
