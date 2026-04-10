@@ -36,7 +36,7 @@ overhead. All experiments tracked with WandB.
 | [Current & Voltage Monitoring](https://www.kaggle.com/datasets/sreshta140/ai-transformer-monitoring) | 19,352 | IoT, TSFM | © Authors | Kaggle |
 | [Smart Grid Fault Records](https://www.kaggle.com/datasets/ziya07/power-system-faults-dataset) | 506 | WO | CC0 | Kaggle |
 
-Only CC0 datasets will be used in any open-source contributions back to AssetOpsBench.
+The repo's tracked `data/processed/` artifacts are kept synthetic/public-safe. Restricted-source Kaggle joins remain a local benchmarking path, not a tracked publication path.
 
 ### Why Llama-3.1-8B-Instruct?
 
@@ -64,7 +64,7 @@ via WatsonX API to assess scaling effects.
 ├── data/                         # Data pipeline + processed datasets — see data/README.md
 │   ├── build_processed.py        #   Downloads + joins 5 Kaggle datasets via synthesized transformer_id
 │   ├── generate_synthetic.py     #   Offline synthetic equivalent (no Kaggle needed)
-│   ├── processed/                #   6 joined CSVs tracked in git (asset_metadata, dga_records, …)
+│   ├── processed/                #   6 public-safe synthetic CSVs tracked in git (asset_metadata, dga_records, …)
 │   ├── scenarios/                #   AssetOpsBench-format scenario files — see data/scenarios/README.md
 │   └── raw/                      #   GITIGNORED raw Kaggle downloads
 │
@@ -130,7 +130,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
 - [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/compute_plan.md`)
 - [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end — 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/watsonx_access.md`)
-- [x] Data pipeline + processed Kaggle datasets landed (`data/processed/` with asset_metadata, dga_records, failure_modes, fault_records, rul_labels, sensor_readings — 97k+ rows, synthesized `transformer_id` key across 20 transformers)
+- [x] Data pipeline + tracked public-safe processed datasets landed (`data/processed/` with synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, and sensor readings — development-ready and safe to publish)
 - [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast, anomaly detection, work-order CRUD)
 - [x] `docs/data_pipeline.tex` paper section drafted
 - [x] **Mid-point report submitted** (`reports/2026-04-06_midpoint_submission.pdf`) to Courseworks on Mon Apr 6

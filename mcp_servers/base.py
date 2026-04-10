@@ -54,7 +54,7 @@ def load_sensor_readings() -> pd.DataFrame:
     Monitoring datasets.
 
     Expected columns:
-        transformer_id, timestamp, sensor_id, value, unit
+        transformer_id, timestamp, sensor_id, value, unit, source
     """
     path = DATA_DIR / "sensor_readings.csv"
     _require(path)
@@ -75,7 +75,8 @@ def load_failure_modes() -> pd.DataFrame:
     Synthesized from: DGA Fault Classification + Transformer Health Index.
 
     Expected columns:
-        failure_mode_id, name, description, severity, affected_sensors
+        failure_mode_id, name, dga_label, description, severity, iec_code,
+        key_gases, recommended_action
     """
     path = DATA_DIR / "failure_modes.csv"
     _require(path)
@@ -90,7 +91,9 @@ def load_dga_records() -> pd.DataFrame:
     Synthesized from: DGA Fault Classification dataset.
 
     Expected columns:
-        transformer_id, h2, ch4, c2h2, c2h4, c2h6, co, co2, fault_label
+        transformer_id, sample_date, dissolved_h2_ppm, dissolved_ch4_ppm,
+        dissolved_c2h2_ppm, dissolved_c2h4_ppm, dissolved_c2h6_ppm,
+        dissolved_co_ppm, dissolved_co2_ppm, fault_label, source_dataset
     """
     path = DATA_DIR / "dga_records.csv"
     _require(path)
@@ -110,7 +113,7 @@ def load_rul_labels() -> pd.DataFrame:
     Synthesized from: Power Transformers FDD & RUL dataset.
 
     Expected columns:
-        transformer_id, timestamp, rul_days, health_index
+        transformer_id, timestamp, rul_days, health_index, fdd_category
     """
     path = DATA_DIR / "rul_labels.csv"
     _require(path)
@@ -130,12 +133,13 @@ def load_fault_records() -> pd.DataFrame:
     Synthesized from: Smart Grid Fault Records dataset.
 
     Expected columns:
-        fault_id, transformer_id, timestamp, fault_type, severity,
-        estimated_downtime_hours, status
+        transformer_id, fault_id, fault_type, location, voltage_v, current_a,
+        power_load_mw, temperature_c, wind_speed_kmh, weather_condition,
+        maintenance_status, component_health, duration_hrs, downtime_hrs
     """
     path = DATA_DIR / "fault_records.csv"
     _require(path)
-    return pd.read_csv(path, parse_dates=["timestamp"])
+    return pd.read_csv(path)
 
 
 # ---------------------------------------------------------------------------

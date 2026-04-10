@@ -43,9 +43,24 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+try:
+    from data.constants import HI_FULL_HEALTH_DAYS
+except ModuleNotFoundError:
+    from constants import HI_FULL_HEALTH_DAYS
+
 SEED = 42
 rng = np.random.default_rng(SEED)
 random.seed(SEED)
+
+
+def _optional_float(row: pd.Series, column: str) -> float | None:
+    if column not in row.index:
+        return None
+    value = row[column]
+    if pd.isna(value):
+        return None
+    return float(value)
+
 
 RAW = Path(__file__).parent / "raw"
 OUT = Path(__file__).parent / "processed"
@@ -72,10 +87,10 @@ def select_representatives() -> pd.DataFrame:
 
     tiers = []
 
-    # Tier 1: healthy (cat=1), high RUL — top quartile (≥1093)
-    t1 = merged[(merged.category == 1) & (merged.rul_days >= 1093)].sample(
-        5, random_state=SEED
-    )
+    # Tier 1: healthy (cat=1), high RUL — top quartile (≥ ~3 years)
+    t1 = merged[
+        (merged.category == 1) & (merged.rul_days >= HI_FULL_HEALTH_DAYS)
+    ].sample(5, random_state=SEED)
     t1 = t1.copy()
     t1["tier"] = "healthy_long"
 
@@ -289,27 +304,17 @@ FAILURE_MODE_CATALOGUE = [
     },
     {
         "failure_mode_id": "FM-003",
-        "name": "Low/Middle-Temperature Overheating (< 700°C)",
-        "dga_label": "Low/Middle-temperature overheating",
+        "name": "Thermal Fault 300-700°C",
+        "dga_label": "Middle-temperature overheating",
         "description": "Thermal fault in conductors or connections. "
         "High C2H4 relative to C2H6.",
-        "severity": "medium",
-        "iec_code": "T2",
-        "key_gases": "C2H4,C2H6",
-        "recommended_action": "De-energize and inspect within 7 days.",
-    },
-    {
-        "failure_mode_id": "FM-004",
-        "name": "Middle-Temperature Overheating",
-        "dga_label": "Middle-temperature overheating",
-        "description": "Medium thermal fault with high C2H4 and C2H6.",
         "severity": "high",
         "iec_code": "T2",
         "key_gases": "C2H4,C2H6",
         "recommended_action": "De-energize and inspect within 48 hours.",
     },
     {
-        "failure_mode_id": "FM-005",
+        "failure_mode_id": "FM-004",
         "name": "High-Temperature Overheating (> 700°C)",
         "dga_label": "High-temperature overheating",
         "description": "Severe winding conductor overheating. "
@@ -320,7 +325,7 @@ FAILURE_MODE_CATALOGUE = [
         "recommended_action": "Immediate de-energization required.",
     },
     {
-        "failure_mode_id": "FM-006",
+        "failure_mode_id": "FM-005",
         "name": "Spark Discharge",
         "dga_label": "Spark discharge",
         "description": "Low-energy electrical sparking in oil. "
@@ -331,7 +336,7 @@ FAILURE_MODE_CATALOGUE = [
         "recommended_action": "De-energize and inspect within 48 hours.",
     },
     {
-        "failure_mode_id": "FM-007",
+        "failure_mode_id": "FM-006",
         "name": "Arc Discharge",
         "dga_label": "Arc discharge",
         "description": "High-energy arcing causing severe oil decomposition. "
@@ -410,37 +415,39 @@ def make_dga_records(reps: pd.DataFrame) -> pd.DataFrame:
             src_row = healthy_hi.iloc[healthy_idx % len(healthy_hi)]
             healthy_idx += 1
             fault_label = "Normal"
-            h2 = float(src_row.get("H2", 0))
-            ch4 = float(src_row.get("CH4", 0))
-            c2h2 = float(src_row.get("C2H2", 0))
-            c2h4 = float(src_row.get("C2H4", 0))
-            c2h6 = float(src_row.get("C2H6", 0))
-            co = float(src_row.get("CO", 0))
-            co2 = float(src_row.get("CO2", 0))
+            h2 = max(0.0, float(src_row.get("H2", 0)))
+            ch4 = max(0.0, float(src_row.get("CH4", 0)))
+            c2h2 = max(0.0, float(src_row.get("C2H2", 0)))
+            c2h4 = max(0.0, float(src_row.get("C2H4", 0)))
+            c2h6 = max(0.0, float(src_row.get("C2H6", 0)))
+            co = _optional_float(src_row, "CO")
+            co2 = _optional_float(src_row, "CO2")
 
         elif rep.tier == "minor_fault":
             src_row = minor_dga.iloc[minor_idx % len(minor_dga)]
             minor_idx += 1
             fault_label = src_row["Type"]
-            h2 = float(src_row["H2"])
-            ch4 = float(src_row.get("CH4", 0))
-            c2h2 = float(src_row["C2H2"])
-            c2h4 = float(src_row["C2H4"])
-            c2h6 = float(src_row.get("C2H6", 0))
-            co = 0.0
-            co2 = 0.0
+            if fault_label == "Low/Middle-temperature overheating":
+                fault_label = "Middle-temperature overheating"
+            h2 = max(0.0, float(src_row["H2"]))
+            ch4 = max(0.0, float(src_row.get("CH4", 0)))
+            c2h2 = max(0.0, float(src_row["C2H2"]))
+            c2h4 = max(0.0, float(src_row["C2H4"]))
+            c2h6 = max(0.0, float(src_row.get("C2H6", 0)))
+            co = _optional_float(src_row, "CO")
+            co2 = _optional_float(src_row, "CO2")
 
         else:  # serious_fault
             src_row = serious_dga.iloc[serious_idx % len(serious_dga)]
             serious_idx += 1
             fault_label = src_row["Type"]
-            h2 = float(src_row["H2"])
-            ch4 = float(src_row.get("CH4", 0))
-            c2h2 = float(src_row["C2H2"])
-            c2h4 = float(src_row["C2H4"])
-            c2h6 = float(src_row.get("C2H6", 0))
-            co = 0.0
-            co2 = 0.0
+            h2 = max(0.0, float(src_row["H2"]))
+            ch4 = max(0.0, float(src_row.get("CH4", 0)))
+            c2h2 = max(0.0, float(src_row["C2H2"]))
+            c2h4 = max(0.0, float(src_row["C2H4"]))
+            c2h6 = max(0.0, float(src_row.get("C2H6", 0)))
+            co = _optional_float(src_row, "CO")
+            co2 = _optional_float(src_row, "CO2")
 
         rows.append(
             {
@@ -490,7 +497,9 @@ def make_rul_labels(reps: pd.DataFrame) -> pd.DataFrame:
                     "transformer_id": rep.transformer_id,
                     "timestamp": ts.strftime("%Y-%m-%d"),
                     "rul_days": rul,
-                    "health_index": round(min(1.0, rul / 1093.0), 4),
+                    # Kaggle-backed path uses a shared "fully healthy" RUL ceiling so
+                    # health_index stays comparable across transformers from different files.
+                    "health_index": round(min(1.0, rul / HI_FULL_HEALTH_DAYS), 4),
                     "fdd_category": rep.fdd_category,
                 }
             )
@@ -548,6 +557,9 @@ def make_fault_records(reps: pd.DataFrame) -> pd.DataFrame:
         },
         inplace=True,
     )
+    for col in ["current_a", "power_load_mw", "wind_speed_kmh"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").clip(lower=0)
 
     df.to_csv(OUT / "fault_records.csv", index=False)
     print(f"  fault_records.csv  ({len(df)} rows)")

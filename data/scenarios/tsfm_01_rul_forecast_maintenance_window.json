@@ -6,7 +6,8 @@
   "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
   "asset_id": "T-016",
   "expected_tools": [
-    "tsfm.forecasting"
+    "tsfm.get_rul",
+    "tsfm.forecast_rul"
   ],
   "ground_truth": {
     "decision_window_days": 180,

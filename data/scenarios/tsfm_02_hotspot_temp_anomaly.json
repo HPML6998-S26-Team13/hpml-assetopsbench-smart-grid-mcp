@@ -1,12 +1,12 @@
 {
   "id": "SGT-006",
   "type": "TSFM",
-  "text": "Run anomaly detection on transformer T-019 hotspot temperature for the past 7 days and summarize any persistent abnormal periods.",
+  "text": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
   "category": "Anomaly Detection",
   "characteristic_form": "The answer should identify abnormal intervals (if any), quantify severity or count of anomalies, and provide a concise interpretation of persistence.",
   "asset_id": "T-019",
   "expected_tools": [
-    "tsfm.timeseries_anomaly_detection"
+    "tsfm.detect_anomalies"
   ],
   "ground_truth": {
     "must_include": [

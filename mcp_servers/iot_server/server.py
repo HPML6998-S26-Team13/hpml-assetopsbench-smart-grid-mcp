@@ -123,8 +123,11 @@ def list_sensors(transformer_id: str) -> list[dict]:
         return [{"error": f"No sensor data found for '{transformer_id}'."}]
 
     summary = (
-        subset.groupby(["sensor_id", "unit"]).size().reset_index(name="num_readings")
+        subset.groupby(["sensor_id", "unit"], dropna=False)
+        .size()
+        .reset_index(name="num_readings")
     )
+    summary["unit"] = summary["unit"].fillna("")
     return summary.to_dict(orient="records")
 
 
@@ -175,9 +178,12 @@ def get_sensor_readings(
 
     subset = subset.sort_values("timestamp").head(min(limit, 1000))
 
+    timestamps = subset["timestamp"].map(
+        lambda ts: None if pd.isna(ts) else ts.isoformat()
+    )
     return (
         subset[["timestamp", "value", "unit"]]
-        .assign(timestamp=subset["timestamp"].dt.isoformat())
+        .assign(timestamp=timestamps)
         .to_dict(orient="records")
     )
 

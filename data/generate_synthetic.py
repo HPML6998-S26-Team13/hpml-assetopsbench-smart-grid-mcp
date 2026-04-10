@@ -31,6 +31,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+try:
+    from data.constants import HI_FULL_HEALTH_DAYS
+except ModuleNotFoundError:
+    from constants import HI_FULL_HEALTH_DAYS
+
 SEED = 42
 rng = np.random.default_rng(SEED)
 random.seed(SEED)
@@ -43,6 +48,9 @@ IDS = [f"T-{i:03d}" for i in range(1, N_TRANSFORMERS + 1)]
 
 START = datetime(2024, 1, 1)
 END = datetime(2024, 1, 31)
+PROFILE_TO_FDD_CATEGORY = {"healthy": 1, "degraded": 2, "critical": 4}
+# Category 3 only appears in the Kaggle-backed build_processed path.
+PROFILE_TO_RUL_BASE = {"healthy": 3650, "degraded": 730, "critical": 90}
 
 
 # ---------------------------------------------------------------------------
@@ -68,6 +76,7 @@ def make_asset_metadata() -> pd.DataFrame:
 
     rows = []
     for i, tid in enumerate(IDS):
+        profile_key = "healthy" if i < 10 else ("degraded" if i < 15 else "critical")
         install_year = rng.integers(2005, 2020)
         rows.append(
             {
@@ -81,6 +90,16 @@ def make_asset_metadata() -> pd.DataFrame:
                 "age_years": 2024 - install_year,
                 # health_status: healthy (0), degraded (1), critical (2)
                 "health_status": 0 if i < 10 else (1 if i < 15 else 2),
+                "fdd_category": PROFILE_TO_FDD_CATEGORY[profile_key],
+                "rul_days": int(
+                    max(
+                        30,
+                        rng.normal(
+                            PROFILE_TO_RUL_BASE[profile_key],
+                            PROFILE_TO_RUL_BASE[profile_key] * 0.12,
+                        ),
+                    )
+                ),
                 "in_service": True,
             }
         )
@@ -163,6 +182,7 @@ def make_sensor_readings(metadata: pd.DataFrame) -> pd.DataFrame:
                         "sensor_id": sensor_id,
                         "value": round(float(val), 3),
                         "unit": params["unit"],
+                        "source": "synthetic",
                     }
                 )
 
@@ -186,72 +206,68 @@ def make_failure_modes() -> pd.DataFrame:
         {
             "failure_mode_id": "FM-001",
             "name": "Partial Discharge",
+            "dga_label": "Partial discharge",
             "description": "Low-energy electrical discharge within insulation voids. "
             "Indicated by elevated H2 and CH4 with trace C2H2.",
             "severity": "low",
             "iec_code": "PD",
-            "affected_sensors": "dissolved_h2_ppm,dissolved_ch4_ppm",
+            "key_gases": "H2,CH4",
             "recommended_action": "Monitor closely; schedule inspection within 90 days",
         },
         {
             "failure_mode_id": "FM-002",
-            "name": "Thermal Fault < 300°C",
+            "name": "Low-Temperature Overheating (< 300°C)",
+            "dga_label": "Low-temperature overheating",
             "description": "Low-temperature thermal fault, typically in core laminations "
             "or due to overload. Elevated CH4 and C2H4.",
             "severity": "medium",
             "iec_code": "T1",
-            "affected_sensors": "dissolved_ch4_ppm,dissolved_c2h4_ppm,oil_temp_c",
+            "key_gases": "CH4,C2H4",
             "recommended_action": "Reduce load; inspect within 30 days",
         },
         {
             "failure_mode_id": "FM-003",
-            "name": "Thermal Fault 300–700°C",
+            "name": "Thermal Fault 300-700°C",
+            "dga_label": "Middle-temperature overheating",
             "description": "Medium-temperature thermal fault in conductors or connections. "
             "High C2H4 relative to C2H6.",
             "severity": "high",
             "iec_code": "T2",
-            "affected_sensors": "dissolved_c2h4_ppm,dissolved_c2h6_ppm,winding_temp_top_c",
-            "recommended_action": "De-energize and inspect within 7 days",
+            "key_gases": "C2H4,C2H6",
+            "recommended_action": "De-energize and inspect within 48 hours",
         },
         {
             "failure_mode_id": "FM-004",
-            "name": "Thermal Fault > 700°C",
-            "description": "High-temperature thermal fault indicating severe overheating, "
-            "often in winding conductors. High C2H4 and C2H6.",
+            "name": "High-Temperature Overheating (> 700°C)",
+            "dga_label": "High-temperature overheating",
+            "description": "Severe winding conductor overheating. "
+            "Very high C2H4 and C2H6.",
             "severity": "critical",
             "iec_code": "T3",
-            "affected_sensors": "dissolved_c2h4_ppm,dissolved_c2h6_ppm,winding_temp_top_c,oil_temp_c",
+            "key_gases": "C2H4,C2H6,H2",
             "recommended_action": "Immediate de-energization required",
         },
         {
             "failure_mode_id": "FM-005",
-            "name": "Low-Energy Electrical Discharge",
-            "description": "Sparking or tracking in oil. Characterized by elevated C2H2 "
-            "alongside H2 and C2H4.",
+            "name": "Spark Discharge",
+            "dga_label": "Spark discharge",
+            "description": "Low-energy electrical sparking in oil. "
+            "Elevated C2H2 and H2.",
             "severity": "high",
             "iec_code": "D1",
-            "affected_sensors": "dissolved_c2h2_ppm,dissolved_h2_ppm,dissolved_c2h4_ppm",
+            "key_gases": "C2H2,H2",
             "recommended_action": "De-energize and inspect within 48 hours",
         },
         {
             "failure_mode_id": "FM-006",
-            "name": "High-Energy Electrical Discharge (Arcing)",
-            "description": "High-energy arcing causing significant oil decomposition. "
+            "name": "Arc Discharge",
+            "dga_label": "Arc discharge",
+            "description": "High-energy arcing causing severe oil decomposition. "
             "Very high C2H2 and H2.",
             "severity": "critical",
             "iec_code": "D2",
-            "affected_sensors": "dissolved_c2h2_ppm,dissolved_h2_ppm,dissolved_c2h4_ppm,dissolved_c2h6_ppm",
+            "key_gases": "C2H2,H2,C2H4",
             "recommended_action": "Immediate de-energization and emergency inspection",
-        },
-        {
-            "failure_mode_id": "FM-007",
-            "name": "Normal Aging",
-            "description": "Background gas generation consistent with normal transformer "
-            "aging. All gases within IEC limits.",
-            "severity": "none",
-            "iec_code": "N",
-            "affected_sensors": "",
-            "recommended_action": "Continue routine monitoring",
         },
     ]
 
@@ -295,8 +311,8 @@ DGA_COLS = [
 
 FAULT_LABEL_MAP = {
     "healthy": "Normal",
-    "degraded": "Thermal Fault < 300°C",
-    "critical": "High-Energy Electrical Discharge (Arcing)",
+    "degraded": "Low-temperature overheating",
+    "critical": "Arc discharge",
 }
 
 
@@ -313,12 +329,12 @@ def make_dga_records(metadata: pd.DataFrame) -> pd.DataFrame:
         rows.append(
             {
                 "transformer_id": tid,
-                "sample_date": (START + timedelta(days=rng.integers(0, 30))).strftime(
-                    "%Y-%m-%d"
-                ),
+                "sample_date": (
+                    START + timedelta(days=int(rng.integers(0, 30)))
+                ).strftime("%Y-%m-%d"),
                 **gas_vals,
                 "fault_label": FAULT_LABEL_MAP[profile_key],
-                "sample_source": "synthetic",
+                "source_dataset": "synthetic",
             }
         )
 
@@ -349,19 +365,20 @@ def make_rul_labels(metadata: pd.DataFrame) -> pd.DataFrame:
         profile_key = ["healthy", "degraded", "critical"][status_map[tid]]
         mu, sigma = RUL_START[profile_key]
         base_rul = max(10, int(rng.normal(mu, sigma)))
+        # ~1 RUL-day consumed per calendar day, with small transformer-to-transformer variation.
+        daily_deg = float(rng.uniform(0.9, 1.1))
         days = (END - START).days
         for d in range(days + 1):
             day = START + timedelta(days=d)
-            # Add small noise to daily degradation
-            daily_deg = rng.normal(1.0, 0.1)
-            rul = max(0, base_rul - int(d * daily_deg))
-            health_index = min(1.0, max(0.0, rul / mu))
+            rul = max(0, base_rul - int(round(d * daily_deg)))
+            health_index = min(1.0, max(0.0, rul / HI_FULL_HEALTH_DAYS))
             rows.append(
                 {
                     "transformer_id": tid,
                     "timestamp": day.strftime("%Y-%m-%d"),
                     "rul_days": rul,
                     "health_index": round(float(health_index), 4),
+                    "fdd_category": PROFILE_TO_FDD_CATEGORY[profile_key],
                 }
             )
 
@@ -372,6 +389,26 @@ def make_rul_labels(metadata: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def sync_asset_metadata_rul_days(
+    metadata: pd.DataFrame, rul_labels: pd.DataFrame
+) -> pd.DataFrame:
+    """Align asset_metadata.rul_days to the latest RUL label for each transformer."""
+    latest_rul = (
+        rul_labels.sort_values("timestamp")
+        .groupby("transformer_id", sort=False)
+        .last()["rul_days"]
+        .astype(int)
+    )
+    synced = metadata.copy()
+    synced["rul_days"] = (
+        synced["transformer_id"].map(latest_rul).fillna(synced["rul_days"]).astype(int)
+    )
+    path = OUT / "asset_metadata.csv"
+    synced.to_csv(path, index=False)
+    print(f"  rewrote {path} with latest RUL labels")
+    return synced
+
+
 # ---------------------------------------------------------------------------
 # 6. fault_records.csv
 # ---------------------------------------------------------------------------
@@ -379,17 +416,21 @@ def make_rul_labels(metadata: pd.DataFrame) -> pd.DataFrame:
 # Each critical/degraded transformer has at least one historical fault event.
 
 FAULT_TYPES = [
-    "Winding insulation degradation",
-    "Oil contamination",
-    "Bushing failure",
-    "Cooling system failure",
-    "Tap changer malfunction",
-    "Core ground fault",
-    "Overload trip",
+    "Transformer Failure",
+    "Line Breakage",
+    "Overload Trip",
+    "Cooling System Failure",
+    "Tap Changer Malfunction",
+    "Insulation Degradation",
 ]
-SEVERITIES = ["low", "medium", "high", "critical"]
-STATUSES = ["open", "in_progress", "resolved", "closed"]
-TECHNICIANS = ["TEC-01", "TEC-02", "TEC-03", "TEC-04", "TEC-05"]
+MAINTENANCE_STATUSES = ["Scheduled", "Pending", "Completed"]
+WEATHER_CONDITIONS = ["Clear", "Rainy", "Windy", "Stormy"]
+COMPONENT_HEALTH = {0: "Normal", 1: "Warning", 2: "Faulty"}
+DOWNTIME_BY_HEALTH = {
+    0: (2, 6),
+    1: (8, 24),
+    2: (24, 72),
+}
 
 
 def make_fault_records(metadata: pd.DataFrame) -> pd.DataFrame:
@@ -406,25 +447,35 @@ def make_fault_records(metadata: pd.DataFrame) -> pd.DataFrame:
             2: rng.integers(2, 6),
         }[health]
         for _ in range(n_faults):
-            event_day = START + timedelta(days=int(rng.integers(0, 30)))
-            severity = SEVERITIES[min(health + rng.integers(0, 2), 3)]
-            downtime = {"low": 4, "medium": 8, "high": 24, "critical": 72}[severity]
+            min_downtime, max_downtime = DOWNTIME_BY_HEALTH[health]
+            downtime = int(rng.integers(min_downtime, max_downtime + 1))
             rows.append(
                 {
-                    "fault_id": f"F-{fault_counter:04d}",
                     "transformer_id": tid,
-                    "timestamp": event_day.isoformat(),
+                    "fault_id": f"F{fault_counter:03d}",
                     "fault_type": random.choice(FAULT_TYPES),
-                    "severity": severity,
-                    "estimated_downtime_hours": downtime + int(rng.integers(-2, 4)),
-                    "assigned_technician": random.choice(TECHNICIANS),
-                    "status": random.choice(STATUSES),
-                    "notes": "",
+                    "location": f"Substation {random.choice(['Alpha', 'Beta', 'Gamma', 'Delta'])}",
+                    "voltage_v": int(rng.choice([11000, 33000, 132000])),
+                    "current_a": int(max(0, rng.normal(220, 40))),
+                    "power_load_mw": round(max(0.0, float(rng.normal(45, 8))), 2),
+                    "temperature_c": round(float(rng.normal(28 + health * 8, 4)), 1),
+                    "wind_speed_kmh": round(max(0.0, float(rng.normal(15, 6))), 1),
+                    "weather_condition": random.choice(WEATHER_CONDITIONS),
+                    "maintenance_status": random.choice(MAINTENANCE_STATUSES),
+                    "component_health": COMPONENT_HEALTH[health],
+                    "duration_hrs": round(
+                        float(max(0.5, rng.normal(2 + health * 3, 1.2))), 1
+                    ),
+                    "downtime_hrs": max(1, downtime + int(rng.integers(-2, 4))),
                 }
             )
             fault_counter += 1
 
-    df = pd.DataFrame(rows).sort_values("timestamp").reset_index(drop=True)
+    df = (
+        pd.DataFrame(rows)
+        .sort_values(["transformer_id", "fault_id"])
+        .reset_index(drop=True)
+    )
     path = OUT / "fault_records.csv"
     df.to_csv(path, index=False)
     print(f"  wrote {path}  ({len(df)} rows)")
@@ -441,7 +492,8 @@ if __name__ == "__main__":
     make_sensor_readings(meta)
     make_failure_modes()
     make_dga_records(meta)
-    make_rul_labels(meta)
+    rul = make_rul_labels(meta)
+    meta = sync_asset_metadata_rul_days(meta, rul)
     make_fault_records(meta)
     print("\nDone. All files written to data/processed/")
     print(

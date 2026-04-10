@@ -6,7 +6,8 @@
   "characteristic_form": "The answer should include a risk-aware priority decision (emergency or high), rationale tied to fault indicators, and a complete corrective work order description.",
   "asset_id": "T-017",
   "expected_tools": [
-    "wo.generate_work_order"
+    "wo.create_work_order",
+    "wo.estimate_downtime"
   ],
   "ground_truth": {
     "must_include": [

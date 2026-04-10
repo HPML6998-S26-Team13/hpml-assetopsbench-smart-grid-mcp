@@ -60,14 +60,14 @@ The current delivery-gate milestones are:
 
 ## W2 — Immediate recovery and foundation
 
-### #56 — Replay local Smart Grid scenario files onto canonical `team13/main` and push first batch
+### #56 — Replay local Smart Grid scenario files onto the org repo `main` branch and push first batch
 - **Owner:** Akshat
 - **What this means:** Recover the scenario JSONs and any helper files that currently exist only on your local machine or old branch history, then replay them onto the canonical team repo history.
 - **Deliverables:** Scenario files under [`data/scenarios/`](../../data/scenarios), with stable filenames and at least one commit on canonical history.
-- **Done when:** The files are visible on `team13/main`, filenames follow repo convention, and Alex can review the actual scenario count from the repo.
+- **Done when:** The files are visible on the org repo `main` branch, filenames follow repo convention, and Alex can review the actual scenario count from the repo.
 - **Coordination:** Use the current canonical repo state as base. If local history is messy, cherry-pick or manually reapply; do not block on preserving old branch shape.
 
-### #57 — Replay local benchmark / harness README work onto canonical `team13/main` and push
+### #57 — Replay local benchmark / harness README work onto the org repo `main` branch and push
 - **Owner:** Akshat
 - **What this means:** Recover the benchmark / harness instructions claimed on the Apr 7 call and land them in the repo in the correct location.
 - **Deliverables:** A repo-tracked benchmark / harness doc or script set, likely under [`benchmarks/`](../../benchmarks), [`docs/`](../../docs), or [`scripts/`](../../scripts), not only in private notes.
@@ -234,7 +234,7 @@ Shared expectations for all four hardening tasks:
 - **Deliverables:** Email or message to Dhaval covering hybrid novelty and scenario realism, plus a saved response or documented non-response.
 - **Done when:** The team has enough signal to either proceed with Hybrid or keep it out of scope, and to validate scenario realism with a concrete mentor answer.
 
-### #19 — Each team member sync canonical `team13/main`, install `ibm-watsonx-ai` into `.venv`, and run the verify script locally
+### #19 — Each team member sync the org repo `main` branch, install `ibm-watsonx-ai` into `.venv`, and run the verify script locally
 - **Owner:** Team
 - **What this means:** Every teammate aligns local repos and confirms basic WatsonX access locally.
 - **Deliverables:** Per-person local confirmation, not just "someone else can run it".

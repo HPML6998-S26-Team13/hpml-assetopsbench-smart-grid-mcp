@@ -43,6 +43,10 @@ wandb/
 # Jupyter
 .ipynb_checkpoints/
 
+# Private
+private/
+docs/plans/
+
 # Secrets
 .env
 *.key

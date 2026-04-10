@@ -31,12 +31,20 @@ import numpy as np
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
 
+from data.constants import HI_FULL_HEALTH_DAYS
 from mcp_servers.base import load_rul_labels, load_sensor_readings
 
 mcp = FastMCP("smart-grid-tsfm")
 
 _rul: pd.DataFrame | None = None
 _readings: pd.DataFrame | None = None
+
+
+def _confidence_from_history(num_points: int, horizon_days: int = 0) -> float:
+    """Simple bounded baseline confidence for deterministic synthetic labels."""
+    history_factor = min(0.99, 0.55 + num_points / 120)
+    horizon_penalty = min(0.45, max(0, horizon_days) / 900)
+    return round(max(0.1, history_factor - horizon_penalty), 3)
 
 
 def _get_rul() -> pd.DataFrame:
@@ -82,6 +90,10 @@ def get_rul(transformer_id: str) -> dict:
 
     latest = subset.iloc[-1]
     rul_days = int(latest["rul_days"])
+    fdd_category = (
+        int(latest["fdd_category"]) if pd.notna(latest["fdd_category"]) else None
+    )
+    as_of_ts = latest["timestamp"]
 
     if rul_days >= 730:
         interpretation = "Healthy — no immediate action required."
@@ -94,10 +106,11 @@ def get_rul(transformer_id: str) -> dict:
 
     return {
         "transformer_id": transformer_id,
-        "as_of_date": str(latest["timestamp"].date()),
+        "as_of_date": str(as_of_ts.date()) if pd.notna(as_of_ts) else None,
         "rul_days": rul_days,
         "health_index": round(float(latest["health_index"]), 4),
-        "fdd_category": int(latest["fdd_category"]),
+        "fdd_category": fdd_category,
+        "confidence": _confidence_from_history(len(subset)),
         "interpretation": interpretation,
     }
 
@@ -123,24 +136,37 @@ def forecast_rul(transformer_id: str, horizon_days: int = 30) -> dict:
     if subset.empty:
         return {"error": f"No RUL data found for '{transformer_id}'."}
 
-    horizon_days = min(horizon_days, 365)
+    if horizon_days < 0 or horizon_days > 365:
+        return {
+            "error": "horizon_days must be between 0 and 365.",
+            "provided_horizon_days": horizon_days,
+        }
     latest = subset.iloc[-1]
     current_rul = int(latest["rul_days"])
+    latest_ts = latest["timestamp"]
 
     # Linear model: assume 1 RUL-day consumed per calendar day
     projected_rul = max(0, current_rul - horizon_days)
-    forecast_date = pd.to_datetime(latest["timestamp"]) + pd.Timedelta(
-        days=horizon_days
+    forecast_date = (
+        pd.to_datetime(latest_ts) + pd.Timedelta(days=horizon_days)
+        if pd.notna(latest_ts)
+        else None
     )
-    projected_hi = round(min(1.0, projected_rul / 1093.0), 4)
+    projected_hi = (
+        0.0
+        if current_rul <= 0
+        else round(min(1.0, projected_rul / HI_FULL_HEALTH_DAYS), 4)
+    )
 
     return {
         "transformer_id": transformer_id,
         "current_rul_days": current_rul,
-        "forecast_date": str(forecast_date.date()),
+        "forecast_date": (
+            str(forecast_date.date()) if forecast_date is not None else None
+        ),
         "projected_rul_days": projected_rul,
         "projected_health_index": projected_hi,
-        "confidence": "low — linear baseline; replace with TSFM inference",
+        "confidence": _confidence_from_history(len(subset), horizon_days),
         "method": "linear_degradation_baseline",
     }
 
@@ -184,7 +210,10 @@ def detect_anomalies(
 
     vals = subset["value"].astype(float)
     rolling_mean = vals.rolling(window_size, min_periods=1).mean()
-    rolling_std = vals.rolling(window_size, min_periods=1).std().fillna(1e-9)
+    rolling_std = vals.rolling(window_size, min_periods=1).std()
+    rolling_std = rolling_std.where(
+        rolling_std > 0, other=rolling_mean.abs() * 0.001 + 1e-3
+    )
     z_scores = ((vals - rolling_mean) / rolling_std).abs()
 
     anomaly_mask = z_scores > z_threshold

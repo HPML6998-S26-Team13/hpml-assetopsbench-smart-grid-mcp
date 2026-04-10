@@ -11,13 +11,13 @@ data/
 ├── generate_synthetic.py   # Offline synthetic generator (no Kaggle access required)
 │                           #   Produces a fully-synthetic equivalent dataset for CI and dev
 ├── raw/                    # GITIGNORED — raw Kaggle downloads
-├── processed/              # Joined, cleaned, TRACKED CSVs:
+├── processed/              # Public-safe TRACKED CSVs generated for development/repro:
 │   ├── asset_metadata.csv        # 20 fictional transformers (T-001..T-020)
-│   ├── dga_records.csv           # 21 rows: DGA gas samples per transformer
-│   ├── failure_modes.csv         # 8 rows: failure mode taxonomy
-│   ├── fault_records.csv         # 507 rows: historical faults
-│   ├── rul_labels.csv            # 621 rows: remaining useful life per transformer per snapshot
-│   └── sensor_readings.csv       # 96,486 rows: timeseries telemetry
+│   ├── dga_records.csv           # 20 synthetic DGA samples
+│   ├── failure_modes.csv         # 6 failure mode entries
+│   ├── fault_records.csv         # synthetic historical faults / maintenance events
+│   ├── rul_labels.csv            # synthetic RUL labels per transformer per day
+│   └── sensor_readings.csv       # hourly synthetic telemetry
 └── scenarios/              # Smart Grid scenario files (see scenarios/README.md)
 ```
 
@@ -32,10 +32,10 @@ See `docs/data_pipeline.tex` for the full methodology writeup (paper-ready LaTeX
 ```bash
 # From repo root, with .venv active:
 
-# Full pipeline (requires Kaggle credentials in ~/.kaggle/kaggle.json):
+# Full pipeline (requires Kaggle credentials in ~/.kaggle/kaggle.json and may ingest restricted-source data locally):
 python data/build_processed.py
 
-# Or, offline-only equivalent (no Kaggle access needed):
+# Or, public-safe tracked outputs (no Kaggle access needed):
 python data/generate_synthetic.py
 ```
 
@@ -43,6 +43,8 @@ python data/generate_synthetic.py
 
 - **3 of 5 source datasets are CC0** — Power Transformers FDD & RUL, DGA Fault Classification, Smart Grid Fault Records (used for FMSR, TSFM, WO)
 - **2 of 5 have redistribution restrictions** — Transformer Health Index (ODbL), Current & Voltage Monitoring (author copyright) — used locally for IoT sensor data only
-- **Public PR plans:** `generate_synthetic.py` will be the default IoT data source for any upstream PR to AssetOpsBench, so all 4 domains are covered end-to-end without any redistribution concerns. Real Kaggle data remains on team machines for internal benchmarking.
+- **Tracked repo policy:** files committed under `data/processed/` must remain public-safe. The repo's tracked outputs should come from `generate_synthetic.py`, not from restricted-source Kaggle joins.
+- **Local benchmarking policy:** if you run `build_processed.py` against Kaggle data, treat those outputs as local-only working data unless the license has been explicitly cleared for redistribution.
+- **Upstream PR policy:** any contribution back to AssetOpsBench should use the synthetic/public-safe path by default so all four domains remain runnable without redistribution concerns.
 
-See Slide 5 of `reports/2026-04-06_midpoint_submission.pdf` for more detail on the licensing gap and mitigation.
+See `docs/project_reference.md` and the midpoint report for the project-level context around this licensing constraint.

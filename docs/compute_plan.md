@@ -19,9 +19,9 @@ unattended jobs that exceed the `short` partition time limit.
 ## 1. Insomnia Cluster (Primary)
 
 **Login:** `ssh af3623@insomnia.rcs.columbia.edu` (SSH key auth + Duo 2FA required)
-**Setup:** `bash scripts/setup_insomnia.sh` (one-time env + model download)
-**Serve:** `sbatch scripts/vllm_serve.sh` (launches vLLM on A6000)
-**Test:** `bash scripts/test_inference.sh <node> 8000` (validates from login node)
+**Setup:** `bash scripts/setup_insomnia.sh` (one-time env + pinned model download; requires `HF_TOKEN`)
+**Serve:** `sbatch scripts/vllm_serve.sh` (launches vLLM on A6000 with explicit precondition checks)
+**Test:** `bash scripts/test_inference.sh localhost 8000` after `ssh -N -L 8000:localhost:8000 <node>` from the login node (only passes on a real completion payload)
 
 ### Available GPUs
 
@@ -54,8 +54,8 @@ srun --partition=short --gres=gpu:A6000:2 --mem=128G --time=02:00:00 --pty bash
 # Interactive: 1x H100 for scaling comparison
 srun --partition=short --gres=gpu:h100:1 --mem=64G --time=02:00:00 --pty bash
 
-# Batch job example (recommended for profiling runs)
-# Note: profiling wrapper scripts will live in profiling/scripts/ once authored in W3.
+# Batch job example (recommended for profiling runs once wrapper scripts land)
+# Note: the generic experiment template is a separate W3 task and should be treated as not-yet-landed until committed.
 sbatch profiling/scripts/run_profile.sh
 ```
 

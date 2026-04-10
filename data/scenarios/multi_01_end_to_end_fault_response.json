@@ -1,15 +1,15 @@
 {
   "id": "SGT-009",
-  "type": "",
+  "type": "Multi",
   "text": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
   "category": "End-to-End Incident Response",
   "characteristic_form": "The answer should show a multi-step workflow: summarize relevant IoT evidence, map to likely fault mode, provide a 30-day risk or forecast statement, and conclude with a concrete work-order recommendation.",
   "asset_id": "T-015",
   "expected_tools": [
     "iot.get_sensor_readings",
-    "fmsr.get_failure_modes",
-    "tsfm.forecasting",
-    "wo.generate_work_order"
+    "fmsr.analyze_dga",
+    "tsfm.forecast_rul",
+    "wo.create_work_order"
   ],
   "ground_truth": {
     "must_include": [

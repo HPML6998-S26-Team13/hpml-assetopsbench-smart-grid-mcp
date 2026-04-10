@@ -7,6 +7,7 @@
   "asset_id": "T-011",
   "expected_tools": [
     "iot.get_asset_metadata",
+    "iot.list_sensors",
     "iot.get_sensor_readings"
   ],
   "ground_truth": {

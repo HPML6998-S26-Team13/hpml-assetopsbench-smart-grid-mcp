@@ -160,7 +160,7 @@ Completed:
 - Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
 - Compute plan committed (`docs/compute_plan.md`) mapping GPU needs per project phase
 - WatsonX API access received from mentor Apr 5 and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked at interactive speeds (`docs/watsonx_access.md`)
-- Data pipeline scripts + processed Kaggle datasets landed (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings — 97k+ rows with synthesized `transformer_id` key spanning 20 transformers across 4 health tiers)
+- Data pipeline scripts plus tracked public-safe processed datasets landed (`data/processed/`: synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings for 20 transformers) while restricted-source Kaggle joins remain a local benchmarking path
 - MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast + z-score anomaly detection + OLS trend, work-order CRUD)
 - Paper-ready `docs/data_pipeline.tex` section drafted
 - **Mid-point report submitted** to Courseworks on Monday April 6 (see `reports/2026-04-06_midpoint_submission.pdf`)
