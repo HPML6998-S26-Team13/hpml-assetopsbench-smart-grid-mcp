@@ -4,7 +4,7 @@ MCP (Model Context Protocol) servers wrapping the four AssetOpsBench tool domain
 
 ## Architecture
 
-All four servers inherit from `base.py`, which provides shared data-loading helpers pointing at `data/processed/`. Each server exposes a set of tools via the MCP JSON-RPC interface.
+All four servers import shared data-loading helpers from `base.py`, which points at `data/processed/`. Each server exposes a set of tools via the MCP JSON-RPC interface.
 
 ```
 mcp_servers/
@@ -29,13 +29,13 @@ mcp_servers/
 python -m mcp_servers.iot_server.server
 ```
 
-Each server runs as an independent process listening on its own socket. The agent (not the server) is responsible for orchestrating multi-turn tool calls across servers.
+In practice, the benchmark path composes multiple servers at once; these modules are intentionally independent so the harness can start only the domains it needs. The agent or harness layer, not the server, is responsible for multi-turn orchestration across domains.
 
 ## Design notes
 
-- **Shared base class** keeps data loading DRY — schema changes in `data/processed/` only need updating in `base.py`.
+- **Shared loader layer** keeps data loading DRY — schema changes in `data/processed/` only need updating in `base.py`.
 - **Stateless tool calls** — servers don't maintain session state; the agent holds multi-turn context.
-- **No network side effects** — all tools read from local CSVs. This is a benchmark, not a live industrial system.
+- **No network side effects** — all read paths come from local CSVs. The only write path is the in-memory WO session store used for work-order creation during a run.
 - **Real domain logic, not stubs** — e.g. `fmsr_server.analyze_dga` implements the IEC 60599 Rogers Ratio method for dissolved gas analysis, not a dummy return.
 
 ## Status (Apr 7, 2026)

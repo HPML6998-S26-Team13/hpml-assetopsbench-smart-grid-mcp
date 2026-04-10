@@ -1,0 +1,16 @@
+{
+  "id": "SG-NEG-005",
+  "type": "Multi",
+  "domain_tags": ["IoT"],
+  "category": "multi-hop",
+  "text": "Invalid fixture: Multi scenario must cover at least two domains.",
+  "characteristic_form": "This fixture should fail because Multi scenarios need multiple domain tags.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "iot.list_sensors",
+    "iot.get_sensor_readings"
+  ],
+  "success_criteria": [
+    "validator rejects Multi scenarios with only one domain tag"
+  ]
+}

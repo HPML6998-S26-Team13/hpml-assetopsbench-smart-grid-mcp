@@ -1,4 +1,4 @@
-# Evaluation Harness Runbook (Local Windows + Watsonx)
+# Evaluation Harness Runbook (Local Windows + WatsonX)
 
 *Last updated: 2026-04-07*
 
@@ -19,11 +19,18 @@ This README is the practical runbook for getting the **AssetOpsBench evaluation 
 
 ## Repositories and paths used
 
-- Upstream harness repo: `../AssetOpsBench`
-- Team repo (this repo): `.`
-- Smart Grid scenarios: `data/scenarios/`
+- Upstream harness repo: `%AOB_PATH%`
+- Team repo (this repo): `%SMARTGRID_REPO%`
+- Smart Grid scenarios: `%SMARTGRID_REPO%\data\scenarios\`
 
 > The orchestration harness (`plan-execute`) lives in `AssetOpsBench`. Our Smart Grid scenarios and MCP servers live in this repo.
+
+Suggested environment variables for the examples below:
+
+```cmd
+set "AOB_PATH=C:\path\to\AssetOpsBench"
+set "SMARTGRID_REPO=C:\path\to\hpml-assetopsbench-smart-grid-mcp"
+```
 
 ---
 
@@ -50,7 +57,7 @@ This README is the practical runbook for getting the **AssetOpsBench evaluation 
 Run from the upstream harness repo.
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench"
+cd /d "%AOB_PATH%"
 uv sync
 ```
 
@@ -78,7 +85,7 @@ setx WATSONX_URL "https://us-south.ml.cloud.ibm.com"
 This verifies the full loop: discover tools → plan → execute tool call → summarize.
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench"
+cd /d "%AOB_PATH%"
 uv run plan-execute --verbose --show-plan --show-trajectory --model-id watsonx/meta-llama/llama-3-3-70b-instruct "Using the utilities server, call the current_date_time tool and return the UTC timestamp."
 ```
 
@@ -95,7 +102,7 @@ Expected success signals:
 From this repo root, run:
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\hpml-assetopsbench-smart-grid-mcp"
+cd /d "%SMARTGRID_REPO%"
 scripts\run_harness_smoke.cmd
 ```
 
@@ -121,7 +128,7 @@ Use this when you want harness calls that require CouchDB-backed data (especiall
 Start CouchDB:
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench"
+cd /d "%AOB_PATH%"
 docker compose -f src/couchdb/docker-compose.yaml up -d
 ```
 
@@ -146,7 +153,7 @@ This path uses the original `aobench/scenario-server` API and confirms scenario 
 ### Terminal 1 — Start scenario server
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench\aobench\scenario-server"
+cd /d "%AOB_PATH%\aobench\scenario-server"
 uv sync
 uv run python serve.py
 ```
@@ -196,7 +203,7 @@ docker-compose -f benchmark/cods_track1/docker-compose.yml up
 Windows (`cmd.exe`) equivalent:
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench"
+cd /d "%AOB_PATH%"
 docker compose -f benchmark/cods_track1/docker-compose.yml up
 ```
 
@@ -213,7 +220,7 @@ docker-compose -f benchmark/cods_track2/docker-compose.yml up
 Windows (`cmd.exe`) equivalent:
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\AssetOpsBench"
+cd /d "%AOB_PATH%"
 docker compose -f benchmark/cods_track2/docker-compose.yml up
 ```
 
@@ -237,9 +244,24 @@ Notes:
 ### Step A — Validate scenario structure
 
 ```cmd
-cd /d "c:\Users\aksha\Documents\COLUMBIA\HPML\Final Project\hpml-assetopsbench-smart-grid-mcp"
+cd /d "%SMARTGRID_REPO%"
 python data\scenarios\validate_scenarios.py
 ```
+
+## What counts as proof of a successful canonical run?
+
+For issue closure or board status, do not treat “I ran it locally” as enough by itself. A successful harness or scenario run should leave at least one of:
+
+- a committed artifact or log under `benchmarks/` or another agreed repo path
+- a terminal snippet in the issue comment showing the exact command and success signal
+- a short note pointing to the exact scenario file, exact command, and exact output/log location
+
+For the first canonical run, the minimum useful proof is:
+
+- the exact command used
+- the exact scenario or benchmark target
+- a success indicator from the run
+- a pointer to the saved output, trajectory, or grading artifact
 
 Expected:
 

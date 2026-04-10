@@ -115,14 +115,14 @@ See [GitHub project](https://github.com/orgs/HPML6998-S26-Team13/projects/1/view
 - [ ] Team: Repoint local git remote / workflow to the new organization repo
 
 **How these were operationalized in the tracker and GitHub issues**
-- [ ] Akshat: [#56](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/56) `Replay local Smart Grid scenario files onto canonical team13/main and push first batch`
-- [ ] Akshat: [#57](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/57) `Replay local benchmark / harness README work onto canonical team13/main and push`
+- [ ] Akshat: [#56](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/56) `Replay local Smart Grid scenario files onto canonical org repo main and push first batch`
+- [ ] Akshat: [#57](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/57) `Replay local benchmark / harness README work onto canonical org repo main and push`
 - [ ] Akshat: [#3](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/3), [#18](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/18), and [#20](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/20) for the first end-to-end ladder
 - [ ] Aaron: [#6](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/6) `Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct`
 - [ ] Aaron: [#8](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/8) `Generic Slurm experiment template for benchmark jobs`
 - [ ] Aaron: [#7](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/7) and [#59](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/59) for profiling capture wrappers
 - [ ] Tanisha: [#58](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/58) plus [#9](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/9)-[#13](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/13)
-- [ ] Team: [#19](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/19) `Each team member sync canonical team13/main, install ibm-watsonx-ai into .venv, and run the verify script locally`
+- [ ] Team: [#19](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/19) `Each team member sync canonical org repo main, install ibm-watsonx-ai into .venv, and run the verify script locally`
 
 ### Implications for the tracker
 

@@ -1,0 +1,15 @@
+{
+  "id": "SG-NEG-001",
+  "type": "Multi",
+  "text": "Negative fixture: declared multi-domain scenario with mismatched tool coverage.",
+  "category": "Negative Validation Check",
+  "characteristic_form": "Should fail validator because domain tags and expected tools do not agree.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "iot.get_sensor_readings"
+  ],
+  "domain_tags": [
+    "IoT",
+    "TSFM"
+  ]
+}

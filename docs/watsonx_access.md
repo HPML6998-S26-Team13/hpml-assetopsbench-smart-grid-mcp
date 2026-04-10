@@ -12,7 +12,7 @@ set up access locally, and how we plan to use it in the project.
 **Repo location:** Everything in this doc (`.env`, `.venv/`, `scripts/verify_watsonx.py`)
 lives in the canonical team repo at [HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp).
 Alex's personal repo is now only a mirror. If you have a different local checkout,
-point it at the canonical `team13/main` branch before treating it as source of truth.
+point it at the org repo `main` branch before treating it as source of truth.
 
 ## Setup
 
@@ -53,6 +53,11 @@ point it at the canonical `team13/main` branch before treating it as source of t
    ```bash
    .venv/bin/python scripts/verify_watsonx.py --model meta-llama/llama-4-maverick-17b-128e-instruct-fp8
    ```
+
+   A successful verification run should:
+   - print the WatsonX host URL and authenticate cleanly
+   - list matching models without exposing secret values
+   - return a non-empty completion payload for the chosen model
 
    For latency measurements:
 

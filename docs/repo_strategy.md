@@ -1,6 +1,6 @@
 # Repository Strategy
 
-*Last updated: April 9, 2026 - team13 repo is canonical*
+*Last updated: April 10, 2026 - org repo is canonical*
 
 ## Canonical repo layout
 
@@ -9,13 +9,13 @@ We now use three code/document surfaces for different purposes:
 ### 1. Canonical collaboration repo: `HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp`
 
 This is the team repo and the source of truth for all shared project work.
-`team13/main` is the canonical branch. GitHub Projects, planning docs, MCP
+The org repo `main` branch is the canonical branch. GitHub Projects, planning docs, MCP
 server code, scenarios, benchmark scripts, and public-facing project docs all
 live here.
 
 ### 2. Personal mirror: `eggrollofchaos/hpml-assetopsbench-smart-grid-mcp`
 
-This repo mirrors the canonical team repo after pushes land on `team13/main`.
+This repo mirrors the canonical team repo after pushes land on the org repo `main` branch.
 It exists as a backup / personal mirror, not as the planning or collaboration
 surface. Day-to-day work should not branch from this mirror.
 
@@ -36,7 +36,7 @@ It is not the canonical source for shared team code or shared task state.
 
 ## What goes where
 
-| Item | team13 canonical repo | personal mirror | AssetOpsBench fork |
+| Item | org canonical repo | personal mirror | AssetOpsBench fork |
 |---|---|---|---|
 | MCP server implementations | yes | mirrored copy | later, PR-bound subset only |
 | Smart Grid scenarios | yes | mirrored copy | later, PR-bound subset only |
@@ -48,8 +48,8 @@ It is not the canonical source for shared team code or shared task state.
 
 ## Day-to-day workflow
 
-1. Treat `team13/main` as canonical.
-2. Push to `team13` first.
+1. Treat the org repo `main` branch as canonical.
+2. Push to the org repo first.
 3. Mirror the same commit to `origin` after the canonical push succeeds.
 4. Keep local planning notes or rough prep material in the personal class repo until
    they are ready to become shared documentation.
@@ -58,12 +58,12 @@ It is not the canonical source for shared team code or shared task state.
 
 ## Practical git guidance
 
-- Local `main` should track `team13/main`.
-- `remote.pushDefault` should point at `team13`.
+- Local `main` should track the org repo `main` branch.
+- If you use a local remote alias like `team13`, remember that alias is only local shorthand for the org repo.
 - Plain `git push` should update the canonical team repo first.
 - After a successful canonical push, mirror to `origin/main`.
 - If history is rewritten on `main`, teammates should reset local `main` to
-  `team13/main` and replay any in-flight work from feature branches.
+  the org repo `main` branch and replay any in-flight work from feature branches.
 
 ## Why this split works
 

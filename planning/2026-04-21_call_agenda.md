@@ -33,6 +33,7 @@
 **0:32-0:35 - Risks and next actions**
 - Biggest blocker per person
 - What must be complete before Apr 28
+- If the first end-to-end ladder is still incomplete, treat that as the Tier-1 gate ahead of any scale-up work
 
 ---
 
@@ -42,3 +43,4 @@
 2. Is Experiment 2 ready for broad runs, or do we still need orchestration or judge fixes?
 3. Is PS B in scale-up mode, or does it need another stabilization week first?
 4. Which final-deliverable artifacts are now on the critical path?
+5. If the first end-to-end ladder is still incomplete, do we explicitly pause scale-up and treat that as the Tier-1 gate for the next week?

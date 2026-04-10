@@ -21,8 +21,17 @@ import time
 from pathlib import Path
 
 
+def _strip_wrapping_quotes(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        return value[1:-1]
+    return value
+
+
 def load_dotenv(env_path: Path) -> None:
     # Minimal .env loader so we don't require python-dotenv
+    # Limitations: does not support multi-line values or '#' inside quoted strings.
+    # Upgrade to python-dotenv if those cases become necessary.
     if not env_path.exists():
         print(
             f"ERROR: {env_path} not found. Create it with WATSONX_* vars.",
@@ -36,7 +45,7 @@ def load_dotenv(env_path: Path) -> None:
         if "=" not in line:
             continue
         key, _, val = line.partition("=")
-        os.environ.setdefault(key.strip(), val.strip())
+        os.environ.setdefault(key.strip(), _strip_wrapping_quotes(val))
 
 
 def main() -> int:
@@ -114,7 +123,10 @@ def main() -> int:
         client = APIClient(credentials=creds, project_id=project_id)
         print(f"  OK. Client version: {client.version}")
     except Exception as e:
-        print(f"  FAILED: {e}", file=sys.stderr)
+        print(
+            f"  FAILED: {type(e).__name__} while initializing the client. Check credentials or network access.",
+            file=sys.stderr,
+        )
         return 1
 
     print(f"\n[2/3] Listing foundation models (filter: '{args.filter}')...")
@@ -142,7 +154,10 @@ def main() -> int:
                 if short_desc:
                     print(f"        desc:  {short_desc}")
     except Exception as e:
-        print(f"  FAILED: {e}", file=sys.stderr)
+        print(
+            f"  FAILED: {type(e).__name__} while listing foundation models. Check network or project_id.",
+            file=sys.stderr,
+        )
         return 1
 
     if args.list_only:
@@ -171,6 +186,12 @@ def main() -> int:
         t0 = time.perf_counter()
         response = model.generate_text(prompt=prompt, params=params)
         cold_elapsed = time.perf_counter() - t0
+        if not isinstance(response, str) or not response.strip():
+            print(
+                "  FAILED: inference returned an empty completion payload.",
+                file=sys.stderr,
+            )
+            return 1
         print(f"  Prompt:   {prompt}")
         print(f"  Response: {response}")
         print(f"  Cold call: {cold_elapsed:.2f}s ({args.max_tokens} max_new_tokens)")
@@ -190,12 +211,15 @@ def main() -> int:
             mn, mx = min(timings), max(timings)
             print(f"  Warm avg: {avg:.2f}s (min {mn:.2f}, max {mx:.2f})")
             print(
-                f"  Approx tokens/sec: {args.max_tokens / avg:.1f}  (assumes full max_new_tokens)"
+                f"  Approx tokens/sec: {args.max_tokens / avg:.1f}  (upper-bound estimate; uses max_new_tokens rather than actual generated tokens)"
             )
 
         print("\n  OK: WatsonX access verified end-to-end.")
     except Exception as e:
-        print(f"  FAILED: {e}", file=sys.stderr)
+        print(
+            f"  FAILED: {type(e).__name__} during inference. Check model access, project tier, or quota.",
+            file=sys.stderr,
+        )
         print("\n  Auth worked but inference failed. Possible causes:")
         print("    - Model ID is wrong (use --list-only to see available models)")
         print("    - Model is not enabled for this project tier")

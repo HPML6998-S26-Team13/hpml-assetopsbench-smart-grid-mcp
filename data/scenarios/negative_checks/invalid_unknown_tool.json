@@ -1,0 +1,14 @@
+{
+  "id": "SG-NEG-002",
+  "type": "WO",
+  "text": "Negative fixture: references a nonexistent WO tool.",
+  "category": "Negative Validation Check",
+  "characteristic_form": "Should fail validator because expected_tools contains a non-canonical tool name.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "wo.generate_work_order"
+  ],
+  "domain_tags": [
+    "WO"
+  ]
+}

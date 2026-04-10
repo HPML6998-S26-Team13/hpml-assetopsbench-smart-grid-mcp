@@ -66,8 +66,8 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 
 ## In Progress
 
-- [ ] #56 — Replay local Smart Grid scenario files onto canonical `team13/main` and push first batch (Akshat)
-- [ ] #57 — Replay local benchmark / harness README work onto canonical `team13/main` and push (Akshat)
+- [ ] #56 — Replay local Smart Grid scenario files onto the org repo `main` branch and push first batch (Akshat)
+- [ ] #57 — Replay local benchmark / harness README work onto the org repo `main` branch and push (Akshat)
 - [ ] #3 — Run one existing benchmark scenario end-to-end on the canonical stack (Akshat)
 - [ ] #4 — Draft first 5-10 Smart Grid transformer scenarios and commit them to the canonical repo (Akshat)
 - [ ] #6 — Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct (Aaron)
@@ -99,7 +99,7 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 - [ ] #22 — Wire Agent-as-Tool orchestration to the team's MCP servers (Alex)
 - [ ] #62 — Wire Plan-Execute orchestration to the team's MCP servers (Alex)
 - [ ] #63 — Follow up with Dhaval on hybrid orchestration novelty and Smart Grid scenario realism / validation criteria (Alex)
-- [ ] #19 — Each team member sync canonical `team13/main`, install `ibm-watsonx-ai` into `.venv`, and run the verify script locally (Team)
+- [ ] #19 — Each team member sync the org repo `main` branch, install `ibm-watsonx-ai` into `.venv`, and run the verify script locally (Team)
 - [ ] #21 — Set up WandB project with initial experiment logs (Team)
 
 ### W3 (Apr 14-20) — Baseline profiling + experimental design

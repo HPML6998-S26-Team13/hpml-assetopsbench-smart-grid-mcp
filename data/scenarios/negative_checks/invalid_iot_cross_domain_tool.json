@@ -1,0 +1,16 @@
+{
+  "id": "SG-NEG-003",
+  "type": "IoT",
+  "domain_tags": ["IoT"],
+  "category": "single-hop",
+  "text": "Invalid fixture: single-domain IoT scenario must not request an FMSR tool.",
+  "characteristic_form": "This fixture should fail because expected_tools includes a cross-domain tool.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "iot.list_sensors",
+    "fmsr.analyze_dga"
+  ],
+  "success_criteria": [
+    "validator rejects cross-domain tool usage"
+  ]
+}

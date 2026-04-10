@@ -33,11 +33,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
 
-from mcp_servers.base import load_fault_records
+from mcp_servers.base import load_asset_metadata, load_fault_records
 
 mcp = FastMCP("smart-grid-wo")
 
 _fault_records: pd.DataFrame | None = None
+_asset_metadata: pd.DataFrame | None = None
 
 # Session-scoped work order store: {wo_id: dict}
 _work_orders: dict[str, dict] = {}
@@ -54,11 +55,22 @@ _VALID_PRIORITIES = {"low", "medium", "high", "critical"}
 _VALID_STATUSES = {"open", "in_progress", "resolved", "closed"}
 
 
+def _normalize_record(record: dict) -> dict:
+    return {key: (None if pd.isna(value) else value) for key, value in record.items()}
+
+
 def _get_fault_records() -> pd.DataFrame:
     global _fault_records
     if _fault_records is None:
         _fault_records = load_fault_records()
     return _fault_records
+
+
+def _get_asset_metadata() -> pd.DataFrame:
+    global _asset_metadata
+    if _asset_metadata is None:
+        _asset_metadata = load_asset_metadata()
+    return _asset_metadata
 
 
 # ---------------------------------------------------------------------------
@@ -97,7 +109,8 @@ def list_fault_records(
     if maintenance_status:
         df = df[df["maintenance_status"].str.lower() == maintenance_status.lower()]
 
-    return df.head(min(limit, 100)).to_dict(orient="records")
+    records = df.head(min(limit, 100)).to_dict(orient="records")
+    return [_normalize_record(record) for record in records]
 
 
 @mcp.tool()
@@ -115,7 +128,7 @@ def get_fault_record(fault_id: str) -> dict:
     row = df[df["fault_id"] == fault_id]
     if row.empty:
         return {"error": f"Fault record '{fault_id}' not found."}
-    return row.iloc[0].to_dict()
+    return _normalize_record(row.iloc[0].to_dict())
 
 
 @mcp.tool()
@@ -147,6 +160,17 @@ def create_work_order(
         return {
             "error": f"Invalid priority '{priority}'. "
             f"Must be one of: {sorted(_VALID_PRIORITIES)}"
+        }
+
+    try:
+        metadata = _get_asset_metadata()
+    except FileNotFoundError as exc:
+        return {"error": str(exc)}
+
+    if transformer_id not in set(metadata["transformer_id"]):
+        return {
+            "error": f"Unknown transformer_id '{transformer_id}'.",
+            "valid_transformer_id_source": "data/processed/asset_metadata.csv",
         }
 
     if estimated_downtime_hours is None:

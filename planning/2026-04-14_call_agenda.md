@@ -5,7 +5,7 @@
 ## Agenda (35 min)
 
 **0:00-0:05 - W2 status reality check**
-- What is merged to canonical `team13/main` vs still only local?
+- What is merged to the org repo `main` branch vs still only local?
 - Which W2 foundation tasks are done, in progress, or blocked?
 - Are we still targeting first end-to-end artifacts by Apr 13-14, or has that slipped?
 

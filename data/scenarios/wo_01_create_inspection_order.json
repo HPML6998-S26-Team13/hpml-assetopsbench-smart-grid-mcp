@@ -6,7 +6,8 @@
   "characteristic_form": "The answer should produce a structured work order containing asset ID, task summary, priority, required technician skill set, and estimated downtime.",
   "asset_id": "T-013",
   "expected_tools": [
-    "wo.generate_work_order"
+    "wo.create_work_order",
+    "wo.estimate_downtime"
   ],
   "ground_truth": {
     "must_include": [

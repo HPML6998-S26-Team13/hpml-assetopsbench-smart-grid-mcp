@@ -19,6 +19,7 @@ Data source: data/processed/failure_modes.csv, dga_records.csv
 from __future__ import annotations
 
 import sys
+import math
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -64,18 +65,18 @@ def _get_dga_records() -> pd.DataFrame:
 _ROGERS_TABLE = [
     # (R1_range, R2_range, R3_range) → (code, description)
     # Each range is (min_inclusive, max_exclusive); None = no bound.
-    ((0.1, 1.0), (0, 0.1), (0, 1.0), "PD", "Partial Discharge"),
-    ((0.1, 1.0), (0.1, 3.0), (0, 1.0), "D1", "Low-Energy Electrical Discharge"),
+    ((0.1, 1.0), (0, 0.1), (0, 1.0), "PD", "Partial discharge"),
+    ((0.1, 1.0), (0.1, 3.0), (0, 1.0), "D1", "Spark discharge"),
     (
         (0.1, 1.0),
         (0.1, 3.0),
         (1.0, None),
         "D2",
-        "High-Energy Electrical Discharge (Arcing)",
+        "Arc discharge",
     ),
-    ((0.1, 1.0), (0, 0.1), (1.0, 3.0), "T1", "Thermal Fault < 300°C"),
-    ((1.0, 3.0), (0, 0.1), (1.0, 3.0), "T2", "Thermal Fault 300–700°C"),
-    ((3.0, None), (0, 0.1), (3.0, None), "T3", "Thermal Fault > 700°C"),
+    ((0.1, 1.0), (0, 0.1), (1.0, 3.0), "T1", "Low-temperature overheating"),
+    ((1.0, 3.0), (0, 0.1), (1.0, 3.0), "T2", "Middle-temperature overheating"),
+    ((3.0, None), (0, 0.1), (3.0, None), "T3", "High-temperature overheating"),
 ]
 
 
@@ -215,10 +216,15 @@ def get_dga_record(transformer_id: str) -> dict:
         Returns an error dict if not found.
     """
     df = _get_dga_records()
-    row = df[df["transformer_id"] == transformer_id]
+    row = (
+        df[df["transformer_id"] == transformer_id]
+        # sample_date is stored as ISO YYYY-MM-DD, so lexicographic descending order is chronological.
+        .sort_values("sample_date", ascending=False)
+    )
     if row.empty:
         return {"error": f"No DGA record found for '{transformer_id}'."}
-    return row.iloc[0].to_dict()
+    record = row.iloc[0].to_dict()
+    return {key: (None if pd.isna(value) else value) for key, value in record.items()}
 
 
 @mcp.tool()
@@ -252,14 +258,31 @@ def analyze_dga(
           r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6,
           input_gases (echo of inputs).
     """
-    result = _rogers_ratio(h2, ch4, c2h2, c2h4, c2h6)
-    result["input_gases"] = {
+    inputs = {
         "h2_ppm": h2,
         "ch4_ppm": ch4,
         "c2h2_ppm": c2h2,
         "c2h4_ppm": c2h4,
         "c2h6_ppm": c2h6,
     }
+    negative_inputs = {name: value for name, value in inputs.items() if value < 0}
+    if negative_inputs:
+        return {
+            "error": "Gas concentrations must be non-negative.",
+            "invalid_inputs": negative_inputs,
+        }
+
+    invalid_number_inputs = {
+        name: value for name, value in inputs.items() if not math.isfinite(value)
+    }
+    if invalid_number_inputs:
+        return {
+            "error": "Gas concentrations must be finite numbers.",
+            "invalid_inputs": invalid_number_inputs,
+        }
+
+    result = _rogers_ratio(h2, ch4, c2h2, c2h4, c2h6)
+    result["input_gases"] = inputs
     if transformer_id:
         result["transformer_id"] = transformer_id
     return result

@@ -6,8 +6,9 @@
   "characteristic_form": "The answer should map DGA evidence to a primary fault mode and provide at least one alternative candidate with rationale grounded in gas patterns or known fault mapping.",
   "asset_id": "T-012",
   "expected_tools": [
-    "fmsr.get_failure_modes",
-    "fmsr.get_failure_sensor_mapping"
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "fmsr.search_failure_modes"
   ],
   "ground_truth": {
     "must_include": [
