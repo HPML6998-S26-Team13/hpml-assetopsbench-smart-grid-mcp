@@ -6,22 +6,24 @@ Raw latency and throughput measurements from end-to-end experiment runs. Each su
 
 ```
 benchmarks/
-├── baseline/              # pre-optimization runs (direct Python, MCP baseline)
-│   ├── config.json        # model, scenario set, hardware, date, git SHA
+├── cell_A_direct/         # direct-tool baseline, no MCP
+│   ├── config.json        # includes WandB linkage fields from docs/wandb_schema.md
 │   ├── raw/               # one file per trial (CSV or JSONL)
-│   │   └── 2026-04-14_llama8b_mcp_run01.csv
+│   │   └── 2026-04-14_A_llama8b_aat_direct_run01.csv
 │   └── summary.json       # mean, p50, p95, throughput (derived)
-└── optimized/             # post-optimization runs
-    ├── int8/              # INT8 quantization
-    ├── kv_cache/          # KV-cache tuning
-    └── batched/           # batched tool-call scheduling
-    # each with the same config.json / raw/ / summary.json shape
+├── cell_B_mcp_baseline/   # shared cell between Experiment 1 and Experiment 2
+├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
+├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline
+└── cell_Z_hybrid/         # Hybrid on MCP baseline, if mentor-cleared
+    # each cell dir keeps the same config.json / raw/ / summary.json shape
 ```
 
 ## Conventions
 
-- **File naming:** `<date>_<model>_<harness>_run<NN>.csv` (e.g. `2026-04-14_llama8b_mcp_run01.csv`)
-- **Config files** must include: model ID, scenario set hash, GPU/host, git SHA of the code used to run, WandB run URL
+- **File naming:** `<date>_<cell>_<model-short>_<orchestration>_<mcp-mode>_run<NN>.csv` (e.g. `2026-04-14_B_llama8b_aat_baseline_run01.csv`)
+- **Canonical WandB schema:** see `docs/wandb_schema.md`
+- **Config files** must include the required reproducibility fields from `docs/wandb_schema.md`; do not treat the examples in this README as a complete schema
+- **Cell-to-directory mapping:** use the `cell_<ID>_*` top-level directory that matches `experiment_cell`; Cell B is intentionally shared across both experiment families
 - **Summary files** are regenerated from `raw/` via a notebook in `notebooks/` — never edit by hand
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
