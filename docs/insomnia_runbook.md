@@ -29,16 +29,29 @@ Check your associations:
 sacctmgr show associations user=<UNI> format=Account%20,Partition%20,QOS%30
 ```
 
-## Storage: clone into scratch, not $HOME
+## Storage: use the shared team directory
 
-**Home directory is capped at 50 GB.** A vLLM venv (~6 GB) plus the
-Llama-3.1-8B weights (~16 GB) plus profiling traces will fill it. Always clone
-the team repo into your edu scratch directory:
+**Home directory is capped at 50 GB**, which isn't enough for a vLLM venv
+(~6 GB) plus the Llama-3.1-8B weights (~16 GB) plus profiling traces.
+
+Instead, the team operates out of a single shared checkout in edu scratch:
+
+```
+/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+```
+
+All Slurm jobs, profiling runs, and vLLM serves should cd into this directory
+rather than per-user clones. The `.venv-insomnia/` under it is the canonical
+team venv — do not delete or recreate it without coordinating with the team
+owner (wax1), or you'll break everyone else's running jobs.
+
+Day-to-day usage:
 
 ```bash
-mkdir -p /insomnia001/depts/edu/users/<UNI>
-cd /insomnia001/depts/edu/users/<UNI>
-git clone git@github.com:HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+source .venv-insomnia/bin/activate
+git pull                                   # stay current
+sbatch scripts/run_experiment.sh configs/<cell>.env
 ```
 
 Scratch is **1 TB shared** across the edu account and **not backed up** — but
@@ -108,13 +121,17 @@ interpreters), then recreate the venv:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.local/bin/env
 
-cd /insomnia001/depts/edu/users/<UNI>/hpml-assetopsbench-smart-grid-mcp
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 deactivate 2>/dev/null || true
 rm -rf .venv-insomnia          # slow on networked FS, can take 1-2 min
 uv venv .venv-insomnia --python 3.11
 source .venv-insomnia/bin/activate
 uv pip install vllm torch transformers huggingface-hub nvidia-cudnn-cu12
 ```
+
+**Note:** `.venv-insomnia/` under the team directory is shared across
+teammates. Only recreate it after pinging the team — an in-flight `rm -rf`
+will take down any running jobs that depend on it.
 
 Verify before submitting any Slurm jobs:
 ```bash
@@ -151,7 +168,7 @@ srun --account=edu --partition=short --qos=short --gres=gpu:1 \
      --mem=64G --time=01:00:00 --pty bash
 
 # Once you're on the compute node:
-cd /insomnia001/depts/edu/users/<UNI>/hpml-assetopsbench-smart-grid-mcp
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 source .venv-insomnia/bin/activate
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH

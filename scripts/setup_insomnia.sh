@@ -1,14 +1,17 @@
 #!/bin/bash
-# One-time setup for vLLM + Llama-3.1-8B-Instruct on Insomnia
-# Run this from the repo root on the Insomnia LOGIN NODE.
+# One-time setup for vLLM + Llama-3.1-8B-Instruct on Insomnia.
+# The team operates out of a single shared checkout in edu scratch:
+#     /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+# Only (re)run this script after coordinating with the team — the venv it
+# creates is shared across everyone, and wiping it mid-job breaks in-flight work.
 #
 # Prerequisites:
 #   - SSH access to insomnia.rcs.columbia.edu working
-#   - Repo cloned to ~/hpml-assetopsbench-smart-grid-mcp
+#   - You're in the team checkout under /insomnia001/depts/edu/users/team13/...
 #   - HuggingFace token with Llama access (https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
 #
 # Usage:
-#   cd ~/hpml-assetopsbench-smart-grid-mcp
+#   cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 #   bash scripts/setup_insomnia.sh
 
 set -euo pipefail
