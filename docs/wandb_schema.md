@@ -1,5 +1,8 @@
 # WandB Metrics Schema
 
+*Created: 2026-04-10*
+*Last updated: 2026-04-10*
+
 *Owner: Alex (`#14`)*
 
 Canonical schema for experiment tracking in the org repo. This doc defines what
