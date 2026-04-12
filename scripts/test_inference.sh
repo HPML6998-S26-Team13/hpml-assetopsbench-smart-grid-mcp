@@ -1,13 +1,13 @@
 #!/bin/bash
 # Test inference against a running vLLM server on Insomnia.
-# Run from the login node after opening an SSH tunnel to the compute node:
-#   ssh -N -L 8000:localhost:8000 <node_hostname>
+# Run from within the allocated job context (for example via srun --jobid=<JOBID> --overlap --pty bash):
+#   bash scripts/test_inference.sh localhost 8000 [model]
 #
 # Usage:
 #   bash scripts/test_inference.sh <host> [port] [model]
 #
 # Example:
-#   bash scripts/test_inference.sh localhost 8000
+#   srun --jobid=<JOBID> --overlap --pty bash
 
 set -euo pipefail
 
@@ -35,9 +35,18 @@ validate_completion_json() {
 import json
 import sys
 
-payload = json.load(sys.stdin)
-if "error" in payload and payload["error"] is not None:
-    raise SystemExit(f"error payload returned: {payload[\"error\"]}")
+raw = sys.stdin.read()
+if not raw.strip():
+    raise SystemExit("completion response was empty")
+
+try:
+    payload = json.loads(raw)
+except json.JSONDecodeError:
+    raise SystemExit(f"completion response was non-JSON: {raw[:500]}")
+
+error = payload.get("error")
+if error is not None:
+    raise SystemExit(f"error payload returned: {error}")
 choices = payload.get("choices") or []
 if not choices:
     raise SystemExit("no choices present in completion response")
@@ -53,9 +62,18 @@ validate_chat_json() {
 import json
 import sys
 
-payload = json.load(sys.stdin)
-if "error" in payload and payload["error"] is not None:
-    raise SystemExit(f"error payload returned: {payload[\"error\"]}")
+raw = sys.stdin.read()
+if not raw.strip():
+    raise SystemExit("chat response was empty")
+
+try:
+    payload = json.loads(raw)
+except json.JSONDecodeError:
+    raise SystemExit(f"chat response was non-JSON: {raw[:500]}")
+
+error = payload.get("error")
+if error is not None:
+    raise SystemExit(f"error payload returned: {error}")
 choices = payload.get("choices") or []
 if not choices:
     raise SystemExit("no choices present in chat response")

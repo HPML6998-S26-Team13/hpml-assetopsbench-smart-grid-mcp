@@ -1,0 +1,93 @@
+=== vLLM Serving Job ===
+Node:      ins086
+GPU:       NVIDIA RTX A6000, 49140 MiB
+Model:     models/Llama-3.1-8B-Instruct
+Port:      8000
+Job ID:    8610115
+Start:     Sun Apr 12 06:43:15 PM EDT 2026
+
+Sun Apr 12 18:43:15 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               On  |   00000000:E1:00.0 Off |                  Off |
+| 30%   33C    P8             22W /  300W |       1MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Waiting for vLLM server to start...
+Server ready after 209s
+
+=== Test Inference ===
+{
+  "id": "cmpl-995be1219d9d867a",
+  "object": "text_completion",
+  "created": 1776034005,
+  "model": "models/Llama-3.1-8B-Instruct",
+  "choices": [
+    {
+      "index": 0,
+      "text": " a likely arc fault, such as a discharge or arcing between conductors. The hydrogen and acetylene levels are expected to decrease over time as the gases are absorbed or removed from the transformer's oil. However, the acetylene level can also be elevated due to other factors, such as the transformer's temperature or the presence of organic materials in the oil. In this case, further investigation is needed to determine the root cause of the elevated acetylene level.\nA power transformer's dissolved",
+      "logprobs": null,
+      "finish_reason": "length",
+      "stop_reason": null,
+      "token_ids": null,
+      "prompt_logprobs": null,
+      "prompt_token_ids": null
+    }
+  ],
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+    "prompt_tokens": 20,
+    "total_tokens": 120,
+    "completion_tokens": 100,
+    "prompt_tokens_details": null
+  },
+  "kv_transfer_params": null
+}
+
+=== GPU State After Model Load ===
+Sun Apr 12 18:46:48 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               On  |   00000000:E1:00.0 Off |                  Off |
+| 30%   49C    P2            284W /  300W |   44606MiB /  49140MiB |    100%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         3015049      C   VLLM::EngineCore                      44596MiB |
++-----------------------------------------------------------------------------------------+
+
+=== Server Running ===
+vLLM is serving on localhost:8000 on compute node ins086
+From the login node, open an SSH tunnel:
+  ssh -N -L 8000:localhost:8000 ins086
+
+Then, in a second terminal on the login node, run:
+  bash scripts/test_inference.sh localhost 8000 models/Llama-3.1-8B-Instruct
+
+Server will run until the SLURM time limit of (unknown) is hit. Ctrl+C or scancel 8610115 to stop.
+[2026-04-12T19:03:19.010] error: *** JOB 8610115 ON ins086 CANCELLED AT 2026-04-12T19:03:19 DUE TO TIME LIMIT ***

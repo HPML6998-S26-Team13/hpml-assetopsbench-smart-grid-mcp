@@ -29,7 +29,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "$REPO_ROOT"
 mkdir -p logs
 
@@ -38,6 +38,7 @@ if [ ! -f ".venv-insomnia/bin/activate" ]; then
     exit 1
 fi
 
+STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-600}"
 MODEL_PATH="${MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 PORT="${PORT:-8000}"
 
@@ -82,34 +83,45 @@ echo ""
 # --- Record baseline GPU state ---
 nvidia-smi
 
+# Add vLLM logging
+VLLM_STARTUP_LOG="logs/vllm_startup_${SLURM_JOB_ID:-local}.log"
+
 # --- Launch vLLM server in background ---
 python3 -m vllm.entrypoints.openai.api_server \
     --model "$MODEL_PATH" \
     --host 127.0.0.1 \
     --port "$PORT" \
     --max-model-len 8192 \
-    --dtype float16 &
+    --dtype float16 \
+    >"$VLLM_STARTUP_LOG" 2>&1 &
 
 VLLM_PID=$!
 
 # --- Wait for server to be ready ---
 echo ""
 echo "Waiting for vLLM server to start..."
-for i in $(seq 1 120); do
+for i in $(seq 1 "$STARTUP_TIMEOUT"); do
     if curl -s http://127.0.0.1:$PORT/health > /dev/null 2>&1; then
         echo "Server ready after ${i}s"
         break
     fi
-    if ! kill -0 $VLLM_PID 2>/dev/null; then
+    if ! kill -0 "$VLLM_PID" 2>/dev/null; then
         echo "ERROR: vLLM process died during startup"
+	tail -100 "$VLLM_STARTUP_LOG" || true
         exit 1
     fi
     sleep 1
 done
 
 if ! curl -s http://127.0.0.1:$PORT/health > /dev/null 2>&1; then
-    echo "ERROR: Server did not start within 120s"
-    kill $VLLM_PID 2>/dev/null
+    echo "ERROR: Server did not start within ${STARTUP_TIMEOUT}s"
+    echo "=== Process state ==="
+    ps -fp "$VLLM_PID" || true
+    echo "=== Port state ==="
+    ss -ltnp | grep ":$PORT" || true
+    echo "=== Recent vLLM startup log ==="
+    tail -100 "$VLLM_STARTUP_LOG" || true
+    kill "$VLLM_PID" 2>/dev/null || true
     exit 1
 fi
 
@@ -129,9 +141,18 @@ echo "$TEST_RESPONSE" | python3 -c '
 import json
 import sys
 
-payload = json.load(sys.stdin)
-if "error" in payload and payload["error"] is not None:
-    raise SystemExit(f"ERROR: inference returned error payload: {payload[\"error\"]}")
+raw = sys.stdin.read()
+if not raw.strip():
+    raise SystemExit("ERROR: inference returned an empty response.")
+
+try:
+    payload = json.loads(raw)
+except json.JSONDecodeError:
+    raise SystemExit(f"ERROR: inference returned non-JSON output: {raw[:500]}")
+
+error = payload.get("error")
+if error is not None:
+    raise SystemExit(f"ERROR: inference returned error payload: {error}")
 
 choices = payload.get("choices") or []
 if not choices:
@@ -152,13 +173,13 @@ nvidia-smi
 echo ""
 echo "=== Server Running ==="
 echo "vLLM is serving on localhost:$PORT on compute node $(hostname)"
-echo "From the login node, open an SSH tunnel:"
-echo "  ssh -N -L $PORT:localhost:$PORT $(hostname)"
+echo "To run the standalone inference smoke test from another shell, attach to this allocation:"
+echo "  srun --jobid ${SLURM_JOB_ID:-<job-id>} --overlap --pty bash"
 echo ""
-echo "Then, in a second terminal on the login node, run:"
+echo "Then, inside that shell, run:"
 echo "  bash scripts/test_inference.sh localhost $PORT $MODEL_PATH"
 echo ""
-echo "Server will run until SLURM time limit (2 hours). Ctrl+C or scancel ${SLURM_JOB_ID:-<job-id>} to stop."
+echo "Server will run until the SLURM time limit is hit (script default is 2 hours unless overridden at submission). Ctrl+C or scancel ${SLURM_JOB_ID:-<job-id>} to stop."
 
 # --- Keep alive until time limit ---
 wait $VLLM_PID

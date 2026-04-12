@@ -1,0 +1,126 @@
+=== vLLM Inference Test ===
+Server: http://localhost:8000
+
+[1/4] Health check...
+  OK
+
+[2/4] Available models:
+{
+    "object": "list",
+    "data": [
+        {
+            "id": "models/Llama-3.1-8B-Instruct",
+            "object": "model",
+            "created": 1776035487,
+            "owned_by": "vllm",
+            "root": "models/Llama-3.1-8B-Instruct",
+            "parent": null,
+            "max_model_len": 8192,
+            "permission": [
+                {
+                    "id": "modelperm-808af77b7ddd2e77",
+                    "object": "model_permission",
+                    "created": 1776035487,
+                    "allow_create_engine": false,
+                    "allow_sampling": true,
+                    "allow_logprobs": true,
+                    "allow_search_indices": false,
+                    "allow_view": true,
+                    "allow_fine_tuning": false,
+                    "organization": "*",
+                    "group": null,
+                    "is_blocking": false
+                }
+            ]
+        }
+    ]
+}
+  OK: models/Llama-3.1-8B-Instruct is loaded
+
+[3/4] Completions API (transformer DGA prompt):
+{
+    "id": "cmpl-89102c97c670782e",
+    "object": "text_completion",
+    "created": 1776035487,
+    "model": "models/Llama-3.1-8B-Instruct",
+    "choices": [
+        {
+            "index": 0,
+            "text": ":\nA. Electrical arcing\nB. Partial discharge\nC. Deterioration of the transformer's oil\nD. All of the above\nExplanation:\nThis question requires the test-taker to understand the significance of dissolved gas analysis (DGA) in power transformers. DGA is a diagnostic technique used to detect faults in power transformers by analyzing the gases dissolved in the transformer oil. The levels of different gases, such as hydrogen, acetylene, and methane, can indicate various types",
+            "logprobs": null,
+            "finish_reason": "length",
+            "stop_reason": null,
+            "token_ids": null,
+            "prompt_logprobs": null,
+            "prompt_token_ids": null
+        }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 120,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null
+    },
+    "kv_transfer_params": null
+}
+  Completion preview: :
+A. Electrical arcing
+B. Partial discharge
+C. Deterioration of the transformer's oil
+D. All of the above
+Explanation:
+This question requires the test-taker to understand the significance of dissolved gas analysis (DGA) in power transformers. DGA is a diagnostic technique used to detect faults in power transformers by analyzing the gases dissolved in the transformer oil. The levels of different gases, such as hydrogen, acetylene, and methane, can indicate various types
+  Prompt tokens: 20, Completion tokens: 100
+
+[4/4] Chat API (work order prompt):
+{
+    "id": "chatcmpl-a0d3415c92e4ce9b",
+    "object": "chat.completion",
+    "created": 1776035489,
+    "model": "models/Llama-3.1-8B-Instruct",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "Based on the Dissolved Gas Analysis (DGA) readings you provided, I would analyze the results as follows:\n\n- Hydrogen (H2): 450 ppm is a relatively high value, but it can be influenced by various factors such as temperature, moisture, and the presence of other gases.\n- Acetylene (C2H2): 120 ppm is a relatively low value, but when combined with high H2 levels, it may indicate a specific fault type.\n\nCombining the high H2 levels with relatively low C2H2 levels, this could be indicative of a partial discharge (PD) or a low-energy discharge within the transformer. However, a more specific indication is an internal fault, possibly a partial discharge or an incipient fault, but it could also be related to an external fault such as a short circuit within the transformer.\n\nGiven the combination of the DGA readings, the priority of the work order should be:\n\n**Medium Priority**: The transformer should be taken offline",
+                "refusal": null,
+                "annotations": null,
+                "audio": null,
+                "function_call": null,
+                "tool_calls": [],
+                "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "length",
+            "stop_reason": null,
+            "token_ids": null
+        }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+        "prompt_tokens": 84,
+        "total_tokens": 284,
+        "completion_tokens": 200,
+        "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "kv_transfer_params": null
+}
+  Chat preview: Based on the Dissolved Gas Analysis (DGA) readings you provided, I would analyze the results as follows:
+
+- Hydrogen (H2): 450 ppm is a relatively high value, but it can be influenced by various factors such as temperature, moisture, and the presence of other gases.
+- Acetylene (C2H2): 120 ppm is a relatively low value, but when combined with high H2 levels, it may indicate a specific fault type.
+
+Combining the high H2 levels with relatively low C2H2 levels, this could be indicative of a partial discharge (PD) or a low-energy discharge within the transformer. However, a more specific indication is an internal fault, possibly a partial discharge or an incipient fault, but it could also be related to an external fault such as a short circuit within the transformer.
+
+Given the combination of the DGA readings, the priority of the work order should be:
+
+**Medium Priority**: The transformer should be taken offline
+
+=== All Tests Passed ===
+Environment is ready for MCP experiments.
