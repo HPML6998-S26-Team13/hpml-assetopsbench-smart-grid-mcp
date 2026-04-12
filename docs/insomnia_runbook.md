@@ -197,6 +197,37 @@ curl http://ins080:8000/v1/completions \
   -d '{"model":"models/Llama-3.1-8B-Instruct","prompt":"A power transformer fails because","max_tokens":50}'
 ```
 
+## Email notifications on job state
+
+Queue waits can be hours, so always attach mail flags when you submit. Pattern:
+
+```bash
+sbatch \
+    --mail-type=BEGIN,END,FAIL \
+    --mail-user=<UNI>@columbia.edu \
+    scripts/vllm_serve.sh
+```
+
+For interactive `srun` sessions:
+
+```bash
+srun \
+    -A edu -p short --qos=short \
+    --gres=gpu:A6000:1 \
+    --time=00:30:00 \
+    --mail-type=BEGIN,END,FAIL \
+    --mail-user=<UNI>@columbia.edu \
+    --pty bash
+```
+
+Convenience: `export MAIL_USER=<UNI>@columbia.edu` in your shell profile
+(`~/.bashrc` on Insomnia), then `sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" ...`.
+
+The committed scripts (`scripts/vllm_serve.sh`, `scripts/run_experiment.sh`)
+deliberately omit `#SBATCH --mail-user` so teammates running shared scripts
+don't get spammed with each other's job notifications. Pass the mail flags
+on the `sbatch` CLI per invocation instead.
+
 ## Queue waits
 
 The `edu` class account has lower priority than dedicated research groups, so

@@ -14,8 +14,16 @@
 # a single Slurm job, runs every scenario in the config, and writes per-scenario
 # trajectories to logs/.
 #
-# Usage:
+# Usage (with BEGIN/END/FAIL email notifications):
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user=<UNI>@columbia.edu \
+#       scripts/run_experiment.sh configs/example_baseline.env
+#
+# Or without notifications:
 #   sbatch scripts/run_experiment.sh configs/example_baseline.env
+#
+# Tip: export MAIL_USER=<UNI>@columbia.edu in your shell profile and run:
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
+#       scripts/run_experiment.sh configs/example_baseline.env
 #
 # The config is a sourceable bash env file. See configs/example_baseline.env
 # for the schema and defaults.

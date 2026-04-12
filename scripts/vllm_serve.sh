@@ -12,8 +12,14 @@
 # Launches vLLM serving Llama-3.1-8B-Instruct on a single A6000.
 # After the server starts, runs a test prompt and keeps serving until the time limit.
 #
-# Usage:
+# Usage (with BEGIN/END/FAIL email notifications):
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user=<UNI>@columbia.edu scripts/vllm_serve.sh
+#
+# Or without notifications:
 #   sbatch scripts/vllm_serve.sh
+#
+# Tip: export MAIL_USER=<UNI>@columbia.edu in your shell profile and run:
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" scripts/vllm_serve.sh
 #
 # To connect from the login node (after job starts):
 #   See the job output for the node hostname, then:
