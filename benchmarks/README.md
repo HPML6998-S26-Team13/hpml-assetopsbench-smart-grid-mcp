@@ -8,9 +8,13 @@ Raw latency and throughput measurements from end-to-end experiment runs. Each su
 benchmarks/
 ├── cell_A_direct/         # direct-tool baseline, no MCP
 │   ├── config.json        # includes WandB linkage fields from docs/wandb_schema.md
-│   ├── raw/               # one file per trial (CSV or JSONL)
-│   │   └── 2026-04-14_A_llama8b_aat_direct_run01.csv
-│   └── summary.json       # mean, p50, p95, throughput (derived)
+│   ├── raw/
+│   │   └── <run-id>/      # run-scoped raw outputs and logs
+│   │       ├── *.json     # one file per scenario-trial
+│   │       ├── latencies.jsonl
+│   │       ├── harness.log
+│   │       └── meta.json
+│   └── summary.json       # mean, p50, p95, throughput (derived for latest run)
 ├── cell_B_mcp_baseline/   # shared cell between Experiment 1 and Experiment 2
 ├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
 ├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline
@@ -20,7 +24,7 @@ benchmarks/
 
 ## Conventions
 
-- **File naming:** `<date>_<cell>_<model-short>_<orchestration>_<mcp-mode>_run<NN>.csv` (e.g. `2026-04-14_B_llama8b_aat_baseline_run01.csv`)
+- **Raw run layout:** each benchmark run gets its own `raw/<run-id>/` directory so the cell-level `config.json` and `summary.json` can represent the latest reproducible run without clobbering older raw artifacts
 - **Canonical WandB schema:** see `docs/wandb_schema.md`
 - **Config files** must include the required reproducibility fields from `docs/wandb_schema.md`; do not treat the examples in this README as a complete schema
 - **Cell-to-directory mapping:** use the `cell_<ID>_*` top-level directory that matches `experiment_cell`; Cell B is intentionally shared across both experiment families

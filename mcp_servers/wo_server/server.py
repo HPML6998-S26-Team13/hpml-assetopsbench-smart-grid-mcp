@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import sys
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -57,6 +57,18 @@ _VALID_STATUSES = {"open", "in_progress", "resolved", "closed"}
 
 def _normalize_record(record: dict) -> dict:
     return {key: (None if pd.isna(value) else value) for key, value in record.items()}
+
+
+def _normalize_priority(priority: str | None) -> str | None:
+    if priority is None:
+        return None
+    return priority.strip().lower()
+
+
+def _normalize_status(status: str | None) -> str | None:
+    if status is None:
+        return None
+    return status.strip().lower()
 
 
 def _get_fault_records() -> pd.DataFrame:
@@ -156,6 +168,8 @@ def create_work_order(
         priority, fault_type, status, estimated_downtime_hours,
         created_at, assigned_technician (null until assigned).
     """
+    priority = _normalize_priority(priority) or "medium"
+
     if priority not in _VALID_PRIORITIES:
         return {
             "error": f"Invalid priority '{priority}'. "
@@ -186,7 +200,7 @@ def create_work_order(
         "fault_type": fault_type,
         "status": "open",
         "estimated_downtime_hours": estimated_downtime_hours,
-        "created_at": datetime.utcnow().isoformat() + "Z",
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "assigned_technician": None,
         "notes": [],
     }
@@ -215,6 +229,9 @@ def list_work_orders(
 
     if transformer_id:
         wos = [w for w in wos if w["transformer_id"] == transformer_id]
+    status = _normalize_status(status)
+    priority = _normalize_priority(priority)
+
     if status:
         wos = [w for w in wos if w["status"] == status]
     if priority:
@@ -248,6 +265,9 @@ def update_work_order(
         return {"error": f"Work order '{work_order_id}' not found in this session."}
 
     wo = _work_orders[work_order_id]
+
+    status = _normalize_status(status)
+    priority = _normalize_priority(priority)
 
     if status is not None:
         if status not in _VALID_STATUSES:

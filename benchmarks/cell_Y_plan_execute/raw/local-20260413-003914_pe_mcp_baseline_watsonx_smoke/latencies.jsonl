@@ -1,0 +1,1 @@
+{"scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json", "trial_index": 1, "latency_seconds": 93.64177012443542, "output_path": "benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/2026-04-13_Y_llama-3-3-70b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json"}

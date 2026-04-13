@@ -1,0 +1,12 @@
+{
+  "started_at": "2026-04-13T04:39:14.266300+00:00",
+  "run_name": "local-20260413-003914_pe_mcp_baseline_watsonx_smoke",
+  "benchmark_config_path": "/tmp/smartgrid_watsonx_smoke.XXXXXX.env",
+  "benchmark_summary_path": "benchmarks/cell_Y_plan_execute/summary.json",
+  "finished_at": "2026-04-13T04:40:47.990529+00:00",
+  "pass": 1,
+  "fail": 0,
+  "total_runs": 1,
+  "run_status": "success",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/9d4442ja"
+}
