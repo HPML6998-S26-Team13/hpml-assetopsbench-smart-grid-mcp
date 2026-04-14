@@ -1,6 +1,6 @@
 # Orchestration Wiring
 
-*Last updated: 2026-04-12*
+*Last updated: 2026-04-14*
 
 Current state of the repo-side orchestration wiring for issues `#22` and `#62`.
 This note is intentionally concrete about what is runnable now versus what is
@@ -99,10 +99,13 @@ Hybrid uses the same pattern:
 That keeps the benchmark artifact path ready without pretending we already have
 a canonical runnable hybrid implementation.
 
-Hybrid also still depends on the mentor-scope decision tracked in `#63` / `#23`
-/ `#24`. We should not treat the absence of a default hybrid runner here as the
-main blocker; the bigger blocker is still the go / no-go decision on whether
-Hybrid stays in-scope.
+The current default scope decision is: proceed with **vanilla Agent-as-Tool vs
+vanilla Plan-Execute** unless Dhaval later reopens Hybrid. That means the
+absence of a default hybrid runner should not block this week's experiment
+progress. If Hybrid stays in scope, it needs both:
+
+- a real runnable entry point, and
+- a written checkpoint design note that makes the reflection behavior explicit
 
 ## Why this split is intentional
 

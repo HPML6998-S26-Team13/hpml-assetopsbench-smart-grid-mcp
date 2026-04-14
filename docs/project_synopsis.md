@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Last updated April 9, 2026. Read time: ~10 minutes.*
+*Last updated April 14, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -145,9 +145,9 @@ profiling and optimization.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 9, 2026)
+## Current status (April 14, 2026)
 
-**Week 1 is complete, the mid-point was submitted Apr 6, and Week 2 is now focused on foundation bring-up plus planning cleanup.**
+**Week 1 is complete, and the repo crossed an important threshold on Apr 13: the first benchmark-facing Smart Grid run is now real on canonical history.**
 
 Completed:
 - Problem statement finalized (four contributions: scenarios, MCP servers, profiling, orchestration comparison)
@@ -166,13 +166,23 @@ Completed:
 - **Mid-point report submitted** to Courseworks on Monday April 6 (see `reports/2026-04-06_midpoint_submission.pdf`)
 - GitHub Projects reset as the canonical planning surface, with weekly iterations, workstream parent issues, and delivery-gate milestones
 
-In progress (Week 2, Apr 7-13):
-- Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct
-- MCP server hardening, tests, and benchmark-path validation
-- AssetOpsBench evaluation harness running end-to-end on the canonical repo
-- First 15+ Smart Grid scenarios committed and validated
-- First Smart Grid end-to-end MCP trajectory and first judge-scored artifact
-- WandB metrics schema plus first experiment logs
+Landed on canonical history during Week 2:
+- Successful Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct, with kept smoke-test logs and corrected serve/test scripts
+- First real WandB run is live and back-linked to committed benchmark artifacts
+- Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with one successful benchmark-facing proof run committed under `benchmarks/cell_Y_plan_execute/`
+- Scenario realism validation note landed with IEEE / IEC grounded findings and narrowed mentor questions
+
+Still open from the original W2 critical path / backlog:
+- Canonical benchmark scenario proof on the AssetOpsBench stack (`#3`)
+- MCP hardening/tests plus benchmark-Llama-path validation closeout (`#9-#13`, `#58`)
+- Profiling wrappers and the first profiling-linked experiment capture path (`#7`, `#59`)
+- Scenario-count, judge, and first trajectory artifacts (`#15`, `#17`, `#18`, `#20`)
+
+Current W3 focus:
+- Experiment 1 profiling captures plus profiling-to-WandB linkage
+- Problem Statement B kickoff: Knowledge Plugin, first generation prototype, and evaluation methodology
+- NeurIPS abstract outline / title candidates
+- Runbook consolidation for the infra / serve / profiling path
 
 Committed W3-W5 workstreams:
 - Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
@@ -180,8 +190,8 @@ Committed W3-W5 workstreams:
 - Problem Statement B extension: generation pipeline, Knowledge Plugin, and validation methodology
 - Paper flow: NeurIPS draft first, then class-report back-port
 
-Open question awaiting mentor reply:
-- Is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside AaT and PE?
+Current scope default:
+- Unless Dhaval says otherwise, the working experiment grid is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition.
 
 **Final deadline: May 4** (presentation + report + code)
 
@@ -196,9 +206,9 @@ Open question awaiting mentor reply:
 ## Timeline at a glance
 
 ```
-Week 2 (Apr 7-13)    MCP servers + 15+ scenarios + baseline runs
-Week 3 (Apr 14-20)   Baseline profiling on GPU infrastructure
-Week 4 (Apr 21-27)   Apply optimizations, complete 30+ scenarios
+Week 2 (Apr 7-13)    Foundation bring-up + first proof runs
+Week 3 (Apr 14-20)   Profiling capture + PS B kickoff + abstract outline
+Week 4 (Apr 21-27)   Optimization / orchestration comparison + failure analysis
 Week 5 (Apr 28-May3) Final report + presentation + open-source PR
 May 4                SUBMIT
 ```

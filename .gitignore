@@ -58,3 +58,4 @@ AGENTS.md
 *codex*
 review/
 .agent-sessions/
+scripts/git-status.sh

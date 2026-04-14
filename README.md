@@ -56,7 +56,6 @@ via WatsonX API to assess scaling effects.
 
 ```
 .
-├── README.md
 ├── README.md                     # This file — project overview, current status, structure
 ├── requirements.txt              # Python dependencies (ibm-watsonx-ai, pandas, etc)
 ├── .github/workflows/            # CI (Black formatting check)
@@ -77,11 +76,18 @@ via WatsonX API to assess scaling effects.
 │
 ├── scripts/                      # Utility scripts
 │   ├── verify_watsonx.py         #   WatsonX access verification + latency benchmarking
+│   ├── run_experiment.sh         #   Canonical SmartGridBench runner (PE today; AaT/Hybrid adapter-ready)
+│   ├── setup_insomnia.sh         #   Shared Insomnia environment setup
+│   ├── vllm_serve.sh             #   Self-hosted vLLM serve + smoke path on Insomnia
+│   ├── test_inference.sh         #   Sanity checks against a live vLLM endpoint
 │   └── benchmark_prompts/        #   Prompt templates for latency tests
 │
 ├── benchmarks/                   # Raw latency/throughput runs — see benchmarks/README.md
-│   ├── baseline/                 #   Pre-optimization (direct Python, MCP baseline)
-│   └── optimized/                #   Post-optimization (int8, kv_cache, batched)
+│   ├── cell_A_direct/            #   Direct-tool baseline (planned)
+│   ├── cell_B_mcp_baseline/      #   MCP baseline (planned)
+│   ├── cell_C_mcp_optimized/     #   Optimized MCP path (planned)
+│   ├── cell_Y_plan_execute/      #   Plan-Execute proof path (landed)
+│   └── cell_Z_hybrid/            #   Hybrid path (planned / mentor-gated)
 │
 ├── notebooks/                    # Jupyter notebooks — see notebooks/README.md
 ├── profiling/                    # PyTorch Profiler + Nsight — see profiling/README.md
@@ -113,7 +119,19 @@ pip install -r requirements.txt
 
 ### Running Experiments
 
-*Instructions will be added as the project progresses.*
+For the currently proven benchmark-facing path:
+
+```bash
+bash scripts/run_experiment.sh configs/example_baseline.env
+```
+
+See:
+- [`docs/orchestration_wiring.md`](docs/orchestration_wiring.md) for what is
+  wired today versus only adapter-ready
+- [`benchmarks/cell_Y_plan_execute/`](benchmarks/cell_Y_plan_execute/) for the
+  first kept proof run and artifact layout
+- [`docs/insomnia_runbook.md`](docs/insomnia_runbook.md) for the shared Insomnia
+  self-hosted vLLM path
 
 ## Experiment Tracking
 
@@ -121,7 +139,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 
-*Last updated: Apr 9, 2026 - W2 foundation work in progress, planning system reset complete.*
+*Last updated: Apr 14, 2026 - W2 proof path landed; remaining risk is in overdue W2 closeout plus W3 profiling / PS B execution.*
 
 **Week 1 (complete):**
 - [x] Problem statement finalized (four contributions)
@@ -135,13 +153,24 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] `docs/data_pipeline.tex` paper section drafted
 - [x] **Mid-point report submitted** (`reports/2026-04-06_midpoint_submission.pdf`) to Courseworks on Mon Apr 6
 
-**Week 2 (in progress, Apr 7-13):**
+**Week 2 (landed on canonical history):**
 - [x] GitHub Projects reset as the canonical planning surface, with weekly iterations, workstream parent issues, and delivery-gate milestones
-- [ ] Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct
-- [ ] AssetOpsBench evaluation harness running end-to-end on the canonical repo
-- [ ] Smart Grid MCP validation through the benchmark Llama path, not only Claude Desktop
-- [ ] First 15+ Smart Grid scenarios committed and validated in the canonical repo
-- [ ] First Smart Grid end-to-end MCP trajectory and first judge-scored artifact
+- [x] Successful Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct, with kept smoke-test logs and fixed serve/test scripts
+- [x] First real SmartGridBench WandB run is live and back-linked to committed benchmark artifacts
+- [x] Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with a successful benchmark-facing proof run under `benchmarks/cell_Y_plan_execute/`
+- [x] Scenario realism validation note landed with IEEE / IEC grounded findings for Dhaval-facing review
+
+**Still open from the original W2 critical path / backlog:**
+- [ ] `#3` Canonical benchmark scenario proof on the AssetOpsBench stack (Akshat)
+- [ ] `#58` Benchmark-Llama-path validation closeout plus `#9-#13` MCP hardening/tests (Tanisha)
+- [ ] `#7` / `#59` profiling wrappers and the first profiling-linked experiment capture path (Aaron)
+- [ ] `#15` / `#17` / `#18` / `#20` scenario-count, judge, and first trajectory artifacts (Akshat)
+
+**W3 focus (Apr 14-20):**
+- Experiment 1 profiling captures plus profiling-to-WandB linkage (`#25`, `#27`)
+- Problem Statement B kickoff: Knowledge Plugin, first generation prototype, and evaluation methodology (`#50`, `#2`, `#51`)
+- NeurIPS abstract outline and title candidates (`#77`)
+- Runbook consolidation for the infra / serve / profiling path (`#37`)
 
 **Committed W3-W5 tracks:**
 - Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
@@ -149,7 +178,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - Problem Statement B extension: scenario generation pipeline, Knowledge Plugin, and validation methodology
 - NeurIPS 2026 draft first, then back-port to the class IEEE report format
 
-**Open question awaiting mentor reply:** is **Hybrid Plan-Execute with reflection checkpoints** novel enough to add as a third orchestration condition alongside vanilla Agent-as-Tool and vanilla Plan-Execute?
+**Current default scope decision:** until Dhaval says otherwise, the working comparison is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition.
 
 ## Key Dates
 

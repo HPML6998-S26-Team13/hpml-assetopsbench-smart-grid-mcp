@@ -1,13 +1,28 @@
 # Execution Plan: W2-W5
 
-*Last updated: April 9, 2026*
+*Last updated: April 14, 2026*
 
 How the team executes the remaining ~4 weeks of work, organized in two parts:
 
 1. **Task dependency map** — which tasks block which, and what the critical path looks like
 2. **Benchmarking operations** — what running experiments actually looks like (it's mostly async batch jobs, not synchronous coordination)
 
-> **TL;DR:** Once W2 setup is done (vLLM up, MCP servers hardened, eval harness wired, WandB instrumented, Slurm template written), W3-W4 benchmark runs are submit-and-walk-away. Nobody needs to be online during runs. The team coordinates during W2 setup and during analysis discussions — not during the experiments themselves.
+> **TL;DR:** The repo is no longer in pure setup mode. Insomnia smoke proof, the first real WandB run, and the first Plan-Execute Smart Grid benchmark proof all landed on Apr 13. The remaining execution risk has narrowed to overdue W2 closeout (canonical benchmark proof, MCP hardening / benchmark-path validation, profiling wrappers, scenario / judge artifacts) plus W3 profiling and PS B deliverables.
+
+## Status note (Apr 14, 2026)
+
+What is now proven on canonical history:
+
+- shared Insomnia A6000 vLLM smoke path
+- first visible WandB run
+- first benchmark-facing Plan-Execute Smart Grid run with committed artifacts
+
+What still governs the near-term critical path:
+
+- `#3` canonical benchmark scenario proof on the AssetOpsBench stack
+- `#9-#13` and `#58` for MCP hardening / benchmark-path confidence
+- `#7` and `#59` for profiler / GPU capture wrappers
+- `#15`, `#17`, `#18`, and `#20` for scenario-count, judge, and first-trajectory evidence
 
 ---
 
@@ -22,7 +37,7 @@ Eval harness end-to-end          │
 WandB instrumentation + schema   ┘
 ```
 
-The four foundation tasks above form a single bottleneck: **all four must complete before any benchmark runs can start**. Each is owned by a different person, so they can run in parallel during W2, but downstream work is blocked until the slowest of the four lands.
+The original W2 foundation tasks were a single bottleneck. As of Apr 14, that bottleneck has partially broken: serving, WandB, and a first Plan-Execute benchmark path are now proven. The remaining bottlenecks are the still-open W2 closeout issues listed in the status note above.
 
 ### Task tiers
 
@@ -83,7 +98,7 @@ The four foundation tasks above form a single bottleneck: **all four must comple
 
 ### Critical-path implications
 
-- **Tier 1 is the bottleneck.** Until all four foundation tasks land, no benchmark runs can start. Three of the four are owned by different people, so they can progress in parallel — but the slowest sets the schedule.
+- **The critical path has narrowed.** Benchmark-facing proof now exists, so the team should stop talking as if “nothing can run yet.” The current blockers are the open W2 closeout issues that gate broader profiling, judge, and scenario-scale work.
 - **The first end-to-end ladder** is now explicit:
   1. one existing benchmark scenario runs on the canonical stack
   2. one Smart Grid scenario runs end-to-end through MCP with a saved trajectory artifact
@@ -213,4 +228,4 @@ Once the template works for one cell, every other cell is just a different confi
 
 - **Mentor novelty check on Hybrid orchestration** - pending response. If green-lit, Hybrid is added as Experiment 2 cell Z. If not, Experiment 2 reduces to 2 cells (AaT vs PE) and the total grid is 4 cells.
 - **Scenario realism validation** - Akshat can validate schema and format, but Dhaval still needs to sanity-check whether the scenarios read like real transformer maintenance work.
-- **First end-to-end ladder date** - still depends on Tier 1 completion. Target remains by end of W2 (April 13).
+- **First end-to-end ladder date** - the repo now has the first benchmark-facing rung (successful Plan-Execute Smart Grid proof run), but the canonical benchmark proof, MCP hardening / benchmark-path closeout, and judge-scored trajectory still need explicit artifacts.

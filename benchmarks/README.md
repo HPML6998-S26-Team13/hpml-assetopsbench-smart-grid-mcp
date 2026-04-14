@@ -32,6 +32,17 @@ benchmarks/
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
 
-## Status (Apr 7, 2026)
+## Status (Apr 14, 2026)
 
-Scaffolding only. First baseline runs scheduled for W2 (Apr 7-13) after Akshat's eval harness lands and Aaron's Insomnia/vLLM environment comes up.
+The directory is no longer scaffolding-only:
+
+- the first kept proof run now lives under `cell_Y_plan_execute/`
+- `config.json`, `summary.json`, `meta.json`, `harness.log`, and raw per-run
+  JSON outputs are committed for that run
+- the committed artifacts back-reference the first real shared WandB run
+
+What is still missing:
+
+- Experiment 1 raw captures for Cells A / B / C
+- profiling-linked artifacts from `#25` / `#27`
+- curated derived metrics in `results/`
