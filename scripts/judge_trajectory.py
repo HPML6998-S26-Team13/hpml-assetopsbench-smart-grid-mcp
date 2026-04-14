@@ -27,6 +27,9 @@ Environment variables (same as the rest of the harness):
     LITELLM_API_KEY       LiteLLM proxy key     (alternative backend)
     LITELLM_BASE_URL      LiteLLM proxy URL     (alternative backend)
 
+    REPO_ROOT             Override the auto-detected repository root used to
+                          produce repo-relative paths in JSONL and judge logs.
+
 The default judge model is watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8.
 Override with --judge-model.
 
@@ -40,11 +43,31 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Repo-root relative path helper
+# ---------------------------------------------------------------------------
+
+# Stable regardless of the caller's working directory.  Can be overridden via
+# the REPO_ROOT env var for unusual checkout layouts.
+_REPO_ROOT = Path(
+    os.environ.get("REPO_ROOT", Path(__file__).resolve().parent.parent)
+).resolve()
+
+
+def _rel(p: Path) -> str:
+    """Return a repo-root-relative POSIX path, falling back to absolute."""
+    try:
+        return p.resolve().relative_to(_REPO_ROOT).as_posix()
+    except ValueError:
+        return p.resolve().as_posix()
+
 
 # ---------------------------------------------------------------------------
 # Rubric prompt — adapted from AssetOpsBench evaluation_agent
@@ -123,8 +146,19 @@ _PASS_THRESHOLD = 0.6  # 4 out of 6 dimensions
 # ---------------------------------------------------------------------------
 
 
-def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dict:
-    """Call the judge model and parse the 6-dimension JSON response."""
+def _call_judge(
+    prompt_user: str,
+    judge_model: str,
+    max_retries: int = 3,
+) -> tuple[dict, str]:
+    """Call the judge model and parse the 6-dimension JSON response.
+
+    Returns
+    -------
+    (parsed_dims, raw_response)
+        parsed_dims  — dict with the 6 boolean keys + suggestions
+        raw_response — verbatim text returned by the model (for audit logging)
+    """
     try:
         import litellm  # type: ignore
     except ImportError:
@@ -139,6 +173,7 @@ def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dic
     ]
 
     last_error: Exception | None = None
+    last_raw = ""
     for attempt in range(max_retries):
         try:
             response = litellm.completion(
@@ -147,10 +182,10 @@ def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dic
                 temperature=0.0,
                 max_tokens=512,
             )
-            raw = response.choices[0].message.content or ""
-            parsed = _parse_judge_json(raw)
+            last_raw = response.choices[0].message.content or ""
+            parsed = _parse_judge_json(last_raw)
             if parsed is not None:
-                return parsed
+                return parsed, last_raw
             print(
                 f"  [judge] attempt {attempt + 1}: invalid/incomplete judge response,"
                 " retrying...",
@@ -206,7 +241,7 @@ def _parse_judge_json(raw: str) -> dict | None:
     non_bool = [dim for dim in _BOOLEAN_DIMS if not isinstance(candidate[dim], bool)]
     if non_bool:
         print(
-            f"  [judge] non-boolean rubric values: "
+            "  [judge] non-boolean rubric values: "
             + ", ".join(f"{d}={candidate[d]!r}" for d in non_bool),
             file=sys.stderr,
         )
@@ -305,8 +340,14 @@ def score_trajectory(
     meta_path: Path | None,
     judge_model: str,
     out_path: Path,
+    log_dir: Path | None = None,
 ) -> dict:
-    """Score one trajectory file. Appends a JSONL record to out_path."""
+    """Score one trajectory file.
+
+    Appends a JSONL record to out_path.  If log_dir is given, also writes a
+    full judge audit log (prompt + raw Maverick response + parsed dims) to
+    ``log_dir/<run_name>/<scenario_id>_judge_log.json``.
+    """
     traj_data = json.loads(trajectory_path.read_text(encoding="utf-8"))
     scenario_data = json.loads(scenario_path.read_text(encoding="utf-8"))
     meta_data = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path else {}
@@ -329,19 +370,23 @@ def score_trajectory(
     )
 
     print(f"  Calling judge ({judge_model})...", file=sys.stderr)
-    dims = _call_judge(prompt_user, judge_model)
+    scored_at = datetime.now(timezone.utc).isoformat()
+    dims, raw_response = _call_judge(prompt_user, judge_model)
 
     score = _compute_score(dims)
     passed = score >= _PASS_THRESHOLD
 
+    run_name = meta_data.get("run_name", trajectory_path.parent.name)
+    scenario_id = scenario_data.get("id", "")
+
     record = {
         "schema_version": "v1",
-        "scored_at": datetime.now(timezone.utc).isoformat(),
+        "scored_at": scored_at,
         # Join keys (align with results/README.md conventions)
-        "run_name": meta_data.get("run_name", trajectory_path.parent.name),
+        "run_name": run_name,
         "wandb_run_url": meta_data.get("wandb_run_url"),
-        "scenario_id": scenario_data.get("id", ""),
-        "scenario_file": str(scenario_path).replace("\\", "/"),
+        "scenario_id": scenario_id,
+        "scenario_file": _rel(scenario_path),
         "trial_index": _extract_trial_index(trajectory_path),
         "experiment_cell": meta_data.get("experiment_cell", "Y"),
         "orchestration_mode": meta_data.get("orchestration_mode", "plan_execute"),
@@ -360,12 +405,37 @@ def score_trajectory(
         "pass_threshold": _PASS_THRESHOLD,
         "pass": passed,
         "suggestions": dims.get("suggestions", ""),
-        "trajectory_file": str(trajectory_path).replace("\\", "/"),
+        "trajectory_file": _rel(trajectory_path),
     }
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(record) + "\n")
+
+    # ------------------------------------------------------------------
+    # Optional: save full judge audit log for reproducibility and analysis
+    # ------------------------------------------------------------------
+    if log_dir is not None:
+        run_log_dir = log_dir / run_name
+        run_log_dir.mkdir(parents=True, exist_ok=True)
+        log_file = run_log_dir / f"{scenario_id}_judge_log.json"
+        judge_log = {
+            "schema_version": "v1",
+            "scored_at": scored_at,
+            "run_name": run_name,
+            "scenario_id": scenario_id,
+            "judge_model": judge_model,
+            "trajectory_file": _rel(trajectory_path),
+            "scenario_file": _rel(scenario_path),
+            "prompt_system": _SYSTEM_PROMPT,
+            "prompt_user": prompt_user,
+            "raw_response": raw_response,
+            "parsed_dims": dims,
+            "score_6d": score,
+            "pass": passed,
+        }
+        log_file.write_text(json.dumps(judge_log, indent=2), encoding="utf-8")
+        print(f"  Judge log saved → {log_file}", file=sys.stderr)
 
     return record
 
@@ -392,6 +462,12 @@ def _build_parser() -> argparse.ArgumentParser:
               python scripts/judge_trajectory.py \\
                   --run-dir    benchmarks/cell_Y_plan_execute/raw/issue3-aob-harness-smoke \\
                   --scenario-dir data/scenarios
+
+              # Score with full audit log saved
+              python scripts/judge_trajectory.py \\
+                  --trajectory benchmarks/... \\
+                  --scenario   data/scenarios/... \\
+                  --log-dir    results/judge_logs
         """),
     )
     p.add_argument(
@@ -429,6 +505,15 @@ def _build_parser() -> argparse.ArgumentParser:
         default=_DEFAULT_JUDGE_MODEL,
         help=f"LiteLLM model string for the judge. Default: {_DEFAULT_JUDGE_MODEL}",
     )
+    p.add_argument(
+        "--log-dir",
+        type=Path,
+        default=None,
+        help=(
+            "If set, save a full judge audit log (prompt + raw response + dims) to "
+            "LOG_DIR/<run_name>/<scenario_id>_judge_log.json"
+        ),
+    )
     return p
 
 
@@ -436,7 +521,8 @@ def _find_scenario(scenario_dir: Path, trajectory_path: Path) -> Path | None:
     """Try to find the matching scenario file for a trajectory.
 
     Checks (in order):
-    1. ``scenario_file`` field embedded in the trajectory JSON.
+    1. ``scenario_file`` field embedded in the trajectory JSON, resolved against
+       multiple candidate bases (trajectory dir, scenario_dir parent, scenario_dir).
     2. Filename stem overlap between trajectory and scenario files.
 
     Returns None if no match is found.
@@ -446,12 +532,25 @@ def _find_scenario(scenario_dir: Path, trajectory_path: Path) -> Path | None:
     except Exception:
         return None
 
-    # If trajectory has a scenario_file field (e.g., from run_experiment.sh latencies)
+    # If trajectory has a scenario_file field (e.g., from run_experiment.sh latencies),
+    # resolve relative paths against several stable bases so the lookup works regardless
+    # of the caller's working directory.
     sf = data.get("scenario_file")
     if sf:
-        candidate = Path(sf)
-        if candidate.exists():
-            return candidate
+        raw = Path(sf)
+        bases = (
+            [raw]
+            if raw.is_absolute()
+            else [
+                trajectory_path.parent / raw,
+                scenario_dir.parent / raw,
+                scenario_dir / raw,
+                _REPO_ROOT / raw,
+            ]
+        )
+        for candidate in bases:
+            if candidate.resolve().exists():
+                return candidate.resolve()
 
     # Try matching by stem: trajectory stem may contain scenario slug
     for candidate in scenario_dir.glob("*.json"):
@@ -475,10 +574,31 @@ def _is_trajectory_file(path: Path) -> bool:
         return False
 
 
-def main() -> None:
-    from dotenv import load_dotenv  # type: ignore
+def _load_env() -> None:
+    """Load .env when available; works with or without python-dotenv installed."""
+    try:
+        from dotenv import load_dotenv  # type: ignore
 
-    load_dotenv()
+        load_dotenv()
+        return
+    except ImportError:
+        pass
+
+    env_path = Path(".env")
+    if not env_path.exists():
+        return
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, val = line.split("=", 1)
+        key, val = key.strip(), val.strip().strip("'\"")
+        if key:
+            os.environ.setdefault(key, val)
+
+
+def main() -> None:
+    _load_env()
 
     args = _build_parser().parse_args()
 
@@ -492,6 +612,7 @@ def main() -> None:
             meta_path=args.run_meta,
             judge_model=args.judge_model,
             out_path=args.out,
+            log_dir=args.log_dir,
         )
         print(json.dumps(record, indent=2))
         return
@@ -523,6 +644,7 @@ def main() -> None:
                 meta_path=meta_path,
                 judge_model=args.judge_model,
                 out_path=args.out,
+                log_dir=args.log_dir,
             )
             print(f"  score_6d={record['score_6d']}  pass={record['pass']}")
             scored += 1
