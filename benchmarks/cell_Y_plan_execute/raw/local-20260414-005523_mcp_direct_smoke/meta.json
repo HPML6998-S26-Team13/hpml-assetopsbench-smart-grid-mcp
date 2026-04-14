@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-04-14T00:55:23.459605+00:00",
+  "run_name": "local-20260414-005523_mcp_direct_smoke",
+  "run_mode": "mcp_direct_smoke",
+  "scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json",
+  "scenario_id": "SGT-009",
+  "benchmark_summary_path": "benchmarks/cell_Y_plan_execute/summary.json",
+  "finished_at": "2026-04-14T00:55:23.663413+00:00",
+  "pass": 1,
+  "fail": 0,
+  "total_runs": 1,
+  "run_status": "success"
+}

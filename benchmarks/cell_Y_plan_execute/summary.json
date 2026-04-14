@@ -41,5 +41,28 @@
   "judge_score_p95": null,
   "judge_score_p5": null,
   "judge_pass_rate": null,
-  "finished_at": "2026-04-13T04:40:47.990529+00:00"
+  "finished_at": "2026-04-13T04:40:47.990529+00:00",
+  "mcp_direct_smoke_run": {
+    "schema_version": "v1",
+    "run_name": "local-20260414-005523_mcp_direct_smoke",
+    "run_mode": "mcp_direct_smoke",
+    "experiment_family": "exp2_orchestration",
+    "experiment_cell": "Y",
+    "orchestration_mode": "mcp_direct",
+    "mcp_mode": "baseline",
+    "scenario_set_name": "smartgrid_single_scenario_smoke",
+    "scenario_set_hash": "f52ee6c622fa101f6adcce26a4e88d953deb241f5f5fe020065a48f431bbe3e4",
+    "model_id": "n/a (direct tool call \u2014 no LLM)",
+    "run_status": "success",
+    "scenarios_attempted": 1,
+    "scenarios_completed": 1,
+    "success_rate": 1.0,
+    "failure_count": 0,
+    "wall_clock_seconds_total": 0.197628,
+    "latency_seconds_mean": 0.197628,
+    "tool_call_count_total": 8,
+    "tool_call_count_mean": 8.0,
+    "tool_error_count": 0,
+    "finished_at": "2026-04-14T00:55:23.663413+00:00"
+  }
 }

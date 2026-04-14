@@ -1,0 +1,20 @@
+00:55:23  INFO     mcp_smoke  run_name=local-20260414-005523_mcp_direct_smoke
+00:55:23  INFO     mcp_smoke  scenario=data/scenarios/multi_01_end_to_end_fault_response.json  transformer=T-015
+00:55:23  INFO     mcp_smoke  output_dir=/home/runner/work/hpml-assetopsbench-smart-grid-mcp/hpml-assetopsbench-smart-grid-mcp/benchmarks/cell_Y_plan_execute/raw/local-20260414-005523_mcp_direct_smoke
+00:55:23  INFO     mcp_smoke  Step 1/8 [iot]: Retrieve the list of sensors for transformer T-015
+00:55:23  INFO     mcp_smoke  Step 1 OK.  (0.075s)
+00:55:23  INFO     mcp_smoke  Step 2/8 [iot]: Get recent sensor readings for the over-temperature and load sensors
+00:55:23  INFO     mcp_smoke  Step 2 OK.  (0.011s)
+00:55:23  INFO     mcp_smoke  Step 3/8 [tsfm]: Trend analysis on the over-temperature sensor
+00:55:23  INFO     mcp_smoke  Step 3 OK.  (0.076s)
+00:55:23  INFO     mcp_smoke  Step 4/8 [tsfm]: Detect anomalies in the load sensor readings
+00:55:23  INFO     mcp_smoke  Step 4 OK.  (0.012s)
+00:55:23  INFO     mcp_smoke  Step 5/8 [fmsr]: Retrieve the most recent DGA record for T-015
+00:55:23  INFO     mcp_smoke  Step 5 OK.  (0.002s)
+00:55:23  INFO     mcp_smoke  Step 6/8 [fmsr]: Analyze DGA record with IEC 60599 Rogers Ratio method
+00:55:23  INFO     mcp_smoke  Step 6 OK.  (0.000s)
+00:55:23  INFO     mcp_smoke  Step 7/8 [tsfm]: Forecast remaining useful life over 30 days
+00:55:23  INFO     mcp_smoke  Step 7 OK.  (0.003s)
+00:55:23  INFO     mcp_smoke  Step 8/8 [wo]: Create maintenance work order based on findings
+00:55:23  INFO     mcp_smoke  Step 8 OK.  (0.001s)
+00:55:23  INFO     mcp_smoke  Run complete: status=success  total_steps=8  wall=0.20s

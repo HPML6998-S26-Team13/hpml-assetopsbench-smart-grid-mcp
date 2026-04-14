@@ -1,0 +1,131 @@
+{
+  "scenario_id": "SGT-009",
+  "scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json",
+  "run_name": "local-20260414-005523_mcp_direct_smoke",
+  "run_mode": "mcp_direct",
+  "transformer_id": "T-015",
+  "status": "success",
+  "wall_clock_seconds": 0.197628,
+  "tool_call_count": 8,
+  "tool_error_count": 0,
+  "trajectory": [
+    {
+      "step": 1,
+      "task": "Retrieve the list of sensors for transformer T-015",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-015"
+      },
+      "response": "[{\"sensor_id\": \"load_current_a\", \"unit\": \"A\", \"num_readings\": 720}, {\"sensor_id\": \"oil_temp_c\", \"unit\": \"\\u00b0C\", \"num_readings\": 720}, {\"sensor_id\": \"power_factor\", \"unit\": \"\", \"num_readings\": 720}, {\"sensor_id\": \"voltage_hv_kv\", \"unit\": \"kV\", \"num_readings\": 720}, {\"sensor_id\": \"voltage_lv_kv\", \"unit\": \"kV\", \"num_readings\": 720}, {\"sensor_id\": \"winding_temp_top_c\", \"unit\": \"\\u00b0C\", \"num_readings\": 720}]",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.075484
+    },
+    {
+      "step": 2,
+      "task": "Get recent sensor readings for the over-temperature and load sensors",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "sensor_id": "winding_temp_top_c",
+        "limit": 20
+      },
+      "response": "[{\"timestamp\": \"2024-01-01T00:00:00\", \"value\": 72.009, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T01:00:00\", \"value\": 81.598, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T02:00:00\", \"value\": 78.831, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T03:00:00\", \"value\": 75.808, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T04:00:00\", \"value\": 82.262, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T05:00:00\", \"value\": 69.764, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T06:00:00\", \"value\": 67.067, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T07:00:00\", \"value\": 62.101, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T08:00:00\", \"value\": 53.181, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T09:00:00\", \"value\": 69.804, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T10:00:00\", \"value\": 88.082, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T11:00:00\", \"value\": 77.034, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T12:00:00\", \"value\": 80.183, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T13:00:00\", \"value\": 73.93, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T14:00:00\", \"value\": 108.983, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T15:00:00\", \"value\": 82.483, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T16:00:00\", \"value\": 71.47, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T17:00:00\", \"value\": 64.147, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T18:00:00\", \"value\": 105.698, \"unit\": \"\\u00b0C\"}, {\"timestamp\": \"2024-01-01T19:00:00\", \"value\": 58.971, \"unit\": \"\\u00b0C\"}]",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.011065
+    },
+    {
+      "step": 3,
+      "task": "Trend analysis on the over-temperature sensor",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "sensor_id": "winding_temp_top_c"
+      },
+      "response": "{\"transformer_id\": \"T-015\", \"sensor_id\": \"winding_temp_top_c\", \"num_readings\": 720, \"start_time\": \"2024-01-01 00:00:00\", \"end_time\": \"2024-01-30 23:00:00\", \"mean_value\": 79.6177, \"min_value\": 35.512, \"max_value\": 130.789, \"slope_per_day\": 0.009346, \"direction\": \"stable\", \"r_squared\": 0.0}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.076474
+    },
+    {
+      "step": 4,
+      "task": "Detect anomalies in the load sensor readings",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "sensor_id": "load_current_a"
+      },
+      "response": "{\"transformer_id\": \"T-015\", \"sensor_id\": \"load_current_a\", \"window_size\": 24, \"z_threshold\": 3.0, \"total_readings\": 720, \"anomaly_count\": 0, \"anomaly_rate_pct\": 0.0, \"anomalies\": []}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.011616
+    },
+    {
+      "step": 5,
+      "task": "Retrieve the most recent DGA record for T-015",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-015"
+      },
+      "response": "{\"transformer_id\": \"T-015\", \"sample_date\": \"2024-01-22\", \"dissolved_h2_ppm\": 39.24, \"dissolved_ch4_ppm\": 33.04, \"dissolved_c2h2_ppm\": 2.19, \"dissolved_c2h4_ppm\": 40.7, \"dissolved_c2h6_ppm\": 13.0, \"dissolved_co_ppm\": 314.21, \"dissolved_co2_ppm\": 1556.98, \"fault_label\": \"Low-temperature overheating\", \"source_dataset\": \"synthetic\"}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.001558
+    },
+    {
+      "step": 6,
+      "task": "Analyze DGA record with IEC 60599 Rogers Ratio method",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 39.24,
+        "ch4": 33.04,
+        "c2h2": 2.19,
+        "c2h4": 40.7,
+        "c2h6": 13.0,
+        "transformer_id": "T-015"
+      },
+      "response": "{\"iec_code\": \"N\", \"diagnosis\": \"Normal / Inconclusive\", \"r1_ch4_h2\": 0.842, \"r2_c2h2_c2h4\": 0.0538, \"r3_c2h4_c2h6\": 3.1308, \"input_gases\": {\"h2_ppm\": 39.24, \"ch4_ppm\": 33.04, \"c2h2_ppm\": 2.19, \"c2h4_ppm\": 40.7, \"c2h6_ppm\": 13.0}, \"transformer_id\": \"T-015\"}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 2.9e-05
+    },
+    {
+      "step": 7,
+      "task": "Forecast remaining useful life over 30 days",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "horizon_days": 30
+      },
+      "response": "{\"transformer_id\": \"T-015\", \"current_rul_days\": 547, \"forecast_date\": \"2024-03-01\", \"projected_rul_days\": 517, \"projected_health_index\": 0.473, \"confidence\": 0.775, \"method\": \"linear_degradation_baseline\"}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.002829
+    },
+    {
+      "step": 8,
+      "task": "Create maintenance work order based on findings",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "issue_description": "Rising load and intermittent over-temperature alerts",
+        "priority": "high",
+        "fault_type": "Low-temperature overheating",
+        "estimated_downtime_hours": 48
+      },
+      "response": "{\"work_order_id\": \"WO-7CEA88C9\", \"transformer_id\": \"T-015\", \"issue_description\": \"Rising load and intermittent over-temperature alerts\", \"priority\": \"high\", \"fault_type\": \"Low-temperature overheating\", \"status\": \"open\", \"estimated_downtime_hours\": 48, \"created_at\": \"2026-04-14T00:55:23.661104Z\", \"assigned_technician\": null, \"notes\": []}",
+      "error": null,
+      "success": true,
+      "latency_seconds": 0.001351
+    }
+  ]
+}
