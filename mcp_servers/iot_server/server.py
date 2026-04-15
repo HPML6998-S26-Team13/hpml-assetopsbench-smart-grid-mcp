@@ -115,12 +115,12 @@ def list_sensors(transformer_id: str) -> list[dict]:
 
     Returns:
         List of dicts with keys: sensor_id, unit, num_readings.
-        Returns an error list if the transformer ID is not found.
+        Returns an error dict ({"error": ...}) if the transformer ID is not found.
     """
     df = _get_readings()
     subset = df[df["transformer_id"] == transformer_id]
     if subset.empty:
-        return [{"error": f"No sensor data found for '{transformer_id}'."}]
+        return {"error": f"No sensor data found for '{transformer_id}'."}
 
     summary = (
         subset.groupby(["sensor_id", "unit"], dropna=False)

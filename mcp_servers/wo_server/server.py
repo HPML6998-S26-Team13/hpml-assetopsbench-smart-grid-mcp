@@ -119,7 +119,7 @@ def list_fault_records(
     if fault_type:
         df = df[df["fault_type"].str.contains(fault_type, case=False, na=False)]
     if maintenance_status:
-        df = df[df["maintenance_status"].str.lower() == maintenance_status.lower()]
+        df = df[df["maintenance_status"].fillna("").str.lower() == maintenance_status.lower()]
 
     records = df.head(min(limit, 100)).to_dict(orient="records")
     return [_normalize_record(record) for record in records]
@@ -291,7 +291,7 @@ def update_work_order(
     if note:
         wo["notes"].append(
             {
-                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
                 "text": note,
             }
         )
