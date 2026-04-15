@@ -14,18 +14,18 @@
 - What is still overdue from W2 despite those wins
 
 **0:05-0:13 - Remaining W2 blockers by owner**
-- Aaron: `#7`, `#59`, and the Insomnia reconciliation pass `#111`, plus how those feed `#25`, `#27`, `#37`
-- Tanisha: W2 carryover `#9-#13`, `#58`, plus W3 kickoff `#50`
-- Akshat: W2 carryover `#3`, `#15`, `#17`, `#18`, `#20`
-- Alex: `#23`, `#24`, `#51`, `#77`, plus the scope question on `#28`
+- Aaron: [#7](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/7), [#59](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/59), and the Insomnia reconciliation pass [#111](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/111), plus how those feed [#25](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/25), [#27](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/27), [#37](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/37)
+- Tanisha: W2 carryover [#9](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/9)-[#13](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/13), [#58](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/58), plus W3 kickoff [#50](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/50)
+- Akshat: W2 carryover [#3](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/3), [#15](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/15), [#17](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/17), [#18](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/18), [#20](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/20)
+- Alex: [#23](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/23), [#24](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/24), [#51](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/51), [#77](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/77), plus the scope question on [#28](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/28)
 
 **0:13-0:19 - Decide the W3 experiment contract**
 - Experiment 1: exact artifact contract for Cells A / B / C
 - What must be present in raw captures before Notebook 02 starts
-- Is `#28` already satisfied by the first WandB run, or is it now the “first profiling-linked experiment log” milestone?
+- Is [#28](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/28) already satisfied by the first WandB run, or is it now the “first profiling-linked experiment log” milestone?
 
 **0:19-0:24 - Problem Statement B lane**
-- `#50 -> #2 -> #53 / #52` handoff chain
+- [#50](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/50) -> [#2](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/2) -> [#53](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/53) / [#52](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/52) handoff chain
 - Agree the Knowledge Plugin artifact format this week
 - Decide what counts as a “real” first generated batch
 
@@ -35,8 +35,8 @@
 - Self-Ask only becomes a W3 coding task once the active-mode scope is explicit
 
 **0:29-0:34 - Writing lane**
-- `#77` abstract outline and title candidates by Apr 15
-- `#51` PS B evaluation methodology by Apr 15
+- [#77](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/77) abstract outline and title candidates by Apr 15
+- [#51](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/51) PS B evaluation methodology by Apr 15
 - What facts are now stable enough to treat as paper-ready
 
 **0:34-0:35 - Next actions**
@@ -45,7 +45,7 @@
 
 ## Decisions needed
 
-1. Do we close `#28` now against WandB run `9d4442ja`, or explicitly narrow it to the first profiling-linked experiment log milestone?
+1. Do we close [#28](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/28) now against WandB run `9d4442ja`, or explicitly narrow it to the first profiling-linked experiment log milestone?
 2. Are we formally treating Hybrid as deferred unless Dhaval later reopens it?
-3. What exact artifact closes `#58` and what exact artifact closes `#3`?
-4. Does Aaron own the consolidated infra/profiling runbook path in `#37`, with Alex only doing editorial cleanup later?
+3. What exact artifact closes [#58](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/58) and what exact artifact closes [#3](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/3)?
+4. Does Aaron own the consolidated infra/profiling runbook path in [#37](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/37), with Alex only doing editorial cleanup later?
