@@ -261,7 +261,13 @@ def analyze_dga(
     # Coerce to float: LLMs sometimes pass numeric args as strings even when
     # the tool schema declares "type": "number".
     try:
-        h2, ch4, c2h2, c2h4, c2h6 = float(h2), float(ch4), float(c2h2), float(c2h4), float(c2h6)
+        h2, ch4, c2h2, c2h4, c2h6 = (
+            float(h2),
+            float(ch4),
+            float(c2h2),
+            float(c2h4),
+            float(c2h6),
+        )
     except (TypeError, ValueError) as exc:
         return {"error": f"Gas values must be numeric: {exc}"}
     inputs = {
