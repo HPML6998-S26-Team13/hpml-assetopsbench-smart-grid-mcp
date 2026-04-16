@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-04-16
+
+### Config / Docs
+
+- Added PS B scenario-evaluation methodology with explicit circularity,
+  duplication, and acceptance criteria for generated-vs-hand-crafted scenario
+  validation — addresses #51 — M (Alex)
+- Added NeurIPS abstract-planning doc with title candidates, evidence
+  structure, and a reusable abstract skeleton — addresses #77 — S (Alex)
+
 ## 2026-04-13
 
 ### Code Changes
