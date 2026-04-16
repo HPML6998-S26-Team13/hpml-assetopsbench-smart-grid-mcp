@@ -62,23 +62,23 @@ if _env.exists():
 # ---------------------------------------------------------------------------
 # MCP server function imports (in-process, no subprocess required)
 # ---------------------------------------------------------------------------
-from mcp_servers.iot_server.server  import get_asset_metadata, list_assets
+from mcp_servers.iot_server.server import get_asset_metadata, list_assets
 from mcp_servers.fmsr_server.server import get_dga_record, analyze_dga
 from mcp_servers.tsfm_server.server import get_rul, trend_analysis
-from mcp_servers.wo_server.server   import create_work_order, estimate_downtime
+from mcp_servers.wo_server.server import create_work_order, estimate_downtime
 
 # ---------------------------------------------------------------------------
 # Tool registry — maps tool name → callable
 # ---------------------------------------------------------------------------
 _TOOL_REGISTRY: dict[str, callable] = {
     "get_asset_metadata": get_asset_metadata,
-    "list_assets":        list_assets,
-    "get_dga_record":     get_dga_record,
-    "analyze_dga":        analyze_dga,
-    "get_rul":            get_rul,
-    "trend_analysis":     trend_analysis,
-    "create_work_order":  create_work_order,
-    "estimate_downtime":  estimate_downtime,
+    "list_assets": list_assets,
+    "get_dga_record": get_dga_record,
+    "analyze_dga": analyze_dga,
+    "get_rul": get_rul,
+    "trend_analysis": trend_analysis,
+    "create_work_order": create_work_order,
+    "estimate_downtime": estimate_downtime,
 }
 
 # ---------------------------------------------------------------------------
@@ -141,8 +141,8 @@ MCP_TOOLS = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "h2":   {"type": "number", "description": "Hydrogen (ppm)."},
-                    "ch4":  {"type": "number", "description": "Methane (ppm)."},
+                    "h2": {"type": "number", "description": "Hydrogen (ppm)."},
+                    "ch4": {"type": "number", "description": "Methane (ppm)."},
                     "c2h2": {"type": "number", "description": "Acetylene (ppm)."},
                     "c2h4": {"type": "number", "description": "Ethylene (ppm)."},
                     "c2h6": {"type": "number", "description": "Ethane (ppm)."},
@@ -183,6 +183,7 @@ MCP_TOOLS = [
 # Tool execution
 # ---------------------------------------------------------------------------
 
+
 def execute_tool(name: str, arguments: dict) -> str:
     """Call the registered MCP function and return its result as a JSON string."""
     fn = _TOOL_REGISTRY.get(name)
@@ -199,6 +200,7 @@ def execute_tool(name: str, arguments: dict) -> str:
 # Main validation loop
 # ---------------------------------------------------------------------------
 
+
 def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> bool:
     """
     Drive a tool-call loop against WatsonX Llama.
@@ -212,15 +214,19 @@ def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> b
         print("ERROR: ibm-watsonx-ai not installed. Run: pip install ibm-watsonx-ai")
         return False
 
-    api_key    = os.environ.get("WATSONX_API_KEY")
+    api_key = os.environ.get("WATSONX_API_KEY")
     project_id = os.environ.get("WATSONX_PROJECT_ID")
-    url        = os.environ.get("WATSONX_URL")
+    url = os.environ.get("WATSONX_URL")
 
-    missing = [k for k, v in [
-        ("WATSONX_API_KEY",    api_key),
-        ("WATSONX_PROJECT_ID", project_id),
-        ("WATSONX_URL",        url),
-    ] if not v]
+    missing = [
+        k
+        for k, v in [
+            ("WATSONX_API_KEY", api_key),
+            ("WATSONX_PROJECT_ID", project_id),
+            ("WATSONX_URL", url),
+        ]
+        if not v
+    ]
     if missing:
         print(f"ERROR: missing env vars: {missing}")
         return False
@@ -251,7 +257,7 @@ def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> b
 
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user",   "content": user_prompt},
+        {"role": "user", "content": user_prompt},
     ]
 
     print(f"[prompt] {user_prompt}")
@@ -266,15 +272,17 @@ def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> b
         )
         elapsed = time.perf_counter() - t0
 
-        choice  = response["choices"][0]
+        choice = response["choices"][0]
         message = choice["message"]
-        finish  = choice.get("finish_reason", "")
+        finish = choice.get("finish_reason", "")
 
         # ---- Tool calls ----
         tool_calls = message.get("tool_calls") or []
         if tool_calls:
-            print(f"[round {round_num}] model requested {len(tool_calls)} tool call(s)  "
-                  f"({elapsed:.2f}s)")
+            print(
+                f"[round {round_num}] model requested {len(tool_calls)} tool call(s)  "
+                f"({elapsed:.2f}s)"
+            )
             # Append the assistant turn with tool_calls
             messages.append(message)
 
@@ -288,21 +296,25 @@ def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> b
 
                 print(f"  → {fn_name}({json.dumps(fn_args)})")
                 tool_result = execute_tool(fn_name, fn_args)
-                result_obj  = json.loads(tool_result)
+                result_obj = json.loads(tool_result)
 
                 # Pretty-print a summary
                 if "error" in result_obj:
                     print(f"    ✗ ERROR: {result_obj['error']}")
                 else:
                     # Print first few keys as a preview
-                    preview = {k: v for i, (k, v) in enumerate(result_obj.items()) if i < 4}
+                    preview = {
+                        k: v for i, (k, v) in enumerate(result_obj.items()) if i < 4
+                    }
                     print(f"    ✓ {preview}")
 
-                messages.append({
-                    "role":         "tool",
-                    "tool_call_id": tc["id"],
-                    "content":      tool_result,
-                })
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tc["id"],
+                        "content": tool_result,
+                    }
+                )
             continue
 
         # ---- Final answer ----
@@ -325,11 +337,15 @@ def run_validation(transformer_id: str, model_id: str, max_rounds: int = 6) -> b
 # Entry point
 # ---------------------------------------------------------------------------
 
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate MCP servers via WatsonX Llama")
+    parser = argparse.ArgumentParser(
+        description="Validate MCP servers via WatsonX Llama"
+    )
     parser.add_argument(
-        "--transformer", default="T-018",
-        help="Transformer ID to diagnose (default: T-018)"
+        "--transformer",
+        default="T-018",
+        help="Transformer ID to diagnose (default: T-018)",
     )
     parser.add_argument(
         "--model",
@@ -337,7 +353,9 @@ def main() -> int:
         help="WatsonX model ID to use",
     )
     parser.add_argument(
-        "--max-rounds", type=int, default=6,
+        "--max-rounds",
+        type=int,
+        default=6,
         help="Maximum tool-call rounds before giving up (default: 6)",
     )
     args = parser.parse_args()
