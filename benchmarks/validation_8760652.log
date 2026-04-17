@@ -1,0 +1,985 @@
+Waiting for vLLM...
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299] 
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]        █     █     █▄   ▄█
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]   █▄█▀ █     █     █     █  model   /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299] 
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:233] non-default args: {'host': '127.0.0.1', 'model': '/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct']}
+(APIServer pid=353036) INFO 04-16 21:33:47 [model.py:549] Resolved architecture: LlamaForCausalLM
+(APIServer pid=353036) WARNING 04-16 21:33:47 [model.py:2016] Casting torch.bfloat16 to torch.float16.
+(APIServer pid=353036) INFO 04-16 21:33:47 [model.py:1678] Using max model len 32768
+(APIServer pid=353036) INFO 04-16 21:33:47 [scheduler.py:238] Chunked prefill is enabled with max_num_batched_tokens=8192.
+(APIServer pid=353036) INFO 04-16 21:33:47 [vllm.py:790] Asynchronous scheduling is enabled.
+(EngineCore pid=354307) INFO 04-16 21:33:58 [core.py:105] Initializing a V1 LLM engine (v0.19.0) with config: model='/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct', speculative_config=None, tokenizer='/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Llama-3.1-8B-Instruct, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_images_per_batch': 0, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=354307) INFO 04-16 21:34:00 [parallel_state.py:1400] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.197.96.50:34881 backend=nccl
+(EngineCore pid=354307) INFO 04-16 21:34:00 [parallel_state.py:1716] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=354307) INFO 04-16 21:34:01 [gpu_model_runner.py:4735] Starting to load model /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct...
+(EngineCore pid=354307) INFO 04-16 21:34:10 [cuda.py:334] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=354307) INFO 04-16 21:34:10 [flash_attn.py:596] Using FlashAttention version 3
+(EngineCore pid=354307) <frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+(EngineCore pid=354307) <frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+(EngineCore pid=354307) Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+(EngineCore pid=354307) Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:03<00:10,  3.39s/it]
+(EngineCore pid=354307) Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:06<00:06,  3.43s/it]
+(EngineCore pid=354307) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:10<00:03,  3.41s/it]
+(EngineCore pid=354307) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:11<00:00,  2.41s/it]
+(EngineCore pid=354307) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:13<00:00,  3.28s/it]
+(EngineCore pid=354307) 
+(EngineCore pid=354307) INFO 04-16 21:34:24 [default_loader.py:384] Loading weights took 13.70 seconds
+(EngineCore pid=354307) INFO 04-16 21:34:24 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 23.096286 seconds
+(EngineCore pid=354307) INFO 04-16 21:34:32 [backends.py:1051] Using cache directory: /insomnia001/home/tr2828/.cache/vllm/torch_compile_cache/2d2207606e/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=354307) INFO 04-16 21:34:32 [backends.py:1111] Dynamo bytecode transform time: 7.07 s
+(EngineCore pid=354307) INFO 04-16 21:34:35 [backends.py:372] Cache the graph of compile range (1, 8192) for later use
+(EngineCore pid=354307) INFO 04-16 21:34:38 [backends.py:390] Compiling a graph for compile range (1, 8192) takes 6.48 s
+(EngineCore pid=354307) INFO 04-16 21:34:40 [decorators.py:640] saved AOT compiled function to /insomnia001/home/tr2828/.cache/vllm/torch_compile_cache/torch_aot_compile/fb94c91a6ff5056efa739d6034767db87063e589d897738aefc90eaad64b1186/rank_0_0/model
+(EngineCore pid=354307) INFO 04-16 21:34:40 [monitor.py:48] torch.compile took 15.60 s in total
+(EngineCore pid=354307) INFO 04-16 21:34:41 [monitor.py:76] Initial profiling/warmup run took 0.51 s
+(EngineCore pid=354307) INFO 04-16 21:34:47 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
+(EngineCore pid=354307) INFO 04-16 21:34:47 [gpu_model_runner.py:5876] Profiling CUDA graph memory: PIECEWISE=51 (largest=512), FULL=51 (largest=512)
+(EngineCore pid=354307) INFO 04-16 21:34:48 [gpu_model_runner.py:5955] Estimated CUDA graph memory: 0.84 GiB total
+(EngineCore pid=354307) INFO 04-16 21:34:50 [gpu_worker.py:436] Available KV cache memory: 66.59 GiB
+(EngineCore pid=354307) INFO 04-16 21:34:50 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.9000 to 0.9090 to maintain the same effective KV cache size.
+(EngineCore pid=354307) INFO 04-16 21:34:50 [kv_cache_utils.py:1319] GPU KV cache size: 545,456 tokens
+(EngineCore pid=354307) INFO 04-16 21:34:50 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 16.65x
+(EngineCore pid=354307) 2026-04-16 21:34:50,276 - INFO - autotuner.py:262 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=354307) 2026-04-16 21:34:50,285 - INFO - autotuner.py:268 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=354307) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:00<00:01, 26.35it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:01, 25.03it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  18%|█▊        | 9/51 [00:00<00:01, 23.71it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  24%|██▎       | 12/51 [00:00<00:01, 24.71it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:00<00:01, 24.77it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  35%|███▌      | 18/51 [00:00<00:01, 25.06it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  41%|████      | 21/51 [00:00<00:01, 25.68it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  47%|████▋     | 24/51 [00:00<00:01, 25.70it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  53%|█████▎    | 27/51 [00:01<00:00, 26.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  59%|█████▉    | 30/51 [00:01<00:00, 25.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  65%|██████▍   | 33/51 [00:01<00:00, 25.29it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  71%|███████   | 36/51 [00:01<00:00, 24.84it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▋  | 39/51 [00:01<00:00, 24.66it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  82%|████████▏ | 42/51 [00:01<00:00, 24.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 45/51 [00:01<00:00, 23.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  94%|█████████▍| 48/51 [00:01<00:00, 23.77it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:02<00:00, 25.00it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:02<00:00, 24.90it/s]
+(EngineCore pid=354307) Capturing CUDA graphs (decode, FULL):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   8%|▊         | 4/51 [00:00<00:01, 31.38it/s]Capturing CUDA graphs (decode, FULL):  16%|█▌        | 8/51 [00:00<00:01, 32.02it/s]Capturing CUDA graphs (decode, FULL):  24%|██▎       | 12/51 [00:00<00:01, 32.85it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 16/51 [00:00<00:00, 35.13it/s]Capturing CUDA graphs (decode, FULL):  41%|████      | 21/51 [00:00<00:00, 37.65it/s]Capturing CUDA graphs (decode, FULL):  51%|█████     | 26/51 [00:00<00:00, 39.56it/s]Capturing CUDA graphs (decode, FULL):  59%|█████▉    | 30/51 [00:01<00:01, 11.95it/s]Capturing CUDA graphs (decode, FULL):  69%|██████▊   | 35/51 [00:01<00:01, 15.93it/s]Capturing CUDA graphs (decode, FULL):  78%|███████▊  | 40/51 [00:01<00:00, 20.09it/s]Capturing CUDA graphs (decode, FULL):  88%|████████▊ | 45/51 [00:01<00:00, 24.27it/s]Capturing CUDA graphs (decode, FULL):  98%|█████████▊| 50/51 [00:02<00:00, 28.24it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 51/51 [00:02<00:00, 24.54it/s]
+(EngineCore pid=354307) INFO 04-16 21:34:54 [gpu_model_runner.py:6046] Graph capturing finished in 5 secs, took 0.92 GiB
+(EngineCore pid=354307) INFO 04-16 21:34:54 [gpu_worker.py:597] CUDA graph pool memory: 0.92 GiB (actual), 0.84 GiB (estimated), difference: 0.08 GiB (9.1%).
+(EngineCore pid=354307) INFO 04-16 21:34:54 [core.py:283] init engine (profile, create kv cache, warmup model) took 30.21 seconds
+(EngineCore pid=354307) INFO 04-16 21:34:55 [vllm.py:790] Asynchronous scheduling is enabled.
+(APIServer pid=353036) INFO 04-16 21:34:55 [api_server.py:590] Supported tasks: ['generate']
+(APIServer pid=353036) WARNING 04-16 21:34:55 [model.py:1435] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'temperature': 0.6, 'top_p': 0.9}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+(APIServer pid=353036) INFO 04-16 21:34:56 [hf.py:314] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+(APIServer pid=353036) INFO 04-16 21:34:56 [api_server.py:594] Starting vLLM server on http://127.0.0.1:8000
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:37] Available routes are:
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /tokenize, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /detokenize, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /load, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /version, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /health, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /metrics, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/models, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /ping, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /ping, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /invocations, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/chat/completions/batch, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/responses, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/completions, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/messages, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/messages/count_tokens, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+(APIServer pid=353036) INFO 04-16 21:34:56 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+(APIServer pid=353036) INFO:     Started server process [353036]
+(APIServer pid=353036) INFO:     Waiting for application startup.
+(APIServer pid=353036) INFO:     Application startup complete.
+(APIServer pid=353036) INFO:     127.0.0.1:54940 - "GET /health HTTP/1.1" 200 OK
+vLLM ready after 137s
+(APIServer pid=353036) INFO:     127.0.0.1:54954 - "GET /health HTTP/1.1" 200 OK
+21:34:58  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/16/26 21:34:58] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:34:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:35:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:35:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:01  INFO      agent.plan_execute.runner  Planning...
+[92m21:35:02 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:02  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+21:35:06  INFO      agent.plan_execute.runner  Plan has 8 step(s).
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+(APIServer pid=353036) INFO 04-16 21:35:06 [loggers.py:259] Engine 000: Avg prompt throughput: 269.5 tokens/s, Avg generation throughput: 47.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+[04/16/26 21:35:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:35:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:35:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[04/16/26 21:35:09] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:09  INFO      agent.plan_execute.executor  Step 1/8 [iot]: List all sensor IDs available for transformer T-015
+21:35:09  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m21:35:09 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:09  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:10] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:10  INFO      agent.plan_execute.executor  Step 1 OK.
+21:35:10  INFO      agent.plan_execute.executor  Step 2/8 [iot]: Get recent sensor readings for transformer T-015 and each sensor
+21:35:10  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m21:35:10 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:10  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m21:35:12 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:12  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "tr...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:12] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:13  INFO      agent.plan_execute.executor  Step 2 OK.
+21:35:13  INFO      agent.plan_execute.executor  Step 3/8 [tsfm]: Analyze sensor readings to detect anomalies
+21:35:13  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m21:35:13 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:13  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:14 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:14  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "tr...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:15] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:15  INFO      agent.plan_execute.executor  Step 3 OK.
+21:35:15  INFO      agent.plan_execute.executor  Step 4/8 [fmsr]: List all failure modes
+21:35:15  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m21:35:15 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:15  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO 04-16 21:35:16 [loggers.py:259] Engine 000: Avg prompt throughput: 2673.3 tokens/s, Avg generation throughput: 9.8 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.4%
+(APIServer pid=353036) INFO 04-16 21:35:26 [loggers.py:259] Engine 000: Avg prompt throughput: 2752.1 tokens/s, Avg generation throughput: 132.7 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:26 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:26  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "ta...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:27] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:27  INFO      agent.plan_execute.executor  Step 4 OK.
+21:35:27  INFO      agent.plan_execute.executor  Step 5/8 [fmsr]: Search failure modes for probable fault mode
+21:35:27  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m21:35:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:27  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO 04-16 21:35:36 [loggers.py:259] Engine 000: Avg prompt throughput: 2796.9 tokens/s, Avg generation throughput: 110.9 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "qu...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:39  INFO      agent.plan_execute.executor  Step 5 OK.
+21:35:39  INFO      agent.plan_execute.executor  Step 6/8 [fmsr]: Get sensor correlation for probable fault mode
+21:35:39  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m21:35:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:39  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO 04-16 21:35:46 [loggers.py:259] Engine 000: Avg prompt throughput: 2797.0 tokens/s, Avg generation throughput: 110.4 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:50 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:50  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "fa...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:51] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:51  INFO      agent.plan_execute.executor  Step 6 OK.
+21:35:51  INFO      agent.plan_execute.executor  Step 7/8 [tsfm]: Estimate short-term risk over 30 days
+21:35:51  INFO      agent.plan_execute.executor  Step 7: calling LLM to resolve args.
+[92m21:35:51 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:51  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m21:35:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "tr...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[04/16/26 21:35:54] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:54  INFO      agent.plan_execute.executor  Step 7 OK.
+21:35:54  INFO      agent.plan_execute.executor  Step 8/8 [wo]: Create maintenance work order recommendation
+21:35:54  INFO      agent.plan_execute.executor  Step 8: calling LLM to resolve args.
+[92m21:35:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:54  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:56 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:56  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n  "tr...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+(APIServer pid=353036) INFO 04-16 21:35:56 [loggers.py:259] Engine 000: Avg prompt throughput: 5628.3 tokens/s, Avg generation throughput: 73.9 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.3%
+[04/16/26 21:35:56] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+21:35:56  INFO      agent.plan_execute.executor  Step 8 OK.
+21:35:56  INFO      agent.plan_execute.runner  Summarising...
+[92m21:35:56 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+21:35:56  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+(APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[92m21:35:59 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+21:35:59  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+{
+  "question": "Transformer T-015 shows rising load and intermittent over-temperature alerts.\nInvestigate recent sensor behavior, infer probable fault mode, estimate short-term risk\nover 30 days, and issue a maintenance work order recommendation.",
+  "answer": "Based on the analysis, the probable fault mode for Transformer T-015 is Partial Discharge (FM-001), indicated by elevated H2 and CH4 gas levels. The short-term risk over 30 days is estimated to be low, with a projected health index of 0.473 and a confidence level of 0.775. A maintenance work order recommendation has been created to monitor the transformer closely and schedule an inspection within 90 days.\n\n**Maintenance Work Order Recommendation:**\n\n* Work Order ID: WO-0867B972\n* Transformer ID: T-015\n* Issue Description: Transformer T-015 shows rising load and intermittent over-temperature alerts.\n* Priority: High\n* Fault Type: FM-001 (Partial Discharge)\n* Status: Open\n* Estimated Downtime Hours: 48.0\n* Created At: 2026-04-17T01:35:56.828959Z\n* Assigned Technician: None\n* Notes: None",
+  "plan": [
+    {
+      "step": 1,
+      "task": "List all sensor IDs available for transformer T-015",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings"
+    },
+    {
+      "step": 2,
+      "task": "Get recent sensor readings for transformer T-015 and each sensor",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts with keys: timestamp, value, unit"
+    },
+    {
+      "step": 3,
+      "task": "Analyze sensor readings to detect anomalies",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings,"
+    },
+    {
+      "step": 4,
+      "task": "List all failure modes",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: failure_mode_id, name, severity, iec_code,"
+    },
+    {
+      "step": 5,
+      "task": "Search failure modes for probable fault mode",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "List of matching failure mode dicts"
+    },
+    {
+      "step": 6,
+      "task": "Get sensor correlation for probable fault mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "Dict with keys: failure_mode_id, name, key_gases, description,"
+    },
+    {
+      "step": 7,
+      "task": "Estimate short-term risk over 30 days",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Dict with keys: transformer_id, current_rul_days, forecast_date,"
+    },
+    {
+      "step": 8,
+      "task": "Create maintenance work order recommendation",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        7
+      ],
+      "expected_output": "Dict with keys: work_order_id, transformer_id, issue_description,"
+    }
+  ],
+  "trajectory": [
+    {
+      "step": 1,
+      "task": "List all sensor IDs available for transformer T-015",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-015"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Get recent sensor readings for transformer T-015 and each sensor",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "sensor_id": "load_current_a",
+        "start_time": null,
+        "end_time": null,
+        "limit": 720
+      },
+      "response": "{\n  \"timestamp\": \"2024-01-01T00:00:00\",\n  \"value\": 150.744,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T01:00:00\",\n  \"value\": 221.648,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T02:00:00\",\n  \"value\": 311.616,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T03:00:00\",\n  \"value\": 114.199,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T04:00:00\",\n  \"value\": 216.601,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T05:00:00\",\n  \"value\": 199.534,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T06:00:00\",\n  \"value\": 174.672,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T07:00:00\",\n  \"value\": 151.151,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T08:00:00\",\n  \"value\": 269.455,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T09:00:00\",\n  \"value\": 228.899,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T10:00:00\",\n  \"value\": 136.351,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T11:00:00\",\n  \"value\": 177.632,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T12:00:00\",\n  \"value\": 195.303,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T13:00:00\",\n  \"value\": 149.292,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T14:00:00\",\n  \"value\": 223.945,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T15:00:00\",\n  \"value\": 231.478,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T16:00:00\",\n  \"value\": 230.839,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T17:00:00\",\n  \"value\": 310.933,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T18:00:00\",\n  \"value\": 177.664,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T19:00:00\",\n  \"value\": 198.716,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T20:00:00\",\n  \"value\": 196.282,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T21:00:00\",\n  \"value\": 258.458,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T22:00:00\",\n  \"value\": 253.532,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T23:00:00\",\n  \"value\": 169.118,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T00:00:00\",\n  \"value\": 285.032,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T01:00:00\",\n  \"value\": 179.14,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T02:00:00\",\n  \"value\": 258.425,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T03:00:00\",\n  \"value\": 255.711,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T04:00:00\",\n  \"value\": 237.91,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T05:00:00\",\n  \"value\": 205.178,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T06:00:00\",\n  \"value\": 206.008,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T07:00:00\",\n  \"value\": 241.657,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T08:00:00\",\n  \"value\": 243.685,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T09:00:00\",\n  \"value\": 251.93,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T10:00:00\",\n  \"value\": 251.947,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T11:00:00\",\n  \"value\": 235.409,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T12:00:00\",\n  \"value\": 283.601,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T13:00:00\",\n  \"value\": 192.99,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T14:00:00\",\n  \"value\": 221.911,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T15:00:00\",\n  \"value\": 194.879,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T16:00:00\",\n  \"value\": 329.962,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T17:00:00\",\n  \"value\": 254.394,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T18:00:00\",\n  \"value\": 265.601,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T19:00:00\",\n  \"value\": 240.086,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T20:00:00\",\n  \"value\": 217.46,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T21:00:00\",\n  \"value\": 340.184,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T22:00:00\",\n  \"value\": 274.697,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-02T23:00:00\",\n  \"value\": 205.566,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T00:00:00\",\n  \"value\": 207.759,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T01:00:00\",\n  \"value\": 229.99,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T02:00:00\",\n  \"value\": 195.663,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T03:00:00\",\n  \"value\": 204.357,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T04:00:00\",\n  \"value\": 151.613,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T05:00:00\",\n  \"value\": 112.207,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T06:00:00\",\n  \"value\": 308.962,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T07:00:00\",\n  \"value\": 197.217,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T08:00:00\",\n  \"value\": 206.32,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T09:00:00\",\n  \"value\": 223.107,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T10:00:00\",\n  \"value\": 251.32,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T11:00:00\",\n  \"value\": 254.915,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T12:00:00\",\n  \"value\": 266.31,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T13:00:00\",\n  \"value\": 245.87,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T14:00:00\",\n  \"value\": 207.941,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T15:00:00\",\n  \"value\": 276.907,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T16:00:00\",\n  \"value\": 211.965,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T17:00:00\",\n  \"value\": 266.423,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T18:00:00\",\n  \"value\": 150.708,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T19:00:00\",\n  \"value\": 278.562,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T20:00:00\",\n  \"value\": 179.881,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T21:00:00\",\n  \"value\": 154.749,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T22:00:00\",\n  \"value\": 161.542,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-03T23:00:00\",\n  \"value\": 229.129,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T00:00:00\",\n  \"value\": 322.867,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T01:00:00\",\n  \"value\": 211.177,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T02:00:00\",\n  \"value\": 214.946,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T03:00:00\",\n  \"value\": 254.579,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T04:00:00\",\n  \"value\": 194.089,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T05:00:00\",\n  \"value\": 213.267,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T06:00:00\",\n  \"value\": 204.316,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T07:00:00\",\n  \"value\": 308.527,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T08:00:00\",\n  \"value\": 223.403,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T09:00:00\",\n  \"value\": 253.689,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T10:00:00\",\n  \"value\": 187.951,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T11:00:00\",\n  \"value\": 168.747,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T12:00:00\",\n  \"value\": 249.875,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T13:00:00\",\n  \"value\": 231.378,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T14:00:00\",\n  \"value\": 266.354,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T15:00:00\",\n  \"value\": 180.095,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T16:00:00\",\n  \"value\": 215.84,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T17:00:00\",\n  \"value\": 162.026,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T18:00:00\",\n  \"value\": 197.751,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T19:00:00\",\n  \"value\": 154.959,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T20:00:00\",\n  \"value\": 207.204,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T21:00:00\",\n  \"value\": 278.853,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T22:00:00\",\n  \"value\": 181.383,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-04T23:00:00\",\n  \"value\": 180.817,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T00:00:00\",\n  \"value\": 212.486,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T01:00:00\",\n  \"value\": 211.716,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T02:00:00\",\n  \"value\": 254.653,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T03:00:00\",\n  \"value\": 161.544,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T04:00:00\",\n  \"value\": 107.329,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T05:00:00\",\n  \"value\": 222.858,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T06:00:00\",\n  \"value\": 296.08,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T07:00:00\",\n  \"value\": 211.275,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T08:00:00\",\n  \"value\": 237.82,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T09:00:00\",\n  \"value\": 216.42,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T10:00:00\",\n  \"value\": 253.549,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T11:00:00\",\n  \"value\": 206.753,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T12:00:00\",\n  \"value\": 216.684,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T13:00:00\",\n  \"value\": 293.717,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T14:00:00\",\n  \"value\": 271.483,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T15:00:00\",\n  \"value\": 188.871,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T16:00:00\",\n  \"value\": 190.046,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T17:00:00\",\n  \"value\": 193.178,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T18:00:00\",\n  \"value\": 169.427,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T19:00:00\",\n  \"value\": 195.146,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T20:00:00\",\n  \"value\": 214.533,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T21:00:00\",\n  \"value\": 185.196,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T22:00:00\",\n  \"value\": 243.015,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-05T23:00:00\",\n  \"value\": 144.69,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T00:00:00\",\n  \"value\": 166.904,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T01:00:00\",\n  \"value\": 249.661,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T02:00:00\",\n  \"value\": 305.541,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T03:00:00\",\n  \"value\": 231.379,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T04:00:00\",\n  \"value\": 182.46,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T05:00:00\",\n  \"value\": 169.91,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T06:00:00\",\n  \"value\": 203.114,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T07:00:00\",\n  \"value\": 276.996,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T08:00:00\",\n  \"value\": 243.14,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T09:00:00\",\n  \"value\": 164.333,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T10:00:00\",\n  \"value\": 236.306,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T11:00:00\",\n  \"value\": 284.562,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T12:00:00\",\n  \"value\": 273.137,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T13:00:00\",\n  \"value\": 279.875,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T14:00:00\",\n  \"value\": 256.012,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T15:00:00\",\n  \"value\": 162.3,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T16:00:00\",\n  \"value\": 183.668,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T17:00:00\",\n  \"value\": 298.28,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T18:00:00\",\n  \"value\": 204.696,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T19:00:00\",\n  \"value\": 134.656,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T20:00:00\",\n  \"value\": 247.287,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T21:00:00\",\n  \"value\": 267.793,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T22:00:00\",\n  \"value\": 216.382,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-06T23:00:00\",\n  \"value\": 244.739,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T00:00:00\",\n  \"value\": 182.732,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T01:00:00\",\n  \"value\": 199.106,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T02:00:00\",\n  \"value\": 138.6,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T03:00:00\",\n  \"value\": 171.69,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T04:00:00\",\n  \"value\": 284.652,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T05:00:00\",\n  \"value\": 70.835,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T06:00:00\",\n  \"value\": 202.569,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T07:00:00\",\n  \"value\": 195.981,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T08:00:00\",\n  \"value\": 246.752,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T09:00:00\",\n  \"value\": 123.999,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T10:00:00\",\n  \"value\": 185.645,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T11:00:00\",\n  \"value\": 193.52,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T12:00:00\",\n  \"value\": 238.236,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T13:00:00\",\n  \"value\": 219.566,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T14:00:00\",\n  \"value\": 145.479,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T15:00:00\",\n  \"value\": 204.755,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T16:00:00\",\n  \"value\": 185.016,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T17:00:00\",\n  \"value\": 240.858,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T18:00:00\",\n  \"value\": 208.923,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T19:00:00\",\n  \"value\": 298.686,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T20:00:00\",\n  \"value\": 190.123,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T21:00:00\",\n  \"value\": 194.446,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T22:00:00\",\n  \"value\": 196.057,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-07T23:00:00\",\n  \"value\": 211.315,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T00:00:00\",\n  \"value\": 257.88,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T01:00:00\",\n  \"value\": 200.101,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T02:00:00\",\n  \"value\": 202.204,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T03:00:00\",\n  \"value\": 236.066,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T04:00:00\",\n  \"value\": 177.414,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T05:00:00\",\n  \"value\": 248.382,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T06:00:00\",\n  \"value\": 202.993,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T07:00:00\",\n  \"value\": 179.374,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T08:00:00\",\n  \"value\": 137.238,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T09:00:00\",\n  \"value\": 170.407,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T10:00:00\",\n  \"value\": 210.702,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T11:00:00\",\n  \"value\": 215.843,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T12:00:00\",\n  \"value\": 207.211,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T13:00:00\",\n  \"value\": 153.406,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T14:00:00\",\n  \"value\": 210.468,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T15:00:00\",\n  \"value\": 150.113,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T16:00:00\",\n  \"value\": 162.854,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T17:00:00\",\n  \"value\": 268.83,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T18:00:00\",\n  \"value\": 213.918,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T19:00:00\",\n  \"value\": 238.989,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T20:00:00\",\n  \"value\": 283.011,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T21:00:00\",\n  \"value\": 215.976,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T22:00:00\",\n  \"value\": 261.789,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-08T23:00:00\",\n  \"value\": 235.981,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T00:00:00\",\n  \"value\": 186.177,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T01:00:00\",\n  \"value\": 212.04,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T02:00:00\",\n  \"value\": 184.724,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T03:00:00\",\n  \"value\": 246.04,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T04:00:00\",\n  \"value\": 263.394,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T05:00:00\",\n  \"value\": 156.994,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T06:00:00\",\n  \"value\": 178.948,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T07:00:00\",\n  \"value\": 202.414,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T08:00:00\",\n  \"value\": 181.819,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T09:00:00\",\n  \"value\": 207.955,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T10:00:00\",\n  \"value\": 234.835,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T11:00:00\",\n  \"value\": 276.374,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T12:00:00\",\n  \"value\": 195.748,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T13:00:00\",\n  \"value\": 193.649,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T14:00:00\",\n  \"value\": 235.235,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T15:00:00\",\n  \"value\": 216.16,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T16:00:00\",\n  \"value\": 148.323,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T17:00:00\",\n  \"value\": 179.646,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T18:00:00\",\n  \"value\": 202.672,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T19:00:00\",\n  \"value\": 253.371,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T20:00:00\",\n  \"value\": 268.305,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T21:00:00\",\n  \"value\": 170.583,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T22:00:00\",\n  \"value\": 183.65,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-09T23:00:00\",\n  \"value\": 257.117,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T00:00:00\",\n  \"value\": 197.486,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T01:00:00\",\n  \"value\": 234.334,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T02:00:00\",\n  \"value\": 209.65,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T03:00:00\",\n  \"value\": 219.653,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T04:00:00\",\n  \"value\": 199.563,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T05:00:00\",\n  \"value\": 268.444,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T06:00:00\",\n  \"value\": 148.374,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T07:00:00\",\n  \"value\": 200.337,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T08:00:00\",\n  \"value\": 264.256,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T09:00:00\",\n  \"value\": 208.574,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T10:00:00\",\n  \"value\": 212.935,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T11:00:00\",\n  \"value\": 261.022,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T12:00:00\",\n  \"value\": 238.66,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T13:00:00\",\n  \"value\": 255.814,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T14:00:00\",\n  \"value\": 271.6,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T15:00:00\",\n  \"value\": 152.761,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T16:00:00\",\n  \"value\": 197.093,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T17:00:00\",\n  \"value\": 180.568,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T18:00:00\",\n  \"value\": 232.142,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T19:00:00\",\n  \"value\": 264.292,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T20:00:00\",\n  \"value\": 104.94,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T21:00:00\",\n  \"value\": 146.192,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T22:00:00\",\n  \"value\": 124.103,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-10T23:00:00\",\n  \"value\": 178.424,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T00:00:00\",\n  \"value\": 218.511,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T01:00:00\",\n  \"value\": 289.275,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T02:00:00\",\n  \"value\": 157.431,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T03:00:00\",\n  \"value\": 323.895,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T04:00:00\",\n  \"value\": 239.681,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T05:00:00\",\n  \"value\": 241.324,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T06:00:00\",\n  \"value\": 248.159,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T07:00:00\",\n  \"value\": 152.329,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T08:00:00\",\n  \"value\": 189.298,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T09:00:00\",\n  \"value\": 169.844,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T10:00:00\",\n  \"value\": 244.804,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T11:00:00\",\n  \"value\": 174.904,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T12:00:00\",\n  \"value\": 205.946,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T13:00:00\",\n  \"value\": 185.56,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T14:00:00\",\n  \"value\": 279.802,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T15:00:00\",\n  \"value\": 188.09,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T16:00:00\",\n  \"value\": 165.947,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T17:00:00\",\n  \"value\": 237.116,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T18:00:00\",\n  \"value\": 212.639,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T19:00:00\",\n  \"value\": 278.626,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T20:00:00\",\n  \"value\": 229.286,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T21:00:00\",\n  \"value\": 227.783,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T22:00:00\",\n  \"value\": 255.012,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-11T23:00:00\",\n  \"value\": 236.192,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T00:00:00\",\n  \"value\": 251.139,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T01:00:00\",\n  \"value\": 247.367,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T02:00:00\",\n  \"value\": 200.744,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T03:00:00\",\n  \"value\": 161.462,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T04:00:00\",\n  \"value\": 207.54,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T05:00:00\",\n  \"value\": 125.217,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T06:00:00\",\n  \"value\": 182.343,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T07:00:00\",\n  \"value\": 197.742,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T08:00:00\",\n  \"value\": 273.924,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T09:00:00\",\n  \"value\": 208.708,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T10:00:00\",\n  \"value\": 294.458,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T11:00:00\",\n  \"value\": 236.751,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T12:00:00\",\n  \"value\": 142.202,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T13:00:00\",\n  \"value\": 267.177,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T14:00:00\",\n  \"value\": 262.502,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T15:00:00\",\n  \"value\": 140.093,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T16:00:00\",\n  \"value\": 248.249,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T17:00:00\",\n  \"value\": 280.589,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T18:00:00\",\n  \"value\": 119.163,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T19:00:00\",\n  \"value\": 167.129,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T20:00:00\",\n  \"value\": 258.39,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T21:00:00\",\n  \"value\": 207.702,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T22:00:00\",\n  \"value\": 282.434,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-12T23:00:00\",\n  \"value\": 258.574,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T00:00:00\",\n  \"value\": 253.535,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T01:00:00\",\n  \"value\": 268.784,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T02:00:00\",\n  \"value\": 179.397,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T03:00:00\",\n  \"value\": 202.314,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T04:00:00\",\n  \"value\": 303.836,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T05:00:00\",\n  \"value\": 200.499,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T06:00:00\",\n  \"value\": 265.508,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T07:00:00\",\n  \"value\": 207.364,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T08:00:00\",\n  \"value\": 181.79,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T09:00:00\",\n  \"value\": 171.853,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T10:00:00\",\n  \"value\": 241.162,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T11:00:00\",\n  \"value\": 274.965,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T12:00:00\",\n  \"value\": 238.303,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T13:00:00\",\n  \"value\": 227.738,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T14:00:00\",\n  \"value\": 164.621,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T15:00:00\",\n  \"value\": 216.349,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T16:00:00\",\n  \"value\": 224.43,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T17:00:00\",\n  \"value\": 176.717,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T18:00:00\",\n  \"value\": 235.853,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T19:00:00\",\n  \"value\": 185.318,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T20:00:00\",\n  \"value\": 198.664,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T21:00:00\",\n  \"value\": 251.146,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T22:00:00\",\n  \"value\": 288.301,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-13T23:00:00\",\n  \"value\": 284.381,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T00:00:00\",\n  \"value\": 210.01,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T01:00:00\",\n  \"value\": 241.102,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T02:00:00\",\n  \"value\": 244.996,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T03:00:00\",\n  \"value\": 244.732,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T04:00:00\",\n  \"value\": 222.215,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T05:00:00\",\n  \"value\": 274.835,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T06:00:00\",\n  \"value\": 188.944,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T07:00:00\",\n  \"value\": 165.198,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T08:00:00\",\n  \"value\": 232.486,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T09:00:00\",\n  \"value\": 202.558,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T10:00:00\",\n  \"value\": 302.846,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T11:00:00\",\n  \"value\": 195.648,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T12:00:00\",\n  \"value\": 263.124,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T13:00:00\",\n  \"value\": 237.912,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T14:00:00\",\n  \"value\": 153.65,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T15:00:00\",\n  \"value\": 243.331,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T16:00:00\",\n  \"value\": 187.303,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T17:00:00\",\n  \"value\": 324.756,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T18:00:00\",\n  \"value\": 181.124,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T19:00:00\",\n  \"value\": 175.131,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T20:00:00\",\n  \"value\": 118.452,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T21:00:00\",\n  \"value\": 182.195,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T22:00:00\",\n  \"value\": 249.347,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-14T23:00:00\",\n  \"value\": 170.246,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T00:00:00\",\n  \"value\": 239.833,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T01:00:00\",\n  \"value\": 228.28,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T02:00:00\",\n  \"value\": 172.767,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T03:00:00\",\n  \"value\": 211.315,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T04:00:00\",\n  \"value\": 174.301,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T05:00:00\",\n  \"value\": 255.323,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T06:00:00\",\n  \"value\": 134.684,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T07:00:00\",\n  \"value\": 249.842,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T08:00:00\",\n  \"value\": 184.185,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T09:00:00\",\n  \"value\": 221.915,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T10:00:00\",\n  \"value\": 237.634,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T11:00:00\",\n  \"value\": 223.02,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T12:00:00\",\n  \"value\": 309.449,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T13:00:00\",\n  \"value\": 197.871,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T14:00:00\",\n  \"value\": 155.084,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T15:00:00\",\n  \"value\": 314.448,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T16:00:00\",\n  \"value\": 233.384,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T17:00:00\",\n  \"value\": 223.61,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T18:00:00\",\n  \"value\": 317.629,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T19:00:00\",\n  \"value\": 157.967,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T20:00:00\",\n  \"value\": 213.149,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T21:00:00\",\n  \"value\": 168.098,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T22:00:00\",\n  \"value\": 212.073,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-15T23:00:00\",\n  \"value\": 152.609,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T00:00:00\",\n  \"value\": 221.139,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T01:00:00\",\n  \"value\": 217.897,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T02:00:00\",\n  \"value\": 215.612,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T03:00:00\",\n  \"value\": 115.096,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T04:00:00\",\n  \"value\": 251.787,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T05:00:00\",\n  \"value\": 206.892,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T06:00:00\",\n  \"value\": 335.576,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T07:00:00\",\n  \"value\": 196.191,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T08:00:00\",\n  \"value\": 188.778,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T09:00:00\",\n  \"value\": 224.692,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T10:00:00\",\n  \"value\": 161.934,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T11:00:00\",\n  \"value\": 272.638,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T12:00:00\",\n  \"value\": 175.494,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T13:00:00\",\n  \"value\": 180.355,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T14:00:00\",\n  \"value\": 255.525,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T15:00:00\",\n  \"value\": 229.533,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T16:00:00\",\n  \"value\": 228.673,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T17:00:00\",\n  \"value\": 158.811,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T18:00:00\",\n  \"value\": 263.709,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T19:00:00\",\n  \"value\": 173.593,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T20:00:00\",\n  \"value\": 142.373,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T21:00:00\",\n  \"value\": 236.636,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T22:00:00\",\n  \"value\": 210.33,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-16T23:00:00\",\n  \"value\": 209.237,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T00:00:00\",\n  \"value\": 250.111,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T01:00:00\",\n  \"value\": 205.613,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T02:00:00\",\n  \"value\": 141.286,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T03:00:00\",\n  \"value\": 204.713,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T04:00:00\",\n  \"value\": 232.954,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T05:00:00\",\n  \"value\": 228.021,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T06:00:00\",\n  \"value\": 211.941,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T07:00:00\",\n  \"value\": 328.497,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T08:00:00\",\n  \"value\": 294.685,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T09:00:00\",\n  \"value\": 165.964,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T10:00:00\",\n  \"value\": 158.377,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T11:00:00\",\n  \"value\": 279.671,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T12:00:00\",\n  \"value\": 267.942,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T13:00:00\",\n  \"value\": 286.579,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T14:00:00\",\n  \"value\": 200.013,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T15:00:00\",\n  \"value\": 212.784,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T16:00:00\",\n  \"value\": 139.977,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T17:00:00\",\n  \"value\": 226.477,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T18:00:00\",\n  \"value\": 191.257,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T19:00:00\",\n  \"value\": 184.871,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T20:00:00\",\n  \"value\": 261.568,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T21:00:00\",\n  \"value\": 212.984,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T22:00:00\",\n  \"value\": 257.116,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-17T23:00:00\",\n  \"value\": 215.144,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T00:00:00\",\n  \"value\": 244.668,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T01:00:00\",\n  \"value\": 160.937,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T02:00:00\",\n  \"value\": 175.586,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T03:00:00\",\n  \"value\": 240.401,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T04:00:00\",\n  \"value\": 296.162,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T05:00:00\",\n  \"value\": 240.985,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T06:00:00\",\n  \"value\": 220.694,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T07:00:00\",\n  \"value\": 287.604,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T08:00:00\",\n  \"value\": 210.186,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T09:00:00\",\n  \"value\": 184.155,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T10:00:00\",\n  \"value\": 220.31,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T11:00:00\",\n  \"value\": 236.774,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T12:00:00\",\n  \"value\": 163.019,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T13:00:00\",\n  \"value\": 225.809,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T14:00:00\",\n  \"value\": 142.407,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T15:00:00\",\n  \"value\": 206.477,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T16:00:00\",\n  \"value\": 212.952,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T17:00:00\",\n  \"value\": 218.549,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T18:00:00\",\n  \"value\": 131.889,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T19:00:00\",\n  \"value\": 224.523,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T20:00:00\",\n  \"value\": 259.326,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T21:00:00\",\n  \"value\": 283.363,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T22:00:00\",\n  \"value\": 285.382,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-18T23:00:00\",\n  \"value\": 221.142,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T00:00:00\",\n  \"value\": 331.535,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T01:00:00\",\n  \"value\": 185.796,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T02:00:00\",\n  \"value\": 187.223,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T03:00:00\",\n  \"value\": 220.814,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T04:00:00\",\n  \"value\": 257.223,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T05:00:00\",\n  \"value\": 248.947,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T06:00:00\",\n  \"value\": 113.426,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T07:00:00\",\n  \"value\": 176.608,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T08:00:00\",\n  \"value\": 254.523,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T09:00:00\",\n  \"value\": 180.011,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T10:00:00\",\n  \"value\": 214.207,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T11:00:00\",\n  \"value\": 236.16,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T12:00:00\",\n  \"value\": 241.764,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T13:00:00\",\n  \"value\": 258.731,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T14:00:00\",\n  \"value\": 277.2,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T15:00:00\",\n  \"value\": 248.466,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T16:00:00\",\n  \"value\": 164.764,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T17:00:00\",\n  \"value\": 246.39,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T18:00:00\",\n  \"value\": 268.679,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T19:00:00\",\n  \"value\": 240.407,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T20:00:00\",\n  \"value\": 278.038,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T21:00:00\",\n  \"value\": 230.69,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T22:00:00\",\n  \"value\": 214.285,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-19T23:00:00\",\n  \"value\": 181.884,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T00:00:00\",\n  \"value\": 311.545,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T01:00:00\",\n  \"value\": 172.961,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T02:00:00\",\n  \"value\": 219.785,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T03:00:00\",\n  \"value\": 203.967,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T04:00:00\",\n  \"value\": 159.961,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T05:00:00\",\n  \"value\": 259.968,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T06:00:00\",\n  \"value\": 242.453,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T07:00:00\",\n  \"value\": 230.979,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T08:00:00\",\n  \"value\": 191.768,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T09:00:00\",\n  \"value\": 245.352,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T10:00:00\",\n  \"value\": 208.25,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T11:00:00\",\n  \"value\": 241.646,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T12:00:00\",\n  \"value\": 284.626,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T13:00:00\",\n  \"value\": 110.039,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T14:00:00\",\n  \"value\": 265.096,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T15:00:00\",\n  \"value\": 326.806,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T16:00:00\",\n  \"value\": 297.438,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T17:00:00\",\n  \"value\": 254.784,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T18:00:00\",\n  \"value\": 275.055,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T19:00:00\",\n  \"value\": 181.768,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T20:00:00\",\n  \"value\": 230.815,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T21:00:00\",\n  \"value\": 213.251,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T22:00:00\",\n  \"value\": 198.978,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-20T23:00:00\",\n  \"value\": 264.473,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T00:00:00\",\n  \"value\": 211.113,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T01:00:00\",\n  \"value\": 136.556,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T02:00:00\",\n  \"value\": 239.731,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T03:00:00\",\n  \"value\": 218.752,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T04:00:00\",\n  \"value\": 251.191,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T05:00:00\",\n  \"value\": 201.563,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T06:00:00\",\n  \"value\": 142.473,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T07:00:00\",\n  \"value\": 176.154,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T08:00:00\",\n  \"value\": 178.81,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T09:00:00\",\n  \"value\": 173.756,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T10:00:00\",\n  \"value\": 194.68,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T11:00:00\",\n  \"value\": 252.726,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T12:00:00\",\n  \"value\": 157.844,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T13:00:00\",\n  \"value\": 259.737,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T14:00:00\",\n  \"value\": 162.862,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T15:00:00\",\n  \"value\": 202.849,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T16:00:00\",\n  \"value\": 218.396,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T17:00:00\",\n  \"value\": 206.514,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T18:00:00\",\n  \"value\": 247.984,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T19:00:00\",\n  \"value\": 215.122,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T20:00:00\",\n  \"value\": 212.94,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T21:00:00\",\n  \"value\": 113.063,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T22:00:00\",\n  \"value\": 238.034,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-21T23:00:00\",\n  \"value\": 304.54,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T00:00:00\",\n  \"value\": 197.863,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T01:00:00\",\n  \"value\": 249.722,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T02:00:00\",\n  \"value\": 182.928,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T03:00:00\",\n  \"value\": 264.343,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T04:00:00\",\n  \"value\": 243.353,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T05:00:00\",\n  \"value\": 203.504,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T06:00:00\",\n  \"value\": 200.539,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T07:00:00\",\n  \"value\": 249.041,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T08:00:00\",\n  \"value\": 221.841,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T09:00:00\",\n  \"value\": 164.588,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T10:00:00\",\n  \"value\": 151.238,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T11:00:00\",\n  \"value\": 246.471,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T12:00:00\",\n  \"value\": 185.661,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T13:00:00\",\n  \"value\": 221.587,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T14:00:00\",\n  \"value\": 246.464,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T15:00:00\",\n  \"value\": 165.889,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T16:00:00\",\n  \"value\": 174.36,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T17:00:00\",\n  \"value\": 293.019,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T18:00:00\",\n  \"value\": 201.447,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T19:00:00\",\n  \"value\": 265.855,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T20:00:00\",\n  \"value\": 332.827,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T21:00:00\",\n  \"value\": 230.764,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T22:00:00\",\n  \"value\": 181.209,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-22T23:00:00\",\n  \"value\": 225.716,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T00:00:00\",\n  \"value\": 211.505,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T01:00:00\",\n  \"value\": 223.021,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T02:00:00\",\n  \"value\": 252.269,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T03:00:00\",\n  \"value\": 257.422,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T04:00:00\",\n  \"value\": 129.786,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T05:00:00\",\n  \"value\": 273.548,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T06:00:00\",\n  \"value\": 232.314,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T07:00:00\",\n  \"value\": 194.19,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T08:00:00\",\n  \"value\": 253.037,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T09:00:00\",\n  \"value\": 172.729,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T10:00:00\",\n  \"value\": 174.826,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T11:00:00\",\n  \"value\": 267.654,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T12:00:00\",\n  \"value\": 223.016,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T13:00:00\",\n  \"value\": 290.546,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T14:00:00\",\n  \"value\": 189.124,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T15:00:00\",\n  \"value\": 233.11,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T16:00:00\",\n  \"value\": 237.433,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T17:00:00\",\n  \"value\": 238.265,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T18:00:00\",\n  \"value\": 247.934,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T19:00:00\",\n  \"value\": 240.683,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T20:00:00\",\n  \"value\": 220.863,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T21:00:00\",\n  \"value\": 132.628,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T22:00:00\",\n  \"value\": 258.888,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-23T23:00:00\",\n  \"value\": 113.179,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T00:00:00\",\n  \"value\": 164.483,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T01:00:00\",\n  \"value\": 188.289,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T02:00:00\",\n  \"value\": 260.644,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T03:00:00\",\n  \"value\": 210.0,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T04:00:00\",\n  \"value\": 304.373,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T05:00:00\",\n  \"value\": 157.594,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T06:00:00\",\n  \"value\": 170.516,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T07:00:00\",\n  \"value\": 118.73,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T08:00:00\",\n  \"value\": 168.395,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T09:00:00\",\n  \"value\": 191.532,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T10:00:00\",\n  \"value\": 285.922,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T11:00:00\",\n  \"value\": 267.06,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T12:00:00\",\n  \"value\": 230.73,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T13:00:00\",\n  \"value\": 205.994,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T14:00:00\",\n  \"value\": 254.413,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T15:00:00\",\n  \"value\": 277.274,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T16:00:00\",\n  \"value\": 190.897,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T17:00:00\",\n  \"value\": 195.375,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T18:00:00\",\n  \"value\": 200.584,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T19:00:00\",\n  \"value\": 141.948,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T20:00:00\",\n  \"value\": 274.492,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T21:00:00\",\n  \"value\": 193.746,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T22:00:00\",\n  \"value\": 206.979,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-24T23:00:00\",\n  \"value\": 285.519,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T00:00:00\",\n  \"value\": 195.718,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T01:00:00\",\n  \"value\": 276.973,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T02:00:00\",\n  \"value\": 141.332,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T03:00:00\",\n  \"value\": 245.265,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T04:00:00\",\n  \"value\": 199.954,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T05:00:00\",\n  \"value\": 148.927,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T06:00:00\",\n  \"value\": 168.902,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T07:00:00\",\n  \"value\": 226.318,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T08:00:00\",\n  \"value\": 176.802,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T09:00:00\",\n  \"value\": 237.235,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T10:00:00\",\n  \"value\": 186.46,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T11:00:00\",\n  \"value\": 147.125,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T12:00:00\",\n  \"value\": 263.641,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T13:00:00\",\n  \"value\": 233.248,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T14:00:00\",\n  \"value\": 138.865,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T15:00:00\",\n  \"value\": 249.387,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T16:00:00\",\n  \"value\": 225.499,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T17:00:00\",\n  \"value\": 200.579,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T18:00:00\",\n  \"value\": 202.363,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T19:00:00\",\n  \"value\": 280.319,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T20:00:00\",\n  \"value\": 234.36,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T21:00:00\",\n  \"value\": 282.512,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T22:00:00\",\n  \"value\": 241.41,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-25T23:00:00\",\n  \"value\": 230.568,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T00:00:00\",\n  \"value\": 185.922,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T01:00:00\",\n  \"value\": 227.101,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T02:00:00\",\n  \"value\": 265.945,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T03:00:00\",\n  \"value\": 223.655,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T04:00:00\",\n  \"value\": 307.138,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T05:00:00\",\n  \"value\": 265.878,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T06:00:00\",\n  \"value\": 166.079,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T07:00:00\",\n  \"value\": 198.179,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T08:00:00\",\n  \"value\": 250.3,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T09:00:00\",\n  \"value\": 151.287,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T10:00:00\",\n  \"value\": 214.76,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T11:00:00\",\n  \"value\": 178.031,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T12:00:00\",\n  \"value\": 221.832,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T13:00:00\",\n  \"value\": 178.391,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T14:00:00\",\n  \"value\": 267.404,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T15:00:00\",\n  \"value\": 197.086,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T16:00:00\",\n  \"value\": 249.909,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T17:00:00\",\n  \"value\": 152.791,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T18:00:00\",\n  \"value\": 206.289,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T19:00:00\",\n  \"value\": 162.42,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T20:00:00\",\n  \"value\": 273.702,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T21:00:00\",\n  \"value\": 185.152,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T22:00:00\",\n  \"value\": 216.073,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-26T23:00:00\",\n  \"value\": 235.836,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T00:00:00\",\n  \"value\": 186.41,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T01:00:00\",\n  \"value\": 165.986,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T02:00:00\",\n  \"value\": 228.352,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T03:00:00\",\n  \"value\": 133.048,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T04:00:00\",\n  \"value\": 280.381,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T05:00:00\",\n  \"value\": 213.849,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T06:00:00\",\n  \"value\": 153.663,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T07:00:00\",\n  \"value\": 208.091,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T08:00:00\",\n  \"value\": 246.001,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T09:00:00\",\n  \"value\": 183.232,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T10:00:00\",\n  \"value\": 132.61,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T11:00:00\",\n  \"value\": 214.449,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T12:00:00\",\n  \"value\": 254.253,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T13:00:00\",\n  \"value\": 230.487,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T14:00:00\",\n  \"value\": 238.125,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T15:00:00\",\n  \"value\": 263.053,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T16:00:00\",\n  \"value\": 291.233,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T17:00:00\",\n  \"value\": 98.796,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T18:00:00\",\n  \"value\": 160.387,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T19:00:00\",\n  \"value\": 227.555,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T20:00:00\/insomnia001/home/tr2828/smartgrid/.venv312/lib/python3.12/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...one, 'reasoning': None}), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+",\n  \"value\": 232.468,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T21:00:00\",\n  \"value\": 150.302,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T22:00:00\",\n  \"value\": 184.802,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-27T23:00:00\",\n  \"value\": 297.493,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T00:00:00\",\n  \"value\": 204.067,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T01:00:00\",\n  \"value\": 229.465,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T02:00:00\",\n  \"value\": 300.587,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T03:00:00\",\n  \"value\": 224.238,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T04:00:00\",\n  \"value\": 255.432,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T05:00:00\",\n  \"value\": 245.697,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T06:00:00\",\n  \"value\": 204.883,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T07:00:00\",\n  \"value\": 202.311,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T08:00:00\",\n  \"value\": 273.172,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T09:00:00\",\n  \"value\": 219.637,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T10:00:00\",\n  \"value\": 174.602,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T11:00:00\",\n  \"value\": 268.704,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T12:00:00\",\n  \"value\": 91.533,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T13:00:00\",\n  \"value\": 291.023,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T14:00:00\",\n  \"value\": 211.605,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T15:00:00\",\n  \"value\": 220.359,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T16:00:00\",\n  \"value\": 223.736,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T17:00:00\",\n  \"value\": 279.881,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T18:00:00\",\n  \"value\": 227.838,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T19:00:00\",\n  \"value\": 218.979,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T20:00:00\",\n  \"value\": 177.145,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T21:00:00\",\n  \"value\": 187.887,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T22:00:00\",\n  \"value\": 248.893,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-28T23:00:00\",\n  \"value\": 230.021,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T00:00:00\",\n  \"value\": 295.92,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T01:00:00\",\n  \"value\": 183.332,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T02:00:00\",\n  \"value\": 168.076,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T03:00:00\",\n  \"value\": 233.49,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T04:00:00\",\n  \"value\": 216.156,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T05:00:00\",\n  \"value\": 166.067,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T06:00:00\",\n  \"value\": 196.644,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T07:00:00\",\n  \"value\": 251.715,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T08:00:00\",\n  \"value\": 160.589,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T09:00:00\",\n  \"value\": 168.81,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T10:00:00\",\n  \"value\": 187.228,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T11:00:00\",\n  \"value\": 188.153,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T12:00:00\",\n  \"value\": 255.687,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T13:00:00\",\n  \"value\": 195.015,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T14:00:00\",\n  \"value\": 293.413,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T15:00:00\",\n  \"value\": 173.064,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T16:00:00\",\n  \"value\": 236.418,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T17:00:00\",\n  \"value\": 218.194,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T18:00:00\",\n  \"value\": 220.144,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T19:00:00\",\n  \"value\": 109.217,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T20:00:00\",\n  \"value\": 170.616,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T21:00:00\",\n  \"value\": 212.466,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T22:00:00\",\n  \"value\": 131.37,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-29T23:00:00\",\n  \"value\": 88.46,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T00:00:00\",\n  \"value\": 164.438,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T01:00:00\",\n  \"value\": 235.179,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T02:00:00\",\n  \"value\": 241.475,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T03:00:00\",\n  \"value\": 164.939,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T04:00:00\",\n  \"value\": 210.939,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T05:00:00\",\n  \"value\": 239.066,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T06:00:00\",\n  \"value\": 279.629,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T07:00:00\",\n  \"value\": 277.878,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T08:00:00\",\n  \"value\": 261.008,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T09:00:00\",\n  \"value\": 195.732,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T10:00:00\",\n  \"value\": 217.782,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T11:00:00\",\n  \"value\": 223.207,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T12:00:00\",\n  \"value\": 210.254,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T13:00:00\",\n  \"value\": 158.055,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T14:00:00\",\n  \"value\": 284.849,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T15:00:00\",\n  \"value\": 239.476,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T16:00:00\",\n  \"value\": 259.151,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T17:00:00\",\n  \"value\": 249.722,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T18:00:00\",\n  \"value\": 200.496,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T19:00:00\",\n  \"value\": 152.542,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T20:00:00\",\n  \"value\": 253.784,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T21:00:00\",\n  \"value\": 250.889,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T22:00:00\",\n  \"value\": 233.035,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-30T23:00:00\",\n  \"value\": 316.86,\n  \"unit\": \"A\"\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "Analyze sensor readings to detect anomalies",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "sensor_id": "load_current_a",
+        "window_size": 720,
+        "z_threshold": 2.0
+      },
+      "response": "{\n  \"transformer_id\": \"T-015\",\n  \"sensor_id\": \"load_current_a\",\n  \"window_size\": 720,\n  \"z_threshold\": 2.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 30,\n  \"anomaly_rate_pct\": 4.17,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-02 16:00:00\",\n      \"value\": 329.962,\n      \"z_score\": 2.251\n    },\n    {\n      \"timestamp\": \"2024-01-02 21:00:00\",\n      \"value\": 340.184,\n      \"z_score\": 2.309\n    },\n    {\n      \"timestamp\": \"2024-01-03 05:00:00\",\n      \"value\": 112.207,\n      \"z_score\": 2.16\n    },\n    {\n      \"timestamp\": \"2024-01-05 04:00:00\",\n      \"value\": 107.329,\n      \"z_score\": 2.33\n    },\n    {\n      \"timestamp\": \"2024-01-07 05:00:00\",\n      \"value\": 70.835,\n      \"z_score\": 3.038\n    },\n    {\n      \"timestamp\": \"2024-01-10 20:00:00\",\n      \"value\": 104.94,\n      \"z_score\": 2.433\n    },\n    {\n      \"timestamp\": \"2024-01-11 03:00:00\",\n      \"value\": 323.895,\n      \"z_score\": 2.327\n    },\n    {\n      \"timestamp\": \"2024-01-12 18:00:00\",\n      \"value\": 119.163,\n      \"z_score\": 2.076\n    },\n    {\n      \"timestamp\": \"2024-01-14 17:00:00\",\n      \"value\": 324.756,\n      \"z_score\": 2.331\n    },\n    {\n      \"timestamp\": \"2024-01-14 20:00:00\",\n      \"value\": 118.452,\n      \"z_score\": 2.13\n    },\n    {\n      \"timestamp\": \"2024-01-15 12:00:00\",\n      \"value\": 309.449,\n      \"z_score\": 2.01\n    },\n    {\n      \"timestamp\": \"2024-01-15 15:00:00\",\n      \"value\": 314.448,\n      \"z_score\": 2.107\n    },\n    {\n      \"timestamp\": \"2024-01-15 18:00:00\",\n      \"value\": 317.629,\n      \"z_score\": 2.163\n    },\n    {\n      \"timestamp\": \"2024-01-16 03:00:00\",\n      \"value\": 115.096,\n      \"z_score\": 2.184\n    },\n    {\n      \"timestamp\": \"2024-01-16 06:00:00\",\n      \"value\": 335.576,\n      \"z_score\": 2.542\n    },\n    {\n      \"timestamp\": \"2024-01-17 07:00:00\",\n      \"value\": 328.497,\n      \"z_score\": 2.409\n    },\n    {\n      \"timestamp\": \"2024-01-19 00:00:00\",\n      \"value\": 331.535,\n      \"z_score\": 2.451\n    },\n    {\n      \"timestamp\": \"2024-01-19 06:00:00\",\n      \"value\": 113.426,\n      \"z_score\": 2.222\n    },\n    {\n      \"timestamp\": \"2024-01-20 00:00:00\",\n      \"value\": 311.545,\n      \"z_score\": 2.016\n    },\n    {\n      \"timestamp\": \"2024-01-20 13:00:00\",\n      \"value\": 110.039,\n      \"z_score\": 2.317\n    },\n    {\n      \"timestamp\": \"2024-01-20 15:00:00\",\n      \"value\": 326.806,\n      \"z_score\": 2.331\n    },\n    {\n      \"timestamp\": \"2024-01-21 21:00:00\",\n      \"value\": 113.063,\n      \"z_score\": 2.246\n    },\n    {\n      \"timestamp\": \"2024-01-22 20:00:00\",\n      \"value\": 332.827,\n      \"z_score\": 2.471\n    },\n    {\n      \"timestamp\": \"2024-01-23 23:00:00\",\n      \"value\": 113.179,\n      \"z_score\": 2.258\n    },\n    {\n      \"timestamp\": \"2024-01-24 07:00:00\",\n      \"value\": 118.73,\n      \"z_score\": 2.121\n    },\n    {\n      \"timestamp\": \"2024-01-27 17:00:00\",\n      \"value\": 98.796,\n      \"z_score\": 2.549\n    },\n    {\n      \"timestamp\": \"2024-01-28 12:00:00\",\n      \"value\": 91.533,\n      \"z_score\": 2.698\n    },\n    {\n      \"timestamp\": \"2024-01-29 19:00:00\",\n      \"value\": 109.217,\n      \"z_score\": 2.324\n    },\n    {\n      \"timestamp\": \"2024-01-29 23:00:00\",\n      \"value\": 88.46,\n      \"z_score\": 2.747\n    },\n    {\n      \"timestamp\": \"2024-01-30 23:00:00\",\n      \"value\": 316.86,\n      \"z_score\": 2.139\n    }\n  ]\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 4,
+      "task": "List all failure modes",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {
+        "task": "List all failure modes",
+        "tool": "list_failure_modes",
+        "sensor_ids": [
+          "load_current_a",
+          "oil_temp_c",
+          "power_factor",
+          "voltage_hv_kv",
+          "voltage_lv_kv",
+          "winding_temp_top_c"
+        ],
+        "transformer_id": "T-015",
+        "window_size": 720,
+        "z_threshold": 2.0,
+        "total_readings": 720,
+        "anomaly_count": 30,
+        "anomaly_rate_pct": 4.17,
+        "anomalies": [
+          {
+            "timestamp": "2024-01-02 16:00:00",
+            "value": 329.962,
+            "z_score": 2.251
+          },
+          {
+            "timestamp": "2024-01-02 21:00:00",
+            "value": 340.184,
+            "z_score": 2.309
+          },
+          {
+            "timestamp": "2024-01-03 05:00:00",
+            "value": 112.207,
+            "z_score": 2.16
+          },
+          {
+            "timestamp": "2024-01-05 04:00:00",
+            "value": 107.329,
+            "z_score": 2.33
+          },
+          {
+            "timestamp": "2024-01-07 05:00:00",
+            "value": 70.835,
+            "z_score": 3.038
+          },
+          {
+            "timestamp": "2024-01-10 20:00:00",
+            "value": 104.94,
+            "z_score": 2.433
+          },
+          {
+            "timestamp": "2024-01-11 03:00:00",
+            "value": 323.895,
+            "z_score": 2.327
+          },
+          {
+            "timestamp": "2024-01-12 18:00:00",
+            "value": 119.163,
+            "z_score": 2.076
+          },
+          {
+            "timestamp": "2024-01-14 17:00:00",
+            "value": 324.756,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-14 20:00:00",
+            "value": 118.452,
+            "z_score": 2.13
+          },
+          {
+            "timestamp": "2024-01-15 12:00:00",
+            "value": 309.449,
+            "z_score": 2.01
+          },
+          {
+            "timestamp": "2024-01-15 15:00:00",
+            "value": 314.448,
+            "z_score": 2.107
+          },
+          {
+            "timestamp": "2024-01-15 18:00:00",
+            "value": 317.629,
+            "z_score": 2.163
+          },
+          {
+            "timestamp": "2024-01-16 03:00:00",
+            "value": 115.096,
+            "z_score": 2.184
+          },
+          {
+            "timestamp": "2024-01-16 06:00:00",
+            "value": 335.576,
+            "z_score": 2.542
+          },
+          {
+            "timestamp": "2024-01-17 07:00:00",
+            "value": 328.497,
+            "z_score": 2.409
+          },
+          {
+            "timestamp": "2024-01-19 00:00:00",
+            "value": 331.535,
+            "z_score": 2.451
+          },
+          {
+            "timestamp": "2024-01-19 06:00:00",
+            "value": 113.426,
+            "z_score": 2.222
+          },
+          {
+            "timestamp": "2024-01-20 00:00:00",
+            "value": 311.545,
+            "z_score": 2.016
+          },
+          {
+            "timestamp": "2024-01-20 13:00:00",
+            "value": 110.039,
+            "z_score": 2.317
+          },
+          {
+            "timestamp": "2024-01-20 15:00:00",
+            "value": 326.806,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-21 21:00:00",
+            "value": 113.063,
+            "z_score": 2.246
+          },
+          {
+            "timestamp": "2024-01-22 20:00:00",
+            "value": 332.827,
+            "z_score": 2.471
+          },
+          {
+            "timestamp": "2024-01-23 23:00:00",
+            "value": 113.179,
+            "z_score": 2.258
+          },
+          {
+            "timestamp": "2024-01-24 07:00:00",
+            "value": 118.73,
+            "z_score": 2.121
+          },
+          {
+            "timestamp": "2024-01-27 17:00:00",
+            "value": 98.796,
+            "z_score": 2.549
+          },
+          {
+            "timestamp": "2024-01-28 12:00:00",
+            "value": 91.533,
+            "z_score": 2.698
+          },
+          {
+            "timestamp": "2024-01-29 19:00:00",
+            "value": 109.217,
+            "z_score": 2.324
+          },
+          {
+            "timestamp": "2024-01-29 23:00:00",
+            "value": 88.46,
+            "z_score": 2.747
+          },
+          {
+            "timestamp": "2024-01-30 23:00:00",
+            "value": 316.86,
+            "z_score": 2.139
+          }
+        ]
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": \"H2,CH4\",\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}\n{\n  \"failure_mode_id\": \"FM-002\",\n  \"name\": \"Low-Temperature Overheating (< 300\u00b0C)\",\n  \"severity\": \"medium\",\n  \"iec_code\": \"T1\",\n  \"key_gases\": \"CH4,C2H4\",\n  \"recommended_action\": \"Reduce load; inspect within 30 days\"\n}\n{\n  \"failure_mode_id\": \"FM-003\",\n  \"name\": \"Thermal Fault 300-700\u00b0C\",\n  \"severity\": \"high\",\n  \"iec_code\": \"T2\",\n  \"key_gases\": \"C2H4,C2H6\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-004\",\n  \"name\": \"High-Temperature Overheating (> 700\u00b0C)\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"T3\",\n  \"key_gases\": \"C2H4,C2H6,H2\",\n  \"recommended_action\": \"Immediate de-energization required\"\n}\n{\n  \"failure_mode_id\": \"FM-005\",\n  \"name\": \"Spark Discharge\",\n  \"severity\": \"high\",\n  \"iec_code\": \"D1\",\n  \"key_gases\": \"C2H2,H2\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-006\",\n  \"name\": \"Arc Discharge\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"D2\",\n  \"key_gases\": \"C2H2,H2,C2H4\",\n  \"recommended_action\": \"Immediate de-energization and emergency inspection\"\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 5,
+      "task": "Search failure modes for probable fault mode",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {
+        "query": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
+        "sensor_id": "load_current_a",
+        "unit": "A",
+        "num_readings": 720,
+        "timestamp": "2024-01-01T00:00:00",
+        "value": 150.744,
+        "window_size": 720,
+        "z_threshold": 2.0,
+        "total_readings": 720,
+        "anomaly_count": 30,
+        "anomaly_rate_pct": 4.17,
+        "anomalies": [
+          {
+            "timestamp": "2024-01-02 16:00:00",
+            "value": 329.962,
+            "z_score": 2.251
+          },
+          {
+            "timestamp": "2024-01-02 21:00:00",
+            "value": 340.184,
+            "z_score": 2.309
+          },
+          {
+            "timestamp": "2024-01-03 05:00:00",
+            "value": 112.207,
+            "z_score": 2.16
+          },
+          {
+            "timestamp": "2024-01-05 04:00:00",
+            "value": 107.329,
+            "z_score": 2.33
+          },
+          {
+            "timestamp": "2024-01-07 05:00:00",
+            "value": 70.835,
+            "z_score": 3.038
+          },
+          {
+            "timestamp": "2024-01-10 20:00:00",
+            "value": 104.94,
+            "z_score": 2.433
+          },
+          {
+            "timestamp": "2024-01-11 03:00:00",
+            "value": 323.895,
+            "z_score": 2.327
+          },
+          {
+            "timestamp": "2024-01-12 18:00:00",
+            "value": 119.163,
+            "z_score": 2.076
+          },
+          {
+            "timestamp": "2024-01-14 17:00:00",
+            "value": 324.756,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-14 20:00:00",
+            "value": 118.452,
+            "z_score": 2.13
+          },
+          {
+            "timestamp": "2024-01-15 12:00:00",
+            "value": 309.449,
+            "z_score": 2.01
+          },
+          {
+            "timestamp": "2024-01-15 15:00:00",
+            "value": 314.448,
+            "z_score": 2.107
+          },
+          {
+            "timestamp": "2024-01-15 18:00:00",
+            "value": 317.629,
+            "z_score": 2.163
+          },
+          {
+            "timestamp": "2024-01-16 03:00:00",
+            "value": 115.096,
+            "z_score": 2.184
+          },
+          {
+            "timestamp": "2024-01-16 06:00:00",
+            "value": 335.576,
+            "z_score": 2.542
+          },
+          {
+            "timestamp": "2024-01-17 07:00:00",
+            "value": 328.497,
+            "z_score": 2.409
+          },
+          {
+            "timestamp": "2024-01-19 00:00:00",
+            "value": 331.535,
+            "z_score": 2.451
+          },
+          {
+            "timestamp": "2024-01-19 06:00:00",
+            "value": 113.426,
+            "z_score": 2.222
+          },
+          {
+            "timestamp": "2024-01-20 00:00:00",
+            "value": 311.545,
+            "z_score": 2.016
+          },
+          {
+            "timestamp": "2024-01-20 13:00:00",
+            "value": 110.039,
+            "z_score": 2.317
+          },
+          {
+            "timestamp": "2024-01-20 15:00:00",
+            "value": 326.806,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-21 21:00:00",
+            "value": 113.063,
+            "z_score": 2.246
+          },
+          {
+            "timestamp": "2024-01-22 20:00:00",
+            "value": 332.827,
+            "z_score": 2.471
+          },
+          {
+            "timestamp": "2024-01-23 23:00:00",
+            "value": 113.179,
+            "z_score": 2.258
+          },
+          {
+            "timestamp": "2024-01-24 07:00:00",
+            "value": 118.73,
+            "z_score": 2.121
+          },
+          {
+            "timestamp": "2024-01-27 17:00:00",
+            "value": 98.796,
+            "z_score": 2.549
+          },
+          {
+            "timestamp": "2024-01-28 12:00:00",
+            "value": 91.533,
+            "z_score": 2.698
+          },
+          {
+            "timestamp": "2024-01-29 19:00:00",
+            "value": 109.217,
+            "z_score": 2.324
+          },
+          {
+            "timestamp": "2024-01-29 23:00:00",
+            "value": 88.46,
+            "z_score": 2.747
+          },
+          {
+            "timestamp": "2024-01-30 23:00:00",
+            "value": 316.86,
+            "z_score": 2.139
+          }
+        ],
+        "failure_mode_id": "FM-001",
+        "name": "Partial Discharge",
+        "severity": "low",
+        "iec_code": "PD",
+        "key_gases": "H2,CH4",
+        "recommended_action": "Monitor closely; schedule inspection within 90 days"
+      },
+      "response": "",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 6,
+      "task": "Get sensor correlation for probable fault mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {
+        "failure_mode_id": "FM-001",
+        "task": "Get sensor correlation for probable fault mode",
+        "sensor_id": "load_current_a",
+        "unit": "A",
+        "num_readings": 720,
+        "timestamp": "2024-01-01T00:00:00",
+        "value": 150.744,
+        "window_size": 720,
+        "z_threshold": 2.0,
+        "total_readings": 720,
+        "anomaly_count": 30,
+        "anomaly_rate_pct": 4.17,
+        "anomalies": [
+          {
+            "timestamp": "2024-01-02 16:00:00",
+            "value": 329.962,
+            "z_score": 2.251
+          },
+          {
+            "timestamp": "2024-01-02 21:00:00",
+            "value": 340.184,
+            "z_score": 2.309
+          },
+          {
+            "timestamp": "2024-01-03 05:00:00",
+            "value": 112.207,
+            "z_score": 2.16
+          },
+          {
+            "timestamp": "2024-01-05 04:00:00",
+            "value": 107.329,
+            "z_score": 2.33
+          },
+          {
+            "timestamp": "2024-01-07 05:00:00",
+            "value": 70.835,
+            "z_score": 3.038
+          },
+          {
+            "timestamp": "2024-01-10 20:00:00",
+            "value": 104.94,
+            "z_score": 2.433
+          },
+          {
+            "timestamp": "2024-01-11 03:00:00",
+            "value": 323.895,
+            "z_score": 2.327
+          },
+          {
+            "timestamp": "2024-01-12 18:00:00",
+            "value": 119.163,
+            "z_score": 2.076
+          },
+          {
+            "timestamp": "2024-01-14 17:00:00",
+            "value": 324.756,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-14 20:00:00",
+            "value": 118.452,
+            "z_score": 2.13
+          },
+          {
+            "timestamp": "2024-01-15 12:00:00",
+            "value": 309.449,
+            "z_score": 2.01
+          },
+          {
+            "timestamp": "2024-01-15 15:00:00",
+            "value": 314.448,
+            "z_score": 2.107
+          },
+          {
+            "timestamp": "2024-01-15 18:00:00",
+            "value": 317.629,
+            "z_score": 2.163
+          },
+          {
+            "timestamp": "2024-01-16 03:00:00",
+            "value": 115.096,
+            "z_score": 2.184
+          },
+          {
+            "timestamp": "2024-01-16 06:00:00",
+            "value": 335.576,
+            "z_score": 2.542
+          },
+          {
+            "timestamp": "2024-01-17 07:00:00",
+            "value": 328.497,
+            "z_score": 2.409
+          },
+          {
+            "timestamp": "2024-01-19 00:00:00",
+            "value": 331.535,
+            "z_score": 2.451
+          },
+          {
+            "timestamp": "2024-01-19 06:00:00",
+            "value": 113.426,
+            "z_score": 2.222
+          },
+          {
+            "timestamp": "2024-01-20 00:00:00",
+            "value": 311.545,
+            "z_score": 2.016
+          },
+          {
+            "timestamp": "2024-01-20 13:00:00",
+            "value": 110.039,
+            "z_score": 2.317
+          },
+          {
+            "timestamp": "2024-01-20 15:00:00",
+            "value": 326.806,
+            "z_score": 2.331
+          },
+          {
+            "timestamp": "2024-01-21 21:00:00",
+            "value": 113.063,
+            "z_score": 2.246
+          },
+          {
+            "timestamp": "2024-01-22 20:00:00",
+            "value": 332.827,
+            "z_score": 2.471
+          },
+          {
+            "timestamp": "2024-01-23 23:00:00",
+            "value": 113.179,
+            "z_score": 2.258
+          },
+          {
+            "timestamp": "2024-01-24 07:00:00",
+            "value": 118.73,
+            "z_score": 2.121
+          },
+          {
+            "timestamp": "2024-01-27 17:00:00",
+            "value": 98.796,
+            "z_score": 2.549
+          },
+          {
+            "timestamp": "2024-01-28 12:00:00",
+            "value": 91.533,
+            "z_score": 2.698
+          },
+          {
+            "timestamp": "2024-01-29 19:00:00",
+            "value": 109.217,
+            "z_score": 2.324
+          },
+          {
+            "timestamp": "2024-01-29 23:00:00",
+            "value": 88.46,
+            "z_score": 2.747
+          },
+          {
+            "timestamp": "2024-01-30 23:00:00",
+            "value": 316.86,
+            "z_score": 2.139
+          }
+        ]
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"dga_label\": \"Partial discharge\",\n  \"description\": \"Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": [\n    \"H2\",\n    \"CH4\"\n  ],\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 7,
+      "task": "Estimate short-term risk over 30 days",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "horizon_days": 30
+      },
+      "response": "{\n  \"transformer_id\": \"T-015\",\n  \"current_rul_days\": 547,\n  \"forecast_date\": \"2024-03-01\",\n  \"projected_rul_days\": 517,\n  \"projected_health_index\": 0.473,\n  \"confidence\": 0.775,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 8,
+      "task": "Create maintenance work order recommendation",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-015",
+        "issue_description": "Transformer T-015 shows rising load and intermittent over-temperature alerts.",
+        "priority": "high",
+        "fault_type": "FM-001",
+        "estimated_downtime_hours": 48
+      },
+      "response": "{\n  \"work_order_id\": \"WO-0867B972\",\n  \"transformer_id\": \"T-015\",\n  \"issue_description\": \"Transformer T-015 shows rising load and intermittent over-temperature alerts.\",\n  \"priority\": \"high\",\n  \"fault_type\": \"FM-001\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 48.0,\n  \"created_at\": \"2026-04-17T01:35:56.828959Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "error": null,
+      "success": true
+    }
+  ]
+}
+(EngineCore pid=354307) INFO 04-16 21:36:00 [core.py:1210] Shutdown initiated (timeout=0)

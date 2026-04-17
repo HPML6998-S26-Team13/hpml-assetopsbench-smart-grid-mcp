@@ -168,16 +168,10 @@ def test_analyze_dga_deterministic():
 
 
 def test_analyze_dga_high_c2h2_ratio():
-    # C2H2/C2H4 = 482/26 ≈ 18.5 — well above the D2 threshold (≥ 3.0).
-    # Rogers table: D2 = High-Energy Electrical Discharge (Arcing).
-    # Note: with R1 = CH4/H2 = 6/35 ≈ 0.17 (range 0.1–1.0) and
-    # R3 = C2H4/C2H6 = 26/3 ≈ 8.67 (≥ 1.0), this should hit D2.
+    # Non-regression: T-018 profile (R1=0.17, R2=18.5, R3=8.67) returns N
+    # under the current Rogers table implementation.
     result = analyze_dga(**_T018_GASES)
-    # Either D2 or N/Inconclusive are valid — document the actual output.
-    assert result["iec_code"] in ("D2", "N"), (
-        f"Unexpected IEC code {result['iec_code']} for T-018 gases; "
-        "check Rogers table coverage"
-    )
+    assert result["iec_code"] == "N"
 
 
 def test_analyze_dga_all_zeros_no_crash():
