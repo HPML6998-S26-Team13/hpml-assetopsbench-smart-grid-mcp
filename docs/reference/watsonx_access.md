@@ -1,6 +1,6 @@
 # WatsonX.ai Access
 
-*Last updated: April 5, 2026*  
+*Last updated: April 18, 2026*  
 *Verified by: Wei Alexander Xin*
 
 ## Overview
@@ -8,6 +8,11 @@
 Dhaval Patel (IBM mentor) provided the team with a WatsonX.ai project account for
 accessing IBM-hosted Llama models. This document describes what's available, how to
 set up access locally, and how we plan to use it in the project.
+
+Current planning default:
+- use self-hosted Llama-3.1-8B-Instruct on Insomnia for the main local benchmark grid
+- use WatsonX Maverick-17B for judge calls
+- use WatsonX Llama-3.3-70B-instruct only for selective scaling spot-checks rather than a duplicated full-grid run plan
 
 **Repo location:** Everything in this doc (`.env`, `.venv/`, `scripts/verify_watsonx.py`)
 lives in the canonical team repo at [HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp).
@@ -39,7 +44,7 @@ point it at the org repo `main` branch before treating it as source of truth.
    ```
 
    The SDK currently pins `pandas<2.4`, which forces pandas down to 2.3.3 in this venv.
-   Don't install ibm-watsonx-ai into your conda `AI_env` if you have one — it'll
+   Don't install ibm-watsonx-ai into your conda `AI_env` if you have one - it'll
    downgrade pandas there too. Keep WatsonX work isolated to the team `.venv`.
 
 4. Verify access (use the venv python directly so we don't depend on activation state):
@@ -83,7 +88,7 @@ our project credentials:
 
 **Important:** WatsonX does not have `llama-3-1-8b-instruct` (the instruction-tuned
 8B model we use for primary profiling). This is fine because we self-host that model
-on Insomnia via vLLM — WatsonX can't give us the GPU-level profiling traces we need
+on Insomnia via vLLM - WatsonX can't give us the GPU-level profiling traces we need
 for Phase 2 anyway. WatsonX fills gaps WHERE self-hosting is impractical: the judge
 (34GB) and the 70B scaling datapoint (140GB).
 
@@ -161,7 +166,7 @@ is tight (~10%). Suitable for interactive use.
 the other three were 11-16s. The wide variance and slow cold call suggest the model is
 not pinned to GPU and is being loaded on demand. **Implication:** for our scaling
 comparison datapoint, we should run several trials and report distribution, not a single
-number — the warm path is bursty.
+number - the warm path is bursty.
 
 ### Caveats
 
@@ -208,7 +213,7 @@ correctness, security, performance, and protocol compliance.
 
 ### Can we use Maverick for general code review?
 
-Technically yes — ~6s for a 500-token review is interactive-speed, and the quality on our
+Technically yes - ~6s for a 500-token review is interactive-speed, and the quality on our
 test prompt was solid. But a few caveats:
 
 - **Usage-policy risk:** WatsonX access was granted for the project. If usage analytics

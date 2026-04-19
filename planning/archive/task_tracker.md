@@ -32,7 +32,7 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 - [x] #86 — Write `scripts/verify_watsonx.py` — auth + model listing + inference + latency benchmark (Alex) — Apr 5
 - [x] #87 — Verify 6 Llama models available on our WatsonX account (Alex) — Apr 5
 - [x] #88 — Benchmark Maverick-17B and Llama-3.3-70B latency (short + long prompts) (Alex) — Apr 5
-- [x] #89 — Document WatsonX access in `docs/watsonx_access.md` with setup, model list, usage patterns, latency (Alex) — Apr 5
+- [x] #89 — Document WatsonX access in `docs/reference/watsonx_access.md` with setup, model list, usage patterns, latency (Alex) — Apr 5
 - [x] #90 — Add `ibm-watsonx-ai` to `requirements.txt` (Alex) — Apr 5
 - [x] #91 — Document team repo strategy in `docs/repo_strategy.md` (Alex) — Apr 5
 - [x] #92 — Consolidate all meeting docs and clarify next steps in shared repo (Alex)

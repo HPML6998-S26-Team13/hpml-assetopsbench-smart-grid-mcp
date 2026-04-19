@@ -1,5 +1,7 @@
 # Project Reference
 
+*Last updated: April 18, 2026*
+
 **Course:** COMS E6998 - High Performance Machine Learning, Spring 2026  
 **Instructor:** Prof. Kaoutar El Maghraoui  
 **Mentor:** Dr. Dhaval Patel (pateldha@us.ibm.com), Shuxin Lin (shuxin.lin@ibm.com)

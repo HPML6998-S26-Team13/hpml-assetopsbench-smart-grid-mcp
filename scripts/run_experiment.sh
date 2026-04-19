@@ -27,12 +27,20 @@ REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}
 PROJECT_ROOT="$(cd "$(dirname "$(git -C "$REPO_ROOT" rev-parse --git-common-dir)")" && pwd)"
 cd "$REPO_ROOT"
 
+# Shared checkout on Insomnia: keep new logs group-writable for teammates.
+umask 0002
+
 if [ ! -f "$CONFIG_PATH" ]; then
   echo "ERROR: config not found: $CONFIG_PATH" >&2
   exit 1
 fi
 
 mkdir -p logs
+chmod 2775 logs 2>/dev/null || true
+if command -v setfacl >/dev/null 2>&1; then
+  setfacl -m g::rwx logs 2>/dev/null || true
+  setfacl -d -m g::rwx logs 2>/dev/null || true
+fi
 
 # Load the repo-root .env when present so local WatsonX/WandB runs can reuse
 # the team's canonical ignored credential file without shell-specific export

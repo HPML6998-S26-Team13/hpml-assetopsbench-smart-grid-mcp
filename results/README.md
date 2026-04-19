@@ -28,13 +28,13 @@ results/
 - `scenario_scores.jsonl` should retain the run-level join keys needed to line up with WandB and benchmark artifacts, especially `run_name`, `wandb_run_url`, `scenario_id`, `trial_index`, `experiment_cell`, `orchestration_mode`, `mcp_mode`, and `judge_model`.
 - Filenames should be **stable** (so the paper can reference them by path) — avoid renames once a figure is committed to a report draft.
 
-## Status (Apr 14, 2026)
+## Status (Apr 18, 2026)
 
 Still intentionally empty of curated metrics.
 
 What changed since the original scaffold:
 
-- raw benchmark proof artifacts now exist under `benchmarks/cell_Y_plan_execute/`
+- raw benchmark proof artifacts now exist under `benchmarks/cell_Y_plan_execute/` as a WatsonX-hosted 70B / Mac 1-scenario smoke run; the primary-lane Insomnia 8B proof is still PR-only
 - the first shared WandB run is real and linked back into those raw artifacts
 
 What still needs to happen before this directory should fill up:

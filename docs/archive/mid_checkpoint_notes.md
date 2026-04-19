@@ -38,7 +38,7 @@ are tracked with WandB. Evaluation uses AssetOpsBench's LLM-as-Judge pipeline
 - Verified compute infrastructure access (Insomnia cluster: 6x H100, ~100x A6000; plus $500 GCP credits/person)
 - Read MCP documentation and understand protocol architecture
 - Compute plan committed documenting GPU needs per phase and Insomnia vs GCP recommendation (`docs/compute_plan.md`)
-- Received WatsonX API access from mentor, verified 6 Llama foundation models available, benchmarked Maverick-17B (~80 tok/s steady) and Llama-3.3-70B (~34 tok/s) end-to-end against a realistic code review prompt (`docs/watsonx_access.md`)
+- Received WatsonX API access from mentor, verified 6 Llama foundation models available, benchmarked Maverick-17B (~80 tok/s steady) and Llama-3.3-70B (~34 tok/s) end-to-end against a realistic code review prompt (`docs/reference/watsonx_access.md`)
 - Data pipeline scripts landed along with processed Kaggle datasets (`data/processed/`: asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings)
 - MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on shared base class
 

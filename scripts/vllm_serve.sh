@@ -31,7 +31,15 @@ set -euo pipefail
 
 REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "$REPO_ROOT"
+
+# Shared checkout on Insomnia: keep new logs group-writable for teammates.
+umask 0002
 mkdir -p logs
+chmod 2775 logs 2>/dev/null || true
+if command -v setfacl >/dev/null 2>&1; then
+    setfacl -m g::rwx logs 2>/dev/null || true
+    setfacl -d -m g::rwx logs 2>/dev/null || true
+fi
 
 if [ ! -f ".venv-insomnia/bin/activate" ]; then
     echo "ERROR: missing .venv-insomnia. Run bash scripts/setup_insomnia.sh first." >&2
