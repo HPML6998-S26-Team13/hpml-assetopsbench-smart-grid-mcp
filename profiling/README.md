@@ -11,7 +11,8 @@ profiling/
 │   ├── sample_nvidia_smi.sh        # background GPU utilization sampler (CSV)
 │   ├── run_nsight.sh               # `nsys profile` wrapper with stats post-proc
 │   ├── run_vllm_torch_profile.sh   # PyTorch Profiler via vLLM's built-in endpoints
-│   └── capture_around.sh           # convenience wrapper: nvidia-smi + optional nsys around any command
+│   ├── capture_around.sh           # convenience wrapper: nvidia-smi + optional nsys around any command
+│   └── log_profiling_to_wandb.py   # link profiling outputs to the benchmark's WandB run
 └── README.md
 ```
 
@@ -134,6 +135,55 @@ bash profiling/scripts/capture_around.sh "$OUT" \
 The W4 optimization experiments (`docs/execution_plan.md`) will consume these
 artifacts via notebooks in `notebooks/` to produce the before/after latency
 and utilization comparisons in the paper.
+
+## WandB linkage
+
+The benchmark runner (`scripts/run_experiment.sh`) already writes
+`wandb_run_url` into `benchmarks/cell_<X>/raw/<RUN_ID>/{meta,summary,config}.json`
+when `ENABLE_WANDB=1`. To link the profiling outputs to the same WandB run,
+set `BENCHMARK_RUN_DIR` when invoking `capture_around.sh`:
+
+```bash
+RUN_ID="pe_mcp_baseline_$(date +%s)"
+BENCH=benchmarks/cell_Y_plan_execute/raw/$RUN_ID
+OUT=profiling/traces/$RUN_ID
+
+# Phase 1 — run the benchmark and populate BENCH/{meta,config,summary}.json
+sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
+
+# Phase 2 — profile a follow-up inference pass and link it to the existing WandB run
+BENCHMARK_RUN_DIR=$BENCH bash profiling/scripts/capture_around.sh "$OUT" \
+    -- bash scripts/test_inference.sh localhost 8000
+```
+
+When `BENCHMARK_RUN_DIR` is set, `capture_around.sh` calls
+`profiling/scripts/log_profiling_to_wandb.py` after the command finishes. That
+helper:
+
+1. Parses the WandB run id from `wandb_run_url` and resumes the run via
+   `wandb.init(id=..., resume="allow")`.
+2. Uploads every file under `$OUT_DIR` as a WandB `Artifact` of type
+   `profiling` named `profiling-<RUN_ID>`.
+3. Parses `nvidia_smi.csv` and writes summary stats onto the same run:
+   `profiling/gpu_util_{mean,max}`, `profiling/mem_util_mean`,
+   `profiling/gpu_mem_used_mib_{mean,max}`, `profiling/power_draw_w_{mean,max}`,
+   `profiling/nvidia_smi_samples`.
+4. Stamps `profiling_dir`, `profiling_artifact`, and a `profiling_summary`
+   block back into the benchmark `meta.json` so the filesystem record matches
+   WandB.
+
+The link step is **non-fatal** — if `wandb` isn't installed, if
+`wandb_run_url` is missing (e.g. `ENABLE_WANDB=0`), or if WandB is unreachable,
+the profiling artifacts still land on disk and the wrapper returns the target
+command's exit code normally.
+
+If you want to skip the WandB step for a local run:
+
+```bash
+# Either don't set BENCHMARK_RUN_DIR, or force offline mode
+WANDB_MODE=offline BENCHMARK_RUN_DIR=$BENCH \
+    bash profiling/scripts/capture_around.sh "$OUT" -- <cmd>
+```
 
 ## Status (Apr 14, 2026)
 

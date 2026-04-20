@@ -14,8 +14,14 @@
 #       -- sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
 #
 # Environment overrides:
-#   CAPTURE_NSYS        (1 to also run under nsys profile, default 0)
-#   CAPTURE_INTERVAL    (nvidia-smi poll interval seconds, default 1)
+#   CAPTURE_NSYS         (1 to also run under nsys profile, default 0)
+#   CAPTURE_INTERVAL     (nvidia-smi poll interval seconds, default 1)
+#   BENCHMARK_RUN_DIR    (path to benchmarks/cell_X/raw/<run-id>/; when set
+#                         and the run has ENABLE_WANDB=1, upload the profiling
+#                         outputs to the benchmark's WandB run as an Artifact
+#                         and write gpu-util / memory summary stats to the
+#                         run.summary. Non-fatal if WandB isn't available.)
+#   WANDB_MODE           (online|offline|disabled; default online)
 #
 # Output:
 #   $OUT_DIR/nvidia_smi.csv
@@ -116,6 +122,22 @@ meta = {
 with open(meta_path, "w") as f:
     json.dump(meta, f, indent=2)
 PY
+
+# --- Optionally link profiling output to the benchmark's WandB run ---
+if [ -n "${BENCHMARK_RUN_DIR:-}" ]; then
+    if [ ! -d "$BENCHMARK_RUN_DIR" ]; then
+        echo "capture_around: BENCHMARK_RUN_DIR=$BENCHMARK_RUN_DIR does not exist; skipping WandB link." >&2
+    else
+        WANDB_MODE="${WANDB_MODE:-online}"
+        echo "capture_around: linking profiling to WandB run in $BENCHMARK_RUN_DIR (mode=$WANDB_MODE)" >&2
+        if ! python3 "$SCRIPT_DIR/log_profiling_to_wandb.py" \
+                --benchmark-run-dir "$BENCHMARK_RUN_DIR" \
+                --profiling-dir "$OUT_DIR" \
+                --mode "$WANDB_MODE"; then
+            echo "capture_around: WandB link failed (non-fatal; artifacts remain on disk)" >&2
+        fi
+    fi
+fi
 
 echo "capture_around: done. rc=$CMD_RC, out=$OUT_DIR" >&2
 exit "$CMD_RC"
