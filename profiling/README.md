@@ -147,51 +147,61 @@ and utilization comparisons in the paper.
 
 ## WandB linkage
 
-The benchmark runner (`scripts/run_experiment.sh`) already writes
-`wandb_run_url` into `benchmarks/cell_<X>/raw/<RUN_ID>/{meta,summary,config}.json`
-when `ENABLE_WANDB=1`. To link the profiling outputs to the same WandB run,
-set `BENCHMARK_RUN_DIR` when invoking `capture_around.sh`:
+`scripts/run_experiment.sh` writes `wandb_run_url` into
+`benchmarks/cell_<X>/raw/<RUN_ID>/meta.json` when `ENABLE_WANDB=1`. To link
+profiling artifacts to the same WandB run, capture profiling **during** the
+benchmark job (the job tears down its vLLM process on exit, so post-run
+profiling is not possible), then call `log_profiling_to_wandb.py` once
+the job completes.
+
+**Step 1 — capture nvidia-smi during the benchmark job:**
+
+From a second terminal, attach to the running Slurm job:
 
 ```bash
-RUN_ID="pe_mcp_baseline_$(date +%s)"
-BENCH=benchmarks/cell_Y_plan_execute/raw/$RUN_ID
-OUT=profiling/traces/$RUN_ID
-
-# Phase 1 — run the benchmark and populate BENCH/{meta,config,summary}.json
-sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
-
-# Phase 2 — profile a follow-up inference pass and link it to the existing WandB run
-BENCHMARK_RUN_DIR=$BENCH bash profiling/scripts/capture_around.sh "$OUT" \
-    -- bash scripts/test_inference.sh localhost 8000
+srun --jobid=<SLURM_JOB_ID> --overlap --pty bash
+# Inside that shell, on the compute node:
+OUT=profiling/traces/$(date +%Y%m%d-%H%M%S)_pe_baseline
+mkdir -p "$OUT"
+bash profiling/scripts/sample_nvidia_smi.sh "$OUT/nvidia_smi.csv" &
+SAMPLER=$!
+# When the benchmark finishes, stop the sampler:
+kill "$SAMPLER"
 ```
 
-When `BENCHMARK_RUN_DIR` is set, `capture_around.sh` calls
-`profiling/scripts/log_profiling_to_wandb.py` after the command finishes. That
-helper:
+**Step 2 — link profiling output to WandB after the job completes:**
 
-1. Parses the WandB run id from `wandb_run_url` and resumes the run via
-   `wandb.init(id=..., resume="allow")`.
-2. Uploads every file under `$OUT_DIR` as a WandB `Artifact` of type
-   `profiling` named `profiling-<RUN_ID>`.
-3. Parses `nvidia_smi.csv` and writes summary stats onto the same run:
-   `profiling/gpu_util_{mean,max}`, `profiling/mem_util_mean`,
-   `profiling/gpu_mem_used_mib_{mean,max}`, `profiling/power_draw_w_{mean,max}`,
-   `profiling/nvidia_smi_samples`.
-4. Stamps `profiling_dir`, `profiling_artifact`, and a `profiling_summary`
-   block back into the benchmark `meta.json` so the filesystem record matches
-   WandB.
-
-The link step is **non-fatal** — if `wandb` isn't installed, if
-`wandb_run_url` is missing (e.g. `ENABLE_WANDB=0`), or if WandB is unreachable,
-the profiling artifacts still land on disk and the wrapper returns the target
-command's exit code normally.
-
-If you want to skip the WandB step for a local run:
+`run_experiment.sh` prints the run directory at startup (`Run dir: ...`).
+Use that path, or find the most recent run dir:
 
 ```bash
-# Either don't set BENCHMARK_RUN_DIR, or force offline mode
-WANDB_MODE=offline BENCHMARK_RUN_DIR=$BENCH \
-    bash profiling/scripts/capture_around.sh "$OUT" -- <cmd>
+# Use the run dir printed in the job log, e.g.:
+BENCH=benchmarks/cell_Y_plan_execute/raw/8760652_exp_pe_mcp_baseline
+# Or find the latest automatically:
+BENCH="$(ls -dt benchmarks/cell_Y_plan_execute/raw/*/ 2>/dev/null | head -1)"
+
+OUT=profiling/traces/<the OUT path from step 1>
+
+python3 profiling/scripts/log_profiling_to_wandb.py \
+    --benchmark-run-dir "$BENCH" \
+    --profiling-dir "$OUT"
+```
+
+`log_profiling_to_wandb.py`:
+1. Parses the WandB run id from `wandb_run_url` in `meta.json` and resumes the run via `wandb.init(id=..., resume="allow")`.
+2. Uploads every file under `$OUT` as a WandB `Artifact` of type `profiling`.
+3. Parses `nvidia_smi.csv` and writes summary stats onto the run: `profiling/gpu_util_{mean,max}`, `profiling/mem_util_mean`, `profiling/gpu_mem_used_mib_{mean,max}`, `profiling/power_draw_w_{mean,max}`, `profiling/nvidia_smi_samples`.
+4. Stamps `profiling_dir`, `profiling_artifact`, and a `profiling_summary` block back into `meta.json`.
+
+The link step is **non-fatal** — if `wandb` isn't installed, `wandb_run_url`
+is missing (e.g. `ENABLE_WANDB=0`), or WandB is unreachable, profiling
+artifacts still land on disk and the script exits 0.
+
+To skip the WandB step for a local run, omit `--benchmark-run-dir` or set:
+
+```bash
+WANDB_MODE=offline python3 profiling/scripts/log_profiling_to_wandb.py \
+    --benchmark-run-dir "$BENCH" --profiling-dir "$OUT"
 ```
 
 ## Status (Apr 14, 2026)

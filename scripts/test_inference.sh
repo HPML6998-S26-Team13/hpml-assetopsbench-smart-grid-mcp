@@ -13,7 +13,7 @@ set -euo pipefail
 
 HOST="${1:?Usage: $0 <host> [port] [model]}"
 PORT="${2:-8000}"
-MODEL="models/Llama-3.1-8B-Instruct"
+MODEL="Llama-3.1-8B-Instruct"
 MODEL="${3:-$MODEL}"
 BASE_URL="http://$HOST:$PORT"
 
