@@ -331,7 +331,7 @@ and what's still upstream): [`orchestration_wiring.md`](orchestration_wiring.md)
 story, dependencies, run sequence): [`experiment1_capture_plan.md`](experiment1_capture_plan.md).
 
 **GCP fallback instructions** (how to spin up an A100 spot instance if
-Insomnia is down): TODO (`#38`, due Apr 26).
+Insomnia is down): [`gcp_fallback.md`](gcp_fallback.md).
 
 **Historical**: the earlier combined `Insomnia or GCP Environment.md` draft
 lived in an earlier branch but was superseded by `insomnia_runbook.md` +
