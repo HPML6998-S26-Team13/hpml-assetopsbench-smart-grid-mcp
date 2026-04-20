@@ -88,9 +88,9 @@ trap 'if [ -n "$VLLM_PID" ]; then kill "$VLLM_PID" 2>/dev/null || true; wait "$V
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
 
-# Required on Insomnia HPE Slingshot fabric to prevent NCCL hanging on cxiWaitEventWait
-export NCCL_SOCKET_IFNAME=eth0
-export NCCL_IB_DISABLE=1
+# Cluster-specific env (NCCL overrides for Insomnia Slingshot fabric, etc.)
+# shellcheck source=scripts/insomnia_env.sh
+source "$(dirname "${BASH_SOURCE[0]}")/insomnia_env.sh"
 
 # --- Activate venv ---
 source .venv-insomnia/bin/activate
@@ -119,7 +119,7 @@ VLLM_STARTUP_LOG="logs/vllm_startup_${SLURM_JOB_ID:-local}.log"
 # --- Launch vLLM server in background ---
 python3 -m vllm.entrypoints.openai.api_server \
     --model "$MODEL_PATH" \
-    --served-model-name "$(basename "$MODEL_PATH")" \
+    --served-model-name "$(basename "${MODEL_PATH%/}")" \
     --host 127.0.0.1 \
     --port "$PORT" \
     --max-model-len "$MAX_MODEL_LEN" \
