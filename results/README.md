@@ -53,4 +53,5 @@ What still needs to happen before this directory should fill up:
 
 - Experiment 1 profiling captures (`#25`)
 - profiling / benchmark linkage into WandB (`#27`)
-- Notebook 02 analysis and export of cleaned metrics / figures (`#26`)
+- Notebook 02 transition from parser/preflight scaffold into real Experiment 1
+  cleaned metrics / figures once Cells A / B / C exist (`#26`)

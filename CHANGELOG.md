@@ -7,6 +7,10 @@
 - Added `notebooks/01_data_exploration.ipynb` as the reproducible replacement
   for the earlier static dataset smoke-test image, with notebook-generated
   summary CSVs and overview figures under `results/` (Alex)
+- Added Experiment 1 / Experiment 2 benchmark scaffolding for `#26` and `#32`:
+  explicit Cell A / B / C / Z benchmark directories, experiment-specific config
+  templates, and a real Notebook 02 parser/preflight scaffold for future MCP
+  overhead analysis (Alex)
 - Split dependency guidance into a portable base `requirements.txt`, a
   cluster-serving `requirements-insomnia.txt`, and a notebook-authoring
   `requirements-notebooks.txt`, with setup docs/scripts updated to use `uv`

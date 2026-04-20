@@ -1,0 +1,4 @@
+cell,label,cell_dir,config_present,summary_present,raw_run_count,latest_run_id,latency_rows,run_status,scenario_set_name,model_id,wandb_run_url,summary_latency_mean,summary_latency_p95,config_experiment_family
+A,Direct,benchmarks/cell_A_direct,False,False,0,,0,,,,,,,
+B,MCP baseline,benchmarks/cell_B_mcp_baseline,False,False,0,,0,,,,,,,
+C,MCP optimized,benchmarks/cell_C_mcp_optimized,False,False,0,,0,,,,,,,

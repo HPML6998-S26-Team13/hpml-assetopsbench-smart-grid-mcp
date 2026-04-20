@@ -18,16 +18,22 @@ CLI for those orchestration modes. See
 
 ## Naming
 
-Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md)
-— the 5-cell experimental grid:
+Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md).
+The repo now treats Experiment 1 and Experiment 2 as separate config families:
+
+- `configs/experiment1/` for the Cell A / B / C MCP-overhead comparison
+- `configs/experiment2/` for the Cell B / Y core orchestration comparison,
+  plus optional Cell Z follow-on scope if Hybrid becomes real enough to run
+
+The active cell mapping is:
 
 | Cell | Orchestration | MCP mode | Suggested config name |
 |---|---|---|---|
-| A | Agent-as-Tool | direct | `aat_direct.env` |
-| B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
-| C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
-| Y | Plan-Execute | baseline | `pe_mcp_baseline.env` |
-| Z | Hybrid | baseline | `hybrid_mcp_baseline.env` |
+| A | Agent-as-Tool | direct | `experiment1/exp1_cell_A_direct.env` |
+| B | Agent-as-Tool | baseline | `experiment1/exp1_cell_B_mcp_baseline.env`, `experiment2/exp2_cell_B_aat_mcp_baseline.env` |
+| C | Agent-as-Tool | optimized | `experiment1/exp1_cell_C_mcp_optimized.env` |
+| Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
+| Z | Hybrid | baseline | `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` |
 
 ## Required keys
 
@@ -66,12 +72,14 @@ Dry-run the wiring first:
 
 ```bash
 DRY_RUN=1 bash scripts/run_experiment.sh configs/example_baseline.env
+# or
+DRY_RUN=1 bash scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
 ```
 
 Submit the real job:
 
 ```bash
-sbatch scripts/run_experiment.sh configs/example_baseline.env
+sbatch scripts/run_experiment.sh configs/experiment1/exp1_cell_B_mcp_baseline.env
 ```
 
 ## Output layout
@@ -91,11 +99,14 @@ Outputs follow the canonical `benchmarks/` shape:
 
 ## Status
 
-As of Apr 12, 2026:
+As of Apr 20, 2026:
 
 - Plan-Execute wiring is implemented through AssetOpsBench's canonical
   `plan-execute` CLI with explicit Smart Grid server overrides.
 - WandB config + summary emission is wired in the benchmark runner.
+- Experiment 1 / Experiment 2 config-template scaffolds now exist as separate
+  families so the shared Cell B naming is explicit instead of hidden in
+  ad-hoc file names.
 - AaT and Hybrid can use the same artifact/logging path, but still need an
   explicit external runner template until a stable upstream invocation path
   exists.
