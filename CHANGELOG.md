@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-04-20
+
+### Config / Docs
+
+- Merged the PS B / abstract-planning docs forward onto the current shared
+  `main` line and tightened the abstract scaffold to a seven-sentence default
+  so the benchmark artifact, systems comparison, and reproducibility story all
+  fit cleanly (follow-up to review feedback) (Alex)
+
 ## 2026-04-18
 
 ### Config / Docs
@@ -17,6 +26,16 @@
 - Archived the Apr 7 meeting notes and the Apr 14 reschedule-planning docs so
   live `planning/` only holds upcoming agendas / prep plus the actual Apr 16
   meeting record (Alex)
+
+## 2026-04-16
+
+### Config / Docs
+
+- Added PS B scenario-evaluation methodology with explicit circularity,
+  duplication, and acceptance criteria for generated-vs-hand-crafted scenario
+  validation — addresses #51 — M (Alex)
+- Added NeurIPS abstract-planning doc with title candidates, evidence
+  structure, and a reusable abstract skeleton — addresses #77 — S (Alex)
 
 ## 2026-04-13
 
@@ -40,6 +59,7 @@
   — #61, #62, #22 (partial) — S (Alex)
 - Added benchmark config docs and an example env for the shared runner path
   — #61, #62 — S (Alex)
+
 ## 2026-04-11
 
 ### Code Changes
