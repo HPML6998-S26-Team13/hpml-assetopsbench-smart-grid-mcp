@@ -26,6 +26,7 @@ data/raw/
 *.parquet
 *.jsonl
 !data/processed/*.csv
+!results/metrics/**/*.csv
 
 # Slurm logs
 logs/*.out

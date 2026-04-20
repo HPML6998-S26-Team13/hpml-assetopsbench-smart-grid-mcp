@@ -1,0 +1,8 @@
+-r requirements.txt
+
+# Cluster-only serving stack (not portable to laptop/macOS environments)
+torch==2.7.0
+transformers==4.51.3
+huggingface-hub==0.31.1
+vllm==0.8.5
+nvidia-cudnn-cu12==9.10.0.56

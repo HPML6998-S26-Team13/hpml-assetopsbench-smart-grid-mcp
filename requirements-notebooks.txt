@@ -1,0 +1,4 @@
+-r requirements.txt
+
+# Interactive notebook authoring UI
+jupyterlab

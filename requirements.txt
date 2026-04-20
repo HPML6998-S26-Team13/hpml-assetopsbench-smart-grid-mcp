@@ -4,9 +4,6 @@ transformers
 datasets
 huggingface-hub
 
-# Serving
-vllm
-
 # MCP
 mcp
 
@@ -22,6 +19,11 @@ pandas
 numpy
 matplotlib
 seaborn
+
+# Reproducible notebook execution
+nbconvert
+nbclient
+ipykernel
 
 # Utilities
 tqdm
