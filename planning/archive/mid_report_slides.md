@@ -65,7 +65,7 @@ Akshat Bhandari (ab6174), Aaron Fan (af3623), Tanisha Rathod (tr2828), Wei Alexa
 
 - **MCP servers built for all four domains** on shared base class: IoT (sensor reads, asset metadata), FMSR (failure search, **IEC 60599 Rogers Ratio DGA analysis**), TSFM (RUL forecast, z-score anomaly detection, OLS trend), WO (work-order CRUD, downtime estimation) — ~2k Python lines landed
 
-- **WatsonX Llama models verified and benchmarked end-to-end** *(see `docs/watsonx_access.md`)*:
+- **WatsonX Llama models verified and benchmarked end-to-end** *(see `docs/reference/watsonx_access.md`)*:
   - Llama-4-Maverick-17B (judge): ~84 tok/s, tight variance (warm 1.4-1.6s, cold ≈ warm) — interactive-speed
   - Llama-3.3-70B-instruct (scaling): ~19-34 tok/s, high cold-call variance (short-prompt warm range 1.6-16.3s)
   - **Maverick is ~2.3x faster than 70B** on matched 1,400-token code-review prompts (6.4s warm vs 14.8s warm); both correctly identified key bugs in the smoke test

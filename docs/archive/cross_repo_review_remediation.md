@@ -30,7 +30,7 @@ Completed review slices so far:
    - `data/README.md`
    - `mcp_servers/README.md`
    - `docs/compute_plan.md`
-   - `docs/watsonx_access.md`
+   - `docs/reference/watsonx_access.md`
 3. Personal repo live planning/docs slice
    - `notes/current_team_status.md`
    - `notes/roadmap.md`
@@ -54,7 +54,7 @@ Completed review slices so far:
 5. Team repo live-doc slice
    - `README.md`
    - `docs/README.md`
-   - `docs/project_reference.md`
+   - `docs/reference/project_reference.md`
    - `docs/project_synopsis.md`
    - `docs/repo_strategy.md`
    - `reports/README.md`
@@ -277,7 +277,7 @@ Update the personal repo only after the team repo remediation PR has passed the 
   Task: review for stale references and doc-routing problems.
   Acceptance: any drift findings are captured in the spec before implementation starts.
 
-- [x] `docs/project_reference.md`
+- [x] `docs/reference/project_reference.md`
   Task: review for stale references, wrong counts, or obsolete workflow assumptions.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
@@ -447,7 +447,7 @@ Batch C - team repo live docs and planning surfaces
   Task: remove machine-specific paths and clarify canonical run proof expectations.
   Acceptance: the runbook is portable and reproducible for teammates.
 
-- [ ] `docs/watsonx_access.md`
+- [ ] `docs/reference/watsonx_access.md`
   Task: tighten secret-handling and usage guidance to match actual scripts and team workflow.
   Acceptance: WatsonX setup docs do not contradict the verification script and include concrete operational guidance.
 
@@ -459,7 +459,7 @@ Batch C - team repo live docs and planning surfaces
   Task: apply the doc-index and routing corrections captured in the Batch C repo-doc portion of F-21.
   Acceptance: doc-routing guidance matches the current live doc set, and the updated content is explicitly reconciled against F-21 in the remediation matrix.
 
-- [ ] `docs/project_reference.md`
+- [ ] `docs/reference/project_reference.md`
   Task: apply the stale-reference and project-fact corrections captured in the Batch C repo-doc portion of F-21.
   Acceptance: the reference doc matches current live project facts, and the updated content is explicitly reconciled against F-21 in the remediation matrix.
 

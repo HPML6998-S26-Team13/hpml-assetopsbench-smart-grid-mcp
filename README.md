@@ -56,18 +56,18 @@ via WatsonX API to assess scaling effects.
 
 ```
 .
-├── README.md                     # This file — project overview, current status, structure
+├── README.md                     # This file - project overview, current status, structure
 ├── requirements.txt              # Python dependencies (ibm-watsonx-ai, pandas, etc)
 ├── .github/workflows/            # CI (Black formatting check)
 │
-├── data/                         # Data pipeline + processed datasets — see data/README.md
+├── data/                         # Data pipeline + processed datasets - see data/README.md
 │   ├── build_processed.py        #   Downloads + joins 5 Kaggle datasets via synthesized transformer_id
 │   ├── generate_synthetic.py     #   Offline synthetic equivalent (no Kaggle needed)
 │   ├── processed/                #   6 public-safe synthetic CSVs tracked in git (asset_metadata, dga_records, …)
-│   ├── scenarios/                #   AssetOpsBench-format scenario files — see data/scenarios/README.md
+│   ├── scenarios/                #   AssetOpsBench-format scenario files - see data/scenarios/README.md
 │   └── raw/                      #   GITIGNORED raw Kaggle downloads
 │
-├── mcp_servers/                  # 4 MCP servers on shared base — see mcp_servers/README.md
+├── mcp_servers/                  # 4 MCP servers on shared base - see mcp_servers/README.md
 │   ├── base.py                   #   Shared data loader + utilities
 │   ├── iot_server/               #   Sensor reads, asset metadata
 │   ├── fmsr_server/              #   Failure search, IEC 60599 Rogers Ratio DGA analysis
@@ -82,20 +82,21 @@ via WatsonX API to assess scaling effects.
 │   ├── test_inference.sh         #   Sanity checks against a live vLLM endpoint
 │   └── benchmark_prompts/        #   Prompt templates for latency tests
 │
-├── benchmarks/                   # Raw latency/throughput runs — see benchmarks/README.md
+├── benchmarks/                   # Raw latency/throughput runs - see benchmarks/README.md
 │   ├── cell_A_direct/            #   Direct-tool baseline (planned)
 │   ├── cell_B_mcp_baseline/      #   MCP baseline (planned)
 │   ├── cell_C_mcp_optimized/     #   Optimized MCP path (planned)
-│   ├── cell_Y_plan_execute/      #   Plan-Execute proof path (landed)
-│   └── cell_Z_hybrid/            #   Hybrid path (planned / mentor-gated)
+│   ├── cell_Y_plan_execute/      #   Plan-Execute proof path (WatsonX smoke landed)
+│   └── cell_Z_hybrid/            #   Hybrid path (future-work scope, not in core grid)
 │
-├── notebooks/                    # Jupyter notebooks — see notebooks/README.md
-├── profiling/                    # PyTorch Profiler + Nsight — see profiling/README.md
-├── results/                      # Curated metrics + figures — see results/README.md
+├── notebooks/                    # Jupyter notebooks - see notebooks/README.md
+├── profiling/                    # PyTorch Profiler + Nsight - see profiling/README.md
+├── results/                      # Curated metrics + figures - see results/README.md
 │
-├── docs/                         # Living authored documentation — see docs/README.md
+├── docs/                         # Living authored documentation - see docs/README.md
+│   └── reference/               #   Lower-churn class / mentor / setup reference docs
 ├── planning/                     # Meeting agendas + working notes
-└── reports/                      # Frozen deliverables (PDFs, PPTXs) — see reports/README.md
+└── reports/                      # Frozen deliverables (PDFs, PPTXs) - see reports/README.md
     └── archive/                  #   Superseded drafts
 ```
 
@@ -129,7 +130,7 @@ See:
 - [`docs/orchestration_wiring.md`](docs/orchestration_wiring.md) for what is
   wired today versus only adapter-ready
 - [`benchmarks/cell_Y_plan_execute/`](benchmarks/cell_Y_plan_execute/) for the
-  first kept proof run and artifact layout
+  first kept WatsonX smoke proof run and artifact layout
 - [`docs/insomnia_runbook.md`](docs/insomnia_runbook.md) for the shared Insomnia
   self-hosted vLLM path
 
@@ -139,7 +140,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 
-*Last updated: Apr 14, 2026 - W2 proof path landed; remaining risk is in overdue W2 closeout plus W3 profiling / PS B execution.*
+*Last updated: Apr 18, 2026 - Apr 16 post-call audit resolved the WO architecture decision, closed the first-WandB-run milestone, and narrowed the active risk to overdue W2 closeout plus W3 profiling / PS B execution.*
 
 **Week 1 (complete):**
 - [x] Problem statement finalized (four contributions)
@@ -147,8 +148,8 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] GitHub repo scaffolded, WandB team created, **repo now public** (Apr 7)
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
 - [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/compute_plan.md`)
-- [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end — 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/watsonx_access.md`)
-- [x] Data pipeline + tracked public-safe processed datasets landed (`data/processed/` with synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, and sensor readings — development-ready and safe to publish)
+- [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end - 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/reference/watsonx_access.md`)
+- [x] Data pipeline + tracked public-safe processed datasets landed (`data/processed/` with synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, and sensor readings - development-ready and safe to publish)
 - [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast, anomaly detection, work-order CRUD)
 - [x] `docs/data_pipeline.tex` paper section drafted
 - [x] **Mid-point report submitted** (`reports/2026-04-06_midpoint_submission.pdf`) to Courseworks on Mon Apr 6
@@ -157,14 +158,20 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] GitHub Projects reset as the canonical planning surface, with weekly iterations, workstream parent issues, and delivery-gate milestones
 - [x] Successful Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct, with kept smoke-test logs and fixed serve/test scripts
 - [x] First real SmartGridBench WandB run is live and back-linked to committed benchmark artifacts
-- [x] Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with a successful benchmark-facing proof run under `benchmarks/cell_Y_plan_execute/`
+- [x] Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with a successful WatsonX-hosted 70B / Mac 1-scenario smoke proof run under `benchmarks/cell_Y_plan_execute/`
 - [x] Scenario realism validation note landed with IEEE / IEC grounded findings for Dhaval-facing review
 
 **Still open from the original W2 critical path / backlog:**
 - [ ] `#3` Canonical benchmark scenario proof on the AssetOpsBench stack (Akshat)
-- [ ] `#58` Benchmark-Llama-path validation closeout plus `#9-#13` MCP hardening/tests (Tanisha)
+- [ ] `#58` Benchmark-Llama-path validation closeout plus `#9-#12` MCP hardening/tests (Tanisha) - PR `#115` now contains a real Insomnia A6000 / self-hosted 8B / all-4-server proof run plus branch-specific long-context serve notes, but the merge/readme cleanup is still open (see `docs/insomnia_runbook.md`)
 - [ ] `#7` / `#59` profiling wrappers and the first profiling-linked experiment capture path (Aaron)
 - [ ] `#15` / `#17` / `#18` / `#20` scenario-count, judge, and first trajectory artifacts (Akshat)
+
+**Current canonical scenario corpus:** 10 committed JSON scenarios under `data/scenarios/`. That is enough for smoke-proofing and early trajectories, but it is still below the intended benchmark corpus size for later experiment claims.
+
+**Resolved during the Apr 16 post-call audit:**
+- [x] `#13` WO architecture review closed as a documented keep-vs-pivot decision
+- [x] `#28` closed against the first real shared WandB run and its committed benchmark artifacts
 
 **W3 focus (Apr 14-20):**
 - Experiment 1 profiling captures plus profiling-to-WandB linkage (`#25`, `#27`)
@@ -178,7 +185,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - Problem Statement B extension: scenario generation pipeline, Knowledge Plugin, and validation methodology
 - NeurIPS 2026 draft first, then back-port to the class IEEE report format
 
-**Current default scope decision:** until Dhaval says otherwise, the working comparison is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition.
+**Current default scope decision:** the working comparison is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition, and the primary local benchmark model is self-hosted Llama-3.1-8B-Instruct with 70B reserved for selective WatsonX spot-checks.
 
 ## Key Dates
 
@@ -199,7 +206,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [PyTorch Profiler](https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html)
 - [Weights & Biases](https://wandb.ai/site)
 
-See also: [docs/project_reference.md](docs/project_reference.md) for class requirements, grading, and mentor guidance.
+See also: [docs/reference/project_reference.md](docs/reference/project_reference.md) for class requirements, grading, and mentor guidance.
 
 ## Acknowledgments
 

@@ -1,6 +1,6 @@
 # Repository Strategy
 
-*Last updated: April 10, 2026 - org repo is canonical*
+*Last updated: April 18, 2026 - org repo is canonical*
 
 ## Canonical repo layout
 
@@ -29,7 +29,7 @@ extension stabilizes.
 
 Alex also keeps private planning notes in the local class repo at:
 
-`~/coding/Classes/COMS-E6998/Final Project/`
+`~/coding/Classes/COMS-E6998/Final_Project/`
 
 That repo is for private prep notes, meeting prep, and personal status tracking.
 It is not the canonical source for shared team code or shared task state.
@@ -45,6 +45,7 @@ It is not the canonical source for shared team code or shared task state.
 | Shared planning docs and call notes | yes | mirrored copy | no |
 | Private prep notes and personal status docs | no | no | no |
 | WatsonX setup, compute notes, benchmark prompts | yes | mirrored copy | mostly no |
+| Lower-churn class / mentor reference docs | yes, under `docs/reference/` | mirrored copy | no |
 
 ## Day-to-day workflow
 
@@ -73,3 +74,5 @@ It is not the canonical source for shared team code or shared task state.
   belongs in AssetOpsBench.
 - The private class repo can hold candid status notes and prep material without
   polluting the shared repo.
+- Lower-churn reference docs can live under `docs/reference/` without turning
+  the top-level docs index into a junk drawer.

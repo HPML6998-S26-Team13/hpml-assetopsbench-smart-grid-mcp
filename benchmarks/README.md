@@ -18,7 +18,7 @@ benchmarks/
 ├── cell_B_mcp_baseline/   # shared cell between Experiment 1 and Experiment 2
 ├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
 ├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline
-└── cell_Z_hybrid/         # Hybrid on MCP baseline, if mentor-cleared
+└── cell_Z_hybrid/         # Hybrid follow-on only, outside the core committed grid
     # each cell dir keeps the same config.json / raw/ / summary.json shape
 ```
 
@@ -32,14 +32,15 @@ benchmarks/
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
 
-## Status (Apr 14, 2026)
+## Status (Apr 18, 2026)
 
 The directory is no longer scaffolding-only:
 
-- the first kept proof run now lives under `cell_Y_plan_execute/`
+- the first kept proof run now lives under `cell_Y_plan_execute/`, specifically as a WatsonX-hosted 70B / Mac 1-scenario smoke run
 - `config.json`, `summary.json`, `meta.json`, `harness.log`, and raw per-run
   JSON outputs are committed for that run
 - the committed artifacts back-reference the first real shared WandB run
+- the canonical scenario corpus currently contains 10 committed JSON scenarios under `data/scenarios/`
 
 What is still missing:
 

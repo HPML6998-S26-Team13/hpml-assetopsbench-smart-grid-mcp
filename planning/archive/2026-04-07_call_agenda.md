@@ -7,7 +7,7 @@
 **0:00-0:03 — Week 1 recap (Alex)**
 - Mid-checkpoint submitted Apr 6 (Courseworks + `reports/2026-04-06_midpoint_submission.pdf`)
 - Team repo made **public** on GitHub (Apr 7)
-- WatsonX API: received from Dhaval Apr 5, verified end-to-end, 6 Llama models available, Maverick-17B (~84 tok/s interactive) + Llama-3.3-70B-instruct (~19-34 tok/s) benchmarked (see `docs/watsonx_access.md`)
+- WatsonX API: received from Dhaval Apr 5, verified end-to-end, 6 Llama models available, Maverick-17B (~84 tok/s interactive) + Llama-3.3-70B-instruct (~19-34 tok/s) benchmarked (see `docs/reference/watsonx_access.md`)
 - AssetOpsBench fork synced with upstream
 - Dhaval email sent with Hybrid orchestration novelty check — awaiting reply
 

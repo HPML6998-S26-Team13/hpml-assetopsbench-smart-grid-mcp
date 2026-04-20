@@ -1,6 +1,6 @@
 # Insomnia Runbook
 
-*Last updated: 2026-04-10*
+*Last updated: 2026-04-18*
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
@@ -186,6 +186,29 @@ Expect 1-3 minutes to "Uvicorn running on http://0.0.0.0:8000" — Python
 imports take ~30 seconds, model load to GPU another minute, CUDA graph capture
 another minute. If you see no output at all within 30 seconds, vLLM is crashing
 on import and you need to investigate that first.
+
+For the successful **Apr 16 ET benchmark-path validation** currently sitting in PR `#115`,
+the committed artifacts support the following narrower reading:
+
+```bash
+python -u -m vllm.entrypoints.openai.api_server \
+    --model models/Llama-3.1-8B-Instruct \
+    --port 8000 \
+    --max-model-len 32768 \
+    --dtype float16
+```
+
+What is verified from committed artifacts:
+
+- the successful long-context validation used `--max-model-len 32768`, while the shared `scripts/vllm_serve.sh` path on the branch still defaulted to `8192`
+- the log reports `served_model_name: Llama-3.1-8B-Instruct`, but that appears as vLLM-reported runtime state rather than a committed explicit CLI flag in the branch script
+- actual startup-to-ready on that validation run was much shorter than the script timeout ceiling; the committed branch script default remained `STARTUP_TIMEOUT=600`
+- the committed `main` smoke path still documents the lighter `8192` configuration because that path was only intended as a short serve smoke, not a full benchmark-length validation
+
+Open questions for merge cleanup:
+
+- should `scripts/vllm_serve.sh` adopt `--max-model-len 32768` as the shared benchmark-path default?
+- are there local NCCL env overrides behind the successful branch run that still need to be codified in the shared script or runbook?
 
 To test inference, open a second SSH session and `curl` against the compute
 node hostname (visible in your interactive shell prompt, e.g. `ins080`):

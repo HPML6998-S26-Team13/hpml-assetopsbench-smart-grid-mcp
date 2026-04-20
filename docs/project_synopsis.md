@@ -1,6 +1,6 @@
 # Project Synopsis -- Cold Start Guide
 
-*Last updated April 14, 2026. Read time: ~10 minutes.*
+*Last updated April 18, 2026. Read time: ~10 minutes.*
 
 ## What is this project?
 
@@ -98,12 +98,12 @@ We extend AssetOpsBench by:
 2. **Wrapping four AssetOpsBench tool domains** (IoT, TSFM, FMSR, WO) as MCP servers
 3. **Profiling the LLM agent inference pipeline** end-to-end when executing scenarios
    through MCP
-4. **Comparing two orchestration paradigms** -- Agent-as-Tool (ReAct-based, with
-   reflection) and Plan-Execute (planner decomposes, executors run sequentially) -- on
+4. **Comparing two orchestration paradigms** -- Agent-as-Tool and Plan-Execute -- on
    end-to-end multi-domain scenarios. Per Dhaval's lecture: Agent-as-Tool wins benchmarks
    (reflection gives self-correction) but Plan-Execute is preferred in practice
    (predictable resources, visibility, no infinite loops). IBM focuses on improving
-   Plan-Execute. Exploratory direction: a hybrid with reflection checkpoints.
+   Plan-Execute. A hybrid with reflection checkpoints remains optional follow-on scope,
+   not a required class-project condition.
 
 We use **Llama-3.1-8B-Instruct** served via **vLLM** on GPU infrastructure, profile with **PyTorch
 Profiler**, and apply 2-3 optimization techniques:
@@ -141,11 +141,11 @@ profiling and optimization.
   LLMs reason about sensors/assets/failure modes beyond data-driven correlations. Directly
   relevant to our FMSR domain.
 - **"Why Do Multi-Agent LLM Systems Fail?"** (arXiv 2503.13657, Berkeley): failure taxonomy
-  for multi-agent systems — specification, inter-agent, and task verification failures.
+  for multi-agent systems - specification, inter-agent, and task verification failures.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 14, 2026)
+## Current status (April 18, 2026)
 
 **Week 1 is complete, and the repo crossed an important threshold on Apr 13: the first benchmark-facing Smart Grid run is now real on canonical history.**
 
@@ -159,7 +159,7 @@ Completed:
 - 5 candidate datasets identified (3 CC0, 2 restricted license)
 - Compute confirmed: Insomnia (6x H100, ~100x A6000) + $500 GCP credits/person
 - Compute plan committed (`docs/compute_plan.md`) mapping GPU needs per project phase
-- WatsonX API access received from mentor Apr 5 and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked at interactive speeds (`docs/watsonx_access.md`)
+- WatsonX API access received from mentor Apr 5 and verified end-to-end; Llama-4-Maverick-17B (judge) and Llama-3.3-70B-instruct (scaling comparison) both benchmarked at interactive speeds (`docs/reference/watsonx_access.md`)
 - Data pipeline scripts plus tracked public-safe processed datasets landed (`data/processed/`: synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, sensor readings for 20 transformers) while restricted-source Kaggle joins remain a local benchmarking path
 - MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast + z-score anomaly detection + OLS trend, work-order CRUD)
 - Paper-ready `docs/data_pipeline.tex` section drafted
@@ -169,12 +169,15 @@ Completed:
 Landed on canonical history during Week 2:
 - Successful Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct, with kept smoke-test logs and corrected serve/test scripts
 - First real WandB run is live and back-linked to committed benchmark artifacts
-- Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with one successful benchmark-facing proof run committed under `benchmarks/cell_Y_plan_execute/`
+- Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with one successful WatsonX-hosted 70B / Mac benchmark-facing smoke run committed under `benchmarks/cell_Y_plan_execute/`
 - Scenario realism validation note landed with IEEE / IEC grounded findings and narrowed mentor questions
+
+New but not yet canonical:
+- PR `#115` now contains a real Insomnia A6000 / self-hosted 8B benchmark-path proof for `#58`, plus concrete long-context serve notes, but that proof is still in review rather than on `main`
 
 Still open from the original W2 critical path / backlog:
 - Canonical benchmark scenario proof on the AssetOpsBench stack (`#3`)
-- MCP hardening/tests plus benchmark-Llama-path validation closeout (`#9-#13`, `#58`)
+- MCP hardening/tests plus benchmark-Llama-path validation closeout (`#9-#12`, `#58`) - now narrowed to getting PR `#115` merged cleanly and folding the long-context serve notes into the shared path
 - Profiling wrappers and the first profiling-linked experiment capture path (`#7`, `#59`)
 - Scenario-count, judge, and first trajectory artifacts (`#15`, `#17`, `#18`, `#20`)
 
@@ -184,6 +187,12 @@ Current W3 focus:
 - NeurIPS abstract outline / title candidates
 - Runbook consolidation for the infra / serve / profiling path
 
+Resolved during the Apr 16 post-call audit:
+- `#13` closed as a resolved WO architecture decision
+- `#28` closed against the first real shared WandB run
+- Hybrid explicitly moved out of the active class-project critical path
+- the primary local benchmark model is now clearly Llama-3.1-8B-Instruct, with 70B reserved for selective scaling spot-checks only
+
 Committed W3-W5 workstreams:
 - Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
 - Experiment 2: orchestration comparison and failure analysis
@@ -191,7 +200,10 @@ Committed W3-W5 workstreams:
 - Paper flow: NeurIPS draft first, then class-report back-port
 
 Current scope default:
-- Unless Dhaval says otherwise, the working experiment grid is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition.
+- the working experiment grid is **vanilla Agent-as-Tool vs vanilla Plan-Execute**
+- Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition
+- local benchmark runs default to self-hosted Llama-3.1-8B-Instruct on Insomnia
+- WatsonX-hosted 70B is used only for selective comparison runs, not as a duplicated full-grid requirement
 
 **Final deadline: May 4** (presentation + report + code)
 

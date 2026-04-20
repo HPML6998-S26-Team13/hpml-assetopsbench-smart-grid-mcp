@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-04-18
+
+### Config / Docs
+
+- Post-call planning audit synced the shared meeting notes, Apr 21 / Apr 28
+  call planning docs, and the main execution / synopsis / orchestration docs
+  to the live repo state after the Apr 16 team sync (Alex)
+- Lower-churn class / mentor setup docs moved under `docs/reference/`, with
+  repo-wide links updated mechanically to match the new paths (Alex)
+- Documentation now reflects the active four-cell experiment grid, Hybrid as
+  deferred future-work scope, and Llama-3.1-8B-Instruct as the primary local
+  benchmark model with 70B reserved for selective WatsonX spot-checks (Alex)
+- Added archived remediation notes under `docs/archive/` capturing the
+  cross-repo review follow-up and spec companion for that cleanup stream (Alex)
+- Archived the Apr 7 meeting notes and the Apr 14 reschedule-planning docs so
+  live `planning/` only holds upcoming agendas / prep plus the actual Apr 16
+  meeting record (Alex)
+
 ## 2026-04-16
 
 ### Config / Docs
@@ -120,7 +138,7 @@
 - WatsonX.ai setup: credentials received from Dhaval (#83), `.env`
   configured (#84), `ibm-watsonx-ai` installed (#85), 6 Llama models
   confirmed (#87), Maverick-17B + Llama-3.3-70B latency benchmarked
-  (#88), documented in `docs/watsonx_access.md` (#89) (Alex)
+  (#88), documented in `docs/reference/watsonx_access.md` (#89) (Alex)
 - `ibm-watsonx-ai` added to `requirements.txt` — #90 closed (Alex)
 - LaTeX data pipeline section and dataset visualization — #102, #103
   closed (Tanisha)

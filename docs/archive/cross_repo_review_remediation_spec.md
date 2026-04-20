@@ -66,7 +66,7 @@ If Phase 1 triage finds a mismatch between this table and the actual live server
      - `data/README.md`
      - `mcp_servers/README.md`
      - `docs/compute_plan.md`
-     - `docs/watsonx_access.md`
+     - `docs/reference/watsonx_access.md`
    - Counts: 3 Critical / 6 High / 10 Medium / 10 Low
 
 3. **Personal repo live planning/docs slice**
@@ -97,7 +97,7 @@ If Phase 1 triage finds a mismatch between this table and the actual live server
    - Files:
      - `README.md`
      - `docs/README.md`
-     - `docs/project_reference.md`
+     - `docs/reference/project_reference.md`
      - `docs/project_synopsis.md`
      - `docs/repo_strategy.md`
      - `reports/README.md`
@@ -179,7 +179,7 @@ Field conventions:
 | F-07 | C | High | `scripts/setup_insomnia.sh` | `#6`, `#8` | `#6 Open; #8 Open` | N/A | B | Pin the model revision/checkpoint used for server bring-up so later runs are reproducible. |
 | F-08 | C | High | `scripts/test_inference.sh` | `#6`, `#57` | `#6 Open; #57 Closed` | `#57 keep closed + PR note` | B | Align model selection with the serve path and only report success on validated non-error responses. |
 | F-09 | C | High | `docs/compute_plan.md` | `#6`, `#8`, `#37` | `#6 Open; #8 Open; #37 Open` | N/A | C | Remove stale scheduler assumptions, dead references, and teammate-specific examples from compute guidance. |
-| F-10 | E | High | `scripts/verify_watsonx.py`, `docs/watsonx_access.md` | `#19`, `#21` | `#19 Open; #21 Open` | N/A | B/C | Document a concrete shared-project / key-rotation workflow and make the verification tool safe to run/share. |
+| F-10 | E | High | `scripts/verify_watsonx.py`, `docs/reference/watsonx_access.md` | `#19`, `#21` | `#19 Open; #21 Open` | N/A | B/C | Document a concrete shared-project / key-rotation workflow and make the verification tool safe to run/share. |
 | F-11 | C | High | `scripts/vllm_serve.sh` | `#6`, `#8`, `#37` | `#6 Open; #8 Open; #37 Open` | N/A | B | Add explicit precondition checks for venv, model path, and related serve-time assumptions; implement together with F-05 in one serve-time precondition block. |
 | F-12 | C | High | `docs/eval_harness_readme.md` | `#57`, `#37` | `#57 Closed; #37 Open` | `#57 keep closed + PR note` | C | Replace Akshat-local paths with teammate-portable instructions and canonical proof expectations. |
 | F-13 | B | Critical | `mcp_servers/iot_server/server.py` | `#9`, `#58` | `#9 Open; #58 Open` | N/A | A | Fix `get_sensor_readings` timestamp serialization so non-empty responses do not crash. |
@@ -190,7 +190,7 @@ Field conventions:
 | F-18 | B | High | `data/generate_synthetic.py`, `mcp_servers/wo_server/server.py` | `#12`, `#58` | `#12 Open; #58 Open` | N/A | A | Align synthetic fault-record schema with WO expectations and enforce transformer referential integrity on work-order creation. |
 | F-19 | B | High | `data/build_processed.py` | `#11` | `#11 Open` | N/A | A | Replace brittle/possibly misleading processed-data assumptions: stop silently zeroing CO/CO2 and guard raw/Kaggle column expectations. |
 | F-20 | B | High | `mcp_servers/fmsr_server/server.py` | `#11`, `#58` | `#11 Open; #58 Open` | N/A | A | Reject invalid negative gas concentrations rather than returning misleading Rogers-ratio outputs. |
-| F-21 | F | High | `README.md`, `docs/README.md`, `docs/project_reference.md`, `docs/project_synopsis.md`, `docs/repo_strategy.md`, `reports/README.md`, `benchmarks/README.md`, `mcp_servers/README.md` | no corresponding issue | `no corresponding issue — review-surfaced team-repo doc/planning drift that was never represented as a standalone issue` | N/A | A/C | Repair repo-level onboarding drift: remote naming, empty experiment instructions, malformed tree lines, stale doc-routing guidance, and missing benchmark/server-composition guidance. Note: the `mcp_servers/README.md` portion is handled alongside Batch A contract cleanup; the rest stays in Batch C. |
+| F-21 | F | High | `README.md`, `docs/README.md`, `docs/reference/project_reference.md`, `docs/project_synopsis.md`, `docs/repo_strategy.md`, `reports/README.md`, `benchmarks/README.md`, `mcp_servers/README.md` | no corresponding issue | `no corresponding issue — review-surfaced team-repo doc/planning drift that was never represented as a standalone issue` | N/A | A/C | Repair repo-level onboarding drift: remote naming, empty experiment instructions, malformed tree lines, stale doc-routing guidance, and missing benchmark/server-composition guidance. Note: the `mcp_servers/README.md` portion is handled alongside Batch A contract cleanup; the rest stays in Batch C. |
 | F-22 | F | Critical | `planning/2026-04-07_meeting_notes.md`, `planning/2026-04-14_call_agenda.md`, `planning/2026-04-14_call_prep.md`, `planning/2026-04-21_call_agenda.md`, `planning/2026-04-21_call_prep.md` | no corresponding issue | `no corresponding issue — live team planning drift surfaced during review, not previously tracked on the board` | N/A | C | Update live planning docs so they encode the correct execution state, Tier-1 fallback gate, and explicit artifact-based acceptance criteria. |
 | F-23 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-07_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Remove stale framing that still treats PS B as unresolved stretch work after the Apr 7 decisions. |
 | F-24 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-14_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Replace archived tracker references with the canonical GitHub Project and current team-repo sources. |
@@ -314,7 +314,7 @@ Key issues:
 Primary affected files:
 
 - `scripts/verify_watsonx.py`
-- `docs/watsonx_access.md`
+- `docs/reference/watsonx_access.md`
 
 Primary affected issues:
 
@@ -336,7 +336,7 @@ Primary affected files:
 
 - `README.md`
 - `docs/README.md`
-- `docs/project_reference.md`
+- `docs/reference/project_reference.md`
 - `docs/project_synopsis.md`
 - `docs/repo_strategy.md`
 - `reports/README.md`
