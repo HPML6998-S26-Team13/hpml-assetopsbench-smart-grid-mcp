@@ -1,0 +1,5 @@
+tier,transformer_count,mean_age_years,mean_rul_days,min_rul_days,max_rul_days
+Healthy / long RUL,10,12.4,3464.8,2526.0,4316.0
+Healthy / aging,0,,,,
+Minor or moderate fault,5,7.8,850.8,547.0,1100.0
+Serious fault,5,11.4,43.2,8.0,72.0

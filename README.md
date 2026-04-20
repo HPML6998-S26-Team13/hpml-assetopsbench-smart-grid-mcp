@@ -115,7 +115,19 @@ via WatsonX API to assess scaling effects.
 ```bash
 git clone https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
 cd hpml-assetopsbench-smart-grid-mcp
-pip install -r requirements.txt
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+```
+
+Optional overlays:
+
+```bash
+# interactive notebook authoring
+uv pip install -r requirements-notebooks.txt
+
+# Insomnia / cluster serving stack
+uv pip install -r requirements-insomnia.txt
 ```
 
 ### Running Experiments

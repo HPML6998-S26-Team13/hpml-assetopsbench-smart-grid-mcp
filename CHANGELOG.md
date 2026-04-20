@@ -4,6 +4,13 @@
 
 ### Config / Docs
 
+- Added `notebooks/01_data_exploration.ipynb` as the reproducible replacement
+  for the earlier static dataset smoke-test image, with notebook-generated
+  summary CSVs and overview figures under `results/` (Alex)
+- Split dependency guidance into a portable base `requirements.txt`, a
+  cluster-serving `requirements-insomnia.txt`, and a notebook-authoring
+  `requirements-notebooks.txt`, with setup docs/scripts updated to use `uv`
+  consistently (Alex)
 - Merged the PS B / abstract-planning docs forward onto the current shared
   `main` line and tightened the abstract scaffold to a seven-sentence default
   so the benchmark artifact, systems comparison, and reproducibility story all

@@ -1,0 +1,5 @@
+tier,Cooling System Failure,Insulation Degradation,Line Breakage,Overload Trip,Tap Changer Malfunction,Transformer Failure
+Healthy / long RUL,1,4,2,1,0,0
+Healthy / aging,0,0,0,0,0,0
+Minor or moderate fault,3,1,1,2,3,3
+Serious fault,4,4,2,3,3,4

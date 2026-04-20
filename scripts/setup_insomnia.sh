@@ -21,17 +21,12 @@ VENV_DIR="$REPO_ROOT/.venv-insomnia"
 MODEL_DIR="$REPO_ROOT/models"
 MODEL_NAME="meta-llama/Llama-3.1-8B-Instruct"
 MODEL_REVISION="${MODEL_REVISION:-}"
-VLLM_VERSION="${VLLM_VERSION:-0.8.5}"
-TORCH_VERSION="${TORCH_VERSION:-2.7.0}"
-TRANSFORMERS_VERSION="${TRANSFORMERS_VERSION:-4.51.3}"
-HF_HUB_VERSION="${HF_HUB_VERSION:-0.31.1}"
-CUDNN_VERSION="${CUDNN_VERSION:-9.10.0.56}"
 
 echo "=== Insomnia Environment Setup ==="
 echo "Repo root: $REPO_ROOT"
 echo "Model: $MODEL_NAME @ $MODEL_REVISION"
 
-for cmd in python3; do
+for cmd in python3 uv; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "ERROR: required command not found: $cmd" >&2
         exit 1
@@ -54,7 +49,7 @@ fi
 if [ ! -d "$VENV_DIR" ]; then
     echo ""
     echo "[1/4] Creating Python virtual environment..."
-    python3 -m venv "$VENV_DIR"
+    uv venv "$VENV_DIR" --python 3.11
 else
     echo "[1/4] Virtual environment already exists at $VENV_DIR"
 fi
@@ -63,16 +58,8 @@ source "$VENV_DIR/bin/activate"
 
 # --- Step 2: Install dependencies ---
 echo ""
-echo "[2/4] Installing pinned dependencies..."
-pip install --upgrade pip
-pip install \
-    "vllm==$VLLM_VERSION" \
-    "torch==$TORCH_VERSION" \
-    "transformers==$TRANSFORMERS_VERSION" \
-    "huggingface-hub==$HF_HUB_VERSION"
-
-# cuDNN for PyTorch (no system cuDNN on Insomnia)
-pip install "nvidia-cudnn-cu12==$CUDNN_VERSION"
+echo "[2/4] Installing pinned dependencies from requirements-insomnia.txt..."
+uv pip install --python "$VENV_DIR/bin/python" -r "$REPO_ROOT/requirements-insomnia.txt"
 
 echo ""
 echo "Installed versions:"
@@ -99,12 +86,7 @@ echo "=== Setup Complete ==="
 echo ""
 echo "Model downloaded to: $MODEL_DIR/Llama-3.1-8B-Instruct"
 echo "Virtual env at:      $VENV_DIR"
-echo "Pinned stack:"
-echo "  vllm==$VLLM_VERSION"
-echo "  torch==$TORCH_VERSION"
-echo "  transformers==$TRANSFORMERS_VERSION"
-echo "  huggingface-hub==$HF_HUB_VERSION"
-echo "  nvidia-cudnn-cu12==$CUDNN_VERSION"
+echo "Pinned stack file:   requirements-insomnia.txt"
 echo ""
 echo "Next step: submit the vLLM serving job:"
 echo "  sbatch scripts/vllm_serve.sh"

@@ -126,12 +126,16 @@ deactivate 2>/dev/null || true
 rm -rf .venv-insomnia          # slow on networked FS, can take 1-2 min
 uv venv .venv-insomnia --python 3.11
 source .venv-insomnia/bin/activate
-uv pip install vllm torch transformers huggingface-hub nvidia-cudnn-cu12
+uv pip install -r requirements-insomnia.txt
 ```
 
 **Note:** `.venv-insomnia/` under the team directory is shared across
 teammates. Only recreate it after pinging the team — an in-flight `rm -rf`
 will take down any running jobs that depend on it.
+
+`requirements-insomnia.txt` is the canonical pinned serving overlay: it layers
+the cluster-only `vllm` / cuDNN stack on top of the portable base
+`requirements.txt`.
 
 Verify before submitting any Slurm jobs:
 ```bash

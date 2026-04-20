@@ -15,11 +15,21 @@ notebooks/
 ## Conventions
 
 - **Number notebooks** by analysis order — `01_` comes before `02_` etc. so the pipeline reads top-down.
+- **Install the right notebook deps** — `requirements.txt` now carries the portable execution stack (`nbconvert`, `nbclient`, `ipykernel`); add `requirements-notebooks.txt` if you want the interactive JupyterLab UI locally.
 - **Don't commit rendered cell outputs.** `.ipynb_checkpoints/` is gitignored, but cell outputs still land in the notebook JSON. Run `jupyter nbconvert --clear-output --inplace <notebook>.ipynb` before `git add`.
 - **Pin versions** — record the Python + package versions used in a markdown cell at the top of each notebook. Future you will thank present you.
 - **Every figure generated here must write to `results/figures/`** — don't leave figures living inside the notebook only.
 - **Reference files by relative path from repo root** (e.g. `data/processed/sensor_readings.csv`), not by absolute path — keeps the notebook portable across machines.
 
-## Status (Apr 7, 2026)
+## Status (Apr 20, 2026)
 
-Scaffolding only. First notebook (`01_data_exploration.ipynb`) will land once someone generalizes the `docs/dataset_visualization.png` smoke test into a committed, reproducible notebook.
+Notebook 01 now exists:
+
+- `01_data_exploration.ipynb` is the reproducible replacement for the older
+  static `docs/dataset_visualization.png` smoke test
+- it reads the tracked processed CSVs under `data/processed/`
+- it writes stable exploratory outputs under `results/metrics/` and
+  `results/figures/`
+
+The remaining notebooks are still pending the benchmark / experiment artifacts
+they depend on.
