@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=vllm-llama8b
 #SBATCH --account=edu
-#SBATCH --partition=burst
-#SBATCH --qos=burst
+#SBATCH --partition=short
+#SBATCH --qos=short
 #SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=4
@@ -12,7 +12,14 @@
 # Launches vLLM serving Llama-3.1-8B-Instruct on a single A6000.
 # After the server starts, runs a test prompt and keeps serving until the time limit.
 #
+# MUST be submitted from the repo root — `#SBATCH --output=logs/...` is
+# resolved relative to $SLURM_SUBMIT_DIR, so running `sbatch` from elsewhere
+# either writes logs to a surprising location or fails with "no such file".
+# If you need to submit from a different directory, add
+# `--chdir=/path/to/repo` to the sbatch invocation.
+#
 # Usage (with BEGIN/END/FAIL email notifications):
+#   cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 #   sbatch --mail-type=BEGIN,END,FAIL --mail-user=<UNI>@columbia.edu scripts/vllm_serve.sh
 #
 # Or without notifications:
@@ -21,11 +28,21 @@
 # Tip: export MAIL_USER=<UNI>@columbia.edu in your shell profile and run:
 #   sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" scripts/vllm_serve.sh
 #
-# To connect from the login node (after job starts):
-#   See the job output for the node hostname, then:
-#   ssh -N -L 8000:localhost:8000 <node_hostname>
-#   In a second terminal:
-#   bash scripts/test_inference.sh localhost 8000
+# --- Connecting to the running server ---
+#
+# vLLM binds to 127.0.0.1 on the compute node (not the compute node's external
+# interface), so SSH-tunneling from the login node does NOT work. The tested
+# path is to attach to the Slurm job from another shell via --overlap:
+#
+#   srun --jobid=<JOB_ID> --overlap --pty bash
+#
+# Inside that shell, hit the server via localhost:
+#
+#   bash scripts/test_inference.sh localhost 8000 models/Llama-3.1-8B-Instruct
+#   # or raw curl:
+#   curl -s http://127.0.0.1:8000/v1/completions \
+#       -H "Content-Type: application/json" \
+#       -d '{"model":"models/Llama-3.1-8B-Instruct","prompt":"hello","max_tokens":16}'
 
 set -euo pipefail
 

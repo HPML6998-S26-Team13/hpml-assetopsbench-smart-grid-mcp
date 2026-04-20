@@ -1,7 +1,10 @@
 -r requirements.txt
 
-# Cluster-only serving stack (not portable to laptop/macOS environments)
-torch==2.7.0
+# Cluster-only serving stack (not portable to laptop/macOS environments).
+# torch is pinned to the version vllm 0.8.5 actually resolves to; prior
+# setups pinned 2.7.0 which caused ResolutionImpossible because vllm 0.8.5
+# caps at torch<2.7. See issue #111.
+torch==2.6.0
 transformers==4.51.3
 huggingface-hub==0.31.1
 vllm==0.8.5

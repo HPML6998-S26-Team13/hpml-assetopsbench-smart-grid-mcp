@@ -16,6 +16,10 @@
 # but still need an explicit external runner command until upstream exposes a
 # stable CLI entry point for those modes.
 #
+# MUST be submitted from the repo root — `#SBATCH --output=logs/...` resolves
+# relative to $SLURM_SUBMIT_DIR. If you need to submit from elsewhere, add
+# `--chdir=/path/to/repo` to the sbatch invocation.
+#
 # Usage:
 #   sbatch scripts/run_experiment.sh configs/example_baseline.env
 

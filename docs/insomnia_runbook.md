@@ -1,13 +1,22 @@
 # Insomnia Runbook
 
-*Last updated: 2026-04-18*
+*Last updated: 2026-04-20*
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
 HPC cluster. Read [`compute_plan.md`](compute_plan.md) first for the higher-level
-hardware strategy (which GPU for which phase, Insomnia vs GCP). This doc covers
-the cluster-specific operational details that aren't obvious from the official
-RCS documentation.
+hardware strategy (which GPU for which phase, Insomnia vs GCP), and
+[`runbook.md`](runbook.md) for the end-to-end reproducibility story. This doc
+covers the cluster-specific operational details that aren't obvious from the
+official RCS documentation.
+
+## Two runbooks, one project
+
+`docs/runbook.md` is the top-level reproducibility doc (preconditions,
+setup, day-to-day cell submission, troubleshooting decision tree). This
+file (`insomnia_runbook.md`) is the cluster-specific gotcha reference that
+`runbook.md` links into. Start with `runbook.md` when onboarding;
+come back here when you hit a weird Slurm/CUDA/vLLM behavior.
 
 ## Slurm: account, partition, QoS
 
