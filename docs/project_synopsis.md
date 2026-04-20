@@ -100,10 +100,12 @@ We extend AssetOpsBench by:
    through MCP
 4. **Comparing two orchestration paradigms** -- Agent-as-Tool and Plan-Execute -- on
    end-to-end multi-domain scenarios. Per Dhaval's lecture: Agent-as-Tool wins benchmarks
-   (reflection gives self-correction) but Plan-Execute is preferred in practice
-   (predictable resources, visibility, no infinite loops). IBM focuses on improving
-   Plan-Execute. A hybrid with reflection checkpoints remains optional follow-on scope,
-   not a required class-project condition.
+   (reflection gives self-correction) but Plan-Execute remains the preferred structured
+   enterprise baseline in practice (predictable resources, visibility, no infinite loops).
+   IBM-facing workflow guidance also points toward plan-first orchestration for those
+   cases. A third orchestration remains optional follow-on scope; if we revive it, the
+   strongest candidate is a verifier-gated Plan-Execute design rather than a generic
+   reflection-checkpoint variant.
 
 We use **Llama-3.1-8B-Instruct** served via **vLLM** on GPU infrastructure, profile with **PyTorch
 Profiler**, and apply 2-3 optimization techniques:

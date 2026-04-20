@@ -133,7 +133,7 @@ If Phase 1 triage finds a mismatch between this table and the actual live server
 
 ## Source Review Records
 
-- Prompt logs for Claude review runs live under `claude_mcp_prompts/` in the repo whose files were reviewed for that slice.
+- Prompt logs for Claude review runs live under `claude-prompts/` in the repo whose files were reviewed for that slice.
 - This spec is the canonical place to lift forward deduplicated Critical/High findings and, during Phase 1, any Medium/Low findings that still matter for implementation.
 - Until a finding is lifted into the Remediation Matrix, its source of truth is the completed review slice summary that produced it and this plan/spec pair under `docs/plans/`.
 - Aggregate slice totals before deduplication: 17 Critical / 36 High / 52 Medium / 44 Low.

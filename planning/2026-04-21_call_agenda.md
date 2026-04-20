@@ -10,6 +10,7 @@
   - `[#28](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/28)` closed
   - Hybrid explicitly moved out of the active critical path
   - PR `[#115](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/pull/115)` now includes a real Insomnia A6000 / self-hosted 8B / all-4-server proof for `[#58](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/58)`, but it is still not merged
+  - the Apr 20 board reset now makes the remaining W2 carryover explicit with Apr 20-21 dates instead of leaving stale W2/W3 targets in place
 - Which overdue W2 items are still hanging around anyway?
 - What evidence is on canonical history versus still trapped in open PRs?
 

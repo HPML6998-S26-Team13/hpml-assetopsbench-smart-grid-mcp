@@ -15,6 +15,21 @@
   `main` line and tightened the abstract scaffold to a seven-sentence default
   so the benchmark artifact, systems comparison, and reproducibility story all
   fit cleanly (follow-up to review feedback) (Alex)
+## 2026-04-19
+
+### Config / Docs
+
+- Reframed the optional `#23` third-orchestration follow-on in local planning
+  docs from a generic "PE + reflection checkpoints" hybrid toward a
+  verifier-gated Plan-Execute / `Plan-Execute-Verify-Replan` design, while
+  keeping AaT vs PE as the core committed comparison (Alex)
+- Reset the live project board's stale overdue targets on Apr 20, hard-dating
+  the remaining W2 carryover to Apr 20-21, pushing selected spillover W3 items
+  into W4 explicitly, and syncing the shared planning docs to the new dates
+  (Alex)
+- Added the repo-local `Manually auto-approve PR` workflow from
+  `ai-coding-agents` so future PR review flows can trigger the shared
+  auto-approval path directly from GitHub Actions (Alex)
 
 ## 2026-04-18
 

@@ -66,7 +66,7 @@ The original W2 foundation tasks were a single bottleneck. As of Apr 14, that bo
 | Task | Owner | Blocked by | Blocks |
 |---|---|---|---|
 | Orchestration wiring (AaT + PE on team's MCP servers) | Alex | Tier 1 complete | Experiment 2 |
-| Hybrid orchestration prototype implementation | Alex | AaT vs PE comparison stable + spare bandwidth | Optional follow-on only |
+| Optional third-orchestration prototype (`#23`; recommended direction: Verified Plan-Execute / PE-Verify-Replan) | Alex | AaT vs PE comparison stable + spare bandwidth | Optional follow-on only |
 | Self-Ask integration (~10 LOC, addresses "Fail to Ask for Clarification" failures) | Alex | Proven active orchestration modes | Quality of active conditions + mitigation work |
 | 6-dimension LLM-as-Judge scoring in eval harness | Akshat | Eval harness running | Final scoring of all runs |
 | First Smart Grid scenario runs end-to-end through MCP with trajectory artifact captured | Akshat | All Tier 1 done | Confidence to start Tier 3 |
@@ -77,7 +77,7 @@ The original W2 foundation tasks were a single bottleneck. As of Apr 14, that bo
 | Task | Owner | Blocked by | Blocks |
 |---|---|---|---|
 | Experiment 1 runs (3 MCP conditions × N scenarios) | Aaron submits, Alex analyzes | Tier 1 + 2 complete | Final report |
-| Experiment 2 runs (3 orchestrations × N multi-domain scenarios) | Alex submits | Tier 1 + 2 complete | Final report |
+| Experiment 2 runs (core AaT vs PE; optional third orchestration only if justified) | Alex submits | Tier 1 + 2 complete | Final report |
 | INT8 quantization experiment | Aaron | vLLM + Slurm template | MCP-optimized condition |
 | KV-cache tuning experiment | Aaron | vLLM + Slurm template | MCP-optimized condition |
 | Batched tool-call scheduling implementation + experiment | Akshat | Eval harness + MCP | MCP-optimized condition |
@@ -197,7 +197,7 @@ Delta (B − A) = raw cost of MCP standardization. Delta (C − A) = residual co
 
 **Cell B is shared between both experiments** - it's the same set of runs, used to answer both research questions. So total unique committed cells = **4**, not 9.
 
-**Optional follow-on only:** a Hybrid cell Z (PE + reflection checkpoints) remains available as backlog / future-work scope if the core AaT vs PE comparison becomes stable early enough to justify it.
+**Optional follow-on only:** if we revive a third cell Z later, the strongest direction is no longer a generic "PE + reflection checkpoints" variant. The better candidate is a verifier-gated Plan-Execute design (`Plan-Execute-Verify-Replan` / `Verified PE`) with explicit step-verification and bounded repair / replanning semantics. That still remains backlog / future-work scope unless the core AaT vs PE comparison becomes stable early enough to justify it.
 
 ```
                   │ Direct (no MCP) │ MCP baseline │ MCP optimized │

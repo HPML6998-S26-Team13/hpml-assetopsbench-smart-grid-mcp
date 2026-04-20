@@ -106,7 +106,28 @@ means the absence of a default hybrid runner should not block this week's
 experiment progress. If Hybrid re-enters scope later, it still needs both:
 
 - a real runnable entry point, and
-- a written checkpoint design note that makes the reflection behavior explicit
+- a written design note that makes the control loop explicit
+
+Historically this slot was framed as `Plan-Execute + reflection checkpoints`.
+After reviewing Dhaval's notes, IBM-oriented plan-first workflow guidance, the
+current agent-orchestration literature, and the code paths we already own here,
+the stronger follow-on candidate is a verifier-gated Plan-Execute design:
+`Plan-Execute-Verify-Replan` / `Verified PE`.
+
+That means a meaningful `#23` prototype would likely include:
+
+- planner + executor reuse from the existing PE path
+- a step verifier that judges whether a completed step actually advanced the
+  scenario goal
+- a bounded repair policy (`continue`, `retry`, `patch remaining plan`, or
+  `replan suffix`)
+- explicit retry / replan budgets so the method stays benchmarkable and does
+  not quietly collapse into open-ended ReAct behavior
+
+That is still materially more engineering than a prompt tweak, but it fits this
+repo better than a vague "hybrid" label because it can reuse the same benchmark
+artifact path and `HYBRID_RUNNER_TEMPLATE` surface while remaining clearly
+distinct from vanilla Plan-Execute.
 
 ## Why this split is intentional
 
