@@ -62,14 +62,22 @@ Wraps any command with nvidia-smi capture (and optionally nsys). Output lands
 under one directory with a `capture_meta.json` that records host, start/stop
 timestamps, the wrapped command, and its exit code.
 
+**Must be run from inside a compute allocation.** `nvidia-smi` and `nsys` are
+not available on the login node. Use `srun --jobid=<id> --overlap --pty bash`
+to attach to a running job, or run inside the Slurm job itself. Do not wrap
+`sbatch` directly — `sbatch` returns immediately on the submit host and
+`capture_around.sh` would sample the login node instead of the GPU node.
+
 ```bash
+# From inside a compute allocation (srun shell or within the Slurm job):
+
 # nvidia-smi only
 bash profiling/scripts/capture_around.sh profiling/traces/pe_baseline_$(date +%s) \
-    -- sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
+    -- bash scripts/run_experiment.sh configs/pe_mcp_baseline.env
 
 # nvidia-smi + nsys (heavier)
 CAPTURE_NSYS=1 bash profiling/scripts/capture_around.sh profiling/traces/pe_baseline_nsys \
-    -- sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
+    -- bash scripts/run_experiment.sh configs/pe_mcp_baseline.env
 ```
 
 ### PyTorch Profiler via vLLM's built-in endpoints
@@ -122,6 +130,7 @@ under `capture_around.sh` and keep the per-run directory name aligned with
 the runner's `RUN_ID`:
 
 ```bash
+# Run this from inside a compute allocation, not from the login node.
 RUN_ID="pe_mcp_baseline_$(date +%s)"
 OUT=profiling/traces/$RUN_ID
 mkdir -p "$OUT"
@@ -129,7 +138,7 @@ mkdir -p "$OUT"
 # Benchmark writes to benchmarks/cell_Y_plan_execute/raw/<RUN_ID>/
 # Profiling writes to profiling/traces/$RUN_ID/
 bash profiling/scripts/capture_around.sh "$OUT" \
-    -- sbatch --wait scripts/run_experiment.sh configs/pe_mcp_baseline.env
+    -- bash scripts/run_experiment.sh configs/pe_mcp_baseline.env
 ```
 
 The W4 optimization experiments (`docs/execution_plan.md`) will consume these

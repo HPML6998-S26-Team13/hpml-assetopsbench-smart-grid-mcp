@@ -63,9 +63,10 @@ if [ ! -f ".venv-insomnia/bin/activate" ]; then
     exit 1
 fi
 
-STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-600}"
+STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-900}"
 MODEL_PATH="${MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 PORT="${PORT:-8000}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 
 if [ ! -d "$MODEL_PATH" ]; then
     echo "ERROR: missing model directory at $MODEL_PATH" >&2
@@ -86,6 +87,10 @@ trap 'if [ -n "$VLLM_PID" ]; then kill "$VLLM_PID" 2>/dev/null || true; wait "$V
 # --- CUDA setup (don't use module load cuda, it's broken) ---
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
+
+# Required on Insomnia HPE Slingshot fabric to prevent NCCL hanging on cxiWaitEventWait
+export NCCL_SOCKET_IFNAME=eth0
+export NCCL_IB_DISABLE=1
 
 # --- Activate venv ---
 source .venv-insomnia/bin/activate
@@ -114,9 +119,10 @@ VLLM_STARTUP_LOG="logs/vllm_startup_${SLURM_JOB_ID:-local}.log"
 # --- Launch vLLM server in background ---
 python3 -m vllm.entrypoints.openai.api_server \
     --model "$MODEL_PATH" \
+    --served-model-name "$(basename "$MODEL_PATH")" \
     --host 127.0.0.1 \
     --port "$PORT" \
-    --max-model-len 8192 \
+    --max-model-len "$MAX_MODEL_LEN" \
     --dtype float16 \
     >"$VLLM_STARTUP_LOG" 2>&1 &
 

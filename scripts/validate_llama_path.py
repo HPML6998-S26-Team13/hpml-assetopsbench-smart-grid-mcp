@@ -1,17 +1,19 @@
 """
-Validate that all four MCP servers work via the benchmark Llama path.
+WatsonX in-process connectivity check for the four MCP server modules.
 
-Issue: #58 — Validate all four MCP servers with the benchmark Llama path,
-             not only Claude Desktop.
+This is a development-time helper, not the canonical #58 benchmark proof.
+The authoritative end-to-end proof (Insomnia A6000, self-hosted Llama-3.1-8B,
+all four servers via the real AssetOpsBench plan-execute harness) is captured
+in benchmarks/validation_8760652.log and benchmarks/validation_output.json.
 
 What this script does
 ---------------------
 1. Defines a representative subset of MCP tool schemas in WatsonX
-   function-calling format (the same format the benchmark harness uses).
-2. Sends a multi-tool diagnostic scenario to llama-3-3-70b-instruct on
-   WatsonX and drives a tool-call loop until the model produces a final answer.
+   function-calling format.
+2. Sends a diagnostic scenario to llama-3-3-70b-instruct on WatsonX and
+   drives a tool-call loop until the model produces a final answer.
 3. Routes each tool call to the local MCP server Python functions (in-process).
-4. Prints a full annotated trace proving end-to-end connectivity.
+4. Prints a full annotated trace confirming import and call-path connectivity.
 
 Scenario
 --------
@@ -19,7 +21,7 @@ Scenario
 analyse the gas concentrations, and check its remaining useful life. Summarise
 the fault type and recommended next action."
 
-This scenario touches all four servers:
+Servers exercised:
   IoT    → get_asset_metadata
   FMSR   → get_dga_record, analyze_dga
   TSFM   → get_rul
