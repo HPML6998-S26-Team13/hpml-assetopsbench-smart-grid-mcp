@@ -13,8 +13,9 @@ the final abstract should be written from.
 - Target venue: **NeurIPS 2026 Datasets & Benchmarks Track**
 - Abstract should read as one tight paragraph, not a mini-outline
 - Current default is **seven sentences**, not four - four is too compressed for
-  this paper because the benchmark artifact, tool surface, experimental axis,
-  reproducibility story, and contribution all need explicit space
+  this paper because the abstract still needs room for five sentence-level
+  jobs: benchmark artifact, tool surface, experimental axis, reproducibility
+  story, and contribution
 - The paper's contribution is primarily **benchmark extension + systems
   measurement**, not a new foundation model
 - Claims must stay aligned with what the repo can prove on canonical history
@@ -158,10 +159,12 @@ above is the target seven-sentence structure. Four sentences would likely force
 multiple contribution blocks to collapse together too aggressively for this
 benchmark paper lane.
 
-> We present a Smart Grid transformer-maintenance extension of AssetOpsBench
-> for benchmarking industrial LLM agents on realistic diagnostic,
-> forecasting, and work-order workflows. The benchmark adds a hand-crafted Smart
-> Grid scenario set on top of AssetOpsBench. It exposes four tool domains
+> Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics
+> and maintenance and often leave the systems cost of protocolized tool use
+> under-measured, so we extend AssetOpsBench with a Smart Grid
+> transformer-maintenance benchmark for realistic diagnostic, forecasting, and
+> work-order workflows. The benchmark adds a hand-crafted Smart Grid scenario
+> set on top of AssetOpsBench. It exposes four tool domains
 > through the Model Context Protocol (MCP), enabling end-to-end evaluation of
 > agents that retrieve telemetry, diagnose transformer faults, forecast
 > degradation, and recommend maintenance actions. We pair this benchmark
@@ -169,7 +172,7 @@ benchmark paper lane.
 > MCP-mediated tool use and orchestration choices through latency, trajectory
 > quality, and task completion metrics. Our implementation emphasizes runnable
 > benchmark paths with committed artifacts, auditable evaluation outputs, and
-> reproducible experiment surfaces. We also treat benchmark growth
+> reproducible end-to-end benchmark paths. We also treat benchmark growth
 > conservatively by making scenario realism, duplication risk, and circularity
 > handling explicit rather than assuming generated data is automatically valid.
 > The resulting benchmark provides a practical testbed for studying industrial

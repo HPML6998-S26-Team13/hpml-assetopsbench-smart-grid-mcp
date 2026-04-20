@@ -5,9 +5,9 @@
 ### Config / Docs
 
 - Merged the PS B / abstract-planning docs forward onto the current shared
-  `main` line and tightened the abstract scaffold around a seven-sentence
-  default so the benchmark artifact, systems comparison, and reproducibility
-  story all fit cleanly after review feedback (Alex)
+  `main` line and tightened the abstract scaffold to a seven-sentence default
+  so the benchmark artifact, systems comparison, and reproducibility story all
+  fit cleanly (follow-up to review feedback) (Alex)
 
 ## 2026-04-18
 
@@ -59,6 +59,7 @@
   — #61, #62, #22 (partial) — S (Alex)
 - Added benchmark config docs and an example env for the shared runner path
   — #61, #62 — S (Alex)
+
 ## 2026-04-11
 
 ### Code Changes
