@@ -39,9 +39,7 @@ log = logging.getLogger("log_profiling_to_wandb")
 
 def _parse_run_id_from_url(url: str) -> Optional[tuple[str, str, str]]:
     """Return (entity, project, run_id) from a WandB run URL, or None."""
-    match = re.match(
-        r"https?://(?:[^/]+/)?([^/]+)/([^/]+)/runs/([^/?#]+)", url.strip()
-    )
+    match = re.match(r"https?://(?:[^/]+/)?([^/]+)/([^/]+)/runs/([^/?#]+)", url.strip())
     if not match:
         return None
     return match.group(1), match.group(2), match.group(3)
@@ -169,7 +167,10 @@ def main(argv: list[str]) -> int:
 
     log.info(
         "resuming WandB run %s/%s/%s to attach profiling artifact %s",
-        entity, project, wandb_run_id, artifact_name,
+        entity,
+        project,
+        wandb_run_id,
+        artifact_name,
     )
 
     run = wandb.init(
@@ -218,7 +219,9 @@ def main(argv: list[str]) -> int:
         meta.setdefault("profiling_summary", {}).update(stats)
     meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
-    log.info("logged profiling artifact %s and %d summary stat(s)", artifact_name, len(stats))
+    log.info(
+        "logged profiling artifact %s and %d summary stat(s)", artifact_name, len(stats)
+    )
     return 0
 
 
