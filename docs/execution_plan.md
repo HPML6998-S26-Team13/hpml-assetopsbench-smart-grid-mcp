@@ -1,36 +1,39 @@
 # Execution Plan: W2-W5
 
-*Last updated: April 18, 2026*
+*Last updated: April 21, 2026*
 
 How the team executes the remaining ~4 weeks of work, organized in two parts:
 
 1. **Task dependency map** - which tasks block which, and what the critical path looks like
 2. **Benchmarking operations** - what running experiments actually looks like (it's mostly async batch jobs, not synchronous coordination)
 
-> **TL;DR:** The repo is no longer in pure setup mode. Insomnia smoke proof, the first real WandB run, and the first Plan-Execute Smart Grid benchmark-facing artifact flow all landed on Apr 13. That canonical proof is specifically a WatsonX-hosted 70B / Mac 1-scenario smoke run under `benchmarks/cell_Y_plan_execute/`, not yet the primary self-hosted 8B benchmark lane. The Apr 16 post-call audit resolved the WO architecture decision plus the first-WandB-run milestone. The remaining execution risk is now concentrated in overdue W2 closeout (canonical benchmark proof, MCP hardening / benchmark-path validation, profiling wrappers, scenario / judge artifacts) plus W3 profiling and PS B deliverables. Tanisha's PR `#115` now adds a real Insomnia A6000 / Llama-3.1-8B benchmark-path proof for `#58`, but it is still in review rather than on canonical history.
+> **TL;DR:** The repo is no longer in pure setup mode. Canonical history now includes the first harness proof / judge / trajectory ladder (`#113`, `#114`), the merged Insomnia benchmark-Llama path (`#115`), the merged repo-local Verified PE / PE + Self-Ask runners with clean smoke proofs (`#119`), and the merged Notebook 02/03 consumer scaffolds (`#120`). The main remaining execution risk is now concentrated in `#111` (final post-merge proof run), `#25` (Cell A runner), and the still-missing real Experiment 1 / Experiment 2 capture sets that feed `#26` and `#32`.
 
-## Status note (Apr 18, 2026)
+## Status note (Apr 21, 2026)
 
 What is now proven on canonical history:
 
 - shared Insomnia A6000 vLLM smoke path
+- self-hosted Llama-3.1-8B benchmark-path validation on Insomnia
 - first visible WandB run
 - first benchmark-facing Plan-Execute Smart Grid artifact flow via a WatsonX-hosted 70B / Mac smoke run with committed artifacts
+- first canonical harness proof / judge / trajectory / judge-log ladder
+- repo-local Verified PE and PE + Self-Ask runners with clean `2/2` smoke proofs
+- Notebook 02 / Notebook 03 consumer-side scaffolds on canonical history
 - resolved WO architecture decision (`#13`)
 - closed "first WandB run" milestone (`#28`)
 
 What still governs the near-term critical path:
 
-- `#3` canonical benchmark scenario proof on the AssetOpsBench stack
-- `#9-#12` and `#58` for MCP hardening / benchmark-path confidence
-- `#7`, `#59`, `#25`, `#27`, `#37`, and `#111` for profiler / GPU capture and runbook usability
-- `#15`, `#17`, `#18`, and `#20` for scenario-count, judge, and first-trajectory evidence
+- `#111` for the final post-merge Insomnia proof / closeout pass
+- `#25` for the Cell A runner and the first real A/B/C capture chain
+- `#26` and `#32` for actual experiment execution artifacts rather than just notebook scaffolds
 - `#50 -> #2 -> #51` for the first believable Problem Statement B artifact chain
 
-Most important nuance after Tanisha's Apr 16 ET validation:
+Most important nuance after the Apr 20-21 merge wave:
 
-- PR `#115` now contains a real Insomnia A6000 Plan-Execute proof that reaches `iot`, `fmsr`, `tsfm`, and `wo` with self-hosted Llama-3.1-8B-Instruct, plus evidence that the successful validation used a `32768` context-length invocation while the shared script still lagged behind that longer benchmark path.
-- That materially lowers uncertainty around `#58`, but it does **not** remove the "proof must land on canonical `main`" rule, and it does **not** yet fix the profiling README mismatch noted in review.
+- The benchmark-facing proof story is now on canonical `main`, not just in PRs.
+- The bottleneck has shifted from "can this stack run at all?" to "do we have the missing execution artifacts for the actual experiments?"
 
 ---
 
@@ -45,7 +48,7 @@ Eval harness end-to-end          │
 WandB instrumentation + schema   ┘
 ```
 
-The original W2 foundation tasks were a single bottleneck. As of Apr 14, that bottleneck has partially broken: serving, WandB, and a first Plan-Execute benchmark path are now proven. The remaining bottlenecks are the still-open W2 closeout issues listed in the status note above.
+The original W2 foundation tasks were a single bottleneck. As of Apr 21, that bottleneck has mostly broken: serving, benchmark-path validation, judge/trajectory artifacts, and the repo-local PE mitigation lane are all proven on canonical history. The remaining bottlenecks are the still-open execution issues listed in the status note above.
 
 ### Task tiers
 

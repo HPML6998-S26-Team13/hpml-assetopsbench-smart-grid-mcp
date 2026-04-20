@@ -147,7 +147,7 @@ profiling and optimization.
   Their "Self-Ask" fix (10 lines of code) significantly reduced "fail to ask for
   clarification" errors (10% of failures).
 
-## Current status (April 18, 2026)
+## Current status (April 21, 2026)
 
 **Week 1 is complete, and the repo crossed an important threshold on Apr 13: the first benchmark-facing Smart Grid run is now real on canonical history.**
 
@@ -173,21 +173,23 @@ Landed on canonical history during Week 2:
 - First real WandB run is live and back-linked to committed benchmark artifacts
 - Plan-Execute is wired to the team’s Smart Grid MCP servers as a real experiment condition, with one successful WatsonX-hosted 70B / Mac benchmark-facing smoke run committed under `benchmarks/cell_Y_plan_execute/`
 - Scenario realism validation note landed with IEEE / IEC grounded findings and narrowed mentor questions
-
-New but not yet canonical:
-- PR `#115` now contains a real Insomnia A6000 / self-hosted 8B benchmark-path proof for `#58`, plus concrete long-context serve notes, but that proof is still in review rather than on `main`
+- Canonical harness proof / judge / first Smart Grid trajectory / judge audit-log ladder landed via `#113` and `#114`
+- Self-hosted Llama-3.1-8B benchmark-path validation and MCP hardening / tests landed via `#115`
+- Repo-local Verified PE and PE + Self-Ask runners landed via `#119`, with clean smoke-proof snapshots committed on canonical history
+- Notebook 02 / Notebook 03 consumer scaffolds landed via `#120`
 
 Still open from the original W2 critical path / backlog:
-- Canonical benchmark scenario proof on the AssetOpsBench stack (`#3`)
-- MCP hardening/tests plus benchmark-Llama-path validation closeout (`#9-#12`, `#58`) - now narrowed to getting PR `#115` merged cleanly and folding the long-context serve notes into the shared path
-- Profiling wrappers and the first profiling-linked experiment capture path (`#7`, `#59`)
-- Scenario-count, judge, and first trajectory artifacts (`#15`, `#17`, `#18`, `#20`)
+- final post-merge Insomnia reconciliation / proof closeout (`#111`)
+- Experiment 1 Cell A runner and the first real A/B/C captures (`#25`)
+- Experiment 1 / Experiment 2 execution artifacts that make Notebook 02 / Notebook 03 real rather than just scaffolded (`#26`, `#32`)
+- Problem Statement B generation / validation chain (`#50 -> #2 -> #51`)
 
 Current W3 focus:
-- Experiment 1 profiling captures plus profiling-to-WandB linkage
+- Experiment 1 execution: Cell A runner plus the first real A/B/C captures
+- Experiment 2 execution: comparable Cell B / Y / Z artifacts
 - Problem Statement B kickoff: Knowledge Plugin, first generation prototype, and evaluation methodology
 - NeurIPS abstract outline / title candidates
-- Runbook consolidation for the infra / serve / profiling path
+- final runbook reconciliation + proof closeout for `#111`
 
 Resolved during the Apr 16 post-call audit:
 - `#13` closed as a resolved WO architecture decision
@@ -195,9 +197,9 @@ Resolved during the Apr 16 post-call audit:
 - Hybrid explicitly moved out of the active class-project critical path
 - the primary local benchmark model is now clearly Llama-3.1-8B-Instruct, with 70B reserved for selective scaling spot-checks only
 
-New local follow-on work now in motion:
-- `#23` is promoted from vague Hybrid backlog into a concrete Verified PE / `Plan-Execute-Verify-Replan` prototype with a repo-local runner path
-- `#24` is promoted into a real Self-Ask clarification hook for the active repo-local orchestration modes rather than the earlier fictional three-mode requirement
+New local follow-on work now merged:
+- `#23` is now a shipped Verified PE / `Plan-Execute-Verify-Replan` runner on canonical history
+- `#24` is now a shipped Self-Ask clarification hook for the active repo-local orchestration modes
 
 Committed W3-W5 workstreams:
 - Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
@@ -207,7 +209,7 @@ Committed W3-W5 workstreams:
 
 Current scope default:
 - the working experiment grid is **vanilla Agent-as-Tool vs vanilla Plan-Execute**
-- Verified PE and PE + Self-Ask are now active local follow-on implementations, but they are still optional relative to the honest core AaT vs PE comparison
+- Verified PE and PE + Self-Ask are now merged local follow-on implementations, but they are still optional relative to the honest core AaT vs PE comparison
 - local benchmark runs default to self-hosted Llama-3.1-8B-Instruct on Insomnia
 - WatsonX-hosted 70B is used only for selective comparison runs, not as a duplicated full-grid requirement
 

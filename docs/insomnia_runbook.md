@@ -1,6 +1,6 @@
 # Insomnia Runbook
 
-*Last updated: 2026-04-20*
+*Last updated: 2026-04-21*
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
@@ -96,7 +96,7 @@ Any venv created with `python3 -m venv` inherits 3.9, which is **not** the path
 we use anymore. The team-standard env is the shared `.venv-insomnia/` created
 via `uv` with **Python 3.11**.
 
-As of Apr 20, 2026, the reconciled shared-stack target is:
+As of Apr 21, 2026, the reconciled shared-stack target is:
 
 - `torch==2.10.0`
 - `transformers==4.57.6`
@@ -144,12 +144,24 @@ the moment — it is to refresh the shared env against
 `requirements-insomnia.txt`. The matching model/runtime contract is now also
 captured in [`governance/model_registry.yaml`](governance/model_registry.yaml).
 
-Verify before submitting any Slurm jobs:
+For quick login-node verification, stick to metadata-only checks:
 ```bash
 python --version                                    # should be 3.11.x
-python -c "import torch; print(torch.__version__)"  # should print 2.10.0
-python -c "import vllm; print(vllm.__version__)"    # should print without error
-python -c "import litellm, mcp; print(litellm.__version__)"  # PE-family wrapper deps
+python - <<'PY'
+from importlib.metadata import version
+for pkg in ("torch", "vllm", "transformers", "huggingface-hub", "litellm", "mcp"):
+    print(f"{pkg}: {version(pkg)}")
+PY
+```
+
+If you want to verify a real `import vllm` or `import torch`, do that only from a
+compute node:
+```bash
+srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+     --mem=64G --time=01:00:00 --pty bash
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+source .venv-insomnia/bin/activate
+python -c "import vllm; print(vllm.__version__)"
 ```
 
 ## Login node etiquette
@@ -307,5 +319,6 @@ feature — it has nothing to do with login-node policy or job execution.
 ## See also
 
 - [`compute_plan.md`](compute_plan.md) — phase-by-phase GPU allocation strategy
+- [`slurm_cheatsheet.md`](slurm_cheatsheet.md) — quick command reference for submit/status/logging/cancel flows
 - [`scripts/setup_insomnia.sh`](../scripts/setup_insomnia.sh) — one-shot env setup with pinned versions
 - [`scripts/vllm_serve.sh`](../scripts/vllm_serve.sh) — Slurm job script for serving Llama-3.1-8B-Instruct

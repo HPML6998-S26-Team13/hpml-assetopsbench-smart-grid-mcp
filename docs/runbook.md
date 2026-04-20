@@ -1,6 +1,6 @@
 # Runbook
 
-*Last updated: 2026-04-18*
+*Last updated: 2026-04-21*
 *Infra owner: Aaron Fan (af3623) — eval-harness owner: Akshat Bhandari (ab6174)*
 
 Canonical reproducibility runbook. A teammate following this from scratch
@@ -97,11 +97,26 @@ Run jobs from the main checkout; worktrees are for editing only.
 ### 2.2 Verify the venv
 
 The venv (`.venv-insomnia/`) is pre-provisioned with Python 3.11 + the pinned
-vLLM stack in `requirements-insomnia.txt`. Verify:
+vLLM stack in `requirements-insomnia.txt`. On the login node, verify with
+metadata-only checks:
 
 ```bash
 source .venv-insomnia/bin/activate
 python --version                           # expect 3.11.x
+python - <<'PY'
+from importlib.metadata import version
+print(version("vllm"))
+PY
+```
+
+If you want to verify `import vllm` itself, do that from a compute node rather
+than the login node:
+
+```bash
+srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+     --mem=64G --time=01:00:00 --pty bash
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+source .venv-insomnia/bin/activate
 python -c "import vllm; print(vllm.__version__)"
 ```
 
@@ -300,7 +315,7 @@ diagnoses it.
 | Symptom | Next step |
 |---|---|
 | `sbatch` returns `ReqNodeNotAvail` or `Priority` forever | [`insomnia_runbook.md` §"Queue waits"](insomnia_runbook.md) — try `--gres=gpu:1` to widen the scheduler pool, or an off-peak window |
-| Slurm log shows only `Waiting for vLLM server to start...` and vLLM log is 0 bytes | [`insomnia_runbook.md` §"Failure mode"](insomnia_runbook.md) — almost certainly the Python 3.9 vLLM silent-import crash; foreground vLLM via `srun --pty` to see the real error |
+| Slurm log shows only `Waiting for vLLM server to start...` and vLLM log is 0 bytes | [`insomnia_runbook.md` §"Debugging: foreground vLLM"](insomnia_runbook.md) — on the current 3.11 / vLLM 0.19 stack this usually means a broken model download, a port conflict, or missing CUDA/cuDNN paths; reproduce in the foreground via `srun --pty` to see the real error |
 | `module load cuda/12.3` fails | [`insomnia_runbook.md` §"CUDA"](insomnia_runbook.md) — module is broken; set `PATH` and `LD_LIBRARY_PATH` directly |
 | WandB run doesn't appear under `assetopsbench-smartgrid` | `wandb login` in `.venv-insomnia`, or export `WANDB_API_KEY`; `ENABLE_WANDB=0` suppresses WandB entirely |
 | `plan-execute` can't find the AssetOpsBench checkout | Set `AOB_PATH` in the config, or clone AssetOpsBench as a sibling directory of the team checkout |

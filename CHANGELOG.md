@@ -4,6 +4,19 @@
 
 ### Config / Docs
 
+- Refreshed the live planning and handoff surfaces after the Apr 20-21 merge
+  wave: `docs/live_repo_summary.md`, `docs/execution_plan.md`,
+  `docs/project_synopsis.md`, and the Apr 21 / Apr 28 call prep + agenda docs
+  now reflect that `#113`, `#114`, `#115`, `#119`, and `#120` are merged,
+  that `#111` is down to a final proof-run closeout, and that `#25` plus the
+  still-missing execution artifacts are now the real gating work rather than
+  old PR-status uncertainty (Alex)
+- Updated the canonical Insomnia docs to the current post-merge 3.11 /
+  `vllm==0.19.0` reality: login-node checks are now metadata-only, real
+  `import vllm` verification is explicitly compute-node-only, and the
+  troubleshooting path for empty vLLM logs now points at current failure modes
+  rather than the older 3.9 / `vllm==0.8.5` silent-import story (Alex)
+
 - Applied Codex Pass 2 review findings on the `#26/#32` notebooks
   (2 Mediums / 2 Lows, 0 Critical/High): Notebook 02's `_latest_run_dir` now
   parses `meta.json.started_at` into a timezone-aware `datetime`
@@ -57,6 +70,10 @@
   for local-vLLM and WatsonX model names, runtime pins, and the current
   non-standardized `MODEL_REVISION` gap, with docs/setup references updated to
   point at it (Alex)
+- Added `docs/slurm_cheatsheet.md` — command-first Slurm reference covering
+  submit, watch, estimate start, inspect failures, historical timing, and
+  cancellation workflows for Insomnia jobs. Linked from `docs/README.md` and
+  `docs/insomnia_runbook.md` See-Also section.
 - Added `notebooks/01_data_exploration.ipynb` as the reproducible replacement
   for the earlier static dataset smoke-test image, with notebook-generated
   summary CSVs and overview figures under `results/` (Alex)
