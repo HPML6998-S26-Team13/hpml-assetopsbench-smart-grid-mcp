@@ -1,6 +1,6 @@
 # NeurIPS Abstract Outline and Title Candidates
 
-*Last updated: 2026-04-16*  
+*Last updated: 2026-04-20*  
 *Owner: Alex Xin*  
 *Issue: [#77](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/77)*
 
@@ -12,6 +12,9 @@ the final abstract should be written from.
 
 - Target venue: **NeurIPS 2026 Datasets & Benchmarks Track**
 - Abstract should read as one tight paragraph, not a mini-outline
+- Current default is **seven sentences**, not four - four is too compressed for
+  this paper because the benchmark artifact, tool surface, experimental axis,
+  reproducibility story, and contribution all need explicit space
 - The paper's contribution is primarily **benchmark extension + systems
   measurement**, not a new foundation model
 - Claims must stay aligned with what the repo can prove on canonical history
@@ -102,32 +105,44 @@ Open with the benchmark gap:
 - existing industrial-agent evaluation also under-specifies the systems cost of
   protocolized tool use
 
-### Sentence 2 — what we built
+### Sentence 2 — benchmark artifact
 
 State the concrete artifact:
 
 - a Smart Grid extension to AssetOpsBench
-- four MCP-backed tool domains
-- hand-crafted scenario set, with PS B generation lane as an extension track
+- hand-crafted scenario set
 
-### Sentence 3 — what we measure
+### Sentence 3 — tool surface
+
+State the runnable tool interface:
+
+- four MCP-backed tool domains
+- realistic telemetry / diagnosis / forecasting / work-order workflows
+
+### Sentence 4 — what we measure
 
 State the experimental axis:
 
 - direct vs MCP-mediated tool use, and orchestration/protocol choices
 - latency, trajectory quality, and benchmark completion metrics
 
-### Sentence 4 — what is already proven / expected contribution
+### Sentence 5 — what is already proven
 
 State the result type carefully:
 
 - end-to-end benchmark path is runnable and reproducible
-- the benchmark is designed to surface the operational trade-offs of industrial
-  agent design decisions
+- committed artifacts and auditable evaluation outputs exist
 
 Avoid numerical claims here unless the final results are already frozen.
 
-### Sentence 5 — why it matters
+### Sentence 6 — benchmark-growth discipline
+
+Name the credibility controls:
+
+- realism checks, duplication checks, and circularity handling are explicit
+- benchmark growth is treated as a measured extension, not assumed-valid scale
+
+### Sentence 7 — why it matters
 
 Close with the broader contribution:
 
@@ -139,23 +154,27 @@ Close with the broader contribution:
 ## Draft abstract skeleton
 
 This is intentionally still a scaffold rather than polished prose. The outline
-above is the target five-sentence structure; the drafting scaffold below may
-temporarily expand to six or seven sentences before the final abstract is
-compressed back down.
+above is the target seven-sentence structure. Four sentences would likely force
+multiple contribution blocks to collapse together too aggressively for this
+benchmark paper lane.
 
 > We present a Smart Grid transformer-maintenance extension of AssetOpsBench
 > for benchmarking industrial LLM agents on realistic diagnostic,
-> forecasting, and work-order workflows. The benchmark adds Smart Grid scenarios
-> and four tool domains exposed through the Model Context Protocol (MCP),
-> enabling end-to-end evaluation of agents that retrieve telemetry, diagnose
-> transformer faults, forecast degradation, and recommend maintenance actions.
-> We pair this benchmark extension with a systems evaluation plan that measures
-> the effects of protocolized tool use and orchestration choices on latency,
-> trajectory quality, and task completion. Our implementation emphasizes
-> reproducible artifacts, auditable evaluation outputs, and explicit scenario
-> realism and circularity handling for benchmark growth. The resulting benchmark
-> provides a practical testbed for studying industrial agent behavior in power
-> systems while making the trade-offs of MCP-based tool integration measurable.
+> forecasting, and work-order workflows. The benchmark adds a hand-crafted Smart
+> Grid scenario set on top of AssetOpsBench. It exposes four tool domains
+> through the Model Context Protocol (MCP), enabling end-to-end evaluation of
+> agents that retrieve telemetry, diagnose transformer faults, forecast
+> degradation, and recommend maintenance actions. We pair this benchmark
+> extension with a systems evaluation plan that measures direct versus
+> MCP-mediated tool use and orchestration choices through latency, trajectory
+> quality, and task completion metrics. Our implementation emphasizes runnable
+> benchmark paths with committed artifacts, auditable evaluation outputs, and
+> reproducible experiment surfaces. We also treat benchmark growth
+> conservatively by making scenario realism, duplication risk, and circularity
+> handling explicit rather than assuming generated data is automatically valid.
+> The resulting benchmark provides a practical testbed for studying industrial
+> agent behavior in power systems while making the trade-offs of MCP-based tool
+> integration measurable.
 
 If the final title does adopt **SmartGridBench**, the abstract opening can be
 rewritten to name it explicitly.

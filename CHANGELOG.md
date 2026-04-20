@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-04-20
+
+### Config / Docs
+
+- Merged the PS B / abstract-planning docs forward onto the current shared
+  `main` line and tightened the abstract scaffold around a seven-sentence
+  default so the benchmark artifact, systems comparison, and reproducibility
+  story all fit cleanly after review feedback (Alex)
+
 ## 2026-04-18
 
 ### Config / Docs
