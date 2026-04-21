@@ -97,7 +97,7 @@ def load_dga_records() -> pd.DataFrame:
     """
     path = DATA_DIR / "dga_records.csv"
     _require(path)
-    return pd.read_csv(path)
+    return pd.read_csv(path, parse_dates=["sample_date"])
 
 
 # ---------------------------------------------------------------------------

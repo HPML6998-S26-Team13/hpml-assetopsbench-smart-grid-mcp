@@ -38,11 +38,11 @@
 #
 # Inside that shell, hit the server via localhost:
 #
-#   bash scripts/test_inference.sh localhost 8000 models/Llama-3.1-8B-Instruct
+#   bash scripts/test_inference.sh localhost 8000 Llama-3.1-8B-Instruct
 #   # or raw curl:
 #   curl -s http://127.0.0.1:8000/v1/completions \
 #       -H "Content-Type: application/json" \
-#       -d '{"model":"models/Llama-3.1-8B-Instruct","prompt":"hello","max_tokens":16}'
+#       -d '{"model":"Llama-3.1-8B-Instruct","prompt":"hello","max_tokens":16}'
 
 set -euo pipefail
 
@@ -63,9 +63,11 @@ if [ ! -f ".venv-insomnia/bin/activate" ]; then
     exit 1
 fi
 
-STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-600}"
+STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-900}"
 MODEL_PATH="${MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 PORT="${PORT:-8000}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
+VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "${MODEL_PATH%/}")}"
 
 if [ ! -d "$MODEL_PATH" ]; then
     echo "ERROR: missing model directory at $MODEL_PATH" >&2
@@ -86,6 +88,10 @@ trap 'if [ -n "$VLLM_PID" ]; then kill "$VLLM_PID" 2>/dev/null || true; wait "$V
 # --- CUDA setup (don't use module load cuda, it's broken) ---
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
+
+# Cluster-specific env (NCCL overrides for Insomnia Slingshot fabric, etc.)
+# shellcheck source=scripts/insomnia_env.sh
+source "$(dirname "${BASH_SOURCE[0]}")/insomnia_env.sh"
 
 # --- Activate venv ---
 source .venv-insomnia/bin/activate
@@ -114,9 +120,10 @@ VLLM_STARTUP_LOG="logs/vllm_startup_${SLURM_JOB_ID:-local}.log"
 # --- Launch vLLM server in background ---
 python3 -m vllm.entrypoints.openai.api_server \
     --model "$MODEL_PATH" \
+    --served-model-name "$VLLM_SERVED_MODEL_NAME" \
     --host 127.0.0.1 \
     --port "$PORT" \
-    --max-model-len 8192 \
+    --max-model-len "$MAX_MODEL_LEN" \
     --dtype float16 \
     >"$VLLM_STARTUP_LOG" 2>&1 &
 
@@ -156,7 +163,7 @@ echo "=== Test Inference ==="
 TEST_RESPONSE="$(curl -s http://127.0.0.1:$PORT/v1/completions \
     -H "Content-Type: application/json" \
     -d "{
-        \"model\": \"$MODEL_PATH\",
+        \"model\": \"$VLLM_SERVED_MODEL_NAME\",
         \"prompt\": \"A power transformer's dissolved gas analysis shows elevated hydrogen and acetylene levels. This pattern indicates\",
         \"max_tokens\": 100,
         \"temperature\": 0.7
@@ -202,7 +209,7 @@ echo "To run the standalone inference smoke test from another shell, attach to t
 echo "  srun --jobid ${SLURM_JOB_ID:-<job-id>} --overlap --pty bash"
 echo ""
 echo "Then, inside that shell, run:"
-echo "  bash scripts/test_inference.sh localhost $PORT $MODEL_PATH"
+echo "  bash scripts/test_inference.sh localhost $PORT $VLLM_SERVED_MODEL_NAME"
 echo ""
 echo "Server will run until the SLURM time limit is hit (script default is 2 hours unless overridden at submission). Ctrl+C or scancel ${SLURM_JOB_ID:-<job-id>} to stop."
 

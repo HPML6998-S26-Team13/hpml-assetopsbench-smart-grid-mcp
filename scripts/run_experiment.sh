@@ -83,7 +83,7 @@ ENABLE_WANDB="${ENABLE_WANDB:-0}"
 WANDB_PROJECT="${WANDB_PROJECT:-assetopsbench-smartgrid}"
 WANDB_ENTITY="${WANDB_ENTITY:-assetopsbench-smartgrid}"
 WANDB_MODE="${WANDB_MODE:-online}"
-MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 LAUNCH_VLLM="${LAUNCH_VLLM:-0}"
@@ -330,6 +330,9 @@ PY
 if [ "$LAUNCH_VLLM" = "1" ]; then
   export PATH=/usr/local/cuda/bin:$PATH
   export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
+  # Cluster-specific env (NCCL overrides for Insomnia Slingshot fabric, etc.)
+  # shellcheck source=scripts/insomnia_env.sh
+  source "$(dirname "${BASH_SOURCE[0]}")/insomnia_env.sh"
   # shellcheck disable=SC1091
   source .venv-insomnia/bin/activate
   CUDNN_LIB="$("$PYTHON_BIN" -c 'import nvidia.cudnn, os; print(os.path.join(os.path.dirname(nvidia.cudnn.__file__), "lib"))' 2>/dev/null || true)"
@@ -374,13 +377,14 @@ trap cleanup EXIT
 if [ "$LAUNCH_VLLM" = "1" ]; then
   "$PYTHON_BIN" -u -m vllm.entrypoints.openai.api_server \
     --model "$VLLM_MODEL_PATH" \
+    --served-model-name "$(basename "${VLLM_MODEL_PATH%/}")" \
     --host 127.0.0.1 \
     --port "$VLLM_PORT" \
     --max-model-len "$MAX_MODEL_LEN" \
     --dtype float16 \
     >"$VLLM_LOG" 2>&1 &
   VLLM_PID=$!
-  for i in $(seq 1 600); do
+  for i in $(seq 1 900); do
     if curl -s "http://127.0.0.1:$VLLM_PORT/health" >/dev/null 2>&1; then
       break
     fi
@@ -391,7 +395,7 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     sleep 1
   done
   if ! curl -s "http://127.0.0.1:$VLLM_PORT/health" >/dev/null 2>&1; then
-    echo "ERROR: vLLM did not become ready within 600s" >&2
+    echo "ERROR: vLLM did not become ready within 900s" >&2
     tail -50 "$VLLM_LOG" >&2 || true
     exit 1
   fi
