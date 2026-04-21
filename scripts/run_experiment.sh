@@ -342,7 +342,7 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
   export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
   # Cluster-specific env (NCCL overrides for Insomnia Slingshot fabric, etc.)
   # shellcheck source=scripts/insomnia_env.sh
-  source "$(dirname "${BASH_SOURCE[0]}")/insomnia_env.sh"
+  source "$REPO_ROOT/scripts/insomnia_env.sh"
   # shellcheck disable=SC1091
   source .venv-insomnia/bin/activate
   CUDNN_LIB="$("$PYTHON_BIN" -c 'import nvidia.cudnn, os; print(os.path.join(os.path.dirname(nvidia.cudnn.__file__), "lib"))' 2>/dev/null || true)"

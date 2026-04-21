@@ -31,6 +31,15 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 
 ## Related directories
 
+- [`../scripts/README.md`](../scripts/README.md) - Executable entrypoints and helper scripts.
+- [`../configs/README.md`](../configs/README.md) - Benchmark config schema and cell naming.
+- [`../data/README.md`](../data/README.md) - Data pipeline and processed dataset policy.
+- [`../data/scenarios/README.md`](../data/scenarios/README.md) - Scenario authoring guide and validator entrypoint.
+- [`../mcp_servers/README.md`](../mcp_servers/README.md) - Smart Grid MCP server layout and tool surfaces.
+- [`../benchmarks/README.md`](../benchmarks/README.md) - Raw benchmark artifact layout.
+- [`../notebooks/README.md`](../notebooks/README.md) - Analysis notebook contract.
+- [`../results/README.md`](../results/README.md) - Derived metrics / figures contract.
+- [`../profiling/README.md`](../profiling/README.md) - Profiling capture workflow and wrappers.
 - [`../planning/`](../planning/) - Meeting agendas, working notes, and archived planning snapshots. Current task state now lives in the [GitHub Project](https://github.com/orgs/HPML6998-S26-Team13/projects/1/views/1); historical tracker/spec snapshots live in [`../planning/archive/task_tracker.md`](../planning/archive/task_tracker.md) and [`../planning/archive/task_specs.md`](../planning/archive/task_specs.md).
 - [`../reports/`](../reports/) - Frozen deliverables (mid-point submission PDF, proposal PDFs, draft archive).
 - [`governance/`](governance/) - Small repo-truth governance artifacts, starting with the model/runtime registry for local vLLM and WatsonX naming/pinning.

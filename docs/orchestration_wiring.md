@@ -1,6 +1,6 @@
 # Orchestration Wiring
 
-*Last updated: 2026-04-18*
+*Last updated: 2026-04-21*
 
 Current state of the repo-side orchestration wiring for issues `#22` and `#62`.
 This note is intentionally concrete about what is runnable now versus what is
@@ -64,30 +64,75 @@ Repo-side support for issue `#22` exists as an explicit adapter surface in
 [`scripts/run_experiment.sh`](../scripts/run_experiment.sh):
 
 - set `ORCHESTRATION=agent_as_tool`
-- provide `AAT_RUNNER_TEMPLATE`
+- provide `AAT_RUNNER_TEMPLATE` for a custom command, or rely on the
+  repo-local wrapper default once `#104` lands
 
-Example shape:
+Example custom-template shape:
 
 ```bash
 AAT_RUNNER_TEMPLATE='cd "$AOB_PATH" && uv run python path/to/aat_runner.py "$PROMPT" >"$OUTPUT_PATH"'
 ```
 
-This is intentionally explicit because the current canonical AssetOpsBench repo
-does not expose a stable top-level AaT CLI comparable to `plan-execute`.
+### Upstream AaT surface (as of 2026-04-21)
+
+Upstream AssetOpsBench exposes two first-class Agent-as-Tool CLIs alongside
+`plan-execute`, both registered under `[project.scripts]` in
+`pyproject.toml`:
+
+- `claude-agent` — `agent.claude_agent.cli:main`, backed by `claude-agent-sdk`
+- `openai-agent` — `agent.openai_agent.cli:main`, backed by `openai-agents`
+
+Both runners connect to registered MCP servers via stdio and route through
+LiteLLM for model dispatch, so they share `DEFAULT_SERVER_PATHS` with
+`plan-execute` and can in principle point at any LiteLLM-supported backend.
+
+The Python runner classes (`OpenAIAgentRunner`, `ClaudeAgentRunner`) both
+accept a `server_paths` argument in their constructors, matching
+`PlanExecuteRunner`. The CLIs, however, do **not** expose a
+`--server NAME=PATH` override flag like `plan-execute` does, so they cannot
+be pointed at this repo's Smart Grid MCP servers without either (a) an
+upstream CLI change or (b) a thin team-repo wrapper that uses the Python
+API directly. This is the actual plumbing gap — not the absence of an AaT
+runner upstream, which an earlier version of this doc had claimed.
+
+### Path to end-to-end proof (`#104`)
+
+Issue `#104` tracks the concrete wiring work:
+
+- add `scripts/aat_runner.py` mirroring the `plan_execute_self_ask_runner.py`
+  pattern — bootstrap the AOB path, import `OpenAIAgentRunner`, construct
+  with team `server_paths` overrides
+- wire it as the default runner when `ORCHESTRATION=agent_as_tool`, keeping
+  `AAT_RUNNER_TEMPLATE` as an override escape hatch
+- first smoke: SGT-009 / T-015 on WatsonX Llama-3.3-70B (matches the Apr 13
+  PE smoke baseline), then on Insomnia Llama-3.1-8B
+- artifacts under `benchmarks/cell_B_mcp_baseline/raw/<run-id>/` following
+  the canonical layout
+
+`openai-agent` is the recommended upstream runner because it is
+provider-generic via LiteLLM, which lets Experiment 2's AaT arm share the
+same Llama-3.1-8B model family as the PE arm. `claude-agent` remains
+available for a separate Claude-family smoke if symmetry is wanted later.
 
 ### What is done on our side
 
 - common benchmark/logging/config plumbing exists
 - Smart Grid MCP server discovery contract is defined
 - benchmark invocation contract is documented
+- `ORCHESTRATION=agent_as_tool` dispatch and `AAT_RUNNER_TEMPLATE` override
+  path are live in the harness
 
-### What is still upstream or unresolved
+### What remains
 
-- stable AaT CLI / runner entry point in AssetOpsBench, or
-- a thin local wrapper script in this repo once the invocation contract is clear
+- repo-local `scripts/aat_runner.py` wrapper (tracked in `#104`)
+- default `run_experiment.sh` dispatch for `agent_as_tool` that uses the
+  wrapper without requiring `AAT_RUNNER_TEMPLATE` (tracked in `#104`)
+- one successful end-to-end AaT run committed under
+  `benchmarks/cell_B_mcp_baseline/raw/` with a `docs/validation_log.md`
+  entry (tracked in `#104`)
 
-So `#22` is adapter-ready on our side, but not yet proven end-to-end the same
-way Plan-Execute is.
+So `#22` is adapter-ready on our side. The remaining "prove AaT end-to-end"
+work is scoped and tracked under `#104`, and is not blocked on upstream.
 
 ## Self-Ask PE status
 

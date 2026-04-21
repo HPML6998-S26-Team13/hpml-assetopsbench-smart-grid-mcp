@@ -74,7 +74,7 @@ via WatsonX API to assess scaling effects.
 │   ├── tsfm_server/              #   RUL forecast, z-score anomaly, OLS trend
 │   └── wo_server/                #   Work order CRUD, downtime estimation
 │
-├── scripts/                      # Utility scripts
+├── scripts/                      # Utility scripts - see scripts/README.md
 │   ├── verify_watsonx.py         #   WatsonX access verification + latency benchmarking
 │   ├── run_experiment.sh         #   Canonical SmartGridBench runner (PE baseline + Self-Ask/Verified PE follow-ons)
 │   ├── setup_insomnia.sh         #   Shared Insomnia environment setup
@@ -150,6 +150,17 @@ See:
   first kept WatsonX smoke proof run and artifact layout
 - [`docs/insomnia_runbook.md`](docs/insomnia_runbook.md) for the shared Insomnia
   self-hosted vLLM path
+
+## Where To Look
+
+- [`docs/README.md`](docs/README.md) - living docs index and runbook navigation
+- [`scripts/README.md`](scripts/README.md) - executable entrypoints and helper scripts
+- [`configs/README.md`](configs/README.md) - benchmark config schema and cell mapping
+- [`data/README.md`](data/README.md) - data pipeline and processed dataset policy
+- [`data/scenarios/README.md`](data/scenarios/README.md) - scenario authoring rules and validation
+- [`mcp_servers/README.md`](mcp_servers/README.md) - Smart Grid MCP server layout
+- [`benchmarks/README.md`](benchmarks/README.md) - raw benchmark artifact layout
+- [`profiling/README.md`](profiling/README.md) - profiling capture workflow
 
 ## Experiment Tracking
 

@@ -36,6 +36,10 @@ Notebook 02 (Experiment 1 — MCP overhead):
 - computes MCP overhead decomposition (B−A, B−C, C−A) at both p50 and p95
 - exports `notebook02_cell_availability.preflight.csv`, `notebook02_latency_summary.csv`, `notebook02_mcp_overhead.csv`, and `notebook02_latency_comparison.png`
 - graceful degradation: skips aggregation / plots when any cell is missing captures, but always writes the availability CSV
+- intended usage is phased: preflight as soon as any A / B / C artifacts exist,
+  early best-effort analysis on the first complete A / B / C set, and final
+  publishable figures after the chosen Cell C optimization stack plus the
+  larger scenario corpus are rerun
 
 Notebook 03 (Experiment 2 — orchestration comparison):
 
@@ -44,6 +48,9 @@ Notebook 03 (Experiment 2 — orchestration comparison):
 - catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False` (per Codex's 2026-04-20 finding)
 - computes success rate, mean failed steps, mean history length, mean tool-error count, recovery rate, and (when `results/metrics/scenario_scores.jsonl` is populated per `#17`) judge pass rate per orchestration
 - exports `notebook03_cell_availability.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
+- the minimum real Experiment 2 comparison is Cell B vs Y; Cell Z is runnable
+  and supported, but still a follow-on lane rather than the minimum evidence
+  needed to make the AaT vs PE comparison real
 
 Notebook 04 is still pending — it will consume `results/figures/` outputs from 02 and 03 to produce paper-ready PDFs.
 

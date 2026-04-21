@@ -1,5 +1,7 @@
 # profiling/
 
+*Last updated: 2026-04-21*
+
 PyTorch Profiler / NVIDIA Nsight / `nvidia-smi` wrappers and captured traces. Traces are large binary files and are **gitignored by default** (`profiling/traces/` and `*.pt.trace.json` are excluded via `.gitignore`). Only the wrapper scripts and this README are tracked here.
 
 ## Structure
@@ -21,8 +23,8 @@ profiling/
 - **Traces are not committed.** They're hundreds of MB each and regenerable from the scripts. Share via team WandB run attachments or upload to a shared drive when needed.
 - **Scripts must be reproducible** — they take explicit output paths, not hardcoded filenames, so the same wrapper can be driven from different run contexts (Slurm, interactive, CI).
 - **Each profiling run should also log a summary** — the profiling trace answers "where did time go?", the benchmark summary answers "how fast was it overall?". Both are needed for the paper. For benchmark runs this pairs with the canonical `benchmarks/cell_<X>/raw/<run-id>/meta.json` + `latencies.jsonl` emitted by `scripts/run_experiment.sh`.
-- **Profiling runs belong on a compute node.** `nvidia-smi` and `nsys` are only available on compute nodes. Never run these from the login node (see `docs/insomnia_runbook.md`).
-- **A6000 for development, H100 only for final scaling comparisons.** See `docs/compute_plan.md`.
+- **Profiling runs belong on a compute node.** `nvidia-smi` and `nsys` are only available on compute nodes. Never run these from the login node (see [`../docs/insomnia_runbook.md`](../docs/insomnia_runbook.md)).
+- **A6000 for development, H100 only for final scaling comparisons.** See [`../docs/compute_plan.md`](../docs/compute_plan.md).
 
 ## Pick the right tool
 
@@ -141,7 +143,7 @@ bash profiling/scripts/capture_around.sh "$OUT" \
     -- bash scripts/run_experiment.sh configs/pe_mcp_baseline.env
 ```
 
-The W4 optimization experiments (`docs/execution_plan.md`) will consume these
+The W4 optimization experiments ([`../docs/execution_plan.md`](../docs/execution_plan.md)) will consume these
 artifacts via notebooks in `notebooks/` to produce the before/after latency
 and utilization comparisons in the paper.
 

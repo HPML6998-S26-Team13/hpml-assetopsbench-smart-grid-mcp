@@ -32,8 +32,8 @@ from Aaron.
 ### Columbia HPC access
 
 - Columbia UNI with Duo 2FA enrolled
-- RCS Insomnia access request filed and approved (see Insomnia Getting
-  Started PDF under [`../insomnia docs/`](../insomnia%20docs/))
+- RCS Insomnia access request filed and approved (see Columbia's Insomnia
+  onboarding material; team-specific settings live in [`insomnia_runbook.md`](insomnia_runbook.md))
 - `ssh <UNI>@insomnia.rcs.columbia.edu` works end-to-end
 
 Team account details:
@@ -270,9 +270,14 @@ kill $SMI
 code.
 
 ```bash
+srun --jobid=<SLURM_JOB_ID> --overlap --pty bash
+# inside the compute shell:
 bash profiling/scripts/capture_around.sh profiling/traces/pe_baseline_$(date +%s) \
-    -- sbatch --wait scripts/run_experiment.sh configs/example_baseline.env
+    -- bash scripts/run_experiment.sh configs/example_baseline.env
 ```
+
+Do not wrap `sbatch` itself with `capture_around.sh`; that samples the submit
+host instead of the compute node. The wrapper should run inside the allocation.
 
 ### 4.3 PyTorch Profiler via vLLM
 

@@ -23,7 +23,7 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 ### W1 (Mar 31-Apr 6) — Foundations + midpoint checkpoint
 
 - [x] #79 — Fork AssetOpsBench, clone, run `uv sync` + unit tests (Team)
-- [x] #80 — Draft mid-point PowerPoint, 5-slide template (Alex)
+- [x] #80 — Draft mid-point PowerPoint (5-slide template) and submit to Courseworks (Alex) — Mon Apr 6 11:59pm [former #104 folded in, 2026-04-21]
 - [x] #81 — Set up Overleaf with problem statement, share with Dhaval (Tanisha)
 - [x] #82 — Request WatsonX API key via Codabench (Alex)
 - [x] #83 — Receive WatsonX credentials from Dhaval — Apr 5
@@ -47,7 +47,6 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 - [x] #101 — Dataset integration — common `transformer_id` key across CC0 datasets (Tanisha) — Apr 6 (subsumed by data pipeline)
 - [x] #102 — `docs/data_pipeline.tex` — paper-ready LaTeX section on dataset schemas, shared-key strategy, output schemas, limitations, reproducibility (Tanisha) — Apr 6
 - [x] #103 — `docs/dataset_visualization.png` — sample/smoke-test visualization confirming data pipeline output is well-formed (6 panels: H2 over time, C2H2 arcing indicator, RUL window, RUL distribution by tier, DGA gas snapshot, fault records by tier) (Tanisha) — Apr 6. **Note:** image is a static snapshot (no tracked generator script in repo). Follow-up: commit a generator notebook into `notebooks/`, or accept as static.
-- [x] #104 — Submit mid-point PowerPoint to Courseworks (Alex) — Mon Apr 6 11:59pm
 
 ### W2 (Apr 7-13) — Public release cleanup
 

@@ -1,5 +1,7 @@
 # data/scenarios/
 
+*Last updated: 2026-04-21*
+
 Smart Grid transformer maintenance scenarios, following the AssetOpsBench scenario format. Each scenario is a multi-turn agentic task where an LLM agent must use the IoT / FMSR / TSFM / WO MCP tools to diagnose, forecast, or remediate a transformer fault.
 
 ## Format
@@ -35,6 +37,18 @@ See the upstream AssetOpsBench structure in `src/scenarios/local/vibration_utter
   - e.g. `multi_01_full_fault_response.json` (IoT sensor alert → FMSR diagnosis → TSFM RUL check → WO creation)
 - **Before committing**, validate against the AssetOpsBench scenario schema and confirm the referenced `asset_id` exists in `data/processed/asset_metadata.csv`.
 - **Ground truth must be objectively checkable** — if scoring depends on subjective judgment, add a scoring rubric field.
+
+## Validation
+
+Run the validator from repo root before committing scenario changes:
+
+```bash
+python data/scenarios/validate_scenarios.py
+```
+
+This catches schema violations and negative-fixture regressions before you get to
+the heavier harness path. For the full harness workflow, see
+[`../../docs/eval_harness_readme.md`](../../docs/eval_harness_readme.md).
 
 ## Status (Apr 7, 2026)
 

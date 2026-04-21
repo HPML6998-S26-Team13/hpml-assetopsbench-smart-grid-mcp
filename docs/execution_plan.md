@@ -191,6 +191,18 @@ Two experimental tracks share infrastructure but answer different research quest
 
 Delta (B − A) = raw cost of MCP standardization. Delta (C − A) = residual cost after optimization.
 
+Important interpretation: **Cell C is one chosen optimized MCP condition**,
+not a separate benchmark for every candidate optimization. The optimization
+issues make Cell C real:
+
+- `#29` proves a runnable INT8 serving path if the team chooses to use it
+- `#30` picks the KV-cache setting the team will actually use
+- `#31` implements the benchmark-side batching / scheduling behavior
+
+Those tasks may each use small targeted sweeps or smoke comparisons, but the
+main experiment result is still the A / B / C comparison rather than a full
+"every scenario on every optimization variant" matrix.
+
 **Experiment 2 - Orchestration comparison (2 committed cells, all on MCP-baseline):**
 
 | Cell | Orchestration | MCP mode | Measures |
@@ -210,6 +222,19 @@ Delta (B − A) = raw cost of MCP standardization. Delta (C − A) = residual co
 ```
 
 We are **not** running the full 3×3 multiplicative grid. The full grid would let us ask "does MCP optimization affect different orchestrations differently?" - interesting but secondary, and not in our committed scope. If the core grid lands early and cleanly, we can still add optional follow-on cells later.
+
+### Scenario-count policy
+
+The team should treat experiment execution as a **two-pass process**:
+
+1. **Best-effort / first-pass runs** on the current committed scenario set, so
+   the cells, artifacts, and notebooks become real now.
+2. **Final canonical runs** on the larger paper-scale scenario set once the
+   scenario corpus expands.
+
+So we do not need to wait for 30+ scenarios before starting Experiment 1 or
+Experiment 2. The configs, batch runner, and notebooks are meant to be rerun
+later on the larger corpus without a structural rewrite.
 
 ### Working model choice
 
@@ -247,6 +272,11 @@ Once the template works for one cell, every other cell is just a different confi
 ## Open questions
 
 - **Exact AaT readiness date** - the four-cell committed grid assumes AaT becomes truly runnable soon enough for fair comparison, but that is still not proven on canonical history today.
+- **Interpreting old blocker lists** - some older issue dependency fields are
+  best read as blockers for the **final canonical report-ready run set**, not
+  as blockers for first execution. The near-term goal should be early
+  best-effort artifact generation, then clean reruns once the later refinement
+  tasks land.
 - **Scenario realism and ground-truth tightening** - Dhaval has now answered the top-level realism question, but the team still needs to apply his "no analytic hints / preserve ideal sequence / record final value" guidance consistently.
 - **First clean profiling capture path** - the real W3 question is no longer "can we serve a model?" but "when do profiler traces, GPU logs, WandB linkage, and teammate-usable instructions all meet in one artifact chain?"
 - **Problem Statement B go-wide threshold** - the first believable generated batch still needs to prove it is strong enough to justify scale-up rather than another stabilization pass.

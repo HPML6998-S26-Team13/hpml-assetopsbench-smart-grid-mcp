@@ -4,6 +4,29 @@
 
 ### Config / Docs
 
+- Corrected the Agent-as-Tool status section in `docs/orchestration_wiring.md`:
+  upstream AssetOpsBench does expose first-class AaT CLIs (`claude-agent`,
+  `openai-agent`) — the real plumbing gap is that neither CLI supports
+  `--server NAME=PATH` overrides, so the team repo needs a thin wrapper around
+  the `OpenAIAgentRunner` Python API to point at the Smart Grid MCP servers.
+  That wiring work is now tracked under the repurposed `#104` (Alex)
+- Fold former `#104` ("Submit the mid-point PowerPoint to Courseworks") into
+  `#80`, freeing `#104` as the AaT wiring issue. `planning/archive/task_tracker.md`
+  and the earlier mid-point entry in this changelog now point at `#80` (Alex)
+- Clarified the execution sequencing for Experiment 1 / 2: Cell C is now
+  documented as the chosen optimized MCP bundle rather than a separate full
+  optimization matrix, `#29/#30/#31` are explicitly framed as what makes Cell C
+  real, Notebook 02 is documented as phased (preflight → early best-effort
+  analysis → final rerun on the larger corpus), and older blocker language is
+  now called out as mostly referring to final canonical evidence rather than
+  first execution (Alex)
+- Added a repo-wide documentation discoverability pass: new `scripts/README.md`
+  index, stronger root/docs cross-links into the local README surfaces, explicit
+  scenario-validator guidance in `data/README.md` and `data/scenarios/README.md`,
+  repaired broken relative links in local indexes / archived planning notes, and
+  aligned `docs/runbook.md` with `profiling/README.md` so profiling wrappers are
+  documented as compute-node-only instead of wrapping `sbatch` from the submit
+  host (Alex)
 - Refreshed the live planning and handoff surfaces after the Apr 20-21 merge
   wave: `docs/live_repo_summary.md`, `docs/execution_plan.md`,
   `docs/project_synopsis.md`, and the Apr 21 / Apr 28 call prep + agenda docs
@@ -11,6 +34,10 @@
   that `#111` is down to a final proof-run closeout, and that `#25` plus the
   still-missing execution artifacts are now the real gating work rather than
   old PR-status uncertainty (Alex)
+- Split the repo handoff layer into a current-state `docs/live_repo_summary.md`
+  and a historical `docs/repo_summary_history.md`, so stale review commentary
+  and older milestone transitions can be archived without making the live
+  summary unreadable (Alex)
 - Updated the canonical Insomnia docs to the current post-merge 3.11 /
   `vllm==0.19.0` reality: login-node checks are now metadata-only, real
   `import vllm` verification is explicitly compute-node-only, and the
@@ -252,7 +279,7 @@
 
 ### Config / Docs
 
-- Mid-point PowerPoint submitted to Courseworks — #104 closed (Alex)
+- Mid-point PowerPoint drafted and submitted to Courseworks — #80 closed (Alex)
 - WatsonX.ai setup: credentials received from Dhaval (#83), `.env`
   configured (#84), `ibm-watsonx-ai` installed (#85), 6 Llama models
   confirmed (#87), Maverick-17B + Llama-3.3-70B latency benchmarked

@@ -21,6 +21,18 @@ decoding parameters.** The only variable is the transport between the ReAct
 agent and the tool. This is what makes `(B - A)` a meaningful measurement of
 MCP overhead rather than a mix of algorithmic differences.
 
+Interpretation note: **Cell C is the chosen optimized MCP bundle**, not a
+separate standalone benchmark for each candidate optimization. The optimization
+issues feed Cell C as follows:
+
+- `#29` — stand up an INT8 serving option if the team chooses to include it
+- `#30` — choose the KV-cache setting the team will actually use
+- `#31` — implement the batched / scheduled MCP behavior that makes the
+  optimized transport materially different from baseline
+
+Those tasks may use small targeted sweeps or smoke checks. The Experiment 1
+headline result remains A / B / C.
+
 Shared cell B: it also doubles as the AaT baseline for Experiment 2
 (orchestration comparison) — `CONTRIBUTING_EXPERIMENTS` on its config
 reflects that.
@@ -104,8 +116,13 @@ cite it in the runner's docstring so the choice is auditable.
 | A | WandB/profiling link | Aaron | ✅ done | `01043c5` |
 | B | MCP server hardening (IoT/TSFM/FMSR/WO) | Tanisha | Apr 20-21 | `#85` in progress, `#86`/`#87`/`#88` Todo |
 | B | Cell A runner (reused) | Aaron | Apr 21 | Not started |
-| C | Batched tool-call scheduling | Akshat | Apr 22 | `#33` Todo |
+| C | Batched tool-call scheduling | Akshat | Apr 22 | `#31` Todo |
 | C | Cell B working (prerequisite for the optimization delta) | Tanisha + Aaron | Apr 21 | — |
+
+These blockers are mostly for the **final canonical A / B / C capture set**.
+The team can still start best-effort runs on the current scenario slice as soon
+as a cell becomes runnable, rather than waiting for every downstream refinement
+task to finish.
 
 ## Capture pipeline per cell
 
@@ -146,6 +163,10 @@ via `run_id`. (`scripts/replay_scenarios.sh` TBD; trivial wrapper that iterates
 | Apr 22 | Cell C capture + all three cells committed with matched `latencies.jsonl` + profiling traces + WandB run URLs | A, B, C |
 | Apr 23 | Hand off to Alex for Notebook 02 parsing; `#25` closes | — |
 
+This is the **first usable run sequence**, not the only one. Once the larger
+scenario corpus exists, rerun the same cells with the same configs and notebook
+pipeline to produce the final report-ready results.
+
 ## Open questions for Alex
 
 1. **Cell A runner ownership** — I'll implement if you're OK with a from-scratch
@@ -159,8 +180,18 @@ via `run_id`. (`scripts/replay_scenarios.sh` TBD; trivial wrapper that iterates
    comparison you'll want enough samples to fit a distribution; 3 feels thin
    but keeps the time budget small. Bump to 5 if compute allows.
 4. **Scoring** — do Notebook 02 parsers need judge scores, or is this purely
-   latency analysis? If latency-only, we can defer LLM-as-Judge scoring
-   (Akshat's `#31`, `#32`) out of the Experiment 1 critical path.
+   latency analysis? If latency-only, we can defer LLM-as-Judge scoring out of
+   the Experiment 1 critical path.
+
+## Notebook 02 expectations
+
+`#26` does not need to wait for the final paper-scale run set before analysis
+starts. The expected cadence is:
+
+1. preflight and parser validation as soon as any A / B / C artifacts exist
+2. early best-effort analysis on the first complete A / B / C run set
+3. final publishable figures/tables after the chosen Cell C stack and the
+   larger scenario corpus are rerun
 
 ## References
 
@@ -168,5 +199,5 @@ via `run_id`. (`scripts/replay_scenarios.sh` TBD; trivial wrapper that iterates
 - `docs/orchestration_wiring.md` — why AaT needs an explicit runner template
 - `docs/wandb_schema.md` — field names used in config/summary JSON
 - `profiling/README.md` — capture wrapper usage + WandB linkage contract
-- Issues: `#25` (this), `#26` (Alex's notebook), `#33` (batched scheduling),
+- Issues: `#25` (this), `#26` (Alex's notebook), `#31` (batched scheduling),
   `#72` (WS4 parent), `#85`-`#88` (MCP hardening)

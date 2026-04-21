@@ -8,7 +8,7 @@
 - Which W4 tasks actually closed?
 - Which open issues still matter for the final submission versus the stretch lane?
 - What is still only in PR form or local artifacts?
-- Did `[#111](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/111)` actually close cleanly after the post-merge proof run?
+- Did [#111](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/111) actually close cleanly after the post-merge proof run?
 
 **0:06-0:14 - Final experiment evidence**
 - Which Experiment 1 cells are clean enough to cite?

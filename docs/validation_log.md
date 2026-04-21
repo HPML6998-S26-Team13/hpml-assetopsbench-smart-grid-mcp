@@ -18,6 +18,34 @@ For each proof entry, record:
 - what the run proves
 - caveats / follow-ups
 
+## 2026-04-13 — Watsonx plan-execute smoke (first canonical benchmark-path proof)
+
+- **Scope:** end-to-end AssetOpsBench plan-execute run against all four Smart Grid MCP servers via Watsonx
+- **Branch / state:** canonical `main` at the time of the run
+- **Scenario:** `data/scenarios/multi_01_end_to_end_fault_response.json` (SGT-009, transformer T-015)
+- **Model:** `watsonx/meta-llama/llama-3-3-70b-instruct`
+- **Run name:** `local-20260413-003914_pe_mcp_baseline_watsonx_smoke`
+- **W&B:** [9d4442ja](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/9d4442ja)
+- **Primary artifacts (all committed in-tree):**
+  - `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/meta.json`
+  - `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/harness.log`
+  - `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/latencies.jsonl`
+  - `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/2026-04-13_Y_llama-3-3-70b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json`
+  - `benchmarks/cell_Y_plan_execute/config.json`, `benchmarks/cell_Y_plan_execute/summary.json`
+
+What this proves:
+
+- the AssetOpsBench `plan-execute` CLI successfully drove all four Smart Grid MCP servers end-to-end through the 8-tool-call sequence for SGT-009
+- the benchmark wrapper produced canonical `benchmarks/cell_Y_plan_execute/raw/<run-id>/` artifacts on the first committed proof run
+- wall-clock 93.6 s with the full LLM latency included; `run_status: "success"`, `pass: 1`, `fail: 0`
+- this was the earliest committed in-tree proof of the benchmark-facing path and seeded the canonical Cell Y artifact layout that later runs reused
+
+Caveats / follow-ups:
+
+- single-scenario smoke; not a full grid
+- uses WatsonX Llama-3.3-70B rather than the eventual Insomnia self-hosted Llama-3.1-8B path (those are the `#58` and `#115` lane)
+- superseded as the canonical Cell Y snapshot by the Apr 21 PE + Self-Ask and Verified PE runs, but the raw artifacts remain committed as the earliest proof
+
 ## 2026-04-16 — Insomnia benchmark-path validation (`#58`, PR `#115`)
 
 - **Scope:** self-hosted Llama-3.1-8B benchmark-path validation on Insomnia
