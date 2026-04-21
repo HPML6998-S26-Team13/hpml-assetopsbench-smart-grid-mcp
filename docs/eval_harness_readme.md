@@ -377,3 +377,48 @@ Install `uv`, then reopen terminal and rerun `uv sync`.
 ## 11) Security reminder
 
 Never commit live credentials to git-tracked files. Keep Watsonx keys in ignored `.env` files or shell environment variables only.
+
+---
+
+## 12) Issue #3 — Canonical harness smoke run (non-Smart-Grid scenario)
+
+**Purpose:** Prove the evaluation harness runs on canonical org repo main branch using an existing non-Smart-Grid FMSR scenario. Deliverable for GitHub issue #3.
+
+**Scenario:** `data/scenarios/aob_fmsr_01_list_failure_modes.json` (`AOB-FMSR-001`)  
+Query: *"List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action."*  
+Server required: `fmsr` only (reads `data/processed/failure_modes.csv` — no CouchDB, no Docker).
+
+### Step 1 — Validate scenario passes schema check
+
+```cmd
+cd /d "%SMARTGRID_REPO%"
+python data\scenarios\validate_scenarios.py
+```
+
+Expected: `Validation passed for 11 scenario files and 5 negative fixtures.`
+
+### Step 2 — Run through the evaluation harness (Windows)
+
+```cmd
+cd /d "%AOB_PATH%"
+uv run plan-execute --json --show-plan --show-trajectory ^
+  --model-id watsonx/meta-llama/llama-3-3-70b-instruct ^
+  --server "fmsr=%SMARTGRID_REPO%\mcp_servers\fmsr_server\server.py" ^
+  "List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action." ^
+  > "%SMARTGRID_REPO%\benchmarks\cell_Y_plan_execute\raw\issue3-aob-harness-smoke\issue3_aob_fmsr_run01.json" 2> "%SMARTGRID_REPO%\benchmarks\cell_Y_plan_execute\raw\issue3-aob-harness-smoke\harness.log"
+```
+
+### Step 3 — Save evidence
+
+Commit the generated files under `benchmarks/cell_Y_plan_execute/raw/issue3-aob-harness-smoke/`.
+
+Success indicators in the JSON output:
+- `"plan"` array contains at least one step with `"server": "fmsr"`
+- `"trajectory"` contains at least one entry with `"success": true`
+- `"answer"` is a non-empty string describing failure modes
+
+### Notes
+
+- `run_experiment.sh` is a Linux/Slurm script — use the `plan-execute` invocation above on Windows.
+- The committed config for this run is `configs/issue3_aob_harness_smoke.env` (Linux/Insomnia path).
+- Passing only `--server fmsr=...` is intentional: the scenario requires only the FMSR server, and this isolates the smoke test from CouchDB dependencies.

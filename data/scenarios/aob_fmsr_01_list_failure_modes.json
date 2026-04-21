@@ -1,0 +1,21 @@
+{
+  "id": "AOB-FMSR-001",
+  "type": "FMSR",
+  "text": "List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action.",
+  "category": "Failure Mode Catalog",
+  "characteristic_form": "The answer should enumerate all failure modes from the catalogue with each entry including at minimum: a name or identifier, a severity level (low/medium/high/critical), and a recommended maintenance action.",
+  "expected_tools": [
+    "fmsr.list_failure_modes"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "failure mode",
+      "severity",
+      "recommended"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

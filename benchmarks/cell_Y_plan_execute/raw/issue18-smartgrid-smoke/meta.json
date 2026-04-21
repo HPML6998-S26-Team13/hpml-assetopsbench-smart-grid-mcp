@@ -1,0 +1,32 @@
+{
+  "run_name": "issue18-smartgrid-smoke",
+  "scenario_file": "data/scenarios/fmsr_01_dga_fault_mode_diagnosis.json",
+  "scenario_id": "SGT-003",
+  "scenario_domain": "FMSR",
+  "harness": "AssetOpsBench plan-execute CLI",
+  "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+  "mcp_servers": {
+    "iot":  "mcp_servers/iot_server/server.py",
+    "fmsr": "mcp_servers/fmsr_server/server.py",
+    "tsfm": "mcp_servers/tsfm_server/server.py",
+    "wo":   "mcp_servers/wo_server/server.py"
+  },
+  "docker_required": false,
+  "run_date": "2026-04-14",
+  "host": "local-windows",
+  "run_status": "success",
+  "scenarios_attempted": 1,
+  "scenarios_completed": 1,
+  "tool_calls": 6,
+  "experiment_cell": "Y",
+  "orchestration_mode": "plan_execute",
+  "mcp_mode": "baseline",
+  "command": "cd AssetOpsBench && uv run plan-execute --json --model-id watsonx/meta-llama/llama-3-3-70b-instruct --server iot=../hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py --server fmsr=../hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py --server tsfm=../hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py --server wo=../hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py \"Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.\"",
+  "success_indicators": {
+    "plan_steps": 6,
+    "trajectory_success": true,
+    "tools_called": ["get_dga_record", "analyze_dga", "search_failure_modes", "get_sensor_correlation", "list_sensors", "get_sensor_readings"],
+    "answer_diagnosis": "Low-Temperature Overheating (T1)"
+  },
+  "issue": "https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/18"
+}
