@@ -211,12 +211,12 @@
         {
           "urgency": "high",
           "horizon": "Days to 2 weeks",
-          "triggers": ["Condition 3 with rising trend", "rapid rate of gas generation (>2x prior interval)", "high moisture in oil (>30 ppm)", "cooling system partial failure"]
+          "triggers": ["Condition 3 with rising trend", "D1 discharge diagnosis", "T2 thermal fault", "rapid rate of gas generation (>2x prior interval)", "high moisture in oil (>30 ppm)", "cooling system partial failure"]
         },
         {
           "urgency": "medium",
           "horizon": "1–6 months",
-          "triggers": ["Condition 2 trending upward", "T1 or T2 thermal fault", "D1 discharge diagnosis", "LTC anomaly", "insulation degradation signals"]
+          "triggers": ["Condition 2 trending upward", "PD diagnosis", "T1 thermal fault", "LTC anomaly", "insulation degradation signals"]
         },
         {
           "urgency": "low",
