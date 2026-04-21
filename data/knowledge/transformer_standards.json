@@ -124,7 +124,7 @@
 
     "representative_gas_profiles": {
       "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga. Use these as the basis for scenario gas inputs. Safe variation: ±10% per gas value preserves the target iec_code for all profiles. Do not use ±20% — several profiles sit close enough to ratio boundaries that larger variation flips the fault code.",
-      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergences from IEC 60599: (1) D2 — standard requires R2>3 (high acetylene ratio); server uses R2 in [0.1,3) with R3>=1. (2) T1 — standard requires R1>1 (CH4 dominant over H2); server requires R1 in [0.1,1) (H2 dominant). These are opposite. Profiles below are calibrated to the server implementation, not the standard text.",
+      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergences from IEC 60599: (1) PD and D1 — standard requires R1 in [0,0.1) (H2 strongly dominant); server uses R1 in [0.1,1). Profiles with H2=500, CH4=100 (R1=0.2) are correct for the server but would not match the standard PD/D1 rows. (2) D2 — standard requires R2>3 (high acetylene ratio); server uses R2 in [0.1,3) with R3>=1. (3) T1 — standard requires R1>1 (CH4 dominant over H2); server requires R1 in [0.1,1) (H2 dominant). These are opposite. Profiles below are calibrated to the server implementation, not the standard text.",
       "profiles": {
         "PD":  { "H2": 500, "CH4": 100, "C2H2": 3,  "C2H4": 60,  "C2H6": 80,  "CO": 250,  "CO2": 2200, "expected_iec_code": "PD" },
         "D1":  { "H2": 500, "CH4": 100, "C2H2": 40, "C2H4": 80,  "C2H6": 100, "CO": 200,  "CO2": 1900, "expected_iec_code": "D1" },
@@ -269,7 +269,7 @@
 
     "fault_diagnosis_scenario": {
       "target_tool": "fmsr_server.analyze_dga",
-      "gas_values": "Use a representative_gas_profiles entry for the target iec_code. Vary values ±20% to create distinct scenario instances.",
+      "gas_values": "Use a representative_gas_profiles entry for the target iec_code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
       "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm — ensure gas values land in Condition 2 or 3 for interesting scenarios (Condition 1 is trivially normal; Condition 4 is edge case).",
       "example": "For a D2 arcing scenario: use D2 profile from representative_gas_profiles (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
     },

@@ -50,7 +50,7 @@ the target `iec_code`.
 
 ```json
 "D2": {
-  "H2": 600, "CH4": 120, "C2H2": 300, "C2H4": 80, "C2H6": 20,
+  "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,
   "CO": 300, "CO2": 2800,
   "expected_iec_code": "D2"
 }
@@ -117,8 +117,10 @@ use the same gas values from step 1 in both places.
 
 ### Step 6 — Variation
 
-Vary each gas ±20%, vary `transformer_id` (T-001 to T-030), and vary one
+Vary each gas ±10%, vary `transformer_id` (T-001 to T-030), and vary one
 operating context field per scenario instance to ensure distinct decision paths.
+Do not exceed ±10% — some profiles sit close to ratio boundaries and larger
+variation flips the fault code.
 
 ---
 
