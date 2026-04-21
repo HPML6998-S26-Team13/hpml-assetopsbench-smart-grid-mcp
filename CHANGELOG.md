@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-04-21
+
+### Config / Docs
+
+- Applied Codex cross-agent review findings on the `#26/#32` notebooks
+  (3 Highs / 2 Mediums / 1 Low): Notebook 02 MCP overhead now pairs on
+  `(scenario_file, trial_index)` before computing B−A / B−C / C−A deltas
+  instead of subtracting whole-cell medians; Notebook 03 judge-score loader
+  normalizes the `#113` schema (`experiment_cell` → `cell`, `score_6d` →
+  `judge_score`, `pass` → `judge_pass`) so the join actually fires when
+  `scenario_scores.jsonl` lands; Notebook 03 per-step failure counter is
+  now one-count-per-step under the normalized-runner contract instead of
+  double-counting `success=False` plus `response.error`; legacy
+  pre-normalization scenario artifacts with null `success` / missing
+  `scenario.id` are preserved as NaN and excluded from the aggregation
+  rather than coerced to `False`; latest-run selection now uses
+  `meta.json.started_at` with an mtime fallback instead of lexicographic
+  sort on run IDs; `recovery_rate` is NaN for zero-failure cells (Alex)
+
 ## 2026-04-20
 
 ### Config / Docs
