@@ -11,6 +11,17 @@
   explicit Cell A / B / C / Z benchmark directories, experiment-specific config
   templates, and a real Notebook 02 parser/preflight scaffold for future MCP
   overhead analysis (Alex)
+- Tightened `notebooks/02_latency_analysis.ipynb` to key off the `summary.json`
+  schema now shipped by `scripts/run_experiment.sh` (latency p50/p95, tool-error
+  counts, MCP latency, tool call counts) and the `meta.json` profiling fields
+  added by `#27` / `01043c5`; adds MCP overhead decomposition (B−A, B−C, C−A)
+  at both p50 and p95 with a p50-bar / p95-cap figure (Alex)
+- Added `notebooks/03_orchestration_comparison.ipynb` scaffold for Experiment 2
+  across Cells B / Y / Z; reads per-scenario `success` / `failed_steps` /
+  `history` / `answer` from the PE-Self-Ask and Verified-PE runner outputs,
+  computes success rate / mean failed steps / mean history length / recovery
+  rate per orchestration, and leaves a hook to join `scenario_scores.jsonl`
+  judge scores (per `#17`) once they land (Alex)
 - Split dependency guidance into a portable base `requirements.txt`, a
   cluster-serving `requirements-insomnia.txt`, and a notebook-authoring
   `requirements-notebooks.txt`, with setup docs/scripts updated to use `uv`

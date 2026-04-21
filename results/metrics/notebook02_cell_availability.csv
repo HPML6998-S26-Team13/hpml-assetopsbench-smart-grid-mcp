@@ -1,4 +1,4 @@
-cell,label,cell_dir,config_present,summary_present,raw_run_count,latest_run_id,latency_rows,run_status,scenario_set_name,model_id,wandb_run_url,summary_latency_mean,summary_latency_p95,config_experiment_family
-A,Direct,benchmarks/cell_A_direct,False,False,0,,0,,,,,,,
-B,MCP baseline,benchmarks/cell_B_mcp_baseline,False,False,0,,0,,,,,,,
-C,MCP optimized,benchmarks/cell_C_mcp_optimized,False,False,0,,0,,,,,,,
+cell,label,cell_dir,config_present,summary_present,raw_run_count,latest_run_id,latency_rows,experiment_family,experiment_cell,orchestration_mode,mcp_mode,scenario_set_name,scenario_set_hash,model_id,model_provider,serving_stack,quantization_mode,run_status,scenarios_attempted,scenarios_completed,success_rate,failure_count,wall_clock_seconds_total,latency_seconds_mean,latency_seconds_p50,latency_seconds_p95,tool_call_count_total,tool_call_count_mean,tool_error_count,mcp_latency_seconds_mean,mcp_latency_seconds_p95,tool_latency_seconds_mean,wandb_run_url,judge_score_mean,judge_score_p50,judge_score_p95,judge_pass_rate,profiling_dir,profiling_artifact,profiling_summary
+A,Direct,benchmarks/cell_A_direct,False,False,0,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,MCP baseline,benchmarks/cell_B_mcp_baseline,False,False,0,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+C,MCP optimized,benchmarks/cell_C_mcp_optimized,False,False,0,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
