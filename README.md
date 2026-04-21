@@ -76,7 +76,7 @@ via WatsonX API to assess scaling effects.
 │
 ├── scripts/                      # Utility scripts
 │   ├── verify_watsonx.py         #   WatsonX access verification + latency benchmarking
-│   ├── run_experiment.sh         #   Canonical SmartGridBench runner (PE today; AaT/Hybrid adapter-ready)
+│   ├── run_experiment.sh         #   Canonical SmartGridBench runner (PE baseline + Self-Ask/Verified PE follow-ons)
 │   ├── setup_insomnia.sh         #   Shared Insomnia environment setup
 │   ├── vllm_serve.sh             #   Self-hosted vLLM serve + smoke path on Insomnia
 │   ├── test_inference.sh         #   Sanity checks against a live vLLM endpoint
@@ -87,7 +87,7 @@ via WatsonX API to assess scaling effects.
 │   ├── cell_B_mcp_baseline/      #   MCP baseline (planned)
 │   ├── cell_C_mcp_optimized/     #   Optimized MCP path (planned)
 │   ├── cell_Y_plan_execute/      #   Plan-Execute proof path (WatsonX smoke landed)
-│   └── cell_Z_hybrid/            #   Hybrid path (future-work scope, not in core grid)
+│   └── cell_Z_hybrid/            #   Optional third-method slot (Verified PE preferred over generic Hybrid)
 │
 ├── notebooks/                    # Jupyter notebooks - see notebooks/README.md
 ├── profiling/                    # PyTorch Profiler + Nsight - see profiling/README.md
@@ -129,6 +129,11 @@ uv pip install -r requirements-notebooks.txt
 # Insomnia / cluster serving stack
 uv pip install -r requirements-insomnia.txt
 ```
+
+`requirements.txt` now also includes the portable AssetOpsBench PE-client
+dependencies (`litellm` and `mcp[cli]`) needed by the repo-local Self-Ask PE /
+Verified PE runners. The cluster overlay in `requirements-insomnia.txt` layers
+vLLM and CUDA-specific pins on top of that base.
 
 ### Running Experiments
 
@@ -197,7 +202,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - Problem Statement B extension: scenario generation pipeline, Knowledge Plugin, and validation methodology
 - NeurIPS 2026 draft first, then back-port to the class IEEE report format
 
-**Current default scope decision:** the working comparison is **vanilla Agent-as-Tool vs vanilla Plan-Execute**. Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition, and the primary local benchmark model is self-hosted Llama-3.1-8B-Instruct with 70B reserved for selective WatsonX spot-checks.
+**Current default scope decision:** the working comparison is still **vanilla Agent-as-Tool vs vanilla Plan-Execute**. The repo now also has an active local mitigation stream for PE + Self-Ask and an optional Verified PE third-method prototype, but neither should muddy the honesty of the core AaT vs PE story. The primary local benchmark model remains self-hosted Llama-3.1-8B-Instruct with 70B reserved for selective WatsonX spot-checks.
 
 ## Key Dates
 

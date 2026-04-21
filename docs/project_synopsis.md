@@ -195,6 +195,10 @@ Resolved during the Apr 16 post-call audit:
 - Hybrid explicitly moved out of the active class-project critical path
 - the primary local benchmark model is now clearly Llama-3.1-8B-Instruct, with 70B reserved for selective scaling spot-checks only
 
+New local follow-on work now in motion:
+- `#23` is promoted from vague Hybrid backlog into a concrete Verified PE / `Plan-Execute-Verify-Replan` prototype with a repo-local runner path
+- `#24` is promoted into a real Self-Ask clarification hook for the active repo-local orchestration modes rather than the earlier fictional three-mode requirement
+
 Committed W3-W5 workstreams:
 - Experiment 1: MCP overhead and optimization (Direct vs MCP-baseline vs MCP-optimized)
 - Experiment 2: orchestration comparison and failure analysis
@@ -203,7 +207,7 @@ Committed W3-W5 workstreams:
 
 Current scope default:
 - the working experiment grid is **vanilla Agent-as-Tool vs vanilla Plan-Execute**
-- Hybrid remains adapter-ready / future-work scoped rather than a blocking third condition
+- Verified PE and PE + Self-Ask are now active local follow-on implementations, but they are still optional relative to the honest core AaT vs PE comparison
 - local benchmark runs default to self-hosted Llama-3.1-8B-Instruct on Insomnia
 - WatsonX-hosted 70B is used only for selective comparison runs, not as a duplicated full-grid requirement
 

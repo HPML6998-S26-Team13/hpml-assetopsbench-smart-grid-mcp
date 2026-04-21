@@ -66,8 +66,8 @@ The original W2 foundation tasks were a single bottleneck. As of Apr 14, that bo
 | Task | Owner | Blocked by | Blocks |
 |---|---|---|---|
 | Orchestration wiring (AaT + PE on team's MCP servers) | Alex | Tier 1 complete | Experiment 2 |
-| Optional third-orchestration prototype (`#23`; recommended direction: Verified Plan-Execute / PE-Verify-Replan) | Alex | AaT vs PE comparison stable + spare bandwidth | Optional follow-on only |
-| Self-Ask integration (~10 LOC, addresses "Fail to Ask for Clarification" failures) | Alex | Proven active orchestration modes | Quality of active conditions + mitigation work |
+| Verified PE third-method prototype (`#23`; active optional follow-on, not core blocker) | Alex | Benchmark runner + PE baseline stable | Optional third-method evidence |
+| Self-Ask clarification hook for active repo-local modes (`#24`) | Alex | Verified PE / PE runner plumbing | Quality of active conditions + mitigation work |
 | 6-dimension LLM-as-Judge scoring in eval harness | Akshat | Eval harness running | Final scoring of all runs |
 | First Smart Grid scenario runs end-to-end through MCP with trajectory artifact captured | Akshat | All Tier 1 done | Confidence to start Tier 3 |
 | First judge-scored trajectory lands with logs / artifacts using Maverick-17B | Akshat | First Smart Grid trajectory + judge wiring | Confidence to start Tier 3 |
@@ -197,7 +197,7 @@ Delta (B − A) = raw cost of MCP standardization. Delta (C − A) = residual co
 
 **Cell B is shared between both experiments** - it's the same set of runs, used to answer both research questions. So total unique committed cells = **4**, not 9.
 
-**Optional follow-on only:** if we revive a third cell Z later, the strongest direction is no longer a generic "PE + reflection checkpoints" variant. The better candidate is a verifier-gated Plan-Execute design (`Plan-Execute-Verify-Replan` / `Verified PE`) with explicit step-verification and bounded repair / replanning semantics. That still remains backlog / future-work scope unless the core AaT vs PE comparison becomes stable early enough to justify it.
+**Active optional follow-on:** the repo now has a local Verified PE / `Plan-Execute-Verify-Replan` implementation path plus a PE + Self-Ask hook. These are real mitigation / third-method work items now, but they still do **not** replace the core AaT vs PE experiment story unless they earn that status through clean artifacts.
 
 ```
                   │ Direct (no MCP) │ MCP baseline │ MCP optimized │

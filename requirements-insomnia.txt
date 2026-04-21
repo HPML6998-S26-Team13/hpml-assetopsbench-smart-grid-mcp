@@ -1,11 +1,17 @@
 -r requirements.txt
 
-# Cluster-only serving stack (not portable to laptop/macOS environments).
-# torch is pinned to the version vllm 0.8.5 actually resolves to; prior
-# setups pinned 2.7.0 which caused ResolutionImpossible because vllm 0.8.5
-# caps at torch<2.7. See issue #111.
-torch==2.6.0
-transformers==4.51.3
-huggingface-hub==0.31.1
-vllm==0.8.5
-nvidia-cudnn-cu12==9.10.0.56
+# Cluster-only serving stack (not portable to laptop/macOS environments)
+# Previous issue of pins (see issue #111) resolved.
+# Before:
+#   torch==2.6.0
+#   transformers==4.51.3
+#   huggingface-hub==0.31.1
+#   vllm==0.8.5
+#   nvidia-cudnn-cu12==9.10.0.56
+torch==2.10.0
+transformers==4.57.6
+huggingface-hub==0.36.2
+vllm==0.19.0
+# Let torch/vLLM pull the matching CUDA/cuDNN wheels transitively. Hard-pinning
+# cuDNN separately makes the resolver fragile and can easily diverge from the
+# stack that vLLM expects.

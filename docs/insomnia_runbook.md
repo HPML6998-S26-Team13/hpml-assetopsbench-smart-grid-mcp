@@ -8,7 +8,9 @@ HPC cluster. Read [`compute_plan.md`](compute_plan.md) first for the higher-leve
 hardware strategy (which GPU for which phase, Insomnia vs GCP), and
 [`runbook.md`](runbook.md) for the end-to-end reproducibility story. This doc
 covers the cluster-specific operational details that aren't obvious from the
-official RCS documentation.
+official RCS documentation. For the current model names, repo-facing model
+IDs, and runtime pins that this runbook assumes, see
+[`governance/model_registry.yaml`](governance/model_registry.yaml).
 
 ## Two runbooks, one project
 
@@ -80,48 +82,32 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ## cuDNN: not installed system-wide
 
 There is no system cuDNN on Insomnia. The team's `scripts/setup_insomnia.sh`
-handles this by pip-installing `nvidia-cudnn-cu12` into the venv, and
-`scripts/vllm_serve.sh` adds the cuDNN lib path to `LD_LIBRARY_PATH` at runtime.
-You shouldn't need to do anything manual unless you're building your own venv.
+handles this by installing the pinned `torch` stack from
+`requirements-insomnia.txt`, which in turn pulls a compatible
+`nvidia-cudnn-cu12` wheel transitively. `scripts/vllm_serve.sh` adds the cuDNN
+lib path to `LD_LIBRARY_PATH` at runtime. You shouldn't need to do anything
+manual unless you're building your own venv.
 
-## Python version: vLLM versions matter
+## Python version: use the shared 3.11 env
 
 Insomnia ships only **Python 3.9.18** system-wide (`/usr/bin/python3.9`); there
 is no newer Python module available (`module avail python` returns nothing).
-Any venv created with `python3 -m venv` inherits 3.9.
+Any venv created with `python3 -m venv` inherits 3.9, which is **not** the path
+we use anymore. The team-standard env is the shared `.venv-insomnia/` created
+via `uv` with **Python 3.11**.
 
-**vLLM 0.10+ requires Python 3.10+** (it uses PEP 604 `X | None` union syntax),
-so newer vLLM releases will not import on a stock Insomnia venv. This is why
-`scripts/setup_insomnia.sh` pins `vllm==0.8.5` — that release still supports
-Python 3.9. **Do not bump the vLLM pin without also installing a newer Python.**
+As of Apr 20, 2026, the reconciled shared-stack target is:
 
-### Failure mode (verified Apr 10, 2026)
+- `torch==2.10.0`
+- `transformers==4.57.6`
+- `huggingface-hub==0.36.2`
+- `vllm==0.19.0`
 
-If you accidentally end up on a vLLM that requires 3.10+ (e.g., by running an
-older unpinned version of the setup script, or by running `pip install vllm`
-manually), you get a **silent crash inside imports** that is extremely hard to
-diagnose:
+Those pins match the actual shared-env direction we are standardizing around,
+not the older `vllm==0.8.5` / Python 3.9 story. **Do not bump the vLLM or
+torch pins casually without re-verifying the whole Insomnia stack.**
 
-```
-File ".../vllm/model_executor/models/registry.py", line 442, in _LazyRegisteredModel
-    module_hash: str) -> _ModelInfo | None:
-TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
-```
-
-When launched as a backgrounded process inside a Slurm script with redirected
-stdout/stderr, the crash produces **zero output**. Symptoms:
-
-- `nvidia-smi` shows 0 MiB GPU usage
-- The vLLM server log file is 0 bytes
-- The Slurm job log shows only "Waiting for vLLM server to start..."
-- No traceback anywhere
-- Job eventually times out in the health-check loop
-
-If you ever see this combination, **don't keep resubmitting Slurm jobs** —
-foreground vLLM in an interactive session and you'll see the real error
-immediately. See "Debugging: foreground vLLM" below.
-
-### If you need a newer vLLM
+### Recreate the shared env when needed
 
 Install Python 3.11 via `uv` (no admin needed; `uv` ships its own Python
 interpreters), then recreate the venv:
@@ -146,10 +132,24 @@ will take down any running jobs that depend on it.
 the cluster-only `vllm` / cuDNN stack on top of the portable base
 `requirements.txt`.
 
+That base now also carries the portable AssetOpsBench PE-client slice used by
+our repo-local Self-Ask PE / Verified PE runners:
+
+- `litellm==1.81.13`
+- `mcp[cli]>=1.26.0`
+
+So if an Insomnia proof run dies with `ModuleNotFoundError: litellm` or
+`ModuleNotFoundError: mcp`, the fix is usually not a bespoke `pip install` in
+the moment — it is to refresh the shared env against
+`requirements-insomnia.txt`. The matching model/runtime contract is now also
+captured in [`governance/model_registry.yaml`](governance/model_registry.yaml).
+
 Verify before submitting any Slurm jobs:
 ```bash
 python --version                                    # should be 3.11.x
+python -c "import torch; print(torch.__version__)"  # should print 2.10.0
 python -c "import vllm; print(vllm.__version__)"    # should print without error
+python -c "import litellm, mcp; print(litellm.__version__)"  # PE-family wrapper deps
 ```
 
 ## Login node etiquette
@@ -200,28 +200,34 @@ imports take ~30 seconds, model load to GPU another minute, CUDA graph capture
 another minute. If you see no output at all within 30 seconds, vLLM is crashing
 on import and you need to investigate that first.
 
-For the successful **Apr 16 ET benchmark-path validation** currently sitting in PR `#115`,
-the committed artifacts support the following narrower reading:
+Concrete proof runs and benchmark-path validation notes live in
+[`validation_log.md`](validation_log.md). Keep this runbook for operational
+instructions; keep proof records there.
+
+## Watching live runs with tmux
+
+If you want a quick 2x2 dashboard instead of manually opening four shells, use:
 
 ```bash
-python -u -m vllm.entrypoints.openai.api_server \
-    --model models/Llama-3.1-8B-Instruct \
-    --port 8000 \
-    --max-model-len 32768 \
-    --dtype float16
+bash scripts/tmux_watch_run.sh --job-id 8848287
 ```
 
-What is verified from committed artifacts:
+or:
 
-- the successful long-context validation used `--max-model-len 32768`, while the shared `scripts/vllm_serve.sh` path on the branch still defaulted to `8192`
-- the log reports `served_model_name: Llama-3.1-8B-Instruct`, but that appears as vLLM-reported runtime state rather than a committed explicit CLI flag in the branch script
-- actual startup-to-ready on that validation run was much shorter than the script timeout ceiling; the committed branch script default remained `STARTUP_TIMEOUT=600`
-- the committed `main` smoke path still documents the lighter `8192` configuration because that path was only intended as a short serve smoke, not a full benchmark-length validation
+```bash
+bash scripts/tmux_watch_run.sh --run-id 8848287_pe_self_ask_mcp_baseline_smoke
+```
 
-Open questions for merge cleanup:
+The helper opens:
 
-- should `scripts/vllm_serve.sh` adopt `--max-model-len 32768` as the shared benchmark-path default?
-- are there local NCCL env overrides behind the successful branch run that still need to be codified in the shared script or runbook?
+- top-left: repo shell with run metadata
+- bottom-left: `logs/exp_<jobid>.out` when `--job-id` is provided
+- top-right: `harness.log`
+- bottom-right: `vllm.log` (or `nvidia-smi` if no vLLM log exists)
+
+If you're SSHing from Ghostty, either start the SSH session with
+`TERM=xterm-256color ssh insomnia` or run `export TERM=xterm-256color` before
+launching `tmux`.
 
 To test inference, open a second SSH session and `curl` against the compute
 node hostname (visible in your interactive shell prompt, e.g. `ins080`):
@@ -230,7 +236,7 @@ node hostname (visible in your interactive shell prompt, e.g. `ins080`):
 ssh <UNI>@insomnia.rcs.columbia.edu
 curl http://ins080:8000/v1/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"models/Llama-3.1-8B-Instruct","prompt":"A power transformer fails because","max_tokens":50}'
+  -d '{"model":"Llama-3.1-8B-Instruct","prompt":"A power transformer fails because","max_tokens":50}'
 ```
 
 ## Email notifications on job state
