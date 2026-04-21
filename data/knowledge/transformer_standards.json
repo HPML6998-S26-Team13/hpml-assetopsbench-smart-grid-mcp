@@ -46,11 +46,8 @@
         {
           "iec_code": "N",
           "label": "Normal / Inconclusive",
-          "R1_range": [0.1, 1.0],
-          "R2_range": [0.0, 0.1],
-          "R3_range": [0.0, 1.0],
-          "description": "Normal aging or no fault pattern matched. Default when no other row matches.",
-          "typical_cause": "Normal insulation aging",
+          "description": "Default result when gas ratios do not match any classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from representative_gas_profiles.",
+          "typical_cause": "Normal insulation aging, or mixed fault signatures that do not cleanly match a single pattern",
           "severity": "low"
         },
         {
@@ -122,20 +119,20 @@
           "condition_4_trigger": true
         }
       ],
-      "generator_note": "To generate a scenario targeting a specific fault code, use the representative gas profile for that code. The analyze_dga MCP tool will return the same iec_code if gas values fall in the correct ratio ranges. See representative_gas_profiles below."
+      "generator_note": "IMPORTANT: Do not derive gas values from fault_table. The fault_table represents the IEC 60599 standard; the server implementation diverges on several rows (see server_rogers_table_note in representative_gas_profiles). Always use representative_gas_profiles as the source of gas values for scenario generation."
     },
 
     "representative_gas_profiles": {
-      "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga. Use these as the basis for scenario gas inputs — vary each value ±20% to create distinct instances while preserving the target iec_code.",
-      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergence from IEC 60599: the standard defines D2 (high-energy arcing) as R2>3; the server's D2 uses R2 in [0.1,3) with R3>=1. Profiles below are calibrated to the server implementation, not the standard text.",
+      "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga. Use these as the basis for scenario gas inputs. Safe variation: ±10% per gas value preserves the target iec_code for all profiles. Do not use ±20% — several profiles sit close enough to ratio boundaries that larger variation flips the fault code.",
+      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergences from IEC 60599: (1) D2 — standard requires R2>3 (high acetylene ratio); server uses R2 in [0.1,3) with R3>=1. (2) T1 — standard requires R1>1 (CH4 dominant over H2); server requires R1 in [0.1,1) (H2 dominant). These are opposite. Profiles below are calibrated to the server implementation, not the standard text.",
       "profiles": {
         "PD":  { "H2": 500, "CH4": 100, "C2H2": 3,  "C2H4": 60,  "C2H6": 80,  "CO": 250,  "CO2": 2200, "expected_iec_code": "PD" },
         "D1":  { "H2": 500, "CH4": 100, "C2H2": 40, "C2H4": 80,  "C2H6": 100, "CO": 200,  "CO2": 1900, "expected_iec_code": "D1" },
-        "D2":  { "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "CO": 300,  "CO2": 2800, "expected_iec_code": "D2" },
+        "D2":  { "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "CO": 300,  "CO2": 2800, "expected_iec_code": "D2", "note": "Server D2 = moderate-severity arc discharge (R2 in [0.1,3)). IEC standard D2 = high-energy arcing with R2>3. Use condition_4_trigger flag from fault_table for catastrophic arcing scenarios." },
         "T1":  { "H2": 200, "CH4": 100, "C2H2": 3,  "C2H4": 90,  "C2H6": 60,  "CO": 400,  "CO2": 3500, "expected_iec_code": "T1" },
         "T2":  { "H2": 100, "CH4": 200, "C2H2": 2,  "C2H4": 150, "C2H6": 100, "CO": 450,  "CO2": 3800, "expected_iec_code": "T2" },
         "T3":  { "H2": 150, "CH4": 600, "C2H2": 3,  "C2H4": 500, "C2H6": 100, "CO": 600,  "CO2": 5000, "expected_iec_code": "T3" },
-        "N":   { "H2": 400, "CH4": 20,  "C2H2": 10, "C2H4": 50,  "C2H6": 40,  "CO": 120,  "CO2": 1000, "expected_iec_code": "N"  }
+        "N":   { "H2": 400, "CH4": 20,  "C2H2": 1,  "C2H4": 50,  "C2H6": 40,  "CO": 120,  "CO2": 1000, "expected_iec_code": "N"  }
       }
     }
   },
@@ -301,7 +298,7 @@
 
     "variation_strategy": {
       "description": "How to generate multiple distinct scenario instances from the same fault type.",
-      "gas_variation": "Vary each gas value ±20% of the representative profile. Keep ratios stable to preserve iec_code.",
+      "gas_variation": "Vary each gas value ±10% of the representative profile. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
       "transformer_variation": "Vary transformer ID (T-001 through T-030), loading percentage, criticality tier, and spare availability.",
       "context_variation": "Vary one must_have_field per instance to ensure the scenarios probe different decision paths."
     }
