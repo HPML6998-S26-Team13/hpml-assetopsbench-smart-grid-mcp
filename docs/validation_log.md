@@ -82,3 +82,51 @@ Caveats / follow-ups:
 
 - this run also happened before the benchmark-wrapper success-accounting fix
 - the raw scenario outputs show semantic failures even though the wrapper summary reported `pass=2`, so rerun on the fixed branch is required
+
+## 2026-04-20 — PE + Self-Ask clean smoke proof (`#24`)
+
+- **Scope:** repo-local PE + Self-Ask runner on Insomnia
+- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `7c13397d422f7fe453ed6c6d70e319a57674fb51`
+- **Config:** `configs/example_pe_self_ask.env`
+- **Run id / Slurm job id:** `8854783_pe_self_ask_mcp_baseline_smoke`
+- **W&B:** [ncai1jfr](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/ncai1jfr)
+- **Primary artifacts:**
+  - `benchmarks/cell_Y_plan_execute/summary.json` from the clean run state
+  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/meta.json`
+  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/harness.log`
+  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/vllm.log`
+
+What this proves:
+
+- the repo-local PE + Self-Ask runner reached a full `2 / 2` smoke success on the two multi-domain scenarios
+- the live path was clean end-to-end: local vLLM, LiteLLM/OpenAI-compatible serving, Smart Grid MCP servers, benchmark wrapper, and WandB upload
+- the earlier accounting / tool-error masking fixes were sufficient for a truthful clean proof
+
+Caveats / follow-ups:
+
+- later local/preflight reruns in the same checkout touched `benchmarks/cell_Y_plan_execute/summary.json` without producing a new comparable full two-scenario artifact
+- treat `raw/8854783_pe_self_ask_mcp_baseline_smoke/` as the authoritative PE + Self-Ask smoke proof until a newer full rerun is archived
+
+## 2026-04-20 — Verified PE clean smoke proof on rebased branch (`#23`)
+
+- **Scope:** repo-local Verified PE runner on Insomnia
+- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
+- **Config:** `configs/example_verified_pe.env`
+- **Run id / Slurm job id:** `local-20260420-180606_verified_pe_mcp_baseline_smoke`
+- **W&B:** [x65ej9e0](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/x65ej9e0)
+- **Primary artifacts:**
+  - `benchmarks/cell_Z_hybrid/summary.json`
+  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/meta.json`
+  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/harness.log`
+  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/vllm.log`
+
+What this proves:
+
+- the repo-local Verified PE runner reached a full `2 / 2` smoke success on the rebased post-`#115` branch
+- verifier-time prompt overflows, summarization overflows, and oversized execution-context recycling are all fixed enough for a clean live proof
+- the `#23/#24` branch is now smoke-proof on Insomnia for both runner variants
+
+Caveats / follow-ups:
+
+- this is the current authoritative Verified PE smoke artifact
+- for perfect same-SHA symmetry, a fresh full PE + Self-Ask rerun on `3a03ab8` would still be nice, but it is no longer blocking branch credibility
