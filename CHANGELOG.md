@@ -55,8 +55,8 @@
   to the live repo state after the Apr 16 team sync (Alex)
 - Lower-churn class / mentor setup docs moved under `docs/reference/`, with
   repo-wide links updated mechanically to match the new paths (Alex)
-- Documentation now reflects the active four-cell experiment grid, Hybrid as
-  deferred future-work scope, and Llama-3.1-8B-Instruct as the primary local
+- Documentation now reflects the active four-cell experiment grid, Cell Z /
+  Verified PE as deferred future-work scope, and Llama-3.1-8B-Instruct as the primary local
   benchmark model with 70B reserved for selective WatsonX spot-checks (Alex)
 - Added archived remediation notes under `docs/archive/` capturing the
   cross-repo review follow-up and spec companion for that cleanup stream (Alex)
@@ -80,7 +80,8 @@
 
 - SmartGridBench experiment runner now invokes the canonical Plan-Execute CLI
   with Smart Grid MCP server overrides, benchmark/WandB artifact
-  back-references, and explicit adapter surfaces for AaT/Hybrid
+  back-references, and explicit adapter surfaces for AaT / the legacy Cell Z
+  `hybrid` hook
   — #61, #62, #22 (partial) — M (Alex)
 - Added local WatsonX/WandB runner support so benchmark runs can reuse the
   team repo `.env` plus the root project `.venv` without manual export glue

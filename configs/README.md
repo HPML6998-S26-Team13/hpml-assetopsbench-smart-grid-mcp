@@ -11,7 +11,7 @@ The currently verified benchmark-facing execution path is:
 - Smart Grid MCP servers passed into AssetOpsBench `plan-execute` via repeated
   `--server name=path` overrides
 
-Agent-as-Tool and Hybrid share the same config schema here, but still need an
+Agent-as-Tool and Cell Z / Verified PE share the same config schema here, but still need an
 explicit external runner command until the canonical upstream exposes a stable
 CLI for those orchestration modes. See
 [`../docs/orchestration_wiring.md`](../docs/orchestration_wiring.md).
@@ -19,21 +19,23 @@ CLI for those orchestration modes. See
 ## Naming
 
 Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md).
-The repo now treats Experiment 1 and Experiment 2 as separate config families:
+The execution-facing config convention is:
 
-- `configs/experiment1/` for the Cell A / B / C MCP-overhead comparison
-- `configs/experiment2/` for the Cell B / Y core orchestration comparison,
-  plus optional Cell Z follow-on scope if Hybrid becomes real enough to run
+- `configs/aat_{direct,mcp_baseline,mcp_optimized}.env` for the canonical
+  Experiment 1 Cell A / B / C runs
+- `configs/experiment2/` for the extra Experiment 2 templates that do not
+  already exist on `main` (currently the Plan-Execute / Cell Y lane and the
+  optional Cell Z follow-on)
 
 The active cell mapping is:
 
 | Cell | Orchestration | MCP mode | Suggested config name |
 |---|---|---|---|
-| A | Agent-as-Tool | direct | `experiment1/exp1_cell_A_direct.env` |
-| B | Agent-as-Tool | baseline | `experiment1/exp1_cell_B_mcp_baseline.env`, `experiment2/exp2_cell_B_aat_mcp_baseline.env` |
-| C | Agent-as-Tool | optimized | `experiment1/exp1_cell_C_mcp_optimized.env` |
+| A | Agent-as-Tool | direct | `aat_direct.env` |
+| B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
+| C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
 | Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
-| Z | Hybrid | baseline | `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` |
+| Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` |
 
 ## Required keys
 
@@ -64,7 +66,8 @@ The active cell mapping is:
 - `HYBRID_RUNNER_TEMPLATE` — required when `ORCHESTRATION=hybrid`
 
 These are intentionally explicit. We do not want hidden shell glue for AaT or
-Hybrid until the invocation contract is stable enough to benchmark.
+the legacy Cell Z / `hybrid` runner hook until the invocation contract is
+stable enough to benchmark.
 
 ## Running
 
@@ -79,7 +82,7 @@ DRY_RUN=1 bash scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_
 Submit the real job:
 
 ```bash
-sbatch scripts/run_experiment.sh configs/experiment1/exp1_cell_B_mcp_baseline.env
+sbatch scripts/run_experiment.sh configs/aat_mcp_baseline.env
 ```
 
 ## Output layout
@@ -104,9 +107,9 @@ As of Apr 20, 2026:
 - Plan-Execute wiring is implemented through AssetOpsBench's canonical
   `plan-execute` CLI with explicit Smart Grid server overrides.
 - WandB config + summary emission is wired in the benchmark runner.
-- Experiment 1 / Experiment 2 config-template scaffolds now exist as separate
-  families so the shared Cell B naming is explicit instead of hidden in
-  ad-hoc file names.
-- AaT and Hybrid can use the same artifact/logging path, but still need an
-  explicit external runner template until a stable upstream invocation path
-  exists.
+- Experiment 1 analysis still maps to Cells A / B / C, but the execution
+  configs for those lanes stay on the canonical `configs/aat_*.env` names that
+  `main` already documents.
+- AaT and the legacy Cell Z / `hybrid` hook can use the same
+  artifact/logging path, but still need an explicit external runner template
+  until a stable upstream invocation path exists.

@@ -18,7 +18,7 @@ benchmarks/
 ├── cell_B_mcp_baseline/   # shared AaT baseline cell for Experiment 1 and 2
 ├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
 ├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline (Experiment 2 core)
-└── cell_Z_hybrid/         # Hybrid follow-on only, outside the core committed grid
+└── cell_Z_hybrid/         # Cell Z / Verified PE follow-on (legacy dir name kept for compatibility)
     # each cell dir keeps the same config.json / raw/ / summary.json shape
 ```
 
@@ -43,7 +43,7 @@ The directory is no longer scaffolding-only:
 - the canonical scenario corpus currently contains 10 committed JSON scenarios under `data/scenarios/`
 - the committed benchmark layout now includes explicit top-level cell
   directories for Experiment 1 (A / B / C), the existing Plan-Execute proof
-  cell (Y), and the optional Hybrid follow-on slot (Z)
+  cell (Y), and the optional Cell Z / Verified PE follow-on slot (Z)
 
 What is still missing:
 
