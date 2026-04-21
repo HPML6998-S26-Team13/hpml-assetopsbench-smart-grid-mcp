@@ -1,6 +1,6 @@
 # Validation Log
 
-*Last updated: 2026-04-20*
+*Last updated: 2026-04-21*
 
 Canonical log for live serve / benchmark / profiling proofs. Use this file for
 concrete run records, not the runbooks.
@@ -39,15 +39,11 @@ Caveats / follow-ups:
 ## 2026-04-20 — PE + Self-Ask integration proof (`#24`)
 
 - **Scope:** repo-local PE + Self-Ask runner on Insomnia
-- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `0591c7573a600867c12fc9e624fc9c0d83ac0a5f`
+- **Branch / git SHA:** historical pre-accounting-fix branch state (around `0591c75`, pre-rebase)
 - **Config:** `configs/example_pe_self_ask.env`
 - **Run id / Slurm job id:** `8850716_pe_self_ask_mcp_baseline_smoke`
 - **W&B:** `y42u88h3`
-- **Primary artifacts:**
-  - `benchmarks/cell_Y_plan_execute/summary.json`
-  - `benchmarks/cell_Y_plan_execute/raw/8850716_pe_self_ask_mcp_baseline_smoke/meta.json`
-  - `benchmarks/cell_Y_plan_execute/raw/8850716_pe_self_ask_mcp_baseline_smoke/harness.log`
-  - `benchmarks/cell_Y_plan_execute/raw/8850716_pe_self_ask_mcp_baseline_smoke/vllm.log`
+- **Primary artifacts:** historical live-run artifacts in the Insomnia worktree + W&B `y42u88h3`
 
 What this proves:
 
@@ -63,15 +59,11 @@ Caveats / follow-ups:
 ## 2026-04-20 — Verified PE integration proof (`#23`)
 
 - **Scope:** repo-local Verified PE runner on Insomnia
-- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `0591c7573a600867c12fc9e624fc9c0d83ac0a5f`
+- **Branch / git SHA:** historical pre-accounting-fix branch state (around `0591c75`, pre-rebase)
 - **Config:** `configs/example_verified_pe.env`
 - **Run id / Slurm job id:** `8851966_verified_pe_mcp_baseline_smoke`
 - **W&B:** `0v3a5jqi`
-- **Primary artifacts:**
-  - `benchmarks/cell_Z_hybrid/summary.json`
-  - `benchmarks/cell_Z_hybrid/raw/8851966_verified_pe_mcp_baseline_smoke/meta.json`
-  - `benchmarks/cell_Z_hybrid/raw/8851966_verified_pe_mcp_baseline_smoke/harness.log`
-  - `benchmarks/cell_Z_hybrid/raw/8851966_verified_pe_mcp_baseline_smoke/vllm.log`
+- **Primary artifacts:** historical live-run artifacts in the Insomnia worktree + W&B `0v3a5jqi`
 
 What this proves:
 
@@ -83,50 +75,48 @@ Caveats / follow-ups:
 - this run also happened before the benchmark-wrapper success-accounting fix
 - the raw scenario outputs show semantic failures even though the wrapper summary reported `pass=2`, so rerun on the fixed branch is required
 
-## 2026-04-20 — PE + Self-Ask clean smoke proof (`#24`)
+## 2026-04-21 — PE + Self-Ask clean smoke proof snapshot (`#24`)
 
 - **Scope:** repo-local PE + Self-Ask runner on Insomnia
-- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `7c13397d422f7fe453ed6c6d70e319a57674fb51`
+- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
 - **Config:** `configs/example_pe_self_ask.env`
-- **Run id / Slurm job id:** `8854783_pe_self_ask_mcp_baseline_smoke`
-- **W&B:** [ncai1jfr](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/ncai1jfr)
+- **Run id / Slurm job id:** `8857842_pe_self_ask_mcp_baseline_smoke`
+- **W&B:** [otkt77pj](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/otkt77pj)
 - **Primary artifacts:**
-  - `benchmarks/cell_Y_plan_execute/summary.json` from the clean run state
-  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/meta.json`
-  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/harness.log`
-  - `benchmarks/cell_Y_plan_execute/raw/8854783_pe_self_ask_mcp_baseline_smoke/vllm.log`
+  - committed snapshot: `benchmarks/cell_Y_plan_execute/config.json`
+  - committed snapshot: `benchmarks/cell_Y_plan_execute/summary.json`
+  - live raw artifacts: archived in the Insomnia worktree under run id `8857842_pe_self_ask_mcp_baseline_smoke`
 
 What this proves:
 
-- the repo-local PE + Self-Ask runner reached a full `2 / 2` smoke success on the two multi-domain scenarios
+- the repo-local PE + Self-Ask runner reached a full `2 / 2` smoke success on the two multi-domain scenarios on the rebased post-`#115` branch
 - the live path was clean end-to-end: local vLLM, LiteLLM/OpenAI-compatible serving, Smart Grid MCP servers, benchmark wrapper, and WandB upload
-- the earlier accounting / tool-error masking fixes were sufficient for a truthful clean proof
+- the committed `config.json` / `summary.json` snapshot now gives the PR an in-tree proof surface without requiring the full raw log bundle in git
 
 Caveats / follow-ups:
 
-- later local/preflight reruns in the same checkout touched `benchmarks/cell_Y_plan_execute/summary.json` without producing a new comparable full two-scenario artifact
-- treat `raw/8854783_pe_self_ask_mcp_baseline_smoke/` as the authoritative PE + Self-Ask smoke proof until a newer full rerun is archived
+- the full raw logs and per-scenario JSONs are intentionally not committed in this branch; they remain archived on Insomnia and externally reflected in W&B
+- earlier `8854783_pe_self_ask_mcp_baseline_smoke` remains useful historical evidence, but `8857842` is the committed snapshot aligned to the current rebased branch state
 
-## 2026-04-20 — Verified PE clean smoke proof on rebased branch (`#23`)
+## 2026-04-21 — Verified PE clean smoke proof snapshot (`#23`)
 
 - **Scope:** repo-local Verified PE runner on Insomnia
 - **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
 - **Config:** `configs/example_verified_pe.env`
-- **Run id / Slurm job id:** `local-20260420-180606_verified_pe_mcp_baseline_smoke`
+- **Run id / Slurm job id:** `8857843_verified_pe_mcp_baseline_smoke`
 - **W&B:** [x65ej9e0](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/x65ej9e0)
 - **Primary artifacts:**
-  - `benchmarks/cell_Z_hybrid/summary.json`
-  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/meta.json`
-  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/harness.log`
-  - `benchmarks/cell_Z_hybrid/raw/local-20260420-180606_verified_pe_mcp_baseline_smoke/vllm.log`
+  - committed snapshot: `benchmarks/cell_Z_hybrid/config.json`
+  - committed snapshot: `benchmarks/cell_Z_hybrid/summary.json`
+  - live raw artifacts: archived in the Insomnia worktree under run id `8857843_verified_pe_mcp_baseline_smoke`
 
 What this proves:
 
 - the repo-local Verified PE runner reached a full `2 / 2` smoke success on the rebased post-`#115` branch
 - verifier-time prompt overflows, summarization overflows, and oversized execution-context recycling are all fixed enough for a clean live proof
-- the `#23/#24` branch is now smoke-proof on Insomnia for both runner variants
+- the committed `config.json` / `summary.json` snapshot now gives the PR an in-tree proof surface for the Verified PE lane as well
 
 Caveats / follow-ups:
 
-- this is the current authoritative Verified PE smoke artifact
-- for perfect same-SHA symmetry, a fresh full PE + Self-Ask rerun on `3a03ab8` would still be nice, but it is no longer blocking branch credibility
+- this is the current authoritative Verified PE smoke snapshot for the PR
+- the full raw logs and per-scenario JSONs are intentionally not committed in this branch; they remain archived on Insomnia and externally reflected in W&B

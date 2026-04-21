@@ -185,6 +185,10 @@ def bootstrap_aob(aob_path: Path) -> None:
         raise FileNotFoundError(f"AssetOpsBench src path not found: {src_path}")
     if not agent_src_path.exists():
         raise FileNotFoundError(f"AssetOpsBench agent path not found: {agent_src_path}")
+    # AOB's PE family is imported both as package-level modules under src/ and
+    # as nested agent modules under src/agent/. Keep both on sys.path so the
+    # repo-local runners can import the plan_execute slice directly without
+    # triggering unrelated package-level imports.
     for path in (src_path, agent_src_path):
         path_text = str(path)
         if path_text not in sys.path:
@@ -649,6 +653,8 @@ def serialize_plan(plan) -> list[dict[str, Any]]:
 def response_error_payload(response: Any) -> str | None:
     response = parse_json_like_value(response)
     if isinstance(response, dict):
+        # In runner artifacts, a top-level "error" field is treated as an
+        # operational failure signal rather than ordinary payload content.
         value = response.get("error")
         if value:
             return str(value).strip()
@@ -683,9 +689,13 @@ def serialize_step_result(result, **extra: Any) -> dict[str, Any]:
         "tool": result.tool,
         "tool_args": result.tool_args,
         "response": normalized_response,
+        "executor_success": bool(result.success),
         "error": payload_error or result.error,
         "success": bool(result.success) and payload_error is None,
     }
+    for optional_field in ("runner_repair", "runner_repair_reason"):
+        if hasattr(result, optional_field):
+            payload[optional_field] = getattr(result, optional_field)
     payload.update(extra)
     return payload
 

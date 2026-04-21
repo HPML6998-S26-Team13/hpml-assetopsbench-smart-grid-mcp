@@ -57,6 +57,7 @@ async def _run(args) -> None:
     planner_descriptions = build_planner_descriptions(descriptions, tool_catalog)
     planning_question = build_planning_question(self_ask.augmented_question)
     plan = planner.generate_plan(planning_question, planner_descriptions)
+    raw_plan_payload = serialize_plan(plan)
     normalization_warnings = normalize_plan_steps(plan, tool_catalog)
     for warning in normalization_warnings:
         _LOG.info("%s", warning)
@@ -76,10 +77,12 @@ async def _run(args) -> None:
                 task=step.task,
                 server=step.server,
                 tool=step.tool,
-                tool_args={},
+                tool_args=getattr(step, "tool_args", {}),
                 response=skip_reason,
                 error=None,
                 success=True,
+                runner_repair="invalid_iot_dga_sensor_lookup",
+                runner_repair_reason=skip_reason,
             )
             context[step.step_number] = result
             trajectory.append(result)
@@ -113,7 +116,9 @@ async def _run(args) -> None:
         "answer": answer,
         "success": not failed_steps,
         "failed_steps": failed_steps,
+        "raw_plan": raw_plan_payload,
         "plan": plan_payload,
+        "plan_normalization_warnings": normalization_warnings,
         "history": history_payload,
     }
 

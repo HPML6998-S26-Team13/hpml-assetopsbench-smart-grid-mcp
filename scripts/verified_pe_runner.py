@@ -98,6 +98,7 @@ async def _run(args) -> None:
     planning_question = build_planning_question(self_ask.augmented_question)
 
     initial_plan = planner.generate_plan(planning_question, planner_descriptions)
+    raw_plan_payload = serialize_steps(initial_plan.steps)
     normalization_warnings = normalize_plan_steps(initial_plan, tool_catalog)
     for warning in normalization_warnings:
         _LOG.info("%s", warning)
@@ -125,7 +126,7 @@ async def _run(args) -> None:
                     task=step.task,
                     server=step.server,
                     tool=step.tool,
-                    tool_args={},
+                    tool_args=getattr(step, "tool_args", {}),
                     response=skip_reason,
                     error=None,
                     success=True,
@@ -134,8 +135,9 @@ async def _run(args) -> None:
                 history.append(
                     serialize_step_result(
                         result,
-                        verifier_decision="continue",
+                        verifier_decision="runner_skip",
                         verifier_reason=skip_reason,
+                        runner_repair="invalid_iot_dga_sensor_lookup",
                     )
                 )
                 _LOG.info("%s", skip_reason)
@@ -250,9 +252,16 @@ async def _run(args) -> None:
                 if suffix_plan is None:
                     history[-1]["verifier_replan_error"] = replan_error
                 else:
+                    history[-1]["verifier_replan_raw_plan"] = serialize_steps(
+                        suffix_plan.steps
+                    )
                     suffix_warnings = normalize_plan_steps(suffix_plan, tool_catalog)
                     for warning in suffix_warnings:
                         _LOG.info("%s", warning)
+                    if suffix_warnings:
+                        history[-1][
+                            "verifier_replan_normalization_warnings"
+                        ] = suffix_warnings
                     shifted_plan = renumber_plan(
                         suffix_plan, max(p.step_number for p in all_plan_steps)
                     )
@@ -287,7 +296,9 @@ async def _run(args) -> None:
         "answer": answer,
         "success": not failed_steps,
         "failed_steps": failed_steps,
+        "raw_plan": raw_plan_payload,
         "plan": serialize_steps(all_plan_steps),
+        "plan_normalization_warnings": normalization_warnings,
         "history": history,
     }
 

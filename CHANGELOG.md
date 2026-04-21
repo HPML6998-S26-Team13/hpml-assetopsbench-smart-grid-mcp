@@ -9,6 +9,10 @@
   Self-Ask PE / Verified PE runners, and committed a small `tmux` watch helper
   so Insomnia proof runs fail fast when the shared env is missing the AOB
   client stack (`litellm`, `mcp[cli]`) (Alex)
+- Tightened runner success accounting so top-level scenario `success` now
+  propagates detected tool failures from JSON `{"error": ...}` payloads and
+  plain-string transport/tool errors instead of trusting the executor's raw
+  success bit alone (Alex)
 - Reconciled the shared Insomnia dependency overlay and runbook to the actual
   Python 3.11 / `vllm==0.19.0` path now present in the team env, with matching
   `torch`, `transformers`, and `huggingface-hub` pins and no separate cuDNN

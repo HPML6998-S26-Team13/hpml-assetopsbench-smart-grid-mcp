@@ -266,6 +266,7 @@ class OrchestrationUtilsTests(unittest.TestCase):
 
         payload = serialize_step_result(Result())
         self.assertFalse(payload["success"])
+        self.assertTrue(payload["executor_success"])
         self.assertEqual(payload["error"], 'Failure mode "T-015" not found.')
 
     def test_serialize_step_result_marks_unknown_tool_string_as_failure(self):
@@ -281,7 +282,26 @@ class OrchestrationUtilsTests(unittest.TestCase):
 
         payload = serialize_step_result(Result())
         self.assertFalse(payload["success"])
+        self.assertTrue(payload["executor_success"])
         self.assertEqual(payload["error"], "Unknown tool: get_dga_record")
+
+    def test_serialize_step_result_carries_runner_repair_metadata(self):
+        class Result:
+            step_number = 2
+            task = "Inspect DGA sensor"
+            server = "iot"
+            tool = "get_sensor_readings"
+            tool_args = {"sensor_id": "dga_h2_ppm"}
+            response = "Skipped invalid IoT DGA lookup."
+            error = None
+            success = True
+            runner_repair = "invalid_iot_dga_sensor_lookup"
+            runner_repair_reason = "Use FMSR DGA tools instead."
+
+        payload = serialize_step_result(Result())
+        self.assertTrue(payload["success"])
+        self.assertEqual(payload["runner_repair"], "invalid_iot_dga_sensor_lookup")
+        self.assertEqual(payload["runner_repair_reason"], "Use FMSR DGA tools instead.")
 
     def test_maybe_self_ask_defaults_to_original_question_when_false(self):
         llm = DummyLLM(
