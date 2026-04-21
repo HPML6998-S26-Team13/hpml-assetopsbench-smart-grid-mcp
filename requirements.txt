@@ -29,3 +29,7 @@ ipykernel
 # Utilities
 tqdm
 pyyaml
+
+# LLM-as-Judge scoring (scripts/judge_trajectory.py)
+litellm
+python-dotenv

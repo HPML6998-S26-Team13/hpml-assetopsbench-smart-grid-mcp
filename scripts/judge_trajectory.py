@@ -40,7 +40,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 import textwrap
@@ -98,12 +97,12 @@ _USER_PROMPT_TEMPLATE = textwrap.dedent("""\
 # Maps per-scenario boolean dimension names to the WandB run-level mean field names
 # defined in docs/wandb_schema.md.
 WANDB_DIM_MAP = {
-    "task_completion":               "judge_dim_task_completion_mean",
-    "data_retrieval_accuracy":       "judge_dim_correctness_mean",
+    "task_completion": "judge_dim_task_completion_mean",
+    "data_retrieval_accuracy": "judge_dim_correctness_mean",
     "generalized_result_verification": "judge_dim_correctness_mean",  # contributes to same mean
-    "agent_sequence_correct":        "judge_dim_tool_usage_mean",
-    "clarity_and_justification":     "judge_dim_efficiency_mean",
-    "hallucinations":                "judge_dim_grounding_mean",   # inverted: false=good
+    "agent_sequence_correct": "judge_dim_tool_usage_mean",
+    "clarity_and_justification": "judge_dim_efficiency_mean",
+    "hallucinations": "judge_dim_grounding_mean",  # inverted: false=good
 }
 
 _BOOLEAN_DIMS = [
@@ -123,6 +122,7 @@ _PASS_THRESHOLD = 0.6  # 4 out of 6 dimensions
 # LiteLLM helper
 # ---------------------------------------------------------------------------
 
+
 def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dict:
     """Call the judge model and parse the 6-dimension JSON response."""
     try:
@@ -135,7 +135,7 @@ def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dic
 
     messages = [
         {"role": "system", "content": _SYSTEM_PROMPT},
-        {"role": "user",   "content": prompt_user},
+        {"role": "user", "content": prompt_user},
     ]
 
     last_error: Exception | None = None
@@ -152,7 +152,8 @@ def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dic
             if parsed is not None:
                 return parsed
             print(
-                f"  [judge] attempt {attempt + 1}: could not parse JSON, retrying...",
+                f"  [judge] attempt {attempt + 1}: invalid/incomplete judge response,"
+                " retrying...",
                 file=sys.stderr,
             )
         except Exception as exc:
@@ -168,39 +169,82 @@ def _call_judge(prompt_user: str, judge_model: str, max_retries: int = 3) -> dic
 
 
 def _parse_judge_json(raw: str) -> dict | None:
-    """Extract and parse the JSON block from the judge response."""
+    """Extract, parse, and validate the JSON block from the judge response.
+
+    Returns the parsed dict only if all six rubric keys are present and their
+    values are actual JSON booleans.  Returns None otherwise so the caller can
+    retry rather than silently persisting a corrupt score.
+    """
     raw = raw.strip()
-    # Try direct parse first
+
+    # Try direct parse first, then extract {...} block as fallback
+    candidate: dict | None = None
     try:
-        return json.loads(raw)
+        candidate = json.loads(raw)
     except json.JSONDecodeError:
-        pass
-    # Try extracting {...} block
-    match = re.search(r"\{.*\}", raw, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            pass
-    return None
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if match:
+            try:
+                candidate = json.loads(match.group(0))
+            except json.JSONDecodeError:
+                pass
+
+    if candidate is None:
+        return None
+
+    # Require all six rubric keys to be present
+    missing = [dim for dim in _BOOLEAN_DIMS if dim not in candidate]
+    if missing:
+        print(
+            f"  [judge] response missing rubric keys: {missing}",
+            file=sys.stderr,
+        )
+        return None
+
+    # Require rubric values to be real JSON booleans — reject string "true"/"false",
+    # integers, etc. to prevent silent score corruption.
+    non_bool = [dim for dim in _BOOLEAN_DIMS if not isinstance(candidate[dim], bool)]
+    if non_bool:
+        print(
+            f"  [judge] non-boolean rubric values: "
+            + ", ".join(f"{d}={candidate[d]!r}" for d in non_bool),
+            file=sys.stderr,
+        )
+        return None
+
+    return candidate
 
 
 # ---------------------------------------------------------------------------
 # Score computation
 # ---------------------------------------------------------------------------
 
+
 def _compute_score(dims: dict) -> float:
-    """
-    Compute a scalar score in [0, 1] from the 6 boolean dimensions.
+    """Compute a scalar score in [0, 1] from the 6 boolean dimensions.
 
     Each dimension contributes 1/6 to the total. For 'hallucinations',
     the score contribution is inverted: False (no hallucinations) = good = 1/6.
+
+    Raises ValueError if dims is missing any expected key or contains non-bool
+    values — callers must validate before calling this function.
     """
+    missing = [dim for dim in _BOOLEAN_DIMS if dim not in dims]
+    if missing:
+        raise ValueError(f"dims missing expected keys: {missing}")
+
+    non_bool = [dim for dim in _BOOLEAN_DIMS if not isinstance(dims[dim], bool)]
+    if non_bool:
+        raise ValueError(
+            "dims has non-boolean values: "
+            + ", ".join(f"{d}={dims[d]!r}" for d in non_bool)
+        )
+
     total = 0.0
     for dim in _BOOLEAN_DIMS:
-        val = dims.get(dim, False)
+        val = dims[dim]
         if dim == "hallucinations":
-            total += 0.0 if val else 1.0   # False hallucinations = good
+            total += 0.0 if val else 1.0  # False hallucinations = good
         else:
             total += 1.0 if val else 0.0
     return round(total / len(_BOOLEAN_DIMS), 4)
@@ -210,6 +254,7 @@ def _compute_score(dims: dict) -> float:
 # Trajectory → prompt helpers
 # ---------------------------------------------------------------------------
 
+
 def _summarise_plan(plan: list[dict]) -> str:
     lines = []
     for step in plan:
@@ -218,7 +263,9 @@ def _summarise_plan(plan: list[dict]) -> str:
         server = step.get("server", "")
         deps = step.get("dependencies", [])
         dep_str = f" (depends on steps {deps})" if deps else ""
-        lines.append(f"  Step {step.get('step', '?')}: [{server}] {tool} — {task}{dep_str}")
+        lines.append(
+            f"  Step {step.get('step', '?')}: [{server}] {tool} — {task}{dep_str}"
+        )
     return "\n".join(lines) if lines else "(no plan)"
 
 
@@ -229,16 +276,28 @@ def _summarise_trajectory(trajectory: list[dict], max_chars: int = 800) -> str:
         tool = r.get("tool") or "none"
         server = r.get("server", "")
         response = str(r.get("response", ""))[:200]
-        lines.append(f"  [{status}] Step {r.get('step', '?')} [{server}] {tool}: {response}")
+        lines.append(
+            f"  [{status}] Step {r.get('step', '?')} [{server}] {tool}: {response}"
+        )
     full = "\n".join(lines)
     if len(full) > max_chars:
         full = full[:max_chars] + "...(truncated)"
     return full if full else "(no trajectory)"
 
 
+def _extract_trial_index(trajectory_path: Path) -> int:
+    """Derive trial index from filename pattern ``*_runNN*`` (1-indexed).
+
+    Falls back to 1 if no match is found.
+    """
+    match = re.search(r"_run(\d+)", trajectory_path.stem)
+    return int(match.group(1)) if match else 1
+
+
 # ---------------------------------------------------------------------------
 # Main scoring logic
 # ---------------------------------------------------------------------------
+
 
 def score_trajectory(
     trajectory_path: Path,
@@ -278,34 +337,30 @@ def score_trajectory(
     record = {
         "schema_version": "v1",
         "scored_at": datetime.now(timezone.utc).isoformat(),
-
         # Join keys (align with results/README.md conventions)
-        "run_name":          meta_data.get("run_name", trajectory_path.parent.name),
-        "wandb_run_url":     meta_data.get("wandb_run_url"),
-        "scenario_id":       scenario_data.get("id", ""),
-        "scenario_file":     str(scenario_path).replace("\\", "/"),
-        "trial_index":       1,
-        "experiment_cell":   meta_data.get("experiment_cell", "Y"),
+        "run_name": meta_data.get("run_name", trajectory_path.parent.name),
+        "wandb_run_url": meta_data.get("wandb_run_url"),
+        "scenario_id": scenario_data.get("id", ""),
+        "scenario_file": str(scenario_path).replace("\\", "/"),
+        "trial_index": _extract_trial_index(trajectory_path),
+        "experiment_cell": meta_data.get("experiment_cell", "Y"),
         "orchestration_mode": meta_data.get("orchestration_mode", "plan_execute"),
-        "mcp_mode":          meta_data.get("mcp_mode", "baseline"),
-        "model_id":          meta_data.get("model_id", ""),
-        "judge_model":       judge_model,
-
+        "mcp_mode": meta_data.get("mcp_mode", "baseline"),
+        "model_id": meta_data.get("model_id", ""),
+        "judge_model": judge_model,
         # 6 rubric dimensions (from AssetOpsBench evaluation_agent)
-        "dim_task_completion":              bool(dims.get("task_completion")),
-        "dim_data_retrieval_accuracy":      bool(dims.get("data_retrieval_accuracy")),
-        "dim_generalized_result_verification": bool(dims.get("generalized_result_verification")),
-        "dim_agent_sequence_correct":       bool(dims.get("agent_sequence_correct")),
-        "dim_clarity_and_justification":    bool(dims.get("clarity_and_justification")),
-        "dim_hallucinations":               bool(dims.get("hallucinations")),
-
+        "dim_task_completion": dims["task_completion"],
+        "dim_data_retrieval_accuracy": dims["data_retrieval_accuracy"],
+        "dim_generalized_result_verification": dims["generalized_result_verification"],
+        "dim_agent_sequence_correct": dims["agent_sequence_correct"],
+        "dim_clarity_and_justification": dims["clarity_and_justification"],
+        "dim_hallucinations": dims["hallucinations"],
         # Derived aggregate
-        "score_6d":       score,
+        "score_6d": score,
         "pass_threshold": _PASS_THRESHOLD,
-        "pass":           passed,
-
-        "suggestions":          dims.get("suggestions", ""),
-        "trajectory_file":      str(trajectory_path).replace("\\", "/"),
+        "pass": passed,
+        "suggestions": dims.get("suggestions", ""),
+        "trajectory_file": str(trajectory_path).replace("\\", "/"),
     }
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -318,6 +373,7 @@ def score_trajectory(
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -338,23 +394,52 @@ def _build_parser() -> argparse.ArgumentParser:
                   --scenario-dir data/scenarios
         """),
     )
-    p.add_argument("--trajectory",    type=Path, help="Path to a single trajectory JSON file.")
-    p.add_argument("--scenario",      type=Path, help="Path to the scenario JSON file (for --trajectory mode).")
-    p.add_argument("--run-meta",      type=Path, help="Path to meta.json for the run (optional, enriches output).")
-    p.add_argument("--run-dir",       type=Path, help="Run directory; scores all *.json files that look like trajectories.")
-    p.add_argument("--scenario-dir",  type=Path, default=Path("data/scenarios"),
-                   help="Directory to search for scenario files when using --run-dir.")
-    p.add_argument("--out",           type=Path, default=Path("results/metrics/scenario_scores.jsonl"),
-                   help="Output JSONL file (appended). Default: results/metrics/scenario_scores.jsonl")
-    p.add_argument("--judge-model",   default=_DEFAULT_JUDGE_MODEL,
-                   help=f"LiteLLM model string for the judge. Default: {_DEFAULT_JUDGE_MODEL}")
+    p.add_argument(
+        "--trajectory", type=Path, help="Path to a single trajectory JSON file."
+    )
+    p.add_argument(
+        "--scenario",
+        type=Path,
+        help="Path to the scenario JSON file (for --trajectory mode).",
+    )
+    p.add_argument(
+        "--run-meta",
+        type=Path,
+        help="Path to meta.json for the run (optional, enriches output).",
+    )
+    p.add_argument(
+        "--run-dir",
+        type=Path,
+        help="Run directory; scores all *.json files that look like trajectories.",
+    )
+    p.add_argument(
+        "--scenario-dir",
+        type=Path,
+        default=Path("data/scenarios"),
+        help="Directory to search for scenario files when using --run-dir.",
+    )
+    p.add_argument(
+        "--out",
+        type=Path,
+        default=Path("results/metrics/scenario_scores.jsonl"),
+        help="Output JSONL file (appended). Default: results/metrics/scenario_scores.jsonl",
+    )
+    p.add_argument(
+        "--judge-model",
+        default=_DEFAULT_JUDGE_MODEL,
+        help=f"LiteLLM model string for the judge. Default: {_DEFAULT_JUDGE_MODEL}",
+    )
     return p
 
 
 def _find_scenario(scenario_dir: Path, trajectory_path: Path) -> Path | None:
-    """
-    Try to find the matching scenario file for a trajectory by scanning
-    the trajectory JSON for a scenario_id or matching filename stem.
+    """Try to find the matching scenario file for a trajectory.
+
+    Checks (in order):
+    1. ``scenario_file`` field embedded in the trajectory JSON.
+    2. Filename stem overlap between trajectory and scenario files.
+
+    Returns None if no match is found.
     """
     try:
         data = json.loads(trajectory_path.read_text(encoding="utf-8"))
@@ -370,10 +455,12 @@ def _find_scenario(scenario_dir: Path, trajectory_path: Path) -> Path | None:
 
     # Try matching by stem: trajectory stem may contain scenario slug
     for candidate in scenario_dir.glob("*.json"):
-        if candidate.stem in trajectory_path.stem or trajectory_path.stem in candidate.stem:
+        if (
+            candidate.stem in trajectory_path.stem
+            or trajectory_path.stem in candidate.stem
+        ):
             return candidate
 
-    # Fall back: return all scenario files and let caller decide
     return None
 
 
@@ -390,6 +477,7 @@ def _is_trajectory_file(path: Path) -> bool:
 
 def main() -> None:
     from dotenv import load_dotenv  # type: ignore
+
     load_dotenv()
 
     args = _build_parser().parse_args()
@@ -425,7 +513,10 @@ def main() -> None:
                     file=sys.stderr,
                 )
                 continue
-            print(f"Scoring {traj_file.name} against {scenario_path.name}...", file=sys.stderr)
+            print(
+                f"Scoring {traj_file.name} against {scenario_path.name}...",
+                file=sys.stderr,
+            )
             record = score_trajectory(
                 trajectory_path=traj_file,
                 scenario_path=scenario_path,
