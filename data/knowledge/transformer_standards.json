@@ -27,7 +27,7 @@
     "key_gases": {
       "H2":   { "name": "Hydrogen",   "primary_fault_indicator": ["PD", "D1", "D2"], "unit": "ppm" },
       "CH4":  { "name": "Methane",    "primary_fault_indicator": ["T1", "T2", "T3"], "unit": "ppm" },
-      "C2H2": { "name": "Acetylene",  "primary_fault_indicator": ["D2"],             "unit": "ppm" },
+      "C2H2": { "name": "Acetylene",  "primary_fault_indicator": ["D1", "D2"],       "unit": "ppm" },
       "C2H4": { "name": "Ethylene",   "primary_fault_indicator": ["T3"],             "unit": "ppm" },
       "C2H6": { "name": "Ethane",     "primary_fault_indicator": ["T1", "T2"],       "unit": "ppm" },
       "CO":   { "name": "Carbon monoxide",  "primary_fault_indicator": ["cellulose_degradation"], "unit": "ppm" },
@@ -270,7 +270,7 @@
     "fault_diagnosis_scenario": {
       "target_tool": "fmsr_server.analyze_dga",
       "gas_values": "Use a representative_gas_profiles entry for the target iec_code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
-      "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm — ensure gas values land in Condition 2 or 3 for interesting scenarios (Condition 1 is trivially normal; Condition 4 is edge case).",
+      "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm — target Condition 2 or 3 for most scenarios (Condition 1 is trivially normal). Exception: faults with condition_4_trigger: true (D2, T3) naturally produce Condition 3–4 due to elevated C2H2 or C2H4; use Condition 4 gas values for those.",
       "example": "For a D2 arcing scenario: use D2 profile from representative_gas_profiles (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
     },
 

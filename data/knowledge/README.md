@@ -45,8 +45,9 @@ code should be paired with IEEE C57.104 Condition 3–4 gas values.
 
 Pre-computed gas values (ppm) that produce each fault code from the
 `fmsr_server.analyze_dga` MCP tool. Use these as the base for scenario gas
-inputs — vary each value ±20% to create distinct instances while preserving
-the target `iec_code`.
+inputs — vary each value ±10% to create distinct instances while preserving
+the target `iec_code`. Do not exceed ±10% — some profiles sit close to ratio
+boundaries and larger variation flips the fault code.
 
 ```json
 "D2": {
