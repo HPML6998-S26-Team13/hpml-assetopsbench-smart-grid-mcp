@@ -4,7 +4,21 @@
 
 ### Config / Docs
 
-- Applied Codex cross-agent review findings on the `#26/#32` notebooks
+- Applied Codex Pass 2 review findings on the `#26/#32` notebooks
+  (2 Mediums / 2 Lows, 0 Critical/High): Notebook 02's `_latest_run_dir` now
+  parses `meta.json.started_at` into a timezone-aware `datetime`
+  (normalizing `Z` to `+00:00`) before comparing, so runs that mix `Z` and
+  `-04:00` offsets sort chronologically; Notebook 02's MCP overhead cell
+  detects duplicate `(cell, scenario_file, trial_index)` rows and refuses to
+  produce a misleading overhead CSV when `pivot_table(aggfunc="first")`
+  would silently collapse them; Notebook 03's readiness-gate note now cites
+  the authoritative Slurm job IDs from `docs/validation_log.md`
+  (`8851966` as the earlier entry, `8857843` as the clean `2/2` snapshot)
+  rather than the intermediate re-run IDs; Notebook 03's `load_judge_scores`
+  uses fillna-style coalescing instead of guarded rename so a JSONL
+  containing mixed pre- and post-normalization rows produces a single
+  complete `cell` / `judge_score` / `judge_pass` column set (Alex)
+- Applied Codex Pass 1 review findings on the `#26/#32` notebooks
   (3 Highs / 2 Mediums / 1 Low): Notebook 02 MCP overhead now pairs on
   `(scenario_file, trial_index)` before computing B−A / B−C / C−A deltas
   instead of subtracting whole-cell medians; Notebook 03 judge-score loader
