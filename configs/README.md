@@ -11,29 +11,31 @@ The currently verified benchmark-facing execution path is:
 - Smart Grid MCP servers passed into AssetOpsBench `plan-execute` via repeated
   `--server name=path` overrides
 
-Repo-local follow-on paths now also exist for:
-
-- `ENABLE_SELF_ASK=1` on the Plan-Execute lane via
-  `scripts/plan_execute_self_ask_runner.py`
-- `ORCHESTRATION=verified_pe` on the third-method slot via
-  `scripts/verified_pe_runner.py`
-
-Agent-as-Tool still needs an explicit external runner command until the
-canonical upstream exposes a stable CLI for that orchestration mode. See
+Agent-as-Tool and Cell Z / Verified PE share the same config schema here, but still need an
+explicit external runner command until the canonical upstream exposes a stable
+CLI for those orchestration modes. See
 [`../docs/orchestration_wiring.md`](../docs/orchestration_wiring.md).
 
 ## Naming
 
-Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md)
-- the four-cell core plus the optional third-method slot:
+Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md).
+The execution-facing config convention is:
+
+- `configs/aat_{direct,mcp_baseline,mcp_optimized}.env` for the canonical
+  Experiment 1 Cell A / B / C runs
+- `configs/experiment2/` for the extra Experiment 2 templates that do not
+  already exist on `main` (currently the Plan-Execute / Cell Y lane and the
+  optional Cell Z follow-on)
+
+The active cell mapping is:
 
 | Cell | Orchestration | MCP mode | Suggested config name |
 |---|---|---|---|
 | A | Agent-as-Tool | direct | `aat_direct.env` |
 | B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
 | C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
-| Y | Plan-Execute | baseline | `example_baseline.env`, `example_pe_self_ask.env` |
-| Z | Verified PE (optional follow-on) | baseline | `example_verified_pe.env` |
+| Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
+| Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` |
 
 ## Required keys
 
@@ -46,45 +48,26 @@ Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md)
 
 ## Important optional keys
 
-- `ORCHESTRATION` — `plan_execute`, `agent_as_tool`, `hybrid`, or `verified_pe`
+- `ORCHESTRATION` — `plan_execute`, `agent_as_tool`, or `hybrid`
 - `MCP_MODE` — `direct`, `baseline`, or `optimized`
 - `ENABLE_SMARTGRID_SERVERS` — when `1`, pass this repo's four Smart Grid MCP
   servers into `plan-execute`
-- `ENABLE_SELF_ASK` — when `1` on the PE lane, use the repo-local
-  `scripts/plan_execute_self_ask_runner.py` wrapper instead of the upstream PE
-  CLI directly; repo-local follow-on runners such as Verified PE may also
-  respect it when their template forwards the toggle
 - `ENABLE_WANDB` — when `1`, write the canonical config + summary fields to a
   WandB run after the benchmark finishes
 - `LAUNCH_VLLM` — when `1`, launch the local vLLM server first and point
   AssetOpsBench's LiteLLM client at `http://127.0.0.1:<port>/v1`
-- `VLLM_SERVED_MODEL_NAME` — explicit OpenAI-compatible model ID that the
-  local vLLM server should advertise; for `MODEL_ID=openai/...` runs this
-  should match the provider-stripped model name exactly
 - `AOB_PATH` — path to the sibling AssetOpsBench checkout; defaults to
   `../AssetOpsBench` relative to the shared project root, so it also works from
   a git worktree
-- `AOB_PYTHON` — optional override for the Python interpreter used by the
-  repo-local orchestration wrappers; defaults to `AOB_PATH/.venv/bin/python`
-
-For the repo-local PE follow-on runners, the active interpreter also needs the
-portable AssetOpsBench client deps from `requirements.txt` (`litellm` and
-`mcp[cli]`). The shared Insomnia path gets these by installing
-`requirements-insomnia.txt`, which layers the serving stack on top of that same
-portable base.
 
 ### Orchestration-specific adapter hooks
 
 - `AAT_RUNNER_TEMPLATE` — required when `ORCHESTRATION=agent_as_tool`
 - `HYBRID_RUNNER_TEMPLATE` — required when `ORCHESTRATION=hybrid`
-- `VERIFIED_PE_RUNNER_TEMPLATE` — optional explicit override when
-  `ORCHESTRATION=verified_pe`; the benchmark runner has a built-in default
-  command for this mode, so most runs should not need to set it
 
 These are intentionally explicit. We do not want hidden shell glue for AaT or
-the optional Hybrid template slot until the invocation contract is stable enough
-to benchmark. Verified PE is the one optional follow-on mode that now has a
-repo-local default runner path.
+the legacy Cell Z / `hybrid` runner hook until the invocation contract is
+stable enough to benchmark.
 
 ## Running
 
@@ -92,14 +75,14 @@ Dry-run the wiring first:
 
 ```bash
 DRY_RUN=1 bash scripts/run_experiment.sh configs/example_baseline.env
-DRY_RUN=1 bash scripts/run_experiment.sh configs/example_pe_self_ask.env
-DRY_RUN=1 bash scripts/run_experiment.sh configs/example_verified_pe.env
+# or
+DRY_RUN=1 bash scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
 ```
 
 Submit the real job:
 
 ```bash
-sbatch scripts/run_experiment.sh configs/example_baseline.env
+sbatch scripts/run_experiment.sh configs/aat_mcp_baseline.env
 ```
 
 ## Output layout
@@ -123,10 +106,10 @@ As of Apr 20, 2026:
 
 - Plan-Execute wiring is implemented through AssetOpsBench's canonical
   `plan-execute` CLI with explicit Smart Grid server overrides.
-- Repo-local follow-on runners now exist for a PE + Self-Ask variant and a
-  Verified PE / `Plan-Execute-Verify-Replan` prototype.
-- The current Verified PE example keeps Self-Ask enabled by default, but its
-  template can also pass `--disable-self-ask` for cleaner verifier-only ablations.
 - WandB config + summary emission is wired in the benchmark runner.
-- Agent-as-Tool still uses the explicit external-template path until a stable
-  upstream invocation entry point exists.
+- Experiment 1 analysis still maps to Cells A / B / C, but the execution
+  configs for those lanes stay on the canonical `configs/aat_*.env` names that
+  `main` already documents.
+- AaT and the legacy Cell Z / `hybrid` hook can use the same
+  artifact/logging path, but still need an explicit external runner template
+  until a stable upstream invocation path exists.

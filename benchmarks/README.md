@@ -6,7 +6,7 @@ Raw latency and throughput measurements from end-to-end experiment runs. Each su
 
 ```
 benchmarks/
-├── cell_A_direct/         # direct-tool baseline, no MCP
+├── cell_A_direct/         # direct-tool baseline for Experiment 1
 │   ├── config.json        # includes WandB linkage fields from docs/wandb_schema.md
 │   ├── raw/
 │   │   └── <run-id>/      # run-scoped raw outputs and logs
@@ -15,10 +15,10 @@ benchmarks/
 │   │       ├── harness.log
 │   │       └── meta.json
 │   └── summary.json       # mean, p50, p95, throughput (derived for latest run)
-├── cell_B_mcp_baseline/   # shared cell between Experiment 1 and Experiment 2
+├── cell_B_mcp_baseline/   # shared AaT baseline cell for Experiment 1 and 2
 ├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
-├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline
-└── cell_Z_hybrid/         # Hybrid follow-on only, outside the core committed grid
+├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline (Experiment 2 core)
+└── cell_Z_hybrid/         # Cell Z / Verified PE follow-on (legacy dir name kept for compatibility)
     # each cell dir keeps the same config.json / raw/ / summary.json shape
 ```
 
@@ -32,7 +32,7 @@ benchmarks/
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
 
-## Status (Apr 18, 2026)
+## Status (Apr 20, 2026)
 
 The directory is no longer scaffolding-only:
 
@@ -41,6 +41,9 @@ The directory is no longer scaffolding-only:
   JSON outputs are committed for that run
 - the committed artifacts back-reference the first real shared WandB run
 - the canonical scenario corpus currently contains 10 committed JSON scenarios under `data/scenarios/`
+- the committed benchmark layout now includes explicit top-level cell
+  directories for Experiment 1 (A / B / C), the existing Plan-Execute proof
+  cell (Y), and the optional Cell Z / Verified PE follow-on slot (Z)
 
 What is still missing:
 

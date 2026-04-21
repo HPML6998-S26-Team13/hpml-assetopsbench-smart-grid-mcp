@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026-04-21
+
+### Config / Docs
+
+- Applied Codex Pass 2 review findings on the `#26/#32` notebooks
+  (2 Mediums / 2 Lows, 0 Critical/High): Notebook 02's `_latest_run_dir` now
+  parses `meta.json.started_at` into a timezone-aware `datetime`
+  (normalizing `Z` to `+00:00`) before comparing, so runs that mix `Z` and
+  `-04:00` offsets sort chronologically; Notebook 02's MCP overhead cell
+  detects duplicate `(cell, scenario_file, trial_index)` rows and refuses to
+  produce a misleading overhead CSV when `pivot_table(aggfunc="first")`
+  would silently collapse them; Notebook 03's readiness-gate note now cites
+  the authoritative Slurm job IDs from `docs/validation_log.md`
+  (`8851966` as the earlier entry, `8857843` as the clean `2/2` snapshot)
+  rather than the intermediate re-run IDs; Notebook 03's `load_judge_scores`
+  uses fillna-style coalescing instead of guarded rename so a JSONL
+  containing mixed pre- and post-normalization rows produces a single
+  complete `cell` / `judge_score` / `judge_pass` column set (Alex)
+- Applied Codex Pass 1 review findings on the `#26/#32` notebooks
+  (3 Highs / 2 Mediums / 1 Low): Notebook 02 MCP overhead now pairs on
+  `(scenario_file, trial_index)` before computing B−A / B−C / C−A deltas
+  instead of subtracting whole-cell medians; Notebook 03 judge-score loader
+  normalizes the `#113` schema (`experiment_cell` → `cell`, `score_6d` →
+  `judge_score`, `pass` → `judge_pass`) so the join actually fires when
+  `scenario_scores.jsonl` lands; Notebook 03 per-step failure counter is
+  now one-count-per-step under the normalized-runner contract instead of
+  double-counting `success=False` plus `response.error`; legacy
+  pre-normalization scenario artifacts with null `success` / missing
+  `scenario.id` are preserved as NaN and excluded from the aggregation
+  rather than coerced to `False`; latest-run selection now uses
+  `meta.json.started_at` with an mtime fallback instead of lexicographic
+  sort on run IDs; `recovery_rate` is NaN for zero-failure cells (Alex)
+
 ## 2026-04-20
 
 ### Config / Docs
@@ -27,6 +60,21 @@
 - Added `notebooks/01_data_exploration.ipynb` as the reproducible replacement
   for the earlier static dataset smoke-test image, with notebook-generated
   summary CSVs and overview figures under `results/` (Alex)
+- Added Experiment 1 / Experiment 2 benchmark scaffolding for `#26` and `#32`:
+  explicit Cell A / B / C / Z benchmark directories, experiment-specific config
+  templates, and a real Notebook 02 parser/preflight scaffold for future MCP
+  overhead analysis (Alex)
+- Tightened `notebooks/02_latency_analysis.ipynb` to key off the `summary.json`
+  schema now shipped by `scripts/run_experiment.sh` (latency p50/p95, tool-error
+  counts, MCP latency, tool call counts) and the `meta.json` profiling fields
+  added by `#27` / `01043c5`; adds MCP overhead decomposition (B−A, B−C, C−A)
+  at both p50 and p95 with a p50-bar / p95-cap figure (Alex)
+- Added `notebooks/03_orchestration_comparison.ipynb` scaffold for Experiment 2
+  across Cells B / Y / Z; reads per-scenario `success` / `failed_steps` /
+  `history` / `answer` from the PE-Self-Ask and Verified-PE runner outputs,
+  computes success rate / mean failed steps / mean history length / recovery
+  rate per orchestration, and leaves a hook to join `scenario_scores.jsonl`
+  judge scores (per `#17`) once they land (Alex)
 - Split dependency guidance into a portable base `requirements.txt`, a
   cluster-serving `requirements-insomnia.txt`, and a notebook-authoring
   `requirements-notebooks.txt`, with setup docs/scripts updated to use `uv`
@@ -60,8 +108,8 @@
   to the live repo state after the Apr 16 team sync (Alex)
 - Lower-churn class / mentor setup docs moved under `docs/reference/`, with
   repo-wide links updated mechanically to match the new paths (Alex)
-- Documentation now reflects the active four-cell experiment grid, Hybrid as
-  deferred future-work scope, and Llama-3.1-8B-Instruct as the primary local
+- Documentation now reflects the active four-cell experiment grid, Cell Z /
+  Verified PE as deferred future-work scope, and Llama-3.1-8B-Instruct as the primary local
   benchmark model with 70B reserved for selective WatsonX spot-checks (Alex)
 - Added archived remediation notes under `docs/archive/` capturing the
   cross-repo review follow-up and spec companion for that cleanup stream (Alex)
@@ -85,7 +133,8 @@
 
 - SmartGridBench experiment runner now invokes the canonical Plan-Execute CLI
   with Smart Grid MCP server overrides, benchmark/WandB artifact
-  back-references, and explicit adapter surfaces for AaT/Hybrid
+  back-references, and explicit adapter surfaces for AaT / the legacy Cell Z
+  `hybrid` hook
   — #61, #62, #22 (partial) — M (Alex)
 - Added local WatsonX/WandB runner support so benchmark runs can reuse the
   team repo `.env` plus the root project `.venv` without manual export glue

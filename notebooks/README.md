@@ -7,8 +7,8 @@ Jupyter notebooks for exploratory analysis and figure generation. Notebooks are 
 ```
 notebooks/
 ├── 01_data_exploration.ipynb         # EDA on processed Kaggle CSVs (data/processed/)
-├── 02_latency_analysis.ipynb         # benchmarks/baseline vs benchmarks/optimized comparison
-├── 03_orchestration_comparison.ipynb # AaT vs PE (vs Hybrid if Dhaval greenlights)
+├── 02_latency_analysis.ipynb         # Experiment 1: Cell A vs B vs C latency / MCP-overhead analysis
+├── 03_orchestration_comparison.ipynb # Experiment 2: AaT vs PE (optional Verified PE follow-on)
 └── 04_figure_generation.ipynb        # produces publication-ready PDFs in results/figures/
 ```
 
@@ -23,13 +23,33 @@ notebooks/
 
 ## Status (Apr 20, 2026)
 
-Notebook 01 now exists:
+Notebook 01 (data exploration):
 
-- `01_data_exploration.ipynb` is the reproducible replacement for the older
-  static `docs/dataset_visualization.png` smoke test
-- it reads the tracked processed CSVs under `data/processed/`
-- it writes stable exploratory outputs under `results/metrics/` and
-  `results/figures/`
+- reproducible replacement for the older static `docs/dataset_visualization.png` smoke test
+- reads tracked processed CSVs under `data/processed/`
+- writes exploratory outputs under `results/metrics/` and `results/figures/`
 
-The remaining notebooks are still pending the benchmark / experiment artifacts
-they depend on.
+Notebook 02 (Experiment 1 — MCP overhead):
+
+- preflight checks Cells A / B / C under `benchmarks/cell_<X>_*/`
+- reads the full `summary.json` schema (latency p50/p95, tool error count, MCP latency, tool call counts) plus `meta.json` profiling linkage fields (`profiling_dir`, `profiling_artifact`, `profiling_summary`) added by `#27`
+- computes MCP overhead decomposition (B−A, B−C, C−A) at both p50 and p95
+- exports `notebook02_cell_availability.preflight.csv`, `notebook02_latency_summary.csv`, `notebook02_mcp_overhead.csv`, and `notebook02_latency_comparison.png`
+- graceful degradation: skips aggregation / plots when any cell is missing captures, but always writes the availability CSV
+
+Notebook 03 (Experiment 2 — orchestration comparison):
+
+- preflight checks Cells B / Y / Z under `benchmarks/cell_<X>_*/`
+- reads per-scenario JSONs for the `success` / `failed_steps` / `history` / `answer` shape that `scripts/run_experiment.sh` + the AOB PE client and the repo-local PE-Self-Ask / Verified-PE runners produce
+- catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False` (per Codex's 2026-04-20 finding)
+- computes success rate, mean failed steps, mean history length, mean tool-error count, recovery rate, and (when `results/metrics/scenario_scores.jsonl` is populated per `#17`) judge pass rate per orchestration
+- exports `notebook03_cell_availability.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
+
+Notebook 04 is still pending — it will consume `results/figures/` outputs from 02 and 03 to produce paper-ready PDFs.
+
+## Config note
+
+- Notebook 02 still analyzes the Experiment 1 Cell A / B / C lanes, but the
+  canonical execution configs for those live at `configs/aat_*.env` on `main`.
+- Notebook 03 uses the extra Experiment 2 templates under `configs/experiment2/`
+  for the Y / Z follow-on lanes.
