@@ -39,7 +39,9 @@
 #   reproducibility in benchmark runs, pin to the resolved commit SHA, e.g.:
 #       export MODEL_REVISION=0e9e39f249a16976918f6564b8830bc894c89659
 #   The script prints the resolved SHA after the download completes so you
-#   can capture it for the next invocation.
+#   can capture it for the next invocation. See
+#   docs/governance/model_registry.yaml for the current repo-level model
+#   contract around this pin.
 #
 # Usage:
 #   cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
@@ -47,7 +49,8 @@
 #   bash scripts/setup_insomnia.sh
 #
 # See also: docs/insomnia_runbook.md (cluster gotchas), docs/runbook.md
-# (reproducibility), issue #111 (why this script is shaped like this).
+# (reproducibility), docs/governance/model_registry.yaml (current model/runtime
+# contract), and issue #111 (why this script is shaped like this).
 
 set -euo pipefail
 

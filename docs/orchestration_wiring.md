@@ -89,45 +89,65 @@ does not expose a stable top-level AaT CLI comparable to `plan-execute`.
 So `#22` is adapter-ready on our side, but not yet proven end-to-end the same
 way Plan-Execute is.
 
-## Hybrid status
+## Self-Ask PE status
 
-Hybrid uses the same pattern:
+The repo now has a local Self-Ask variant for the PE lane:
 
-- set `ORCHESTRATION=hybrid`
-- provide `HYBRID_RUNNER_TEMPLATE`
+- keep `ORCHESTRATION=plan_execute`
+- set `ENABLE_SELF_ASK=1`
+- the benchmark runner swaps in `scripts/plan_execute_self_ask_runner.py`
+  instead of calling the upstream PE CLI directly
 
-That keeps the benchmark artifact path ready without pretending we already have
-a canonical runnable hybrid implementation.
+This is the current implementation path for `#24` on the runnable PE baseline.
+The hook stays lightweight on purpose:
 
-The current post-call scope decision is: proceed with **vanilla Agent-as-Tool
-vs vanilla Plan-Execute** and treat Hybrid as deferred backlog / future-work
-scope unless the core comparison stabilizes early enough to justify it. That
-means the absence of a default hybrid runner should not block this week's
-experiment progress. If Hybrid re-enters scope later, it still needs both:
+- one internal clarification decision before planning
+- no human-facing clarification loop
+- no open-ended back-and-forth that would make the benchmark path unstable
 
-- a real runnable entry point, and
-- a written design note that makes the control loop explicit
+Current trigger rule:
 
-Historically this slot was framed as `Plan-Execute + reflection checkpoints`.
-After reviewing Dhaval's notes, IBM-oriented plan-first workflow guidance, the
-current agent-orchestration literature, and the code paths we already own here,
-the stronger follow-on candidate is a verifier-gated Plan-Execute design:
-`Plan-Execute-Verify-Replan` / `Verified PE`.
+- the runner asks the LLM whether the question needs an internal clarification
+  pass before tool planning
+- if the answer is "no", the PE path behaves like vanilla planning
+- if the answer is "yes", the runner appends up to two clarification questions
+  plus short temporary assumptions to the planning question and then proceeds
+  with normal PE execution
 
-That means a meaningful `#23` prototype would likely include:
+## Verified PE status
+
+The optional third-method slot is now implemented locally as a verifier-gated
+Plan-Execute design:
+
+- set `ORCHESTRATION=verified_pe`
+- the benchmark runner now has a built-in default command for this mode
+- provide `VERIFIED_PE_RUNNER_TEMPLATE` only if you need an explicit override
+- the repo-local entry point is `scripts/verified_pe_runner.py`
+
+This replaces the older vague `Hybrid` framing for `#23`. The benchmark runner
+still preserves the same artifact path and external-runner pattern, but the
+control loop is now explicit:
 
 - planner + executor reuse from the existing PE path
-- a step verifier that judges whether a completed step actually advanced the
-  scenario goal
-- a bounded repair policy (`continue`, `retry`, `patch remaining plan`, or
-  `replan suffix`)
-- explicit retry / replan budgets so the method stays benchmarkable and does
-  not quietly collapse into open-ended ReAct behavior
+- one verifier pass after each successful step
+- bounded repair policy: `continue`, `retry`, or `replan_suffix`
+- explicit retry / replan budgets so the method stays benchmarkable
 
-That is still materially more engineering than a prompt tweak, but it fits this
-repo better than a vague "hybrid" label because it can reuse the same benchmark
-artifact path and `HYBRID_RUNNER_TEMPLATE` surface while remaining clearly
-distinct from vanilla Plan-Execute.
+Current control rules:
+
+- the runner can perform the same pre-plan Self-Ask clarification pass used by
+  the PE + Self-Ask variant; the current example config keeps it enabled, but
+  the runner also supports disabling it for cleaner ablations
+- after each successful step, a verifier decides whether to `continue`,
+  `retry`, or `replan_suffix`
+- `retry` is bounded per step and feeds the prior attempt plus verifier reason
+  back into the next execution prompt rather than replaying an identical call
+- `replan_suffix` is bounded globally per run and only replans the unfinished
+  suffix rather than the whole trajectory
+
+The current scope rule still holds: the core experiment story remains vanilla
+AaT vs vanilla PE. Verified PE is an active optional follow-on, not permission
+to quietly rewrite Experiment 2 around a third method.
 
 ## Why this split is intentional
 
@@ -135,8 +155,8 @@ The repo now distinguishes between:
 
 - **benchmark plumbing we own here**: configs, artifacts, WandB linkage, MCP
   server overrides, Insomnia/vLLM launch
-- **orchestration entry points we may or may not own upstream**: concrete AaT /
-  Hybrid runners
+- **orchestration entry points we may or may not own upstream**: concrete AaT
+  runners, plus the repo-local PE mitigation variants we now own directly
 
 That keeps the benchmark/logging layer moving without smuggling in unstable
 orchestration assumptions.

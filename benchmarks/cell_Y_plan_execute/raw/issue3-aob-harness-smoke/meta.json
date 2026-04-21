@@ -1,0 +1,26 @@
+{
+  "run_name": "issue3-aob-harness-smoke",
+  "scenario_file": "data/scenarios/aob_fmsr_01_list_failure_modes.json",
+  "scenario_id": "AOB-FMSR-001",
+  "scenario_domain": "FMSR",
+  "harness": "AssetOpsBench plan-execute CLI",
+  "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+  "mcp_servers": {
+    "fmsr": "mcp_servers/fmsr_server/server.py"
+  },
+  "docker_required": false,
+  "run_date": "2026-04-14",
+  "host": "local-windows",
+  "run_status": "success",
+  "scenarios_attempted": 1,
+  "scenarios_completed": 1,
+  "tool_calls": 1,
+  "command": "cd AssetOpsBench && uv run plan-execute --json --show-plan --show-trajectory --model-id watsonx/meta-llama/llama-3-3-70b-instruct --server \"fmsr=../hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py\" \"List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action.\"",
+  "success_indicators": {
+    "plan_steps": 2,
+    "trajectory_success": true,
+    "answer_non_empty": true,
+    "fmsr_tool_called": "list_failure_modes"
+  },
+  "issue": "https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/3"
+}

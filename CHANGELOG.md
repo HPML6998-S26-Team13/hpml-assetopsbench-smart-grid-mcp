@@ -37,6 +37,26 @@
 
 ### Config / Docs
 
+- Promoted `#23` and `#24` from vague backlog wording into active Verified PE / Self-Ask work items, with repo-local runner wiring, example configs, and current planning/docs updated to match that narrower implementation reality (Alex)
+- Added explicit runtime preflight + dependency documentation for the repo-local
+  Self-Ask PE / Verified PE runners, and committed a small `tmux` watch helper
+  so Insomnia proof runs fail fast when the shared env is missing the AOB
+  client stack (`litellm`, `mcp[cli]`) (Alex)
+- Tightened runner success accounting so top-level scenario `success` now
+  propagates detected tool failures from JSON `{"error": ...}` payloads and
+  plain-string transport/tool errors instead of trusting the executor's raw
+  success bit alone (Alex)
+- Reconciled the shared Insomnia dependency overlay and runbook to the actual
+  Python 3.11 / `vllm==0.19.0` path now present in the team env, with matching
+  `torch`, `transformers`, and `huggingface-hub` pins and no separate cuDNN
+  hard pin (Alex)
+- Fixed the local vLLM model-name contract for Insomnia runs by explicitly
+  serving `Llama-3.1-8B-Instruct`, validating `/v1/models` before the benchmark
+  loop, and aligning the smoke/test scripts with that served model ID (Alex)
+- Added `docs/governance/model_registry.yaml` as the canonical repo-side record
+  for local-vLLM and WatsonX model names, runtime pins, and the current
+  non-standardized `MODEL_REVISION` gap, with docs/setup references updated to
+  point at it (Alex)
 - Added `notebooks/01_data_exploration.ipynb` as the reproducible replacement
   for the earlier static dataset smoke-test image, with notebook-generated
   summary CSVs and overview figures under `results/` (Alex)

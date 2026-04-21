@@ -12,9 +12,9 @@
 # Generic Slurm experiment runner for SmartGridBench benchmark cells.
 # The currently verified benchmark-facing orchestration path is Plan-Execute
 # against the team's Smart Grid MCP servers via AssetOpsBench's `plan-execute`
-# CLI. Agent-as-Tool and Hybrid share the same benchmark artifact layout here,
-# but still need an explicit external runner command until upstream exposes a
-# stable CLI entry point for those modes.
+# CLI. Repo-local follow-on runners now exist for the Self-Ask PE variant and
+# the Verified PE third-method prototype. Agent-as-Tool still uses the external
+# template path until upstream exposes a stable CLI entry point.
 #
 # MUST be submitted from the repo root — `#SBATCH --output=logs/...` resolves
 # relative to $SLURM_SUBMIT_DIR. If you need to submit from elsewhere, add
@@ -71,6 +71,7 @@ case "$ORCHESTRATION" in
   aat) ORCHESTRATION="agent_as_tool" ;;
   plan-execute) ORCHESTRATION="plan_execute" ;;
   agent-as-tool) ORCHESTRATION="agent_as_tool" ;;
+  verified-pe) ORCHESTRATION="verified_pe" ;;
   *) ;;
 esac
 
@@ -86,6 +87,8 @@ WANDB_MODE="${WANDB_MODE:-online}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
+VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
+VLLM_STARTUP_TIMEOUT="${VLLM_STARTUP_TIMEOUT:-}"
 LAUNCH_VLLM="${LAUNCH_VLLM:-0}"
 AOB_PATH="${AOB_PATH:-$PROJECT_ROOT/../AssetOpsBench}"
 CONTRIBUTING_EXPERIMENTS="${CONTRIBUTING_EXPERIMENTS:-}"
@@ -98,6 +101,8 @@ MAX_TOKENS="${MAX_TOKENS:-0}"
 JUDGE_MODEL="${JUDGE_MODEL:-}"
 AAT_RUNNER_TEMPLATE="${AAT_RUNNER_TEMPLATE:-}"
 HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
+VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
+ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
 
 SERVER_IOT_PATH="${SERVER_IOT_PATH:-$REPO_ROOT/mcp_servers/iot_server/server.py}"
 SERVER_FMSR_PATH="${SERVER_FMSR_PATH:-$REPO_ROOT/mcp_servers/fmsr_server/server.py}"
@@ -167,6 +172,7 @@ META_FILE="$RUN_DIR/meta.json"
 VLLM_LOG="$RUN_DIR/vllm.log"
 HARNESS_LOG="$RUN_DIR/harness.log"
 LATENCY_FILE="$RUN_DIR/latencies.jsonl"
+: >"$HARNESS_LOG"
 
 echo "=== SmartGridBench Experiment ==="
 echo "Run ID:        $RUN_ID"
@@ -187,6 +193,10 @@ echo ""
 PYTHON_BIN="python3"
 if [ "$LAUNCH_VLLM" != "1" ] && [ -x "$PROJECT_ROOT/.venv/bin/python" ]; then
   PYTHON_BIN="$PROJECT_ROOT/.venv/bin/python"
+fi
+AOB_PYTHON="${AOB_PYTHON:-$AOB_PATH/.venv/bin/python}"
+if [ ! -x "$AOB_PYTHON" ]; then
+  AOB_PYTHON="$PYTHON_BIN"
 fi
 
 for cmd in python3 curl uv; do
@@ -344,13 +354,68 @@ fi
 run_plan_execute_trial() {
   local prompt="$1"
   local out_path="$2"
+  if [ "$ENABLE_SELF_ASK" = "1" ]; then
+    local -a wrapper_cmd=(
+      "$AOB_PYTHON"
+      "$REPO_ROOT/scripts/plan_execute_self_ask_runner.py"
+      --json
+      --model-id "$MODEL_ID"
+      --aob-path "$AOB_PATH"
+    )
+    if [ "$HARNESS_VERBOSE" = "1" ]; then
+      wrapper_cmd+=(--verbose --show-plan --show-trajectory)
+    fi
+    wrapper_cmd+=("${SERVER_ARGS[@]}")
+    wrapper_cmd+=("$prompt")
+    (cd "$REPO_ROOT" && "${wrapper_cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+    return
+  fi
   local -a cmd=(uv run plan-execute --json --model-id "$MODEL_ID")
   if [ "$HARNESS_VERBOSE" = "1" ]; then
-    cmd+=(--verbose --show-plan --show-history)
+    cmd+=(--verbose --show-plan --show-trajectory)
   fi
   cmd+=("${SERVER_ARGS[@]}")
   cmd+=("$prompt")
   (cd "$AOB_PATH" && "${cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+}
+
+preflight_repo_local_orchestration_runtime() {
+  case "$ORCHESTRATION" in
+    verified_pe) ;;
+    plan_execute)
+      if [ "$ENABLE_SELF_ASK" != "1" ]; then
+        return 0
+      fi
+      ;;
+    *)
+      return 0
+      ;;
+  esac
+
+  if ! (
+    cd "$REPO_ROOT"
+    "$AOB_PYTHON" - "$REPO_ROOT" "$AOB_PATH" >>"$HARNESS_LOG" 2>&1 <<'PY'
+from pathlib import Path
+import sys
+
+repo_root = Path(sys.argv[1])
+aob_path = Path(sys.argv[2])
+
+sys.path.insert(0, str(repo_root / "scripts"))
+
+from orchestration_utils import (  # noqa: E402
+    bootstrap_aob,
+    preflight_aob_runtime_dependencies,
+)
+
+bootstrap_aob(aob_path)
+preflight_aob_runtime_dependencies()
+print("Repo-local orchestration runtime preflight passed.")
+PY
+  ); then
+    echo "ERROR: repo-local orchestration runtime preflight failed. See $HARNESS_LOG for details." >&2
+    return 1
+  fi
 }
 
 run_external_orchestration_trial() {
@@ -362,7 +427,68 @@ run_external_orchestration_trial() {
     echo "ERROR: $template_var must be set for ORCHESTRATION=$ORCHESTRATION" >&2
     return 1
   fi
-  PROMPT="$prompt" OUTPUT_PATH="$out_path" REPO_ROOT="$REPO_ROOT" AOB_PATH="$AOB_PATH" bash -lc "$template" >>"$HARNESS_LOG" 2>&1
+  PROMPT="$prompt" \
+    OUTPUT_PATH="$out_path" \
+    REPO_ROOT="$REPO_ROOT" \
+    AOB_PATH="$AOB_PATH" \
+    AOB_PYTHON="$AOB_PYTHON" \
+    MODEL_ID="$MODEL_ID" \
+    ENABLE_SELF_ASK="$ENABLE_SELF_ASK" \
+    HARNESS_VERBOSE="$HARNESS_VERBOSE" \
+    SERVER_IOT_PATH="$SERVER_IOT_PATH" \
+    SERVER_FMSR_PATH="$SERVER_FMSR_PATH" \
+    SERVER_TSFM_PATH="$SERVER_TSFM_PATH" \
+    SERVER_WO_PATH="$SERVER_WO_PATH" \
+    bash -lc "$template" >>"$HARNESS_LOG" 2>&1
+}
+
+run_verified_pe_trial() {
+  local prompt="$1"
+  local out_path="$2"
+  if [ -n "$VERIFIED_PE_RUNNER_TEMPLATE" ]; then
+    run_external_orchestration_trial "$prompt" "$out_path" "VERIFIED_PE_RUNNER_TEMPLATE"
+    return
+  fi
+
+  local -a cmd=(
+    "$AOB_PYTHON"
+    "$REPO_ROOT/scripts/verified_pe_runner.py"
+    --json
+    --model-id "$MODEL_ID"
+    --aob-path "$AOB_PATH"
+  )
+  if [ "$ENABLE_SELF_ASK" != "1" ]; then
+    cmd+=(--disable-self-ask)
+  fi
+  if [ "$HARNESS_VERBOSE" = "1" ]; then
+    cmd+=(--verbose --show-plan --show-trajectory)
+  fi
+  cmd+=("$prompt")
+  (cd "$REPO_ROOT" && "${cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+}
+
+trial_succeeded() {
+  local out_path="$1"
+  if [ ! -s "$out_path" ]; then
+    return 1
+  fi
+  "$PYTHON_BIN" - "$out_path" <<'PY'
+import json
+import pathlib
+import sys
+
+path = pathlib.Path(sys.argv[1])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+
+success = payload.get("success")
+if isinstance(success, bool):
+    raise SystemExit(0 if success else 1)
+
+raise SystemExit(0)
+PY
 }
 
 VLLM_PID=""
@@ -374,17 +500,36 @@ cleanup() {
 }
 trap cleanup EXIT
 
+preflight_repo_local_orchestration_runtime
+
 if [ "$LAUNCH_VLLM" = "1" ]; then
+  if [ -z "$VLLM_STARTUP_TIMEOUT" ]; then
+    if [ "$MAX_MODEL_LEN" -ge 32768 ]; then
+      VLLM_STARTUP_TIMEOUT=1200
+    elif [ "$MAX_MODEL_LEN" -ge 16384 ]; then
+      VLLM_STARTUP_TIMEOUT=900
+    else
+      VLLM_STARTUP_TIMEOUT=600
+    fi
+  fi
+  if [[ "$MODEL_ID" == openai/* ]]; then
+    REQUEST_MODEL_NAME="${MODEL_ID#openai/}"
+    if [ "$REQUEST_MODEL_NAME" != "$VLLM_SERVED_MODEL_NAME" ]; then
+      echo "ERROR: MODEL_ID=$MODEL_ID implies requested local vLLM model '$REQUEST_MODEL_NAME'," >&2
+      echo "but VLLM_SERVED_MODEL_NAME is '$VLLM_SERVED_MODEL_NAME'." >&2
+      exit 1
+    fi
+  fi
   "$PYTHON_BIN" -u -m vllm.entrypoints.openai.api_server \
     --model "$VLLM_MODEL_PATH" \
-    --served-model-name "$(basename "${VLLM_MODEL_PATH%/}")" \
+    --served-model-name "$VLLM_SERVED_MODEL_NAME" \
     --host 127.0.0.1 \
     --port "$VLLM_PORT" \
     --max-model-len "$MAX_MODEL_LEN" \
     --dtype float16 \
     >"$VLLM_LOG" 2>&1 &
   VLLM_PID=$!
-  for i in $(seq 1 900); do
+  for i in $(seq 1 "$VLLM_STARTUP_TIMEOUT"); do
     if curl -s "http://127.0.0.1:$VLLM_PORT/health" >/dev/null 2>&1; then
       break
     fi
@@ -395,8 +540,29 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     sleep 1
   done
   if ! curl -s "http://127.0.0.1:$VLLM_PORT/health" >/dev/null 2>&1; then
-    echo "ERROR: vLLM did not become ready within 900s" >&2
+    echo "ERROR: vLLM did not become ready within ${VLLM_STARTUP_TIMEOUT}s" >&2
+    echo "MAX_MODEL_LEN=$MAX_MODEL_LEN can stretch startup on A6000 nodes well past simple weight-load time." >&2
+    echo "Set VLLM_STARTUP_TIMEOUT in the config if this run intentionally uses a slower startup profile." >&2
     tail -50 "$VLLM_LOG" >&2 || true
+    exit 1
+  fi
+  MODELS_JSON="$(curl -s "http://127.0.0.1:$VLLM_PORT/v1/models")"
+  if ! MODELS_JSON_PAYLOAD="$MODELS_JSON" "$PYTHON_BIN" -c '
+import json
+import os
+import sys
+
+expected = sys.argv[1]
+payload = json.loads(os.environ["MODELS_JSON_PAYLOAD"])
+model_ids = [item.get("id") for item in payload.get("data", []) if item.get("id")]
+if expected not in model_ids:
+    raise SystemExit(
+        f"expected served model {expected!r} not present in /v1/models: {model_ids}"
+    )
+' "$VLLM_SERVED_MODEL_NAME"
+  then
+    echo "ERROR: vLLM registry did not expose expected served model '$VLLM_SERVED_MODEL_NAME'." >&2
+    echo "$MODELS_JSON" >&2
     exit 1
   fi
   export LITELLM_BASE_URL="http://127.0.0.1:$VLLM_PORT/v1"
@@ -432,21 +598,32 @@ PY
 
     case "$ORCHESTRATION" in
       plan_execute)
-        if run_plan_execute_trial "$PROMPT" "$TRIAL_OUT"; then
+        run_plan_execute_trial "$PROMPT" "$TRIAL_OUT" || true
+        if trial_succeeded "$TRIAL_OUT"; then
           PASS=$((PASS + 1))
         else
           FAIL=$((FAIL + 1))
         fi
         ;;
       agent_as_tool)
-        if run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "AAT_RUNNER_TEMPLATE"; then
+        run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "AAT_RUNNER_TEMPLATE" || true
+        if trial_succeeded "$TRIAL_OUT"; then
           PASS=$((PASS + 1))
         else
           FAIL=$((FAIL + 1))
         fi
         ;;
       hybrid)
-        if run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "HYBRID_RUNNER_TEMPLATE"; then
+        run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "HYBRID_RUNNER_TEMPLATE" || true
+        if trial_succeeded "$TRIAL_OUT"; then
+          PASS=$((PASS + 1))
+        else
+          FAIL=$((FAIL + 1))
+        fi
+        ;;
+      verified_pe)
+        run_verified_pe_trial "$PROMPT" "$TRIAL_OUT" || true
+        if trial_succeeded "$TRIAL_OUT"; then
           PASS=$((PASS + 1))
         else
           FAIL=$((FAIL + 1))

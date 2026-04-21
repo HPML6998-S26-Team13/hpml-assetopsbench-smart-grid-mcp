@@ -1,0 +1,93 @@
+# Canonical model/runtime registry for SmartGridBench.
+# This file is documentation-first: it is meant for humans and future tooling.
+
+version: 1
+last_updated: 2026-04-20
+owner: Team 13
+
+status:
+  model_revision_standardized_repo_wide: false
+  note: >
+    scripts/setup_insomnia.sh already requires MODEL_REVISION for the local
+    HuggingFace download path, but the repo has not yet standardized one
+    canonical tag or commit SHA for Llama-3.1-8B-Instruct. Until that happens,
+    record the chosen value in setup notes or job logs instead of assuming a
+    shared default.
+
+defaults:
+  primary_local_benchmark_model: llama_3_1_8b_instruct_local
+  primary_local_runtime_profile: insomnia_vllm_py311
+  primary_judge_model: watsonx_llama_4_maverick_17b
+  selective_scaling_spotcheck_model: watsonx_llama_3_3_70b_instruct
+
+runtime_profiles:
+  insomnia_vllm_py311:
+    purpose: Shared Insomnia serving and benchmark path
+    python: "3.11"
+    torch: "2.10.0"
+    transformers: "4.57.6"
+    huggingface_hub: "0.36.2"
+    vllm: "0.19.0"
+    requirements_file: requirements-insomnia.txt
+    runbook: docs/insomnia_runbook.md
+
+model_contracts:
+  llama_3_1_8b_instruct_local:
+    provider: local_vllm
+    role: primary_local_benchmark_model
+    repo_model_id: openai/Llama-3.1-8B-Instruct
+    provider_model_id: meta-llama/Llama-3.1-8B-Instruct
+    served_model_name: Llama-3.1-8B-Instruct
+    local_model_path: models/Llama-3.1-8B-Instruct
+    runtime_profile: insomnia_vllm_py311
+    setup_script: scripts/setup_insomnia.sh
+    serve_script: scripts/vllm_serve.sh
+    smoke_test_script: scripts/test_inference.sh
+    benchmark_config_examples:
+      - configs/example_baseline.env
+      - configs/example_pe_self_ask.env
+      - configs/example_verified_pe.env
+    model_revision:
+      value: null
+      required_by_setup: true
+      source: MODEL_REVISION environment variable
+      status: not_yet_standardized_repo_wide
+      note: >
+        Replace null with a concrete HuggingFace tag or commit SHA once the
+        team agrees on the single checkpoint to mirror on Insomnia.
+
+  watsonx_llama_4_maverick_17b:
+    provider: watsonx
+    role: primary_judge_model
+    repo_model_id: watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8
+    provider_model_id: meta-llama/llama-4-maverick-17b-128e-instruct-fp8
+    access_doc: docs/reference/watsonx_access.md
+    notes:
+      - Primary hosted judge path
+      - Matches the current repo-side default in orchestration_utils.py
+
+  watsonx_llama_3_3_70b_instruct:
+    provider: watsonx
+    role: selective_scaling_spotcheck_model
+    repo_model_id: watsonx/meta-llama/llama-3-3-70b-instruct
+    provider_model_id: meta-llama/llama-3-3-70b-instruct
+    access_doc: docs/reference/watsonx_access.md
+    notes:
+      - Use for selective scaling datapoints, not the full local benchmark grid
+
+  watsonx_llama_3_1_8b_base:
+    provider: watsonx
+    role: fallback_only
+    repo_model_id: watsonx/meta-llama/llama-3-1-8b
+    provider_model_id: meta-llama/llama-3-1-8b
+    access_doc: docs/reference/watsonx_access.md
+    notes:
+      - Base model only, not instruction-tuned
+      - Do not treat as a drop-in replacement for the local 8B Instruct path
+
+open_follow_ups:
+  - Standardize a single HuggingFace MODEL_REVISION for the local 8B checkpoint.
+  - Decide whether scripts/vllm_serve.sh should adopt 32768 as the shared
+    benchmark-path default instead of the lighter 8192 smoke-path default.
+  - Record any future NCCL or cluster-env overrides here if they become part of
+    the canonical Insomnia serving contract.

@@ -4,8 +4,9 @@ transformers
 datasets
 huggingface-hub
 
-# MCP
-mcp
+# MCP + orchestration client stack
+mcp[cli]>=1.26.0
+litellm==1.81.13
 
 # WatsonX.ai (LLM-as-Judge, scaling comparison)
 ibm-watsonx-ai
@@ -28,3 +29,7 @@ ipykernel
 # Utilities
 tqdm
 pyyaml
+
+# LLM-as-Judge scoring (scripts/judge_trajectory.py)
+litellm
+python-dotenv

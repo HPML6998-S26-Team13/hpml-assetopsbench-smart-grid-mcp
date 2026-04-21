@@ -28,6 +28,7 @@ data/raw/
 !data/processed/*.csv
 !results/metrics/**/*.csv
 results/metrics/*.preflight.csv
+!results/metrics/*.jsonl
 
 # Slurm logs
 logs/*.out

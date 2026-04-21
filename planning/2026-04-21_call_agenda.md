@@ -22,7 +22,7 @@
 **0:14-0:21 - Experiment 2 honesty check**
 - Is vanilla AaT now truly runnable, or is PE still the only proven orchestration path?
 - What does that mean for `[#32](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/32)` and Notebook 03 framing?
-- Do we keep `[#24](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/24)` alive as an active mitigation task, or park it until the orchestration set is genuinely runnable?
+- What evidence bar do we want before `[#23](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/23)` and `[#24](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/24)` count as analysis-relevant rather than just local mitigation work?
 
 **0:21-0:27 - Problem Statement B checkpoint**
 - Is the `[#50](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/50)` -> `[#2](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/2)` -> `[#51](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/51)` chain materially real?
