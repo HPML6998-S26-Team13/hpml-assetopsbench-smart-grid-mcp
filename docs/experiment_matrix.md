@@ -1,7 +1,7 @@
 # Experiment Matrix and Follow-On Conditions
 
-*Last updated: 2026-04-22*  
-*Owner: Alex Xin*  
+*Last updated: 2026-04-22*
+*Owner: Alex Xin*
 *Issues: core framing for `#25`, `#32`, `#35`, `#64`, `#5`*
 
 This note keeps the experiment matrix honest and small. It distinguishes:
@@ -61,7 +61,6 @@ Important honesty rule:
 - So the repo should treat `Y/Z + Self-Ask + MCP optimized` as a **planned
   follow-on condition**, not a current runnable claim, until the Cell C
   optimization stack is real enough to reuse outside AaT.
-
 ## Core design rule
 
 Keep one variable fixed per experiment.
@@ -95,7 +94,6 @@ This also means the right near-term Experiment 2 order is:
 3. run `Z`
 4. run `Z + Self-Ask`
 5. only then decide whether the optimized-transport follow-ons are honest to run
-
 ## Review of the two extra conditions
 
 ### 1. `Y + Self-Ask + MCP optimized`
@@ -184,6 +182,21 @@ and that is the right tradeoff for time, cost discipline, and interpretability.
 5. If the optimized MCP transport becomes behaviorally real outside AaT, run
    `Y + Self-Ask + MCP optimized`.
 6. Only after that, consider `Z + Self-Ask + MCP optimized`.
+
+## Promotion rule for optional follow-ons
+
+Do not promote an optional condition into the active run queue unless all of
+these are true:
+
+1. the shared baseline artifacts for `B` and `Y` exist and are analysis-ready
+2. the optimized MCP bundle is real enough to support `C`
+3. the follow-on condition can get at least the same final trial count policy
+   as the core cells
+4. the paper can still explain the condition in one sentence without adding a
+   new axis to the main claim
+
+If any of those fail, keep the condition in the "interesting but not yet worth
+running" bucket.
 
 ## What this means for the paper
 
