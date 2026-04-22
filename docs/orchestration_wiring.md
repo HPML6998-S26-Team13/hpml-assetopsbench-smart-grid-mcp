@@ -134,6 +134,26 @@ available for a separate Claude-family smoke if symmetry is wanted later.
 So `#22` is adapter-ready on our side. The remaining "prove AaT end-to-end"
 work is scoped and tracked under `#104`, and is not blocked on upstream.
 
+### Teammate note: AOB dependency
+
+If you are trying to run PE-family or AaT benchmark lanes, assume a sibling
+AssetOpsBench checkout is required.
+
+- `AOB_PATH` defaults to `../AssetOpsBench` relative to the shared project root.
+- On Insomnia, the shared `team13` area already has that sibling clone, and it
+  should stay in sync with the runtime slice we are using here.
+- Repo-local PE runners do **not** vendor AOB. They import a small
+  plan-execute runtime slice from that checkout.
+- The upcoming vanilla AaT runner in `#104` will use the same pattern through
+  AOB's `OpenAIAgentRunner`, not a standalone team-repo implementation.
+- Do not assume the upstream AaT CLIs are enough by themselves: the real gap is
+  that neither upstream AaT CLI supports `--server NAME=PATH`, so the Smart
+  Grid MCP servers still need the team wrapper layer.
+
+Practical implication: if a teammate sees "AssetOpsBench not found" or the
+runner cannot reach the Smart Grid servers, check `AOB_PATH` and the wrapper
+path first before debugging the model or MCP servers.
+
 ## Self-Ask PE status
 
 The repo now has a local Self-Ask variant for the PE lane:

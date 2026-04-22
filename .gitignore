@@ -8,9 +8,7 @@ build/
 *.egg
 
 # Virtual environments
-venv/
 .venv/
-env/
 *.lock
 
 # IDE
@@ -61,4 +59,3 @@ AGENTS.md
 *codex*
 review/
 .agent-sessions/
-scripts/git-status.sh

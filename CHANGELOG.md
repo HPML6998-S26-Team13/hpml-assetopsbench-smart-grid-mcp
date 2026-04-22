@@ -4,6 +4,16 @@
 
 ### Config / Docs
 
+- Renamed the short handoff format to `docs/coordination/shift_coordination_note_template.md`,
+  moved the coordination surfaces under `docs/coordination/`, and made the
+  purpose explicit: short coordination delta for either concurrent work or
+  handoff, separate from `docs/coordination/live_repo_summary.md` and
+  `docs/coordination/repo_summary_history.md` (Alex)
+- Added an explicit teammate-facing AOB dependency note to
+  `docs/orchestration_wiring.md`: PE-family runners and the upcoming AaT runner
+  depend on a sibling AssetOpsBench checkout at `AOB_PATH`, and the real AaT
+  gap is the missing `--server NAME=PATH` override in upstream CLIs rather than
+  the absence of an upstream runner (Alex)
 - Corrected the Agent-as-Tool status section in `docs/orchestration_wiring.md`:
   upstream AssetOpsBench does expose first-class AaT CLIs (`claude-agent`,
   `openai-agent`) — the real plumbing gap is that neither CLI supports
@@ -28,16 +38,17 @@
   documented as compute-node-only instead of wrapping `sbatch` from the submit
   host (Alex)
 - Refreshed the live planning and handoff surfaces after the Apr 20-21 merge
-  wave: `docs/live_repo_summary.md`, `docs/execution_plan.md`,
+  wave: `docs/coordination/live_repo_summary.md`, `docs/execution_plan.md`,
   `docs/project_synopsis.md`, and the Apr 21 / Apr 28 call prep + agenda docs
   now reflect that `#113`, `#114`, `#115`, `#119`, and `#120` are merged,
   that `#111` is down to a final proof-run closeout, and that `#25` plus the
   still-missing execution artifacts are now the real gating work rather than
   old PR-status uncertainty (Alex)
-- Split the repo handoff layer into a current-state `docs/live_repo_summary.md`
-  and a historical `docs/repo_summary_history.md`, so stale review commentary
-  and older milestone transitions can be archived without making the live
-  summary unreadable (Alex)
+- Split the repo handoff layer into a current-state
+  `docs/coordination/live_repo_summary.md` and a historical
+  `docs/coordination/repo_summary_history.md`, so stale review commentary and
+  older milestone transitions can be archived without making the live summary
+  unreadable (Alex)
 - Updated the canonical Insomnia docs to the current post-merge 3.11 /
   `vllm==0.19.0` reality: login-node checks are now metadata-only, real
   `import vllm` verification is explicitly compute-node-only, and the

@@ -1,9 +1,9 @@
 # Repo Summary History
 
 Created: 2026-04-21  
-Updated: 2026-04-21 22:53 EDT
+Updated: 2026-04-22 01:42 EDT
 
-This file records material deliberately removed or condensed out of `docs/live_repo_summary.md`.
+This file records material deliberately removed or condensed out of `docs/coordination/live_repo_summary.md`.
 It is not a verbatim changelog of every edit. The goal is to preserve useful historical context
 without making the live summary unreadable.
 
@@ -98,7 +98,7 @@ At this point the issue is no longer a vague reconciliation bucket. It is a tiny
 
 Going forward:
 
-- keep `docs/live_repo_summary.md` for current state only
+- keep `docs/coordination/live_repo_summary.md` for current state only
 - whenever something important is removed from the live summary because it is now historical,
   add a short note here instead of losing the context entirely
 
@@ -126,8 +126,24 @@ That guidance was redundant once the repo docs had a stable single-source locati
 
 ### Ongoing summary-maintenance rule
 
-When material is removed from `docs/live_repo_summary.md`, preserve the substance here in condensed form:
+When material is removed from `docs/coordination/live_repo_summary.md`, preserve the substance here in condensed form:
 
 - enough detail to reconstruct the state transition
 - enough detail to function as a lightweight audit trail
 - not a verbatim copy of the removed live text
+
+## 2026-04-22 — coordination docs moved under `docs/coordination/`
+
+### What changed
+
+- The coordination surfaces were moved out of the top-level `docs/` namespace and into `docs/coordination/`:
+  - `live_repo_summary.md`
+  - `repo_summary_history.md`
+  - `shift_coordination_note_template.md`
+- The old tracked singleton `docs/shift_coordination_note.md` was retired in favor of local per-agent notes matching the `shift_coordination_note__*.md` convention.
+
+### Why it mattered
+
+- It separates durable project docs from the narrower coordination layer.
+- It makes the per-agent/local status of `shift_coordination_note__*.md` clearer under the current gitignore setup.
+- The retired singleton note did not need to remain tracked because its unique substance had already graduated into the live summary and orchestration docs.

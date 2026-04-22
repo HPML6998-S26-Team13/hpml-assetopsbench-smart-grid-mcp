@@ -238,7 +238,7 @@ See also: [docs/reference/project_reference.md](docs/reference/project_reference
 
 ## Acknowledgments
 
-We acknowledge the use of AI tools, including Claude, during the development of this project.
+We acknowledge the use of AI tools, including ChatGPT and Claude, during the development of this project.
 
 ## License
 

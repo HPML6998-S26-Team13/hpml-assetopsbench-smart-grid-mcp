@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-21 22:53 EDT*
-*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-21 22:53 EDT*
-*Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/repo_summary_history.md`.*
+*Last updated: 2026-04-22 01:42 EDT*
+*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-22 01:42 EDT*
+*Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`.*
 
 > Legend: **[V]** verified from code/git/GitHub/logs • **[I]** inference • **[?]** unresolved.
 
@@ -11,7 +11,13 @@
 ## 1. Executive Snapshot
 
 - **[V]** `team13/main` currently points to `3609321`.
-- **[V]** Local `main` is ahead at `6d8f340` with local-only follow-up docs and the still-uncommitted-then-localized `#111` proof/ops cleanup stream. Nothing in this summary assumes those local commits are published.
+- **[V]** Local `main` is ahead at `7bd2165` by 11 commits. The unpublished local stack now includes the `#111` shell fix, the `#104` repurpose + AaT guidance updates, the coordination-doc split, and the live-summary refresh clarifying the AOB/AaT wrapper relationship.
+- **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
+- **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
+- **[V]** Short coordination docs now live under `docs/coordination/`.
+  - tracked: `docs/coordination/shift_coordination_note_template.md`
+  - local/untracked per-agent notes: `docs/coordination/shift_coordination_note__*.md`
+  They are meant to stay much shorter than `docs/coordination/live_repo_summary.md` and carry only the current delta / coordination signal.
 - **[V]** The repo-local orchestration lane is now merged and proven:
   - PR `#119` landed repo-local **PE + Self-Ask** and **Verified PE** runners.
   - clean smoke proofs exist for both on the rebased branch:
@@ -36,6 +42,10 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
+| 2026-04-22 morning | `f1a3241`, `bb0d45e` | local `main` | Added the short coordination-note template/current note and a teammate-facing AOB dependency note to `docs/orchestration_wiring.md`. |
+| 2026-04-22 00:15 | `#104` reassigned Alex → Aaron | team GitHub | AaT wiring consolidated with Aaron's Exp 1 runner work (`#25`) since Cells A/B/C all ride on the ReAct/AaT surface and Cell B is shared with Exp 2. One runner, two experiments. Casual handoff comment posted. |
+| 2026-04-21 23:55 | `#104` repurpose + `docs/orchestration_wiring.md` correction + local squash (9→7 commits) + Apr 13 Watsonx PE smoke entry added to `docs/validation_log.md` | local `main` | Repurposed `#104` from the closed mid-point PPT task into the vanilla AaT wiring issue (runner wrapper + harness dispatch + first smoke + docs), with full metadata set and outline comment posted. Fixed the stale `docs/orchestration_wiring.md` claim that upstream lacks an AaT CLI. Squashed two repo-summary refreshes and the AaT-pair commits into cleaner units. |
 | 2026-04-21 evening | issue-body cleanup | team GitHub issues | Removed duplicated “Canonical task source … / Historical planning snapshots …” boilerplate from the team issue bodies; `docs/README.md` is now the single source for that guidance. |
 | 2026-04-21 12:49 | `3609321` | `team13/main` = local `main` | Current shared-main baseline for this summary. |
 | 2026-04-21 morning | `8859928_issue111_main_proof` | temp Insomnia worktree on `main` + local shell fix | `2/2` clean proof for `#111` after patching the Slurm spool-path bug. Useful validation, but not final canonical proof because the fix is still local/uncommitted. |
@@ -47,7 +57,7 @@
 | 2026-04-21 ~00:25 | run `8857842_pe_self_ask_mcp_baseline_smoke` | rebased `#119` branch | Clean PE + Self-Ask smoke proof. |
 | 2026-04-21 ~00:19 | run `8857843_verified_pe_mcp_baseline_smoke` | rebased `#119` branch | Clean Verified PE smoke proof. |
 | 2026-04-21 ~00:05 | merge `de11fd7` | `team13/main` | PR `#115` merged. Server hardening and self-hosted benchmark path fixes landed. |
-| 2026-04-20 afternoon-evening | `01043c5` → `b0f0d40` | `team13/main` | Aaron’s 5-commit infra/docs/scaffold series landed: profiling↔W&B wiring, Experiment 1 A/B/C scaffolding, canonical runbook, GCP fallback, `#111` setup reconciliation. Historical review notes moved to `docs/repo_summary_history.md`. |
+| 2026-04-20 afternoon-evening | `01043c5` → `b0f0d40` | `team13/main` | Aaron’s 5-commit infra/docs/scaffold series landed: profiling↔W&B wiring, Experiment 1 A/B/C scaffolding, canonical runbook, GCP fallback, `#111` setup reconciliation. Historical review notes moved to `docs/coordination/repo_summary_history.md`. |
 
 ---
 
@@ -71,6 +81,11 @@
   - import the actual `plan_execute` surfaces directly
   - use LiteLLM / OpenAI-compatible serving as the model boundary
   - avoid package-level imports that drag in unrelated SDK dependencies
+- **[V]** In practice, PE already uses the same general pattern AaT will use:
+  - thin repo-local wrappers around the AOB runtime slice
+  - explicit team `server_paths` overrides pointing at this repo's Smart Grid MCP servers
+  - shared harness/logging/artifact plumbing in `scripts/run_experiment.sh`
+  The difference is that PE-family wrappers already exist (`plan_execute_self_ask_runner.py`, `verified_pe_runner.py`), while vanilla AaT still needs its wrapper (`#104`).
 - **[V]** The main orchestration runner code is now:
   - `scripts/plan_execute_self_ask_runner.py`
   - `scripts/verified_pe_runner.py`
@@ -78,14 +93,19 @@
 - **[V]** The mainline proof snapshots committed in-tree are:
   - `benchmarks/cell_Y_plan_execute/{config.json,summary.json}`
   - `benchmarks/cell_Z_hybrid/{config.json,summary.json}`
+- **[V]** Vanilla **Agent-as-Tool is not yet smoke-tested.** `benchmarks/cell_B_mcp_baseline/raw/` is empty, and `docs/validation_log.md` contains PE-family proofs only (Apr 13 Watsonx PE smoke, Apr 16 Insomnia PE benchmark path, Apr 20/21 PE + Self-Ask and Verified PE). Upstream AssetOpsBench does expose `claude-agent` and `openai-agent` as first-class AaT runners (MCP-wired via stdio, LiteLLM-routed, with `server_paths` parity on their Python constructors) — the actual gap is that neither AaT CLI supports a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper. That wiring work is now tracked under `#104`.
 
 ### Local-only delta right now
 
-- **[V]** Local `main` is ahead of `team13/main` by 7 commits.
+- **[V]** Local `main` is ahead of `team13/main` by 10 commits.
 - **[V]** Local `main` already contains the unpublished `#111` shell fix in:
   - `scripts/run_experiment.sh`
   - `scripts/vllm_serve.sh`
 - **[V]** Those edits switch `insomnia_env.sh` sourcing from `$(dirname "${BASH_SOURCE[0]}")` to `$REPO_ROOT/scripts/insomnia_env.sh`.
+- **[V]** Local `main` also contains:
+  - the `#104` repurpose + `docs/orchestration_wiring.md` AaT-status correction
+  - the Apr 13 Watsonx PE smoke entry added to `docs/validation_log.md`
+  - the new shift-coordination note/template docs
 - **[V]** Shared Insomnia `main` checkout was fast-forwarded to `3609321`, but the actual `#111` fix was only copied into a temporary proof worktree there. It is not yet committed on canonical `main`.
 
 ---
@@ -111,6 +131,11 @@
    - **[V]** Still open with `CHANGES_REQUESTED`.
    - **[V]** Earlier guidance already given to Akshat; no new blocker surfaced in this pass.
 
+5. **`#104` vanilla AaT wiring (owned by Aaron, adjacent to `#25`)**
+   - **[V]** Issue repurposed from the closed mid-point PPT task; parent `#73`, milestone `M5`, outline comment posted; reassigned to Aaron 2026-04-22 so the AaT runner is built once and reused across Exp 1 Cells A/B/C and the Exp 2 AaT arm.
+   - **[?]** Implementation still to land: `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths`, default harness dispatch for `ORCHESTRATION=agent_as_tool`, first smoke run (SGT-009 on Watsonx then Insomnia), canonical `benchmarks/cell_B_mcp_baseline/raw/<run-id>/` artifacts, and a `docs/validation_log.md` entry.
+   - **[?]** Open questions on Codex-side: does `openai-agent --json` output mesh with `judge_trajectory.py`, is our local AssetOpsBench venv synced cleanly with the LiteLLM refactor, and should `claude-agent` also get a parallel smoke for symmetry.
+
 ---
 
 ## 5. Issues / PRs / Ownership Signals
@@ -131,6 +156,7 @@
 | `#25` | Aaron implementation lane | Cell A runner still missing |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
 | `#32` | analysis/results lane | Notebook 03 scaffold merged; needs real captures |
+| `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Vanilla AaT wiring — wrapper + harness dispatch + first smoke + docs. Metadata set; outline posted; not started. Pairs with `#25` so one AaT runner covers Cells A/B/C and the Exp 2 AaT arm. |
 
 ### Older open PR
 
@@ -144,6 +170,7 @@
 
 | Date (EDT) | Run ID | Branch / SHA | Config | W&B | Status | Notes |
 |---|---|---|---|---|---|---|
+| 2026-04-13 | `local-20260413-003914_pe_mcp_baseline_watsonx_smoke` | canonical `main` at the time | Watsonx `llama-3-3-70b-instruct` on SGT-009 / T-015 | `9d4442ja` | **Earliest committed PE proof** | `run_status: success`, `pass: 1`, `fail: 0`, wall-clock 93.6s. 8-step plan, all steps OK. Raw artifacts live at `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_*`. Just added to `docs/validation_log.md` so the earliest benchmark-path proof is explicitly in the log ladder. |
 | 2026-04-21 | `8859928_issue111_main_proof` | temp Insomnia worktree based on `main@3609321` + local shell fix | `configs/issue111_main_proof.env` | disabled | **Validated fix** | `2/2` success after patching the Slurm spool-path bug. Useful proof of the fix, but not final canonical proof because the committed SHA does not yet contain the fix. |
 | 2026-04-21 | `8859923` | shared Insomnia `main@3609321` | `configs/issue111_main_proof.env` | disabled | **Immediate failure** | Exposed the `insomnia_env.sh` sourcing bug under `sbatch`. |
 | 2026-04-21 | `8857843_verified_pe_mcp_baseline_smoke` | rebased `#119` branch @ `3a03ab8…` | `configs/example_verified_pe.env` | `x65ej9e0` | **Clean smoke success** | Verified PE `2/2`; proof snapshot committed in-tree at `benchmarks/cell_Z_hybrid/`. |
@@ -161,9 +188,14 @@
      - `scripts/vllm_serve.sh`
 2. **Rerun the same `#111` proof on the matching committed SHA.**
    - Then close `#111`.
-3. **Wait on / review Aaron’s `#25` Cell A runner work.**
-4. **After Cell A lands, start real Experiment 1 / 2 capture generation for `#26` / `#32`.**
-5. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
+3. **Execute `#104` vanilla AaT wiring.**
+   - `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths` (mirror `plan_execute_self_ask_runner.py` structure).
+   - `run_experiment.sh` default dispatch for `ORCHESTRATION=agent_as_tool`, `AAT_RUNNER_TEMPLATE` kept as override.
+   - First smoke on SGT-009 / T-015 under Watsonx, then Insomnia; artifacts under `benchmarks/cell_B_mcp_baseline/raw/<run-id>/`.
+   - `docs/validation_log.md` entry recording the run.
+4. **Wait on / review Aaron’s `#25` Cell A runner work.**
+5. **After Cell A lands, start real Experiment 1 / 2 capture generation for `#26` / `#32`.**
+6. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
 
 ---
 
@@ -196,13 +228,13 @@
   - `pm/backlog.md`
   - `CHANGELOG.md`
   - `.agent-sessions/sessions.md`
-  - `docs/repo_summary_history.md`
+  - `docs/coordination/repo_summary_history.md`
 
 ---
 
 ## 9. Historical Notes Pointer
 
-- Older detail that was removed from this live summary now belongs in `docs/repo_summary_history.md`.
+- Older detail that was removed from this live summary now belongs in `docs/coordination/repo_summary_history.md`.
 - That includes:
   - the long-form review treatment of Aaron’s Apr 20 five-commit series
   - earlier stale “candidate cleanup” notes that are now already reflected in docs
@@ -210,4 +242,4 @@
 
 ---
 
-*If this doc starts carrying stale or purely historical material again, move it into `docs/repo_summary_history.md` rather than letting the live summary become an archive.*
+*If this doc starts carrying stale or purely historical material again, move it into `docs/coordination/repo_summary_history.md` rather than letting the live summary become an archive.*
