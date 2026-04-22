@@ -88,9 +88,9 @@ Use `representative_gas_profiles[iec_code]` as the gas input baseline.
 
 ### Step 2 — Set condition level
 
-Look up each gas in `ieee_c57_104.gas_thresholds_ppm`. Choose values that land
-in Condition 2 or 3 for interesting scenarios. Condition 1 is normal (trivial);
-Condition 4 should be reserved for emergency/critical scenarios.
+Look up each gas in `ieee_c57_104.gas_thresholds_ppm.gases`. Choose values that
+land in Condition 2 or 3 for interesting scenarios. Condition 1 is normal
+(trivial); Condition 4 is reserved for emergency/critical scenarios (D2, T3).
 
 ### Step 3 — Assign urgency and horizon
 
@@ -113,12 +113,16 @@ For multi-domain scenarios, always set:
 
 ### Step 5 — Gas consistency
 
-If the scenario involves both IoT sensor readings and a DGA analysis call,
-use the same gas values from step 1 in both places.
+The IoT server exposes non-DGA sensors only (`load_current_a`, `oil_temp_c`,
+`power_factor`, `voltage_hv_kv`, `voltage_lv_kv`, `winding_temp_top_c`). Gas
+values do not appear in IoT sensor readings. For multi-domain scenarios, use
+IoT readings for thermal/electrical context and pass gas values only to the
+`analyze_dga` call. Use a `representative_gas_profiles` entry as the source of
+truth for the DGA call.
 
 ### Step 6 — Variation
 
-Vary each gas ±10%, vary `transformer_id` (T-001 to T-030), and vary one
+Vary each gas ±10%, vary `transformer_id` (T-001 to T-020), and vary one
 operating context field per scenario instance to ensure distinct decision paths.
 Do not exceed ±10% — some profiles sit close to ratio boundaries and larger
 variation flips the fault code.

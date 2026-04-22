@@ -18,7 +18,8 @@ data/
 │   ├── fault_records.csv         # synthetic historical faults / maintenance events
 │   ├── rul_labels.csv            # synthetic RUL labels per transformer per day
 │   └── sensor_readings.csv       # hourly synthetic telemetry
-└── scenarios/              # Smart Grid scenario files (see scenarios/README.md)
+├── scenarios/              # Smart Grid scenario files (see scenarios/README.md)
+└── knowledge/              # Structured standards artifacts for scenario generation (see knowledge/README.md)
 ```
 
 ## The `transformer_id` key

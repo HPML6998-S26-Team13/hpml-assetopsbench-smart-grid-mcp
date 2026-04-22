@@ -65,6 +65,7 @@ via WatsonX API to assess scaling effects.
 │   ├── generate_synthetic.py     #   Offline synthetic equivalent (no Kaggle needed)
 │   ├── processed/                #   6 public-safe synthetic CSVs tracked in git (asset_metadata, dga_records, …)
 │   ├── scenarios/                #   AssetOpsBench-format scenario files - see data/scenarios/README.md
+│   ├── knowledge/                #   Structured standards artifacts for PS B generation - see data/knowledge/README.md
 │   └── raw/                      #   GITIGNORED raw Kaggle downloads
 │
 ├── mcp_servers/                  # 4 MCP servers on shared base - see mcp_servers/README.md
