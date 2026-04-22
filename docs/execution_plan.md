@@ -90,8 +90,8 @@ The original W2 foundation tasks were a single bottleneck. As of Apr 21, that bo
 
 | Task | Owner | Blocked by | Blocks |
 |---|---|---|---|
-| Notebook 02: latency analysis (MCP overhead) | Alex | Experiment 1 results in WandB | Paper section on overhead |
-| Notebook 03: orchestration comparison | Alex | Experiment 2 results in WandB | Paper section on orchestration |
+| Notebook 02: latency analysis (MCP overhead) | Alex | first full A / B / C artifact chain for headline figures; preflight + shared-Cell-B checks can start earlier | Paper section on overhead |
+| Notebook 03: orchestration comparison | Alex | staged: Y / Z follow-on runs can be analyzed now; the core B / Y comparison still waits on Cell B | Paper section on orchestration |
 | Failure taxonomy classification + evidence table | Alex | Experiment 2 results | Failure analysis section |
 | Failure taxonomy visuals + mitigation plan | Alex | Classification table | Mitigation implementation |
 | Implement chosen mitigation(s), including Self-Ask if selected | Alex | Mitigation plan | Before/after reruns |
@@ -116,6 +116,10 @@ The original W2 foundation tasks were a single bottleneck. As of Apr 21, that bo
   3. one judge-scored trajectory lands with logs / artifacts
   This replaces the earlier vague "first baseline trajectory" milestone and is the integration moment that unlocks all experiment runs.
 - **The committed experiment grid is now the four-cell core, not the earlier five-cell conditional grid.** Hybrid is parked as optional follow-on scope rather than treated as a silent required condition.
+- **Experiment 2 is now explicitly staged.** Y and Z baseline runs, plus their
+  Self-Ask ablations, can already be captured and analyzed as PE-family
+  follow-on evidence. The core AaT-vs-PE claim still waits on Cell B via
+  `#104` / `#25`.
 - **Tier 3 can run in parallel and async** - once the foundation is in place, multiple experiment cells can be submitted as independent Slurm jobs, each running unattended.
 - **Tier 5 (writing) can begin during Tier 3** - Alex can draft outline, intro, methodology, related work in parallel with experiments running. Only Results and Discussion need to wait for Tier 4 analysis.
 - **Problem Statement B is now committed work**, not a stretch toggle. It runs in parallel across W3-W5: Tanisha owns the Knowledge Plugin, Aaron owns the generation pipeline, Akshat owns validation, and Alex owns evaluation methodology plus the write-up.
@@ -214,6 +218,14 @@ main experiment result is still the A / B / C comparison rather than a full
 
 **Active optional follow-on:** the repo now has a local Verified PE / `Plan-Execute-Verify-Replan` implementation path plus a PE + Self-Ask hook. These are real mitigation / third-method work items now, but they still do **not** replace the core AaT vs PE experiment story unless they earn that status through clean artifacts.
 
+Practical consequence:
+
+- `#32` is no longer a single all-or-nothing gate.
+- The team can run and inspect `Y`, `Y + Self-Ask`, `Z`, and `Z + Self-Ask`
+  now as PE-family follow-on evidence.
+- The **core** Experiment 2 claim still becomes paper-ready only when the
+  shared AaT Cell B lane is real.
+
 ```
                   │ Direct (no MCP) │ MCP baseline │ MCP optimized │
 ──────────────────┼─────────────────┼──────────────┼───────────────┤
@@ -235,6 +247,14 @@ The team should treat experiment execution as a **two-pass process**:
 So we do not need to wait for 30+ scenarios before starting Experiment 1 or
 Experiment 2. The configs, batch runner, and notebooks are meant to be rerun
 later on the larger corpus without a structural rewrite.
+
+For Alex's notebook lane, that means:
+
+- Notebook 02 (`#26`) can preflight immediately and should start shared Cell B
+  schema checks as soon as `#104` lands its first AaT artifact, even before the
+  full A / B / C chain is complete.
+- Notebook 03 (`#34`) can start with Y / Z PE-family follow-on analysis now,
+  then expand to the honest B / Y core comparison once Cell B lands.
 
 ### Working model choice
 

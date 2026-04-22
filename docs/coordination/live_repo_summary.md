@@ -1,7 +1,7 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-22 01:42 EDT*
-*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-22 01:42 EDT*
+*Last updated: 2026-04-22 03:09 EDT*
+*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-22 03:09 EDT*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`.*
 
 > Legend: **[V]** verified from code/git/GitHub/logs • **[I]** inference • **[?]** unresolved.
@@ -10,8 +10,9 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** `team13/main` currently points to `3609321`.
-- **[V]** Local `main` is ahead at `7bd2165` by 11 commits. The unpublished local stack now includes the `#111` shell fix, the `#104` repurpose + AaT guidance updates, the coordination-doc split, and the live-summary refresh clarifying the AOB/AaT wrapper relationship.
+- **[V]** `team13/main` currently points to `999667d`.
+- **[V]** Local root `main` currently carries the unpublished `#111` Hugging Face CLI fix plus a smaller shared-doc follow-up around the experiment matrix / staged analysis story.
+- **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work has been split out of root `main` into local worktree branch `codex-fnd/exp-26-32-34-staging`, so root `main` can stay focused on the shared planning layer while the more iterative execution lane keeps moving in isolation.
 - **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
@@ -26,6 +27,12 @@
 - **[V]** The analysis scaffold lane is merged:
   - PR `#120` landed Notebook 02 / Notebook 03 consumer-side scaffolds for `#26` / `#32`.
   - `#26` and `#32` remain open because they still need real experiment captures, not because the notebook structure is missing.
+- **[V]** The local follow-up after `#120` now makes the staged execution story explicit:
+  - on the shared-doc side, Notebook 02 / Notebook 03 are now documented as staged rather than all-or-nothing
+  - on the local worktree branch side, the concrete config/notebook staging for `#26` / `#32` / `#34` continues in isolation
+  - current observed repo state from local notebook execution:
+    - Cell Y is analysis-ready
+    - Cell Z still has committed `config.json` / `summary.json` only, not the raw scenario JSON set the notebook needs for the Y/Z follow-on comparison
 - **[V]** Team issue bodies no longer carry the duplicated planning boilerplate.
   - the single-source explanation now lives in `docs/README.md`
   - archived planning tracker/spec references remain documented there, not repeated on every issue
@@ -43,6 +50,8 @@
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
+| 2026-04-22 03:09 | local `#26/#32/#34` staging pass | local worktree branch `codex-fnd/exp-26-32-34-staging` | Tightened the experiment-matrix story into actual scaffolding: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config with a real Verified PE baseline config, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. |
+| 2026-04-22 03:15 | local Notebook 02 / 03 execution | local worktree branch `codex-fnd/exp-26-32-34-staging` | Notebook execution confirmed the staged logic compiles and runs. Current repo-state result: Notebook 03 sees Y as analysis-ready, but Z still lacks committed raw scenario JSONs, so the Y/Z follow-on comparison remains deferred for now. |
 | 2026-04-22 morning | `f1a3241`, `bb0d45e` | local `main` | Added the short coordination-note template/current note and a teammate-facing AOB dependency note to `docs/orchestration_wiring.md`. |
 | 2026-04-22 00:15 | `#104` reassigned Alex → Aaron | team GitHub | AaT wiring consolidated with Aaron's Exp 1 runner work (`#25`) since Cells A/B/C all ride on the ReAct/AaT surface and Cell B is shared with Exp 2. One runner, two experiments. Casual handoff comment posted. |
 | 2026-04-21 23:55 | `#104` repurpose + `docs/orchestration_wiring.md` correction + local squash (9→7 commits) + Apr 13 Watsonx PE smoke entry added to `docs/validation_log.md` | local `main` | Repurposed `#104` from the closed mid-point PPT task into the vanilla AaT wiring issue (runner wrapper + harness dispatch + first smoke + docs), with full metadata set and outline comment posted. Fixed the stale `docs/orchestration_wiring.md` claim that upstream lacks an AaT CLI. Squashed two repo-summary refreshes and the AaT-pair commits into cleaner units. |
@@ -126,6 +135,9 @@
    - **[V]** Remaining blocker is real capture generation:
      - Experiment 1: Cell A / B / C
      - Experiment 2: Cell B / Y / Z
+   - **[V]** Important nuance after the local Apr 22 staging pass:
+     - Y / Z baseline and baseline Self-Ask runs are already first-class runnable follow-on conditions
+     - the honest Experiment 2 core claim still waits on Cell B
 
 4. **`#112` still needs another pass**
    - **[V]** Still open with `CHANGES_REQUESTED`.
@@ -155,7 +167,7 @@
 | `#111` | shared infra follow-up | one local shell fix + one matching-SHA rerun |
 | `#25` | Aaron implementation lane | Cell A runner still missing |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
-| `#32` | analysis/results lane | Notebook 03 scaffold merged; needs real captures |
+| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y/Z follow-on lane can already run locally, but the honest B/Y core still needs Cell B |
 | `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Vanilla AaT wiring — wrapper + harness dispatch + first smoke + docs. Metadata set; outline posted; not started. Pairs with `#25` so one AaT runner covers Cells A/B/C and the Exp 2 AaT arm. |
 
 ### Older open PR

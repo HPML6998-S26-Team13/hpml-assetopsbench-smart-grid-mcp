@@ -1,0 +1,221 @@
+# Experiment Matrix and Follow-On Conditions
+
+*Last updated: 2026-04-22*  
+*Owner: Alex Xin*  
+*Issues: core framing for `#25`, `#32`, `#35`, `#64`, `#5`*
+
+This note keeps the experiment matrix honest and small. It distinguishes:
+
+- the **core cells** the paper must land cleanly
+- the **variant flags** already supported in repo-local runners
+- the **optional follow-on cells** that could be worth adding if the core grid
+  lands early
+
+## Short answer
+
+Current recommended matrix:
+
+| Track | Cell | Orchestration | MCP mode | Status | Role |
+|---|---|---|---|---|---|
+| Experiment 1 | A | AaT | direct | planned | transport baseline |
+| Experiment 1 / 2 | B | AaT | baseline | planned | shared anchor |
+| Experiment 1 | C | AaT | optimized | planned | optimized transport |
+| Experiment 2 | Y | Plan-Execute | baseline | runnable | core orchestration baseline |
+| Experiment 2 | Z | Verified PE | baseline | runnable follow-on | optional third method |
+
+Current recommendation on trials:
+
+- **First complete artifact chain:** `3` trials per `(cell, scenario, model)` is acceptable.
+- **Final canonical run set:** `5` trials per `(cell, scenario, model)` should be the default.
+
+The harness semantics are:
+
+```text
+for each cell
+  for each scenario file
+    for each trial in 1..TRIALS
+      run once
+```
+
+So yes: `Cell A + Scenario 1 + Llama-3.1-8B-Instruct + 5 trials` means five
+independent runs under the same config, then aggregate in `summary.json` and the
+analysis notebooks.
+
+## Runnable today vs pending
+
+What we can honestly run on the current runner surface right now:
+
+| Condition | Status | Why |
+|---|---|---|
+| `Y` | runnable now | canonical PE baseline already proven |
+| `Y + Self-Ask` | runnable now | repo-local Self-Ask PE path already proven |
+| `Z` | runnable now | repo-local Verified PE path already proven |
+| `Z + Self-Ask` | runnable now | same Verified PE path with the clarification hook enabled |
+| `B` | pending | waits on `#104` / `#25` AaT runner |
+| `A` / `C` | pending | wait on `#25`, plus the Cell C optimization lane |
+
+Important honesty rule:
+
+- `MCP_MODE=optimized` is already part of the paper framing, but it is **not yet
+  a behaviorally distinct PE-family transport path** on canonical history.
+- So the repo should treat `Y/Z + Self-Ask + MCP optimized` as a **planned
+  follow-on condition**, not a current runnable claim, until the Cell C
+  optimization stack is real enough to reuse outside AaT.
+
+## Core design rule
+
+Keep one variable fixed per experiment.
+
+- **Experiment 1** fixes orchestration to AaT and varies transport: `A -> B -> C`.
+- **Experiment 2** fixes transport to MCP baseline and varies orchestration:
+  `B -> Y` and optionally `Z`.
+
+That is why the repo does **not** currently commit to the full multiplicative
+grid. If we vary orchestration and transport at the same time, we lose the clean
+story for both experiments.
+
+## How Self-Ask is tracked
+
+Self-Ask is a **runner variant**, not a new official cell ID.
+
+| Condition | Tracking shape |
+|---|---|
+| PE + Self-Ask | `Y` with `ENABLE_SELF_ASK=1` |
+| Verified PE + Self-Ask | `Z` with `ENABLE_SELF_ASK=1` |
+| Verified PE without Self-Ask | `Z` with `ENABLE_SELF_ASK=0` |
+
+This matters for both notebooks and the paper. We should present Self-Ask as a
+mitigation / ablation toggle on top of PE-family methods, not as a whole new
+benchmark axis unless it becomes central enough to deserve that promotion.
+
+This also means the right near-term Experiment 2 order is:
+
+1. run `Y`
+2. run `Y + Self-Ask`
+3. run `Z`
+4. run `Z + Self-Ask`
+5. only then decide whether the optimized-transport follow-ons are honest to run
+
+## Review of the two extra conditions
+
+### 1. `Y + Self-Ask + MCP optimized`
+
+Verdict: **worth keeping as the first optional follow-on condition** once the
+core grid is real.
+
+Why it is attractive:
+
+- it stays aligned with the IBM-facing story: Plan-Execute remains the structured
+  enterprise baseline
+- it asks a practical question: does PE stay behind AaT mainly because of
+  reasoning quality, or is some of the gap just transport friction?
+- it combines two plausible production-facing mitigations rather than an
+  academic-only ablation
+
+Why it is not a core cell yet:
+
+- it mixes two changes at once relative to `Y`: Self-Ask and optimized MCP
+- it depends on the optimized MCP bundle for `C` becoming technically real first
+- it should not be introduced before `B` and `Y` both have clean comparable
+  baseline artifacts
+
+Recommended interpretation if we run it:
+
+- **not** a replacement for vanilla `Y`
+- a follow-on cell answering: "How far can Plan-Execute be pushed with a cheap
+  clarification hook plus better transport?"
+
+### 2. `Z + Self-Ask + MCP optimized`
+
+Verdict: **reasonable as a second optional follow-on, but only after the first
+optional condition above**.
+
+Why it is interesting:
+
+- it is the strongest "best engineered PE-family" condition in the current repo
+- it tests whether verifier gates + clarification + lower transport overhead
+  together produce a materially better enterprise-style agent loop
+
+Why it should come later:
+
+- it is farther from the clean core paper claim
+- it compounds three moving parts: verifier logic, Self-Ask, and optimized MCP
+- if it beats everything else, the explanation becomes harder to defend cleanly
+  without enough intermediate evidence
+
+Recommended interpretation if we run it:
+
+- a **best-effort engineered PE-family ceiling**, not part of the minimal
+  honesty-preserving comparison
+
+## Conditions we should not prioritize
+
+### `Y + direct tools`
+
+Recommendation: **do not prioritize**.
+
+Reason:
+
+- it weakens the IBM / MCP production story
+- it expands the matrix without helping the main paper claim much
+- it makes Experiment 2 less about orchestration under the team's actual MCP
+  stack and more about an alternate plumbing path that IBM would not standardize on
+
+### `Z + direct tools`
+
+Recommendation: **do not prioritize** for the same reason, plus the verifier
+logic is already enough complexity without adding an off-story transport mode.
+
+### Full 8B / 70B duplicated grid
+
+Recommendation: **do not run as a full matrix**.
+
+Keep 70B as a spot-check lane only. The repo docs already treat 70B that way,
+and that is the right tradeoff for time, cost discipline, and interpretability.
+
+## Recommended sequence
+
+1. Land the honest core cells: `A`, `B`, `C`, `Y`.
+2. In parallel, while AaT is still pending, run the already-runnable PE-family
+   baseline / Self-Ask ladder: `Y`, `Y + Self-Ask`, `Z`, `Z + Self-Ask`.
+3. Add `Z` to the core report only if the optional third-method lane stays
+   stable and analysis-ready.
+4. Treat Self-Ask as a PE-family ablation, not a headline cell explosion.
+5. If the optimized MCP transport becomes behaviorally real outside AaT, run
+   `Y + Self-Ask + MCP optimized`.
+6. Only after that, consider `Z + Self-Ask + MCP optimized`.
+
+## What this means for the paper
+
+Use Dhaval's framing carefully:
+
+- **Benchmark reality:** AaT tends to win because ReAct gives reflection.
+- **Production reality:** IBM still prefers Plan-Execute because it is more
+  predictable and inspectable.
+
+That makes the strongest paper structure:
+
+1. show the clean baseline comparison honestly
+2. show one or two targeted PE-family mitigations
+3. avoid turning the paper into an uncontrolled matrix of every possible combo
+
+## Current working recommendation
+
+Default paper lane:
+
+- Experiment 1: `A / B / C`
+- Experiment 2: `B / Y`
+- Optional follow-on: `Z`
+
+Default mitigation / extension lane:
+
+- `Y + Self-Ask`
+- `Z + Self-Ask`
+- if extra time exists: `Y + Self-Ask + MCP optimized`
+- only after that: `Z + Self-Ask + MCP optimized`
+
+That keeps the story sharp:
+
+- **core result:** transport cost and orchestration baseline
+- **follow-on result:** whether structured PE-family methods can recover ground
+  through lightweight reasoning and systems fixes
