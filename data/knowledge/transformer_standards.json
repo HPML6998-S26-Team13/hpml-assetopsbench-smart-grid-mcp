@@ -1,0 +1,306 @@
+{
+  "meta": {
+    "schema_version": "v1",
+    "created": "2026-04-21",
+    "owner": "Tanisha Rathod",
+    "issue": "#50",
+    "sources": [
+      {
+        "id": "IEC_60599_2022",
+        "title": "IEC 60599:2022 — Mineral oil-filled electrical equipment in service — Guidance on the interpretation of dissolved and free gases analysis",
+        "edition": "3rd",
+        "year": 2022
+      },
+      {
+        "id": "IEEE_C57_104_2019",
+        "title": "IEEE C57.104-2019 — IEEE Guide for the Interpretation of Gases Generated in Mineral Oil-Immersed Transformers",
+        "year": 2019
+      }
+    ],
+    "description": "Structured representation of IEC 60599 and IEEE C57.104 transformer DGA interpretation standards. Intended for use by Aaron's PS B scenario generation pipeline. See data/knowledge/README.md for schema notes and consumption instructions.",
+    "server_note": "The fmsr_server analyze_dga tool implements the Rogers Ratio method from IEC 60599. Gas thresholds used for condition screening come from IEEE C57.104-2019. Scenario gas values should be consistent with these thresholds to produce realistic analyze_dga outputs."
+  },
+
+  "iec_60599": {
+    "description": "IEC 60599 defines methods for interpreting dissolved gas analysis (DGA) in oil-filled transformers. The Rogers Ratio method is the primary fault classification tool.",
+
+    "key_gases": {
+      "H2":   { "name": "Hydrogen",   "primary_fault_indicator": ["PD", "D1", "D2"], "unit": "ppm" },
+      "CH4":  { "name": "Methane",    "primary_fault_indicator": ["T1", "T2", "T3"], "unit": "ppm" },
+      "C2H2": { "name": "Acetylene",  "primary_fault_indicator": ["D1", "D2"],       "unit": "ppm" },
+      "C2H4": { "name": "Ethylene",   "primary_fault_indicator": ["T3"],             "unit": "ppm" },
+      "C2H6": { "name": "Ethane",     "primary_fault_indicator": ["T1", "T2"],       "unit": "ppm" },
+      "CO":   { "name": "Carbon monoxide",  "primary_fault_indicator": ["cellulose_degradation"], "unit": "ppm" },
+      "CO2":  { "name": "Carbon dioxide",   "primary_fault_indicator": ["cellulose_degradation"], "unit": "ppm" }
+    },
+
+    "rogers_ratio_method": {
+      "source": "IEC_60599_2022",
+      "description": "Classifies fault type from three gas ratios. A set of gas readings that matches no row defaults to N (normal or inconclusive). This is the method implemented in the fmsr_server analyze_dga tool.",
+      "ratios": {
+        "R1": { "formula": "CH4 / H2",    "label": "Methane to Hydrogen" },
+        "R2": { "formula": "C2H2 / C2H4", "label": "Acetylene to Ethylene" },
+        "R3": { "formula": "C2H4 / C2H6", "label": "Ethylene to Ethane" }
+      },
+      "fault_table": [
+        {
+          "iec_code": "N",
+          "label": "Normal / Inconclusive",
+          "description": "Default result when gas ratios do not match any classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from iec_60599.representative_gas_profiles.profiles.",
+          "typical_cause": "Normal insulation aging, or mixed fault signatures that do not cleanly match a single pattern",
+          "severity": "low"
+        },
+        {
+          "iec_code": "PD",
+          "label": "Partial Discharge",
+          "R1_range": [0.0, 0.1],
+          "R2_range": [0.0, 0.1],
+          "R3_range": [0.0, 1.0],
+          "description": "Low-level ionization without bridging, typically in voids or cavities.",
+          "typical_cause": "Voids in insulation, gas cavities, high-moisture paper",
+          "severity": "medium",
+          "dominant_gas": "H2"
+        },
+        {
+          "iec_code": "D1",
+          "label": "Low-Energy Electrical Discharge",
+          "R1_range": [0.0, 0.1],
+          "R2_range": [0.1, 3.0],
+          "R3_range": [0.0, 1.0],
+          "description": "Sparking or corona discharge in oil or between surfaces.",
+          "typical_cause": "High electric field stress, floating potential, turn-to-turn incipient fault",
+          "severity": "medium-high",
+          "dominant_gases": ["H2", "C2H2"]
+        },
+        {
+          "iec_code": "D2",
+          "label": "High-Energy Electrical Discharge (Arcing)",
+          "R1_range": [0.1, 3.0],
+          "R2_range": [3.0, null],
+          "R3_range": [3.0, null],
+          "description": "Power-follow arc, flashover, or sustained arcing between conductors.",
+          "typical_cause": "Insulation breakdown, winding short circuit, tap changer failure",
+          "severity": "critical",
+          "dominant_gases": ["H2", "C2H2", "C2H4"],
+          "condition_4_trigger": true
+        },
+        {
+          "iec_code": "T1",
+          "label": "Thermal Fault — Low Temperature (<300°C)",
+          "R1_range": [1.0, null],
+          "R2_range": [0.0, 0.1],
+          "R3_range": [0.0, 1.0],
+          "description": "Mild local overheating, typically in solid insulation or mild conductor hot spot.",
+          "typical_cause": "Circulating currents, overloading, insulation contact with hot surface",
+          "severity": "low-medium",
+          "dominant_gases": ["CH4", "C2H6"]
+        },
+        {
+          "iec_code": "T2",
+          "label": "Thermal Fault — Medium Temperature (300–700°C)",
+          "R1_range": [1.0, 3.0],
+          "R2_range": [0.0, 0.1],
+          "R3_range": [1.0, 3.0],
+          "description": "Local overheating in oil or conductor, significant thermal degradation.",
+          "typical_cause": "Core hot spot, conductor short circuit, cooling blockage",
+          "severity": "high",
+          "dominant_gases": ["CH4", "C2H4", "C2H6"]
+        },
+        {
+          "iec_code": "T3",
+          "label": "Thermal Fault — High Temperature (>700°C)",
+          "R1_range": [3.0, null],
+          "R2_range": [0.0, 0.1],
+          "R3_range": [3.0, null],
+          "description": "Severe thermal fault, carbonization of oil or paper.",
+          "typical_cause": "Core bolt fault, severe conductor overheating, cooling system failure",
+          "severity": "critical",
+          "dominant_gases": ["CH4", "C2H4"],
+          "condition_4_trigger": true
+        }
+      ],
+      "generator_note": "IMPORTANT: Do not derive gas values from fault_table. The fault_table represents the IEC 60599 standard; the server implementation diverges on several rows (see server_rogers_table_note in representative_gas_profiles). Always use iec_60599.representative_gas_profiles.profiles as the source of gas values for scenario generation."
+    },
+
+    "representative_gas_profiles": {
+      "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga. Use these as the basis for scenario gas inputs. Safe variation: ±10% per gas value preserves the target iec_code for all profiles. Do not use ±20% — several profiles sit close enough to ratio boundaries that larger variation flips the fault code.",
+      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergences from IEC 60599: (1) PD and D1 — standard requires R1 in [0,0.1) (H2 strongly dominant); server uses R1 in [0.1,1). Profiles with H2=500, CH4=100 (R1=0.2) are correct for the server but would not match the standard PD/D1 rows. (2) D2 — standard requires R2>3 (high acetylene ratio); server uses R2 in [0.1,3) with R3>=1. (3) T1 — standard requires R1>1 (CH4 dominant over H2); server requires R1 in [0.1,1) (H2 dominant). These are opposite. Profiles below are calibrated to the server implementation, not the standard text.",
+      "profiles": {
+        "PD":  { "H2": 500, "CH4": 100, "C2H2": 3,  "C2H4": 60,  "C2H6": 80,  "CO": 250,  "CO2": 2200, "expected_iec_code": "PD" },
+        "D1":  { "H2": 500, "CH4": 100, "C2H2": 30, "C2H4": 80,  "C2H6": 100, "CO": 200,  "CO2": 1900, "expected_iec_code": "D1" },
+        "D2":  { "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "CO": 300,  "CO2": 2800, "expected_iec_code": "D2", "note": "Server D2 = moderate-severity arc discharge (R2 in [0.1,3)). IEC standard D2 = high-energy arcing with R2>3. Use condition_4_trigger flag from fault_table for catastrophic arcing scenarios." },
+        "T1":  { "H2": 200, "CH4": 100, "C2H2": 3,  "C2H4": 90,  "C2H6": 60,  "CO": 400,  "CO2": 3500, "expected_iec_code": "T1" },
+        "T2":  { "H2": 100, "CH4": 200, "C2H2": 2,  "C2H4": 150, "C2H6": 100, "CO": 450,  "CO2": 3800, "expected_iec_code": "T2" },
+        "T3":  { "H2": 150, "CH4": 600, "C2H2": 3,  "C2H4": 500, "C2H6": 100, "CO": 600,  "CO2": 5000, "expected_iec_code": "T3" },
+        "N":   { "H2": 90,  "CH4": 5,   "C2H2": 1,  "C2H4": 50,  "C2H6": 40,  "CO": 120,  "CO2": 1000, "expected_iec_code": "N"  }
+      }
+    }
+  },
+
+  "ieee_c57_104": {
+    "description": "IEEE C57.104-2019 defines a four-condition framework for evaluating transformer health from dissolved gas analysis. Condition 1 is normal; Condition 4 requires immediate action.",
+
+    "condition_framework": {
+      "source": "IEEE_C57_104_2019",
+      "conditions": [
+        {
+          "level": 1,
+          "label": "Normal",
+          "action": "Continue normal sampling schedule.",
+          "sampling_interval": "Routine annual or semi-annual"
+        },
+        {
+          "level": 2,
+          "label": "Caution — Investigate",
+          "action": "Obtain laboratory sample, determine rate of gas generation, increase monitoring frequency.",
+          "sampling_interval": "Monthly or more frequent"
+        },
+        {
+          "level": 3,
+          "label": "Alert — Monitor Closely",
+          "action": "Sample every 3–6 days. Investigate root cause. Consider offline inspection or planned outage.",
+          "sampling_interval": "Every 3–6 days"
+        },
+        {
+          "level": 4,
+          "label": "Immediate Action",
+          "action": "Consider de-energizing the transformer. Inspect, retest, or remove from service.",
+          "sampling_interval": "Continuous or daily until resolved"
+        }
+      ]
+    },
+
+    "gas_thresholds_ppm": {
+      "description": "IEEE C57.104-2019 Table 1 — per-gas limits defining condition boundaries. Values are dissolved gas concentration in ppm. Exceeding a gas threshold moves the unit to that condition level for that gas; the overall condition is the worst across all gases.",
+      "gases": {
+        "H2":   { "C1_max": 100,  "C2_max": 700,   "C3_max": 1800,  "C4": ">1800"  },
+        "CH4":  { "C1_max": 120,  "C2_max": 400,   "C3_max": 1000,  "C4": ">1000"  },
+        "C2H2": { "C1_max": 1,    "C2_max": 9,     "C3_max": 35,    "C4": ">35"    },
+        "C2H4": { "C1_max": 50,   "C2_max": 100,   "C3_max": 200,   "C4": ">200"   },
+        "C2H6": { "C1_max": 65,   "C2_max": 100,   "C3_max": 150,   "C4": ">150"   },
+        "CO":   { "C1_max": 350,  "C2_max": 570,   "C3_max": 1400,  "C4": ">1400"  },
+        "CO2":  { "C1_max": 2500, "C2_max": 4000,  "C3_max": 10000, "C4": ">10000" }
+      },
+      "TDCG": {
+        "description": "Total Dissolved Combustible Gas (sum of H2+CH4+C2H2+C2H4+C2H6+CO).",
+        "C1_max": 720,
+        "C2_max": 1920,
+        "C3_max": 4630,
+        "C4": ">4630"
+      }
+    },
+
+    "rate_of_generation": {
+      "description": "IEEE C57.104 emphasizes that rate of gas generation (ppm/day or ppm/month) is as important as absolute values. A rapidly rising Condition 2 unit may pose more risk than a stable Condition 3 unit.",
+      "escalation_rule": "If the rate of increase doubles from one sample interval to the next, escalate by one condition level regardless of absolute value.",
+      "trending_minimum_samples": 3
+    }
+  },
+
+  "operational_context": {
+    "description": "Domain context for generating realistic scenario operating conditions. Drawn from IEEE C57.104 and utility practice documented in docs/scenario_realism_validation.md.",
+
+    "maintenance_decision_horizons": {
+      "description": "Typical time horizons for maintenance decisions by urgency level. Use these to set realistic response windows in work order scenarios.",
+      "horizons": [
+        {
+          "urgency": "emergency",
+          "horizon": "Hours to days",
+          "triggers": ["Condition 4 gas levels", "Buchholz relay alarm or trip", "sudden pressure relay operation", "active arcing or discharge (D2 diagnosis)", "T3 thermal fault diagnosis", "oil leak with safety hazard", "unexplained protection trip"]
+        },
+        {
+          "urgency": "high",
+          "horizon": "Days to 2 weeks",
+          "triggers": ["Condition 3 with rising trend", "D1 discharge diagnosis", "T2 thermal fault", "rapid rate of gas generation (>2x prior interval)", "high moisture in oil (>30 ppm)", "cooling system partial failure"]
+        },
+        {
+          "urgency": "medium",
+          "horizon": "1–6 months",
+          "triggers": ["Condition 2 trending upward", "PD diagnosis", "T1 thermal fault", "LTC anomaly", "insulation degradation signals"]
+        },
+        {
+          "urgency": "low",
+          "horizon": "6 months to 5 years",
+          "triggers": ["Condition 1 with early indicators", "health index fleet planning", "age-based capital replacement program"]
+        }
+      ]
+    },
+
+    "work_order_minimum_fields": {
+      "description": "Minimum realistic fields for a corrective work order in a utility CMMS. Based on IEEE C57 practice and documented in docs/scenario_realism_validation.md.",
+      "required_fields": [
+        "wo_number", "priority", "work_type", "equipment_id", "location",
+        "requester", "crew_type", "estimated_duration_hours",
+        "outage_required", "loto_reference", "task_steps", "safety_notes"
+      ],
+      "priority_codes": {
+        "emergency": "Immediate dispatch; no scheduling delay",
+        "high": "Dispatch within 24–48 hours",
+        "medium": "Scheduled within 2 weeks",
+        "low": "Next planned maintenance window"
+      },
+      "work_types": ["inspection", "corrective", "emergency", "preventive", "capital_replacement"]
+    },
+
+    "asset_operating_context": {
+      "description": "Three factors that must be present in realistic multi-domain scenarios. Absence makes scenarios implausibly generic.",
+      "must_have_fields": [
+        {
+          "field": "asset_criticality_tier",
+          "values": ["critical", "important", "standard"],
+          "impact": "Determines acceptable risk tolerance and urgency of response"
+        },
+        {
+          "field": "spare_availability",
+          "values": ["in_stock", "lead_time_2_weeks", "lead_time_3_months", "no_spare"],
+          "impact": "Directly affects whether de-energizing is feasible"
+        },
+        {
+          "field": "current_loading_pct",
+          "range": [30, 110],
+          "impact": "Overloading accelerates thermal fault progression; affects urgency"
+        }
+      ]
+    }
+  },
+
+  "scenario_generator_hints": {
+    "description": "Direct instructions for Aaron's generation pipeline. Maps scenario types to the specific fields and values that should be populated from this artifact.",
+
+    "fault_diagnosis_scenario": {
+      "target_tool": "fmsr_server.analyze_dga",
+      "gas_values": "Use iec_60599.representative_gas_profiles.profiles[iec_code] for the target fault code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
+      "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm.gases — target Condition 2 or 3 for most scenarios (Condition 1 is trivially normal). Exception: faults with condition_4_trigger: true (D2, T3) naturally produce Condition 3–4 due to elevated C2H2 or C2H4; use Condition 4 gas values for those.",
+      "example": "For a D2 arcing scenario: use iec_60599.representative_gas_profiles.profiles[\"D2\"] (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
+    },
+
+    "rul_risk_scenario": {
+      "target_tool": "tsfm_server.forecast_rul",
+      "horizon_days": "Use maintenance_decision_horizons to pick a realistic window. 30 days = Condition 3 post-investigation. 180 days = Condition 2 stable unit.",
+      "required_context": "Include asset_criticality_tier, spare_availability, and current_loading_pct from asset_operating_context.",
+      "example": "Forecast RUL for critical transformer at 95% load with no spare — use 30-day horizon, emergency urgency."
+    },
+
+    "work_order_scenario": {
+      "target_tool": "wo_server.create_work_order",
+      "priority_selection": "Map iec_code to urgency: D2/T3 → emergency, D1/T2 → high, PD/T1 → medium. Override if Condition 4 threshold breached.",
+      "fields": "Always include all work_order_minimum_fields. Use work_types from operational_context.",
+      "example": "D2 diagnosis + Condition 4 C2H2 → emergency work order, loto_reference required, task_steps include de-energize and inspect."
+    },
+
+    "multi_domain_scenario": {
+      "target_tools": ["iot_server", "tsfm_server", "fmsr_server", "wo_server"],
+      "flow": "IoT sensor readings → TSFM anomaly detection → FMSR fault classification → WO creation",
+      "required_context_fields": ["asset_criticality_tier", "spare_availability", "current_loading_pct"],
+      "gas_consistency": "The IoT server exposes non-DGA sensors only (load_current_a, oil_temp_c, power_factor, voltage_hv_kv, voltage_lv_kv, winding_temp_top_c). Gas values do not appear in IoT sensor readings. For multi-domain scenarios, use IoT readings for thermal/electrical context and pass gas values only to the analyze_dga call. Use iec_60599.representative_gas_profiles.profiles[iec_code] as the source of truth for the DGA call.",
+      "example": "T-015 at 92% load, critical tier, no spare: IoT shows rising temperatures → TSFM detects anomaly → FMSR returns T2 → WO created with high priority and 1-week horizon."
+    },
+
+    "variation_strategy": {
+      "description": "How to generate multiple distinct scenario instances from the same fault type.",
+      "gas_variation": "Vary each gas value ±10% of the representative profile. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
+      "transformer_variation": "Vary transformer ID (T-001 through T-020), loading percentage, criticality tier, and spare availability.",
+      "context_variation": "Vary one must_have_field per instance to ensure the scenarios probe different decision paths."
+    }
+  }
+}
