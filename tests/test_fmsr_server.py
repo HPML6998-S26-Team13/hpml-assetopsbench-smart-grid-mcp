@@ -184,3 +184,30 @@ def test_analyze_dga_all_zeros_no_crash():
 def test_analyze_dga_without_transformer_id():
     result = analyze_dga(**_T018_GASES)
     assert "transformer_id" not in result
+
+
+# ---------------------------------------------------------------------------
+# analyze_dga — knowledge plugin profile round-trip (issue #50)
+# ---------------------------------------------------------------------------
+
+import json as _json
+
+_KNOWLEDGE_PATH = Path(__file__).resolve().parents[1] / "data" / "knowledge" / "transformer_standards.json"
+_PROFILES = _json.loads(_KNOWLEDGE_PATH.read_text())["iec_60599"]["representative_gas_profiles"]["profiles"]
+
+
+@pytest.mark.parametrize("iec_code,profile", _PROFILES.items())
+def test_knowledge_profile_round_trips(iec_code, profile):
+    """Each representative_gas_profiles entry must produce its declared iec_code."""
+    result = analyze_dga(
+        h2=profile["H2"],
+        ch4=profile["CH4"],
+        c2h2=profile["C2H2"],
+        c2h4=profile["C2H4"],
+        c2h6=profile["C2H6"],
+    )
+    assert result["iec_code"] == profile["expected_iec_code"], (
+        f"Profile {iec_code}: expected {profile['expected_iec_code']!r}, "
+        f"got {result['iec_code']!r} (R1={result['r1_ch4_h2']:.3f}, "
+        f"R2={result['r2_c2h2_c2h4']:.3f}, R3={result['r3_c2h4_c2h6']:.3f})"
+    )

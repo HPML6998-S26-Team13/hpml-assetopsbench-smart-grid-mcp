@@ -84,7 +84,7 @@ contains per-scenario-type instructions. Quick reference:
 ### Step 1 — Pick a fault type
 
 Choose a target `iec_code` from `iec_60599.rogers_ratio_method.fault_table`.
-Use `representative_gas_profiles[iec_code]` as the gas input baseline.
+Use `iec_60599.representative_gas_profiles.profiles[iec_code]` as the gas input baseline.
 
 ### Step 2 — Set condition level
 
@@ -118,7 +118,7 @@ The IoT server exposes non-DGA sensors only (`load_current_a`, `oil_temp_c`,
 values do not appear in IoT sensor readings. For multi-domain scenarios, use
 IoT readings for thermal/electrical context and pass gas values only to the
 `analyze_dga` call. Use a `representative_gas_profiles` entry as the source of
-truth for the DGA call.
+truth for the DGA call (`iec_60599.representative_gas_profiles.profiles[iec_code]`).
 
 ### Step 6 — Variation
 

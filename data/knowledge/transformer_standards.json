@@ -46,7 +46,7 @@
         {
           "iec_code": "N",
           "label": "Normal / Inconclusive",
-          "description": "Default result when gas ratios do not match any classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from representative_gas_profiles.",
+          "description": "Default result when gas ratios do not match any classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from iec_60599.representative_gas_profiles.profiles.",
           "typical_cause": "Normal insulation aging, or mixed fault signatures that do not cleanly match a single pattern",
           "severity": "low"
         },
@@ -119,7 +119,7 @@
           "condition_4_trigger": true
         }
       ],
-      "generator_note": "IMPORTANT: Do not derive gas values from fault_table. The fault_table represents the IEC 60599 standard; the server implementation diverges on several rows (see server_rogers_table_note in representative_gas_profiles). Always use representative_gas_profiles as the source of gas values for scenario generation."
+      "generator_note": "IMPORTANT: Do not derive gas values from fault_table. The fault_table represents the IEC 60599 standard; the server implementation diverges on several rows (see server_rogers_table_note in representative_gas_profiles). Always use iec_60599.representative_gas_profiles.profiles as the source of gas values for scenario generation."
     },
 
     "representative_gas_profiles": {
@@ -269,9 +269,9 @@
 
     "fault_diagnosis_scenario": {
       "target_tool": "fmsr_server.analyze_dga",
-      "gas_values": "Use a representative_gas_profiles entry for the target iec_code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
+      "gas_values": "Use iec_60599.representative_gas_profiles.profiles[iec_code] for the target fault code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
       "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm.gases — target Condition 2 or 3 for most scenarios (Condition 1 is trivially normal). Exception: faults with condition_4_trigger: true (D2, T3) naturally produce Condition 3–4 due to elevated C2H2 or C2H4; use Condition 4 gas values for those.",
-      "example": "For a D2 arcing scenario: use D2 profile from representative_gas_profiles (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
+      "example": "For a D2 arcing scenario: use iec_60599.representative_gas_profiles.profiles[\"D2\"] (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
     },
 
     "rul_risk_scenario": {
@@ -292,7 +292,7 @@
       "target_tools": ["iot_server", "tsfm_server", "fmsr_server", "wo_server"],
       "flow": "IoT sensor readings → TSFM anomaly detection → FMSR fault classification → WO creation",
       "required_context_fields": ["asset_criticality_tier", "spare_availability", "current_loading_pct"],
-      "gas_consistency": "The IoT server exposes non-DGA sensors only (load_current_a, oil_temp_c, power_factor, voltage_hv_kv, voltage_lv_kv, winding_temp_top_c). Gas values do not appear in IoT sensor readings. For multi-domain scenarios, use IoT readings for thermal/electrical context and pass gas values only to the analyze_dga call. Use a representative_gas_profiles entry as the source of truth for the DGA call.",
+      "gas_consistency": "The IoT server exposes non-DGA sensors only (load_current_a, oil_temp_c, power_factor, voltage_hv_kv, voltage_lv_kv, winding_temp_top_c). Gas values do not appear in IoT sensor readings. For multi-domain scenarios, use IoT readings for thermal/electrical context and pass gas values only to the analyze_dga call. Use iec_60599.representative_gas_profiles.profiles[iec_code] as the source of truth for the DGA call.",
       "example": "T-015 at 92% load, critical tier, no spare: IoT shows rising temperatures → TSFM detects anomaly → FMSR returns T2 → WO created with high priority and 1-week horizon."
     },
 
