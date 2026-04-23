@@ -43,17 +43,23 @@ code should be paired with IEEE C57.104 Condition 3–4 gas values.
 
 ### `iec_60599.representative_gas_profiles`
 
-Pre-computed gas values (ppm) that produce each fault code from the
-`fmsr_server.analyze_dga` MCP tool. Use these as the base for scenario gas
-inputs — vary each value ±10% to create distinct instances while preserving
-the target `iec_code`. Do not exceed ±10% — some profiles sit close to ratio
-boundaries and larger variation flips the fault code.
+Wrapper object with a `description`, a `server_rogers_table_note`, and a
+`profiles` map. **Always index via `.profiles[iec_code]`**, not directly on
+the wrapper. Pre-computed gas values (ppm) verified to produce each fault code
+from `fmsr_server.analyze_dga`. Vary each value ±10%; do not exceed ±10% —
+some profiles sit close to ratio boundaries and larger variation flips the
+fault code.
 
 ```json
-"D2": {
-  "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,
-  "CO": 300, "CO2": 2800,
-  "expected_iec_code": "D2"
+"iec_60599": {
+  "representative_gas_profiles": {
+    "profiles": {
+      "D2": {
+        "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,
+        "CO": 300, "CO2": 2800, "expected_iec_code": "D2"
+      }
+    }
+  }
 }
 ```
 
@@ -117,8 +123,8 @@ The IoT server exposes non-DGA sensors only (`load_current_a`, `oil_temp_c`,
 `power_factor`, `voltage_hv_kv`, `voltage_lv_kv`, `winding_temp_top_c`). Gas
 values do not appear in IoT sensor readings. For multi-domain scenarios, use
 IoT readings for thermal/electrical context and pass gas values only to the
-`analyze_dga` call. Use a `representative_gas_profiles` entry as the source of
-truth for the DGA call (`iec_60599.representative_gas_profiles.profiles[iec_code]`).
+`analyze_dga` call. Use `iec_60599.representative_gas_profiles.profiles[iec_code]`
+as the source of truth for the DGA call.
 
 ### Step 6 — Variation
 

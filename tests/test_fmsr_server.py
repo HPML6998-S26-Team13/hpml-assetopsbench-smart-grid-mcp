@@ -16,6 +16,7 @@ DGA contract assumptions documented below for harness authors (see also #11):
   - All-zero inputs return "N" (no division by zero crash)
 """
 
+import json as _json
 import sys
 from pathlib import Path
 
@@ -189,8 +190,6 @@ def test_analyze_dga_without_transformer_id():
 # ---------------------------------------------------------------------------
 # analyze_dga — knowledge plugin profile round-trip (issue #50)
 # ---------------------------------------------------------------------------
-
-import json as _json
 
 _KNOWLEDGE_PATH = (
     Path(__file__).resolve().parents[1]
