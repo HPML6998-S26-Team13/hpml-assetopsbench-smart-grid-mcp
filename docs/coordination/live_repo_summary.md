@@ -13,10 +13,11 @@
 - **[V]** Current canonical remote history includes PR `#122`'s knowledge-plugin
   merge (`0865f67`). Do not use the older `999667d` pre-`#122` baseline as
   current truth.
-- **[V]** PR `#125` is the review surface for the small experiment-matrix /
-  Insomnia-HF cleanup stack that was previously parked on local root `main`.
+- **[V]** The small experiment-matrix / Insomnia-HF cleanup stack has been
+  isolated from the older local root-main history so it can land independently
+  of the heavier staging lanes.
 - **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
-  remains isolated on draft PR `#123`, not on this cleanup PR.
+  remains isolated on draft PR `#123`, not on this cleanup stack.
 - **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
@@ -109,12 +110,10 @@
   - `benchmarks/cell_Z_hybrid/{config.json,summary.json}`
 - **[V]** Vanilla **Agent-as-Tool is not yet smoke-tested.** `benchmarks/cell_B_mcp_baseline/raw/` is empty, and `docs/validation_log.md` contains PE-family proofs only (Apr 13 Watsonx PE smoke, Apr 16 Insomnia PE benchmark path, Apr 20/21 PE + Self-Ask and Verified PE). Upstream AssetOpsBench does expose `claude-agent` and `openai-agent` as first-class AaT runners (MCP-wired via stdio, LiteLLM-routed, with `server_paths` parity on their Python constructors) — the actual gap is that neither AaT CLI supports a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper. That wiring work is now tracked under `#104`.
 
-### Active branch / PR state
+### Active execution lanes
 
-- **[V]** PR `#125` isolates the old local experiment-matrix cleanup stack on a
-  clean branch based on the post-`#122` remote history. It should be reviewed as
-  a small docs + Insomnia HF-login fix, not as the heavier Notebook 03 staging
-  lane.
+- **[V]** The experiment-matrix cleanup stack is scoped as a small docs +
+  Insomnia HF-login fix, not as the heavier Notebook 03 staging lane.
 - **[V]** Draft PR `#123` remains the concrete config/notebook staging lane for
   `#26` / `#32` / `#34`.
 - **[V]** The `#111` Slurm shell fix remains a separate closeout: the local
