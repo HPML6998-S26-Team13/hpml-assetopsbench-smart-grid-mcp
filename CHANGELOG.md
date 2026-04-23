@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-04-22
+
+### Config / Docs
+
+- Added `docs/experiment_matrix.md` to pin down the honest core benchmark grid,
+  trial policy, Self-Ask tracking, and the recommended order for optional
+  follow-on conditions such as `Y + Self-Ask + MCP optimized` and
+  `Z + Self-Ask + MCP optimized`, so the experiment story stays identifiable
+  instead of drifting into an uncontrolled matrix; the docs now distinguish
+  smoke-proven runner paths from canonical config / raw-artifact readiness
+  (Alex)
+- Tightened the shared planning docs around `#26` / `#32` / `#34`: the
+  execution plan and Experiment 1 capture plan now make the staged analysis
+  story explicit, including the role of the first real shared Cell B artifact
+  as an Experiment 1 / 2 milestone rather than treating the notebook lane as
+  purely all-or-nothing (Alex)
+
 ## 2026-04-21
 
 ### Config / Docs

@@ -48,9 +48,9 @@ Notebook 03 (Experiment 2 — orchestration comparison):
 - catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False` (per Codex's 2026-04-20 finding)
 - computes success rate, mean failed steps, mean history length, mean tool-error count, recovery rate, and (when `results/metrics/scenario_scores.jsonl` is populated per `#17`) judge pass rate per orchestration
 - exports `notebook03_cell_availability.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
-- the minimum real Experiment 2 comparison is Cell B vs Y; Cell Z is runnable
-  and supported, but still a follow-on lane rather than the minimum evidence
-  needed to make the AaT vs PE comparison real
+- the minimum real Experiment 2 comparison is Cell B vs Y; Cell Z has a
+  smoke-proven repo-local runner, but still needs promoted canonical configs and
+  raw artifacts before it becomes a notebook-ready follow-on lane
 
 Notebook 04 is still pending — it will consume `results/figures/` outputs from 02 and 03 to produce paper-ready PDFs.
 
@@ -59,4 +59,5 @@ Notebook 04 is still pending — it will consume `results/figures/` outputs from
 - Notebook 02 still analyzes the Experiment 1 Cell A / B / C lanes, but the
   canonical execution configs for those live at `configs/aat_*.env` on `main`.
 - Notebook 03 uses the extra Experiment 2 templates under `configs/experiment2/`
-  for the Y / Z follow-on lanes.
+  for Y today; Z / Self-Ask follow-ons should not be treated as
+  notebook-ready until their canonical configs and raw artifacts land.

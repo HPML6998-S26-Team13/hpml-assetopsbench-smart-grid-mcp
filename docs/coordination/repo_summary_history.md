@@ -1,7 +1,7 @@
 # Repo Summary History
 
 Created: 2026-04-21  
-Updated: 2026-04-22 01:42 EDT
+Updated: 2026-04-23 15:20 EDT
 
 This file records material deliberately removed or condensed out of `docs/coordination/live_repo_summary.md`.
 It is not a verbatim changelog of every edit. The goal is to preserve useful historical context
@@ -147,3 +147,41 @@ When material is removed from `docs/coordination/live_repo_summary.md`, preserve
 - It separates durable project docs from the narrower coordination layer.
 - It makes the per-agent/local status of `shift_coordination_note__*.md` clearer under the current gitignore setup.
 - The retired singleton note did not need to remain tracked because its unique substance had already graduated into the live summary and orchestration docs.
+
+## 2026-04-22 early morning — `#26/#32/#34` staging details pulled into the live summary
+
+### What changed
+
+The live summary now carries a more precise staged-execution story for the
+analysis lane:
+
+- Notebook 02 still needs A / B / C for the headline Experiment 1 result, but
+  the first real Cell B artifact from `#104` is now treated as a meaningful
+  intermediate milestone for shared-anchor schema checks.
+- Notebook 03 is no longer described as all-or-nothing. Y can start from the
+  canonical PE lane once raw artifacts exist; Z / Self-Ask follow-ons are
+  smoke-proven but still need promoted canonical configs and raw artifacts before
+  they are analysis-ready.
+- The draft staging branch proposed replacing the stale
+  `exp2_cell_Z_hybrid_mcp_baseline.env` placeholder with a real Verified PE
+  baseline config and adding baseline Self-Ask variants for Y and Z. Those
+  concrete config edits remain draft-PR work, not current canonical-main truth.
+
+### Why this mattered
+
+The earlier live-summary wording compressed all of `#26` / `#32` into "needs
+real captures," which was directionally true but too coarse:
+
+- it hid the fact that some PE-family Experiment 2 evidence can be generated
+  once the relevant canonical configs and raw-artifact runs are promoted
+- it made Notebook 03 sound more blocked than it really is
+- it did not capture the new role of Cell B as a shared Experiment 1 / 2
+  milestone once `#104` lands
+
+### Later split
+
+Shortly after this staging pass, the concrete notebook/config changes were
+parked onto local worktree branch `codex-fnd/exp-26-32-34-staging` so root
+`main` could keep only the shared planning/docs layer. The conceptual staging
+story stayed in the live docs; the more iterative execution-surface edits moved
+out of root `main`.
