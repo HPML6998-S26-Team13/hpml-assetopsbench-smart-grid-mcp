@@ -192,8 +192,15 @@ def test_analyze_dga_without_transformer_id():
 
 import json as _json
 
-_KNOWLEDGE_PATH = Path(__file__).resolve().parents[1] / "data" / "knowledge" / "transformer_standards.json"
-_PROFILES = _json.loads(_KNOWLEDGE_PATH.read_text())["iec_60599"]["representative_gas_profiles"]["profiles"]
+_KNOWLEDGE_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "data"
+    / "knowledge"
+    / "transformer_standards.json"
+)
+_PROFILES = _json.loads(_KNOWLEDGE_PATH.read_text())["iec_60599"][
+    "representative_gas_profiles"
+]["profiles"]
 
 
 @pytest.mark.parametrize("iec_code,profile", _PROFILES.items())
