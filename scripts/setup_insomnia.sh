@@ -141,10 +141,11 @@ if [ "$do_model" = "1" ]; then
 
     echo ""
     echo "[3] HuggingFace auth (needed for the gated Llama model)..."
-    # `hf auth login` is the canonical command in huggingface-hub 0.30+;
-    # `huggingface-cli login` is a thin backward-compat shim that still works
-    # but emits a deprecation warning.
-    "$PYTHON_BIN" -m huggingface_hub.commands.huggingface_cli auth login \
+    # `python -m huggingface_hub.commands.huggingface_cli login` matches the
+    # actual CLI surface in the shared huggingface-hub 0.36.x environment.
+    # `huggingface-cli login` is still a thin backward-compat shim that works
+    # too, but this form keeps the script independent of an extra entry point.
+    "$PYTHON_BIN" -m huggingface_hub.commands.huggingface_cli login \
         --token "$HF_TOKEN"
 
     echo ""

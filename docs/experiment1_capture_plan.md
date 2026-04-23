@@ -189,13 +189,18 @@ pipeline to produce the final report-ready results.
 starts. The expected cadence is:
 
 1. preflight and parser validation as soon as any A / B / C artifacts exist
-2. early best-effort analysis on the first complete A / B / C run set
-3. final publishable figures/tables after the chosen Cell C stack and the
+2. shared-Cell-B contract checks as soon as `#104` / the first AaT artifact
+   makes Cell B real:
+   - scenario IDs and trial indices match the Experiment 2 join keys
+   - latency rows are present in the expected `latencies.jsonl` shape
+   - `CONTRIBUTING_EXPERIMENTS` correctly marks Cell B as dual-use
+3. early best-effort analysis on the first complete A / B / C run set
+4. final publishable figures/tables after the chosen Cell C stack and the
    larger scenario corpus are rerun
 
 ## References
 
-- `docs/execution_plan.md` — 5-cell grid, async batch workflow
+- `docs/execution_plan.md` — core grid, staged follow-on policy, async batch workflow
 - `docs/orchestration_wiring.md` — why AaT needs an explicit runner template
 - `docs/wandb_schema.md` — field names used in config/summary JSON
 - `profiling/README.md` — capture wrapper usage + WandB linkage contract
