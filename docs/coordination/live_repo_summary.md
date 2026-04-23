@@ -1,7 +1,7 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-22 03:09 EDT*
-*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-22 03:09 EDT*
+*Last updated: 2026-04-23 15:20 EDT*
+*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-23 15:20 EDT*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`.*
 
 > Legend: **[V]** verified from code/git/GitHub/logs • **[I]** inference • **[?]** unresolved.
@@ -10,9 +10,13 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** `team13/main` currently points to `999667d`.
-- **[V]** Local root `main` currently carries the unpublished `#111` Hugging Face CLI fix plus a smaller shared-doc follow-up around the experiment matrix / staged analysis story.
-- **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work has been split out of root `main` into local worktree branch `codex-fnd/exp-26-32-34-staging`, so root `main` can stay focused on the shared planning layer while the more iterative execution lane keeps moving in isolation.
+- **[V]** Current canonical remote history includes PR `#122`'s knowledge-plugin
+  merge (`0865f67`). Do not use the older `999667d` pre-`#122` baseline as
+  current truth.
+- **[V]** PR `#125` is the review surface for the small experiment-matrix /
+  Insomnia-HF cleanup stack that was previously parked on local root `main`.
+- **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
+  remains isolated on draft PR `#123`, not on this cleanup PR.
 - **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
@@ -27,12 +31,13 @@
 - **[V]** The analysis scaffold lane is merged:
   - PR `#120` landed Notebook 02 / Notebook 03 consumer-side scaffolds for `#26` / `#32`.
   - `#26` and `#32` remain open because they still need real experiment captures, not because the notebook structure is missing.
-- **[V]** The local follow-up after `#120` now makes the staged execution story explicit:
+- **[V]** The follow-up after `#120` now makes the staged execution story explicit:
   - on the shared-doc side, Notebook 02 / Notebook 03 are now documented as staged rather than all-or-nothing
-  - on the local worktree branch side, the concrete config/notebook staging for `#26` / `#32` / `#34` continues in isolation
-  - current observed repo state from local notebook execution:
-    - Cell Y is analysis-ready
-    - Cell Z still has committed `config.json` / `summary.json` only, not the raw scenario JSON set the notebook needs for the Y/Z follow-on comparison
+  - on the draft PR `#123` side, the concrete config/notebook staging for `#26` / `#32` / `#34` continues in isolation
+  - current canonical artifact state:
+    - Cell Y has a canonical PE config and proof snapshot
+    - PE + Self-Ask and Verified PE are smoke-proven runner paths
+    - Cell Z / Self-Ask follow-ons still need promoted canonical Experiment 2 configs and raw scenario JSONs before Notebook 03 can treat them as analysis-ready
 - **[V]** Team issue bodies no longer carry the duplicated planning boilerplate.
   - the single-source explanation now lives in `docs/README.md`
   - archived planning tracker/spec references remain documented there, not repeated on every issue
@@ -50,13 +55,13 @@
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
-| 2026-04-22 03:09 | local `#26/#32/#34` staging pass | local worktree branch `codex-fnd/exp-26-32-34-staging` | Tightened the experiment-matrix story into actual scaffolding: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config with a real Verified PE baseline config, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. |
-| 2026-04-22 03:15 | local Notebook 02 / 03 execution | local worktree branch `codex-fnd/exp-26-32-34-staging` | Notebook execution confirmed the staged logic compiles and runs. Current repo-state result: Notebook 03 sees Y as analysis-ready, but Z still lacks committed raw scenario JSONs, so the Y/Z follow-on comparison remains deferred for now. |
+| 2026-04-22 03:09 | local `#26/#32/#34` staging pass | draft PR `#123` branch | Tightened the experiment-matrix story into actual scaffolding on the staging branch: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config there, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. Those concrete config/notebook edits are not part of PR `#125`. |
+| 2026-04-22 03:15 | local Notebook 02 / 03 execution | draft PR `#123` branch | Notebook execution confirmed the staged logic compiles and runs on the staging branch. Current canonical repo-state result: Y has the canonical baseline surface; Z / Self-Ask follow-ons are smoke-proven but not yet canonical-analysis-ready because the promoted configs and raw scenario JSONs are not merged. |
 | 2026-04-22 morning | `f1a3241`, `bb0d45e` | local `main` | Added the short coordination-note template/current note and a teammate-facing AOB dependency note to `docs/orchestration_wiring.md`. |
 | 2026-04-22 00:15 | `#104` reassigned Alex → Aaron | team GitHub | AaT wiring consolidated with Aaron's Exp 1 runner work (`#25`) since Cells A/B/C all ride on the ReAct/AaT surface and Cell B is shared with Exp 2. One runner, two experiments. Casual handoff comment posted. |
 | 2026-04-21 23:55 | `#104` repurpose + `docs/orchestration_wiring.md` correction + local squash (9→7 commits) + Apr 13 Watsonx PE smoke entry added to `docs/validation_log.md` | local `main` | Repurposed `#104` from the closed mid-point PPT task into the vanilla AaT wiring issue (runner wrapper + harness dispatch + first smoke + docs), with full metadata set and outline comment posted. Fixed the stale `docs/orchestration_wiring.md` claim that upstream lacks an AaT CLI. Squashed two repo-summary refreshes and the AaT-pair commits into cleaner units. |
 | 2026-04-21 evening | issue-body cleanup | team GitHub issues | Removed duplicated “Canonical task source … / Historical planning snapshots …” boilerplate from the team issue bodies; `docs/README.md` is now the single source for that guidance. |
-| 2026-04-21 12:49 | `3609321` | `team13/main` = local `main` | Current shared-main baseline for this summary. |
+| 2026-04-21 12:49 | `3609321` | historical `team13/main` | Former shared-main baseline before the Apr 21-22 merge wave and PR `#122`; no longer current. |
 | 2026-04-21 morning | `8859928_issue111_main_proof` | temp Insomnia worktree on `main` + local shell fix | `2/2` clean proof for `#111` after patching the Slurm spool-path bug. Useful validation, but not final canonical proof because the fix is still local/uncommitted. |
 | 2026-04-21 morning | job `8859923` | shared Insomnia `main` checkout | First `#111` proof attempt failed immediately. Root cause: `insomnia_env.sh` sourced via `BASH_SOURCE[0]` under `sbatch`. |
 | 2026-04-21 ~02:27 | merge `b08500e` | `team13/main` | PR `#120` merged. Notebook 02/03 scaffolds are on canonical history. |
@@ -104,18 +109,17 @@
   - `benchmarks/cell_Z_hybrid/{config.json,summary.json}`
 - **[V]** Vanilla **Agent-as-Tool is not yet smoke-tested.** `benchmarks/cell_B_mcp_baseline/raw/` is empty, and `docs/validation_log.md` contains PE-family proofs only (Apr 13 Watsonx PE smoke, Apr 16 Insomnia PE benchmark path, Apr 20/21 PE + Self-Ask and Verified PE). Upstream AssetOpsBench does expose `claude-agent` and `openai-agent` as first-class AaT runners (MCP-wired via stdio, LiteLLM-routed, with `server_paths` parity on their Python constructors) — the actual gap is that neither AaT CLI supports a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper. That wiring work is now tracked under `#104`.
 
-### Local-only delta right now
+### Active branch / PR state
 
-- **[V]** Local `main` is ahead of `team13/main` by 10 commits.
-- **[V]** Local `main` already contains the unpublished `#111` shell fix in:
-  - `scripts/run_experiment.sh`
-  - `scripts/vllm_serve.sh`
-- **[V]** Those edits switch `insomnia_env.sh` sourcing from `$(dirname "${BASH_SOURCE[0]}")` to `$REPO_ROOT/scripts/insomnia_env.sh`.
-- **[V]** Local `main` also contains:
-  - the `#104` repurpose + `docs/orchestration_wiring.md` AaT-status correction
-  - the Apr 13 Watsonx PE smoke entry added to `docs/validation_log.md`
-  - the new shift-coordination note/template docs
-- **[V]** Shared Insomnia `main` checkout was fast-forwarded to `3609321`, but the actual `#111` fix was only copied into a temporary proof worktree there. It is not yet committed on canonical `main`.
+- **[V]** PR `#125` isolates the old local experiment-matrix cleanup stack on a
+  clean branch based on the post-`#122` remote history. It should be reviewed as
+  a small docs + Insomnia HF-login fix, not as the heavier Notebook 03 staging
+  lane.
+- **[V]** Draft PR `#123` remains the concrete config/notebook staging lane for
+  `#26` / `#32` / `#34`.
+- **[V]** The `#111` Slurm shell fix remains a separate closeout: the local
+  proof job `8859928` validated the fix, but the matching committed-SHA rerun is
+  still the gating step before clean closure.
 
 ---
 
@@ -136,7 +140,9 @@
      - Experiment 1: Cell A / B / C
      - Experiment 2: Cell B / Y / Z
    - **[V]** Important nuance after the local Apr 22 staging pass:
-     - Y / Z baseline and baseline Self-Ask runs are already first-class runnable follow-on conditions
+     - Y is the canonical PE baseline
+     - PE + Self-Ask and Verified PE have smoke-proven runner paths
+     - Z / Self-Ask follow-ons still need promoted canonical configs and raw artifacts before they are analysis-ready
      - the honest Experiment 2 core claim still waits on Cell B
 
 4. **`#112` still needs another pass**
@@ -167,7 +173,7 @@
 | `#111` | shared infra follow-up | one local shell fix + one matching-SHA rerun |
 | `#25` | Aaron implementation lane | Cell A runner still missing |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
-| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y/Z follow-on lane can already run locally, but the honest B/Y core still needs Cell B |
+| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Z / Self-Ask follow-ons need promoted canonical configs and raw artifacts; the honest B/Y core still needs Cell B |
 | `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Vanilla AaT wiring — wrapper + harness dispatch + first smoke + docs. Metadata set; outline posted; not started. Pairs with `#25` so one AaT runner covers Cells A/B/C and the Exp 2 AaT arm. |
 
 ### Older open PR

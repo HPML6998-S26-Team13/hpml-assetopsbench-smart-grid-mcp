@@ -21,7 +21,7 @@ Current recommended matrix:
 | Experiment 1 / 2 | B | AaT | baseline | planned | shared anchor |
 | Experiment 1 | C | AaT | optimized | planned | optimized transport |
 | Experiment 2 | Y | Plan-Execute | baseline | runnable | core orchestration baseline |
-| Experiment 2 | Z | Verified PE | baseline | runnable follow-on | optional third method |
+| Experiment 2 | Z | Verified PE | baseline | smoke-proven follow-on; canonical config pending | optional third method |
 
 Current recommendation on trials:
 
@@ -47,12 +47,21 @@ What we can honestly run on the current runner surface right now:
 
 | Condition | Status | Why |
 |---|---|---|
-| `Y` | runnable now | canonical PE baseline already proven |
-| `Y + Self-Ask` | runnable now | repo-local Self-Ask PE path already proven |
-| `Z` | runnable now | repo-local Verified PE path already proven |
-| `Z + Self-Ask` | runnable now | same Verified PE path with the clarification hook enabled |
+| `Y` | canonical runnable now | canonical PE baseline config and proof already exist |
+| `Y + Self-Ask` | smoke-runnable; canonical config pending | repo-local Self-Ask PE path is proven, but this PR does not add the Experiment 2 config or raw run set |
+| `Z` | smoke-runnable; canonical config pending | repo-local Verified PE path is proven, but the committed Experiment 2 Z config still needs promotion from its legacy placeholder |
+| `Z + Self-Ask` | smoke-runnable; canonical config pending | the Verified PE runner supports the clarification hook, but the canonical config and raw run set are still follow-on work |
 | `B` | pending | waits on `#104` / `#25` AaT runner |
 | `A` / `C` | pending | wait on `#25`, plus the Cell C optimization lane |
+
+Important distinction:
+
+- **Runner-runnable** means there is a smoke-proven script/config path that can
+  execute a condition.
+- **Analysis-ready** means the canonical config has produced raw per-scenario
+  JSONs under `benchmarks/cell_*/raw/<run-id>/` for the notebook contract.
+- Current canonical history has the PE-family smoke proofs, but not the full
+  canonical Z / Self-Ask Experiment 2 raw run sets.
 
 Important honesty rule:
 
@@ -61,6 +70,7 @@ Important honesty rule:
 - So the repo should treat `Y/Z + Self-Ask + MCP optimized` as a **planned
   follow-on condition**, not a current runnable claim, until the Cell C
   optimization stack is real enough to reuse outside AaT.
+
 ## Core design rule
 
 Keep one variable fixed per experiment.
@@ -89,11 +99,12 @@ benchmark axis unless it becomes central enough to deserve that promotion.
 
 This also means the right near-term Experiment 2 order is:
 
-1. run `Y`
-2. run `Y + Self-Ask`
-3. run `Z`
-4. run `Z + Self-Ask`
+1. run `Y` using the canonical Experiment 2 config
+2. promote and run a canonical `Y + Self-Ask` config
+3. promote and run a canonical `Z` Verified PE config
+4. promote and run a canonical `Z + Self-Ask` config
 5. only then decide whether the optimized-transport follow-ons are honest to run
+
 ## Review of the two extra conditions
 
 ### 1. `Y + Self-Ask + MCP optimized`
@@ -174,10 +185,11 @@ and that is the right tradeoff for time, cost discipline, and interpretability.
 ## Recommended sequence
 
 1. Land the honest core cells: `A`, `B`, `C`, `Y`.
-2. In parallel, while AaT is still pending, run the already-runnable PE-family
-   baseline / Self-Ask ladder: `Y`, `Y + Self-Ask`, `Z`, `Z + Self-Ask`.
+2. In parallel, while AaT is still pending, use the smoke-proven PE-family
+   runners to promote and capture the baseline / Self-Ask ladder: `Y`,
+   `Y + Self-Ask`, `Z`, `Z + Self-Ask`.
 3. Add `Z` to the core report only if the optional third-method lane stays
-   stable and analysis-ready.
+   stable and analysis-ready after canonical raw artifacts land.
 4. Treat Self-Ask as a PE-family ablation, not a headline cell explosion.
 5. If the optimized MCP transport becomes behaviorally real outside AaT, run
    `Y + Self-Ask + MCP optimized`.
@@ -222,8 +234,8 @@ Default paper lane:
 
 Default mitigation / extension lane:
 
-- `Y + Self-Ask`
-- `Z + Self-Ask`
+- `Y + Self-Ask` after canonical config promotion
+- `Z + Self-Ask` after canonical config promotion
 - if extra time exists: `Y + Self-Ask + MCP optimized`
 - only after that: `Z + Self-Ask + MCP optimized`
 

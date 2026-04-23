@@ -11,9 +11,9 @@ The currently verified benchmark-facing execution path is:
 - Smart Grid MCP servers passed into AssetOpsBench `plan-execute` via repeated
   `--server name=path` overrides
 
-Agent-as-Tool and Cell Z / Verified PE share the same config schema here, but still need an
-explicit external runner command until the canonical upstream exposes a stable
-CLI for those orchestration modes. See
+Agent-as-Tool still needs an explicit external runner command. Repo-local
+Verified PE runner code exists, but the canonical Experiment 2 Cell Z config is
+still pending promotion from the legacy placeholder. See
 [`../docs/orchestration_wiring.md`](../docs/orchestration_wiring.md).
 
 ## Naming
@@ -35,7 +35,7 @@ The active cell mapping is:
 | B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
 | C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
 | Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
-| Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` |
+| Z | Verified PE follow-on | baseline | pending canonical promotion; the current `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` is still a legacy placeholder |
 
 ## Required keys
 
@@ -63,7 +63,11 @@ The active cell mapping is:
 ### Orchestration-specific adapter hooks
 
 - `AAT_RUNNER_TEMPLATE` — required when `ORCHESTRATION=agent_as_tool`
-- `HYBRID_RUNNER_TEMPLATE` — required when `ORCHESTRATION=hybrid`
+- `HYBRID_RUNNER_TEMPLATE` — required only for the legacy `hybrid` placeholder
+  path
+- `VERIFIED_PE_RUNNER_TEMPLATE` — optional override when
+  `ORCHESTRATION=verified_pe`; otherwise the repo-local Verified PE runner is
+  used
 
 These are intentionally explicit. We do not want hidden shell glue for AaT or
 the legacy Cell Z / `hybrid` runner hook until the invocation contract is
@@ -110,6 +114,8 @@ As of Apr 20, 2026:
 - Experiment 1 analysis still maps to Cells A / B / C, but the execution
   configs for those lanes stay on the canonical `configs/aat_*.env` names that
   `main` already documents.
-- AaT and the legacy Cell Z / `hybrid` hook can use the same
-  artifact/logging path, but still need an explicit external runner template
-  until a stable upstream invocation path exists.
+- AaT still needs an explicit external runner template until a stable upstream
+  invocation path exists.
+- Verified PE has a repo-local runner and smoke proofs, but the canonical
+  Experiment 2 Z config and raw run set still need to be promoted before Z is a
+  notebook-ready follow-on lane.

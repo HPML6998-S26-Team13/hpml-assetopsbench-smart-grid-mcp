@@ -1,7 +1,7 @@
 # Repo Summary History
 
 Created: 2026-04-21  
-Updated: 2026-04-22 03:09 EDT
+Updated: 2026-04-23 15:20 EDT
 
 This file records material deliberately removed or condensed out of `docs/coordination/live_repo_summary.md`.
 It is not a verbatim changelog of every edit. The goal is to preserve useful historical context
@@ -158,19 +158,22 @@ analysis lane:
 - Notebook 02 still needs A / B / C for the headline Experiment 1 result, but
   the first real Cell B artifact from `#104` is now treated as a meaningful
   intermediate milestone for shared-anchor schema checks.
-- Notebook 03 is no longer described as all-or-nothing. Y / Z can already be
-  used for PE-family follow-on analysis before AaT lands; the honest core claim
-  still waits on B / Y.
-- The Experiment 2 config surface replaced the stale dead
+- Notebook 03 is no longer described as all-or-nothing. Y can start from the
+  canonical PE lane once raw artifacts exist; Z / Self-Ask follow-ons are
+  smoke-proven but still need promoted canonical configs and raw artifacts before
+  they are analysis-ready.
+- The draft staging branch proposed replacing the stale
   `exp2_cell_Z_hybrid_mcp_baseline.env` placeholder with a real Verified PE
-  baseline config and added baseline Self-Ask variants for Y and Z.
+  baseline config and adding baseline Self-Ask variants for Y and Z. Those
+  concrete config edits remain draft-PR work, not current canonical-main truth.
 
 ### Why this mattered
 
 The earlier live-summary wording compressed all of `#26` / `#32` into "needs
 real captures," which was directionally true but too coarse:
 
-- it hid the fact that some Experiment 2 evidence can already be generated now
+- it hid the fact that some PE-family Experiment 2 evidence can be generated
+  once the relevant canonical configs and raw-artifact runs are promoted
 - it made Notebook 03 sound more blocked than it really is
 - it did not capture the new role of Cell B as a shared Experiment 1 / 2
   milestone once `#104` lands

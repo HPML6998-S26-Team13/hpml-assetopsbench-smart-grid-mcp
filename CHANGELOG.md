@@ -8,7 +8,9 @@
   trial policy, Self-Ask tracking, and the recommended order for optional
   follow-on conditions such as `Y + Self-Ask + MCP optimized` and
   `Z + Self-Ask + MCP optimized`, so the experiment story stays identifiable
-  instead of drifting into an uncontrolled matrix (Alex)
+  instead of drifting into an uncontrolled matrix; the docs now distinguish
+  smoke-proven runner paths from canonical config / raw-artifact readiness
+  (Alex)
 - Tightened the shared planning docs around `#26` / `#32` / `#34`: the
   execution plan and Experiment 1 capture plan now make the staged analysis
   story explicit, including the role of the first real shared Cell B artifact

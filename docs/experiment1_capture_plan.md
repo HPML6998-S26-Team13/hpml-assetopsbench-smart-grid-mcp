@@ -200,7 +200,7 @@ starts. The expected cadence is:
 
 ## References
 
-- `docs/execution_plan.md` — 5-cell grid, async batch workflow
+- `docs/execution_plan.md` — core grid, staged follow-on policy, async batch workflow
 - `docs/orchestration_wiring.md` — why AaT needs an explicit runner template
 - `docs/wandb_schema.md` — field names used in config/summary JSON
 - `profiling/README.md` — capture wrapper usage + WandB linkage contract
