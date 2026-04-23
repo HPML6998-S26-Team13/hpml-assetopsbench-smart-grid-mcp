@@ -94,6 +94,12 @@
   default to that resolved checkpoint SHA, and updated the runbooks so future
   Insomnia / fallback setup runs record the same model contract (Alex)
 
+## 2026-04-23
+
+### Config / Docs
+
+- Added a short tracked `.claude/rules/project-board.md` rule so team-repo GitHub Project comments stay factual, proportional to issue size, and concise in closeout mode without turning the rule layer into a long template surface (Alex)
+
 ## 2026-04-22
 
 ### Config / Docs
