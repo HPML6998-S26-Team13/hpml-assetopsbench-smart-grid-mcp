@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-24 13:05 EDT*
+*Last updated: 2026-04-24 13:10 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-22 13:05 EDT → 2026-04-24 13:05 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-22 13:10 EDT → 2026-04-24 13:10 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -13,11 +13,12 @@
 ## 1. Executive Snapshot
 
 - **[V]** Current canonical remote history includes the `#122` knowledge-plugin
-  merge and the later `#125` setup fix; use `team13/main@b480604` as the
-  current shared baseline, not the older `999667d` pre-`#122` state.
-- **[V]** The small experiment-matrix / Insomnia-HF cleanup stack has been
-  isolated from the older local root-main history so it can land independently
-  of the heavier staging lanes.
+  merge, `#125` setup fix, and `#126` root coordination / AaT docs stack; use
+  `team13/main@8548b8a` as the current shared baseline, not `b480604` or the
+  older `999667d` pre-`#122` state.
+- **[V]** The former local root-main coordination stack is now merged as PR
+  `#126`. The branch `codex-fnd/root-main-coordination` was deleted remotely
+  and local root `main` was reset to the squash merge.
 - **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
   remains isolated on draft PR `#123`, not on this cleanup stack.
 - **[V]** Draft PR `#124` is the separate staging lane for `#35` / `#64` /
@@ -65,6 +66,7 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-24 13:08 | PR `#126` / `8548b8a` | `team13/main` | Root coordination/docs stack merged after review feedback was addressed: live-summary window sync, AaT runner design CHANGELOG entry, orchestration heading cleanup, and a clean squash body replacing the malformed intermediate commit message. |
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
 | 2026-04-22 03:09 | local `#26/#32/#34` staging pass | draft PR `#123` branch | Tightened the experiment-matrix story into actual scaffolding on the staging branch: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config there, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. Those concrete config/notebook edits are not part of PR `#125`. |
 | 2026-04-22 03:15 | local Notebook 02 / 03 execution | draft PR `#123` branch | Notebook execution confirmed the staged logic compiles and runs on the staging branch. Current canonical repo-state result: Y has the canonical baseline surface; Z / Self-Ask follow-ons are smoke-proven but not yet canonical-analysis-ready because the promoted configs and raw scenario JSONs are not merged. |
