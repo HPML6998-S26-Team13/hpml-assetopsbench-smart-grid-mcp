@@ -28,6 +28,11 @@ older material is no longer useful in the live memo. The live summary is allowed
 older facts when they are still live blockers, current proof anchors, or necessary context
 for the next agent.
 
+When refreshing `live_repo_summary.md`, update the emphasis-window endpoints alongside
+the `Last updated` timestamp unless the window start is intentionally anchored. If the
+window is anchored rather than sliding, say so explicitly in the banner so readers do
+not mistake it for the current last-N-hours window.
+
 ## Filename convention (per-agent-session)
 
 Each agent maintains its **own persistent shift note**; concurrent sessions do not share a single file. Naming:

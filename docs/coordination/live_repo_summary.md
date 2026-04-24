@@ -1,8 +1,9 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-24 09:27 EDT*
+*Last updated: 2026-04-24 13:05 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-22 01:31 EDT → 2026-04-24 01:31 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-22 13:05 EDT → 2026-04-24 13:05 EDT, with older still-live blockers retained as needed.*
+*Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
 > Legend: **[V]** verified from code/git/GitHub/logs • **[I]** inference • **[?]** unresolved.

@@ -13,6 +13,13 @@
   local transcripts; settled details should be promoted to the live summary,
   summarized into history only when otherwise unrecoverable, or left to the
   durable artifact that already records them (Alex)
+- Clarified the Agent-as-Tool runner design in `docs/orchestration_wiring.md`:
+  the team runner at `scripts/aat_runner.py` will wrap the OpenAI Agents SDK
+  (`agents.Runner.run()`) directly rather than AOB's `OpenAIAgentRunner`, so
+  Cell A (direct) and Cell B (MCP) share the same runner code and `(B - A)` in
+  Experiment 1 measures MCP transport overhead by construction. #104 now tracks
+  Cell A, Cell B, and a parity smoke against upstream's `openai-agent` CLI
+  (Alex)
 
 ## 2026-04-22
 

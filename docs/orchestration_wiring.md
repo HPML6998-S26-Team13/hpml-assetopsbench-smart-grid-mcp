@@ -94,7 +94,9 @@ be pointed at this repo's Smart Grid MCP servers without a team-repo
 wrapper. This is the actual plumbing gap — not the absence of an AaT
 runner upstream, which an earlier version of this doc had claimed.
 
-### Why we wrap the Agents SDK, not AOB's runner (decided 2026-04-24)
+### Why we wrap the Agents SDK, not AOB's runner
+
+_Decision date: 2026-04-24._
 
 Which API to wrap is a design choice with experimental consequences.
 `OpenAIAgentRunner.run()` at `src/agent/openai_agent/runner.py:224`
