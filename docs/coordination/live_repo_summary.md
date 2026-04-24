@@ -1,6 +1,6 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-24 01:31 EDT*
+*Last updated: 2026-04-24 01:56 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
 *Current emphasis window: 2026-04-22 01:31 EDT → 2026-04-24 01:31 EDT, with older still-live blockers retained as needed.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
@@ -25,6 +25,12 @@
   - tracked: `docs/coordination/shift_coordination_note_template.md`
   - local/untracked per-agent notes: `docs/coordination/shift_coordination_note__*.md`
   They are meant to stay much shorter than `docs/coordination/live_repo_summary.md` and carry only the current delta / coordination signal.
+- **[V]** Shift notes now have an explicit compaction trigger. When a per-agent
+  note grows past roughly 600 words / 20 bullets, or when commits / PRs /
+  issues / logs already preserve the detailed work, the agent should rewrite the
+  note in place: keep active deltas and open loops, promote settled current truth
+  here, summarize only otherwise-unrecoverable context into history, and drop
+  transcript-level minutiae.
 - **[V]** The repo-local orchestration lane is now merged and proven:
   - PR `#119` landed repo-local **PE + Self-Ask** and **Verified PE** runners.
   - clean smoke proofs exist for both on the rebased branch:

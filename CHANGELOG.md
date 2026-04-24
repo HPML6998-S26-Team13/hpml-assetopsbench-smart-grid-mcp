@@ -8,6 +8,11 @@
   now has a configurable emphasis window rather than a hard 48-hour eviction
   policy, and stale material moves to `docs/coordination/repo_summary_history.md`
   only when newer active work has displaced it from the live memo (Alex)
+- Added a compaction rule to `docs/coordination/shift_coordination_note_template.md`
+  so per-agent shift notes stay short working buffers rather than growing into
+  local transcripts; settled details should be promoted to the live summary,
+  summarized into history only when otherwise unrecoverable, or left to the
+  durable artifact that already records them (Alex)
 
 ## 2026-04-22
 

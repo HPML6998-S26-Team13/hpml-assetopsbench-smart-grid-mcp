@@ -1,7 +1,7 @@
 # Repo Summary History
 
 Created: 2026-04-21  
-Updated: 2026-04-24 01:31 EDT
+Updated: 2026-04-24 01:56 EDT
 
 This file records material deliberately removed or condensed out of `docs/coordination/live_repo_summary.md`.
 It is not a verbatim changelog of every edit. The goal is to preserve useful historical context
@@ -222,3 +222,12 @@ cadence. A repo can choose a window in hours or days, and older material should
 not be evicted solely because it crossed that threshold. Move material to this
 history file only when there is enough newer active work that the older material
 is no longer useful in the live memo.
+
+## 2026-04-24 — shift-note compaction clarified
+
+Shift coordination notes are now explicitly treated as working buffers, not
+session transcripts. If a note grows past the target budget, the owning agent
+should compact it in place before yielding: keep active deltas, promote settled
+current-state facts to the live summary, summarize only otherwise-unrecoverable
+context here, and rely on commits, PRs, issues, logs, meeting notes, and run
+artifacts for full detail.

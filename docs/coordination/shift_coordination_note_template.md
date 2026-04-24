@@ -61,6 +61,42 @@ Cadence (sync'd with team-repo `CLAUDE.md` MECE item 4):
 - **Read** all sibling `shift_coordination_note__*.md` files **at the start of each turn at minimum**, and more often during long turns as needed to stay current. There is no canonical master note.
 - **Write** your own note **at the end of each turn at minimum** (before yielding control back to the user), and more often during long turns as the material delta evolves. Do not leave your local note stale while relying on others to read it.
 
+## Compaction / pruning rule
+
+A shift note is a working buffer, not a session transcript. The 250-600 word
+target is a maintenance budget; once the note grows past it, compact rather
+than appending forever.
+
+Compact your own note before yielding when any of these are true:
+
+- it is over roughly 600 words or 20 bullets
+- it is longer than the live-summary section it is supposed to support
+- a material commit, PR, issue closeout, proof run, or doc update has made the
+  detailed work log recoverable elsewhere
+- older bullets describe completed work rather than active coordination risk
+
+Compaction procedure:
+
+1. Keep only active deltas, current truths, open loops, next actions, and
+   "ignore / not a blocker" guidance.
+2. Promote settled current-state facts to `live_repo_summary.md` if they are not
+   already there.
+3. Add one condensed `repo_summary_history.md` entry only for displaced context
+   that is not already recoverable from commits, PR / issue comments,
+   `CHANGELOG.md`, validation logs, meeting notes, or run artifacts.
+4. Drop command-by-command, review-loop, and local exploration minutiae once the
+   result is captured in durable artifacts.
+5. Rewrite the shift note in place. Do not append a summary below the old long
+   note.
+
+Preservation test:
+
+- keep it in the shift note if the next agent needs it to act now
+- keep it in the live summary if it is current repo truth
+- keep it in history if it explains a state transition not otherwise recorded
+- rely on commits, PRs, issues, logs, and run artifacts for full detail whenever
+  possible
+
 ## Retirement pattern (what happens to stuff as it ages)
 
 Content flows through the coordination surfaces in a cascade:
