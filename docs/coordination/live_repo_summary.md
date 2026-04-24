@@ -1,6 +1,6 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-24 01:56 EDT*
+*Last updated: 2026-04-24 09:27 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
 *Current emphasis window: 2026-04-22 01:31 EDT → 2026-04-24 01:31 EDT, with older still-live blockers retained as needed.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
@@ -11,14 +11,18 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history includes PR `#122`'s knowledge-plugin
-  merge (`0865f67`). Do not use the older `999667d` pre-`#122` baseline as
-  current truth.
+- **[V]** Current canonical remote history includes the `#122` knowledge-plugin
+  merge and the later `#125` setup fix; use `team13/main@b480604` as the
+  current shared baseline, not the older `999667d` pre-`#122` state.
 - **[V]** The small experiment-matrix / Insomnia-HF cleanup stack has been
   isolated from the older local root-main history so it can land independently
   of the heavier staging lanes.
 - **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
   remains isolated on draft PR `#123`, not on this cleanup stack.
+- **[V]** Draft PR `#124` is the separate staging lane for `#35` / `#64` /
+  `#36` / `#5`: a docs-only stack carrying the experiment-framing prerequisites
+  plus `docs/failure_analysis_scaffold.md` and `docs/neurips_draft.md`.
+  `black` passed; the PR remains draft and is not in review yet.
 - **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
@@ -121,6 +125,10 @@
   Insomnia HF-login fix, not as the heavier Notebook 03 staging lane.
 - **[V]** Draft PR `#123` remains the concrete config/notebook staging lane for
   `#26` / `#32` / `#34`.
+- **[V]** Draft PR `#124` is the current staging lane for the
+  failure-analysis / paper docs (`#35` / `#64` / `#36` / `#5`). It is
+  intentionally docs-only and does not close the underlying issues because the
+  missing artifact-backed reruns and final results are still outstanding.
 - **[V]** The `#111` Insomnia setup reconciliation is closed. The final verification
   checked `scripts/setup_insomnia.sh` syntax, the shared `.venv-insomnia` package
   metadata, and the corrected `huggingface_cli login` command shape on Insomnia.
@@ -179,6 +187,13 @@
 | PR | Author | Status | Notes |
 |---|---|---|---|
 | `#112` | Copilot SWE Agent | `CHANGES_REQUESTED` | Needs the earlier requested fixes; no new dependency from today’s work |
+
+### Active draft PRs
+
+| PR | Author | Status | Notes |
+|---|---|---|---|
+| `#123` | Alex / Codex staging branch | draft, `black` green | Notebook/config staging for `#26` / `#32` / `#34`; keeps the staged Experiment 2 analysis lane isolated while AaT artifacts are still missing |
+| `#124` | Alex / Codex staging branch | draft, `black` green | Failure-analysis / paper staging for `#35` / `#64` / `#36` / `#5`; docs-only stack with experiment-framing prerequisites plus the scaffold docs |
 
 ---
 
