@@ -1,6 +1,6 @@
 # Shift Coordination Note Template
 
-*Last updated: 2026-04-22*
+*Last updated: 2026-04-24*
 *Target length: 250-600 words*
 *Purpose: short coordination memo for either concurrent work or handoff. Do not restate the full repo. Current-state context belongs in `live_repo_summary.md`; removed/stale detail belongs in `repo_summary_history.md`.*
 *Local-only note: under the current gitignore setup, `shift_coordination_note__*.md` files are expected to remain local/untracked.*
@@ -14,6 +14,19 @@ This doc is one of five surfaces that coordinate Claude and Codex agents in this
 3. **`docs/coordination/live_repo_summary.md`** — current state of the repo (merged PRs, open loops, validation ledger).
 4. **`docs/coordination/shift_coordination_note__*.md`** — *this file type*. Short per-agent-session delta. One file per session, not one shared file.
 5. **`docs/coordination/repo_summary_history.md`** — rolling archive of removed historical detail for audit/timeline.
+
+## Live-summary window policy
+
+`live_repo_summary.md` should name an explicit emphasis window, but that window is a
+configuration choice, not a hard eviction timer. This repo currently uses a short
+handoff window because active work moves quickly, but another repo can choose any
+reasonable number of hours or days based on its cadence.
+
+Do not evict material just because it is older than the configured window. Move stale
+detail to `repo_summary_history.md` only when there is enough newer active work that the
+older material is no longer useful in the live memo. The live summary is allowed to carry
+older facts when they are still live blockers, current proof anchors, or necessary context
+for the next agent.
 
 ## Filename convention (per-agent-session)
 
@@ -168,15 +181,15 @@ This section is important. It keeps another agent from re-opening already-resolv
 
 ### Open loops
 
-- `#111`
-  - current blocker: one shell-path fix still local
-  - next action: commit it, rerun proof, close issue
+- `#104`
+  - current blocker: vanilla AaT wrapper not smoke-proven yet
+  - next action: land the wrapper, run SGT-009, record proof
 
 ### Do next
 
-1. Publish the `#111` fix
-2. Rerun the canonical proof
-3. Then review Aaron's `#25` runner work
+1. Review Aaron's `#25` runner work
+2. Run the first Cell B smoke once `#104` lands
+3. Promote settled proof state into `live_repo_summary.md`
 
 ### Ignore / not a blocker
 

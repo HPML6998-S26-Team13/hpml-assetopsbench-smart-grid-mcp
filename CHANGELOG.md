@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-04-24
+
+### Config / Docs
+
+- Clarified the coordination-doc retention rule: `docs/coordination/live_repo_summary.md`
+  now has a configurable emphasis window rather than a hard 48-hour eviction
+  policy, and stale material moves to `docs/coordination/repo_summary_history.md`
+  only when newer active work has displaced it from the live memo (Alex)
+
 ## 2026-04-22
 
 ### Config / Docs
