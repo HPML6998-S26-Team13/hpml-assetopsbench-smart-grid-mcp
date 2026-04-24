@@ -18,7 +18,7 @@ The runbook is split by concern:
 - **§6 Related runbooks and pointers**
 
 Cluster-specific gotchas (broken CUDA module, Python version issues, login-
-node etiquette) live in [`insomnia_runbook.md`](insomnia_runbook.md). This
+node etiquette) live in [insomnia_runbook.md](insomnia_runbook.md). This
 file is the higher-level reproducibility story; read the Insomnia runbook
 alongside it.
 
@@ -33,7 +33,7 @@ from Aaron.
 
 - Columbia UNI with Duo 2FA enrolled
 - RCS Insomnia access request filed and approved (see Columbia's Insomnia
-  onboarding material; team-specific settings live in [`insomnia_runbook.md`](insomnia_runbook.md))
+  onboarding material; team-specific settings live in [insomnia_runbook.md](insomnia_runbook.md))
 - `ssh <UNI>@insomnia.rcs.columbia.edu` works end-to-end
 
 Team account details:
@@ -64,7 +64,7 @@ Shared team scratch directory (always work from here, not `$HOME`):
 ### WatsonX.ai (required only for the WatsonX serving path)
 
 Credentials live in `.env` at repo root (gitignored). Ask Alex if you don't
-have values. Full setup in [`reference/watsonx_access.md`](reference/watsonx_access.md).
+have values. Full setup in [reference/watsonx_access.md](reference/watsonx_access.md).
 
 ### WandB (required for `ENABLE_WANDB=1`)
 
@@ -122,7 +122,7 @@ python -c "import vllm; print(vllm.__version__)"
 
 **If the venv is missing or broken, coordinate with the owner before
 recreating.** Recreation steps live in
-[`insomnia_runbook.md`](insomnia_runbook.md) under "If you need a newer vLLM".
+[insomnia_runbook.md](insomnia_runbook.md) under "If you need a newer vLLM".
 
 ### 2.3 Verify the model
 
@@ -145,7 +145,7 @@ From the team checkout:
 ```
 
 Expect six Llama models listed. Full walkthrough in
-[`reference/watsonx_access.md`](reference/watsonx_access.md).
+[reference/watsonx_access.md](reference/watsonx_access.md).
 
 ### 2.5 Set up email-notified Slurm submission
 
@@ -172,18 +172,18 @@ notifications; pass it per-invocation.
 
 The canonical benchmark-facing execution path is `scripts/run_experiment.sh
 <config.env>`. Configs under `configs/` describe each cell of the
-experimental grid; see [`configs/README.md`](../configs/README.md) for the
-5-cell mapping and [`execution_plan.md`](execution_plan.md) for the cells'
+experimental grid; see [configs/README.md](../configs/README.md) for the
+5-cell mapping and [execution_plan.md](execution_plan.md) for the cells'
 scientific roles.
 
 ### 3.1 Pick a config
 
 | File | Cell | Orchestration | MCP mode | Status |
 |---|---|---|---|---|
-| [`configs/example_baseline.env`](../configs/example_baseline.env) | Y | Plan-Execute | baseline | Working |
-| [`configs/aat_direct.env`](../configs/aat_direct.env) | A | Agent-as-Tool | direct | Skeleton (needs runner, see [`experiment1_capture_plan.md`](experiment1_capture_plan.md)) |
-| [`configs/aat_mcp_baseline.env`](../configs/aat_mcp_baseline.env) | B | Agent-as-Tool | baseline | Skeleton |
-| [`configs/aat_mcp_optimized.env`](../configs/aat_mcp_optimized.env) | C | Agent-as-Tool | optimized | Skeleton |
+| [configs/example_baseline.env](../configs/example_baseline.env) | Y | Plan-Execute | baseline | Working |
+| [configs/aat_direct.env](../configs/aat_direct.env) | A | Agent-as-Tool | direct | Skeleton (needs runner, see [experiment1_capture_plan.md](experiment1_capture_plan.md)) |
+| [configs/aat_mcp_baseline.env](../configs/aat_mcp_baseline.env) | B | Agent-as-Tool | baseline | Skeleton |
+| [configs/aat_mcp_optimized.env](../configs/aat_mcp_optimized.env) | C | Agent-as-Tool | optimized | Skeleton |
 
 ### 3.2 Dry-run the wiring
 
@@ -245,8 +245,8 @@ all three JSON files above. `docs/wandb_schema.md` documents the field names.
 
 ## 4. Profiling workflow
 
-Four wrapper scripts under [`profiling/scripts/`](../profiling/scripts/);
-[`profiling/README.md`](../profiling/README.md) explains when to pick which.
+Four wrapper scripts under [profiling/scripts/](../profiling/scripts/);
+[profiling/README.md](../profiling/README.md) explains when to pick which.
 
 ### 4.1 Lightweight GPU telemetry (always-on option)
 
@@ -284,7 +284,7 @@ host instead of the compute node. The wrapper should run inside the allocation.
 vLLM has built-in `torch.profiler` support gated on the `VLLM_TORCH_PROFILER_DIR`
 env var. Start vLLM with the env var set, then drive capture with
 `run_vllm_torch_profile.sh`. Full recipe in
-[`profiling/README.md#pytorch-profiler-via-vllms-built-in-endpoints`](../profiling/README.md).
+[profiling/README.md#pytorch-profiler-via-vllms-built-in-endpoints](../profiling/README.md).
 
 ### 4.4 Linking profiling outputs to the benchmark's WandB run
 
@@ -319,39 +319,39 @@ diagnoses it.
 
 | Symptom | Next step |
 |---|---|
-| `sbatch` returns `ReqNodeNotAvail` or `Priority` forever | [`insomnia_runbook.md` §"Queue waits"](insomnia_runbook.md) — try `--gres=gpu:1` to widen the scheduler pool, or an off-peak window |
-| Slurm log shows only `Waiting for vLLM server to start...` and vLLM log is 0 bytes | [`insomnia_runbook.md` §"Debugging: foreground vLLM"](insomnia_runbook.md) — on the current 3.11 / vLLM 0.19 stack this usually means a broken model download, a port conflict, or missing CUDA/cuDNN paths; reproduce in the foreground via `srun --pty` to see the real error |
-| `module load cuda/12.3` fails | [`insomnia_runbook.md` §"CUDA"](insomnia_runbook.md) — module is broken; set `PATH` and `LD_LIBRARY_PATH` directly |
+| `sbatch` returns `ReqNodeNotAvail` or `Priority` forever | [insomnia_runbook.md §"Queue waits"](insomnia_runbook.md) — try `--gres=gpu:1` to widen the scheduler pool, or an off-peak window |
+| Slurm log shows only `Waiting for vLLM server to start...` and vLLM log is 0 bytes | [insomnia_runbook.md §"Debugging: foreground vLLM"](insomnia_runbook.md) — on the current 3.11 / vLLM 0.19 stack this usually means a broken model download, a port conflict, or missing CUDA/cuDNN paths; reproduce in the foreground via `srun --pty` to see the real error |
+| `module load cuda/12.3` fails | [insomnia_runbook.md §"CUDA"](insomnia_runbook.md) — module is broken; set `PATH` and `LD_LIBRARY_PATH` directly |
 | WandB run doesn't appear under `assetopsbench-smartgrid` | `wandb login` in `.venv-insomnia`, or export `WANDB_API_KEY`; `ENABLE_WANDB=0` suppresses WandB entirely |
 | `plan-execute` can't find the AssetOpsBench checkout | Set `AOB_PATH` in the config, or clone AssetOpsBench as a sibling directory of the team checkout |
 | HF download fails with 401 / gated-repo error | License not accepted yet at <https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct>, or `HF_TOKEN` not exported |
 | Permission denied writing into `logs/` / `benchmarks/` | Shared-dir group-write perms — ask Alex to run `chmod -R g+w` on the write-heavy directories; see the Apr 16 Slack thread |
-| `import vllm` warning email from RCS | You're on the login node. Use `srun --pty bash` to grab a compute node first; see [`insomnia_runbook.md` §"Login node etiquette"](insomnia_runbook.md) |
+| `import vllm` warning email from RCS | You're on the login node. Use `srun --pty bash` to grab a compute node first; see [insomnia_runbook.md §"Login node etiquette"](insomnia_runbook.md) |
 
 ---
 
 ## 6. Related runbooks and pointers
 
 **Eval harness side** (Akshat's half of the runbook, covers scenario
-execution + judge + grading): [`eval_harness_readme.md`](eval_harness_readme.md).
+execution + judge + grading): [eval_harness_readme.md](eval_harness_readme.md).
 
 **Compute strategy** (which GPU for which phase, Insomnia vs GCP fallback):
-[`compute_plan.md`](compute_plan.md).
+[compute_plan.md](compute_plan.md).
 
 **Insomnia cluster ops** (Slurm details, Python/CUDA gotchas, foreground-debug
-recipe): [`insomnia_runbook.md`](insomnia_runbook.md).
+recipe): [insomnia_runbook.md](insomnia_runbook.md).
 
 **WandB schema** (canonical field names used in `benchmarks/cell_<X>/config.json`
-and `summary.json`): [`wandb_schema.md`](wandb_schema.md).
+and `summary.json`): [wandb_schema.md](wandb_schema.md).
 
 **Orchestration wiring** (what Plan-Execute / AaT / Hybrid look like today,
-and what's still upstream): [`orchestration_wiring.md`](orchestration_wiring.md).
+and what's still upstream): [orchestration_wiring.md](orchestration_wiring.md).
 
 **Experiment 1 capture plan** (the Direct / MCP-baseline / MCP-optimized
-story, dependencies, run sequence): [`experiment1_capture_plan.md`](experiment1_capture_plan.md).
+story, dependencies, run sequence): [experiment1_capture_plan.md](experiment1_capture_plan.md).
 
 **GCP fallback instructions** (how to spin up an A100 spot instance if
-Insomnia is down): [`gcp_fallback.md`](gcp_fallback.md).
+Insomnia is down): [gcp_fallback.md](gcp_fallback.md).
 
 **Historical**: the earlier combined `Insomnia or GCP Environment.md` draft
 lived in an earlier branch but was superseded by `insomnia_runbook.md` +

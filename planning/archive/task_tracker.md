@@ -3,7 +3,7 @@
 *Archived planning snapshot for the SmartGridBench project. Last updated: April 9, 2026.*
 *Weeks: W1 = Mar 31-Apr 6, W2 = Apr 7-13, W3 = Apr 14-20, W4 = Apr 21-27, W5 = Apr 28-May 4, FW = May 5+.*
 *Roadmap view note: In the GitHub Projects board, `Iteration` is the primary timeline field. Every task, including completed work, stays assigned to the week it was due so the roadmap remains readable historically. `Priority` uses `P0` for critical-path or deadline-driven work, `P1` for important supporting work, and `P2` for stretch/future work.*
-*Current canonical task state now lives in the GitHub Project and issue bodies. This archived snapshot preserves the final repo-based planning view before task execution moved fully into GitHub. For exact task definitions, deliverables, dependencies, and coordination handoffs, see [`task_specs.md`](./task_specs.md).*
+*Current canonical task state now lives in the GitHub Project and issue bodies. This archived snapshot preserves the final repo-based planning view before task execution moved fully into GitHub. For exact task definitions, deliverables, dependencies, and coordination handoffs, see [task_specs.md](./task_specs.md).*
 
 ## GitHub Workstreams
 
@@ -162,8 +162,8 @@ These are the long-lived parent issues used in the GitHub project. They cross we
 - Weekly meetings: Tuesdays 2:45 PM ET
 - AssetOpsBench has 467 scenarios across 6 HuggingFace subsets (152 original + 315 newer); our contribution is the 7th asset domain (Smart Grid transformers)
 - Problem Statement B / scenario-generation work is activated and scheduled across W3-W5, not parked as stretch.
-- Two experimental tracks: Experiment 1 (MCP overhead, 3 conditions) and Experiment 2 (Orchestration comparison, 3 orchestrations on MCP-baseline). 5 unique cells total. See [`../../docs/execution_plan.md`](../../docs/execution_plan.md) for the full operational plan with task dependency map and benchmarking workflow.
+- Two experimental tracks: Experiment 1 (MCP overhead, 3 conditions) and Experiment 2 (Orchestration comparison, 3 orchestrations on MCP-baseline). 5 unique cells total. See [../../docs/execution_plan.md](../../docs/execution_plan.md) for the full operational plan with task dependency map and benchmarking workflow.
 
 ---
 
-*This archive preserves the final repo-based task snapshot before execution tracking moved fully into GitHub Projects. For the dependency map between tasks, the experimental design, and the operational benchmarking workflow, see [`../../docs/execution_plan.md`](../../docs/execution_plan.md).*
+*This archive preserves the final repo-based task snapshot before execution tracking moved fully into GitHub Projects. For the dependency map between tasks, the experimental design, and the operational benchmarking workflow, see [../../docs/execution_plan.md](../../docs/execution_plan.md).*

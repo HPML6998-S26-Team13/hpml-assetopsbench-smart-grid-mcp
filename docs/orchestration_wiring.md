@@ -10,7 +10,7 @@ only adapter-ready.
 
 The benchmark-facing path that is wired and reproducible in-repo is:
 
-1. [`scripts/run_experiment.sh`](../scripts/run_experiment.sh) prepares the
+1. [scripts/run_experiment.sh](../scripts/run_experiment.sh) prepares the
    benchmark config and raw-output directory under `benchmarks/`
 2. it launches local vLLM first when `LAUNCH_VLLM=1`, or uses WatsonX / another
    preconfigured backend when `LAUNCH_VLLM=0`
@@ -61,7 +61,7 @@ separate follow-on work once the server-side timing contract is settled.
 ## Agent-as-Tool status
 
 Repo-side support for issue `#22` exists as an explicit adapter surface in
-[`scripts/run_experiment.sh`](../scripts/run_experiment.sh):
+[scripts/run_experiment.sh](../scripts/run_experiment.sh):
 
 - set `ORCHESTRATION=agent_as_tool`
 - provide `AAT_RUNNER_TEMPLATE` for a custom command, or rely on the

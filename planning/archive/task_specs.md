@@ -1,6 +1,6 @@
 # SmartGridBench Task Specs
 
-*Archived companion to [`task_tracker.md`](./task_tracker.md). Last updated: April 9, 2026. Current canonical task state now lives in the GitHub Project and issue bodies.*
+*Archived companion to [task_tracker.md](./task_tracker.md). Last updated: April 9, 2026. Current canonical task state now lives in the GitHub Project and issue bodies.*
 
 This document removes ambiguity from the open work in the tracker. Every task here has:
 
@@ -63,14 +63,14 @@ The current delivery-gate milestones are:
 ### #56 — Replay local Smart Grid scenario files onto the org repo `main` branch and push first batch
 - **Owner:** Akshat
 - **What this means:** Recover the scenario JSONs and any helper files that currently exist only on your local machine or old branch history, then replay them onto the canonical team repo history.
-- **Deliverables:** Scenario files under [`data/scenarios/`](../../data/scenarios), with stable filenames and at least one commit on canonical history.
+- **Deliverables:** Scenario files under [data/scenarios/](../../data/scenarios), with stable filenames and at least one commit on canonical history.
 - **Done when:** The files are visible on the org repo `main` branch, filenames follow repo convention, and Alex can review the actual scenario count from the repo.
 - **Coordination:** Use the current canonical repo state as base. If local history is messy, cherry-pick or manually reapply; do not block on preserving old branch shape.
 
 ### #57 — Replay local benchmark / harness README work onto the org repo `main` branch and push
 - **Owner:** Akshat
 - **What this means:** Recover the benchmark / harness instructions claimed on the Apr 7 call and land them in the repo in the correct location.
-- **Deliverables:** A repo-tracked benchmark / harness doc or script set, likely under [`benchmarks/`](../../benchmarks), [`docs/`](../../docs), or [`scripts/`](../../scripts), not only in private notes.
+- **Deliverables:** A repo-tracked benchmark / harness doc or script set, likely under [benchmarks/](../../benchmarks), [docs/](../../docs), or [scripts/](../../scripts), not only in private notes.
 - **Done when:** Another teammate can read the pushed artifact and understand how to invoke the harness without relying on call memory.
 - **Coordination:** Keep the instructions aligned with Aaron's serving setup and Alex's experiment design language.
 
@@ -92,7 +92,7 @@ The current delivery-gate milestones are:
 ### #6 — Successful first Insomnia A6000 vLLM serve smoke test for Llama-3.1-8B-Instruct
 - **Owner:** Aaron
 - **What this means:** Move from "scripts written" to "environment actually works on Insomnia".
-- **Deliverables:** Successful run of [`setup_insomnia.sh`](../../scripts/setup_insomnia.sh), [`vllm_serve.sh`](../../scripts/vllm_serve.sh), and [`test_inference.sh`](../../scripts/test_inference.sh), plus captured job output / notes.
+- **Deliverables:** Successful run of [setup_insomnia.sh](../../scripts/setup_insomnia.sh), [vllm_serve.sh](../../scripts/vllm_serve.sh), and [test_inference.sh](../../scripts/test_inference.sh), plus captured job output / notes.
 - **Done when:** The model serves on Insomnia, the smoke test completes successfully, and the exact invocation path is documented in-repo.
 - **Coordination:** Share the tested path with Alex and Akshat so they can build experiment and harness flows on top of the real environment rather than guessed commands.
 

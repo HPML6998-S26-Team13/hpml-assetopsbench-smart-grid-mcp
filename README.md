@@ -145,23 +145,23 @@ bash scripts/run_experiment.sh configs/example_baseline.env
 ```
 
 See:
-- [`docs/orchestration_wiring.md`](docs/orchestration_wiring.md) for what is
+- [docs/orchestration_wiring.md](docs/orchestration_wiring.md) for what is
   wired today versus only adapter-ready
-- [`benchmarks/cell_Y_plan_execute/`](benchmarks/cell_Y_plan_execute/) for the
+- [benchmarks/cell_Y_plan_execute/](benchmarks/cell_Y_plan_execute/) for the
   first kept WatsonX smoke proof run and artifact layout
-- [`docs/insomnia_runbook.md`](docs/insomnia_runbook.md) for the shared Insomnia
+- [docs/insomnia_runbook.md](docs/insomnia_runbook.md) for the shared Insomnia
   self-hosted vLLM path
 
 ## Where To Look
 
-- [`docs/README.md`](docs/README.md) - living docs index and runbook navigation
-- [`scripts/README.md`](scripts/README.md) - executable entrypoints and helper scripts
-- [`configs/README.md`](configs/README.md) - benchmark config schema and cell mapping
-- [`data/README.md`](data/README.md) - data pipeline and processed dataset policy
-- [`data/scenarios/README.md`](data/scenarios/README.md) - scenario authoring rules and validation
-- [`mcp_servers/README.md`](mcp_servers/README.md) - Smart Grid MCP server layout
-- [`benchmarks/README.md`](benchmarks/README.md) - raw benchmark artifact layout
-- [`profiling/README.md`](profiling/README.md) - profiling capture workflow
+- [docs/README.md](docs/README.md) - living docs index and runbook navigation
+- [scripts/README.md](scripts/README.md) - executable entrypoints and helper scripts
+- [configs/README.md](configs/README.md) - benchmark config schema and cell mapping
+- [data/README.md](data/README.md) - data pipeline and processed dataset policy
+- [data/scenarios/README.md](data/scenarios/README.md) - scenario authoring rules and validation
+- [mcp_servers/README.md](mcp_servers/README.md) - Smart Grid MCP server layout
+- [benchmarks/README.md](benchmarks/README.md) - raw benchmark artifact layout
+- [profiling/README.md](profiling/README.md) - profiling capture workflow
 
 ## Experiment Tracking
 

@@ -7,7 +7,7 @@ This README is the practical runbook for getting the **AssetOpsBench evaluation 
 ## What this runbook covers
 
 1. Quick harness smoke test (`plan-execute` + MCP tools + Watsonx)
-2. One-command smoke script ([`../scripts/run_harness_smoke.cmd`](../scripts/run_harness_smoke.cmd))
+2. One-command smoke script ([../scripts/run_harness_smoke.cmd](../scripts/run_harness_smoke.cmd))
 3. Docker-backed test path for IoT/WO data access (CouchDB)
 4. Existing harness end-to-end (`scenario-server` + grading path)
 5. Original repo benchmark flow (`benchmark/cods_track1` and `benchmark/cods_track2`)

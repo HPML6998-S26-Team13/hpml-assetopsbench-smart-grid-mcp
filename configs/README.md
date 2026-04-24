@@ -1,6 +1,6 @@
 # configs/
 
-Experiment configs consumed by [`scripts/run_experiment.sh`](../scripts/run_experiment.sh).
+Experiment configs consumed by [scripts/run_experiment.sh](../scripts/run_experiment.sh).
 Each file describes one benchmark cell (or one smoke run that maps to a benchmark
 cell) and is sourced as bash, so the schema is just env vars.
 
@@ -14,11 +14,11 @@ The currently verified benchmark-facing execution path is:
 Agent-as-Tool still needs an explicit external runner command. Repo-local
 Verified PE runner code exists, but the canonical Experiment 2 Cell Z config is
 still pending promotion from the legacy placeholder. See
-[`../docs/orchestration_wiring.md`](../docs/orchestration_wiring.md).
+[../docs/orchestration_wiring.md](../docs/orchestration_wiring.md).
 
 ## Naming
 
-Use the cell name from [`../docs/execution_plan.md`](../docs/execution_plan.md).
+Use the cell name from [../docs/execution_plan.md](../docs/execution_plan.md).
 The execution-facing config convention is:
 
 - `configs/aat_{direct,mcp_baseline,mcp_optimized}.env` for the canonical

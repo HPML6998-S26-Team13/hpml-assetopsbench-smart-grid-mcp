@@ -9,8 +9,8 @@ watch a running allocation, or recover from common `sbatch` / `srun`
 confusion.
 
 For Insomnia-specific setup and serving guidance, see
-[`insomnia_runbook.md`](insomnia_runbook.md). For the higher-level workflow,
-see [`runbook.md`](runbook.md).
+[insomnia_runbook.md](insomnia_runbook.md). For the higher-level workflow,
+see [runbook.md](runbook.md).
 
 ## Mental model
 

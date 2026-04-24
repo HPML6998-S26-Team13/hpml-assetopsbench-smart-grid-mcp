@@ -11,7 +11,7 @@ or a job genuinely needs longer than the 12-hour cluster walltime.
 validated with a real benchmark run.** Treat the first GCP execution as a
 shakedown and update this doc with anything that surprises you.
 
-See [`compute_plan.md`](compute_plan.md) §2 for the strategic rationale
+See [compute_plan.md](compute_plan.md) §2 for the strategic rationale
 (Insomnia-first, GCP as insurance); this doc is the tactical how-to.
 
 ## 1. When to actually use GCP
@@ -60,7 +60,7 @@ first use:
 
 ## 3. Instance selection
 
-Default picks from [`compute_plan.md`](compute_plan.md):
+Default picks from [compute_plan.md](compute_plan.md):
 
 | Instance | GPU | VRAM | Spot $/hr | On-demand $/hr | Good for |
 |---|---|---|---|---|---|
@@ -162,7 +162,7 @@ up and documents the bucket URL here.
 
 ### 6c. Smoke test
 
-Same as the Insomnia smoke test from [`runbook.md`](runbook.md) §2:
+Same as the Insomnia smoke test from [runbook.md](runbook.md) §2:
 
 ```bash
 source .venv-insomnia/bin/activate
@@ -312,8 +312,8 @@ controls note in the paper.
 
 ## References
 
-- [`compute_plan.md`](compute_plan.md) §2 — why Insomnia is the default and GCP is insurance
-- [`runbook.md`](runbook.md) — the Insomnia-side runbook, which the GCP path mirrors
-- [`insomnia_runbook.md`](insomnia_runbook.md) — the underlying Insomnia-specific quirks that mostly don't apply on GCP
+- [compute_plan.md](compute_plan.md) §2 — why Insomnia is the default and GCP is insurance
+- [runbook.md](runbook.md) — the Insomnia-side runbook, which the GCP path mirrors
+- [insomnia_runbook.md](insomnia_runbook.md) — the underlying Insomnia-specific quirks that mostly don't apply on GCP
 - [GCP Deep Learning VM images](https://cloud.google.com/deep-learning-vm/docs/images)
 - [GCP A100 pricing](https://cloud.google.com/compute/gpus-pricing)

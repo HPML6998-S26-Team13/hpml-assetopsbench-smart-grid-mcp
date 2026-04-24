@@ -2,7 +2,7 @@
 
 *Last updated: 2026-04-21*
 
-Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or otherwise "shipped" and should not be edited after the fact. Living documentation (domain guides, architecture, setup) lives in [`../docs/`](../docs/); planning artifacts (roadmap, meeting agendas, working notes) live in [`../planning/`](../planning/). This directory is for the immutable outputs.
+Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or otherwise "shipped" and should not be edited after the fact. Living documentation (domain guides, architecture, setup) lives in [../docs/](../docs/); planning artifacts (roadmap, meeting agendas, working notes) live in [../planning/](../planning/). This directory is for the immutable outputs.
 
 ## Current deliverables
 
@@ -26,4 +26,4 @@ Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or oth
 - **Naming:** `YYYY-MM-DD_<what>.<ext>` — date-prefixed so `ls` orders them chronologically.
 - **No edits after the fact.** If a shipped deliverable needs a correction, create a new dated file — don't overwrite history.
 - **Drafts and working versions go to `archive/`** at the time the final version is created, so the top-level only ever shows what's currently authoritative.
-- **Source files (LaTeX, Markdown, Keynote) live elsewhere** - [`../docs/data_pipeline.tex`](../docs/data_pipeline.tex) for paper-ready LaTeX sections, [`../planning/archive/mid_report_slides.md`](../planning/archive/mid_report_slides.md) for the archived midpoint slide source. `reports/` only holds the rendered outputs.
+- **Source files (LaTeX, Markdown, Keynote) live elsewhere** - [../docs/data_pipeline.tex](../docs/data_pipeline.tex) for paper-ready LaTeX sections, [../planning/archive/mid_report_slides.md](../planning/archive/mid_report_slides.md) for the archived midpoint slide source. `reports/` only holds the rendered outputs.
