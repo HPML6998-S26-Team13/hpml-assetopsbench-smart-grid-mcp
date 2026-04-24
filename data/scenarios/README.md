@@ -48,7 +48,7 @@ python data/scenarios/validate_scenarios.py
 
 This catches schema violations and negative-fixture regressions before you get to
 the heavier harness path. For the full harness workflow, see
-[`../../docs/eval_harness_readme.md`](../../docs/eval_harness_readme.md).
+[../../docs/eval_harness_readme.md](../../docs/eval_harness_readme.md).
 
 ## Status (Apr 7, 2026)
 

@@ -1,8 +1,10 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-23 15:20 EDT*
-*Window emphasized: 2026-04-19 00:00 EDT → 2026-04-23 15:20 EDT*
-*Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`.*
+*Last updated: 2026-04-24 13:05 EDT*
+*Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
+*Current emphasis window: 2026-04-22 13:05 EDT → 2026-04-24 13:05 EDT, with older still-live blockers retained as needed.*
+*Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
+*Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
 > Legend: **[V]** verified from code/git/GitHub/logs • **[I]** inference • **[?]** unresolved.
 
@@ -10,20 +12,30 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history includes PR `#122`'s knowledge-plugin
-  merge (`0865f67`). Do not use the older `999667d` pre-`#122` baseline as
-  current truth.
+- **[V]** Current canonical remote history includes the `#122` knowledge-plugin
+  merge and the later `#125` setup fix; use `team13/main@b480604` as the
+  current shared baseline, not the older `999667d` pre-`#122` state.
 - **[V]** The small experiment-matrix / Insomnia-HF cleanup stack has been
   isolated from the older local root-main history so it can land independently
   of the heavier staging lanes.
 - **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
   remains isolated on draft PR `#123`, not on this cleanup stack.
+- **[V]** Draft PR `#124` is the separate staging lane for `#35` / `#64` /
+  `#36` / `#5`: a docs-only stack carrying the experiment-framing prerequisites
+  plus `docs/failure_analysis_scaffold.md` and `docs/neurips_draft.md`.
+  `black` passed; the PR remains draft and is not in review yet.
 - **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
   - tracked: `docs/coordination/shift_coordination_note_template.md`
   - local/untracked per-agent notes: `docs/coordination/shift_coordination_note__*.md`
   They are meant to stay much shorter than `docs/coordination/live_repo_summary.md` and carry only the current delta / coordination signal.
+- **[V]** Shift notes now have an explicit compaction trigger. When a per-agent
+  note grows past roughly 600 words / 20 bullets, or when commits / PRs /
+  issues / logs already preserve the detailed work, the agent should rewrite the
+  note in place: keep active deltas and open loops, promote settled current truth
+  here, summarize only otherwise-unrecoverable context into history, and drop
+  transcript-level minutiae.
 - **[V]** The repo-local orchestration lane is now merged and proven:
   - PR `#119` landed repo-local **PE + Self-Ask** and **Verified PE** runners.
   - clean smoke proofs exist for both on the rebased branch:
@@ -43,10 +55,8 @@
   - the single-source explanation now lives in `docs/README.md`
   - archived planning tracker/spec references remain documented there, not repeated on every issue
 - **[V]** `#25` remains gated on the missing **Cell A runner**. Aaron has the design answers he needed; the remaining gap is implementation, not decision-making.
-- **[V]** `#111` is now down to one concrete last-mile fix:
-  - first proof run on canonical `main` failed because `scripts/run_experiment.sh` and `scripts/vllm_serve.sh` source `insomnia_env.sh` via `BASH_SOURCE[0]`, which points into Slurm’s spool dir under `sbatch`
-  - a local 2-line fix was validated on Insomnia in a temporary proof worktree
-  - that fix still needs to be committed on `main`, then rerun once on the matching committed SHA
+- **[V]** `#111` is closed after PR `#125` landed the final Insomnia HF CLI fix and
+  the shared Insomnia checkout was verified on `main@b480604`.
 - **[V]** `#112` is the main older open PR still lagging. It still has `CHANGES_REQUESTED`; the remaining work is in Akshat’s lane.
 
 ---
@@ -116,24 +126,23 @@
   Insomnia HF-login fix, not as the heavier Notebook 03 staging lane.
 - **[V]** Draft PR `#123` remains the concrete config/notebook staging lane for
   `#26` / `#32` / `#34`.
-- **[V]** The `#111` Slurm shell fix remains a separate closeout: the local
-  proof job `8859928` validated the fix, but the matching committed-SHA rerun is
-  still the gating step before clean closure.
+- **[V]** Draft PR `#124` is the current staging lane for the
+  failure-analysis / paper docs (`#35` / `#64` / `#36` / `#5`). It is
+  intentionally docs-only and does not close the underlying issues because the
+  missing artifact-backed reruns and final results are still outstanding.
+- **[V]** The `#111` Insomnia setup reconciliation is closed. The final verification
+  checked `scripts/setup_insomnia.sh` syntax, the shared `.venv-insomnia` package
+  metadata, and the corrected `huggingface_cli login` command shape on Insomnia.
 
 ---
 
 ## 4. Active Findings / Open Loops
 
-1. **`#111` last-mile shell fix**
-   - **[V]** Real bug found.
-   - **[V]** Local fix validated by job `8859928`.
-   - **[?]** Still needs commit + one rerun on the matching committed SHA before the issue can be cleanly closed.
-
-2. **`#25` Cell A runner**
+1. **`#25` Cell A runner**
    - **[V]** Config scaffolds, direct adapter, and profiling↔W&B plumbing are already on `main`.
    - **[V]** Missing piece is still the actual Cell A ReAct / Agent-as-Tool runner.
 
-3. **`#26` / `#32` need execution data**
+2. **`#26` / `#32` need execution data**
    - **[V]** Notebook scaffolds are merged.
    - **[V]** Remaining blocker is real capture generation:
      - Experiment 1: Cell A / B / C
@@ -144,11 +153,11 @@
      - Z / Self-Ask follow-ons still need promoted canonical configs and raw artifacts before they are analysis-ready
      - the honest Experiment 2 core claim still waits on Cell B
 
-4. **`#112` still needs another pass**
+3. **`#112` still needs another pass**
    - **[V]** Still open with `CHANGES_REQUESTED`.
    - **[V]** Earlier guidance already given to Akshat; no new blocker surfaced in this pass.
 
-5. **`#104` vanilla AaT wiring (owned by Aaron, adjacent to `#25`)**
+4. **`#104` vanilla AaT wiring (owned by Aaron, adjacent to `#25`)**
    - **[V]** Issue repurposed from the closed mid-point PPT task; parent `#73`, milestone `M5`, outline comment posted; reassigned to Aaron 2026-04-22 so the AaT runner is built once and reused across Exp 1 Cells A/B/C and the Exp 2 AaT arm.
    - **[?]** Implementation still to land: `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths`, default harness dispatch for `ORCHESTRATION=agent_as_tool`, first smoke run (SGT-009 on Watsonx then Insomnia), canonical `benchmarks/cell_B_mcp_baseline/raw/<run-id>/` artifacts, and a `docs/validation_log.md` entry.
    - **[?]** Open questions on Codex-side: does `openai-agent --json` output mesh with `judge_trajectory.py`, is our local AssetOpsBench venv synced cleanly with the LiteLLM refactor, and should `claude-agent` also get a parallel smoke for symmetry.
@@ -169,7 +178,6 @@
 
 | Issue | Owner signal | Current state |
 |---|---|---|
-| `#111` | shared infra follow-up | one local shell fix + one matching-SHA rerun |
 | `#25` | Aaron implementation lane | Cell A runner still missing |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
 | `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Z / Self-Ask follow-ons need promoted canonical configs and raw artifacts; the honest B/Y core still needs Cell B |
@@ -180,6 +188,13 @@
 | PR | Author | Status | Notes |
 |---|---|---|---|
 | `#112` | Copilot SWE Agent | `CHANGES_REQUESTED` | Needs the earlier requested fixes; no new dependency from today’s work |
+
+### Active draft PRs
+
+| PR | Author | Status | Notes |
+|---|---|---|---|
+| `#123` | Alex / Codex staging branch | draft, `black` green | Notebook/config staging for `#26` / `#32` / `#34`; keeps the staged Experiment 2 analysis lane isolated while AaT artifacts are still missing |
+| `#124` | Alex / Codex staging branch | draft, `black` green | Failure-analysis / paper staging for `#35` / `#64` / `#36` / `#5`; docs-only stack with experiment-framing prerequisites plus the scaffold docs |
 
 ---
 
@@ -199,20 +214,14 @@
 
 ## 7. Recommended Next Steps
 
-1. **Commit the `#111` shell fix on `main`.**
-   - Files:
-     - `scripts/run_experiment.sh`
-     - `scripts/vllm_serve.sh`
-2. **Rerun the same `#111` proof on the matching committed SHA.**
-   - Then close `#111`.
-3. **Execute `#104` vanilla AaT wiring.**
+1. **Execute `#104` vanilla AaT wiring.**
    - `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths` (mirror `plan_execute_self_ask_runner.py` structure).
    - `run_experiment.sh` default dispatch for `ORCHESTRATION=agent_as_tool`, `AAT_RUNNER_TEMPLATE` kept as override.
    - First smoke on SGT-009 / T-015 under Watsonx, then Insomnia; artifacts under `benchmarks/cell_B_mcp_baseline/raw/<run-id>/`.
    - `docs/validation_log.md` entry recording the run.
-4. **Wait on / review Aaron’s `#25` Cell A runner work.**
-5. **After Cell A lands, start real Experiment 1 / 2 capture generation for `#26` / `#32`.**
-6. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
+2. **Wait on / review Aaron’s `#25` Cell A runner work.**
+3. **After Cell A lands, start real Experiment 1 / 2 capture generation for `#26` / `#32`.**
+4. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
 
 ---
 
@@ -259,4 +268,4 @@
 
 ---
 
-*If this doc starts carrying stale or purely historical material again, move it into `docs/coordination/repo_summary_history.md` rather than letting the live summary become an archive.*
+*If this doc starts carrying stale or purely historical material again, move it into `docs/coordination/repo_summary_history.md` rather than letting the live summary become an archive. The configured window is an emphasis guide, not an automatic eviction rule.*

@@ -1,7 +1,7 @@
 # Repo Summary History
 
 Created: 2026-04-21  
-Updated: 2026-04-23 15:20 EDT
+Updated: 2026-04-24 01:56 EDT
 
 This file records material deliberately removed or condensed out of `docs/coordination/live_repo_summary.md`.
 It is not a verbatim changelog of every edit. The goal is to preserve useful historical context
@@ -185,3 +185,49 @@ parked onto local worktree branch `codex-fnd/exp-26-32-34-staging` so root
 `main` could keep only the shared planning/docs layer. The conceptual staging
 story stayed in the live docs; the more iterative execution-surface edits moved
 out of root `main`.
+
+## 2026-04-23 — `#111` closed after Insomnia verification
+
+### What changed
+
+`#111` moved from an active "commit the setup fix and rerun proof" item to a
+closed infra cleanup.
+
+The final landed fix came through PR `#125`, which corrected the
+`huggingface_hub` CLI path in `scripts/setup_insomnia.sh` for the actual
+shared Insomnia environment.
+
+### Proof retained from the live summary
+
+- PR `#125` merged as `b480604`.
+- The shared Insomnia checkout was fast-forwarded to `main@b480604`.
+- `bash -n scripts/setup_insomnia.sh` passed.
+- The shared `.venv-insomnia` package metadata matched the newer stack:
+  `torch==2.10.0`, `vllm==0.19.0`, `transformers==4.57.6`,
+  `huggingface-hub==0.36.2`.
+- `huggingface_cli login --help` worked, while `auth login` was rejected on
+  that same environment.
+- The GitHub Project card was already `Done`, so closing the issue did not
+  require board cleanup.
+
+### Why this was moved here
+
+The failed Apr 21 proof attempts and temporary-worktree validation are still
+useful audit context, but `#111` should no longer appear as a live blocker.
+
+## 2026-04-24 — live-summary window clarified
+
+The live summary's time window is now documented as configurable by repo
+cadence. A repo can choose a window in hours or days, and older material should
+not be evicted solely because it crossed that threshold. Move material to this
+history file only when there is enough newer active work that the older material
+is no longer useful in the live memo.
+
+## 2026-04-24 — shift-note compaction clarified
+
+Shift coordination notes are now explicitly treated as working buffers, not
+session transcripts. If a note grows past the target budget, the owning agent
+should compact it in place before yielding: keep active deltas, promote settled
+current-state facts to the live summary, summarize only otherwise-unrecoverable
+context here, and rely on commits, PRs, issues, logs, meeting notes, and run
+artifacts for full detail.

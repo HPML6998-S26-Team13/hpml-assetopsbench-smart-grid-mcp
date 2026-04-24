@@ -10,7 +10,7 @@ only adapter-ready.
 
 The benchmark-facing path that is wired and reproducible in-repo is:
 
-1. [`scripts/run_experiment.sh`](../scripts/run_experiment.sh) prepares the
+1. [scripts/run_experiment.sh](../scripts/run_experiment.sh) prepares the
    benchmark config and raw-output directory under `benchmarks/`
 2. it launches local vLLM first when `LAUNCH_VLLM=1`, or uses WatsonX / another
    preconfigured backend when `LAUNCH_VLLM=0`
@@ -61,7 +61,7 @@ separate follow-on work once the server-side timing contract is settled.
 ## Agent-as-Tool status
 
 Repo-side support for issue `#22` exists as an explicit adapter surface in
-[`scripts/run_experiment.sh`](../scripts/run_experiment.sh):
+[scripts/run_experiment.sh](../scripts/run_experiment.sh):
 
 - set `ORCHESTRATION=agent_as_tool`
 - provide `AAT_RUNNER_TEMPLATE` for a custom command, or rely on the
@@ -90,29 +90,57 @@ The Python runner classes (`OpenAIAgentRunner`, `ClaudeAgentRunner`) both
 accept a `server_paths` argument in their constructors, matching
 `PlanExecuteRunner`. The CLIs, however, do **not** expose a
 `--server NAME=PATH` override flag like `plan-execute` does, so they cannot
-be pointed at this repo's Smart Grid MCP servers without either (a) an
-upstream CLI change or (b) a thin team-repo wrapper that uses the Python
-API directly. This is the actual plumbing gap — not the absence of an AaT
+be pointed at this repo's Smart Grid MCP servers without a team-repo
+wrapper. This is the actual plumbing gap — not the absence of an AaT
 runner upstream, which an earlier version of this doc had claimed.
+
+### Why we wrap the Agents SDK, not AOB's runner
+
+_Decision date: 2026-04-24._
+
+Which API to wrap is a design choice with experimental consequences.
+`OpenAIAgentRunner.run()` at `src/agent/openai_agent/runner.py:224`
+hardcodes `_build_mcp_servers(server_paths)` and feeds the resulting MCP
+servers to the OpenAI Agents SDK's `Runner.run()`. There is no hook to
+swap in direct Python callables, which means AOB's runner cannot serve
+Cell A (direct, no-MCP) without a fork.
+
+Using AOB's runner for Cell B while forking or vendoring it for Cell A
+would give us two code paths, and `(B - A)` in Experiment 1 would then
+include any implementation delta between those paths on top of the MCP
+transport overhead we want to measure.
+
+So the team runner at `scripts/aat_runner.py` wraps the OpenAI Agents SDK
+(`agents.Runner.run()`) directly — one layer below AOB — with AOB's
+system prompt copied verbatim from a pinned AOB SHA. Tool source is
+parameterized across cells:
+
+- Cell A: direct Python callables over `mcp_servers/direct_adapter.py`
+- Cell B: MCP stdio servers (our four Smart Grid servers)
+- Cell C: optimized MCP stdio servers (gated on `#85`–`#88`, `#33`)
+
+A/B/C share the exact same runner code; the only difference is the tool
+source. `(B - A)` measures MCP transport overhead by construction.
 
 ### Path to end-to-end proof (`#104`)
 
 Issue `#104` tracks the concrete wiring work:
 
-- add `scripts/aat_runner.py` mirroring the `plan_execute_self_ask_runner.py`
-  pattern — bootstrap the AOB path, import `OpenAIAgentRunner`, construct
-  with team `server_paths` overrides
+- add `scripts/aat_runner.py` per the SDK-wrapping design above
 - wire it as the default runner when `ORCHESTRATION=agent_as_tool`, keeping
   `AAT_RUNNER_TEMPLATE` as an override escape hatch
-- first smoke: SGT-009 / T-015 on WatsonX Llama-3.3-70B (matches the Apr 13
-  PE smoke baseline), then on Insomnia Llama-3.1-8B
-- artifacts under `benchmarks/cell_B_mcp_baseline/raw/<run-id>/` following
-  the canonical layout
+- Cell A smoke on SGT-009 / T-015 (direct callables)
+- Cell B smoke on the same scenario (MCP stdio, matches the Apr 13 PE
+  smoke baseline)
+- parity smoke: run Cell B once more using upstream's `openai-agent` CLI
+  on the same scenario to quantify any implementation gap between our
+  runner and AOB's
+- artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/raw/<run-id>/`
+  following the canonical layout
 
-`openai-agent` is the recommended upstream runner because it is
-provider-generic via LiteLLM, which lets Experiment 2's AaT arm share the
-same Llama-3.1-8B model family as the PE arm. `claude-agent` remains
-available for a separate Claude-family smoke if symmetry is wanted later.
+`openai-agent` remains the reference upstream runner for the parity check
+because it is provider-generic via LiteLLM; `claude-agent` stays available
+for a separate Claude-family smoke if symmetry is wanted later.
 
 ### What is done on our side
 
@@ -124,12 +152,14 @@ available for a separate Claude-family smoke if symmetry is wanted later.
 
 ### What remains
 
-- repo-local `scripts/aat_runner.py` wrapper (tracked in `#104`)
+- repo-local `scripts/aat_runner.py` wrapping the Agents SDK directly
+  (tracked in `#104`)
 - default `run_experiment.sh` dispatch for `agent_as_tool` that uses the
   wrapper without requiring `AAT_RUNNER_TEMPLATE` (tracked in `#104`)
-- one successful end-to-end AaT run committed under
-  `benchmarks/cell_B_mcp_baseline/raw/` with a `docs/validation_log.md`
-  entry (tracked in `#104`)
+- Cell A + Cell B smokes plus the parity check against upstream's CLI
+  (tracked in `#104`)
+- `docs/validation_log.md` entries for A, B, and the parity run (tracked
+  in `#104`)
 
 So `#22` is adapter-ready on our side. The remaining "prove AaT end-to-end"
 work is scoped and tracked under `#104`, and is not blocked on upstream.

@@ -27,7 +27,7 @@ results/
 ## Conventions
 
 - Every figure in `figures/` must trace back to a CSV in `metrics/`, which traces back to a run dir in `benchmarks/`. Keep that chain intact — reviewers need it.
-- The canonical WandB field definitions live in [`../docs/wandb_schema.md`](../docs/wandb_schema.md).
+- The canonical WandB field definitions live in [../docs/wandb_schema.md](../docs/wandb_schema.md).
 - **Don't edit files in this dir by hand** — regenerate from notebooks. If you catch yourself tweaking a PDF directly, that's a smell.
 - WandB exports are snapshots in time. If a WandB run is deleted or the project is wiped, the exports here are the only remaining record.
 - `scenario_scores.jsonl` should retain the run-level join keys needed to line up with WandB and benchmark artifacts, especially `run_name`, `wandb_run_url`, `scenario_id`, `trial_index`, `experiment_cell`, `orchestration_mode`, `mcp_mode`, and `judge_model`.

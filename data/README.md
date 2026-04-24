@@ -28,7 +28,7 @@ data/
 
 All 5 source Kaggle datasets cover different slices (gas analysis, health index, RUL, fault records, monitoring) with no common key between them. The pipeline synthesizes a fleet of **20 fictional transformers** (`T-001` through `T-020`) stratified across 4 health tiers (healthy long-life, healthy aging, minor fault, serious fault) and joins each source dataset against this synthetic fleet so that cross-domain queries return **coherent narratives** — a transformer's sensor anomalies align with its fault history which aligns with its failure modes which aligns with its work orders.
 
-See [`../docs/data_pipeline.tex`](../docs/data_pipeline.tex) for the full methodology writeup (paper-ready LaTeX section), and [`scenarios/README.md`](scenarios/README.md) for the scenario authoring / validation path.
+See [../docs/data_pipeline.tex](../docs/data_pipeline.tex) for the full methodology writeup (paper-ready LaTeX section), and [scenarios/README.md](scenarios/README.md) for the scenario authoring / validation path.
 
 ## Running the pipeline
 
@@ -51,7 +51,7 @@ python data/scenarios/validate_scenarios.py
 ```
 
 That validator is the quickest schema sanity check for new scenario authoring. The
-full harness-facing workflow lives in [`../docs/eval_harness_readme.md`](../docs/eval_harness_readme.md).
+full harness-facing workflow lives in [../docs/eval_harness_readme.md](../docs/eval_harness_readme.md).
 
 ## Licensing
 
@@ -61,4 +61,4 @@ full harness-facing workflow lives in [`../docs/eval_harness_readme.md`](../docs
 - **Local benchmarking policy:** if you run `build_processed.py` against Kaggle data, treat those outputs as local-only working data unless the license has been explicitly cleared for redistribution.
 - **Upstream PR policy:** any contribution back to AssetOpsBench should use the synthetic/public-safe path by default so all four domains remain runnable without redistribution concerns.
 
-See [`../docs/reference/project_reference.md`](../docs/reference/project_reference.md) and the midpoint report for the project-level context around this licensing constraint.
+See [../docs/reference/project_reference.md](../docs/reference/project_reference.md) and the midpoint report for the project-level context around this licensing constraint.

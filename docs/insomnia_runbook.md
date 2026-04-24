@@ -4,13 +4,13 @@
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
-HPC cluster. Read [`compute_plan.md`](compute_plan.md) first for the higher-level
+HPC cluster. Read [compute_plan.md](compute_plan.md) first for the higher-level
 hardware strategy (which GPU for which phase, Insomnia vs GCP), and
-[`runbook.md`](runbook.md) for the end-to-end reproducibility story. This doc
+[runbook.md](runbook.md) for the end-to-end reproducibility story. This doc
 covers the cluster-specific operational details that aren't obvious from the
 official RCS documentation. For the current model names, repo-facing model
 IDs, and runtime pins that this runbook assumes, see
-[`governance/model_registry.yaml`](governance/model_registry.yaml).
+[governance/model_registry.yaml](governance/model_registry.yaml).
 
 ## Two runbooks, one project
 
@@ -142,7 +142,7 @@ So if an Insomnia proof run dies with `ModuleNotFoundError: litellm` or
 `ModuleNotFoundError: mcp`, the fix is usually not a bespoke `pip install` in
 the moment — it is to refresh the shared env against
 `requirements-insomnia.txt`. The matching model/runtime contract is now also
-captured in [`governance/model_registry.yaml`](governance/model_registry.yaml).
+captured in [governance/model_registry.yaml](governance/model_registry.yaml).
 
 For quick login-node verification, stick to metadata-only checks:
 ```bash
@@ -213,7 +213,7 @@ another minute. If you see no output at all within 30 seconds, vLLM is crashing
 on import and you need to investigate that first.
 
 Concrete proof runs and benchmark-path validation notes live in
-[`validation_log.md`](validation_log.md). Keep this runbook for operational
+[validation_log.md](validation_log.md). Keep this runbook for operational
 instructions; keep proof records there.
 
 ## Watching live runs with tmux
@@ -318,7 +318,7 @@ feature — it has nothing to do with login-node policy or job execution.
 
 ## See also
 
-- [`compute_plan.md`](compute_plan.md) — phase-by-phase GPU allocation strategy
-- [`slurm_cheatsheet.md`](slurm_cheatsheet.md) — quick command reference for submit/status/logging/cancel flows
-- [`scripts/setup_insomnia.sh`](../scripts/setup_insomnia.sh) — one-shot env setup with pinned versions
-- [`scripts/vllm_serve.sh`](../scripts/vllm_serve.sh) — Slurm job script for serving Llama-3.1-8B-Instruct
+- [compute_plan.md](compute_plan.md) — phase-by-phase GPU allocation strategy
+- [slurm_cheatsheet.md](slurm_cheatsheet.md) — quick command reference for submit/status/logging/cancel flows
+- [scripts/setup_insomnia.sh](../scripts/setup_insomnia.sh) — one-shot env setup with pinned versions
+- [scripts/vllm_serve.sh](../scripts/vllm_serve.sh) — Slurm job script for serving Llama-3.1-8B-Instruct

@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-04-24
+
+### Config / Docs
+
+- Clarified the coordination-doc retention rule: `docs/coordination/live_repo_summary.md`
+  now has a configurable emphasis window rather than a hard 48-hour eviction
+  policy, and stale material moves to `docs/coordination/repo_summary_history.md`
+  only when newer active work has displaced it from the live memo (Alex)
+- Added a compaction rule to `docs/coordination/shift_coordination_note_template.md`
+  so per-agent shift notes stay short working buffers rather than growing into
+  local transcripts; settled details should be promoted to the live summary,
+  summarized into history only when otherwise unrecoverable, or left to the
+  durable artifact that already records them (Alex)
+- Clarified the Agent-as-Tool runner design in `docs/orchestration_wiring.md`:
+  the team runner at `scripts/aat_runner.py` will wrap the OpenAI Agents SDK
+  (`agents.Runner.run()`) directly rather than AOB's `OpenAIAgentRunner`, so
+  Cell A (direct) and Cell B (MCP) share the same runner code and `(B - A)` in
+  Experiment 1 measures MCP transport overhead by construction. #104 now tracks
+  Cell A, Cell B, and a parity smoke against upstream's `openai-agent` CLI
+  (Alex)
+
 ## 2026-04-22
 
 ### Config / Docs
