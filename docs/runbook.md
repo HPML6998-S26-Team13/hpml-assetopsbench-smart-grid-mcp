@@ -1,6 +1,6 @@
 # Runbook
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-04-24*
 *Infra owner: Aaron Fan (af3623) — eval-harness owner: Akshat Bhandari (ab6174)*
 
 Canonical reproducibility runbook. A teammate following this from scratch
@@ -132,9 +132,18 @@ ls models/Llama-3.1-8B-Instruct/ | head
 
 Should list `config.json`, `tokenizer.json`, and four `model-*.safetensors`
 shards (~16 GB total). If missing, the canonical re-download path is
-`bash scripts/setup_insomnia.sh` with `HF_TOKEN` and `MODEL_REVISION`
-exported — again, coordinate first because the download is slow and
-clobbers the shared `models/` directory.
+`bash scripts/setup_insomnia.sh` with `HF_TOKEN` exported. The script now
+defaults to the repo-standard `MODEL_REVISION` recorded in
+[`governance/model_registry.yaml`](governance/model_registry.yaml):
+
+```bash
+export MODEL_REVISION=0e9e39f249a16976918f6564b8830bc894c89659
+```
+
+You can leave `MODEL_REVISION` unset for the standard path, but keep the
+resolved SHA in run logs and issue comments when reporting benchmark evidence.
+Coordinate first because the download is slow and clobbers the shared
+`models/` directory.
 
 ### 2.4 Verify WatsonX (used by evaluation / judge paths)
 

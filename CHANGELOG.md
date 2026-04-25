@@ -63,6 +63,11 @@
   Experiment 1 measures MCP transport overhead by construction. #104 now tracks
   Cell A, Cell B, and a parity smoke against upstream's `openai-agent` CLI
   (Alex)
+- Standardized the local Llama-3.1-8B-Instruct `MODEL_REVISION` at
+  `0e9e39f249a16976918f6564b8830bc894c89659` in
+  `docs/governance/model_registry.yaml`, made `scripts/setup_insomnia.sh`
+  default to that resolved checkpoint SHA, and updated the runbooks so future
+  Insomnia / fallback setup runs record the same model contract (Alex)
 
 ## 2026-04-22
 

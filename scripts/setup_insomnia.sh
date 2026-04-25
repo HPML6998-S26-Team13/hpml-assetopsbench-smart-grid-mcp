@@ -35,8 +35,8 @@
 #
 # --- MODEL_REVISION env var ---
 #
-#   Leave unset to pull `main` (the current default HF tag). For
-#   reproducibility in benchmark runs, pin to the resolved commit SHA, e.g.:
+#   Leave unset to use the repo-standard resolved commit SHA. For
+#   reproducibility in benchmark runs, keep this explicit in logs, e.g.:
 #       export MODEL_REVISION=0e9e39f249a16976918f6564b8830bc894c89659
 #   The script prints the resolved SHA after the download completes so you
 #   can capture it for the next invocation. See
@@ -58,7 +58,8 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VENV_DIR="$REPO_ROOT/.venv-insomnia"
 MODEL_DIR="$REPO_ROOT/models"
 MODEL_NAME="meta-llama/Llama-3.1-8B-Instruct"
-MODEL_REVISION="${MODEL_REVISION:-main}"
+DEFAULT_MODEL_REVISION="0e9e39f249a16976918f6564b8830bc894c89659"
+MODEL_REVISION="${MODEL_REVISION:-$DEFAULT_MODEL_REVISION}"
 SETUP_MODE="${SETUP_MODE:-all}"
 
 case "$SETUP_MODE" in

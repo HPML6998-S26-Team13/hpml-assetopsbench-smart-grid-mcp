@@ -2,17 +2,16 @@
 # This file is documentation-first: it is meant for humans and future tooling.
 
 version: 1
-last_updated: 2026-04-20
+last_updated: 2026-04-24
 owner: Team 13
 
 status:
-  model_revision_standardized_repo_wide: false
+  model_revision_standardized_repo_wide: true
   note: >
-    scripts/setup_insomnia.sh already requires MODEL_REVISION for the local
-    HuggingFace download path, but the repo has not yet standardized one
-    canonical tag or commit SHA for Llama-3.1-8B-Instruct. Until that happens,
-    record the chosen value in setup notes or job logs instead of assuming a
-    shared default.
+    The local HuggingFace Llama-3.1-8B-Instruct path now has a repo-standard
+    resolved commit SHA. scripts/setup_insomnia.sh uses that SHA by default,
+    while still allowing MODEL_REVISION to override it for explicit reruns or
+    future validation work.
 
 defaults:
   primary_local_benchmark_model: llama_3_1_8b_instruct_local
@@ -48,13 +47,17 @@ model_contracts:
       - configs/example_pe_self_ask.env
       - configs/example_verified_pe.env
     model_revision:
-      value: null
+      value: 0e9e39f249a16976918f6564b8830bc894c89659
       required_by_setup: true
+      default_used_by_setup: true
       source: MODEL_REVISION environment variable
-      status: not_yet_standardized_repo_wide
+      status: standardized_repo_wide
+      selected_on: 2026-04-24
       note: >
-        Replace null with a concrete HuggingFace tag or commit SHA once the
-        team agrees on the single checkpoint to mirror on Insomnia.
+        This SHA is the repo-standard local benchmark checkpoint for the
+        shared Insomnia mirror. It was selected from the stable HuggingFace
+        Llama-3.1-8B-Instruct main line so benchmark reruns can distinguish
+        "same checkpoint" from "current main at download time".
 
   watsonx_llama_4_maverick_17b:
     provider: watsonx
@@ -86,7 +89,9 @@ model_contracts:
       - Do not treat as a drop-in replacement for the local 8B Instruct path
 
 open_follow_ups:
-  - Standardize a single HuggingFace MODEL_REVISION for the local 8B checkpoint.
+  - Revalidate the local 8B MODEL_REVISION only if upstream announces a new
+    Llama-3.1-8B-Instruct checkpoint or if a fresh download resolves to a
+    different SHA.
   - Decide whether scripts/vllm_serve.sh should adopt 32768 as the shared
     benchmark-path default instead of the lighter 8192 smoke-path default.
   - Record any future NCCL or cluster-env overrides here if they become part of
