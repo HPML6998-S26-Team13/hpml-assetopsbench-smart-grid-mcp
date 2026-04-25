@@ -43,6 +43,10 @@
 
 ### Config / Docs
 
+- Ported the Apr 21 Team 13 meeting notes from the local reconciliation branch
+  onto `main`, preserving the Notion / Google Meet source record and updating
+  the Apr 28 agenda / prep docs so they point at the meeting record while
+  reflecting the newer `#111` closeout and `#104` runner landing (Alex)
 - Clarified the coordination-doc retention rule: `docs/coordination/live_repo_summary.md`
   now has a configurable emphasis window rather than a hard 48-hour eviction
   policy, and stale material moves to `docs/coordination/repo_summary_history.md`

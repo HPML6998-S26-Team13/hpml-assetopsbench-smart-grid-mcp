@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-26 05:05 EDT*
+*Last updated: 2026-04-26 05:30 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-24 05:05 EDT -> 2026-04-26 05:05 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-24 05:30 EDT -> 2026-04-26 05:30 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -16,6 +16,10 @@
   Aaron's three squashed AaT commits. Alex's root `main` is local-only ahead by
   two coordination/model-revision commits (`1dc3593`, `bf717c1`); do not push
   root `main` unless Alex asks.
+- **[V]** Apr 21 Team check-in #4 now has a repo meeting record at
+  `planning/2026-04-21_meeting_notes.md`. The Apr 28 agenda/prep docs point at
+  that record while preserving current truth: #104 is proof-backed but awaits
+  PR/review and human closure, and #25 remains the full-capture gate.
 - **[V]** AaT Cell A/B smoke and upstream parity proof are now real on branch
   `codex-fnd/aat-smoke-fix`: Cell A job `8962310_aat_direct_smoke_104`
   completed `1 / 1` on `9541e26`, and Cell B job
@@ -80,6 +84,10 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-26 05:30 | `codex-fnd/aat-smoke-fix` | feature branch | Ported the local Apr 21 meeting-note/call-prep commit onto the AaT smoke-fix PR branch so the PR can carry the local root-main coordination commits plus the runtime proof branch together. |
+| 2026-04-25/26 | `9d827a8` + Slurm `8962310`, `8969519`, `8970383` | feature branch / Insomnia | AaT Cell A, team-runner Cell B, and upstream AOB `OpenAIAgentRunner` parity are all smoke-proven on the SGT-009 / T-015 scenario; docs and issue comments now record the proof ladder. |
+| 2026-04-24 evening | `e2b3f48` | `team13/main` | Aaron's AaT runner stack was squashed into three shared-main commits: shared runner, Cell A/B configs/smokes, and design docs. The feature branch now carries the follow-up fixes/proofs on top. |
+| 2026-04-24 evening | `planning/2026-04-21_meeting_notes.md` | local `main` -> feature branch | Ported the Apr 21 Team check-in #4 notes from the stale local reconciliation branch, then updated Apr 28 agenda/prep to point at the meeting record while preserving current issue truth. |
 | 2026-04-24 13:08 | PR `#126` / `8548b8a` | `team13/main` | Root coordination/docs stack merged after review feedback was addressed: live-summary window sync, AaT runner design CHANGELOG entry, orchestration heading cleanup, and a clean squash body replacing the malformed intermediate commit message. |
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
 | 2026-04-22 03:09 | local `#26/#32/#34` staging pass | draft PR `#123` branch | Tightened the experiment-matrix story into actual scaffolding on the staging branch: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config there, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. Those concrete config/notebook edits are not part of PR `#125`. |
