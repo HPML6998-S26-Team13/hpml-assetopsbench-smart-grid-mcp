@@ -15,3 +15,7 @@ vllm==0.19.0
 # Let torch/vLLM pull the matching CUDA/cuDNN wheels transitively. Hard-pinning
 # cuDNN separately makes the resolver fragile and can easily diverge from the
 # stack that vLLM expects.
+
+# AaT runner deps (also pinned in requirements.txt; re-listed here for clarity)
+mcp[cli]==1.27.0
+openai-agents==0.14.5

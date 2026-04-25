@@ -5,7 +5,8 @@ datasets
 huggingface-hub
 
 # MCP + orchestration client stack
-mcp[cli]>=1.26.0
+mcp[cli]==1.27.0
+openai-agents==0.14.5
 litellm==1.81.13
 
 # WatsonX.ai (LLM-as-Judge, scaling comparison)
