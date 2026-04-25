@@ -16,6 +16,17 @@ from agents import function_tool
 from mcp_servers import direct_adapter
 
 
+def _agent_visible_name(registry_name: str) -> str:
+    """Return the tool name the model should see.
+
+    The direct adapter keeps domain-qualified names internally
+    (``iot.list_assets``), but MCP stdio exposes bare names
+    (``list_assets``). Cell A must match Cell B's model-visible names for
+    the transport-overhead comparison to stay fair.
+    """
+    return registry_name.rsplit(".", 1)[-1]
+
+
 def build_direct_tools() -> List[Any]:
     """Return a list of function_tool objects, one per entry in the
     direct_adapter registry.
@@ -23,11 +34,12 @@ def build_direct_tools() -> List[Any]:
     wrapped: List[Any] = []
     for spec in direct_adapter.get_tools():
         callable_fn: Callable[..., Any] = spec.fn
+        tool_name = _agent_visible_name(spec.name)
         wrapped.append(
             function_tool(
                 callable_fn,
-                name_override=spec.name,
-                description_override=spec.doc or f"Direct call to {spec.name}",
+                name_override=tool_name,
+                description_override=spec.doc or f"Direct call to {tool_name}",
             )
         )
     return wrapped

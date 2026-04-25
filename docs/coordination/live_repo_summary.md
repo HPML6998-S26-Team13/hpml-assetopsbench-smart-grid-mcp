@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-24 13:10 EDT*
+*Last updated: 2026-04-26 05:05 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-22 13:10 EDT → 2026-04-24 13:10 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-24 05:05 EDT -> 2026-04-26 05:05 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -12,10 +12,22 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history includes the `#122` knowledge-plugin
-  merge, `#125` setup fix, and `#126` root coordination / AaT docs stack; use
-  `team13/main@8548b8a` as the current shared baseline, not `b480604` or the
-  older `999667d` pre-`#122` state.
+- **[V]** Current canonical remote history is `team13/main@e2b3f48`, carrying
+  Aaron's three squashed AaT commits. Alex's root `main` is local-only ahead by
+  two coordination/model-revision commits (`1dc3593`, `bf717c1`); do not push
+  root `main` unless Alex asks.
+- **[V]** AaT Cell A/B smoke and upstream parity proof are now real on branch
+  `codex-fnd/aat-smoke-fix`: Cell A job `8962310_aat_direct_smoke_104`
+  completed `1 / 1` on `9541e26`, and Cell B job
+  `8969519_aat_mcp_baseline_smoke_104` completed `1 / 1` on `a10d092`.
+  Upstream AOB `OpenAIAgentRunner` parity job
+  `8970383_aat_mcp_baseline_upstream_smoke_104` completed `1 / 1` on
+  `e43cba3` with Slurm elapsed `00:11:18`. These used self-hosted
+  `openai/Llama-3.1-8B-Instruct` on Insomnia and emitted canonical raw
+  artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/`. This clears
+  the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gives
+  `#25` an A/B smoke anchor; full `multi_*.json` / 3-trial A/B/C captures still
+  remain.
 - **[V]** The former local root-main coordination stack is now merged as PR
   `#126`. The branch `codex-fnd/root-main-coordination` was deleted remotely
   and local root `main` was reset to the squash merge.
@@ -55,7 +67,9 @@
 - **[V]** Team issue bodies no longer carry the duplicated planning boilerplate.
   - the single-source explanation now lives in `docs/README.md`
   - archived planning tracker/spec references remain documented there, not repeated on every issue
-- **[V]** `#25` remains gated on the missing **Cell A runner**. Aaron has the design answers he needed; the remaining gap is implementation, not decision-making.
+- **[V]** `#25` has moved past the missing-runner gate for Cells A/B. The
+  remaining gap is full Experiment 1 capture material: agreed `multi_*.json`
+  slice, 3 trials, and Cell C after the optimized MCP lane is ready.
 - **[V]** `#111` is closed after PR `#125` landed the final Insomnia HF CLI fix and
   the shared Insomnia checkout was verified on `main@b480604`.
 - **[V]** `#112` is the main older open PR still lagging. It still has `CHANGES_REQUESTED`; the remaining work is in Akshat’s lane.
@@ -120,7 +134,14 @@
 - **[V]** The mainline proof snapshots committed in-tree are:
   - `benchmarks/cell_Y_plan_execute/{config.json,summary.json}`
   - `benchmarks/cell_Z_hybrid/{config.json,summary.json}`
-- **[V]** Vanilla **Agent-as-Tool is not yet smoke-tested.** `benchmarks/cell_B_mcp_baseline/raw/` is empty, and `docs/validation_log.md` contains PE-family proofs only (Apr 13 Watsonx PE smoke, Apr 16 Insomnia PE benchmark path, Apr 20/21 PE + Self-Ask and Verified PE). Upstream AssetOpsBench does expose `claude-agent` and `openai-agent` as first-class AaT runners (MCP-wired via stdio, LiteLLM-routed, with `server_paths` parity on their Python constructors) — the actual gap is that neither AaT CLI supports a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper. That wiring work is now tracked under `#104`.
+- **[V]** Vanilla **Agent-as-Tool is smoke-tested for Cells A/B** on
+  `codex-fnd/aat-smoke-fix`. The team wrapper uses one OpenAI Agents SDK loop
+  with the pinned AOB prompt; Cell A supplies direct callables and Cell B
+  supplies MCP stdio servers. Proof anchors: Cell A Slurm job `8962310`,
+  Cell B Slurm job `8969519`, and upstream AOB `OpenAIAgentRunner` parity
+  Slurm job `8970383`. `docs/validation_log.md` records all three. Remaining
+  AaT work is PR/review closeout, Cell C once the optimized MCP lane lands,
+  and the full `#25` capture slice.
 
 ### Active execution lanes
 
@@ -141,8 +162,13 @@
 ## 4. Active Findings / Open Loops
 
 1. **`#25` Cell A runner**
-   - **[V]** Config scaffolds, direct adapter, and profiling↔W&B plumbing are already on `main`.
-   - **[V]** Missing piece is still the actual Cell A ReAct / Agent-as-Tool runner.
+   - **[V]** Config scaffolds, direct adapter, profiling↔W&B plumbing, and the
+     shared AaT runner are now present on the active fix branch.
+   - **[V]** Cell A smoke succeeded on Insomnia as job `8962310`; this is no
+     longer a missing-runner issue.
+   - **[?]** Remaining `#25` work is the full capture set, not the smoke proof:
+     `multi_*.json`, 3 trials, A/B first, and Cell C after the optimized MCP
+     stack is ready.
 
 2. **`#26` / `#32` need execution data**
    - **[V]** Notebook scaffolds are merged.
@@ -153,7 +179,8 @@
      - Y is the canonical PE baseline
      - PE + Self-Ask and Verified PE have smoke-proven runner paths
      - Z / Self-Ask follow-ons still need promoted canonical configs and raw artifacts before they are analysis-ready
-     - the honest Experiment 2 core claim still waits on Cell B
+     - Cell B now has a one-scenario AaT smoke anchor; the honest Experiment 2
+       core claim still needs the agreed raw run set
 
 3. **`#112` still needs another pass**
    - **[V]** Still open with `CHANGES_REQUESTED`.
@@ -161,8 +188,16 @@
 
 4. **`#104` vanilla AaT wiring (owned by Aaron, adjacent to `#25`)**
    - **[V]** Issue repurposed from the closed mid-point PPT task; parent `#73`, milestone `M5`, outline comment posted; reassigned to Aaron 2026-04-22 so the AaT runner is built once and reused across Exp 1 Cells A/B/C and the Exp 2 AaT arm.
-   - **[?]** Implementation still to land: `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths`, default harness dispatch for `ORCHESTRATION=agent_as_tool`, first smoke run (SGT-009 on Watsonx then Insomnia), canonical `benchmarks/cell_B_mcp_baseline/raw/<run-id>/` artifacts, and a `docs/validation_log.md` entry.
-   - **[?]** Open questions on Codex-side: does `openai-agent --json` output mesh with `judge_trajectory.py`, is our local AssetOpsBench venv synced cleanly with the LiteLLM refactor, and should `claude-agent` also get a parallel smoke for symmetry.
+   - **[V]** Core runner/proof is now done on `codex-fnd/aat-smoke-fix`:
+     `scripts/aat_runner.py` uses the OpenAI Agents SDK directly, Cell A/B tool
+     names match, local vLLM routing is explicit, and Insomnia smoke artifacts
+     exist for A (`8962310`) and B (`8969519`).
+   - **[V]** Upstream parity is now proven by
+     `8970383_aat_mcp_baseline_upstream_smoke_104`: AOB
+     `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario,
+     `1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls.
+   - **[?]** Remaining closeout is process, not implementation proof: PR/review,
+     issue comment/update, and then a human decision to close `#104`.
 
 ---
 
@@ -180,10 +215,10 @@
 
 | Issue | Owner signal | Current state |
 |---|---|---|
-| `#25` | Aaron implementation lane | Cell A runner still missing |
+| `#25` | Aaron implementation lane | A/B smoke artifacts exist; full `multi_*.json` / 3-trial A/B/C capture still pending |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
-| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Z / Self-Ask follow-ons need promoted canonical configs and raw artifacts; the honest B/Y core still needs Cell B |
-| `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Vanilla AaT wiring — wrapper + harness dispatch + first smoke + docs. Metadata set; outline posted; not started. Pairs with `#25` so one AaT runner covers Cells A/B/C and the Exp 2 AaT arm. |
+| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Cell B now has an AaT smoke anchor, but final Experiment 2 raw run set is still pending |
+| `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Team AaT runner plus A/B smoke and upstream `OpenAIAgentRunner` parity proof exist; PR/review and issue closeout remain |
 
 ### Older open PR
 
@@ -204,6 +239,9 @@
 
 | Date (EDT) | Run ID | Branch / SHA | Config | W&B | Status | Notes |
 |---|---|---|---|---|---|---|
+| 2026-04-26 | `8970383_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix@e43cba3` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:11:18`, `run_status: success`, `1/1`, latency 36.18s, `tool_call_count_total=4`. |
+| 2026-04-26 | `8969519_aat_mcp_baseline_smoke_104` | `codex-fnd/aat-smoke-fix@a10d092` | `configs/aat_mcp_baseline_smoke.env` | disabled | **AaT Cell B smoke success** | `run_status: success`, `1/1`, latency 91.78s, `tool_call_count_total=4`; all four MCP servers bootstrapped/initialized and vLLM accepted sequential tool-call turns with `parallel_tool_calls=false`. |
+| 2026-04-25 | `8962310_aat_direct_smoke_104` | `codex-fnd/aat-smoke-fix@9541e26` | `configs/aat_direct_smoke.env` | disabled | **AaT Cell A smoke success** | `run_status: success`, `1/1`, latency 12.09s, `tool_call_count_total=4`; direct callable path exercised the same SGT-009 / T-015 scenario as Cell B. |
 | 2026-04-13 | `local-20260413-003914_pe_mcp_baseline_watsonx_smoke` | canonical `main` at the time | Watsonx `llama-3-3-70b-instruct` on SGT-009 / T-015 | `9d4442ja` | **Earliest committed PE proof** | `run_status: success`, `pass: 1`, `fail: 0`, wall-clock 93.6s. 8-step plan, all steps OK. Raw artifacts live at `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_*`. Just added to `docs/validation_log.md` so the earliest benchmark-path proof is explicitly in the log ladder. |
 | 2026-04-21 | `8859928_issue111_main_proof` | temp Insomnia worktree based on `main@3609321` + local shell fix | `configs/issue111_main_proof.env` | disabled | **Validated fix** | `2/2` success after patching the Slurm spool-path bug. Useful proof of the fix, but not final canonical proof because the committed SHA does not yet contain the fix. |
 | 2026-04-21 | `8859923` | shared Insomnia `main@3609321` | `configs/issue111_main_proof.env` | disabled | **Immediate failure** | Exposed the `insomnia_env.sh` sourcing bug under `sbatch`. |
@@ -216,13 +254,14 @@
 
 ## 7. Recommended Next Steps
 
-1. **Execute `#104` vanilla AaT wiring.**
-   - `scripts/aat_runner.py` around `OpenAIAgentRunner` with team `server_paths` (mirror `plan_execute_self_ask_runner.py` structure).
-   - `run_experiment.sh` default dispatch for `ORCHESTRATION=agent_as_tool`, `AAT_RUNNER_TEMPLATE` kept as override.
-   - First smoke on SGT-009 / T-015 under Watsonx, then Insomnia; artifacts under `benchmarks/cell_B_mcp_baseline/raw/<run-id>/`.
-   - `docs/validation_log.md` entry recording the run.
-2. **Wait on / review Aaron’s `#25` Cell A runner work.**
-3. **After Cell A lands, start real Experiment 1 / 2 capture generation for `#26` / `#32`.**
+1. **Close out `#104` through process.**
+   - Core A/B smoke proof is present (`8962310`, `8969519`) and upstream
+     `OpenAIAgentRunner` parity proof is present (`8970383`). Remaining work is
+     PR/review, issue comment/update, and human closure.
+2. **Proceed to `#25` full capture planning.**
+   - Use the proven A/B smoke path for the real `multi_*.json`, 3-trial
+     capture set. Keep Cell C gated on the optimized MCP workstream.
+3. **Use Cell B smoke artifacts to unblock Notebook 02/03 contract checks.**
 4. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
 
 ---

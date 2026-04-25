@@ -51,8 +51,9 @@ What we can honestly run on the current runner surface right now:
 | `Y + Self-Ask` | smoke-runnable; canonical config pending | repo-local Self-Ask PE path is proven, but this PR does not add the Experiment 2 config or raw run set |
 | `Z` | smoke-runnable; canonical config pending | repo-local Verified PE path is proven, but the committed Experiment 2 Z config still needs promotion from its legacy placeholder |
 | `Z + Self-Ask` | smoke-runnable; canonical config pending | the Verified PE runner supports the clarification hook, but the canonical config and raw run set are still follow-on work |
-| `B` | pending | waits on `#104` / `#25` AaT runner |
-| `A` / `C` | pending | wait on `#25`, plus the Cell C optimization lane |
+| `B` | smoke-runnable; full capture pending | AaT MCP-baseline smoke succeeded in Slurm job `8969519`; upstream `OpenAIAgentRunner` parity succeeded in Slurm job `8970383`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
+| `A` | smoke-runnable; full capture pending | AaT direct smoke succeeded in Slurm job `8962310`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
+| `C` | pending | waits on `#25`, plus the Cell C optimization lane |
 
 Important distinction:
 

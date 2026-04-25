@@ -1,5 +1,44 @@
 # Changelog
 
+## 2026-04-25
+
+### Runtime / Config
+
+- Added first-class Agent-as-Tool dispatch to `scripts/run_experiment.sh` so
+  Cell A/B configs no longer need an explicit `AAT_RUNNER_TEMPLATE` for the
+  standard team-local runner. Added a separate upstream
+  `OpenAIAgentRunner` parity smoke config/wrapper that uses the AOB Python API
+  with Smart Grid MCP server paths, since the upstream CLI has no server-path
+  override. The parity wrapper keeps AOB's agent loop but patches its MCP
+  server factory onto the same warmed Smart Grid server launch/timeout envelope
+  used by the benchmark Cell B smoke, so the parity run measures runner
+  behavior rather than missing server dependencies or cold `uv` startup. The
+  upstream parity path is smoke-proven on Insomnia by Slurm job `8970383`
+  (`1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls). Removed the
+  stale Apr 21 meeting-notes backlog item that was already handled elsewhere
+  (Alex)
+- Hardened the AaT smoke path so stale Insomnia virtualenvs fail fast before
+  launching vLLM: `run_experiment.sh` now preflights the pinned AaT dependency
+  set, and the Cell A/B AaT configs run `scripts/aat_runner.py` through the
+  same explicit `uv --with` dependency pins. The local-vLLM AaT configs also
+  enable vLLM auto tool choice with the Llama 3 JSON tool-call parser so the
+  Agents SDK's `tool_choice=auto` requests are accepted, and summary generation
+  now counts AaT `tool_call_count` / nested `history[*].tool_calls` records
+  instead of reporting zero tool calls for successful AaT trials. The Cell B
+  MCP path now launches server subprocesses with their data dependencies and
+  preflights those imports before vLLM startup, preferring the shared Insomnia
+  server Python so MCP initialization is not blocked by per-server dependency
+  downloads; its SDK initialize deadline is now configurable and defaults to
+  30s for the smoke/configured Cell B path. Cell B MCP server launch now uses
+  an explicit bootstrap wrapper with stderr startup milestones and can force
+  the same `uv --with` dependency envelope used by local parity tests, so
+  initialize hangs identify which server startup stage went silent; the
+  Insomnia Cell B configs launch servers from the warmed `.venv-insomnia`
+  Python with a longer initialize budget to avoid rebuilding server envs inside
+  the MCP connection timeout, and the AaT runner now defaults
+  `parallel_tool_calls` to false so local vLLM Llama 3 accepts the sequential
+  tool-call loop after MCP execution begins (Alex)
+
 ## 2026-04-24
 
 ### Config / Docs

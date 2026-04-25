@@ -1,6 +1,6 @@
 # Validation Log
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-04-26*
 
 Canonical log for live serve / benchmark / profiling proofs. Use this file for
 concrete run records, not the runbooks.
@@ -17,6 +17,87 @@ For each proof entry, record:
 - primary artifacts
 - what the run proves
 - caveats / follow-ups
+
+## 2026-04-25/26 — Agent-as-Tool Cell A/B and upstream parity smoke proofs (`#104`, unblocks `#25`)
+
+- **Scope:** Agent-as-Tool smoke proofs for Experiment 1 Cell A (direct Python
+  tools), Cell B (MCP baseline), and the upstream
+  `OpenAIAgentRunner` parity path on the shared SGT-009 / T-015 scenario
+- **Scenario:** `data/scenarios/multi_01_end_to_end_fault_response.json`
+- **Model:** self-hosted `openai/Llama-3.1-8B-Instruct` through local vLLM on
+  Insomnia
+- **Cell A branch / git SHA:** `codex-fnd/aat-smoke-fix` at
+  `9541e2661111daa14eb4d99f46d30bdc03681114`
+- **Cell A config:** `configs/aat_direct_smoke.env`
+- **Cell A run id / Slurm job id:** `8962310_aat_direct_smoke_104`
+- **Cell A primary artifacts:** live artifacts in the shared Insomnia checkout:
+  - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/meta.json`
+  - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/harness.log`
+  - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/latencies.jsonl`
+  - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/2026-04-25_A_llama-3-1-8b-instruct_agent_as_tool_direct_multi_01_end_to_end_fault_response_run01.json`
+  - `benchmarks/cell_A_direct/config.json`, `benchmarks/cell_A_direct/summary.json`
+- **Cell B branch / git SHA:** `codex-fnd/aat-smoke-fix` at
+  `a10d092d374309f45d282c7f7aec71a7fa8d11df`
+- **Cell B config:** `configs/aat_mcp_baseline_smoke.env`
+- **Cell B run id / Slurm job id:** `8969519_aat_mcp_baseline_smoke_104`
+- **Cell B primary artifacts:** live artifacts in the shared Insomnia checkout:
+  - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/meta.json`
+  - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/harness.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/vllm.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/latencies.jsonl`
+  - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/2026-04-26_B_llama-3-1-8b-instruct_agent_as_tool_baseline_multi_01_end_to_end_fault_response_run01.json`
+  - `benchmarks/cell_B_mcp_baseline/config.json`, `benchmarks/cell_B_mcp_baseline/summary.json`
+- **Upstream parity branch / git SHA:** `codex-fnd/aat-smoke-fix` at
+  `e43cba33c7d78cf17390ec65bd82aeb4a9ebbe10`
+- **Upstream parity config:** `configs/aat_mcp_baseline_upstream_smoke.env`
+- **Upstream parity run id / Slurm job id:** `8970383_aat_mcp_baseline_upstream_smoke_104`
+- **Upstream parity primary artifacts:** live artifacts in the shared Insomnia checkout:
+  - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/meta.json`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/harness.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/vllm.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/latencies.jsonl`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/2026-04-26_B_llama-3-1-8b-instruct_agent_as_tool_baseline_multi_01_end_to_end_fault_response_run01.json`
+
+What this proves:
+
+- Cell A and Cell B now run through the same OpenAI Agents SDK loop with only
+  the tool source changed: direct callables for Cell A, MCP stdio servers for
+  Cell B
+- the AaT runner reaches local vLLM, uses the pinned AOB prompt, and emits the
+  canonical benchmark artifact set for both smoke cells
+- Cell A completed `1 / 1` with `run_status: "success"`, wall-clock latency
+  12.09 s, and 4 tool calls
+- Cell B completed `1 / 1` with `run_status: "success"`, wall-clock latency
+  91.78 s, and 4 MCP tool calls after all four Smart Grid MCP servers
+  bootstrapped and initialized
+- the Cell B smoke specifically validates the local-vLLM compatibility fixes:
+  explicit LiteLLM base URL/API key wiring, vLLM auto tool choice with
+  `llama3_json`, warmed `.venv-insomnia` MCP server launch, 120 s MCP initialize
+  timeout, and `parallel_tool_calls=false` for sequential tool-call turns
+- the upstream parity smoke drove AssetOpsBench's `OpenAIAgentRunner` Python
+  API end-to-end against the same Smart Grid MCP servers and scenario:
+  Slurm `COMPLETED 0:0` in `00:11:18`, benchmark `run_status: "success"`,
+  `1 / 1` scenario complete, 36.18 s benchmark latency, 30.14 s upstream
+  runner duration, and 4 MCP tool calls
+- the upstream parity harness reached MCP bootstrap, MCP initialize,
+  model requests, and tool execution: all four servers listed tools,
+  local vLLM served five `/v1/chat/completions` calls, and the trajectory
+  called `get_sensor_readings`, `get_sensor_correlation`, `forecast_rul`, and
+  `create_work_order`
+
+Caveats / follow-ups:
+
+- these are one-scenario smoke proofs, not the full `#25` Experiment 1 capture
+  slice (`multi_*.json`, 3 trials, A/B/C)
+- Cell A was proven on an earlier branch tip before the final Cell B runtime
+  hardening; the code-path changes after that point were MCP/vLLM compatibility
+  fixes and did not change the direct tool surface
+- Cell C still waits on the optimized MCP stack (`#29`, `#30`, `#31`, `#33`)
+- the upstream parity proof uses AOB's `OpenAIAgentRunner` Python API rather
+  than the `openai-agent` CLI because the CLI cannot pass Smart Grid
+  `server_paths`; the wrapper keeps AOB's agent loop and patches only the MCP
+  server launch envelope and `parallel_tool_calls=false` for Insomnia/local-vLLM
+  compatibility
 
 ## 2026-04-13 — Watsonx plan-execute smoke (first canonical benchmark-path proof)
 

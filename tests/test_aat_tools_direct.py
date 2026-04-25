@@ -1,7 +1,7 @@
 """Tests for the Cell A tool builder.
 
 The builder wraps every entry in mcp_servers.direct_adapter as an
-agents SDK function_tool, preserving name and description.
+agents SDK function_tool, preserving the MCP-visible name and description.
 """
 
 from __future__ import annotations
@@ -19,17 +19,19 @@ def test_build_direct_tools_returns_one_per_registry_entry() -> None:
     tools = build_direct_tools()
     registry = direct_adapter.get_tools()
 
-    assert len(tools) == len(registry), (
-        f"Expected {len(registry)} tools wrapped, got {len(tools)}"
-    )
+    assert len(tools) == len(
+        registry
+    ), f"Expected {len(registry)} tools wrapped, got {len(tools)}"
 
 
-def test_build_direct_tools_preserves_names() -> None:
+def test_build_direct_tools_uses_mcp_visible_names() -> None:
     from mcp_servers import direct_adapter
     from scripts.aat_tools_direct import build_direct_tools
 
     tools = build_direct_tools()
-    registry_names = {spec.name for spec in direct_adapter.get_tools()}
+    registry_names = {
+        spec.name.rsplit(".", 1)[-1] for spec in direct_adapter.get_tools()
+    }
     wrapped_names = {getattr(tool, "name", None) for tool in tools}
 
     assert wrapped_names == registry_names, (
@@ -53,7 +55,9 @@ def test_direct_and_mcp_tool_schemas_match():
     from mcp_servers import direct_adapter
     from scripts.aat_tools_mcp import build_mcp_servers
 
-    direct_names = {spec.name for spec in direct_adapter.get_tools()}
+    from scripts.aat_tools_direct import build_direct_tools
+
+    direct_names = {getattr(tool, "name", None) for tool in build_direct_tools()}
 
     async def collect_mcp_names() -> set[str]:
         servers = await build_mcp_servers(pathlib.Path.cwd())
@@ -61,12 +65,8 @@ def test_direct_and_mcp_tool_schemas_match():
             names: set[str] = set()
             for srv in servers:
                 tools_result = await srv.list_tools()
-                # list_tools() returns a list of Tool objects with a .name field;
-                # MCP names come back unqualified (e.g. "get_sensor_readings"),
-                # so we qualify with the server's name to compare against
-                # direct_adapter's "domain.bare" format.
                 for t in tools_result:
-                    names.add(f"{srv.name}.{t.name}")
+                    names.add(t.name)
             return names
         finally:
             for srv in servers:

@@ -7,7 +7,9 @@ they don't require network, MCP subprocesses, or WatsonX.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
+import sys
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -21,6 +23,7 @@ def _stub_args(**overrides):
         model_id="watsonx/meta-llama/llama-3-3-70b-instruct",
         mcp_mode="direct",
         max_turns=30,
+        parallel_tool_calls=False,
         verbose=False,
     )
     defaults.update(overrides)
@@ -38,6 +41,7 @@ def _msg_item(text: str):
 def _tool_call_item(name: str, args: dict, call_id: str = "c1"):
     """Build a stub tool_call_item."""
     import json as _json
+
     return SimpleNamespace(
         type="tool_call_item",
         raw_item=SimpleNamespace(
@@ -53,7 +57,9 @@ def _tool_output_item(output: str):
     return SimpleNamespace(type="tool_call_output_item", output=output)
 
 
-def _stub_run_result(items=None, final_output="final answer text", max_turns_reached=False):
+def _stub_run_result(
+    items=None, final_output="final answer text", max_turns_reached=False
+):
     """Build a minimal RunResult-shaped object for serializer tests.
 
     Matches the shape AOB's _build_trajectory in
@@ -71,11 +77,13 @@ def test_serialize_run_result_happy_path():
     from scripts.aat_runner import _serialize_run_result
 
     args = _stub_args()
-    result = _stub_run_result(items=[
-        _tool_call_item("iot.list_sensors", {"asset_id": "T-1"}, "c1"),
-        _tool_output_item("[]"),
-        _msg_item("final answer text"),
-    ])
+    result = _stub_run_result(
+        items=[
+            _tool_call_item("iot.list_sensors", {"asset_id": "T-1"}, "c1"),
+            _tool_output_item("[]"),
+            _msg_item("final answer text"),
+        ]
+    )
 
     out = _serialize_run_result(args, "test prompt", result, duration_seconds=12.5)
 
@@ -88,6 +96,7 @@ def test_serialize_run_result_happy_path():
     assert out["runner_meta"]["model_id"] == args.model_id
     assert out["runner_meta"]["mcp_mode"] == "direct"
     assert out["runner_meta"]["max_turns"] == 30
+    assert out["runner_meta"]["parallel_tool_calls"] is False
     assert out["runner_meta"]["duration_seconds"] == 12.5
     assert "aob_prompt_sha" in out["runner_meta"]
 
@@ -122,15 +131,43 @@ def test_cli_parses_required_args():
     from scripts.aat_runner import build_parser
 
     parser = build_parser()
-    args = parser.parse_args([
-        "--prompt", "p",
-        "--output", "/tmp/o.json",
-        "--model-id", "watsonx/x",
-        "--mcp-mode", "direct",
-    ])
+    args = parser.parse_args(
+        [
+            "--prompt",
+            "p",
+            "--output",
+            "/tmp/o.json",
+            "--model-id",
+            "watsonx/x",
+            "--mcp-mode",
+            "direct",
+        ]
+    )
     assert args.prompt == "p"
     assert args.mcp_mode == "direct"
     assert args.max_turns == 30  # default
+    assert args.parallel_tool_calls is False  # vLLM-compatible default
+
+
+def test_cli_parses_parallel_tool_call_modes():
+    from scripts.aat_runner import build_parser
+
+    parser = build_parser()
+    common = [
+        "--prompt",
+        "p",
+        "--output",
+        "/tmp/o.json",
+        "--model-id",
+        "watsonx/x",
+        "--mcp-mode",
+        "direct",
+        "--parallel-tool-calls",
+    ]
+
+    assert parser.parse_args(common + ["false"]).parallel_tool_calls is False
+    assert parser.parse_args(common + ["true"]).parallel_tool_calls is True
+    assert parser.parse_args(common + ["auto"]).parallel_tool_calls is None
 
 
 def test_cli_missing_args_errors():
@@ -146,9 +183,73 @@ def test_cli_invalid_mcp_mode_errors():
 
     parser = build_parser()
     with pytest.raises(SystemExit):
-        parser.parse_args([
-            "--prompt", "p",
-            "--output", "/tmp/o.json",
-            "--model-id", "x",
-            "--mcp-mode", "nonsense",
-        ])
+        parser.parse_args(
+            [
+                "--prompt",
+                "p",
+                "--output",
+                "/tmp/o.json",
+                "--model-id",
+                "x",
+                "--mcp-mode",
+                "nonsense",
+            ]
+        )
+
+
+def test_runner_threads_litellm_env(monkeypatch):
+    from scripts.aat_runner import AaTRunner
+
+    captured: dict[str, object] = {}
+
+    class FakeLitellmModel:
+        def __init__(self, model, base_url=None, api_key=None):
+            captured["model"] = model
+            captured["base_url"] = base_url
+            captured["api_key"] = api_key
+
+    class FakeModelSettings:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class FakeAgent:
+        def __init__(self, **kwargs):
+            captured["agent_kwargs"] = kwargs
+
+    class FakeRunner:
+        @staticmethod
+        async def run(agent, prompt, max_turns):
+            captured["prompt"] = prompt
+            captured["max_turns"] = max_turns
+            return _stub_run_result()
+
+    monkeypatch.setenv("LITELLM_BASE_URL", "http://127.0.0.1:8000/v1")
+    monkeypatch.setenv("LITELLM_API_KEY", "dummy-vllm-not-checked")
+    monkeypatch.setitem(
+        sys.modules,
+        "agents",
+        SimpleNamespace(
+            Agent=FakeAgent,
+            ModelSettings=FakeModelSettings,
+            Runner=FakeRunner,
+            __version__="test",
+        ),
+    )
+    monkeypatch.setitem(sys.modules, "agents.extensions", SimpleNamespace())
+    monkeypatch.setitem(sys.modules, "agents.extensions.models", SimpleNamespace())
+    monkeypatch.setitem(
+        sys.modules,
+        "agents.extensions.models.litellm_model",
+        SimpleNamespace(LitellmModel=FakeLitellmModel),
+    )
+
+    runner = AaTRunner(model_id="openai/Llama-3.1-8B-Instruct", mcp_mode="direct")
+    asyncio.run(runner.run("hello"))
+
+    assert captured["model"] == "openai/Llama-3.1-8B-Instruct"
+    assert captured["base_url"] == "http://127.0.0.1:8000/v1"
+    assert captured["api_key"] == "dummy-vllm-not-checked"
+    assert captured["prompt"] == "hello"
+    assert captured["max_turns"] == 30
+    settings = captured["agent_kwargs"]["model_settings"]
+    assert settings.kwargs["parallel_tool_calls"] is False

@@ -62,16 +62,19 @@ The active cell mapping is:
 
 ### Orchestration-specific adapter hooks
 
-- `AAT_RUNNER_TEMPLATE` — required when `ORCHESTRATION=agent_as_tool`
+- `AAT_RUNNER_TEMPLATE` — optional override when
+  `ORCHESTRATION=agent_as_tool`; otherwise the harness runs
+  `scripts/aat_runner.py`
+- `AAT_PARALLEL_TOOL_CALLS` — optional AaT runner setting for the OpenAI
+  Agents SDK; defaults to `false` for local vLLM Llama 3 tool-call compatibility
 - `HYBRID_RUNNER_TEMPLATE` — required only for the legacy `hybrid` placeholder
   path
 - `VERIFIED_PE_RUNNER_TEMPLATE` — optional override when
   `ORCHESTRATION=verified_pe`; otherwise the repo-local Verified PE runner is
   used
 
-These are intentionally explicit. We do not want hidden shell glue for AaT or
-the legacy Cell Z / `hybrid` runner hook until the invocation contract is
-stable enough to benchmark.
+These are intentionally explicit. AaT now has a default benchmark dispatch
+path; templates are reserved for parity smoke checks and one-off variants.
 
 ## Running
 

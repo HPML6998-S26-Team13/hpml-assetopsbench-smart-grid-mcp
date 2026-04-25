@@ -21,6 +21,7 @@ import argparse
 import asyncio
 import json
 import logging
+import os
 import sys
 import time
 from dataclasses import dataclass, field
@@ -45,16 +46,43 @@ def build_parser() -> argparse.ArgumentParser:
         prog="aat_runner",
         description="Team-local Agent-as-Tool runner for Cells A + B of Experiment 1.",
     )
-    p.add_argument("--prompt", required=True,
-                   help="Scenario text (AAT_RUNNER_TEMPLATE passes $PROMPT here)")
-    p.add_argument("--output", required=True,
-                   help="Trial JSON output path (passed as $OUTPUT_PATH)")
-    p.add_argument("--model-id", required=True,
-                   help="LiteLLM-style model string, e.g. watsonx/meta-llama/llama-3-3-70b-instruct")
-    p.add_argument("--mcp-mode", required=True, choices=("direct", "baseline"),
-                   help="direct = Cell A in-process callables; baseline = Cell B MCP stdio")
-    p.add_argument("--max-turns", type=int, default=30,
-                   help="Agent turn budget (default 30 matches upstream openai-agent)")
+    p.add_argument(
+        "--prompt",
+        required=True,
+        help="Scenario text (AAT_RUNNER_TEMPLATE passes $PROMPT here)",
+    )
+    p.add_argument(
+        "--output",
+        required=True,
+        help="Trial JSON output path (passed as $OUTPUT_PATH)",
+    )
+    p.add_argument(
+        "--model-id",
+        required=True,
+        help="LiteLLM-style model string, e.g. watsonx/meta-llama/llama-3-3-70b-instruct",
+    )
+    p.add_argument(
+        "--mcp-mode",
+        required=True,
+        choices=("direct", "baseline"),
+        help="direct = Cell A in-process callables; baseline = Cell B MCP stdio",
+    )
+    p.add_argument(
+        "--max-turns",
+        type=int,
+        default=30,
+        help="Agent turn budget (default 30 matches upstream openai-agent)",
+    )
+    p.add_argument(
+        "--parallel-tool-calls",
+        type=_parse_parallel_tool_calls,
+        default=_parse_parallel_tool_calls(os.environ.get("AAT_PARALLEL_TOOL_CALLS")),
+        help=(
+            "Whether the model may emit multiple tool calls in one turn. "
+            "Use false for local vLLM Llama 3 tool-calling compatibility "
+            "(default: false; set AAT_PARALLEL_TOOL_CALLS=auto for SDK default)."
+        ),
+    )
     p.add_argument("--verbose", action="store_true")
     return p
 
@@ -63,6 +91,20 @@ def _setup_logging(verbose: bool) -> None:
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
+
+
+def _parse_parallel_tool_calls(value: str | None) -> bool | None:
+    """Parse CLI/env tri-state for Agents SDK parallel tool calls."""
+    raw = (value if value is not None else "false").strip().lower()
+    if raw in {"", "false", "0", "no", "off"}:
+        return False
+    if raw in {"true", "1", "yes", "on"}:
+        return True
+    if raw in {"auto", "default", "none"}:
+        return None
+    raise argparse.ArgumentTypeError(
+        "parallel tool calls must be true, false, or auto; " f"got {value!r}"
     )
 
 
@@ -102,12 +144,14 @@ def _serialize_run_result(
         if not current_text_parts and not pending_tool_calls:
             return
         turn += 1
-        history.append({
-            "turn": turn,
-            "role": "assistant",
-            "content": "".join(current_text_parts),
-            "tool_calls": list(pending_tool_calls),
-        })
+        history.append(
+            {
+                "turn": turn,
+                "role": "assistant",
+                "content": "".join(current_text_parts),
+                "tool_calls": list(pending_tool_calls),
+            }
+        )
         current_text_parts.clear()
         pending_tool_calls.clear()
 
@@ -130,14 +174,18 @@ def _serialize_run_result(
             call_id = getattr(raw, "call_id", "") or getattr(raw, "id", "") or ""
             args_raw = getattr(raw, "arguments", "{}") or "{}"
             try:
-                arguments = json.loads(args_raw) if isinstance(args_raw, str) else args_raw
+                arguments = (
+                    json.loads(args_raw) if isinstance(args_raw, str) else args_raw
+                )
             except (json.JSONDecodeError, TypeError):
                 arguments = {"raw": args_raw}
-            pending_tool_calls.append({
-                "name": name,
-                "arguments": arguments,
-                "call_id": call_id,
-            })
+            pending_tool_calls.append(
+                {
+                    "name": name,
+                    "arguments": arguments,
+                    "call_id": call_id,
+                }
+            )
             tool_call_count += 1
         elif item_type == "tool_call_output_item":
             output = getattr(item, "output", "")
@@ -173,6 +221,7 @@ def _serialize_run_result(
 
     try:
         import agents as _agents
+
         sdk_version = getattr(_agents, "__version__", "unknown")
     except Exception:
         sdk_version = "unknown"
@@ -191,6 +240,7 @@ def _serialize_run_result(
             "mcp_mode": args.mcp_mode,
             "aob_prompt_sha": AOB_PROMPT_SHA,
             "max_turns": args.max_turns,
+            "parallel_tool_calls": args.parallel_tool_calls,
             "sdk_version": f"openai-agents=={sdk_version}",
             "duration_seconds": duration_seconds,
         },
@@ -211,18 +261,30 @@ class AaTRunner:
     max_turns: int = 30
     tools: list = field(default_factory=list)
     mcp_servers: list = field(default_factory=list)
+    litellm_base_url: str | None = None
+    litellm_api_key: str | None = None
+    parallel_tool_calls: bool | None = False
 
     async def run(self, prompt: str):
-        from agents import Agent, Runner
+        from agents import Agent, ModelSettings, Runner
         from agents.extensions.models.litellm_model import LitellmModel
         from scripts.aat_system_prompt import AOB_SYSTEM_PROMPT
 
+        base_url = self.litellm_base_url or os.environ.get("LITELLM_BASE_URL")
+        api_key = self.litellm_api_key or os.environ.get("LITELLM_API_KEY")
         agent = Agent(
             name="smartgrid_aat",
             instructions=AOB_SYSTEM_PROMPT,
             tools=self.tools,
             mcp_servers=self.mcp_servers,
-            model=LitellmModel(model=self.model_id),
+            model=LitellmModel(
+                model=self.model_id,
+                base_url=base_url,
+                api_key=api_key,
+            ),
+            model_settings=ModelSettings(
+                parallel_tool_calls=self.parallel_tool_calls,
+            ),
         )
         return await Runner.run(agent, prompt, max_turns=self.max_turns)
 
@@ -235,9 +297,11 @@ async def _main(args: argparse.Namespace) -> int:
 
     if args.mcp_mode == "direct":
         from scripts.aat_tools_direct import build_direct_tools
+
         tools = build_direct_tools()
     elif args.mcp_mode == "baseline":
         from scripts.aat_tools_mcp import build_mcp_servers
+
         mcp_servers = await build_mcp_servers(repo_root)
     else:
         _LOG.error("unknown --mcp-mode %r", args.mcp_mode)
@@ -249,6 +313,7 @@ async def _main(args: argparse.Namespace) -> int:
         max_turns=args.max_turns,
         tools=tools,
         mcp_servers=mcp_servers,
+        parallel_tool_calls=args.parallel_tool_calls,
     )
 
     start = time.time()
@@ -258,6 +323,7 @@ async def _main(args: argparse.Namespace) -> int:
     except Exception as exc:
         _LOG.exception("runner failed: %s", exc)
         from scripts.aat_system_prompt import AOB_PROMPT_SHA
+
         error_payload = {
             "question": args.prompt,
             "answer": "",
@@ -273,6 +339,7 @@ async def _main(args: argparse.Namespace) -> int:
                 "mcp_mode": args.mcp_mode,
                 "aob_prompt_sha": AOB_PROMPT_SHA,
                 "max_turns": args.max_turns,
+                "parallel_tool_calls": args.parallel_tool_calls,
                 "sdk_version": "unknown",
                 "duration_seconds": time.time() - start,
             },
