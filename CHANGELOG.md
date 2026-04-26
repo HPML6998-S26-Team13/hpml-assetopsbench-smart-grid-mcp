@@ -13,10 +13,11 @@
   server factory onto the same warmed Smart Grid server launch/timeout envelope
   used by the benchmark Cell B smoke, so the parity run measures runner
   behavior rather than missing server dependencies or cold `uv` startup. The
-  upstream parity path is smoke-proven on Insomnia by Slurm job `8970383`
-  (`1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls). Removed the
-  stale Apr 21 meeting-notes backlog item that was already handled elsewhere
-  (Alex)
+  upstream parity path is smoke-proven on Insomnia by Slurm jobs `8970383`
+  (`1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls) and `8970468`
+  (`1 / 1` repeat success, Slurm elapsed `00:09:05`, 4 MCP tool calls).
+  Removed the stale Apr 21 meeting-notes backlog item that was already handled
+  elsewhere (Alex)
 - Hardened the AaT smoke path so stale Insomnia virtualenvs fail fast before
   launching vLLM: `run_experiment.sh` now preflights the pinned AaT dependency
   set, and the Cell A/B AaT configs run `scripts/aat_runner.py` through the

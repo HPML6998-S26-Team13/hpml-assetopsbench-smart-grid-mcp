@@ -139,7 +139,9 @@ Issue `#104` tracks the concrete wiring work:
   `OpenAIAgentRunner` Python API on the same scenario to quantify any
   implementation gap between our runner and AOB's (**done:** Slurm job
   `8970383_aat_mcp_baseline_upstream_smoke_104`, `1 / 1` success,
-  Slurm elapsed `00:11:18`)
+  Slurm elapsed `00:11:18`; repeat Slurm job
+  `8970468_aat_mcp_baseline_upstream_smoke_104`, `1 / 1` success,
+  Slurm elapsed `00:09:05`)
 - artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/raw/<run-id>/`
   following the canonical layout
 
@@ -164,8 +166,8 @@ smoke if symmetry is wanted later.
 - Cell A and Cell B expose the same model-visible bare tool names
 - Insomnia local-vLLM smoke proofs exist for Cell A (`8962310`) and Cell B
   (`8969519`) on the shared SGT-009 / T-015 scenario
-- upstream `OpenAIAgentRunner` parity smoke exists for Cell B (`8970383`) on
-  the same shared scenario and Smart Grid MCP server paths
+- upstream `OpenAIAgentRunner` parity smoke exists for Cell B (`8970383`,
+  repeat `8970468`) on the same shared scenario and Smart Grid MCP server paths
 
 ### What remains
 

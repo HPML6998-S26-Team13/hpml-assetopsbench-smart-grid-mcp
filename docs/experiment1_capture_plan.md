@@ -63,7 +63,7 @@ and the tool source selected by cell:
 |---|---|---|
 | A | `mcp_servers.direct_adapter` direct callables | Slurm job `8962310_aat_direct_smoke_104`, `1 / 1` success, 4 tool calls |
 | B | MCP stdio to the four Smart Grid servers | Slurm job `8969519_aat_mcp_baseline_smoke_104`, `1 / 1` success, 4 MCP tool calls |
-| B parity | Upstream AOB `OpenAIAgentRunner` Python API with Smart Grid server paths | Slurm job `8970383_aat_mcp_baseline_upstream_smoke_104`, `1 / 1` success, Slurm elapsed `00:11:18` |
+| B parity | Upstream AOB `OpenAIAgentRunner` Python API with Smart Grid server paths | Slurm jobs `8970383_aat_mcp_baseline_upstream_smoke_104` and `8970468_aat_mcp_baseline_upstream_smoke_104`, both `1 / 1` success |
 | C | optimized MCP transport | waits on the optimized MCP lane |
 
 What remains for `#25` is the report-facing capture set, not the smoke runner:
@@ -151,8 +151,9 @@ starts. The expected cadence is:
 
 1. preflight and parser validation can now start from the AaT smoke artifacts:
    Cell A job `8962310_aat_direct_smoke_104` and Cell B job
-   `8969519_aat_mcp_baseline_smoke_104`; upstream parity proof is job
-   `8970383_aat_mcp_baseline_upstream_smoke_104`
+   `8969519_aat_mcp_baseline_smoke_104`; upstream parity proofs are jobs
+   `8970383_aat_mcp_baseline_upstream_smoke_104` and
+   `8970468_aat_mcp_baseline_upstream_smoke_104`
 2. shared-Cell-B contract checks can now use the Cell B smoke artifact:
    - scenario IDs and trial indices match the Experiment 2 join keys
    - latency rows are present in the expected `latencies.jsonl` shape

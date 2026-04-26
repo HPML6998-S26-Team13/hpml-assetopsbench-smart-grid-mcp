@@ -57,6 +57,13 @@ For each proof entry, record:
   - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/vllm.log`
   - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/latencies.jsonl`
   - `benchmarks/cell_B_mcp_baseline/raw/8970383_aat_mcp_baseline_upstream_smoke_104/2026-04-26_B_llama-3-1-8b-instruct_agent_as_tool_baseline_multi_01_end_to_end_fault_response_run01.json`
+- **Upstream parity repeat run id / Slurm job id:** `8970468_aat_mcp_baseline_upstream_smoke_104`
+- **Upstream parity repeat primary artifacts:** live artifacts in the shared Insomnia checkout:
+  - `benchmarks/cell_B_mcp_baseline/raw/8970468_aat_mcp_baseline_upstream_smoke_104/meta.json`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970468_aat_mcp_baseline_upstream_smoke_104/harness.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970468_aat_mcp_baseline_upstream_smoke_104/vllm.log`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970468_aat_mcp_baseline_upstream_smoke_104/latencies.jsonl`
+  - `benchmarks/cell_B_mcp_baseline/raw/8970468_aat_mcp_baseline_upstream_smoke_104/2026-04-26_B_llama-3-1-8b-instruct_agent_as_tool_baseline_multi_01_end_to_end_fault_response_run01.json`
 
 What this proves:
 
@@ -79,6 +86,9 @@ What this proves:
   Slurm `COMPLETED 0:0` in `00:11:18`, benchmark `run_status: "success"`,
   `1 / 1` scenario complete, 36.18 s benchmark latency, 30.14 s upstream
   runner duration, and 4 MCP tool calls
+- the repeat upstream parity smoke also succeeded end-to-end:
+  Slurm `COMPLETED 0:0` in `00:09:05`, benchmark `run_status: "success"`,
+  `1 / 1` scenario complete, 31.48 s benchmark latency, and 4 MCP tool calls
 - the upstream parity harness reached MCP bootstrap, MCP initialize,
   model requests, and tool execution: all four servers listed tools,
   local vLLM served five `/v1/chat/completions` calls, and the trajectory

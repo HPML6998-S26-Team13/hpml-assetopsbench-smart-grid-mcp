@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-26 05:30 EDT*
+*Last updated: 2026-04-26 06:20 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-24 05:30 EDT -> 2026-04-26 05:30 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-24 06:20 EDT -> 2026-04-26 06:20 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -12,9 +12,10 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history is `team13/main@e2b3f48`, carrying
-  Aaron's three squashed AaT commits. Alex's root `main` is local-only ahead by
-  two coordination/model-revision commits (`1dc3593`, `bf717c1`); do not push
+- **[V]** Current canonical remote history is `team13/main@c61538e`, carrying
+  Aaron's three squashed AaT commits with author/committer metadata aligned
+  after the Apr 26 attribution rewrite. Alex's root `main` is local-only ahead by
+  two coordination/model-revision commits (`2726482`, `0ef5304`); do not push
   root `main` unless Alex asks.
 - **[V]** Apr 21 Team check-in #4 now has a repo meeting record at
   `planning/2026-04-21_meeting_notes.md`. The Apr 28 agenda/prep docs point at
@@ -26,7 +27,9 @@
   `8969519_aat_mcp_baseline_smoke_104` completed `1 / 1` on `a10d092`.
   Upstream AOB `OpenAIAgentRunner` parity job
   `8970383_aat_mcp_baseline_upstream_smoke_104` completed `1 / 1` on
-  `e43cba3` with Slurm elapsed `00:11:18`. These used self-hosted
+  `e43cba3` with Slurm elapsed `00:11:18`; repeat parity job
+  `8970468_aat_mcp_baseline_upstream_smoke_104` also completed `1 / 1` with
+  Slurm elapsed `00:09:05`. These used self-hosted
   `openai/Llama-3.1-8B-Instruct` on Insomnia and emitted canonical raw
   artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/`. This clears
   the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gives
@@ -84,9 +87,10 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-26 06:10 | `team13/main@c61538e`, PR branch `b8f4e52` | `team13/main` + `codex-fnd/aat-smoke-fix` | Rewrote published commit metadata at Alex's explicit override so the six squash commits no longer show a second GitHub "committed by" identity: PR `#126`/Alex commits now have Alex as committer, and Aaron's AaT squash stack now has Aaron as committer. Trees/messages are unchanged; backup refs exist locally under `refs/backup/pre-attribution-rewrite-*20260426_060931`. |
 | 2026-04-26 05:30 | `codex-fnd/aat-smoke-fix` | feature branch | Ported the local Apr 21 meeting-note/call-prep commit onto the AaT smoke-fix PR branch so the PR can carry the local root-main coordination commits plus the runtime proof branch together. |
-| 2026-04-25/26 | `9d827a8` + Slurm `8962310`, `8969519`, `8970383` | feature branch / Insomnia | AaT Cell A, team-runner Cell B, and upstream AOB `OpenAIAgentRunner` parity are all smoke-proven on the SGT-009 / T-015 scenario; docs and issue comments now record the proof ladder. |
-| 2026-04-24 evening | `e2b3f48` | `team13/main` | Aaron's AaT runner stack was squashed into three shared-main commits: shared runner, Cell A/B configs/smokes, and design docs. The feature branch now carries the follow-up fixes/proofs on top. |
+| 2026-04-25/26 | `46edc87` + Slurm `8962310`, `8969519`, `8970383`, `8970468` | feature branch / Insomnia | AaT Cell A, team-runner Cell B, and upstream AOB `OpenAIAgentRunner` parity are all smoke-proven on the SGT-009 / T-015 scenario; the parity path now has two successful runs. |
+| 2026-04-24 evening | `c61538e` | `team13/main` | Aaron's AaT runner stack was squashed into three shared-main commits: shared runner, Cell A/B configs/smokes, and design docs. The feature branch now carries the follow-up fixes/proofs on top. |
 | 2026-04-24 evening | `planning/2026-04-21_meeting_notes.md` | local `main` -> feature branch | Ported the Apr 21 Team check-in #4 notes from the stale local reconciliation branch, then updated Apr 28 agenda/prep to point at the meeting record while preserving current issue truth. |
 | 2026-04-24 13:08 | PR `#126` / `8548b8a` | `team13/main` | Root coordination/docs stack merged after review feedback was addressed: live-summary window sync, AaT runner design CHANGELOG entry, orchestration heading cleanup, and a clean squash body replacing the malformed intermediate commit message. |
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
@@ -147,7 +151,8 @@
   with the pinned AOB prompt; Cell A supplies direct callables and Cell B
   supplies MCP stdio servers. Proof anchors: Cell A Slurm job `8962310`,
   Cell B Slurm job `8969519`, and upstream AOB `OpenAIAgentRunner` parity
-  Slurm job `8970383`. `docs/validation_log.md` records all three. Remaining
+  Slurm jobs `8970383` and `8970468`. `docs/validation_log.md` records these
+  proof anchors. Remaining
   AaT work is PR/review closeout, Cell C once the optimized MCP lane lands,
   and the full `#25` capture slice.
 
@@ -204,6 +209,8 @@
      `8970383_aat_mcp_baseline_upstream_smoke_104`: AOB
      `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario,
      `1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls.
+     Repeat job `8970468_aat_mcp_baseline_upstream_smoke_104` also completed
+     `1 / 1` successfully, Slurm elapsed `00:09:05`, 4 MCP tool calls.
    - **[?]** Remaining closeout is process, not implementation proof: PR/review,
      issue comment/update, and then a human decision to close `#104`.
 
@@ -247,6 +254,7 @@
 
 | Date (EDT) | Run ID | Branch / SHA | Config | W&B | Status | Notes |
 |---|---|---|---|---|---|---|
+| 2026-04-26 | `8970468_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix@e43cba3` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity repeat success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:09:05`, `run_status: success`, `1/1`, latency 31.48s, `tool_call_count_total=4`. |
 | 2026-04-26 | `8970383_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix@e43cba3` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:11:18`, `run_status: success`, `1/1`, latency 36.18s, `tool_call_count_total=4`. |
 | 2026-04-26 | `8969519_aat_mcp_baseline_smoke_104` | `codex-fnd/aat-smoke-fix@a10d092` | `configs/aat_mcp_baseline_smoke.env` | disabled | **AaT Cell B smoke success** | `run_status: success`, `1/1`, latency 91.78s, `tool_call_count_total=4`; all four MCP servers bootstrapped/initialized and vLLM accepted sequential tool-call turns with `parallel_tool_calls=false`. |
 | 2026-04-25 | `8962310_aat_direct_smoke_104` | `codex-fnd/aat-smoke-fix@9541e26` | `configs/aat_direct_smoke.env` | disabled | **AaT Cell A smoke success** | `run_status: success`, `1/1`, latency 12.09s, `tool_call_count_total=4`; direct callable path exercised the same SGT-009 / T-015 scenario as Cell B. |
@@ -264,8 +272,8 @@
 
 1. **Close out `#104` through process.**
    - Core A/B smoke proof is present (`8962310`, `8969519`) and upstream
-     `OpenAIAgentRunner` parity proof is present (`8970383`). Remaining work is
-     PR/review, issue comment/update, and human closure.
+     `OpenAIAgentRunner` parity proof is present twice (`8970383`, `8970468`).
+     Remaining work is PR/review, issue comment/update, and human closure.
 2. **Proceed to `#25` full capture planning.**
    - Use the proven A/B smoke path for the real `multi_*.json`, 3-trial
      capture set. Keep Cell C gated on the optimized MCP workstream.
