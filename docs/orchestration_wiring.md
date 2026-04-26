@@ -64,8 +64,8 @@ Repo-side support for issue `#22` exists as an explicit adapter surface in
 [scripts/run_experiment.sh](../scripts/run_experiment.sh):
 
 - set `ORCHESTRATION=agent_as_tool`
-- provide `AAT_RUNNER_TEMPLATE` for a custom command, or rely on the
-  repo-local wrapper default once `#104` lands
+- rely on the repo-local `scripts/aat_runner.py` default dispatch, or provide
+  `AAT_RUNNER_TEMPLATE` for a custom parity / variant command
 
 Example custom-template shape:
 
@@ -126,43 +126,58 @@ source. `(B - A)` measures MCP transport overhead by construction.
 
 Issue `#104` tracks the concrete wiring work:
 
-- add `scripts/aat_runner.py` per the SDK-wrapping design above
-- wire it as the default runner when `ORCHESTRATION=agent_as_tool`, keeping
-  `AAT_RUNNER_TEMPLATE` as an override escape hatch
-- Cell A smoke on SGT-009 / T-015 (direct callables)
-- Cell B smoke on the same scenario (MCP stdio, matches the Apr 13 PE
-  smoke baseline)
-- parity smoke: run Cell B once more using upstream's `openai-agent` CLI
-  on the same scenario to quantify any implementation gap between our
-  runner and AOB's
+- add `scripts/aat_runner.py` per the SDK-wrapping design above (**done**)
+- wire smoke configs through first-class `ORCHESTRATION=agent_as_tool`
+  dispatch, with `AAT_RUNNER_TEMPLATE` kept as an explicit variant/parity
+  override (**done**)
+- Cell A smoke on SGT-009 / T-015, direct callables (**done:** Slurm job
+  `8962310_aat_direct_smoke_104`, `1 / 1` success)
+- Cell B smoke on the same scenario, MCP stdio, matching the Apr 13 PE smoke
+  baseline (**done:** Slurm job `8969519_aat_mcp_baseline_smoke_104`,
+  `1 / 1` success)
+- parity smoke: run Cell B once more through upstream AssetOpsBench's
+  `OpenAIAgentRunner` Python API on the same scenario to quantify any
+  implementation gap between our runner and AOB's (**done:** Slurm job
+  `8970383_aat_mcp_baseline_upstream_smoke_104`, `1 / 1` success,
+  Slurm elapsed `00:11:18`; repeat Slurm job
+  `8970468_aat_mcp_baseline_upstream_smoke_104`, `1 / 1` success,
+  Slurm elapsed `00:09:05`)
 - artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/raw/<run-id>/`
   following the canonical layout
 
-`openai-agent` remains the reference upstream runner for the parity check
-because it is provider-generic via LiteLLM; `claude-agent` stays available
-for a separate Claude-family smoke if symmetry is wanted later.
+`OpenAIAgentRunner` remains the reference upstream runner for the parity check
+because it is provider-generic via LiteLLM. We use the Python API rather than
+the `openai-agent` CLI because the CLI cannot pass Smart Grid `server_paths`;
+the parity wrapper keeps AOB's agent loop but patches its MCP server factory
+onto the warmed Smart Grid server launch/timeout envelope that the benchmark
+Cell B smoke uses. `claude-agent` stays available for a separate Claude-family
+smoke if symmetry is wanted later.
 
 ### What is done on our side
 
 - common benchmark/logging/config plumbing exists
 - Smart Grid MCP server discovery contract is defined
 - benchmark invocation contract is documented
-- `ORCHESTRATION=agent_as_tool` dispatch and `AAT_RUNNER_TEMPLATE` override
-  path are live in the harness
+- `ORCHESTRATION=agent_as_tool` dispatch is live in the harness with
+  `scripts/aat_runner.py` as the default and `AAT_RUNNER_TEMPLATE` as an
+  override path
+- `scripts/aat_runner.py` runs Cells A/B on one OpenAI Agents SDK loop with the
+  AOB prompt pinned by SHA
+- Cell A and Cell B expose the same model-visible bare tool names
+- Insomnia local-vLLM smoke proofs exist for Cell A (`8962310`) and Cell B
+  (`8969519`) on the shared SGT-009 / T-015 scenario
+- upstream `OpenAIAgentRunner` parity smoke exists for Cell B (`8970383`,
+  repeat `8970468`) on the same shared scenario and Smart Grid MCP server paths
 
 ### What remains
 
-- repo-local `scripts/aat_runner.py` wrapping the Agents SDK directly
-  (tracked in `#104`)
-- default `run_experiment.sh` dispatch for `agent_as_tool` that uses the
-  wrapper without requiring `AAT_RUNNER_TEMPLATE` (tracked in `#104`)
-- Cell A + Cell B smokes plus the parity check against upstream's CLI
-  (tracked in `#104`)
-- `docs/validation_log.md` entries for A, B, and the parity run (tracked
-  in `#104`)
+- Cell C once the optimized MCP stack is ready
+- full `#25` Experiment 1 capture set across `multi_*.json` with 3 trials
 
 So `#22` is adapter-ready on our side. The remaining "prove AaT end-to-end"
-work is scoped and tracked under `#104`, and is not blocked on upstream.
+work now has Cell A/B smoke artifacts plus upstream parity proof; the remaining
+work is broader capture and Cell C optimization, not the core runner/MCP
+bootstrap.
 
 ### Teammate note: AOB dependency
 
@@ -174,8 +189,10 @@ AssetOpsBench checkout is required.
   should stay in sync with the runtime slice we are using here.
 - Repo-local PE runners do **not** vendor AOB. They import a small
   plan-execute runtime slice from that checkout.
-- The upcoming vanilla AaT runner in `#104` will use the same pattern through
-  AOB's `OpenAIAgentRunner`, not a standalone team-repo implementation.
+- The vanilla AaT parity smoke uses the same pattern through AOB's
+  `OpenAIAgentRunner`; the benchmark Cell A/B runner is the team-local
+  OpenAI Agents SDK wrapper described above so the direct and MCP arms share
+  one agent loop.
 - Do not assume the upstream AaT CLIs are enough by themselves: the real gap is
   that neither upstream AaT CLI supports `--server NAME=PATH`, so the Smart
   Grid MCP servers still need the team wrapper layer.

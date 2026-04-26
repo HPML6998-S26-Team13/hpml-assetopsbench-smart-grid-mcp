@@ -1,6 +1,6 @@
 # Experiment 1 Capture Plan
 
-*Last updated: 2026-04-18*
+*Last updated: 2026-04-26*
 *Owner: Aaron Fan (af3623)*
 
 Plan for producing the raw profiling + benchmark artifacts for Experiment 1
@@ -43,81 +43,46 @@ reflects that.
   functions as plain Python callables, plus a helper that emits a compact
   JSON-schema-ish description list for LLM prompting. Used by Cell A.
 - `scripts/run_experiment.sh` — generic runner with the benchmark / WandB /
-  vLLM plumbing already wired; it has an `AAT_RUNNER_TEMPLATE` hook for
-  Agent-as-Tool paths (see `docs/orchestration_wiring.md`).
+  vLLM plumbing already wired; Agent-as-Tool dispatch now defaults to
+  `scripts/aat_runner.py`, with `AAT_RUNNER_TEMPLATE` kept as an override for
+  parity or variant runs (see `docs/orchestration_wiring.md`).
 - `profiling/scripts/{sample_nvidia_smi,run_nsight,run_vllm_torch_profile,capture_around}.sh`
   — capture wrappers that link to the benchmark's WandB run via
   `log_profiling_to_wandb.py` when `BENCHMARK_RUN_DIR` is set.
 - `configs/aat_{direct,mcp_baseline,mcp_optimized}.env` — cell config
-  skeletons with the metadata fields filled in; `AAT_RUNNER_TEMPLATE` is
-  intentionally blank pending the runner work below.
+  skeletons with the metadata fields filled in. The direct and MCP-baseline
+  configs now use first-class Agent-as-Tool dispatch.
 
-## What's missing — the Cell A runner
+## Current smoke status and remaining capture gaps
 
-The gating piece is a ReAct loop that uses the direct adapter. Cells B and C
-then reuse the **same ReAct loop** with different tool dispatchers. Shape:
+The Cell A/B runner gate is no longer open. `scripts/aat_runner.py` now
+provides the shared OpenAI Agents SDK loop, with the AOB prompt pinned by SHA
+and the tool source selected by cell:
 
-```python
-# Pseudocode — not yet implemented
-for step in range(max_steps):
-    resp = llm.chat(messages)
-    action = parse_react_action(resp)  # "Thought / Action / Action Input"
-    if action.name == "final_answer":
-        break
-    result = tool_dispatcher.call(action.name, **action.args)
-    messages.append(react_observation(result))
-```
+| Cell | Dispatcher | Smoke status |
+|---|---|---|
+| A | `mcp_servers.direct_adapter` direct callables | Slurm job `8962310_aat_direct_smoke_104`, `1 / 1` success, 4 tool calls |
+| B | MCP stdio to the four Smart Grid servers | Slurm job `8969519_aat_mcp_baseline_smoke_104`, `1 / 1` success, 4 MCP tool calls |
+| B parity | Upstream AOB `OpenAIAgentRunner` Python API with Smart Grid server paths | Slurm jobs `8970383_aat_mcp_baseline_upstream_smoke_104` and `8970468_aat_mcp_baseline_upstream_smoke_104`, both `1 / 1` success |
+| C | optimized MCP transport | waits on the optimized MCP lane |
 
-The `tool_dispatcher` is the only thing that changes across cells:
+What remains for `#25` is the report-facing capture set, not the smoke runner:
 
-| Cell | Dispatcher |
-|---|---|
-| A | `mcp_servers.direct_adapter.get_tool(name)(**args)` |
-| B | MCP JSON-RPC client → stdio to `mcp_servers/<domain>_server/server.py` |
-| C | Same MCP client + batching wrapper + persistent stdio connections |
-
-### Cell A runner requirements
-
-To make the runner comparable to AOB's canonical ReAct (so the "Direct vs
-MCP" story reads as an apples-to-apples), it needs:
-
-1. **ReAct prompt template** close to AOB's. Upstream AOB uses a Thought /
-   Action / Action Input / Observation format; the Cell A runner should
-   match exactly so the model-side prompt isn't a confound.
-2. **Tool schema** fed via `direct_adapter.list_tool_specs_for_llm()` —
-   same 21 tools, same descriptions, same parameter shapes as the MCP path.
-3. **Stopping criteria** — max steps, token budget, loop detection.
-4. **Per-step latency logging** to `latencies.jsonl` in the run dir (matches
-   the shape Alex's PE smoke run already writes, so Notebook 02 parses both
-   identically).
-5. **Error handling** for tool exceptions — surface as `Observation:
-   <error>` so the agent can recover, but flag in the trajectory so
-   Notebook 02 can filter failed runs.
-
-**Design decision still needed (escalate to Alex):** do we reimplement the
-ReAct loop in this repo, or fork AOB's ReAct runner and run it against the
-direct adapter + our scenarios? Options:
-
-- **Reimplement (~200-400 LOC).** Clean control, uses our adapter natively,
-  no AOB fork needed. Risk: our prompt drifts from AOB's and the comparison
-  becomes about prompt quality rather than transport.
-- **Fork AOB ReAct.** Prompt fidelity is guaranteed. Risk: couples us to
-  an unreleased AOB internal API, and AOB doesn't expose a stable top-level
-  AaT CLI per `docs/orchestration_wiring.md`.
-
-Recommendation: reimplement, but copy AOB's prompt template verbatim and
-cite it in the runner's docstring so the choice is auditable.
+- run A/B across the agreed `multi_*.json` slice with 3 trials first
+- add Cell C when the optimized MCP implementation is behaviorally ready
+- decide whether raw scenario JSONs are committed, summarized in-tree with
+  validation-log references, or kept on Insomnia with live artifact paths
+- keep Notebook 02 parser checks moving on the smoke artifacts while the full
+  capture set runs
 
 ## Dependencies across the team
 
-| Cell | Blocker | Who | Target | Status |
-|---|---|---|---|---|
-| A | Cell A ReAct runner + AOB prompt review | Aaron (impl), Alex (review) | Apr 21 | Not started |
-| A | WandB/profiling link | Aaron | ✅ done | `01043c5` |
-| B | MCP server hardening (IoT/TSFM/FMSR/WO) | Tanisha | Apr 20-21 | `#85` in progress, `#86`/`#87`/`#88` Todo |
-| B | Cell A runner (reused) | Aaron | Apr 21 | Not started |
-| C | Batched tool-call scheduling | Akshat | Apr 22 | `#31` Todo |
-| C | Cell B working (prerequisite for the optimization delta) | Tanisha + Aaron | Apr 21 | — |
+| Cell | Remaining blocker | Who | Status |
+|---|---|---|---|
+| A | full `multi_*.json` / 3-trial capture | Aaron | smoke-proven, capture pending |
+| A | WandB/profiling link | Aaron | done in `01043c5` |
+| B | full `multi_*.json` / 3-trial capture | Aaron | smoke-proven, capture pending |
+| C | optimized MCP transport chosen and wired into the Cell C config | Akshat / Tanisha / Aaron | pending optimized lane |
 
 These blockers are mostly for the **final canonical A / B / C capture set**.
 The team can still start best-effort runs on the current scenario slice as soon
@@ -152,34 +117,30 @@ produces matched `capture_meta.json` that can be joined to the benchmark run
 via `run_id`. (`scripts/replay_scenarios.sh` TBD; trivial wrapper that iterates
 `BENCH/*.json` and reissues each prompt against the same vLLM endpoint.)
 
-## Proposed run sequence
+## Recommended run sequence
 
-| Date | Work | Cells |
+| Order | Work | Cells |
 |---|---|---|
-| Apr 18-20 | Cell A runner impl; validate against 2 scenarios locally via `DRY_RUN=1` then a short Slurm slot | A (dry) |
-| Apr 20 evening | Tanisha lands IoT hardening → Cell B unblocked | — |
-| Apr 21 | Cell A + B full captures against the multi-domain smoke set; first artifacts land in `benchmarks/cell_{A,B}*/raw/` | A, B |
-| Apr 21-22 | Akshat lands batched scheduling → Cell C unblocked | — |
-| Apr 22 | Cell C capture + all three cells committed with matched `latencies.jsonl` + profiling traces + WandB run URLs | A, B, C |
-| Apr 23 | Hand off to Alex for Notebook 02 parsing; `#25` closes | — |
+| 1 | Use the smoke-proven configs to capture A and B over the agreed `multi_*.json` slice with 3 trials | A, B |
+| 2 | Check artifact size and decide retention: committed summaries plus validation-log/live Insomnia paths by default, full raw only if manageable | A, B |
+| 3 | Run Notebook 02 parser/availability checks against the A/B outputs and the existing smoke artifacts | A, B |
+| 4 | Add Cell C once the optimized MCP lane is ready enough to provide a stable config and comparable tool surface | C |
+| 5 | Rerun A/B/C as the final matched set if Cell C changes shared runner/config assumptions | A, B, C |
 
 This is the **first usable run sequence**, not the only one. Once the larger
 scenario corpus exists, rerun the same cells with the same configs and notebook
 pipeline to produce the final report-ready results.
 
-## Open questions for Alex
+## Open decisions
 
-1. **Cell A runner ownership** — I'll implement if you're OK with a from-scratch
-   ReAct loop that copies AOB's prompt template, OR you'd rather we fork AOB's
-   runner (more invasive, higher prompt fidelity).
-2. **Scenario slice** — current default is `data/scenarios/multi_*.json`
+1. **Scenario slice** — current default is `data/scenarios/multi_*.json`
    (6-ish multi-domain scenarios). Is that the scenario slice you want for
    Notebook 02, or should we include the single-domain `iot_`, `fmsr_`,
    `tsfm_`, `wo_` files too?
-3. **Trials** — configs default to 3 trials/scenario. For the overhead
+2. **Trials** — configs default to 3 trials/scenario. For the overhead
    comparison you'll want enough samples to fit a distribution; 3 feels thin
    but keeps the time budget small. Bump to 5 if compute allows.
-4. **Scoring** — do Notebook 02 parsers need judge scores, or is this purely
+3. **Scoring** — do Notebook 02 parsers need judge scores, or is this purely
    latency analysis? If latency-only, we can defer LLM-as-Judge scoring out of
    the Experiment 1 critical path.
 
@@ -188,9 +149,12 @@ pipeline to produce the final report-ready results.
 `#26` does not need to wait for the final paper-scale run set before analysis
 starts. The expected cadence is:
 
-1. preflight and parser validation as soon as any A / B / C artifacts exist
-2. shared-Cell-B contract checks as soon as `#104` / the first AaT artifact
-   makes Cell B real:
+1. preflight and parser validation can now start from the AaT smoke artifacts:
+   Cell A job `8962310_aat_direct_smoke_104` and Cell B job
+   `8969519_aat_mcp_baseline_smoke_104`; upstream parity proofs are jobs
+   `8970383_aat_mcp_baseline_upstream_smoke_104` and
+   `8970468_aat_mcp_baseline_upstream_smoke_104`
+2. shared-Cell-B contract checks can now use the Cell B smoke artifact:
    - scenario IDs and trial indices match the Experiment 2 join keys
    - latency rows are present in the expected `latencies.jsonl` shape
    - `CONTRIBUTING_EXPERIMENTS` correctly marks Cell B as dual-use
@@ -201,7 +165,8 @@ starts. The expected cadence is:
 ## References
 
 - `docs/execution_plan.md` — core grid, staged follow-on policy, async batch workflow
-- `docs/orchestration_wiring.md` — why AaT needs an explicit runner template
+- `docs/orchestration_wiring.md` — why AaT uses first-class harness dispatch
+  plus a separate upstream parity wrapper
 - `docs/wandb_schema.md` — field names used in config/summary JSON
 - `profiling/README.md` — capture wrapper usage + WandB linkage contract
 - Issues: `#25` (this), `#26` (Alex's notebook), `#31` (batched scheduling),

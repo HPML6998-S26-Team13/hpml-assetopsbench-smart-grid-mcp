@@ -10,11 +10,10 @@
 #SBATCH --output=logs/exp_%j.out
 #
 # Generic Slurm experiment runner for SmartGridBench benchmark cells.
-# The currently verified benchmark-facing orchestration path is Plan-Execute
-# against the team's Smart Grid MCP servers via AssetOpsBench's `plan-execute`
-# CLI. Repo-local follow-on runners now exist for the Self-Ask PE variant and
-# the Verified PE third-method prototype. Agent-as-Tool still uses the external
-# template path until upstream exposes a stable CLI entry point.
+# The canonical benchmark-facing orchestration paths are Plan-Execute against
+# the team's Smart Grid MCP servers, Agent-as-Tool Cells A/B, and repo-local
+# follow-on runners for Self-Ask PE and Verified PE. Runner templates remain
+# available as explicit escape hatches for parity or variant smoke checks.
 #
 # MUST be submitted from the repo root — `#SBATCH --output=logs/...` resolves
 # relative to $SLURM_SUBMIT_DIR. If you need to submit from elsewhere, add
@@ -88,6 +87,8 @@ MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
+VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-0}"
+VLLM_TOOL_CALL_PARSER="${VLLM_TOOL_CALL_PARSER:-}"
 VLLM_STARTUP_TIMEOUT="${VLLM_STARTUP_TIMEOUT:-}"
 LAUNCH_VLLM="${LAUNCH_VLLM:-0}"
 AOB_PATH="${AOB_PATH:-$PROJECT_ROOT/../AssetOpsBench}"
@@ -100,6 +101,13 @@ TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-0}"
 JUDGE_MODEL="${JUDGE_MODEL:-}"
 AAT_RUNNER_TEMPLATE="${AAT_RUNNER_TEMPLATE:-}"
+AAT_OPENAI_AGENTS_VERSION="${AAT_OPENAI_AGENTS_VERSION:-0.14.5}"
+AAT_MCP_VERSION="${AAT_MCP_VERSION:-1.27.0}"
+AAT_LITELLM_VERSION="${AAT_LITELLM_VERSION:-1.81.13}"
+AAT_MCP_SERVER_PYTHON="${AAT_MCP_SERVER_PYTHON:-}"
+AAT_MCP_SERVER_LAUNCH_MODE="${AAT_MCP_SERVER_LAUNCH_MODE:-python}"
+AAT_MCP_CLIENT_TIMEOUT_SECONDS="${AAT_MCP_CLIENT_TIMEOUT_SECONDS:-30}"
+AAT_PARALLEL_TOOL_CALLS="${AAT_PARALLEL_TOOL_CALLS:-false}"
 HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
 VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
 ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
@@ -173,6 +181,7 @@ VLLM_LOG="$RUN_DIR/vllm.log"
 HARNESS_LOG="$RUN_DIR/harness.log"
 LATENCY_FILE="$RUN_DIR/latencies.jsonl"
 : >"$HARNESS_LOG"
+VLLM_PGID=""
 
 echo "=== SmartGridBench Experiment ==="
 echo "Run ID:        $RUN_ID"
@@ -321,6 +330,9 @@ if os.environ.get("CONTRIBUTING_EXPERIMENTS"):
         part.strip() for part in os.environ["CONTRIBUTING_EXPERIMENTS"].split(",") if part.strip()
     ]
 
+if orchestration_mode == "agent_as_tool":
+    payload["aat_parallel_tool_calls"] = os.environ.get("AAT_PARALLEL_TOOL_CALLS", "false")
+
 pathlib.Path(config_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 pathlib.Path(meta_path).write_text(
     json.dumps(
@@ -345,11 +357,60 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
   source "$REPO_ROOT/scripts/insomnia_env.sh"
   # shellcheck disable=SC1091
   source .venv-insomnia/bin/activate
+  if [ "$AAT_MCP_SERVER_LAUNCH_MODE" != "uv" ] && [ -z "$AAT_MCP_SERVER_PYTHON" ] && [ -x "$REPO_ROOT/.venv-insomnia/bin/python" ]; then
+    export AAT_MCP_SERVER_PYTHON="$REPO_ROOT/.venv-insomnia/bin/python"
+  fi
   CUDNN_LIB="$("$PYTHON_BIN" -c 'import nvidia.cudnn, os; print(os.path.join(os.path.dirname(nvidia.cudnn.__file__), "lib"))' 2>/dev/null || true)"
   if [ -n "$CUDNN_LIB" ]; then
     export LD_LIBRARY_PATH="$CUDNN_LIB:$LD_LIBRARY_PATH"
   fi
 fi
+
+preflight_vllm_gpu_runtime() {
+  if [ "$LAUNCH_VLLM" != "1" ]; then
+    return 0
+  fi
+
+  {
+    echo "=== vLLM GPU preflight ==="
+    echo "Node: $(hostname)"
+    echo "SLURM_JOB_ID=${SLURM_JOB_ID:-N/A}"
+    echo "SLURM_JOB_GPUS=${SLURM_JOB_GPUS:-<unset>}"
+    echo "SLURM_GPUS_ON_NODE=${SLURM_GPUS_ON_NODE:-<unset>}"
+    echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"
+  } >>"$HARNESS_LOG"
+
+  if ! command -v nvidia-smi >/dev/null 2>&1; then
+    echo "ERROR: nvidia-smi not found after CUDA path setup; cannot launch vLLM." >&2
+    return 1
+  fi
+
+  if ! nvidia-smi -L >>"$HARNESS_LOG" 2>&1; then
+    echo "ERROR: Slurm allocated node $(hostname), but nvidia-smi cannot see a GPU." >&2
+    echo "This is a cluster/GPU allocation problem, not an AaT runner failure." >&2
+    echo "Try resubmitting, or exclude this node if it repeats: sbatch --exclude=$(hostname) ..." >&2
+    return 1
+  fi
+
+  if ! "$PYTHON_BIN" >>"$HARNESS_LOG" 2>&1 <<'PY'
+import sys
+
+import torch
+
+print(f"torch={torch.__version__}")
+print(f"cuda_available={torch.cuda.is_available()}")
+print(f"cuda_device_count={torch.cuda.device_count()}")
+if not torch.cuda.is_available() or torch.cuda.device_count() < 1:
+    raise SystemExit("torch cannot see an allocated CUDA device")
+torch.cuda.init()
+print(f"cuda_device_0={torch.cuda.get_device_name(0)}")
+PY
+  then
+    echo "ERROR: PyTorch CUDA preflight failed before vLLM launch. See $HARNESS_LOG." >&2
+    echo "This usually means the Slurm node/GPU allocation is unhealthy; try a fresh node." >&2
+    return 1
+  fi
+}
 
 run_plan_execute_trial() {
   local prompt="$1"
@@ -418,6 +479,113 @@ PY
   fi
 }
 
+preflight_aat_runtime_dependencies() {
+  if [ "$ORCHESTRATION" != "agent_as_tool" ]; then
+    return 0
+  fi
+
+  if ! (
+    cd "$REPO_ROOT"
+    uv run \
+      --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION" \
+      --with "mcp[cli]==$AAT_MCP_VERSION" \
+      --with "litellm==$AAT_LITELLM_VERSION" \
+      python - >>"$HARNESS_LOG" 2>&1 <<'PY'
+from importlib.metadata import version
+
+from agents import Agent, Runner, function_tool
+from agents.extensions.models.litellm_model import LitellmModel
+from agents.mcp import MCPServerStdio
+
+import litellm
+import mcp
+
+print("AaT runtime dependency preflight passed.")
+print(f"openai-agents=={version('openai-agents')}")
+print(f"mcp=={version('mcp')}")
+print(f"litellm=={version('litellm')}")
+PY
+  ); then
+    echo "ERROR: AaT runtime dependency preflight failed before vLLM launch. See $HARNESS_LOG." >&2
+    echo "Check AAT_OPENAI_AGENTS_VERSION, AAT_MCP_VERSION, and AAT_LITELLM_VERSION." >&2
+    return 1
+  fi
+
+  echo "AaT parallel tool calls: $AAT_PARALLEL_TOOL_CALLS" >>"$HARNESS_LOG"
+
+  if [ "$MCP_MODE" != "direct" ]; then
+    echo "AaT MCP server launch mode: $AAT_MCP_SERVER_LAUNCH_MODE" >>"$HARNESS_LOG"
+    if [ "$AAT_MCP_SERVER_LAUNCH_MODE" = "uv" ]; then
+      if ! (
+        cd "$REPO_ROOT"
+        uv run \
+          --with "mcp[cli]==$AAT_MCP_VERSION" \
+          --with pandas \
+          --with numpy \
+          python - >>"$HARNESS_LOG" 2>&1 <<'PY'
+from importlib.metadata import version
+
+import mcp
+import numpy
+import pandas
+
+print("AaT MCP server dependency preflight passed.")
+print("server_launch_mode=uv")
+print(f"mcp=={version('mcp')}")
+print(f"numpy=={version('numpy')}")
+print(f"pandas=={version('pandas')}")
+PY
+      ); then
+        echo "ERROR: AaT MCP server dependency preflight failed before vLLM launch. See $HARNESS_LOG." >&2
+        return 1
+      fi
+    elif [ -n "$AAT_MCP_SERVER_PYTHON" ]; then
+      if ! "$AAT_MCP_SERVER_PYTHON" >>"$HARNESS_LOG" 2>&1 <<'PY'
+from importlib.metadata import version
+
+import mcp
+import numpy
+import pandas
+
+print("AaT MCP server dependency preflight passed.")
+print(f"server_python={__import__('sys').executable}")
+print(f"mcp=={version('mcp')}")
+print(f"numpy=={version('numpy')}")
+print(f"pandas=={version('pandas')}")
+PY
+      then
+        echo "ERROR: AaT MCP server dependency preflight failed before vLLM launch. See $HARNESS_LOG." >&2
+        return 1
+      fi
+    elif [ "$AAT_MCP_SERVER_LAUNCH_MODE" = "python" ]; then
+      echo "ERROR: AAT_MCP_SERVER_LAUNCH_MODE=python requires AAT_MCP_SERVER_PYTHON." >&2
+      echo "For local uv-managed launches, set AAT_MCP_SERVER_LAUNCH_MODE=uv." >&2
+      return 1
+    elif ! (
+      cd "$REPO_ROOT"
+      uv run \
+        --with "mcp[cli]==$AAT_MCP_VERSION" \
+        --with pandas \
+        --with numpy \
+        python - >>"$HARNESS_LOG" 2>&1 <<'PY'
+from importlib.metadata import version
+
+import mcp
+import numpy
+import pandas
+
+print("AaT MCP server dependency preflight passed.")
+print(f"mcp=={version('mcp')}")
+print(f"numpy=={version('numpy')}")
+print(f"pandas=={version('pandas')}")
+PY
+    ); then
+      echo "ERROR: AaT MCP server dependency preflight failed before vLLM launch. See $HARNESS_LOG." >&2
+      return 1
+    fi
+  fi
+}
+
 run_external_orchestration_trial() {
   local prompt="$1"
   local out_path="$2"
@@ -433,6 +601,13 @@ run_external_orchestration_trial() {
     AOB_PATH="$AOB_PATH" \
     AOB_PYTHON="$AOB_PYTHON" \
     MODEL_ID="$MODEL_ID" \
+    AAT_OPENAI_AGENTS_VERSION="$AAT_OPENAI_AGENTS_VERSION" \
+    AAT_MCP_VERSION="$AAT_MCP_VERSION" \
+    AAT_LITELLM_VERSION="$AAT_LITELLM_VERSION" \
+    AAT_MCP_SERVER_PYTHON="$AAT_MCP_SERVER_PYTHON" \
+    AAT_MCP_SERVER_LAUNCH_MODE="$AAT_MCP_SERVER_LAUNCH_MODE" \
+    AAT_MCP_CLIENT_TIMEOUT_SECONDS="$AAT_MCP_CLIENT_TIMEOUT_SECONDS" \
+    AAT_PARALLEL_TOOL_CALLS="$AAT_PARALLEL_TOOL_CALLS" \
     ENABLE_SELF_ASK="$ENABLE_SELF_ASK" \
     HARNESS_VERBOSE="$HARNESS_VERBOSE" \
     SERVER_IOT_PATH="$SERVER_IOT_PATH" \
@@ -440,6 +615,33 @@ run_external_orchestration_trial() {
     SERVER_TSFM_PATH="$SERVER_TSFM_PATH" \
     SERVER_WO_PATH="$SERVER_WO_PATH" \
     bash -lc "$template" >>"$HARNESS_LOG" 2>&1
+}
+
+run_agent_as_tool_trial() {
+  local prompt="$1"
+  local out_path="$2"
+
+  if [ -n "$AAT_RUNNER_TEMPLATE" ]; then
+    run_external_orchestration_trial "$prompt" "$out_path" "AAT_RUNNER_TEMPLATE"
+    return
+  fi
+
+  local -a cmd=(
+    uv run
+    --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION"
+    --with "mcp[cli]==$AAT_MCP_VERSION"
+    --with "litellm==$AAT_LITELLM_VERSION"
+    python scripts/aat_runner.py
+    --prompt "$prompt"
+    --output "$out_path"
+    --model-id "$MODEL_ID"
+    --mcp-mode "$MCP_MODE"
+    --parallel-tool-calls "$AAT_PARALLEL_TOOL_CALLS"
+  )
+  if [ "$HARNESS_VERBOSE" = "1" ]; then
+    cmd+=(--verbose)
+  fi
+  (cd "$REPO_ROOT" && "${cmd[@]}") >>"$HARNESS_LOG" 2>&1
 }
 
 run_verified_pe_trial() {
@@ -493,23 +695,30 @@ PY
 
 VLLM_PID=""
 cleanup() {
-  if [ -n "$VLLM_PID" ] && kill -0 "$VLLM_PID" 2>/dev/null; then
-    kill "$VLLM_PID" 2>/dev/null || true
+  if [ -n "$VLLM_PGID" ] && kill -0 -- "-$VLLM_PGID" 2>/dev/null; then
+    kill -TERM -- "-$VLLM_PGID" 2>/dev/null || true
+    sleep 2
+    kill -KILL -- "-$VLLM_PGID" 2>/dev/null || true
+    wait "$VLLM_PID" 2>/dev/null || true
+  elif [ -n "$VLLM_PID" ] && kill -0 "$VLLM_PID" 2>/dev/null; then
+    kill -TERM "$VLLM_PID" 2>/dev/null || true
     wait "$VLLM_PID" 2>/dev/null || true
   fi
 }
 trap cleanup EXIT
 
 preflight_repo_local_orchestration_runtime
+preflight_aat_runtime_dependencies
+preflight_vllm_gpu_runtime
 
 if [ "$LAUNCH_VLLM" = "1" ]; then
   if [ -z "$VLLM_STARTUP_TIMEOUT" ]; then
     if [ "$MAX_MODEL_LEN" -ge 32768 ]; then
-      VLLM_STARTUP_TIMEOUT=1200
+      VLLM_STARTUP_TIMEOUT=1800
     elif [ "$MAX_MODEL_LEN" -ge 16384 ]; then
-      VLLM_STARTUP_TIMEOUT=900
+      VLLM_STARTUP_TIMEOUT=1500
     else
-      VLLM_STARTUP_TIMEOUT=600
+      VLLM_STARTUP_TIMEOUT=1200
     fi
   fi
   if [[ "$MODEL_ID" == openai/* ]]; then
@@ -520,14 +729,31 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
       exit 1
     fi
   fi
-  "$PYTHON_BIN" -u -m vllm.entrypoints.openai.api_server \
-    --model "$VLLM_MODEL_PATH" \
-    --served-model-name "$VLLM_SERVED_MODEL_NAME" \
-    --host 127.0.0.1 \
-    --port "$VLLM_PORT" \
-    --max-model-len "$MAX_MODEL_LEN" \
-    --dtype float16 \
-    >"$VLLM_LOG" 2>&1 &
+  echo "vLLM startup timeout: ${VLLM_STARTUP_TIMEOUT}s"
+  VLLM_SERVER_ARGS=(
+    -u
+    -m vllm.entrypoints.openai.api_server
+    --model "$VLLM_MODEL_PATH"
+    --served-model-name "$VLLM_SERVED_MODEL_NAME"
+    --host 127.0.0.1
+    --port "$VLLM_PORT"
+    --max-model-len "$MAX_MODEL_LEN"
+    --dtype float16
+  )
+  if [ "$VLLM_ENABLE_AUTO_TOOL_CHOICE" = "1" ]; then
+    if [ -z "$VLLM_TOOL_CALL_PARSER" ]; then
+      echo "ERROR: VLLM_TOOL_CALL_PARSER must be set when VLLM_ENABLE_AUTO_TOOL_CHOICE=1." >&2
+      exit 1
+    fi
+    echo "vLLM auto tool choice: enabled with parser '$VLLM_TOOL_CALL_PARSER'"
+    VLLM_SERVER_ARGS+=(--enable-auto-tool-choice --tool-call-parser "$VLLM_TOOL_CALL_PARSER")
+  fi
+  if command -v setsid >/dev/null 2>&1; then
+    setsid "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
+    VLLM_PGID=$!
+  else
+    "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
+  fi
   VLLM_PID=$!
   for i in $(seq 1 "$VLLM_STARTUP_TIMEOUT"); do
     if curl -s "http://127.0.0.1:$VLLM_PORT/health" >/dev/null 2>&1; then
@@ -606,7 +832,7 @@ PY
         fi
         ;;
       agent_as_tool)
-        run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "AAT_RUNNER_TEMPLATE" || true
+        run_agent_as_tool_trial "$PROMPT" "$TRIAL_OUT" || true
         if trial_succeeded "$TRIAL_OUT"; then
           PASS=$((PASS + 1))
         else
@@ -677,16 +903,29 @@ latencies = [
 
 tool_call_total = 0
 tool_call_trials = 0
-for output_path in sorted(pathlib.Path(run_dir).glob("*.json")):
+for output_path in sorted(pathlib.Path(run_dir).glob("*_run[0-9][0-9].json")):
     try:
         payload = json.loads(output_path.read_text(encoding="utf-8"))
     except Exception:
+        continue
+    explicit_tool_calls = payload.get("tool_call_count")
+    if (
+        isinstance(explicit_tool_calls, int)
+        and not isinstance(explicit_tool_calls, bool)
+        and explicit_tool_calls >= 0
+    ):
+        tool_call_total += explicit_tool_calls
+        tool_call_trials += 1
         continue
     history = payload.get("history")
     if not isinstance(history, list):
         continue
     tool_calls = 0
     for step in history:
+        nested_calls = step.get("tool_calls")
+        if isinstance(nested_calls, list):
+            tool_calls += len(nested_calls)
+            continue
         tool = str(step.get("tool", "")).strip().lower()
         if tool and tool not in {"none", "null"}:
             tool_calls += 1

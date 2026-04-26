@@ -1,9 +1,62 @@
 # Changelog
 
+## 2026-04-25
+
+### Runtime / Config
+
+- Tightened the PR `#127` AaT cleanup findings after review: Cell A direct
+  tools now fail fast on bare-name collisions and expose non-strict schemas
+  matching the MCP required-parameter surface; Cell B MCP launch mode now
+  fails fast when `python` mode lacks `AAT_MCP_SERVER_PYTHON`; the MCP
+  bootstrap no longer assumes a fixed directory depth; summary aggregation
+  scans only per-trial JSON outputs; and the upstream parity wrapper now fails
+  earlier on missing Smart Grid server paths, preserves max-turn exhaustion in
+  its serialized result, and avoids shadowing a real `claude_agent_sdk`
+  install (Alex)
+- Added first-class Agent-as-Tool dispatch to `scripts/run_experiment.sh` so
+  Cell A/B configs no longer need an explicit `AAT_RUNNER_TEMPLATE` for the
+  standard team-local runner. Added a separate upstream
+  `OpenAIAgentRunner` parity smoke config/wrapper that uses the AOB Python API
+  with Smart Grid MCP server paths, since the upstream CLI has no server-path
+  override. The parity wrapper keeps AOB's agent loop but patches its MCP
+  server factory onto the same warmed Smart Grid server launch/timeout envelope
+  used by the benchmark Cell B smoke, so the parity run measures runner
+  behavior rather than missing server dependencies or cold `uv` startup. The
+  upstream parity path is smoke-proven on Insomnia by Slurm jobs `8970383`
+  (`1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls) and `8970468`
+  (`1 / 1` repeat success, Slurm elapsed `00:09:05`, 4 MCP tool calls).
+  Removed the stale Apr 21 meeting-notes backlog item that was already handled
+  elsewhere (Alex)
+- Hardened the AaT smoke path so stale Insomnia virtualenvs fail fast before
+  launching vLLM: `run_experiment.sh` now preflights the pinned AaT dependency
+  set, and the Cell A/B AaT configs run `scripts/aat_runner.py` through the
+  same explicit `uv --with` dependency pins. The local-vLLM AaT configs also
+  enable vLLM auto tool choice with the Llama 3 JSON tool-call parser so the
+  Agents SDK's `tool_choice=auto` requests are accepted, and summary generation
+  now counts AaT `tool_call_count` / nested `history[*].tool_calls` records
+  instead of reporting zero tool calls for successful AaT trials. The Cell B
+  MCP path now launches server subprocesses with their data dependencies and
+  preflights those imports before vLLM startup, preferring the shared Insomnia
+  server Python so MCP initialization is not blocked by per-server dependency
+  downloads; its SDK initialize deadline is now configurable and defaults to
+  30s for the smoke/configured Cell B path. Cell B MCP server launch now uses
+  an explicit bootstrap wrapper with stderr startup milestones and can force
+  the same `uv --with` dependency envelope used by local parity tests, so
+  initialize hangs identify which server startup stage went silent; the
+  Insomnia Cell B configs launch servers from the warmed `.venv-insomnia`
+  Python with a longer initialize budget to avoid rebuilding server envs inside
+  the MCP connection timeout, and the AaT runner now defaults
+  `parallel_tool_calls` to false so local vLLM Llama 3 accepts the sequential
+  tool-call loop after MCP execution begins (Alex)
+
 ## 2026-04-24
 
 ### Config / Docs
 
+- Ported the Apr 21 Team 13 meeting notes from the local reconciliation branch
+  onto `main`, preserving the Notion / Google Meet source record and updating
+  the Apr 28 agenda / prep docs so they point at the meeting record while
+  reflecting the newer `#111` closeout and `#104` runner landing (Alex)
 - Clarified the coordination-doc retention rule: `docs/coordination/live_repo_summary.md`
   now has a configurable emphasis window rather than a hard 48-hour eviction
   policy, and stale material moves to `docs/coordination/repo_summary_history.md`
@@ -20,6 +73,11 @@
   Experiment 1 measures MCP transport overhead by construction. #104 now tracks
   Cell A, Cell B, and a parity smoke against upstream's `openai-agent` CLI
   (Alex)
+- Standardized the local Llama-3.1-8B-Instruct `MODEL_REVISION` at
+  `0e9e39f249a16976918f6564b8830bc894c89659` in
+  `docs/governance/model_registry.yaml`, made `scripts/setup_insomnia.sh`
+  default to that resolved checkpoint SHA, and updated the runbooks so future
+  Insomnia / fallback setup runs record the same model contract (Alex)
 
 ## 2026-04-22
 

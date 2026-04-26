@@ -136,7 +136,7 @@ Recreate on GCP. Two options — pick based on urgency.
 git clone https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
 cd hpml-assetopsbench-smart-grid-mcp
 export HF_TOKEN=hf_yourtokenhere
-export MODEL_REVISION=$(cat .model_revision 2>/dev/null || echo main)
+export MODEL_REVISION=$(cat .model_revision 2>/dev/null || echo 0e9e39f249a16976918f6564b8830bc894c89659)
 bash scripts/setup_insomnia.sh
 ```
 

@@ -231,3 +231,38 @@ should compact it in place before yielding: keep active deltas, promote settled
 current-state facts to the live summary, summarize only otherwise-unrecoverable
 context here, and rely on commits, PRs, issues, logs, meeting notes, and run
 artifacts for full detail.
+
+## 2026-04-24 evening — Claude d6519b31 backup shift note folded
+
+The local backup note
+`docs/coordination/shift_coordination_note__claude_d6519b31_fnd_memory-and-conventions_backup.md`
+was retired after its unique content was condensed here and its current-state
+successors were promoted to the live summary.
+
+### What the backup preserved
+
+The backup covered the 2026-04-22 memory/conventions consolidation and early
+AaT-repurpose pass:
+
+- `#104` was repurposed from the mid-point PowerPoint task into vanilla
+  Agent-as-Tool wiring; the old PowerPoint task was folded into `#80`.
+- `docs/orchestration_wiring.md` was corrected to acknowledge upstream
+  AssetOpsBench's `claude-agent` and `openai-agent` CLIs; the true gap was
+  Smart Grid server override/wrapper plumbing, not missing upstream AaT.
+- The Apr 13 WatsonX PE smoke proof was added to `docs/validation_log.md`.
+- Project memory from the old Claude memory directory was promoted into durable
+  team/personal `CLAUDE.md` files and scoped `.claude/rules/` files.
+- The per-session shift-coordination convention was introduced, including the
+  `shift_coordination_note__*.md` filename pattern and the
+  shift-note → live-summary → history retirement cascade.
+- The local root-main stack was squashed and published as two commits at the
+  time (`fab3003` and `999667d`); later work superseded that baseline.
+
+### Why it no longer needs to stay as a local note
+
+The durable conventions from that note now live in `CLAUDE.md`,
+`.claude/rules/planning-docs.md`, the personal repo's matching conventions,
+`docs/coordination/shift_coordination_note_template.md`, and this history file.
+Its live `#104` status was superseded on 2026-04-24 when Aaron landed the AaT
+runner stack through `team13/main@f58bda8`; the current live summary now carries
+that newer state.

@@ -1,6 +1,6 @@
 # Insomnia Runbook
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-04-24*
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
@@ -143,6 +143,16 @@ So if an Insomnia proof run dies with `ModuleNotFoundError: litellm` or
 the moment — it is to refresh the shared env against
 `requirements-insomnia.txt`. The matching model/runtime contract is now also
 captured in [governance/model_registry.yaml](governance/model_registry.yaml).
+
+The repo-standard local Llama checkpoint revision is:
+
+```bash
+MODEL_REVISION=0e9e39f249a16976918f6564b8830bc894c89659
+```
+
+`scripts/setup_insomnia.sh` uses that SHA by default. Override
+`MODEL_REVISION` only for an intentional checkpoint refresh or validation
+rerun, and record the override in the run artifact / issue comment.
 
 For quick login-node verification, stick to metadata-only checks:
 ```bash
