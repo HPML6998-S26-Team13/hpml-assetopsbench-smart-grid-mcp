@@ -26,8 +26,15 @@ For each proof entry, record:
 - **Scenario:** `data/scenarios/multi_01_end_to_end_fault_response.json`
 - **Model:** self-hosted `openai/Llama-3.1-8B-Instruct` through local vLLM on
   Insomnia
-- **Cell A branch / git SHA:** `codex-fnd/aat-smoke-fix` at
-  `9541e2661111daa14eb4d99f46d30bdc03681114`
+- **Current reachable PR branch:** `codex-fnd/aat-smoke-fix`
+- **Historical Slurm-recorded SHAs:** these jobs ran before the Apr 26
+  author/committer attribution rewrite. The run `meta.json` files therefore
+  record pre-rewrite hashes that are no longer reachable from the remote branch:
+  Cell A `9541e2661111daa14eb4d99f46d30bdc03681114`, Cell B
+  `a10d092d374309f45d282c7f7aec71a7fa8d11df`, upstream parity
+  `e43cba33c7d78cf17390ec65bd82aeb4a9ebbe10`. The rewritten PR branch above
+  preserves the smoke-fix code/doc lineage and is the checkout target for
+  review/merge.
 - **Cell A config:** `configs/aat_direct_smoke.env`
 - **Cell A run id / Slurm job id:** `8962310_aat_direct_smoke_104`
 - **Cell A primary artifacts:** live artifacts in the shared Insomnia checkout:
@@ -36,8 +43,6 @@ For each proof entry, record:
   - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/latencies.jsonl`
   - `benchmarks/cell_A_direct/raw/8962310_aat_direct_smoke_104/2026-04-25_A_llama-3-1-8b-instruct_agent_as_tool_direct_multi_01_end_to_end_fault_response_run01.json`
   - `benchmarks/cell_A_direct/config.json`, `benchmarks/cell_A_direct/summary.json`
-- **Cell B branch / git SHA:** `codex-fnd/aat-smoke-fix` at
-  `a10d092d374309f45d282c7f7aec71a7fa8d11df`
 - **Cell B config:** `configs/aat_mcp_baseline_smoke.env`
 - **Cell B run id / Slurm job id:** `8969519_aat_mcp_baseline_smoke_104`
 - **Cell B primary artifacts:** live artifacts in the shared Insomnia checkout:
@@ -47,8 +52,6 @@ For each proof entry, record:
   - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/latencies.jsonl`
   - `benchmarks/cell_B_mcp_baseline/raw/8969519_aat_mcp_baseline_smoke_104/2026-04-26_B_llama-3-1-8b-instruct_agent_as_tool_baseline_multi_01_end_to_end_fault_response_run01.json`
   - `benchmarks/cell_B_mcp_baseline/config.json`, `benchmarks/cell_B_mcp_baseline/summary.json`
-- **Upstream parity branch / git SHA:** `codex-fnd/aat-smoke-fix` at
-  `e43cba33c7d78cf17390ec65bd82aeb4a9ebbe10`
 - **Upstream parity config:** `configs/aat_mcp_baseline_upstream_smoke.env`
 - **Upstream parity run id / Slurm job id:** `8970383_aat_mcp_baseline_upstream_smoke_104`
 - **Upstream parity primary artifacts:** live artifacts in the shared Insomnia checkout:

@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-26 06:20 EDT*
+*Last updated: 2026-04-26 06:38 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-24 06:20 EDT -> 2026-04-26 06:20 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-24 06:38 EDT -> 2026-04-26 06:38 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -22,14 +22,16 @@
   that record while preserving current truth: #104 is proof-backed but awaits
   PR/review and human closure, and #25 remains the full-capture gate.
 - **[V]** AaT Cell A/B smoke and upstream parity proof are now real on branch
-  `codex-fnd/aat-smoke-fix`: Cell A job `8962310_aat_direct_smoke_104`
-  completed `1 / 1` on `9541e26`, and Cell B job
-  `8969519_aat_mcp_baseline_smoke_104` completed `1 / 1` on `a10d092`.
-  Upstream AOB `OpenAIAgentRunner` parity job
-  `8970383_aat_mcp_baseline_upstream_smoke_104` completed `1 / 1` on
-  `e43cba3` with Slurm elapsed `00:11:18`; repeat parity job
-  `8970468_aat_mcp_baseline_upstream_smoke_104` also completed `1 / 1` with
-  Slurm elapsed `00:09:05`. These used self-hosted
+  `codex-fnd/aat-smoke-fix`: Cell A job `8962310_aat_direct_smoke_104`,
+  Cell B job `8969519_aat_mcp_baseline_smoke_104`, upstream AOB
+  `OpenAIAgentRunner` parity job
+  `8970383_aat_mcp_baseline_upstream_smoke_104`, and repeat parity job
+  `8970468_aat_mcp_baseline_upstream_smoke_104` all completed `1 / 1`.
+  The parity jobs reported Slurm elapsed `00:11:18` and `00:09:05`,
+  respectively. The run `meta.json` files record historical pre-rewrite SHAs
+  from before the Apr 26 attribution rewrite; `docs/validation_log.md` records
+  those hashes as artifact metadata, while the current reachable checkout target
+  is the PR branch itself. These used self-hosted
   `openai/Llama-3.1-8B-Instruct` on Insomnia and emitted canonical raw
   artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/`. This clears
   the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gives
@@ -254,10 +256,10 @@
 
 | Date (EDT) | Run ID | Branch / SHA | Config | W&B | Status | Notes |
 |---|---|---|---|---|---|---|
-| 2026-04-26 | `8970468_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix@e43cba3` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity repeat success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:09:05`, `run_status: success`, `1/1`, latency 31.48s, `tool_call_count_total=4`. |
-| 2026-04-26 | `8970383_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix@e43cba3` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:11:18`, `run_status: success`, `1/1`, latency 36.18s, `tool_call_count_total=4`. |
-| 2026-04-26 | `8969519_aat_mcp_baseline_smoke_104` | `codex-fnd/aat-smoke-fix@a10d092` | `configs/aat_mcp_baseline_smoke.env` | disabled | **AaT Cell B smoke success** | `run_status: success`, `1/1`, latency 91.78s, `tool_call_count_total=4`; all four MCP servers bootstrapped/initialized and vLLM accepted sequential tool-call turns with `parallel_tool_calls=false`. |
-| 2026-04-25 | `8962310_aat_direct_smoke_104` | `codex-fnd/aat-smoke-fix@9541e26` | `configs/aat_direct_smoke.env` | disabled | **AaT Cell A smoke success** | `run_status: success`, `1/1`, latency 12.09s, `tool_call_count_total=4`; direct callable path exercised the same SGT-009 / T-015 scenario as Cell B. |
+| 2026-04-26 | `8970468_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity repeat success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:09:05`, `run_status: success`, `1/1`, latency 31.48s, `tool_call_count_total=4`. Historical run metadata recorded pre-rewrite SHA `e43cba3`. |
+| 2026-04-26 | `8970383_aat_mcp_baseline_upstream_smoke_104` | `codex-fnd/aat-smoke-fix` | `configs/aat_mcp_baseline_upstream_smoke.env` | disabled | **AaT upstream parity success** | AOB `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario, Slurm `COMPLETED 0:0` in `00:11:18`, `run_status: success`, `1/1`, latency 36.18s, `tool_call_count_total=4`. Historical run metadata recorded pre-rewrite SHA `e43cba3`. |
+| 2026-04-26 | `8969519_aat_mcp_baseline_smoke_104` | `codex-fnd/aat-smoke-fix` | `configs/aat_mcp_baseline_smoke.env` | disabled | **AaT Cell B smoke success** | `run_status: success`, `1/1`, latency 91.78s, `tool_call_count_total=4`; all four MCP servers bootstrapped/initialized and vLLM accepted sequential tool-call turns with `parallel_tool_calls=false`. Historical run metadata recorded pre-rewrite SHA `a10d092`. |
+| 2026-04-25 | `8962310_aat_direct_smoke_104` | `codex-fnd/aat-smoke-fix` | `configs/aat_direct_smoke.env` | disabled | **AaT Cell A smoke success** | `run_status: success`, `1/1`, latency 12.09s, `tool_call_count_total=4`; direct callable path exercised the same SGT-009 / T-015 scenario as Cell B. Historical run metadata recorded pre-rewrite SHA `9541e26`. |
 | 2026-04-13 | `local-20260413-003914_pe_mcp_baseline_watsonx_smoke` | canonical `main` at the time | Watsonx `llama-3-3-70b-instruct` on SGT-009 / T-015 | `9d4442ja` | **Earliest committed PE proof** | `run_status: success`, `pass: 1`, `fail: 0`, wall-clock 93.6s. 8-step plan, all steps OK. Raw artifacts live at `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_*`. Just added to `docs/validation_log.md` so the earliest benchmark-path proof is explicitly in the log ladder. |
 | 2026-04-21 | `8859928_issue111_main_proof` | temp Insomnia worktree based on `main@3609321` + local shell fix | `configs/issue111_main_proof.env` | disabled | **Validated fix** | `2/2` success after patching the Slurm spool-path bug. Useful proof of the fix, but not final canonical proof because the committed SHA does not yet contain the fix. |
 | 2026-04-21 | `8859923` | shared Insomnia `main@3609321` | `configs/issue111_main_proof.env` | disabled | **Immediate failure** | Exposed the `insomnia_env.sh` sourcing bug under `sbatch`. |
