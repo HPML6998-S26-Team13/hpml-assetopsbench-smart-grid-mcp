@@ -784,6 +784,17 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     VLLM_SERVER_ARGS+=(--profiler-config "{\"profiler\":\"torch\",\"torch_profiler_dir\":\"$TORCH_PROFILE_DIR_ABS\"}")
     echo "Torch profiler enabled: --profiler-config torch torch_profiler_dir=$TORCH_PROFILE_DIR_ABS" | tee -a "$HARNESS_LOG"
   fi
+  # EXTRA_VLLM_ARGS: optional whitespace-separated extra CLI flags for the
+  # vLLM server. Used by Cell C and the #29/#30 smoke configs to pass
+  # --quantization, --kv-cache-dtype, --enable-prefix-caching, etc., without
+  # editing this script per experiment. Values are word-split (POSIX) so
+  # arguments with embedded whitespace need quoting at the source.
+  if [ -n "${EXTRA_VLLM_ARGS:-}" ]; then
+    # shellcheck disable=SC2206  # intentional word-splitting
+    EXTRA_VLLM_ARGS_ARR=($EXTRA_VLLM_ARGS)
+    VLLM_SERVER_ARGS+=("${EXTRA_VLLM_ARGS_ARR[@]}")
+    echo "vLLM extra args: $EXTRA_VLLM_ARGS" | tee -a "$HARNESS_LOG"
+  fi
   if command -v setsid >/dev/null 2>&1; then
     setsid "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
     VLLM_PGID=$!

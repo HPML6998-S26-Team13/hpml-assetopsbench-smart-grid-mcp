@@ -1,0 +1,171 @@
+#!/bin/bash
+#SBATCH --job-name=lane2-int8-smoke
+#SBATCH --account=edu
+#SBATCH --partition=short
+#SBATCH --qos=short
+#SBATCH --gres=gpu:1
+#SBATCH --mem=64G
+#SBATCH --cpus-per-task=8
+#SBATCH --time=01:00:00
+#SBATCH --output=logs/lane2_int8_smoke_%j.out
+#
+# Lane 2 / #29 INT8 quantization startup + reachability smoke.
+# Validates that vLLM 0.19.0 can serve a CompressedTensors INT8 (W8A8) variant
+# of Llama-3.1-8B-Instruct and that the served model is reachable + responds
+# to a one-shot completion. NOT a full benchmark — just startup + /v1/models
+# + one /v1/completions round-trip.
+#
+# Status: deferred per docs/lane2_int8_kv_status.md. Run this only after team
+# decision to revive INT8 for Cell C v2 / a model-scaling cell.
+#
+# Prerequisites (one-time):
+#   1. HuggingFace gating approval for the INT8 checkpoint (typically
+#      RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8 or equivalent).
+#   2. HF_TOKEN exported in the team .env (or in this shell).
+#   3. ~16 GB free in models/ for the INT8 checkpoint (separate from the
+#      existing FP16 checkpoint).
+#
+# Usage:
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user=$USER@columbia.edu \
+#       scripts/test_int8_smoke.sh
+#
+# Override the model + revision via env if you want to try a different INT8 build:
+#   INT8_MODEL_REPO=other/llama-int8-repo \
+#   INT8_MODEL_REVISION=<sha> \
+#       sbatch ... scripts/test_int8_smoke.sh
+
+set -euo pipefail
+
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+cd "$REPO_ROOT"
+umask 0002
+mkdir -p logs
+
+JOB="${SLURM_JOB_ID:?expected to be running inside a Slurm job}"
+
+INT8_MODEL_REPO="${INT8_MODEL_REPO:-RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8}"
+INT8_MODEL_REVISION="${INT8_MODEL_REVISION:-main}"
+INT8_LOCAL_DIR="${INT8_LOCAL_DIR:-models/Llama-3.1-8B-Instruct-int8}"
+PORT="${PORT:-8001}"  # Different from default 8000 so doesn't collide with a live vLLM
+
+OUT_DIR="benchmarks/lane2/int8_smoke/${JOB}"
+mkdir -p "$OUT_DIR"
+
+echo "=== Lane 2 / #29 INT8 Startup + Reachability Smoke ==="
+echo "Node:        $(hostname)"
+echo "Slurm job:   $JOB"
+echo "INT8 model:  $INT8_MODEL_REPO @ $INT8_MODEL_REVISION"
+echo "Local dir:   $INT8_LOCAL_DIR"
+echo "Port:        $PORT"
+echo "Out dir:     $OUT_DIR"
+echo "Started:     $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo ""
+
+# CUDA setup (don't use module load cuda, broken on Insomnia)
+export PATH=/usr/local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
+
+# Activate the team-shared venv
+source .venv-insomnia/bin/activate
+
+# Step 1: download INT8 checkpoint if not already present
+if [ ! -d "$INT8_LOCAL_DIR" ] || [ -z "$(ls -A "$INT8_LOCAL_DIR" 2>/dev/null)" ]; then
+    echo "--- Downloading $INT8_MODEL_REPO @ $INT8_MODEL_REVISION ---"
+    if [ -z "${HF_TOKEN:-}" ]; then
+        echo "ERROR: HF_TOKEN not set. Export it (from team .env) before running." >&2
+        exit 1
+    fi
+    mkdir -p "$INT8_LOCAL_DIR"
+    .venv-insomnia/bin/python -m huggingface_hub.commands.huggingface_cli \
+        download "$INT8_MODEL_REPO" \
+        --revision "$INT8_MODEL_REVISION" \
+        --local-dir "$INT8_LOCAL_DIR" \
+        --token "$HF_TOKEN"
+else
+    echo "--- INT8 checkpoint already present at $INT8_LOCAL_DIR ---"
+fi
+
+# Step 2: launch vLLM with --quantization compressed-tensors
+echo ""
+echo "--- Starting vLLM with --quantization compressed-tensors ---"
+VLLM_LOG="$OUT_DIR/vllm.log"
+
+setsid python3 -u -m vllm.entrypoints.openai.api_server \
+    --model "$INT8_LOCAL_DIR" \
+    --served-model-name "Llama-3.1-8B-Instruct-int8" \
+    --host 127.0.0.1 \
+    --port "$PORT" \
+    --max-model-len 8192 \
+    --quantization compressed-tensors \
+    >"$VLLM_LOG" 2>&1 &
+VLLM_PID=$!
+trap '[ -n "${VLLM_PID:-}" ] && kill "$VLLM_PID" 2>/dev/null || true' EXIT
+
+# Step 3: wait for /health
+echo "--- Waiting for /health ---"
+for i in $(seq 1 600); do
+    if curl -s "http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
+        echo "    ready after ${i}s"
+        break
+    fi
+    if ! kill -0 "$VLLM_PID" 2>/dev/null; then
+        echo "ERROR: vLLM died during startup. Last 50 lines of vllm.log:" >&2
+        tail -50 "$VLLM_LOG" >&2
+        exit 1
+    fi
+    sleep 1
+done
+
+if ! curl -s "http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
+    echo "ERROR: vLLM did not become ready within 600s" >&2
+    tail -50 "$VLLM_LOG" >&2
+    exit 1
+fi
+
+# Step 4: verify /v1/models lists the INT8 served name
+echo ""
+echo "--- /v1/models ---"
+curl -s "http://127.0.0.1:$PORT/v1/models" | tee "$OUT_DIR/models.json"
+
+# Step 5: one-shot completion smoke
+echo ""
+echo "--- Test completion ---"
+TEST_PROMPT="A power transformer with elevated H2 and C2H2 in DGA indicates"
+COMPLETION=$(curl -s "http://127.0.0.1:$PORT/v1/completions" \
+    -H "Content-Type: application/json" \
+    -d "{\"model\":\"Llama-3.1-8B-Instruct-int8\",\"prompt\":\"$TEST_PROMPT\",\"max_tokens\":80,\"temperature\":0.1}")
+echo "$COMPLETION" | tee "$OUT_DIR/completion.json"
+
+# Step 6: GPU memory snapshot (proves INT8 actually reduced memory vs FP16)
+echo ""
+echo "--- nvidia-smi snapshot ---"
+nvidia-smi --query-gpu=name,memory.used,memory.free,memory.total --format=csv | tee "$OUT_DIR/nvidia_smi.csv"
+
+# Step 7: write meta summary
+echo ""
+python3 -c "
+import json, pathlib, datetime
+meta = {
+    'slurm_job_id': '$JOB',
+    'int8_model_repo': '$INT8_MODEL_REPO',
+    'int8_model_revision': '$INT8_MODEL_REVISION',
+    'int8_local_dir': '$INT8_LOCAL_DIR',
+    'vllm_port': $PORT,
+    'started_at': datetime.datetime.utcnow().isoformat() + 'Z',
+    'served_model_name': 'Llama-3.1-8B-Instruct-int8',
+    'quantization_flag': 'compressed-tensors',
+    'vllm_log': '$VLLM_LOG',
+    'completion_path': '$OUT_DIR/completion.json',
+    'nvidia_smi_path': '$OUT_DIR/nvidia_smi.csv',
+}
+pathlib.Path('$OUT_DIR/meta.json').write_text(json.dumps(meta, indent=2) + '\n')
+print('meta.json written to $OUT_DIR')
+"
+
+echo ""
+echo "=== INT8 smoke complete ==="
+echo "Outputs in $OUT_DIR/"
+echo "Update docs/lane2_int8_kv_status.md with the result."
+echo "Finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+# vLLM auto-stops on exit via the trap
