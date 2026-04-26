@@ -1010,7 +1010,9 @@ if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAU
   echo ""
   echo "=== Torch profiler replay pass ==="
   echo "Profiler dir: $TORCH_PROFILE_DIR"
-  if bash profiling/scripts/run_vllm_torch_profile.sh \
+  # Export VLLM_PORT so run_vllm_torch_profile.sh (a subprocess) sees it.
+  export VLLM_PORT
+  if VLLM_PORT="$VLLM_PORT" bash profiling/scripts/run_vllm_torch_profile.sh \
       "$TORCH_PROFILE_DIR" \
       -- bash scripts/replay_scenarios.sh "$RUN_DIR" "$MCP_MODE" \
       2>>"$HARNESS_LOG"; then
@@ -1067,6 +1069,18 @@ config_path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
 summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
+fi
+
+# Link torch profiler trace to WandB after wandb_run_url is written into meta.json.
+# This runs even when ENABLE_WANDB=0 — log_profiling_to_wandb.py is non-fatal if
+# wandb_run_url is missing (it still logs a summary to stdout and exits 0).
+if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ]; then
+  "$PYTHON_BIN" profiling/scripts/log_profiling_to_wandb.py \
+      --benchmark-run-dir "$RUN_DIR" \
+      --profiling-dir "$TORCH_PROFILE_DIR" \
+      --mode "${WANDB_MODE:-online}" \
+      2>>"$HARNESS_LOG" \
+    || echo "WARNING: torch profiler WandB link failed (non-fatal)" | tee -a "$HARNESS_LOG"
 fi
 
 echo ""
