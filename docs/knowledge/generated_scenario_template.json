@@ -1,0 +1,79 @@
+{
+  "_comment": "Generated scenario template for PS B (issue #90). Replace every <PLACEHOLDER> with scenario-specific values. Fields marked REQUIRED must be present; OPTIONAL fields may be omitted if not applicable. Remove this _comment field before committing the scenario to data/scenarios/.",
+
+  "id": "<PLACEHOLDER: e.g. SGT-GEN-001 — use SGT-GEN- prefix for all generated scenarios>",
+  "type": "<REQUIRED: one of FMSR | TSFM | WO | IoT | Multi>",
+  "text": "<REQUIRED: the user-facing task description. Must follow no-hint rules from docs/knowledge/generated_scenario_authoring_and_ground_truth.md section 2-3. Under 80 words. Describe an operational event or condition; do not mention tool names, gas ratios, IEC codes, or analytic methods.>",
+  "category": "<REQUIRED: one of Fault Diagnosis | Root Cause Analysis | Remaining Useful Life | Anomaly Detection | Trend Analysis | Maintenance Decision | Work Order Creation | Sensor Analysis | End-to-End Incident Response | Cross-Domain Planning>",
+  "characteristic_form": "<REQUIRED: one sentence describing what form the ideal answer takes. Focus on structure, not content: e.g. 'The answer should identify the primary fault mode with gas-ratio evidence and provide a recommended next action.'>",
+  "asset_id": "<REQUIRED: transformer ID from T-001 to T-020>",
+  "expected_tools": [
+    "<REQUIRED: list every tool the ideal agent calls. Use dot notation: domain.tool_name. Example entries below — replace with the actual tools for this scenario.>",
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "<REQUIRED: ordered list of tool calls in the sequence the ideal agent should make. Same entries as expected_tools but in the correct call order. For scenarios where order within a domain is flexible, list required calls in a reasonable sequence.>",
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga"
+    ],
+    "decisive_intermediate_values": {
+      "<REQUIRED: key values the agent must surface or compute during reasoning. The judge checks that the agent's stated reasoning is consistent with these. Use the exact field names that the relevant MCP tool returns.>": null,
+      "example_iec_code": "<replace with actual value, e.g. D2>",
+      "example_r2_c2h2_c2h4": "<replace with actual ratio value>",
+      "example_condition_tier": "<replace with C1 | C2 | C3 | C4>"
+    },
+    "final_value": {
+      "<REQUIRED: the concrete output the answer must assert. At minimum, one of: fault_label, rul_days, wo_priority, maintenance_decision.>": null,
+      "example_fault_label": "<replace with fault label string>",
+      "example_recommended_action": "<replace with action string>"
+    },
+    "acceptance_criteria": [
+      "<REQUIRED: 2-5 natural-language criteria the judge checks against the agent's response. Each criterion should be independently checkable. Begin each with 'agent'.>",
+      "<example> agent identifies <fault label> or equivalent",
+      "<example> agent references <gas name> as dominant evidence",
+      "<example> agent recommends <action> or equivalent"
+    ],
+    "must_not_include": [
+      "<OPTIONAL: things the agent must not claim. Omit this field entirely if no exclusion applies.>",
+      "<example> agent must not recommend immediate de-energization for a low-urgency fault"
+    ],
+    "must_include": [
+      "<REQUIRED: high-level answer elements carried over from the hand-crafted scenario format. These are the coarse checks; acceptance_criteria above are the fine-grained checks.>",
+      "<example> fault mode identification",
+      "<example> recommended action"
+    ],
+    "decision_window_days": "<OPTIONAL: integer. Include only for RUL/TSFM scenarios where the task specifies a forward-looking horizon. Example: 180>"
+  },
+  "difficulty": "<REQUIRED: one of easy | medium | hard>",
+  "domain_tags": [
+    "<REQUIRED: list of domain strings from IoT | FMSR | TSFM | WO. Multi-domain scenarios list all relevant domains.>"
+  ],
+  "operating_context": {
+    "_comment": "REQUIRED for WO_CREATION and MULTI_DOMAIN_INCIDENT families; OPTIONAL for single-domain families. Use one of the named profiles from docs/knowledge/scenario_generation_support.json operational_context_profiles, or set fields directly. Remove this _comment field before committing.",
+    "asset_criticality_tier": "<critical | important | standard>",
+    "spare_availability": "<in_stock | lead_time_2_weeks | lead_time_3_months | no_spare>",
+    "current_loading_pct": "<integer 30–110>",
+    "context_profile_name": "<OPTIONAL: name of the profile from scenario_generation_support.json if a named profile was used, e.g. critical_peak_no_spare>"
+  },
+  "provenance": {
+    "_comment": "REQUIRED for all generated scenarios. Remove this _comment field before committing.",
+    "source_type": "generated",
+    "generator_prompt_version": "<REQUIRED: version string or short hash of the generation prompt template, e.g. v1.0 or abc1234>",
+    "knowledge_plugin_version": "<REQUIRED: git commit hash or schema version of data/knowledge/transformer_standards.json at generation time>",
+    "generation_model": "<REQUIRED: model ID, e.g. claude-sonnet-4-6>",
+    "generation_date": "<REQUIRED: ISO 8601 date, e.g. 2026-04-26>",
+    "batch_id": "<REQUIRED: identifier for the generation batch, e.g. psb-batch-01>",
+    "manual_cleanup": "<REQUIRED: true | false>",
+    "cleanup_notes": "<CONDITIONAL: required if manual_cleanup is true; omit if false. Describe what was changed post-generation.>"
+  },
+  "nearest_handcrafted_comparator": {
+    "_comment": "REQUIRED for all generated scenarios. Remove this _comment field before committing.",
+    "scenario_id": "<REQUIRED: id field of the nearest hand-crafted scenario, e.g. SGT-003. Set to null if no close match exists.>",
+    "scenario_file": "<REQUIRED: repo-relative path, e.g. data/scenarios/fmsr_01_dga_fault_mode_diagnosis.json. Set to null if no close match.>",
+    "similarity_basis": "<REQUIRED: one sentence: why is this the nearest comparator? E.g. same primary domain, same task type, same expected tool pattern.>",
+    "novelty_note": "<REQUIRED: one sentence: how does this generated scenario differ materially from the comparator? E.g. different fault code, different operating context, different task framing.>",
+    "nearest_match_weak": "<OPTIONAL: set to true only if no natural comparator exists across the full hand-crafted set.>"
+  }
+}
