@@ -130,9 +130,26 @@ def _patch_aob_openai_runner(aob_openai_runner: Any, repo_root: Path) -> list[st
     """Patch AOB runner dependencies while leaving OpenAIAgentRunner.run intact."""
     from agents import Agent as SDKAgent, ModelSettings
     from agents.mcp import MCPServerStdio
+    from scripts.aat_system_prompt import AOB_SOURCE_SHA
     from scripts.aat_tools_mcp import _client_timeout_seconds, _server_params
 
     patches: list[str] = []
+
+    build_mcp_servers = getattr(aob_openai_runner, "_build_mcp_servers", None)
+    if not callable(build_mcp_servers):
+        raise RuntimeError(
+            "AssetOpsBench OpenAIAgentRunner patch precondition failed: "
+            "agent.openai_agent.runner._build_mcp_servers is missing or not "
+            f"callable at expected AOB source SHA {AOB_SOURCE_SHA}. "
+            "Refusing to run parity smoke with the default upstream MCP launcher."
+        )
+    if not callable(getattr(aob_openai_runner, "Agent", None)):
+        raise RuntimeError(
+            "AssetOpsBench OpenAIAgentRunner patch precondition failed: "
+            "agent.openai_agent.runner.Agent is missing or not callable at "
+            f"expected AOB source SHA {AOB_SOURCE_SHA}. Refusing to run parity "
+            "smoke without the local-vLLM parallel_tool_calls setting."
+        )
 
     def _build_smartgrid_mcp_servers(
         server_paths: dict[str, Path | str],
