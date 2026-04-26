@@ -108,6 +108,8 @@ AAT_MCP_SERVER_PYTHON="${AAT_MCP_SERVER_PYTHON:-}"
 AAT_MCP_SERVER_LAUNCH_MODE="${AAT_MCP_SERVER_LAUNCH_MODE:-python}"
 AAT_MCP_CLIENT_TIMEOUT_SECONDS="${AAT_MCP_CLIENT_TIMEOUT_SECONDS:-30}"
 AAT_PARALLEL_TOOL_CALLS="${AAT_PARALLEL_TOOL_CALLS:-false}"
+TORCH_PROFILE="${TORCH_PROFILE:-0}"
+TORCH_PROFILE_DIR="${TORCH_PROFILE_DIR:-}"
 HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
 VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
 ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
@@ -748,6 +750,12 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     echo "vLLM auto tool choice: enabled with parser '$VLLM_TOOL_CALL_PARSER'"
     VLLM_SERVER_ARGS+=(--enable-auto-tool-choice --tool-call-parser "$VLLM_TOOL_CALL_PARSER")
   fi
+  if [ "$TORCH_PROFILE" = "1" ]; then
+    [ -z "$TORCH_PROFILE_DIR" ] && TORCH_PROFILE_DIR="profiling/traces/${RUN_ID}_torch"
+    mkdir -p "$TORCH_PROFILE_DIR"
+    export VLLM_TORCH_PROFILER_DIR="$TORCH_PROFILE_DIR"
+    echo "Torch profiler enabled: VLLM_TORCH_PROFILER_DIR=$TORCH_PROFILE_DIR" | tee -a "$HARNESS_LOG"
+  fi
   if command -v setsid >/dev/null 2>&1; then
     setsid "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
     VLLM_PGID=$!
@@ -997,6 +1005,20 @@ meta["total_runs"] = int(total)
 meta["run_status"] = summary["run_status"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
+
+if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAUNCH_VLLM" = "1" ]; then
+  echo ""
+  echo "=== Torch profiler replay pass ==="
+  echo "Profiler dir: $TORCH_PROFILE_DIR"
+  if bash profiling/scripts/run_vllm_torch_profile.sh \
+      "$TORCH_PROFILE_DIR" \
+      -- bash scripts/replay_scenarios.sh "$RUN_DIR" "$MCP_MODE" \
+      2>>"$HARNESS_LOG"; then
+    echo "Torch profiler trace written to $TORCH_PROFILE_DIR"
+  else
+    echo "WARNING: torch profiler replay failed (non-fatal; nvidia-smi capture unaffected)"
+  fi
+fi
 
 if [ "$ENABLE_WANDB" = "1" ]; then
   "$PYTHON_BIN" - "$CONFIG_FILE" "$SUMMARY_FILE" "$META_FILE" "$WANDB_MODE" <<'PY'
