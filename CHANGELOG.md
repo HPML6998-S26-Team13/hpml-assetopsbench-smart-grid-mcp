@@ -4,6 +4,15 @@
 
 ### Runtime / Config
 
+- Tightened the PR `#127` AaT cleanup findings after review: Cell A direct
+  tools now fail fast on bare-name collisions and expose non-strict schemas
+  matching the MCP required-parameter surface; Cell B MCP launch mode now
+  fails fast when `python` mode lacks `AAT_MCP_SERVER_PYTHON`; the MCP
+  bootstrap no longer assumes a fixed directory depth; summary aggregation
+  scans only per-trial JSON outputs; and the upstream parity wrapper now fails
+  earlier on missing Smart Grid server paths, preserves max-turn exhaustion in
+  its serialized result, and avoids shadowing a real `claude_agent_sdk`
+  install (Alex)
 - Added first-class Agent-as-Tool dispatch to `scripts/run_experiment.sh` so
   Cell A/B configs no longer need an explicit `AAT_RUNNER_TEMPLATE` for the
   standard team-local runner. Added a separate upstream

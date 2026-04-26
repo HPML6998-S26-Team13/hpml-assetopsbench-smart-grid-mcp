@@ -76,6 +76,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--parallel-tool-calls",
         type=_parse_parallel_tool_calls,
+        # argparse captures env defaults when the parser is constructed; tests
+        # that exercise env-driven defaults must set AAT_PARALLEL_TOOL_CALLS
+        # before calling build_parser().
         default=_parse_parallel_tool_calls(os.environ.get("AAT_PARALLEL_TOOL_CALLS")),
         help=(
             "Whether the model may emit multiple tool calls in one turn. "
@@ -139,7 +142,12 @@ def _serialize_run_result(
     current_text_parts: list[str] = []
 
     def _close_turn() -> None:
-        """If there's pending text or tool calls, emit a turn record for them."""
+        """If there's pending text or tool calls, emit a turn record for them.
+
+        Empty-content turns with non-empty tool_calls are valid tool-execution
+        turns, not parser anomalies. Some SDK item orderings surface a tool
+        call before the assistant text that explains it.
+        """
         nonlocal turn
         if not current_text_parts and not pending_tool_calls:
             return
@@ -190,10 +198,16 @@ def _serialize_run_result(
         elif item_type == "tool_call_output_item":
             output = getattr(item, "output", "")
             # Attach to the most recent pending call that has no output yet.
+            attached = False
             for call in reversed(pending_tool_calls):
                 if "output" not in call:
                     call["output"] = output
+                    attached = True
                     break
+            if not attached:
+                _LOG.warning(
+                    "dropping tool_call_output_item without a pending tool call"
+                )
             # Defensive: the real Agents SDK today surfaces tool errors as
             # stringified output content, not a separate .error attribute.
             # Kept as a forward-compat hook for future SDK versions that may.
@@ -349,8 +363,10 @@ async def _main(args: argparse.Namespace) -> int:
             try:
                 await srv.cleanup()
             except (asyncio.CancelledError, Exception) as cleanup_exc:
-                # See tests/test_aat_tools_direct.py for the rationale;
-                # CancelledError is a BaseException in Py3.8+, not an Exception.
+                # CancelledError is a BaseException in Py3.8+, and the
+                # openai-agents MCP stdio teardown can surface it from anyio
+                # subprocess waits. Cleanup failures should not mask the
+                # original runner error.
                 _LOG.warning("cleanup failed for %s: %s", srv, cleanup_exc)
 
     if error_payload is not None:

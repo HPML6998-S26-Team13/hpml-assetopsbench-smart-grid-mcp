@@ -64,7 +64,7 @@ def _server_params(repo_root: Path, abs_path: Path) -> dict[str, object]:
         raise FileNotFoundError(f"AaT MCP server bootstrap missing: {bootstrap_path}")
 
     launch_mode = _server_launch_mode()
-    env = {"PYTHONUNBUFFERED": "1"}
+    env = {"PYTHONUNBUFFERED": "1", "AAT_MCP_REPO_ROOT": str(repo_root)}
 
     if launch_mode == "uv":
         return {
@@ -82,27 +82,19 @@ def _server_params(repo_root: Path, abs_path: Path) -> dict[str, object]:
         }
 
     server_python = os.environ.get("AAT_MCP_SERVER_PYTHON", "").strip()
-    if server_python:
-        python_path = Path(server_python)
-        if not python_path.exists():
-            raise FileNotFoundError(f"AAT_MCP_SERVER_PYTHON not found: {python_path}")
-        return {
-            "command": str(python_path),
-            "args": ["-u", str(bootstrap_path), str(abs_path)],
-            "cwd": str(repo_root),
-            "env": env,
-        }
-
+    if not server_python:
+        raise ValueError(
+            "AAT_MCP_SERVER_LAUNCH_MODE=python requires AAT_MCP_SERVER_PYTHON. "
+            "scripts/run_experiment.sh sets this to .venv-insomnia/bin/python "
+            "for Insomnia LAUNCH_VLLM=1 runs; use "
+            "AAT_MCP_SERVER_LAUNCH_MODE=uv for local uv-managed launches."
+        )
+    python_path = Path(server_python)
+    if not python_path.exists():
+        raise FileNotFoundError(f"AAT_MCP_SERVER_PYTHON not found: {python_path}")
     return {
-        "command": "uv",
-        "args": [
-            "run",
-            *(arg for dep in SERVER_UV_DEPS for arg in ("--with", dep)),
-            "python",
-            "-u",
-            str(bootstrap_path),
-            str(abs_path),
-        ],
+        "command": str(python_path),
+        "args": ["-u", str(bootstrap_path), str(abs_path)],
         "cwd": str(repo_root),
         "env": env,
     }

@@ -97,6 +97,10 @@ What this proves:
   local vLLM served five `/v1/chat/completions` calls, and the trajectory
   called `get_sensor_readings`, `get_sensor_correlation`, `forecast_rul`, and
   `create_work_order`
+- the Cell A / Cell B fairness guard now checks both model-visible tool names
+  and per-tool parameter requiredness. Tool descriptions may still differ
+  slightly between Python docstrings and FastMCP-derived schemas; the enforced
+  contract is that the callable names and required argument surface match.
 
 Caveats / follow-ups:
 

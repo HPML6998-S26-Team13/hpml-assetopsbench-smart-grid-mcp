@@ -557,6 +557,10 @@ PY
         echo "ERROR: AaT MCP server dependency preflight failed before vLLM launch. See $HARNESS_LOG." >&2
         return 1
       fi
+    elif [ "$AAT_MCP_SERVER_LAUNCH_MODE" = "python" ]; then
+      echo "ERROR: AAT_MCP_SERVER_LAUNCH_MODE=python requires AAT_MCP_SERVER_PYTHON." >&2
+      echo "For local uv-managed launches, set AAT_MCP_SERVER_LAUNCH_MODE=uv." >&2
+      return 1
     elif ! (
       cd "$REPO_ROOT"
       uv run \
@@ -899,7 +903,7 @@ latencies = [
 
 tool_call_total = 0
 tool_call_trials = 0
-for output_path in sorted(pathlib.Path(run_dir).glob("*.json")):
+for output_path in sorted(pathlib.Path(run_dir).glob("*_run[0-9][0-9].json")):
     try:
         payload = json.loads(output_path.read_text(encoding="utf-8"))
     except Exception:

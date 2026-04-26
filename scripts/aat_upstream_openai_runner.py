@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import importlib.util
 import json
 import logging
 import os
@@ -82,6 +83,12 @@ def _install_unused_claude_sdk_stub() -> None:
     the OpenAI parity smoke and is not available in the Insomnia AaT runtime.
     """
     if "claude_agent_sdk" in sys.modules:
+        return
+    if importlib.util.find_spec("claude_agent_sdk") is not None:
+        _LOG.warning(
+            "real claude_agent_sdk package is installed; not installing the "
+            "OpenAI parity smoke import shim"
+        )
         return
     stub = types.ModuleType("claude_agent_sdk")
     for name in (
@@ -239,12 +246,16 @@ def _serialize_result(
         )
 
     answer = getattr(result, "answer", "") or ""
+    max_turns_reached = bool(
+        getattr(result, "max_turns_reached", False)
+        or getattr(result, "max_turns_exhausted", False)
+    )
     return {
         "question": prompt,
         "answer": answer,
-        "success": bool(answer),
+        "success": (not max_turns_reached) and bool(answer),
         "failed_tools": [],
-        "max_turns_exhausted": False,
+        "max_turns_exhausted": max_turns_reached,
         "turn_count": len(history),
         "tool_call_count": tool_call_count,
         "history": history,
@@ -270,11 +281,11 @@ def _write_output(path: Path, payload: dict[str, Any]) -> None:
 async def _main(args: argparse.Namespace) -> int:
     repo_root = Path(__file__).resolve().parent.parent
     aob_path = Path(args.aob_path).resolve()
+    server_paths = _smartgrid_server_paths(repo_root)
     _bootstrap_aob(aob_path)
 
     from agent.openai_agent import runner as aob_openai_runner
 
-    server_paths = _smartgrid_server_paths(repo_root)
     patches = _patch_aob_openai_runner(aob_openai_runner, repo_root)
     OpenAIAgentRunner = aob_openai_runner.OpenAIAgentRunner
     runner = OpenAIAgentRunner(

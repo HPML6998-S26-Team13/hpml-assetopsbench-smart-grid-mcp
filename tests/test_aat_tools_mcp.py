@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pathlib
+import sys
 
 import pytest
 
@@ -47,18 +48,33 @@ def test_server_params_python_uses_bootstrap(monkeypatch):
     repo_root = pathlib.Path.cwd()
     server_path = repo_root / "mcp_servers/iot_server/server.py"
     monkeypatch.setenv("AAT_MCP_SERVER_LAUNCH_MODE", "python")
-    monkeypatch.setenv("AAT_MCP_SERVER_PYTHON", "/usr/bin/python3")
+    monkeypatch.setenv("AAT_MCP_SERVER_PYTHON", sys.executable)
 
     params = _server_params(repo_root, server_path)
 
-    assert params["command"] == "/usr/bin/python3"
+    assert params["command"] == sys.executable
     assert params["args"][:2] == [
         "-u",
         str(repo_root / "scripts/aat_mcp_server_bootstrap.py"),
     ]
     assert params["args"][-1] == str(server_path)
     assert params["cwd"] == str(repo_root)
-    assert params["env"] == {"PYTHONUNBUFFERED": "1"}
+    assert params["env"] == {
+        "PYTHONUNBUFFERED": "1",
+        "AAT_MCP_REPO_ROOT": str(repo_root),
+    }
+
+
+def test_server_params_python_requires_server_python(monkeypatch):
+    from scripts.aat_tools_mcp import _server_params
+
+    repo_root = pathlib.Path.cwd()
+    server_path = repo_root / "mcp_servers/iot_server/server.py"
+    monkeypatch.setenv("AAT_MCP_SERVER_LAUNCH_MODE", "python")
+    monkeypatch.delenv("AAT_MCP_SERVER_PYTHON", raising=False)
+
+    with pytest.raises(ValueError, match="requires AAT_MCP_SERVER_PYTHON"):
+        _server_params(repo_root, server_path)
 
 
 def test_server_params_uv_ignores_server_python(monkeypatch):
@@ -76,3 +92,7 @@ def test_server_params_uv_ignores_server_python(monkeypatch):
     assert "-u" in params["args"]
     assert str(repo_root / "scripts/aat_mcp_server_bootstrap.py") in params["args"]
     assert params["args"][-1] == str(server_path)
+    assert params["env"] == {
+        "PYTHONUNBUFFERED": "1",
+        "AAT_MCP_REPO_ROOT": str(repo_root),
+    }

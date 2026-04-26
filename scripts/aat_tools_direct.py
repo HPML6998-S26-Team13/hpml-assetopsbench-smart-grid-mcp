@@ -32,14 +32,23 @@ def build_direct_tools() -> List[Any]:
     direct_adapter registry.
     """
     wrapped: List[Any] = []
+    seen_names: dict[str, str] = {}
     for spec in direct_adapter.get_tools():
         callable_fn: Callable[..., Any] = spec.fn
         tool_name = _agent_visible_name(spec.name)
+        if tool_name in seen_names:
+            raise ValueError(
+                "Duplicate Agent-visible AaT tool name after stripping domain "
+                f"prefix: {tool_name!r} from {seen_names[tool_name]!r} and "
+                f"{spec.name!r}"
+            )
+        seen_names[tool_name] = spec.name
         wrapped.append(
             function_tool(
                 callable_fn,
                 name_override=tool_name,
                 description_override=spec.doc or f"Direct call to {tool_name}",
+                strict_mode=False,
             )
         )
     return wrapped

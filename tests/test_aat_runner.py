@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import logging
 import sys
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -104,11 +105,25 @@ def test_serialize_run_result_happy_path():
     # still surface in history[0].tool_calls (not just tool_call_count).
     assert len(out["history"]) >= 1
     turn0 = out["history"][0]
+    assert turn0["content"] == ""
     assert len(turn0["tool_calls"]) == 1
     assert turn0["tool_calls"][0]["name"] == "iot.list_sensors"
     assert turn0["tool_calls"][0]["output"] == "[]"
     # Sanity check: the final assistant content made it into the last turn.
     assert out["history"][-1]["content"] == "final answer text"
+
+
+def test_serialize_run_result_warns_on_orphan_tool_output(caplog):
+    from scripts.aat_runner import _serialize_run_result
+
+    args = _stub_args()
+    result = _stub_run_result(items=[_tool_output_item("late output")])
+
+    with caplog.at_level(logging.WARNING, logger="aat_runner"):
+        out = _serialize_run_result(args, "test prompt", result, duration_seconds=1.0)
+
+    assert out["success"] is True
+    assert "without a pending tool call" in caplog.text
 
 
 def test_serialize_run_result_max_turns_exhausted():
