@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "schema_version": "v1",
+    "created": "2026-04-21",
+    "owner": "Tanisha Rathod",
+    "issue": "#83",
+    "description": "Scenario generation support artifact. Provides a scenario family matrix, operational context profiles, DGA trend templates, event/alarm templates, work-order playbooks, and RUL/health-context templates for the PS B scenario generation pipeline (issue #2). Companion to data/knowledge/transformer_standards.json (issue #50).",
+    "cross_references": {
+      "standards_artifact": "data/knowledge/transformer_standards.json",
+      "evaluation_methodology": "docs/ps_b_evaluation_methodology.md",
+      "realism_validation": "docs/scenario_realism_validation.md",
+      "schema_reference": "data/scenarios/README.md"
+    },
+    "usage_note": "This file answers HOW to assemble scenarios from the IEC/IEEE facts in transformer_standards.json. It does not replicate standards content. Gas values, fault codes, and condition thresholds must be sourced from transformer_standards.json."
+  },
+
+  "scenario_family_matrix": {
+    "description": "Defines five scenario families, each with a target count, primary domain, required tools, and per-instance variation axes. The generator must produce at least one scenario per family to meet the PS B coverage requirement.",
+    "total_target": 18,
+    "families": {
+      "FMSR_DGA_DIAGNOSIS": {
+        "target_count": 4,
+        "primary_domain": "FMSR",
+        "domain_tags": ["FMSR"],
+        "difficulty_range": ["easy", "medium", "hard"],
+        "task_types": ["fault_diagnosis", "root_cause_analysis"],
+        "required_tools": ["fmsr.get_dga_record", "fmsr.analyze_dga"],
+        "optional_tools": ["fmsr.search_failure_modes", "fmsr.get_sensor_correlation"],
+        "variation_axes": {
+          "fault_code": "vary across PD, D1, D2, T1, T2, T3 — do not generate two scenarios with the same iec_code",
+          "transformer_id": "vary across T-001 to T-020",
+          "task_framing": "rotate among: identify primary fault, compare two candidate fault modes, explain dominant gas, recommend next inspection step"
+        },
+        "ground_truth_must_include": ["iec_code", "dominant_gas_rationale", "recommended_action"],
+        "anti_patterns": [
+          "Do not frame the task as 'run analyze_dga with these exact numbers' — the agent must retrieve gas values from get_dga_record first.",
+          "Do not generate a scenario where the answer is trivially N (normal) with no diagnostic interest."
+        ]
+      },
+      "TSFM_RUL_FORECAST": {
+        "target_count": 4,
+        "primary_domain": "TSFM",
+        "domain_tags": ["TSFM"],
+        "difficulty_range": ["easy", "medium", "hard"],
+        "task_types": ["rul_forecast", "anomaly_detection", "trend_analysis"],
+        "required_tools": ["tsfm.forecast_rul"],
+        "optional_tools": ["tsfm.detect_anomalies", "tsfm.trend_analysis", "tsfm.get_rul"],
+        "variation_axes": {
+          "horizon": "vary among 30-day, 60-day, 90-day forecast horizons",
+          "transformer_id": "vary across T-001 to T-020",
+          "task_framing": "rotate among: forecast RUL for a specific horizon, detect anomaly in sensor trend, explain a trend reversal, compare RUL against maintenance window"
+        },
+        "ground_truth_must_include": ["rul_estimate_days", "risk_level_rationale", "recommended_action_horizon"],
+        "anti_patterns": [
+          "Do not ask for a trend analysis without specifying which sensor parameter.",
+          "Do not set expected_tools to forecast_rul only when the task description mentions anomaly detection."
+        ]
+      },
+      "WO_CREATION": {
+        "target_count": 4,
+        "primary_domain": "WO",
+        "domain_tags": ["WO"],
+        "difficulty_range": ["easy", "medium"],
+        "task_types": ["work_order_creation", "corrective_maintenance", "downtime_estimation"],
+        "required_tools": ["wo.create_work_order"],
+        "optional_tools": ["wo.estimate_downtime", "wo.list_fault_records", "wo.get_fault_record"],
+        "variation_axes": {
+          "trigger_type": "vary among: DGA fault confirmed, sensor threshold exceeded, routine scheduled maintenance, post-trip inspection",
+          "transformer_id": "vary across T-001 to T-020",
+          "urgency": "vary among emergency, high, medium — use work_order_playbook entries in this file for minimum field requirements per urgency tier"
+        },
+        "ground_truth_must_include": ["work_order_type", "priority", "minimum_fields_from_playbook"],
+        "anti_patterns": [
+          "Do not create a WO scenario where the fault evidence is absent — the task text must reference a triggering event.",
+          "Do not use urgency=emergency for PD or T1 fault codes."
+        ]
+      },
+      "IOT_SENSOR_ANALYSIS": {
+        "target_count": 2,
+        "primary_domain": "IoT",
+        "domain_tags": ["IoT"],
+        "difficulty_range": ["easy", "medium"],
+        "task_types": ["sensor_threshold_check", "asset_metadata_lookup", "sensor_list_enumeration"],
+        "required_tools": ["iot.get_sensor_readings"],
+        "optional_tools": ["iot.get_asset_metadata", "iot.list_sensors", "iot.list_assets"],
+        "variation_axes": {
+          "sensor_parameter": "vary between thermal (oil_temp_c, winding_temp_top_c) and electrical (load_current_a, power_factor, voltage_hv_kv, voltage_lv_kv)",
+          "transformer_id": "vary across T-001 to T-020"
+        },
+        "ground_truth_must_include": ["sensor_value_with_unit", "threshold_comparison", "status_summary"],
+        "anti_patterns": [
+          "IoT sensors do not include dissolved gas readings. Do not ask for gas values via IoT tools.",
+          "Do not ask for DGA-based fault classification from IoT tools alone."
+        ]
+      },
+      "MULTI_DOMAIN_INCIDENT": {
+        "target_count": 4,
+        "primary_domain": "Multi",
+        "domain_tags": ["IoT", "FMSR", "TSFM", "WO"],
+        "difficulty_range": ["hard"],
+        "task_types": ["end_to_end_incident_response", "integrated_diagnostic", "multi_step_maintenance_decision"],
+        "required_tools": [
+          "iot.get_sensor_readings",
+          "fmsr.analyze_dga",
+          "tsfm.forecast_rul",
+          "wo.create_work_order"
+        ],
+        "optional_tools": [
+          "fmsr.get_dga_record",
+          "fmsr.search_failure_modes",
+          "tsfm.detect_anomalies",
+          "wo.estimate_downtime",
+          "iot.get_asset_metadata"
+        ],
+        "variation_axes": {
+          "fault_code": "vary across D2, T3, D1, T2 — avoid N or PD which produce low-urgency multi-domain paths",
+          "transformer_id": "vary across T-001 to T-020",
+          "operating_context": "use one of the five named profiles from operational_context_profiles in this file; vary one field per instance"
+        },
+        "ground_truth_must_include": [
+          "iot_evidence_summary",
+          "fault_hypothesis_with_iec_code",
+          "rul_or_risk_forecast",
+          "work_order_recommendation"
+        ],
+        "anti_patterns": [
+          "Do not collapse all four domains into a single lookup; the task narrative must require reasoning across at least three distinct domains.",
+          "Do not use the same operational_context_profile for more than two MULTI_DOMAIN_INCIDENT scenarios in a batch."
+        ]
+      }
+    }
+  },
+
+  "operational_context_profiles": {
+    "description": "Named operating context profiles to assign to multi-domain scenarios. Each profile pre-sets the three must-have fields from transformer_standards.json operational_context.asset_operating_context. Use exactly one profile per multi-domain scenario instance; vary one field at most ±1 tier when generating a new variant of an existing scenario.",
+    "profiles": {
+      "critical_peak_no_spare": {
+        "asset_criticality_tier": "critical",
+        "spare_availability": "no_spare",
+        "current_loading_pct": 98,
+        "urgency_floor": "high",
+        "narrative_context": "Feeder transformer carrying peak load with no spare on site. Any forced outage requires load shedding.",
+        "suitable_fault_codes": ["D2", "T3"],
+        "scenario_families": ["MULTI_DOMAIN_INCIDENT"]
+      },
+      "critical_lead_time_spare": {
+        "asset_criticality_tier": "critical",
+        "spare_availability": "lead_time_2_weeks",
+        "current_loading_pct": 82,
+        "urgency_floor": "high",
+        "narrative_context": "Substation main transformer with a spare on order. Fault response must account for the 2-week procurement window.",
+        "suitable_fault_codes": ["D2", "T3", "D1", "T2"],
+        "scenario_families": ["MULTI_DOMAIN_INCIDENT", "WO_CREATION"]
+      },
+      "important_spare_in_stock": {
+        "asset_criticality_tier": "important",
+        "spare_availability": "in_stock",
+        "current_loading_pct": 65,
+        "urgency_floor": "medium",
+        "narrative_context": "Distribution transformer with a local spare available. Planned replacement can be scheduled within the week.",
+        "suitable_fault_codes": ["D1", "T2", "PD", "T1"],
+        "scenario_families": ["MULTI_DOMAIN_INCIDENT", "WO_CREATION", "FMSR_DGA_DIAGNOSIS"]
+      },
+      "standard_low_load": {
+        "asset_criticality_tier": "standard",
+        "spare_availability": "lead_time_3_months",
+        "current_loading_pct": 38,
+        "urgency_floor": "low",
+        "narrative_context": "Rural distribution transformer at low load. Condition monitoring is routine; no immediate intervention required.",
+        "suitable_fault_codes": ["PD", "T1", "N"],
+        "scenario_families": ["FMSR_DGA_DIAGNOSIS", "TSFM_RUL_FORECAST", "IOT_SENSOR_ANALYSIS"]
+      },
+      "important_overloaded": {
+        "asset_criticality_tier": "important",
+        "spare_availability": "in_stock",
+        "current_loading_pct": 108,
+        "urgency_floor": "high",
+        "narrative_context": "Industrial park feeder running over nameplate capacity due to load growth. Thermal fault risk is elevated; forced outage would impact production.",
+        "suitable_fault_codes": ["T3", "T2", "D2"],
+        "scenario_families": ["MULTI_DOMAIN_INCIDENT", "TSFM_RUL_FORECAST"]
+      }
+    }
+  },
+
+  "dga_trend_templates": {
+    "description": "Time-series DGA trend patterns for scenario text and ground-truth construction. Each template describes a progression across two to four sample points. Use these to write scenario text that references observable trends rather than single-point snapshots. Gas values at each step are indicative order-of-magnitude guidance; use transformer_standards.json representative_gas_profiles.profiles[iec_code] for exact analyze_dga inputs.",
+    "templates": {
+      "stable_normal": {
+        "iec_code_trajectory": ["N"],
+        "description": "All key gases remain at background levels across consecutive samples. No discernible trend.",
+        "sample_progression": [
+          { "step": "T-0 baseline",  "H2_approx": 5,  "C2H2_approx": 0, "trend_note": "All gases C1" },
+          { "step": "T-30 days",     "H2_approx": 6,  "C2H2_approx": 0, "trend_note": "No change" },
+          { "step": "T-60 days",     "H2_approx": 5,  "C2H2_approx": 0, "trend_note": "Stable" }
+        ],
+        "scenario_text_cue": "Routine monitoring with no anomalies detected.",
+        "urgency": "low",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "IOT_SENSOR_ANALYSIS"]
+      },
+      "rising_hydrogen_pd": {
+        "iec_code_trajectory": ["N", "N", "PD"],
+        "description": "Gradual H2 increase over 60–90 days with C2H2 near zero. Indicative of partial discharge developing in voids.",
+        "sample_progression": [
+          { "step": "T-0 baseline",  "H2_approx": 20,  "C2H2_approx": 0, "trend_note": "Elevated H2 but ratio not yet PD" },
+          { "step": "T-30 days",     "H2_approx": 60,  "C2H2_approx": 0, "trend_note": "H2 rising, C2H2 still zero" },
+          { "step": "T-60 days",     "H2_approx": 140, "C2H2_approx": 0, "trend_note": "PD ratios met" }
+        ],
+        "scenario_text_cue": "Three consecutive DGA samples show a rising hydrogen trend over the past 60 days.",
+        "urgency": "medium",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "MULTI_DOMAIN_INCIDENT"]
+      },
+      "accelerating_arc_d1_to_d2": {
+        "iec_code_trajectory": ["D1", "D1", "D2"],
+        "description": "C2H2 and H2 both rising; C2H2/C2H4 ratio crosses the D1→D2 boundary. Indicates worsening arcing.",
+        "sample_progression": [
+          { "step": "T-0 baseline",  "H2_approx": 200, "C2H2_approx": 15,  "C2H4_approx": 20, "trend_note": "D1 — R2 in [0.1,3)" },
+          { "step": "T-14 days",     "H2_approx": 280, "C2H2_approx": 30,  "C2H4_approx": 22, "trend_note": "D1 still, accelerating" },
+          { "step": "T-28 days",     "H2_approx": 400, "C2H2_approx": 80,  "C2H4_approx": 20, "trend_note": "D2 — R2 crosses 3.0" }
+        ],
+        "scenario_text_cue": "Two prior DGA samples showed D1; the latest sample has significantly elevated C2H2.",
+        "urgency": "emergency",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "MULTI_DOMAIN_INCIDENT"]
+      },
+      "thermal_t1_to_t3_progression": {
+        "iec_code_trajectory": ["T1", "T2", "T3"],
+        "description": "Ethylene and methane rising steadily across three samples. Indicates escalating thermal fault severity.",
+        "sample_progression": [
+          { "step": "T-0 baseline",  "CH4_approx": 60,  "C2H4_approx": 15, "C2H6_approx": 30, "trend_note": "T1 — R3 < 1" },
+          { "step": "T-21 days",     "CH4_approx": 150, "C2H4_approx": 60, "C2H6_approx": 35, "trend_note": "T2 — R3 in [1,3)" },
+          { "step": "T-42 days",     "CH4_approx": 300, "C2H4_approx": 220,"C2H6_approx": 38, "trend_note": "T3 — R3 > 3" }
+        ],
+        "scenario_text_cue": "Successive DGA samples over the past six weeks show a consistent rise in methane and ethylene.",
+        "urgency": "emergency",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "MULTI_DOMAIN_INCIDENT", "TSFM_RUL_FORECAST"]
+      },
+      "stable_condition3_d1": {
+        "iec_code_trajectory": ["D1", "D1", "D1"],
+        "description": "Stable D1 pattern across three samples. Gas levels remain at Condition 3 without significant increase. Condition is serious but not actively escalating.",
+        "sample_progression": [
+          { "step": "T-0 baseline",  "H2_approx": 280, "C2H2_approx": 20, "C2H4_approx": 35, "trend_note": "D1 Condition 3" },
+          { "step": "T-30 days",     "H2_approx": 295, "C2H2_approx": 22, "C2H4_approx": 36, "trend_note": "D1 stable" },
+          { "step": "T-60 days",     "H2_approx": 310, "C2H2_approx": 25, "C2H4_approx": 37, "trend_note": "D1 slow drift, no step change" }
+        ],
+        "scenario_text_cue": "Three DGA samples confirm a persistent D1 pattern with no rapid escalation.",
+        "urgency": "high",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "WO_CREATION"]
+      }
+    }
+  },
+
+  "event_alarm_templates": {
+    "description": "Triggering event and alarm patterns that provide the operational narrative context for scenario tasks. Each template defines an alarm source, the IoT sensor signal (if any), and the diagnostic question it motivates. Use these to populate scenario 'text' fields with realistic operational triggers.",
+    "templates": {
+      "buchholz_relay_alarm": {
+        "alarm_source": "buchholz_relay",
+        "iot_signal": null,
+        "associated_fault_codes": ["D2", "T3"],
+        "urgency": "emergency",
+        "scenario_text_cue": "A Buchholz relay alarm was triggered on transformer {transformer_id}. Determine the probable fault type and recommend immediate action.",
+        "ground_truth_cue": "Agent must invoke analyze_dga and map result to a condition-4 fault code; recommendation must reference an emergency inspection or de-energization path.",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "MULTI_DOMAIN_INCIDENT"]
+      },
+      "over_temperature_alert": {
+        "alarm_source": "winding_temp_sensor",
+        "iot_signal": { "sensor": "winding_temp_top_c", "threshold_note": "exceeds 95°C operating limit" },
+        "associated_fault_codes": ["T2", "T3"],
+        "urgency": "high",
+        "scenario_text_cue": "Transformer {transformer_id} has triggered a sustained over-temperature alert on the top oil winding sensor. Investigate and recommend corrective action.",
+        "ground_truth_cue": "Agent must retrieve sensor readings to confirm the thermal exceedance, then correlate with DGA or RUL evidence before issuing a work order.",
+        "suitable_families": ["IOT_SENSOR_ANALYSIS", "MULTI_DOMAIN_INCIDENT", "TSFM_RUL_FORECAST"]
+      },
+      "rising_load_intermittent_temp": {
+        "alarm_source": "load_monitoring",
+        "iot_signal": { "sensor": "load_current_a", "threshold_note": "above 110% rated current for >4h" },
+        "associated_fault_codes": ["T2", "T3"],
+        "urgency": "high",
+        "scenario_text_cue": "Transformer {transformer_id} shows rising load current with intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, and estimate short-term risk.",
+        "ground_truth_cue": "Multi-step: IoT retrieval → DGA analysis → RUL forecast → WO recommendation.",
+        "suitable_families": ["MULTI_DOMAIN_INCIDENT"]
+      },
+      "protection_trip_unknown_cause": {
+        "alarm_source": "differential_protection",
+        "iot_signal": null,
+        "associated_fault_codes": ["D2", "D1"],
+        "urgency": "emergency",
+        "scenario_text_cue": "Transformer {transformer_id} has tripped on differential protection. DGA samples are available. Determine the likely fault cause before re-energization.",
+        "ground_truth_cue": "Agent must use analyze_dga to diagnose fault type; answer must explicitly address re-energization risk.",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS", "MULTI_DOMAIN_INCIDENT", "WO_CREATION"]
+      },
+      "routine_monitoring_elevated_h2": {
+        "alarm_source": "scheduled_dga_sampling",
+        "iot_signal": null,
+        "associated_fault_codes": ["PD", "D1", "N"],
+        "urgency": "medium",
+        "scenario_text_cue": "Routine DGA sampling for transformer {transformer_id} shows elevated hydrogen compared to the prior sample. Identify the fault mode and recommend a monitoring interval.",
+        "ground_truth_cue": "Agent must call get_dga_record and analyze_dga; ground truth includes fault code and a monitoring recommendation aligned with urgency tier.",
+        "suitable_families": ["FMSR_DGA_DIAGNOSIS"]
+      }
+    }
+  },
+
+  "work_order_playbook": {
+    "description": "Minimum work-order field requirements per fault code / urgency tier. Each entry specifies the WO type, priority, minimum fields required in the scenario's ground_truth, and the time-to-action bound. These supplement the minimum_fields defined in transformer_standards.json operational_context.work_order_minimum_fields.",
+    "entries": {
+      "D2_C4": {
+        "fault_code": "D2",
+        "condition_tier": "C4",
+        "urgency": "emergency",
+        "wo_type": "corrective",
+        "priority": "emergency",
+        "time_to_action": "hours",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "immediate_action_required",
+          "safety_isolation_note",
+          "spare_status"
+        ],
+        "notes": "Arcing fault. Do not re-energize without gas recheck. Spare status determines repair vs replacement path."
+      },
+      "T3_C4": {
+        "fault_code": "T3",
+        "condition_tier": "C4",
+        "urgency": "emergency",
+        "wo_type": "corrective",
+        "priority": "emergency",
+        "time_to_action": "hours",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "immediate_action_required",
+          "thermal_history_note",
+          "spare_status"
+        ],
+        "notes": "High-temperature thermal fault. Check loading history and cooling system status before re-energization."
+      },
+      "D1_C3": {
+        "fault_code": "D1",
+        "condition_tier": "C3",
+        "urgency": "high",
+        "wo_type": "corrective",
+        "priority": "high",
+        "time_to_action": "days",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "planned_inspection_date",
+          "dga_resampling_interval"
+        ],
+        "notes": "Sparking or low-energy discharge. Schedule inspection within 1 week; resample DGA in 7 days."
+      },
+      "T2_C3": {
+        "fault_code": "T2",
+        "condition_tier": "C3",
+        "urgency": "high",
+        "wo_type": "corrective",
+        "priority": "high",
+        "time_to_action": "days",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "planned_inspection_date",
+          "cooling_check_note"
+        ],
+        "notes": "Moderate thermal fault. Inspect cooling system and tap changer. Resample DGA within 14 days."
+      },
+      "PD_C2": {
+        "fault_code": "PD",
+        "condition_tier": "C2",
+        "urgency": "medium",
+        "wo_type": "predictive",
+        "priority": "medium",
+        "time_to_action": "weeks_to_months",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "monitoring_interval",
+          "next_review_date"
+        ],
+        "notes": "Partial discharge at moderate level. Increase DGA sampling frequency. No forced outage required."
+      },
+      "T1_C2": {
+        "fault_code": "T1",
+        "condition_tier": "C2",
+        "urgency": "medium",
+        "wo_type": "predictive",
+        "priority": "medium",
+        "time_to_action": "weeks_to_months",
+        "minimum_fields": [
+          "asset_id",
+          "fault_type",
+          "trigger_evidence",
+          "monitoring_interval",
+          "next_review_date"
+        ],
+        "notes": "Low-temperature thermal fault. Verify hotspot indicators. Schedule next DGA within 30–60 days."
+      }
+    }
+  },
+
+  "rul_health_context_templates": {
+    "description": "RUL and health-index context templates for TSFM and multi-domain scenarios. Each template provides a named operational state (long_runway, medium_horizon, etc.) with indicative RUL range, health index range, and the maintenance decision it typically motivates. Use the named template when writing scenario text and ground_truth to ensure consistent RUL framing across the batch.",
+    "templates": {
+      "long_runway": {
+        "rul_range_days": [730, 3650],
+        "health_index_range": [0.75, 1.0],
+        "condition_note": "Healthy long-life transformer. No fault indication. Monitoring only.",
+        "typical_decision": "Continue scheduled monitoring. Next DGA in 6–12 months.",
+        "suitable_fault_codes": ["N"],
+        "suitable_families": ["TSFM_RUL_FORECAST", "IOT_SENSOR_ANALYSIS"]
+      },
+      "medium_horizon_stable": {
+        "rul_range_days": [180, 729],
+        "health_index_range": [0.4, 0.74],
+        "condition_note": "Aging transformer with some degradation indicators. Stable trend but planning horizon is relevant.",
+        "typical_decision": "Plan for replacement or major overhaul within 1–2 years. Increase DGA sampling to quarterly.",
+        "suitable_fault_codes": ["PD", "T1", "D1"],
+        "suitable_families": ["TSFM_RUL_FORECAST", "FMSR_DGA_DIAGNOSIS"]
+      },
+      "short_horizon_critical_load": {
+        "rul_range_days": [30, 179],
+        "health_index_range": [0.15, 0.39],
+        "condition_note": "Transformer under critical load with short remaining useful life. Fault escalation risk is high.",
+        "typical_decision": "Expedite replacement planning. De-load if possible. Emergency WO if fault code escalates.",
+        "suitable_fault_codes": ["T2", "T3", "D1", "D2"],
+        "suitable_families": ["TSFM_RUL_FORECAST", "MULTI_DOMAIN_INCIDENT"]
+      },
+      "critical_immediate": {
+        "rul_range_days": [0, 29],
+        "health_index_range": [0.0, 0.14],
+        "condition_note": "Critically degraded transformer. Immediate intervention required to prevent unplanned outage.",
+        "typical_decision": "Issue emergency corrective WO. Confirm spare availability. De-energize if condition-4 gases confirmed.",
+        "suitable_fault_codes": ["D2", "T3"],
+        "suitable_families": ["MULTI_DOMAIN_INCIDENT", "WO_CREATION"]
+      }
+    }
+  }
+}
