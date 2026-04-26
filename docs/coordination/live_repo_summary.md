@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-26 06:38 EDT*
+*Last updated: 2026-04-26 18:08 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-24 06:38 EDT -> 2026-04-26 06:38 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-24 18:08 EDT -> 2026-04-26 18:08 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -12,15 +12,18 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history is `team13/main@c61538e`, carrying
-  Aaron's three squashed AaT commits with author/committer metadata aligned
-  after the Apr 26 attribution rewrite. Alex's root `main` is local-only ahead by
-  two coordination/model-revision commits (`2726482`, `0ef5304`); do not push
-  root `main` unless Alex asks.
+- **[V]** Current canonical remote history is `team13/main@6046b26`. Since
+  the AaT design stack, `main` has also received PR `#127` / `b06f68d`
+  (AaT smoke hardening and validation proof), `4b9f039` (PS B support
+  artifacts), `ac01e12` (Experiment 1 A/B capture/profiling instrumentation),
+  and `6046b26` (three follow-up profiling instrumentation fixes). Alex's local
+  root `main` is synced to `team13/main`; do not push any local coordination
+  follow-up unless Alex asks.
 - **[V]** Apr 21 Team check-in #4 now has a repo meeting record at
   `planning/2026-04-21_meeting_notes.md`. The Apr 28 agenda/prep docs point at
-  that record while preserving current truth: #104 is proof-backed but awaits
-  PR/review and human closure, and #25 remains the full-capture gate.
+  that record while preserving current truth: #104 is closed / Done, #25 remains
+  the full-capture gate, and the Apr 28 2:45 PM ET team call feeds Alex's
+  3:30 PM ET Dhaval call.
 - **[V]** AaT Cell A/B smoke and upstream parity proof are now real on branch
   `codex-fnd/aat-smoke-fix`: Cell A job `8962310_aat_direct_smoke_104`,
   Cell B job `8969519_aat_mcp_baseline_smoke_104`, upstream AOB
@@ -31,22 +34,32 @@
   respectively. The run `meta.json` files record historical pre-rewrite SHAs
   from before the Apr 26 attribution rewrite; `docs/validation_log.md` records
   those hashes as artifact metadata, while the current reachable checkout target
-  is the PR branch itself. These used self-hosted
+  is `team13/main@6046b26` / the merged PR `#127` history. These used self-hosted
   `openai/Llama-3.1-8B-Instruct` on Insomnia and emitted canonical raw
   artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/`. This clears
   the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gives
-  `#25` an A/B smoke anchor; full `multi_*.json` / 3-trial A/B/C captures still
-  remain.
-- **[V]** The former local root-main coordination stack is now merged as PR
-  `#126`. The branch `codex-fnd/root-main-coordination` was deleted remotely
-  and local root `main` was reset to the squash merge.
+  `#25` an A/B smoke anchor; full `multi_*.json` / 3-trial A/B captures still
+  remain, with Cell C waiting on optimized MCP readiness.
+- **[V]** `#104` is now closed / Done on GitHub after PR `#127` merged. Treat
+  future references to `#104` as historical proof, not an active blocker.
+- **[V]** PR `#128` is the active PS B correction/review lane. Baseline support
+  artifacts exist on main via `4b9f039`, but the PR still has `CHANGES_REQUESTED`
+  with two Critical DGA support-trajectory findings; generated-scenario claims
+  should stay guarded until this is corrected.
+- **[V]** Experiment 1 instrumentation moved on main after PR `#127`:
+  `scripts/run_exp1_ab_capture.sh` and `scripts/replay_scenarios.sh` now exist,
+  and `scripts/run_experiment.sh` has the latest profiling fixes from `6046b26`.
+  These support `#25`; they do not by themselves replace the needed full raw
+  capture artifacts.
+- **[V]** The former local root-main coordination stack is merged as PR `#126`;
+  PR `#127` is also merged; the team root is now synced to `team13/main@6046b26`.
 - **[V]** The heavier `#26` / `#32` / `#34` notebook-and-config staging work
   remains isolated on draft PR `#123`, not on this cleanup stack.
 - **[V]** Draft PR `#124` is the separate staging lane for `#35` / `#64` /
   `#36` / `#5`: a docs-only stack carrying the experiment-framing prerequisites
   plus `docs/failure_analysis_scaffold.md` and `docs/neurips_draft.md`.
   `black` passed; the PR remains draft and is not in review yet.
-- **[V]** `#104` is repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" — the former mid-point PowerPoint task is folded into `#80`. Metadata: parent `#73 WS5 Orchestration comparison`, milestone `M5`, Project Status `Todo`, **assigned Aaron** (reassigned from Alex on 2026-04-22 so the AaT wiring lands alongside Aaron's Exp 1 runner work in `#25` — Cells A/B/C all sit on the ReAct/AaT surface and Cell B is shared with Exp 2). Outline comment posted with the wrapper plan (scripts/aat_runner.py on the openai-agent Python API), recommended upstream runner, first-run target (SGT-009 on Watsonx then Insomnia), and open questions.
+- **[V]** `#104` was repurposed as "Wire vanilla Agent-as-Tool to MCP-baseline stack (runner + harness + smoke + docs)" and is now closed / Done. The former mid-point PowerPoint task is folded into `#80`. Future blockers belong to `#25`, Cell C optimization, or Experiment 2 raw artifact issues, not `#104`.
 - **[V]** `docs/orchestration_wiring.md` Agent-as-Tool section is corrected: upstream AssetOpsBench exposes `claude-agent` and `openai-agent` as first-class AaT CLIs (both MCP-wired via stdio, LiteLLM-routed, `server_paths` on their Python runner constructors). The real plumbing gap is that neither AaT CLI exposes a `--server NAME=PATH` override, so the Smart Grid MCP servers need a thin team-repo wrapper to be reachable.
 - **[V]** Short coordination docs now live under `docs/coordination/`.
   - tracked: `docs/coordination/shift_coordination_note_template.md`
@@ -89,6 +102,9 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-26 evening | `team13/main@6046b26` | `team13/main` | Local root fast-forwarded to canonical team main after PS B support artifacts and Experiment 1 capture/profiling instrumentation landed. |
+| 2026-04-26 afternoon | PR `#128` head `1146ca4` | open PR | PS B support-data corrections are still not clean: two Critical DGA trajectory findings and two Medium explanation fixes remain. |
+| 2026-04-26 morning | PR `#127` / `b06f68d` | `team13/main` | AaT smoke hardening and validation proof merged; `#104` closed / Done. |
 | 2026-04-26 06:10 | `team13/main@c61538e`, PR branch `b8f4e52` | `team13/main` + `codex-fnd/aat-smoke-fix` | Rewrote published commit metadata at Alex's explicit override so the six squash commits no longer show a second GitHub "committed by" identity: PR `#126`/Alex commits now have Alex as committer, and Aaron's AaT squash stack now has Aaron as committer. Trees/messages are unchanged; backup refs exist locally under `refs/backup/pre-attribution-rewrite-*20260426_060931`. |
 | 2026-04-26 05:30 | `codex-fnd/aat-smoke-fix` | feature branch | Ported the local Apr 21 meeting-note/call-prep commit onto the AaT smoke-fix PR branch so the PR can carry the local root-main coordination commits plus the runtime proof branch together. |
 | 2026-04-25/26 | `46edc87` + Slurm `8962310`, `8969519`, `8970383`, `8970468` | feature branch / Insomnia | AaT Cell A, team-runner Cell B, and upstream AOB `OpenAIAgentRunner` parity are all smoke-proven on the SGT-009 / T-015 scenario; the parity path now has two successful runs. |
@@ -140,7 +156,8 @@
   - thin repo-local wrappers around the AOB runtime slice
   - explicit team `server_paths` overrides pointing at this repo's Smart Grid MCP servers
   - shared harness/logging/artifact plumbing in `scripts/run_experiment.sh`
-  The difference is that PE-family wrappers already exist (`plan_execute_self_ask_runner.py`, `verified_pe_runner.py`), while vanilla AaT still needs its wrapper (`#104`).
+  The difference was that PE-family wrappers existed first; vanilla AaT now has
+  `scripts/aat_runner.py` and #104 is closed / Done.
 - **[V]** The main orchestration runner code is now:
   - `scripts/plan_execute_self_ask_runner.py`
   - `scripts/verified_pe_runner.py`
@@ -154,9 +171,8 @@
   supplies MCP stdio servers. Proof anchors: Cell A Slurm job `8962310`,
   Cell B Slurm job `8969519`, and upstream AOB `OpenAIAgentRunner` parity
   Slurm jobs `8970383` and `8970468`. `docs/validation_log.md` records these
-  proof anchors. Remaining
-  AaT work is PR/review closeout, Cell C once the optimized MCP lane lands,
-  and the full `#25` capture slice.
+  proof anchors. Remaining AaT-adjacent work is Cell C once the optimized MCP
+  lane lands and the full `#25` capture slice.
 
 ### Active execution lanes
 
@@ -171,6 +187,9 @@
 - **[V]** The `#111` Insomnia setup reconciliation is closed. The final verification
   checked `scripts/setup_insomnia.sh` syntax, the shared `.venv-insomnia` package
   metadata, and the corrected `huggingface_cli login` command shape on Insomnia.
+- **[V]** PR `#128` is the live PS B review lane. `4b9f039` put baseline support
+  artifacts on main, but the PR-only correction branch still has Critical DGA
+  support-data findings.
 
 ---
 
@@ -201,20 +220,12 @@
    - **[V]** Still open with `CHANGES_REQUESTED`.
    - **[V]** Earlier guidance already given to Akshat; no new blocker surfaced in this pass.
 
-4. **`#104` vanilla AaT wiring (owned by Aaron, adjacent to `#25`)**
-   - **[V]** Issue repurposed from the closed mid-point PPT task; parent `#73`, milestone `M5`, outline comment posted; reassigned to Aaron 2026-04-22 so the AaT runner is built once and reused across Exp 1 Cells A/B/C and the Exp 2 AaT arm.
-   - **[V]** Core runner/proof is now done on `codex-fnd/aat-smoke-fix`:
-     `scripts/aat_runner.py` uses the OpenAI Agents SDK directly, Cell A/B tool
-     names match, local vLLM routing is explicit, and Insomnia smoke artifacts
-     exist for A (`8962310`) and B (`8969519`).
-   - **[V]** Upstream parity is now proven by
-     `8970383_aat_mcp_baseline_upstream_smoke_104`: AOB
-     `OpenAIAgentRunner` Python API, same Smart Grid MCP servers/scenario,
-     `1 / 1` success, Slurm elapsed `00:11:18`, 4 MCP tool calls.
-     Repeat job `8970468_aat_mcp_baseline_upstream_smoke_104` also completed
-     `1 / 1` successfully, Slurm elapsed `00:09:05`, 4 MCP tool calls.
-   - **[?]** Remaining closeout is process, not implementation proof: PR/review,
-     issue comment/update, and then a human decision to close `#104`.
+4. **PS B support data / PR `#128`**
+   - **[V]** Baseline support artifacts are on main via `4b9f039`.
+   - **[V]** PR `#128` remains open with `CHANGES_REQUESTED`: two Critical DGA
+     trajectory findings plus two Medium explanation fixes.
+   - **[?]** Generated-scenario final-story claims remain guarded until those
+     support-data corrections land.
 
 ---
 
@@ -227,15 +238,16 @@
 - **PR `#115`** → closes `#9`, `#10`, `#11`, `#12`, `#58`
 - **PR `#119`** → closes `#23`, `#24`
 - **PR `#120`** → updates `#26`, `#32` but intentionally does not close them
+- **PR `#127`** → closes `#104`
 
 ### Still-open issues that matter most
 
 | Issue | Owner signal | Current state |
 |---|---|---|
-| `#25` | Aaron implementation lane | A/B smoke artifacts exist; full `multi_*.json` / 3-trial A/B/C capture still pending |
+| `#25` | Aaron implementation lane | A/B smoke artifacts exist; full `multi_*.json` / 3-trial A/B capture still pending; Cell C waits on optimized MCP |
 | `#26` | analysis/results lane | Notebook 02 scaffold merged; needs real captures |
 | `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Cell B now has an AaT smoke anchor, but final Experiment 2 raw run set is still pending |
-| `#104` | Aaron implementation lane (reassigned from Alex 2026-04-22) | Team AaT runner plus A/B smoke and upstream `OpenAIAgentRunner` parity proof exist; PR/review and issue closeout remain |
+| `#83` / `#90` | Tanisha PS B lane | support artifacts partly on main; PR `#128` still has Critical support-data fixes |
 
 ### Older open PR
 
@@ -249,6 +261,12 @@
 |---|---|---|---|
 | `#123` | Alex / Codex staging branch | draft, `black` green | Notebook/config staging for `#26` / `#32` / `#34`; keeps the staged Experiment 2 analysis lane isolated while AaT artifacts are still missing |
 | `#124` | Alex / Codex staging branch | draft, `black` green | Failure-analysis / paper staging for `#35` / `#64` / `#36` / `#5`; docs-only stack with experiment-framing prerequisites plus the scaffold docs |
+
+### Active review PRs
+
+| PR | Author | Status | Notes |
+|---|---|---|---|
+| `#128` | Tanisha | `CHANGES_REQUESTED`, merge state dirty | PS B support-data corrections; two Critical DGA trajectory findings remain |
 
 ---
 
@@ -272,15 +290,13 @@
 
 ## 7. Recommended Next Steps
 
-1. **Close out `#104` through process.**
-   - Core A/B smoke proof is present (`8962310`, `8969519`) and upstream
-     `OpenAIAgentRunner` parity proof is present twice (`8970383`, `8970468`).
-     Remaining work is PR/review, issue comment/update, and human closure.
-2. **Proceed to `#25` full capture planning.**
+1. **Proceed to `#25` full capture planning.**
    - Use the proven A/B smoke path for the real `multi_*.json`, 3-trial
      capture set. Keep Cell C gated on the optimized MCP workstream.
-3. **Use Cell B smoke artifacts to unblock Notebook 02/03 contract checks.**
-4. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
+2. **Use Cell B smoke artifacts to unblock Notebook 02/03 contract checks.**
+3. **Fix PR `#128` before treating PS B support data as final evidence.**
+4. **Use the Apr 28 team call to prepare Alex's 3:30 PM ET Dhaval proof/blocker summary.**
+5. **Triage `#112` only if Akshat wants another pass or it starts blocking other work.**
 
 ---
 
