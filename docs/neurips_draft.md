@@ -96,8 +96,10 @@ Use this table to keep the draft aligned with what the repo can actually prove.
 | Benchmark-facing PE-family path exists on canonical history | `docs/validation_log.md`, `benchmarks/cell_Y_plan_execute/`, `benchmarks/cell_Z_hybrid/` | safe now |
 | Experiment design cleanly separates transport from orchestration | `docs/experiment_matrix.md`, `docs/execution_plan.md`, config surfaces | safe now |
 | AaT Cell A/B runner surface exists and can emit canonical smoke artifacts | `docs/validation_log.md`, jobs `8962310` and `8969519`; upstream parity jobs `8970383`, `8970468` | safe now as smoke proof |
-| PE-family failures show recurring correctness/accounting issues worth classifying | `docs/failure_analysis_scaffold.md`, committed Y/Z artifacts, `docs/validation_log.md` | safe now |
-| Full transport result across `A/B/C` | final comparable captures under `benchmarks/cell_A_direct/`, `cell_B_mcp_baseline/`, `cell_C_mcp_optimized/` | blocked; A/B smoke exists |
+| AaT Cell A/B canonical captures exist on the same scenario set, same model, same job | `benchmarks/cell_A_direct/summary.json` and `benchmarks/cell_B_mcp_baseline/summary.json` from job `8979314` (PR `#130`); 6 scenarios per side, `Llama-3.1-8B-Instruct`, scenario set `smartgrid_multi_domain` (hash `ca66cd16…2691e48`); both sides hit `success_rate=1.0`, `failure_count=0`, `tool_error_count=0` | safe now as a paired one-job baseline |
+| PE-family failures show recurring correctness/accounting issues worth classifying | `docs/failure_taxonomy_evidence.md`, committed Y/Z artifacts, `docs/validation_log.md` | safe now |
+| Indicative AaT MCP transport overhead (Cell B − Cell A) on the canonical scenario set | job `8979314` paired summaries: latency mean `+1.20s` (`+9.8%`), wall-clock total `+7.17s` (`+9.8%`), tool-call mean `+0.17` (`+5.0%`), zero tool errors | safe now as one-job, six-scenario evidence; **not** safe as a final transport-overhead distribution |
+| Full transport result across `A/B/C` | final comparable captures under `benchmarks/cell_A_direct/`, `cell_B_mcp_baseline/`, `cell_C_mcp_optimized/` with repeat trials and judge data | blocked; one-job A/B canonical pair exists, C cell and repeat captures still missing |
 | Final orchestration comparison across shared `B/Y` anchor | final comparable shared-cell artifacts plus judge outputs | blocked |
 
 ## Section scaffold
@@ -383,6 +385,45 @@ When final numbers land, keep the results section ordered this way:
 That order prevents the paper from front-loading mitigation wins before the
 baseline matrix is actually established.
 
+### Preliminary Experiment 1 numbers (one job, six scenarios)
+
+The first canonical transport-overhead measurement is now committed. PR
+`#130` produced the paired Cell A and Cell B captures from a single Slurm
+job (`8979314`) on `Llama-3.1-8B-Instruct`, running 6 scenarios per side
+over the canonical scenario set `smartgrid_multi_domain` (hash
+`ca66cd16…2691e48`). Both sides hit `success_rate=1.0` with zero tool
+errors. Pairing the two summaries gives the first concrete (Cell B −
+Cell A) row:
+
+| Metric | Cell A (direct) | Cell B (MCP baseline) | Δ (B − A) | Δ % |
+|---|---:|---:|---:|---:|
+| `wall_clock_seconds_total` | 73.13 | 80.30 | +7.17 | +9.8% |
+| `latency_seconds_mean` | 12.19 | 13.38 | +1.20 | +9.8% |
+| `latency_seconds_p50` | 11.47 | 12.91 | +1.44 | +12.6% |
+| `latency_seconds_p95` | 18.57 | 16.65 | −1.92 | −10.3% |
+| `tool_call_count_total` | 20 | 21 | +1 | +5.0% |
+| `tool_call_count_mean` | 3.33 | 3.50 | +0.17 | +5.0% |
+| `tool_error_count` | 0 | 0 | 0 | n/a |
+
+Draft sentence (paper-safe wording, calibrated to "one job, six
+scenarios" — do not promote to "AaT MCP transport overhead is X%" until
+repeat captures land):
+
+We observe an indicative AaT MCP transport overhead of approximately 9.8%
+on canonical scenario set `smartgrid_multi_domain` from a single paired
+Cell A / Cell B capture (Slurm job `8979314`, `Llama-3.1-8B-Instruct`, 6
+scenarios per side, `success_rate = 1.0` on both sides, zero tool errors
+on either side). The p95 latency reverses sign in this single-job pair,
+which we interpret as small-sample noise rather than a stable transport
+effect. The final transport-overhead distribution requires repeat captures
+plus the still-NULL `mcp_latency_seconds_*` and `tool_latency_seconds_mean`
+profiling dims before the paper commits to a quoted overhead number.
+
+Note for the Results section: this row is `partial_export` per the `#36`
+status labels. It can be cited in the draft as preliminary evidence but
+should not appear in the final results table without paired profiling
+samples and repeat trials.
+
 ### 6. Failure Analysis and Mitigation
 
 Paper promise:
@@ -479,10 +520,15 @@ Draft paragraph:
 At the time of writing, canonical history already contains the benchmark-facing
 Plan-Execute path, the first committed Smart Grid benchmark artifacts, clean
 repo-local PE + Self-Ask and Verified PE smoke proofs, AaT Cell A/B smoke
-proofs, upstream AaT parity proofs, and analysis scaffolds for the Experiment 1
-and Experiment 2 notebook lanes. The remaining empirical gap is not whether the
-stack can run at all, but whether the full matched captures land cleanly enough
-to support final transport and orchestration comparisons.
+proofs, upstream AaT parity proofs, the first paired AaT Cell A / Cell B
+canonical capture (Slurm job `8979314`, `Llama-3.1-8B-Instruct`, scenario set
+`smartgrid_multi_domain`, 6 scenarios per side, `success_rate = 1.0` on both
+sides, indicative MCP transport overhead approximately 9.8% from this single
+paired job), and analysis scaffolds for the Experiment 1 and Experiment 2
+notebook lanes. The remaining empirical gap is not whether the stack can run
+at all, but whether repeat captures and matched profiling samples land cleanly
+enough to promote the indicative one-job overhead to a final transport
+distribution and to support the final orchestration comparison.
 
 ## Teammate evidence asks
 
