@@ -47,19 +47,31 @@ ERR_LOG="${OUTPUT%.csv}.stderr.log"
 echo "sample_nvidia_smi: writing to $OUTPUT (interval=${INTERVAL}s, pid=$$)" >&2
 echo "sample_nvidia_smi: stderr -> $ERR_LOG" >&2
 
-# Write header. Disable pipefail for this single line: `head -1` closes its
-# stdin after one line, sending SIGPIPE to nvidia-smi which then exits 141.
-# Under `set -euo pipefail` (set above) the pipeline returns 141 and `set -e`
-# kills the script BEFORE the sample loop even starts, leaving the CSV with
-# just the header row. (This was the silent root cause behind every prior
-# nvidia_smi_samples=0 capture, including 8978297 and 8979215.)
-set +o pipefail
-nvidia-smi --query-gpu="$FIELDS" --format=csv | head -1 > "$OUTPUT"
-HEADER_RC=$?
-set -o pipefail
-if [ "$HEADER_RC" -ne 0 ] && [ "$HEADER_RC" -ne 141 ]; then
+# Write the header without a pipeline so we capture nvidia-smi's status, not
+# head's. The earlier pipe-based version had to disable pipefail to tolerate
+# head closing stdin after one line, but that also made malformed/empty header
+# output easier to miss.
+HEADER_TMP="$(mktemp "${OUTPUT}.header.XXXXXX")"
+if nvidia-smi --query-gpu="$FIELDS" --format=csv >"$HEADER_TMP" 2>>"$ERR_LOG"; then
+    :
+else
+    HEADER_RC=$?
+    rm -f "$HEADER_TMP"
+    echo "ERROR: header nvidia-smi query failed with exit $HEADER_RC" >&2
+    exit "$HEADER_RC"
+fi
+if head -n 1 "$HEADER_TMP" >"$OUTPUT"; then
+    :
+else
+    HEADER_RC=$?
+    rm -f "$HEADER_TMP"
     echo "ERROR: header write failed with exit $HEADER_RC" >&2
     exit "$HEADER_RC"
+fi
+rm -f "$HEADER_TMP"
+if [ ! -s "$OUTPUT" ]; then
+    echo "ERROR: header write produced an empty CSV" >&2
+    exit 1
 fi
 
 # Append rows until signalled. Drop `set -e` for the loop so a transient
