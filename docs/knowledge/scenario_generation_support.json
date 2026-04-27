@@ -239,8 +239,8 @@
         "description": "Stable D1 pattern across three samples with slow gas drift and no step change. Condition is serious but not actively escalating toward D2.",
         "sample_progression": [
           { "step": "T-0 baseline", "H2": 500, "CH4": 100, "C2H2": 30, "C2H4": 80, "C2H6": 100, "trend_note": "D1 Condition 3 — verified D1 profile", "endpoint_verified": true, "source": "transformer_standards.json D1 profile" },
-          { "step": "T-30 days",    "H2": 500, "CH4": 100, "C2H2": 32, "C2H4": 82, "C2H6": 100, "trend_note": "D1 stable, R2=0.39" },
-          { "step": "T-60 days",    "H2": 500, "CH4": 100, "C2H2": 35, "C2H4": 85, "C2H6": 100, "trend_note": "D1 slow drift, no step change, R2=0.41" }
+          { "step": "T-30 days",    "H2": 500, "CH4": 100, "C2H2": 32, "C2H4": 82, "C2H6": 100, "trend_note": "D1 stable, R2=0.39", "step_verified": true },
+          { "step": "T-60 days",    "H2": 500, "CH4": 100, "C2H2": 35, "C2H4": 85, "C2H6": 100, "trend_note": "D1 slow drift, no step change, R2=0.41", "step_verified": true }
         ],
         "scenario_text_cue": "Three DGA samples confirm a persistent D1 pattern with no rapid escalation.",
         "urgency": "high",
