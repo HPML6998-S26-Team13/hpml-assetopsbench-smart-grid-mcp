@@ -32,6 +32,19 @@ same scenario slice (`data/scenarios/multi_*.json`), the same model
 (`Llama-3.1-8B-Instruct` on Insomnia vLLM), and the same decoding parameters.
 The only variable is the orchestration method.
 
+**Runner Python version caveat.** Cell Y (vanilla Plan-Execute) runs upstream
+AssetOpsBench's `plan-execute` CLI under its pinned Python 3.12 environment
+via `uv run plan-execute` from `$AOB_PATH`. The remaining PE-family cells
+(Y + Self-Ask, Z, Z + Self-Ask) use repo-local runners
+(`scripts/plan_execute_self_ask_runner.py`, `scripts/verified_pe_runner.py`)
+under Python 3.11 from `.venv-insomnia`. Cell B uses `scripts/aat_runner.py`,
+also under Python 3.11. The model server, MCP servers, scenario set, and
+decoding parameters are identical across all cells — only the orchestration
+client's interpreter differs. We keep Cell Y on AOB's pinned 3.12 toolchain
+deliberately so it remains "vanilla AOB plan-execute as published," rather
+than monkey-patching it to match. Methods section should document this
+delta when reporting Cell Y comparisons.
+
 **Shared Cell B.** Cell B is the AaT condition for Experiment 2 *and* the MCP
 baseline for Experiment 1. The same `8979314_aat_mcp_baseline` capture is the
 canonical anchor for both experiments — do not re-run B for Experiment 2.
