@@ -68,6 +68,61 @@ sbatch scripts/run_experiment.sh configs/<cell>.env
 Scratch is **1 TB shared** across the edu account and **not backed up** — but
 everything important is in git or re-downloadable from HuggingFace.
 
+## Group permissions: keep the team checkout group-writable
+
+Every file or directory that any teammate needs to edit must be group-readable
+*and* group-writable. The shared parent at
+`/insomnia001/depts/edu/users/team13/` is owned by `wax1:somedu` with mode
+`drwxrws---` (770 + setgid). The setgid bit makes new files inherit the
+`somedu` group automatically; the `g+w` bit is what lets teammates push
+commits, edit configs, or run `git pull` into a worktree they didn't create.
+
+The default sshd `umask` on Insomnia is `0027`, which writes new files as
+`-rw-r-----` and new directories as `drwxr-x---`. That's the opposite of what
+we want for shared work — only the file's owner can edit it, even though the
+group is correct. **Set your interactive umask to `002`** so new artifacts
+land as `-rw-rw----` and `drwxrws---`:
+
+```bash
+# one-time, in ~/.bashrc:
+echo "umask 002" >> ~/.bashrc
+```
+
+Slurm jobs inherit the submitting shell's umask, so this also fixes job-emitted
+logs, `.out` files, and write-from-Python artifacts.
+
+If you encounter a tree where the perms have already drifted (typical sign:
+`git pull` works but `git checkout` of a teammate's branch fails with
+"unable to unlink"), repair it from the team root:
+
+```bash
+cd /insomnia001/depts/edu/users/team13
+# Recursive group rwx, capital X = exec only on dirs/already-exec files.
+# Skip git internals, venvs, and __pycache__.
+find <tree> \( -path "*/.git" -o -path "*/.git/*" \
+              -o -path "*/.venv*" -o -path "*/__pycache__/*" \) -prune \
+            -o -print0 | xargs -0 chmod g+rwX
+# Ensure setgid on every dir so future writes inherit somedu.
+find <tree> \( -path "*/.git" -o -path "*/.git/*" -o -path "*/.venv*" \) -prune \
+            -o -type d -print0 | xargs -0 chmod g+s
+```
+
+The upstream `AssetOpsBench/` clone under the same parent is intentionally
+left at owner-only mode; if you need to make a local change there, branch it
+into your own clone rather than mutating the shared copy.
+
+Two kinds of residue are expected after the sweep and not problems to chase:
+
+- **Worktree `.git` stub files** (e.g.
+  `worktrees/<name>/.git`) — these are owned by whoever created the worktree
+  and are deliberately excluded by the `*/.git` prune. Teammates never need
+  to write them.
+- **Slurm output files** (`logs/exp_*.out`) — owned by the user who
+  submitted the job. `chmod` requires being the file's owner, so each
+  teammate needs to run the recipe (or just `find . -user "$USER" ! -perm
+  -g+w -exec chmod g+rwX {} +`) once from their own account. Adding the
+  `umask 002` line above prevents this drift on all future writes.
+
 ## CUDA: don't use `module load cuda`
 
 Insomnia's `cuda/12.3` module is broken — it points at `/usr/local/cuda-12.3/`
