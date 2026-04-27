@@ -35,6 +35,7 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 
 ## Related directories
 
+- [knowledge/](knowledge/) - PS B generation support: scenario family matrix, operational context profiles, DGA trend templates, event/alarm templates, WO playbook, and scenario authoring contract with ground-truth field spec.
 - [../scripts/README.md](../scripts/README.md) - Executable entrypoints and helper scripts.
 - [../configs/README.md](../configs/README.md) - Benchmark config schema and cell naming.
 - [../data/README.md](../data/README.md) - Data pipeline and processed dataset policy.
