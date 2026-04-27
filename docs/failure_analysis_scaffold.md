@@ -40,8 +40,13 @@ Since the Apr 26 refresh, the canonical `team13/main` lane has advanced:
 - Notebook 02 partial-readiness mode landed in PR `#123` and Notebook 03
   preliminary mode landed in PR `#136`.
 - Experiment 1 A/B canonical captures landed in PR `#130` with WandB,
-  `nvidia-smi`, and `torch.profiler` integration; PR `#128` added the PS B
-  scenario-generation support artifacts.
+  `nvidia-smi`, and `torch.profiler` integration. The first job
+  (`8979314_aat_direct` / `8979314_aat_mcp_baseline`) ran 6 scenarios per
+  side on `Llama-3.1-8B-Instruct` over scenario set `smartgrid_multi_domain`
+  (hash `ca66cd16…2691e48`). Both sides hit `success_rate=1.0`; canonical
+  AaT MCP overhead from this single job is `+1.20s` mean per-trial latency
+  (`+9.8%`) and `+7.17s` total wall clock (`+9.8%`).
+- PR `#128` added the PS B scenario-generation support artifacts.
 - These artifacts now define the live "before" baseline — any future
   mitigation rerun must pair against the same scenario set, model, and
   capture wrapper to keep the comparison honest.
@@ -107,18 +112,32 @@ W&B stay joinable:
 
 ## Current before/after comparison ledger
 
-This is the minimal rerun ledger we can already define for `#36`. The Apr 27
-pass keeps the same lanes; the canonical "after" runs are unchanged because no
-new mitigation rerun has landed since the Apr 26 refresh.
+This is the minimal rerun ledger we can already define for `#36`. PR `#130`
+added the canonical Cell A/B captures from job `8979314` on Llama-3.1-8B
+(scenario set `smartgrid_multi_domain`, hash
+`ca66cd16b7704157f9d21c74e1c8d40c1d2d19ab60957d4d05ad737c27691e48`); those
+rows now seed the canonical "AaT transport baseline" lane. Mitigation
+reruns against this lane have not yet landed.
 
 | lane | before run | after run | before status | after status | after metrics already committed | missing for full comparison |
 |---|---|---|---|---|---|---|
-| PE + Self-Ask | `8850716_pe_self_ask_mcp_baseline_smoke` | `8857842_pe_self_ask_mcp_baseline_smoke` | integration proof with terminal `Unknown server 'none'` | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=67.11`, `latency_seconds_p95=99.57`, `tool_call_count_mean=9.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
-| Verified PE | `8851966_verified_pe_mcp_baseline_smoke` | `8857843_verified_pe_mcp_baseline_smoke` | semantic failures masked by wrapper success accounting | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=93.59`, `latency_seconds_p95=139.64`, `tool_call_count_mean=10.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
+| PE + Self-Ask (smoke) | `8850716_pe_self_ask_mcp_baseline_smoke` | `8857842_pe_self_ask_mcp_baseline_smoke` | integration proof with terminal `Unknown server 'none'` | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=67.11`, `latency_seconds_p95=99.57`, `tool_call_count_mean=9.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
+| Verified PE (smoke) | `8851966_verified_pe_mcp_baseline_smoke` | `8857843_verified_pe_mcp_baseline_smoke` | semantic failures masked by wrapper success accounting | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=93.59`, `latency_seconds_p95=139.64`, `tool_call_count_mean=10.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
+| AaT transport baseline (Cell A) | n/a (this is the baseline) | `8979314_aat_direct` | n/a | clean `6/6` canonical capture | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=73.13`, `latency_seconds_mean=12.19`, `latency_seconds_p50=11.47`, `latency_seconds_p95=18.57`, `tool_call_count_total=20`, `tool_call_count_mean=3.33`, `tool_error_count=0` | tokens / judge / MCP latency dims unpopulated on Cell A by definition |
+| AaT transport baseline (Cell B) | `8979314_aat_direct` | `8979314_aat_mcp_baseline` | clean Cell A (6/6) | clean Cell B (6/6) | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=80.30`, `latency_seconds_mean=13.38`, `latency_seconds_p50=12.91`, `latency_seconds_p95=16.65`, `tool_call_count_total=21`, `tool_call_count_mean=3.50`, `tool_error_count=0` | `mcp_latency_seconds_mean`, `mcp_latency_seconds_p95`, `tool_latency_seconds_mean`, token / judge dims still NULL on the capture |
 
-When the Cell A/B canonical capture wave from PR `#130` produces matched
-mitigation reruns, append rows here in the same shape and update the
-`comparison_ready` status when both sides have a complete metric pack.
+Same job (`8979314`) produced both Cell A and Cell B captures, so the
+transport-overhead row pairs the two sides under one job ID. Observed
+canonical AaT MCP overhead from this single job: latency mean
+`+1.20s` (`+9.8%`), wall-clock total `+7.17s` (`+9.8%`), tool-call count
+`+1` (`6 → 7%` increase in mean), zero tool errors on either side. This is
+one job, six scenarios, three trials per scenario; treat it as a
+`partial_export` row pending repeat captures and the still-NULL MCP
+latency dims.
+
+When mitigation reruns against this AaT transport baseline land, append
+rows in the same shape and update the `comparison_ready` status when both
+sides have a complete metric pack.
 
 ## Export contract by file
 
@@ -132,8 +151,8 @@ read these tables, not the raw run JSON.
 - required columns: `run_name`, `cell`, `orchestration_mode`, `mcp_mode`,
   `scenario_id`, `trial_index`, `failure_stage`, `taxonomy_label`, `symptom`,
   `artifact_path`, `evidence_note`, `candidate_mitigation`, `priority`
-- this table is owned by `#35` (see `docs/failure_taxonomy_evidence.md`); the
-  `#36` lane only needs the join keys to remain stable
+- schema owned by `#36` export contract (this doc); populated rows produced
+  under `#35` (see `docs/failure_taxonomy_evidence.md`)
 
 `results/metrics/mitigation_run_inventory.csv`
 
@@ -144,13 +163,43 @@ read these tables, not the raw run JSON.
 `results/metrics/mitigation_before_after.csv`
 
 - one row per `(lane, phase, run_name)`
-- required columns: `lane`, `phase`, `run_name`, `cell`, `success_rate`,
-  `failure_count`, `latency_seconds_mean`, `latency_seconds_p95`,
-  `tool_call_count_mean`, `judge_pass_rate`, `benchmark_run_dir`,
-  `profiling_dir`, `torch_profile_dir`, `replay_dir`, `profiling_summary`,
-  `profiling_gpu_util_mean`, `profiling_gpu_util_max`,
+- required columns (organized by group; column order can stay flexible as
+  long as every column appears):
+
+  identity / metadata: `lane`, `phase`, `run_name`, `cell`,
+  `orchestration_mode`, `mcp_mode`, `model_id`, `slurm_job_id`, `git_sha`,
+  `scenario_set_name`, `scenario_set_hash`, `experiment_family`,
+  `experiment_cell`, `wandb_run_url`, `benchmark_config_path`,
+  `benchmark_summary_path`, `host_name`, `gpu_type`, `run_status`,
+  `finished_at`
+
+  outcome: `scenarios_attempted`, `scenarios_completed`, `success_rate`,
+  `failure_count`
+
+  latency: `wall_clock_seconds_total`, `latency_seconds_mean`,
+  `latency_seconds_p50`, `latency_seconds_p95`,
+  `mcp_latency_seconds_mean`, `mcp_latency_seconds_p95`,
+  `tool_latency_seconds_mean`
+
+  tool / token shape: `tool_call_count_total`, `tool_call_count_mean`,
+  `tool_error_count`, `input_tokens_total`, `output_tokens_total`,
+  `tokens_per_second_mean`
+
+  judge: `judge_score_mean`, `judge_score_p50`, `judge_score_p95`,
+  `judge_score_p5`, `judge_pass_rate`
+
+  artifact roots: `benchmark_run_dir`, `profiling_dir`, `torch_profile_dir`,
+  `replay_dir`, `profiling_summary`
+
+  profiling samples: `profiling_gpu_util_mean`, `profiling_gpu_util_max`,
   `profiling_gpu_mem_used_mib_mean`, `profiling_gpu_mem_used_mib_max`,
   `profiling_power_draw_w_mean`, `profiling_power_draw_w_max`
+
+  Every column in `benchmarks/cell_*/summary.json` is mirrored here so the
+  CSV is a strict superset of what the capture wrapper already emits. Fields
+  that the capture has not produced for a given row (e.g., judge scores when
+  judge data is not yet wired) stay NULL on that row but the column must
+  exist on the CSV.
 
 ## Current safe claims
 
@@ -226,6 +275,18 @@ is readable without raw log archaeology:
 | `historical_only` | cited in validation log, but raw comparison artifact is incomplete in-tree |
 | `partial_export` | enough metrics exist for a provisional row, but not the full pack |
 | `comparison_ready` | before/after rows can support a figure or paper sentence |
+
+### Asymmetric-field rule
+
+A row stays `partial_export` until **both sides carry the same field set**
+on the columns the comparison claim depends on. If the after-side has
+profiling samples (`profiling_gpu_util_*`, `profiling_power_draw_w_*`) but
+the before-side does not — or vice versa — the row is `partial_export`,
+not `comparison_ready`, even when both rows otherwise look complete. The
+guardrail in the previous section (record asymmetric fields as missing
+rather than imputing) governs *how* the row is written; this rule governs
+*what status it gets*. Promote to `comparison_ready` only when both sides
+carry the columns the figure or paper sentence will actually read.
 
 ## Immediate fill order
 
