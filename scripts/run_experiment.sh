@@ -711,6 +711,29 @@ run_agent_as_tool_trial() {
   (cd "$REPO_ROOT" && "${cmd[@]}") >>"$HARNESS_LOG" 2>&1
 }
 
+run_agent_as_tool_batch() {
+  local out_dir="$1"
+
+  local -a cmd=(
+    uv run
+    --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION"
+    --with "mcp[cli]==$AAT_MCP_VERSION"
+    --with "litellm==$AAT_LITELLM_VERSION"
+    python scripts/aat_runner.py
+    --scenarios-glob "$SCENARIOS_GLOB"
+    --trials "$TRIALS"
+    --output-dir "$out_dir"
+    --run-basename "$RUN_BASENAME"
+    --model-id "$MODEL_ID"
+    --mcp-mode "$MCP_MODE"
+    --parallel-tool-calls "$AAT_PARALLEL_TOOL_CALLS"
+  )
+  if [ "$HARNESS_VERBOSE" = "1" ]; then
+    cmd+=(--verbose)
+  fi
+  (cd "$REPO_ROOT" && "${cmd[@]}") >>"$HARNESS_LOG" 2>&1
+}
+
 run_verified_pe_trial() {
   local prompt="$1"
   local out_path="$2"
@@ -896,6 +919,26 @@ FAIL=0
 TOTAL=0
 : >"$LATENCY_FILE"
 
+# Cell C optimized: run all scenarios in a single aat_runner.py call so MCP
+# subprocesses are reused across trials (reuse_mcp_connections).
+if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
+  run_agent_as_tool_batch "$RUN_DIR"
+  # Merge per-trial latency records into the canonical latencies.jsonl.
+  if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
+    cat "$RUN_DIR/_batch_latencies.jsonl" >>"$LATENCY_FILE"
+  fi
+  # Count pass/fail — RUN_BASENAME prefix safely excludes meta.json etc.
+  for trial_json in "$RUN_DIR/${RUN_BASENAME}"_*.json; do
+    [ -f "$trial_json" ] || continue
+    TOTAL=$((TOTAL + 1))
+    if trial_succeeded "$trial_json"; then
+      PASS=$((PASS + 1))
+    else
+      FAIL=$((FAIL + 1))
+    fi
+  done
+else
+
 for SCENARIO_FILE in "${SCENARIO_FILES[@]}"; do
   SCENARIO_BASENAME="$(basename "$SCENARIO_FILE" .json)"
   PROMPT="$("$PYTHON_BIN" - "$SCENARIO_FILE" <<'PY'
@@ -1039,6 +1082,8 @@ with open(latency_file, "a", encoding="utf-8") as fh:
 PY
   done
 done
+
+fi  # end of per-scenario/per-trial loop (skipped for MCP_MODE=optimized batch path)
 
 "$PYTHON_BIN" - "$SUMMARY_FILE" "$CONFIG_FILE" "$META_FILE" "$LATENCY_FILE" "$RUN_DIR" "$PASS" "$FAIL" "$TOTAL" <<'PY'
 import json
