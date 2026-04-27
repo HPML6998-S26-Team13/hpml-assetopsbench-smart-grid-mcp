@@ -21,6 +21,12 @@
   card, and the promotion gate from `#64` into `#65` / `#66`. The table-side
   exports (`mitigation_run_inventory.csv`, `mitigation_before_after.csv`)
   stay owned by `#36` (Alex)
+- Refocused `docs/failure_analysis_scaffold.md` on the `#36` before/after
+  metric pack only (export contract, comparison ledger,
+  comparison-ready status labels, fill order) and dropped
+  `docs/neurips_draft.md` from this surface since the paper-writing lane
+  moved to its own `#5` PR. Cross-references to the new `#35`
+  taxonomy/evidence doc and `#64` visuals/mitigation doc are added (Alex)
 
 ### Planning / Coordination
 
