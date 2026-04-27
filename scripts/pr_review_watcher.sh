@@ -74,13 +74,15 @@ need_jq() {
   command -v jq >/dev/null 2>&1 || { echo "jq required" >&2; exit 2; }
 }
 
-# Match any prior packet for this PR, including renamed _REVIEWED.md, but
-# require a trailing _ after the PR number so PR1 does not match PR12.
+# Match any prior packet for this PR, including renamed _REVIEWED.md.
+# Case-sensitive on the canonical `_PR<N>_` slot so slugified content
+# (slugify lowercases everything) cannot collide with the PR-number slot.
+# Concrete failure case caught by adversarial v2 review:
+# 20260427_010000_ADHOC_PR50_watcher_pr137_fix-v1.md would have matched
+# `is_claimed 137` under the prior case-insensitive globs.
 existing_claims() {
   local pr="$1"
-  { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f \
-      \( -iname "*PR${pr}_*" -o -iname "*PR_${pr}_*" \
-         -o -iname "*pr_${pr}_*" -o -iname "*pr${pr}_*" \) 2>/dev/null \
+  { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f -name "*_PR${pr}_*" 2>/dev/null \
       || true; }
 }
 
@@ -241,7 +243,12 @@ write_claim_from_data() {
   title=$(echo "$data" | jq -r .title)
   branch=$(echo "$data" | jq -r .headRefName)
   url=$(echo "$data" | jq -r .url)
-  hint=$(author_hint "$pr" "$branch")
+  # Reuse the hint find_candidates already computed; fall back to a fresh
+  # compute if the caller passed JSON without it (e.g., legacy write_claim).
+  hint=$(echo "$data" | jq -r '.author_hint // empty')
+  if [[ -z "$hint" ]]; then
+    hint=$(author_hint "$pr" "$branch")
+  fi
   slug=$(slugify "$title")
   next_version=$(( $(max_version_for "$pr" | grep -E '^[0-9]+$' || echo 0) + 1 ))
   pkt=$(claim_packet_path "$pr" "$slug" "$reviewer" "$next_version")
@@ -386,6 +393,8 @@ case "$cmd" in
     # review/ directory keyed by reviewer side. Two concurrent watcher
     # processes for the same side would otherwise race the
     # is_claimed/write_claim window and produce duplicate packets (M5).
+    command -v flock >/dev/null 2>&1 \
+      || { echo "flock not found; install via 'brew install flock' (macOS) or 'apt-get install util-linux' (Linux)" >&2; exit 2; }
     LOCK_FILE="${LOCK_DIR}/.watcher.${reviewer}.lock"
     exec 9>"$LOCK_FILE"
     if ! flock -n 9; then
