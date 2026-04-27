@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-04-27
+
+### Tooling
+
+- Added a repo-level PR review watcher (`scripts/pr_review_watcher.sh`)
+  that filters open PRs in
+  `HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp` to those that
+  need a fresh cross-agent review (unmerged, not draft, not approved, no
+  LGTM, unclaimed) and emits each candidate as a JSON line. The script
+  writes a per-PR request packet using the existing cross-agent review
+  filename convention so the same runner does not double-claim across
+  iterations. Author hints come from shift coordination notes under
+  `docs/coordination/`, and the embedded review prompt asks for
+  heightened scrutiny when the PR appears to be authored by the same
+  runner kind as the reviewer, or when authorship is unclear. The
+  reproducible workflow is documented in `docs/pr_review_watcher.md`.
+  Resolves the watcher backlog item pinned in `fdaf248`.
+
 ## 2026-04-25
 
 ### Runtime / Config
