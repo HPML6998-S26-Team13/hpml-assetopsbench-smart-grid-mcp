@@ -837,35 +837,15 @@ PY
     case "$ORCHESTRATION" in
       plan_execute)
         run_plan_execute_trial "$PROMPT" "$TRIAL_OUT" || true
-        if trial_succeeded "$TRIAL_OUT"; then
-          PASS=$((PASS + 1))
-        else
-          FAIL=$((FAIL + 1))
-        fi
         ;;
       agent_as_tool)
         run_agent_as_tool_trial "$PROMPT" "$TRIAL_OUT" || true
-        if trial_succeeded "$TRIAL_OUT"; then
-          PASS=$((PASS + 1))
-        else
-          FAIL=$((FAIL + 1))
-        fi
         ;;
       hybrid)
         run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "HYBRID_RUNNER_TEMPLATE" || true
-        if trial_succeeded "$TRIAL_OUT"; then
-          PASS=$((PASS + 1))
-        else
-          FAIL=$((FAIL + 1))
-        fi
         ;;
       verified_pe)
         run_verified_pe_trial "$PROMPT" "$TRIAL_OUT" || true
-        if trial_succeeded "$TRIAL_OUT"; then
-          PASS=$((PASS + 1))
-        else
-          FAIL=$((FAIL + 1))
-        fi
         ;;
       *)
         echo "ERROR: unknown ORCHESTRATION=$ORCHESTRATION" >&2
@@ -878,6 +858,85 @@ import time
 print(time.time())
 PY
 )"
+
+    # Inject canonical scenario field + derive top-level success into the
+    # trial output JSON BEFORE the pass/fail counter runs. Notebook 03 expects
+    # each per-trial JSON to carry data["scenario"] = <input scenario object>
+    # AND a bool data["success"], so it can match on scenario.id and aggregate
+    # over canonical records. trial_succeeded() reads payload["success"] and
+    # treats a missing field as a pass — running the post-process AFTER the
+    # counter would split summary.json (run-level pass count) from the per-
+    # trial JSON (canonical success), which Notebook 03 would then read in two
+    # different truths. Order: case ⇒ END_EPOCH ⇒ post-process ⇒ counter.
+    # This is uniform across every orchestration path (plan_execute,
+    # agent_as_tool, hybrid, verified_pe) and any upstream-only runner whose
+    # output we cannot directly modify (e.g. AOB plan-execute CLI for Cell Y
+    # baseline, which writes per-step success in history/trajectory but no
+    # top-level success field).
+    "$PYTHON_BIN" - "$SCENARIO_FILE" "$TRIAL_OUT" <<'PY'
+import json
+import pathlib
+import sys
+
+
+def _step_failed(step: dict) -> bool:
+    if not isinstance(step, dict):
+        return False
+    if step.get("success") is False:
+        return True
+    if step.get("error"):
+        return True
+    resp = step.get("response")
+    if isinstance(resp, dict) and resp.get("error"):
+        return True
+    return False
+
+
+def _derive_success(data: dict) -> bool | None:
+    raw = data.get("success")
+    if isinstance(raw, bool):
+        return raw
+    # Match Notebook 03's history-first precedence so all three call sites
+    # (run_experiment.sh, backfill_canonical_scenario.py, notebook
+    # load_*_records) walk the same step array.
+    steps = data.get("history") or data.get("trajectory") or []
+    if not steps and not data.get("answer"):
+        return None
+    for step in steps:
+        if _step_failed(step):
+            return False
+    return bool(data.get("answer"))
+
+
+scenario_path, trial_path = sys.argv[1:]
+trial_file = pathlib.Path(trial_path)
+if not trial_file.exists() or trial_file.stat().st_size == 0:
+    sys.exit(0)
+try:
+    payload = json.loads(trial_file.read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    sys.exit(0)
+if not isinstance(payload, dict):
+    sys.exit(0)
+try:
+    scenario = json.loads(pathlib.Path(scenario_path).read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError):
+    sys.exit(0)
+payload["scenario"] = scenario
+derived = _derive_success(payload)
+if derived is not None and not isinstance(payload.get("success"), bool):
+    payload["success"] = derived
+trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+PY
+
+    # Now count pass/fail using the canonical, post-processed success field.
+    # trial_succeeded reads payload["success"]; for upstream AOB plan-execute
+    # output it is now populated by the derive-success block above.
+    if trial_succeeded "$TRIAL_OUT"; then
+      PASS=$((PASS + 1))
+    else
+      FAIL=$((FAIL + 1))
+    fi
 
     "$PYTHON_BIN" - "$LATENCY_FILE" "$SCENARIO_FILE" "$TRIAL" "$START_EPOCH" "$END_EPOCH" "$TRIAL_OUT" <<'PY'
 import json
