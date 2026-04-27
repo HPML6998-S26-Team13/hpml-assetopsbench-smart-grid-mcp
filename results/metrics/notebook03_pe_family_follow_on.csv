@@ -1,0 +1,2 @@
+cell,label,mode,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,note
+,,,,,,,,,PE-family follow-on deferred - need both Y and Z scenario captures.

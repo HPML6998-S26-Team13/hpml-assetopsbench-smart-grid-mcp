@@ -4,16 +4,20 @@ Experiment configs consumed by [scripts/run_experiment.sh](../scripts/run_experi
 Each file describes one benchmark cell (or one smoke run that maps to a benchmark
 cell) and is sourced as bash, so the schema is just env vars.
 
-The currently verified benchmark-facing execution path is:
+The currently verified benchmark-facing execution paths are:
 
 - `ORCHESTRATION=plan_execute`
+- `ORCHESTRATION=plan_execute` with `ENABLE_SELF_ASK=1`
+- `ORCHESTRATION=verified_pe`
+- `ORCHESTRATION=verified_pe` with `ENABLE_SELF_ASK=1`
 - `ENABLE_SMARTGRID_SERVERS=1`
-- Smart Grid MCP servers passed into AssetOpsBench `plan-execute` via repeated
-  `--server name=path` overrides
+- Smart Grid MCP servers passed into AssetOpsBench `plan-execute` or the
+  repo-local PE-family wrappers via the same server-path contract
 
-Agent-as-Tool still needs an explicit external runner command. Repo-local
-Verified PE runner code exists, but the canonical Experiment 2 Cell Z config is
-still pending promotion from the legacy placeholder. See
+Agent-as-Tool now uses the repo-local default runner at `scripts/aat_runner.py`
+(no template required). Repo-local Verified PE runner code exists; this branch
+promotes the canonical Experiment 2 Cell Z config out of the legacy placeholder
+and adds the Y/Z + Self-Ask variants. See
 [../docs/orchestration_wiring.md](../docs/orchestration_wiring.md).
 
 ## Naming
@@ -25,7 +29,7 @@ The execution-facing config convention is:
   Experiment 1 Cell A / B / C runs
 - `configs/experiment2/` for the extra Experiment 2 templates that do not
   already exist on `main` (currently the Plan-Execute / Cell Y lane and the
-  optional Cell Z follow-on)
+  optional Cell Z follow-on plus the PE-family Self-Ask ablations)
 
 The active cell mapping is:
 
@@ -35,7 +39,9 @@ The active cell mapping is:
 | B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
 | C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
 | Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
-| Z | Verified PE follow-on | baseline | pending canonical promotion; the current `experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` is still a legacy placeholder |
+| Y + Self-Ask | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_self_ask_mcp_baseline.env` |
+| Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_mcp_baseline.env` |
+| Z + Self-Ask | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_self_ask_mcp_baseline.env` |
 
 ## Required keys
 
@@ -48,7 +54,7 @@ The active cell mapping is:
 
 ## Important optional keys
 
-- `ORCHESTRATION` — `plan_execute`, `agent_as_tool`, or `hybrid`
+- `ORCHESTRATION` — `plan_execute`, `agent_as_tool`, or `verified_pe`
 - `MCP_MODE` — `direct`, `baseline`, or `optimized`
 - `ENABLE_SMARTGRID_SERVERS` — when `1`, pass this repo's four Smart Grid MCP
   servers into `plan-execute`
@@ -117,8 +123,7 @@ As of Apr 20, 2026:
 - Experiment 1 analysis still maps to Cells A / B / C, but the execution
   configs for those lanes stay on the canonical `configs/aat_*.env` names that
   `main` already documents.
-- AaT still needs an explicit external runner template until a stable upstream
-  invocation path exists.
-- Verified PE has a repo-local runner and smoke proofs, but the canonical
-  Experiment 2 Z config and raw run set still need to be promoted before Z is a
+- AaT now uses `scripts/aat_runner.py` by default; templates only for variants.
+- Verified PE / PE + Self-Ask are already runnable on the canonical harness
+  path. Cell Z raw run set still needs to be captured before Z is a
   notebook-ready follow-on lane.

@@ -1,0 +1,2 @@
+cell,comparison_label,variant_key,variant_label,run_id,run_name,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,note
+,,,,,,,,,,,,Self-Ask ablation deferred - need a ready baseline/self-ask run pair for Y and/or Z.
