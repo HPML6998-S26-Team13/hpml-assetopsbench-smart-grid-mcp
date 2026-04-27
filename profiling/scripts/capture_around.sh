@@ -130,7 +130,16 @@ if [ -n "${BENCHMARK_RUN_DIR:-}" ]; then
     else
         WANDB_MODE="${WANDB_MODE:-online}"
         echo "capture_around: linking profiling to WandB run in $BENCHMARK_RUN_DIR (mode=$WANDB_MODE)" >&2
-        if ! python3 "$SCRIPT_DIR/log_profiling_to_wandb.py" \
+        # Pick a Python with wandb installed. System python3 on Insomnia is
+        # 3.9 with no wandb; prefer caller PYTHON_BIN, then team venv, then fall back.
+        if [ -n "${PYTHON_BIN:-}" ] && [ -x "${PYTHON_BIN}" ]; then
+            CAPTURE_PY="$PYTHON_BIN"
+        elif [ -x "${REPO_ROOT:-$(pwd)}/.venv-insomnia/bin/python" ]; then
+            CAPTURE_PY="${REPO_ROOT:-$(pwd)}/.venv-insomnia/bin/python"
+        else
+            CAPTURE_PY="python3"
+        fi
+        if ! "$CAPTURE_PY" "$SCRIPT_DIR/log_profiling_to_wandb.py" \
                 --benchmark-run-dir "$BENCHMARK_RUN_DIR" \
                 --profiling-dir "$OUT_DIR" \
                 --mode "$WANDB_MODE"; then

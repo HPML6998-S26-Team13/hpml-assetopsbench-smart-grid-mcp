@@ -27,6 +27,10 @@ data/raw/
 !results/metrics/**/*.csv
 results/metrics/*.preflight.csv
 !results/metrics/*.jsonl
+# Per-trial latency records are part of the canonical Notebook 02 input
+# (run_experiment.sh writes them via the benchmark trial loop). Keep them
+# tracked so reviewers can replay analysis without cluster access.
+!benchmarks/**/latencies.jsonl
 
 # Slurm logs
 logs/*.out
