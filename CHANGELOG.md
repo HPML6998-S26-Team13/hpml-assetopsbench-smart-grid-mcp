@@ -2,6 +2,17 @@
 
 ## 2026-04-27
 
+### Config / Docs
+
+- Added `docs/failure_taxonomy_evidence.md` as the dedicated working surface
+  for `#35` (failure taxonomy classification + evidence table), split out of
+  the combined `docs/failure_analysis_scaffold.md` so each issue (`#35`,
+  `#64`, `#36`, `#5`) has its own reviewable PR. This doc carries the
+  Berkeley categories, taxonomy decision ladder, evidence table schema,
+  populated Apr 22 evidence pass, paper-safe wording guide, classification
+  workflow, and artifact readiness ledger. The CSV export
+  `results/metrics/failure_evidence_table.csv` stays owned by `#36` (Alex)
+
 ### Planning / Coordination
 
 - Split Cell C analysis out of `#26` into `#86` (mirror of `#85`-from-`#25`
