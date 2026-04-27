@@ -27,6 +27,15 @@
   `docs/neurips_draft.md` from this surface since the paper-writing lane
   moved to its own `#5` PR. Cross-references to the new `#35`
   taxonomy/evidence doc and `#64` visuals/mitigation doc are added (Alex)
+- Added `docs/neurips_draft.md` as the dedicated NeurIPS paper-writing
+  scaffold for `#5`, lifted out of the combined `#35/#64/#36/#5` staging in
+  PR `#124` so each issue has its own reviewable PR. Carries working title,
+  one-paragraph claim, draft abstract, contribution list, claim ledger
+  (which claims are already evidence-backed vs blocked), and section
+  scaffold with reusable draft prose for Introduction, Related Work,
+  Benchmark / Method, Experiments, Results, Discussion, Limitations. Owner
+  field updated to flag that section co-authoring is under discussion for
+  the Apr 28 team sync (Round 2 writing rebalance proposal) (Alex)
 
 ### Planning / Coordination
 
