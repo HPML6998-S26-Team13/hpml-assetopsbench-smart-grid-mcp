@@ -34,8 +34,22 @@ Notebook 02 (Experiment 1 — MCP overhead):
 - preflight checks Cells A / B / C under `benchmarks/cell_<X>_*/`
 - reads the full `summary.json` schema (latency p50/p95, tool error count, MCP latency, tool call counts) plus `meta.json` profiling linkage fields (`profiling_dir`, `profiling_artifact`, `profiling_summary`) added by `#27`
 - computes MCP overhead decomposition (B−A, B−C, C−A) at both p50 and p95
-- exports `notebook02_cell_availability.preflight.csv`, `notebook02_latency_summary.csv`, `notebook02_mcp_overhead.csv`, and `notebook02_latency_comparison.png`
-- graceful degradation: skips aggregation / plots when any cell is missing captures, but always writes the availability CSV
+- exports `notebook02_cell_availability.preflight.csv`, `notebook02_cell_b_contract.preflight.csv`, `notebook02_latency_summary.csv`, `notebook02_mcp_overhead.csv`, and `notebook02_latency_comparison.png`
+- graceful degradation: degraded / zero-cell reruns deterministically replace
+  every output (rather than leaving stale prior-run artifacts) — schema-only
+  CSVs carry an explicit `note` column and the figure renders a "zero-cell
+  preview" placeholder, so downstream readers can never see a fresh availability
+  CSV alongside a stale overhead figure
+- as soon as Cell B exists, it also validates the **shared Cell B
+  contract** for `#104` / Experiment 2:
+  - scenario IDs + trial indices match the downstream join keys
+  - latency rows exist in the canonical shape
+  - Cell B still advertises `CONTRIBUTING_EXPERIMENTS="exp1_mcp_overhead,exp2_orchestration"`
+- partial-readiness mode: when only some of A / B / C are present, the
+  notebook still computes pairwise overhead deltas and renders the latency
+  figure with hatched placeholder bars for missing cells. With Cells A and B
+  today the headline `MCP transport overhead (B − A)` row populates while the
+  Cell C overlay waits for `#31`.
 - intended usage is phased: preflight as soon as any A / B / C artifacts exist,
   early best-effort analysis on the first complete A / B / C set, and final
   publishable figures after the chosen Cell C optimization stack plus the
