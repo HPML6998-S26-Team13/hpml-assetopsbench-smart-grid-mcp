@@ -412,7 +412,9 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 try:
                     result = await runner.run(prompt)
                 except Exception as exc:
-                    _LOG.exception("trial failed (%s trial %d): %s", sf.name, trial, exc)
+                    _LOG.exception(
+                        "trial failed (%s trial %d): %s", sf.name, trial, exc
+                    )
                     from scripts.aat_system_prompt import AOB_PROMPT_SHA
 
                     error_payload = {
