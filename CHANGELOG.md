@@ -95,6 +95,17 @@
   story explicit, including the role of the first real shared Cell B artifact
   as an Experiment 1 / 2 milestone rather than treating the notebook lane as
   purely all-or-nothing (Alex)
+- Notebook 02 now turns the shared Cell B milestone into a real contract check
+  instead of a prose note: when the first AaT Cell B artifact lands, it will
+  verify the dual-use `contributing_experiments` metadata, canonical
+  scenario-ID propagation, filename-aligned `trial_index` values, and
+  `latencies.jsonl` join-key shape, then export
+  `results/metrics/notebook02_cell_b_contract.preflight.csv` alongside the
+  availability snapshot. Notebook 02 also runs in a partial-readiness mode
+  whenever any subset of cells is present: the per-scenario summary, MCP
+  overhead pairwise deltas, and latency figure now publish whatever pair is
+  available (Cell A + Cell B today; Cell C overlay automatic when it lands)
+  (Alex) (#26)
 
 ## 2026-04-21
 
