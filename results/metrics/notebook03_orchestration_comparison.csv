@@ -1,0 +1,2 @@
+cell,label,mode,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,note
+,,,,,,,,,"Core Experiment 2 comparison deferred (refused): incompatible metadata - scenario_set_name mismatch across ['B', 'Y']: {'B': 'smartgrid_multi_domain', 'Y': 'smartgrid_multi_domain_smoke'}"

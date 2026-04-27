@@ -61,10 +61,25 @@ Notebook 03 (Experiment 2 — orchestration comparison):
 - reads per-scenario JSONs for the `success` / `failed_steps` / `history` / `answer` shape that `scripts/run_experiment.sh` + the AOB PE client and the repo-local PE-Self-Ask / Verified-PE runners produce
 - catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False` (per Codex's 2026-04-20 finding)
 - computes success rate, mean failed steps, mean history length, mean tool-error count, recovery rate, and (when `results/metrics/scenario_scores.jsonl` is populated per `#17`) judge pass rate per orchestration
-- exports `notebook03_cell_availability.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
-- the minimum real Experiment 2 comparison is Cell B vs Y; Cell Z has a
-  smoke-proven repo-local runner, but still needs promoted canonical configs and
-  raw artifacts before it becomes a notebook-ready follow-on lane
+- exports `notebook03_cell_availability.preflight.csv`, `notebook03_self_ask_run_inventory.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
+- staged usage:
+  - Y / Z can already support a PE-family follow-on comparison and ablation pass
+  - the minimum real Experiment 2 comparison is still Cell B vs Y
+  - Cell Z is runnable and supported, but remains an optional third-method lane
+    rather than the minimum evidence needed to make the AaT vs PE comparison real
+- preliminary mode in the orchestration comparison aggregator: when no
+  canonical scenario.id propagation exists yet (current AaT runner gap), the
+  comparison aggregates on `scenario_file` instead and tags the output with
+  `mode=preliminary` so reviewers can spot the difference
+- should now also export a PE-family follow-on artifact when Y and Z are both
+  present:
+  - `notebook03_pe_family_follow_on.csv`
+  - `notebook03_pe_family_follow_on.png`
+- should now also export a run-centric Self-Ask ablation inventory and, when a
+  ready baseline/self-ask pair exists for Y and/or Z, the ablation outputs:
+  - `notebook03_self_ask_run_inventory.preflight.csv`
+  - `notebook03_self_ask_ablation.csv`
+  - `notebook03_self_ask_ablation.png`
 
 Notebook 04 is still pending — it will consume `results/figures/` outputs from 02 and 03 to produce paper-ready PDFs.
 
@@ -73,5 +88,10 @@ Notebook 04 is still pending — it will consume `results/figures/` outputs from
 - Notebook 02 still analyzes the Experiment 1 Cell A / B / C lanes, but the
   canonical execution configs for those live at `configs/aat_*.env` on `main`.
 - Notebook 03 uses the extra Experiment 2 templates under `configs/experiment2/`
-  for Y today; Z / Self-Ask follow-ons should not be treated as
-  notebook-ready until their canonical configs and raw artifacts land.
+  for the Y / Z follow-on lanes, including the baseline Self-Ask ablations:
+  - `exp2_cell_Y_pe_mcp_baseline.env`
+  - `exp2_cell_Y_pe_self_ask_mcp_baseline.env`
+  - `exp2_cell_Z_verified_pe_mcp_baseline.env`
+  - `exp2_cell_Z_verified_pe_self_ask_mcp_baseline.env`
+- Z / Self-Ask follow-ons remain runnable but still need raw artifacts before
+  the notebook can produce real comparison plots for those lanes.

@@ -106,6 +106,24 @@
   overhead pairwise deltas, and latency figure now publish whatever pair is
   available (Cell A + Cell B today; Cell C overlay automatic when it lands)
   (Alex) (#26)
+- Notebook 03 now has a run-centric Self-Ask ablation layer for the PE-family
+  lanes: it scans the raw Y / Z run inventory, classifies each run as baseline
+  vs Self-Ask from committed artifacts rather than trusting the mutable cell
+  root `summary.json`, writes
+  `results/metrics/notebook03_self_ask_run_inventory.preflight.csv`, and will
+  emit `notebook03_self_ask_ablation.{csv,png}` as soon as a ready
+  baseline/self-ask pair exists for Y and/or Z. The orchestration comparison
+  also runs in a preliminary mode when no canonical scenario.id propagation
+  exists yet, aggregating on `scenario_file` and tagging the output with
+  `mode=preliminary` so reviewers can spot the difference (Alex) (#34)
+- Promoted the Experiment 2 config surface out of placeholder state: renamed
+  `configs/experiment2/exp2_cell_Z_hybrid_mcp_baseline.env` to
+  `exp2_cell_Z_verified_pe_mcp_baseline.env`, added Y + Self-Ask, Z + Self-Ask
+  variants, aligned `SCENARIO_SET_NAME` with Cell B for clean cross-experiment
+  joins, and turned on `TORCH_PROFILE=1` by default in all four exp2 configs
+  for HPML profiling. Added `docs/experiment2_capture_plan.md` documenting the
+  Insomnia run sequence, the legacy `cell_Z_hybrid` directory mapping, and
+  what each merged run unlocks downstream (Alex) (#32)
 
 ## 2026-04-21
 
