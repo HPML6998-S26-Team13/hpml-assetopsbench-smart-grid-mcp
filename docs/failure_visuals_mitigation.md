@@ -103,8 +103,8 @@ Initial candidate mitigations already visible in repo history:
 | 1 | strict success accounting + atomic error promotion | prevents the benchmark from silently counting broken runs as clean evidence | partly landed; keep as required baseline |
 | 2 | final-answer evidence consistency check | closes the most dangerous correctness gap now visible in committed Y-cell artifacts | not yet explicit |
 | 3 | unknown-server / invalid-routing hard fail | turns orchestration-contract bugs into obvious failures instead of muddled completions | partly visible in rerun history; should remain enforced |
-| 4 | Self-Ask on ambiguous PE-family tasks | cheap clarification hook for under-specified reasoning tasks | implemented as follow-on mitigation |
-| 5 | verifier-gated retry / suffix replan | helps recover from bad intermediate steps without restarting the whole run | implemented in Z lane |
+| 4 | Self-Ask on ambiguous PE-family tasks | cheap clarification hook for under-specified reasoning tasks | implemented as follow-on mitigation in `scripts/plan_execute_self_ask_runner.py` |
+| 5 | verifier-gated retry / suffix replan | helps recover from bad intermediate steps without restarting the whole run | implemented in Z lane in `scripts/verified_pe_runner.py` |
 | 6 | MCP-optimized transport for PE-family follow-ons | worthwhile after correctness/verification fixes, but not the first mitigation to prioritize | future follow-on |
 
 ### Why this order
@@ -144,6 +144,68 @@ true:
 4. the paper can explain the mitigation in one sentence without inventing a
    new benchmark axis
 
+### Test of boundedness (criterion 2)
+
+A mitigation is **bounded** when it can be expressed as either:
+
+- one named function added to one named runner module, with a single call
+  site (e.g., a `check_evidence_consistency()` helper called from one
+  `_finalize_answer()` path), or
+- a typed config knob already present in the runner, plus one if-branch
+  that consumes it (e.g., raise `tool_error` when `routing_strict=True`),
+
+and the rerun command line that invokes the mitigation is identical to the
+baseline command line except for one flag, one config file, or one env
+variable.
+
+A mitigation is **fuzzy** (and therefore not promotable under criterion 2)
+when it requires:
+
+- editing a free-form prompt without a deterministic check that the edit
+  did what was intended, or
+- changing the runner's behavior in ways that touch more than one tool /
+  step / verifier surface at once, or
+- a rerun command line that diverges from the baseline in a way the
+  diff-against-baseline cannot show in one line.
+
+## Worked card: rank-2 first promotion
+
+The first concrete mitigation card under the rubric above. Targets the
+dominant `task verification failure` pattern surfaced by PR `#138`'s
+populated evidence pass.
+
+| Field | Value |
+|---|---|
+| `mitigation_name` | `final_answer_evidence_consistency_check` |
+| `target_pattern` | answer/tool inconsistency: final answer or work order disagrees with the deciding tool's named output (PR #138 rows 1 and 2) |
+| `hypothesis` | adding a deterministic check that compares the chosen fault label against the formal diagnostic tool's named output before final answer / WO emission will eliminate the answer/tool inconsistency pattern in PE-family runs |
+| `before_run` | `local-20260413-003914_pe_mcp_baseline_watsonx_smoke` and `issue18-smartgrid-smoke` (both Y-cell, plan_execute, baseline; both currently `must-fix` priority) |
+| `after_run_plan` | rerun the same scenario set under PE-baseline with the consistency check enabled; capture into `benchmarks/cell_Y_plan_execute/raw/<job>_pe_evidence_consistency_check/` |
+| `primary_metric` | count of rows whose taxonomy_label flips from `task verification failure` (final answer stage) to clean on the after-side of `failure_evidence_table.csv` |
+| `secondary_metrics` | `success_rate`, `judge_pass_rate` if judge data exists, `latency_seconds_mean` (cost of the check) |
+| `stop_condition` | the mitigation does not flip at least the two named runs to clean, OR `latency_seconds_mean` rises by more than 25% on the after-side |
+
+Boundedness: implements as one helper function in
+`scripts/plan_execute_runner.py` (or a new wrapper module) called from one
+finalize-answer path; rerun command differs from the baseline by one
+config flag (e.g. `--enable-evidence-consistency-check`). Passes the
+boundedness test.
+
+Promotion gate check:
+
+1. `recurring` evidence grade — yes (rows 1 and 2 in PR #138's pass)
+2. one bounded implementation point — yes (see boundedness above)
+3. like-for-like rerun lane — yes (same scenario set, same runner, one
+   config flag toggles the mitigation)
+4. paper-explainable in one sentence — yes ("the runner refuses to emit a
+   final answer whose chosen fault label is not supported by the deciding
+   diagnostic tool's named output")
+
+Recommended owner: aligns with `#65` (Implement chosen mitigations); after
+W5 reassignment proposal, that issue is owned by Akshat. The boundedness
+condition keeps the implementation small enough that #65 can absorb it
+without changing scope.
+
 ## Minimum deliverable definition
 
 For `#64`:
@@ -166,8 +228,9 @@ baseline.
 
 The artifact gap that still bounds this lane:
 
-1. populated rows on `failure_evidence_table.csv` (owned by `#35`) so the
-   taxonomy bar chart and the stage-by-cell heatmap have real counts, not
+1. populated rows on `failure_evidence_table.csv` (schema owned by `#36`
+   export contract; populated rows produced under `#35`) so the taxonomy
+   bar chart and the stage-by-cell heatmap have real counts, not
    illustrative placeholders
 2. one matched mitigation rerun pair where both the before and after rows are
    populated end-to-end on `mitigation_before_after.csv` so the comparison
