@@ -187,12 +187,12 @@
     "endpoint_verification_note": "Terminal step gas values were taken from transformer_standards.json representative_gas_profiles and confirmed to produce the claimed IEC code via fmsr.analyze_dga: PD(H2=500,CH4=100,C2H2=3,C2H4=60,C2H6=80), D1(H2=500,CH4=100,C2H2=30,C2H4=80,C2H6=100), D2(H2=500,CH4=100,C2H2=60,C2H4=120,C2H6=50), T1(H2=200,CH4=100,C2H2=3,C2H4=90,C2H6=60), T2(H2=100,CH4=200,C2H2=2,C2H4=150,C2H6=100), T3(H2=150,CH4=600,C2H2=3,C2H4=500,C2H6=100), N(H2=90,CH4=5,C2H2=1,C2H4=50,C2H6=40).",
     "templates": {
       "stable_normal": {
-        "iec_code_trajectory": ["N"],
-        "description": "All key gases remain at background levels across consecutive samples. No discernible trend.",
+        "iec_code_trajectory": ["N", "N", "N"],
+        "description": "All key gases remain at background levels across consecutive samples. No discernible trend. All three steps verified as N via fmsr.analyze_dga — key constraint: R1=CH4/H2 must remain below ~0.1 at every step.",
         "sample_progression": [
-          { "step": "T-0 baseline", "H2": 30,  "CH4": 4,  "C2H2": 1, "C2H4": 45, "C2H6": 35, "trend_note": "All gases below N levels" },
-          { "step": "T-30 days",    "H2": 35,  "CH4": 4,  "C2H2": 1, "C2H4": 46, "C2H6": 36, "trend_note": "No change" },
-          { "step": "T-60 days",    "H2": 90,  "CH4": 5,  "C2H2": 1, "C2H4": 50, "C2H6": 40, "trend_note": "Stable at verified N profile", "endpoint_verified": true, "source": "transformer_standards.json N profile" }
+          { "step": "T-0 baseline", "H2": 60,  "CH4": 4,  "C2H2": 1, "C2H4": 48, "C2H6": 38, "trend_note": "N — R1=0.067, R2=0.021, R3=1.26", "step_verified": true },
+          { "step": "T-30 days",    "H2": 75,  "CH4": 5,  "C2H2": 1, "C2H4": 49, "C2H6": 39, "trend_note": "N — R1=0.067, R2=0.020, R3=1.26, no change", "step_verified": true },
+          { "step": "T-60 days",    "H2": 90,  "CH4": 5,  "C2H2": 1, "C2H4": 50, "C2H6": 40, "trend_note": "N — stable at verified N profile", "endpoint_verified": true, "source": "transformer_standards.json N profile" }
         ],
         "scenario_text_cue": "Routine monitoring with no anomalies detected.",
         "urgency": "low",
@@ -200,10 +200,10 @@
       },
       "rising_hydrogen_pd": {
         "iec_code_trajectory": ["N", "N", "PD"],
-        "description": "Gradual H2 increase over 60 days with other gases rising proportionally. Terminal step meets Rogers Ratio criteria for PD. Indicative of partial discharge developing in voids.",
+        "description": "H2 rises sharply over 60 days while CH4/H2 (R1) stays below ~0.1, keeping early steps in N territory until the PD profile is reached at T-60. All three steps verified via fmsr.analyze_dga.",
         "sample_progression": [
-          { "step": "T-0 baseline", "H2": 30,  "CH4": 10, "C2H2": 1, "C2H4": 50, "C2H6": 40, "trend_note": "Sub-threshold, N pattern" },
-          { "step": "T-30 days",    "H2": 150, "CH4": 45, "C2H2": 1, "C2H4": 55, "C2H6": 45, "trend_note": "H2 rising, still N" },
+          { "step": "T-0 baseline", "H2": 40,  "CH4": 3,  "C2H2": 1, "C2H4": 48, "C2H6": 40, "trend_note": "N — R1=0.075, R2=0.021, R3=1.20", "step_verified": true },
+          { "step": "T-30 days",    "H2": 180, "CH4": 10, "C2H2": 1, "C2H4": 52, "C2H6": 42, "trend_note": "N — H2 rising, R1=0.056 still below N boundary", "step_verified": true },
           { "step": "T-60 days",    "H2": 500, "CH4": 100,"C2H2": 3, "C2H4": 60, "C2H6": 80, "trend_note": "PD threshold met", "endpoint_verified": true, "source": "transformer_standards.json PD profile" }
         ],
         "scenario_text_cue": "Three consecutive DGA samples show a rising hydrogen trend over the past 60 days.",
@@ -212,11 +212,11 @@
       },
       "accelerating_arc_d1_to_d2": {
         "iec_code_trajectory": ["D1", "D1", "D2"],
-        "description": "C2H2 rising relative to C2H4 across three samples; R2=C2H2/C2H4 crosses the D1→D2 boundary. Indicates worsening arcing toward high-energy discharge.",
+        "description": "C2H2 rising while C2H4 also rises and C2H6 drops across samples, driving the D1→D2 transition. The transition is produced by the full ratio combination (R1=0.20, R2=0.50, R3=2.40 for D2 vs R1=0.20, R2=0.38, R3=0.80 for D1) — it is not caused by R2 crossing a single threshold. Do not extrapolate R2 as the sole discriminator.",
         "sample_progression": [
-          { "step": "T-0 baseline", "H2": 500, "CH4": 100, "C2H2": 30, "C2H4": 80,  "C2H6": 100, "trend_note": "D1 — verified D1 profile, R2=0.38", "endpoint_verified": true, "source": "transformer_standards.json D1 profile" },
-          { "step": "T-14 days",    "H2": 500, "CH4": 100, "C2H2": 40, "C2H4": 82,  "C2H6": 100, "trend_note": "D1 still, R2=0.49, C2H2 rising" },
-          { "step": "T-28 days",    "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "trend_note": "D2 — R2=0.5 with C2H4 surge; verified D2 profile", "endpoint_verified": true, "source": "transformer_standards.json D2 profile" }
+          { "step": "T-0 baseline", "H2": 500, "CH4": 100, "C2H2": 30, "C2H4": 80,  "C2H6": 100, "trend_note": "D1 — verified D1 profile; R1=0.20, R2=0.38, R3=0.80", "endpoint_verified": true, "source": "transformer_standards.json D1 profile" },
+          { "step": "T-14 days",    "H2": 500, "CH4": 100, "C2H2": 40, "C2H4": 82,  "C2H6": 100, "trend_note": "D1 still; R1=0.20, R2=0.49, R3=0.82 — C2H2 rising, C2H6 unchanged", "step_verified": true },
+          { "step": "T-28 days",    "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "trend_note": "D2 — verified D2 profile; R1=0.20, R2=0.50, R3=2.40 (R3 rise + C2H6 drop drive transition)", "endpoint_verified": true, "source": "transformer_standards.json D2 profile" }
         ],
         "scenario_text_cue": "Two prior DGA samples showed D1; the latest sample has significantly elevated C2H2.",
         "urgency": "emergency",
@@ -224,11 +224,11 @@
       },
       "thermal_t1_to_t3_progression": {
         "iec_code_trajectory": ["T1", "T2", "T3"],
-        "description": "Methane and ethylene rising steadily across three samples with C2H2 near zero throughout. R3=C2H4/C2H6 escalates through the T1→T2→T3 boundaries. Indicates escalating thermal fault severity.",
+        "description": "Methane and ethylene rising steadily across three samples with C2H2 near zero throughout. The T1→T2 step is driven by R1=CH4/H2 rising from 0.50 to 2.00 (not by R3, which stays at 1.50 for both). The T2→T3 step is driven by both R1 rising to 4.00 and R3 rising from 1.50 to 5.00. All three steps use verified profiles.",
         "sample_progression": [
-          { "step": "T-0 baseline", "H2": 200, "CH4": 100, "C2H2": 3, "C2H4": 90,  "C2H6": 60,  "trend_note": "T1 — verified T1 profile, R3=1.5", "endpoint_verified": true, "source": "transformer_standards.json T1 profile" },
-          { "step": "T-21 days",    "H2": 100, "CH4": 200, "C2H2": 2, "C2H4": 150, "C2H6": 100, "trend_note": "T2 — verified T2 profile, R3=1.5", "endpoint_verified": true, "source": "transformer_standards.json T2 profile" },
-          { "step": "T-42 days",    "H2": 150, "CH4": 600, "C2H2": 3, "C2H4": 500, "C2H6": 100, "trend_note": "T3 — verified T3 profile, R3=5.0", "endpoint_verified": true, "source": "transformer_standards.json T3 profile" }
+          { "step": "T-0 baseline", "H2": 200, "CH4": 100, "C2H2": 3, "C2H4": 90,  "C2H6": 60,  "trend_note": "T1 — verified T1 profile; R1=0.50, R2=0.033, R3=1.50", "endpoint_verified": true, "source": "transformer_standards.json T1 profile" },
+          { "step": "T-21 days",    "H2": 100, "CH4": 200, "C2H2": 2, "C2H4": 150, "C2H6": 100, "trend_note": "T2 — verified T2 profile; R1=2.00 (↑ from 0.50 drives T1→T2), R2=0.013, R3=1.50 (unchanged)", "endpoint_verified": true, "source": "transformer_standards.json T2 profile" },
+          { "step": "T-42 days",    "H2": 150, "CH4": 600, "C2H2": 3, "C2H4": 500, "C2H6": 100, "trend_note": "T3 — verified T3 profile; R1=4.00, R2=0.006, R3=5.00 (↑ from 1.50 drives T2→T3)", "endpoint_verified": true, "source": "transformer_standards.json T3 profile" }
         ],
         "scenario_text_cue": "Successive DGA samples over the past six weeks show a consistent rise in methane and ethylene.",
         "urgency": "emergency",
