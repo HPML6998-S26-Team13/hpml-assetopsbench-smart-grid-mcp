@@ -47,9 +47,20 @@ ERR_LOG="${OUTPUT%.csv}.stderr.log"
 echo "sample_nvidia_smi: writing to $OUTPUT (interval=${INTERVAL}s, pid=$$)" >&2
 echo "sample_nvidia_smi: stderr -> $ERR_LOG" >&2
 
-# Write header. Header write IS allowed to fail-fast under set -e: if we
-# can't even produce the header we want to know immediately.
+# Write header. Disable pipefail for this single line: `head -1` closes its
+# stdin after one line, sending SIGPIPE to nvidia-smi which then exits 141.
+# Under `set -euo pipefail` (set above) the pipeline returns 141 and `set -e`
+# kills the script BEFORE the sample loop even starts, leaving the CSV with
+# just the header row. (This was the silent root cause behind every prior
+# nvidia_smi_samples=0 capture, including 8978297 and 8979215.)
+set +o pipefail
 nvidia-smi --query-gpu="$FIELDS" --format=csv | head -1 > "$OUTPUT"
+HEADER_RC=$?
+set -o pipefail
+if [ "$HEADER_RC" -ne 0 ] && [ "$HEADER_RC" -ne 141 ]; then
+    echo "ERROR: header write failed with exit $HEADER_RC" >&2
+    exit "$HEADER_RC"
+fi
 
 # Append rows until signalled. Drop `set -e` for the loop so a transient
 # nvidia-smi exit (DCGM contention, brief driver reset, momentary CUDA OOM
