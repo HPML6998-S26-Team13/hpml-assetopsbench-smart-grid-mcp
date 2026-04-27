@@ -1,0 +1,17 @@
+{
+  "started_at": "2026-04-26T23:35:55.746702+00:00",
+  "run_name": "8978297_aat_direct",
+  "benchmark_config_path": "configs/aat_direct.env",
+  "benchmark_summary_path": "benchmarks/cell_A_direct/summary.json",
+  "finished_at": "2026-04-26T23:39:07.248942+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/muz73hsg",
+  "profiling_dir": "/insomnia001/depts/edu/users/af3623/exp1-clone/profiling/traces/8978297_cell_a",
+  "profiling_artifact": "profiling-muz73hsg",
+  "profiling_summary": {
+    "profiling/nvidia_smi_samples": 0
+  }
+}

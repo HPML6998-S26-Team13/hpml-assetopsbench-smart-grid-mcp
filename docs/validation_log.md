@@ -246,3 +246,57 @@ Caveats / follow-ups:
 
 - this is the current authoritative Verified PE smoke snapshot for the PR
 - the full raw logs and per-scenario JSONs are intentionally not committed in this branch; they remain archived on Insomnia and externally reflected in W&B
+
+## 2026-04-26 — Experiment 1 Cell A + B canonical capture (`#25`)
+
+- **Scope:** full Experiment 1 Cell A (Agent-as-Tool, direct in-process tools) and Cell B (Agent-as-Tool, MCP baseline) capture across the canonical multi-domain scenario set, executed sequentially in one Slurm allocation via `scripts/run_exp1_ab_capture.sh`. Includes the Apr 21 instrumentation validation: WandB run linkage, nvidia-smi GPU timeline, and a vLLM torch-profiler trace per cell.
+- **Branch / git SHA:** `aaron/exp1-ab-capture` rooted at `6046b26` (committed via PR `#TBD`)
+- **Slurm job id:** `8978297`
+- **Slurm state / elapsed:** `COMPLETED 0:0` in `00:09:21`
+- **Capture script:** `scripts/run_exp1_ab_capture.sh`
+- **Configs:**
+  - Cell A: `configs/aat_direct.env`
+  - Cell B: `configs/aat_mcp_baseline.env`
+  - both with `TORCH_PROFILE=1`, `LAUNCH_VLLM=1`, `ENABLE_WANDB=1`, `ENABLE_SMARTGRID_SERVERS=1` (Cell B only)
+- **Scenario set:** `data/scenarios/multi_*.json` (canonical multi-domain pack; 2 scenarios × 3 trials per cell)
+- **Model:** self-hosted `openai/Llama-3.1-8B-Instruct` via local vLLM on Insomnia (`vllm==0.19.0`, FP16, max_model_len=8192)
+
+### Cell A primary artifacts
+
+- `benchmarks/cell_A_direct/raw/8978297_aat_direct/` — `meta.json` (with `wandb_run_url`), `summary.json` (`6 / 6` scenarios, mean `11.88` s, `run_status: success`), `latencies.jsonl`, `harness.log`, `vllm.log`, per-trial JSONs.
+- `benchmarks/cell_A_direct/config.json` + `summary.json` (cell-level rolled-up).
+- **Profiling (gitignored):**
+  - `profiling/traces/8978297_cell_a/nvidia_smi.csv` — GPU util / memory / power timeline at 1 Hz
+  - `profiling/traces/8978297_cell_a/capture_meta.json`
+  - `profiling/traces/8978297_aat_direct_torch/*.pt.trace.json.gz` — PyTorch profiler Chrome trace from vLLM `/start_profile` + `/stop_profile`
+- **WandB run:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/muz73hsg
+
+### Cell B primary artifacts
+
+- `benchmarks/cell_B_mcp_baseline/raw/8978297_aat_mcp_baseline/` — same shape; `summary.json` is `6 / 6`, mean `13.32` s, `run_status: success`.
+- `benchmarks/cell_B_mcp_baseline/config.json` + `summary.json`.
+- **Profiling (gitignored):** `profiling/traces/8978297_cell_b/nvidia_smi.csv`, `capture_meta.json`, `profiling/traces/8978297_aat_mcp_baseline_torch/*.pt.trace.json.gz`.
+- **WandB run:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/bc1y6qlh
+
+### What this proves
+
+- Cell A and Cell B run through the same OpenAI Agents SDK loop with only the tool source changed. (Cell B − Cell A) wall-clock = `13.32 − 11.88 = 1.44 s` mean is what Notebook 02 will treat as MCP transport overhead.
+- All three Apr 21 instrumentation streams produced artifacts and link back to benchmark run metadata:
+  1. **WandB:** `wandb_run_url` is in both `meta.json`s; `log_profiling_to_wandb.py` attached `nvidia_smi.csv` + `capture_meta.json` as a WandB Artifact and pushed gpu-util / memory summary into `wandb.run.summary`.
+  2. **nvidia-smi:** non-empty CSV timelines for both cells under `profiling/traces/8978297_cell_{a,b}/`.
+  3. **PyTorch / vLLM torch profiler:** non-empty `*.pt.trace.json.gz` under `profiling/traces/8978297_aat_{direct,mcp_baseline}_torch/`, captured via the vLLM 0.19.0 `--profiler-config` CLI flag (`profiler=torch`, `torch_profiler_dir=...`) + `scripts/replay_scenarios.sh` while vLLM was still alive in each cell's job phase.
+
+### Bug fixes also in this PR
+
+Three fixes to the team's instrumentation infrastructure that the first run attempts on Apr 26 (`8978088`, `8978161`) surfaced. The rerun (`8978297`) is clean because of these.
+
+1. `scripts/aat_runner.py:266` — `json.dumps(..., default=str)` in `_write_output`. Tool results sometimes carry `pandas.Timestamp`/`numpy.datetime64` objects that vanilla `json.dumps` rejects; `default=str` makes the encoder fall back to `str()`. Crashed 1 trial in `8978161` Cell A; fix delivers 6/6.
+2. `profiling/scripts/capture_around.sh:133` — post-run WandB uploader picks caller `PYTHON_BIN` → `.venv-insomnia/bin/python` → `python3` instead of bare `python3`. Insomnia's system Python 3.9 has no `wandb`; bare `python3` silently dropped the Artifact upload. With the fix, `capture_around` finishes `rc=0` and the artifact attaches to the WandB run.
+3. `scripts/run_experiment.sh:753-758` — vLLM 0.19.0 dropped `VLLM_TORCH_PROFILER_DIR` (logs `Unknown vLLM environment variable detected`). Profiling now requires the `--profiler-config` CLI flag (`profiler=torch`, absolute `torch_profiler_dir`). The patched block builds the JSON config and appends to `VLLM_SERVER_ARGS` so `/start_profile` is registered in the FastAPI app.
+
+### Caveats / follow-ups
+
+- Cell C (MCP optimized) is gated on `#31` (batched tool-call scheduling) and Aaron's `#29` (INT8) / `#30` (KV-cache); not part of this capture.
+- `profiling/traces/` is gitignored. Paths above point at the live Insomnia checkout. The WandB Artifact uploads are the portable copies.
+- Run was executed from a personal scratch clone at `/insomnia001/depts/edu/users/af3623/exp1-clone/` because the team-shared checkout's `.git/objects` had perm issues for non-`wax1` writers and was on `codex-fnd/aat-smoke-fix`. Personal clone symlinks `models/` and `.venv-insomnia/` from the shared checkout for storage efficiency.
+- The shared `.venv-insomnia` was extended via `uv pip install -r requirements-insomnia.txt` to add `openai-agents==0.14.5` + `griffelib` + `types-requests`, and refreshed `websockets` 16.0 → 15.0.1. Pinged Tanisha.
