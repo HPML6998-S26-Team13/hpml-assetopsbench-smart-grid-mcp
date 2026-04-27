@@ -2,32 +2,42 @@
 # PR review watcher engine for hpml-assetopsbench-smart-grid-mcp.
 #
 # Filters open PRs to those that need a fresh cross-agent review and emits
-# them as JSON lines for a Claude (Monitor) or Codex (poll loop) reviewer
-# session. Reuses the review-agent / review-request file convention:
+# them as JSON lines for an agentic-AI runner that acts as both watcher and
+# reviewer. Reuses the cross-agent review filename convention for claim
+# packets:
 #
-#   review/claude-prompts/<YYYYMMDD_HHMMSS>_ADHOC_PR<N>_<slug>-v1.md
-#   review/codex-prompts/<YYYYMMDD_HHMMSS>_ADHOC_PR<N>_<slug>-v1.md
+#   review/claude-prompts/<YYYYMMDD_HHMMSS>_ADHOC_PR<N>_<slug>-vK.md
+#   review/codex-prompts/<YYYYMMDD_HHMMSS>_ADHOC_PR<N>_<slug>-vK.md
 #
 # Subcommands:
-#   find-candidates                 List qualifying PRs as JSON, no claim.
-#   claim <pr> <reviewer>           Write claim packet for reviewer side.
-#                                   reviewer = claude | codex.
-#   is-claimed <pr>                 Exit 0 if claimed in any review/*-prompts.
-#   author-hint <pr> [branch]       Print claude | codex | unknown.
-#   loop [--interval SECONDS]       Poll forever, emit one JSON line per
-#                                   newly-claimed candidate. Default 600s.
+#   find-candidates                     List qualifying PRs as JSON, no claim.
+#   claim <pr> <reviewer>               Write claim packet for reviewer side.
+#                                       reviewer = claude | codex.
+#   is-claimed <pr>                     Exit 0 if claimed in any inbox.
+#   author-hint <pr> [branch]           Print claude | codex | unknown.
+#   loop --reviewer <claude|codex>      Poll forever, claim-and-emit JSON
+#         [--interval SECONDS]          per new candidate. Default 600s.
 #
-# Filter logic for "needs review":
-#   * state == OPEN
-#   * isDraft == false
-#   * reviewDecision != APPROVED
-#   * no comment or review body contains LGTM (case-insensitive)
-#   * unclaimed: no file matching *PR<N>* under review/claude-prompts/
-#     or review/codex-prompts/ (recursive, case-insensitive)
+# Filter logic for "needs review" (all six must hold):
+#   1. state == OPEN
+#   2. isDraft == false
+#   3. reviewDecision != APPROVED
+#   4. no review body of state COMMENTED|APPROVED contains a word-bounded
+#      LGTM (case-insensitive). PR-comment text is ignored to avoid false
+#      positives from quoted or conditional mentions.
+#   5. unclaimed: no file matching *PR<N>_* under review/claude-prompts/
+#      or review/codex-prompts/ recursively (case-insensitive).
+#   6. no substantive review (CHANGES_REQUESTED or APPROVED, non-empty
+#      body) was submitted on or after the head commit's committed time.
+#
+# Re-emit semantics: criterion 5 alone does NOT skip a PR if criterion 6
+# would say the prior review is stale. A PR with an existing claim packet
+# whose head has since moved past the last review is re-claimed at the next
+# vN+1 version so the runner re-reviews the new diff.
 #
 # Author hint reads docs/coordination/shift_coordination_note__*.md and
-# picks the side whose note mentions the PR number or branch name. Both
-# sides hit -> unknown. Neither -> unknown.
+# picks the side whose note mentions PR #<N>, pull request <N>, pull/<N>,
+# or the head branch name. Both sides hit -> unknown. Neither -> unknown.
 
 set -euo pipefail
 
@@ -44,15 +54,15 @@ fi
 INBOX_CLAUDE="${SHARED_ROOT}/review/claude-prompts"
 INBOX_CODEX="${SHARED_ROOT}/review/codex-prompts"
 COORD_DIR="${SHARED_ROOT}/docs/coordination"
+LOCK_DIR="${SHARED_ROOT}/review"
 
-# Target the team repo, not Alex's personal fork. Override with WATCHER_REPO.
 WATCHER_REPO="${WATCHER_REPO:-HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp}"
 GH=(gh --repo "$WATCHER_REPO")
 
-mkdir -p "$INBOX_CLAUDE" "$INBOX_CODEX"
+mkdir -p "$INBOX_CLAUDE" "$INBOX_CODEX" "$LOCK_DIR"
 
 usage() {
-  sed -n '2,40p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,45p' "$0" | sed 's/^# \{0,1\}//'
   exit 1
 }
 
@@ -64,11 +74,32 @@ need_jq() {
   command -v jq >/dev/null 2>&1 || { echo "jq required" >&2; exit 2; }
 }
 
+# Match any prior packet for this PR, including renamed _REVIEWED.md, but
+# require a trailing _ after the PR number so PR1 does not match PR12.
+existing_claims() {
+  local pr="$1"
+  { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f \
+      \( -iname "*PR${pr}_*" -o -iname "*PR_${pr}_*" \
+         -o -iname "*pr_${pr}_*" -o -iname "*pr${pr}_*" \) 2>/dev/null \
+      || true; }
+}
+
 is_claimed() {
   local pr="$1"
   local hits
-  hits=$( { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f \( -iname "*PR${pr}_*" -o -iname "*PR_${pr}_*" -o -iname "*pr_${pr}_*" -o -iname "*pr${pr}_*" \) 2>/dev/null || true; } | wc -l | tr -d ' ')
+  hits=$(existing_claims "$pr" | wc -l | tr -d ' ')
   [[ "$hits" -gt 0 ]]
+}
+
+# Highest existing version (-vN) across all packets for this PR. Returns 0
+# if no prior packet exists.
+max_version_for() {
+  local pr="$1"
+  existing_claims "$pr" \
+    | sed -E 's/.*-v([0-9]+)(_REVIEWED)?\.md$/\1/' \
+    | grep -E '^[0-9]+$' \
+    | sort -n \
+    | tail -1
 }
 
 slugify() {
@@ -84,7 +115,9 @@ author_hint() {
     echo unknown
     return
   fi
-  local pat="(PR ?#?${pr}\b|#${pr}\b)"
+  # Tightened: match PR-context phrasing only, not bare #NNN that may refer
+  # to issues or Slurm job IDs. Branch name remains a fallback.
+  local pat="(PR ?#?${pr}\b|pull[-_ ]?request[s]? ?#?${pr}\b|pull/${pr}\b)"
   if [[ -n "$branch" ]]; then
     pat="${pat}|$(printf '%s' "$branch" | sed 's/[][\.*^$(){}+?|/\\]/\\&/g')"
   fi
@@ -100,46 +133,92 @@ author_hint() {
   fi
 }
 
-# Body LGTM scan: pull comments and review bodies in one shot.
-has_lgtm() {
-  local pr="$1"
-  local body
-  body=$("${GH[@]}" pr view "$pr" --json comments,reviews --jq \
-    '[.comments[].body, .reviews[].body] | map(select(. != null)) | join("\n")' 2>/dev/null || true)
-  echo "$body" | grep -iq '\bLGTM\b'
+# ---------------------------------------------------------------------------
+# JSON-driven helpers operate on a per-PR JSON blob already fetched once.
+# This avoids per-PR re-invocations of gh and keeps a single failure mode
+# per PR per iteration (M4, M6).
+# ---------------------------------------------------------------------------
+
+has_lgtm_in_data() {
+  local data="$1"
+  # Scope to review bodies of state COMMENTED or APPROVED; ignore PR
+  # comments entirely. A reviewer who genuinely intends "ship it" submits
+  # the review with state APPROVED (already filtered by criterion 3) or
+  # COMMENTED with the LGTM marker. Quoted or conditional mentions in
+  # general comments are not enough to skip.
+  echo "$data" | jq -e '
+    [.reviews[]?
+      | select(.state == "COMMENTED" or .state == "APPROVED")
+      | (.body // "")]
+    | map(test("\\bLGTM\\b"; "i"))
+    | any
+  ' >/dev/null 2>&1
 }
 
-# Returns 0 (true) if the most recent substantive review on this PR already
-# requested changes AND no commit has landed since that review, i.e. the
-# review covers the current head. A "substantive" review is one whose body
-# is at least 200 characters; shorter reviews are treated as discussion
-# comments rather than full review responses.
-already_reviewed_at_head() {
-  local pr="$1"
-  local data
-  data=$("${GH[@]}" pr view "$pr" --json reviews,commits 2>/dev/null || true)
-  [[ -z "$data" ]] && return 1
+# Convert RFC 3339 UTC timestamp ("2026-04-27T08:56:32Z") to epoch seconds.
+# macOS uses BSD date, Linux uses GNU date; try both forms.
+rfc3339_to_epoch() {
+  local s="$1"
+  TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%SZ" "$s" +%s 2>/dev/null \
+    || date -u -d "$s" +%s 2>/dev/null \
+    || return 1
+}
+
+# File mtime in epoch seconds. macOS BSD vs Linux GNU.
+mtime_epoch() {
+  local f="$1"
+  stat -f "%m" "$f" 2>/dev/null || stat --format=%Y "$f" 2>/dev/null
+}
+
+# Path 1: a GitHub formal review record covers the current head. Most
+# recent CHANGES_REQUESTED review with non-empty body, submittedAt strictly
+# after head_at. Drops the prior 200-char threshold (M3) and tie semantics
+# (M1).
+formal_review_covers_head() {
+  local data="$1"
+  local head_at
+  head_at=$(echo "$data" | jq -r '(.commits // []) | last | .commit.committedDate // .committedDate // empty')
+  [[ -z "$head_at" || "$head_at" == "null" ]] && return 1
   local last_review
   last_review=$(echo "$data" | jq -c '
-    [.reviews[]
+    [.reviews[]?
       | select(.state == "CHANGES_REQUESTED" or .state == "APPROVED")
-      | select((.body // "") | length >= 200)]
+      | select((.body // "") != "")]
     | sort_by(.submittedAt) | last // empty
   ')
   [[ -z "$last_review" || "$last_review" == "null" ]] && return 1
-  local last_state last_at head_at
+  local last_state last_at
   last_state=$(echo "$last_review" | jq -r .state)
   last_at=$(echo "$last_review" | jq -r .submittedAt)
-  head_at=$(echo "$data" | jq -r '.commits[-1].committedDate')
   [[ "$last_state" != "CHANGES_REQUESTED" ]] && return 1
-  # ISO 8601 timestamps sort lexically.
-  [[ "$last_at" > "$head_at" || "$last_at" == "$head_at" ]]
+  [[ "$last_at" > "$head_at" ]]
+}
+
+# Path 2: a prior claim packet covers the current head. Cross-agent
+# reviewers that fall back to `gh pr comment` (because GitHub blocks
+# self-authored `gh pr review` on shared identities) leave no formal
+# review record, but they leave a packet (renamed to _REVIEWED.md if a
+# response was written). Compare the newest packet's mtime to head_at:
+# packet newer than head means the request was filed for the current
+# diff, so the watcher should not re-claim until commits move past it.
+claim_covers_head() {
+  local pr="$1"
+  local data="$2"
+  local newest_claim mtime head_at head_epoch
+  newest_claim=$(existing_claims "$pr" | sort -r | head -1)
+  [[ -z "$newest_claim" ]] && return 1
+  mtime=$(mtime_epoch "$newest_claim") || return 1
+  head_at=$(echo "$data" | jq -r '(.commits // []) | last | .commit.committedDate // .committedDate // empty')
+  [[ -z "$head_at" || "$head_at" == "null" ]] && return 1
+  head_epoch=$(rfc3339_to_epoch "$head_at") || return 1
+  [[ "$mtime" -gt "$head_epoch" ]]
 }
 
 claim_packet_path() {
   local pr="$1"
   local slug="$2"
   local reviewer="$3"
+  local version="${4:-1}"
   local ts
   ts=$(date +%Y%m%d_%H%M%S)
   local inbox
@@ -148,19 +227,30 @@ claim_packet_path() {
     codex)  inbox="$INBOX_CODEX"  ;;
     *) echo "unknown reviewer: $reviewer" >&2; exit 2 ;;
   esac
-  echo "${inbox}/${ts}_ADHOC_PR${pr}_${slug}-v1.md"
+  echo "${inbox}/${ts}_ADHOC_PR${pr}_${slug}-v${version}.md"
 }
 
-write_claim() {
+# write_claim_from_data <pr> <reviewer> <data-json>
+# Reuses the per-PR JSON fetched by find_candidates so no extra gh calls
+# happen inside the inner loop (M4).
+write_claim_from_data() {
   local pr="$1"
   local reviewer="$2"
-  local title branch url author_hint slug pkt
-  title=$("${GH[@]}" pr view "$pr" --json title --jq .title)
-  branch=$("${GH[@]}" pr view "$pr" --json headRefName --jq .headRefName)
-  url=$("${GH[@]}" pr view "$pr" --json url --jq .url)
-  author_hint=$(author_hint "$pr" "$branch")
+  local data="$3"
+  local title branch url hint slug pkt next_version extra
+  title=$(echo "$data" | jq -r .title)
+  branch=$(echo "$data" | jq -r .headRefName)
+  url=$(echo "$data" | jq -r .url)
+  hint=$(author_hint "$pr" "$branch")
   slug=$(slugify "$title")
-  pkt=$(claim_packet_path "$pr" "$slug" "$reviewer")
+  next_version=$(( $(max_version_for "$pr" | grep -E '^[0-9]+$' || echo 0) + 1 ))
+  pkt=$(claim_packet_path "$pr" "$slug" "$reviewer" "$next_version")
+
+  extra=""
+  if [[ "$hint" == "claude" || "$hint" == "unknown" ]]; then
+    extra=$'\n\n**Heightened scrutiny -- apparent same-runner or unknown authorship.**\nAssume the implementation has subtle bugs and edge cases that a same-source review would normalize. Read the diff line-by-line, question every assumption, prefer over-reporting to under-reporting, and explicitly verify that preconditions hold rather than trusting prose claims. When this watcher session is itself the apparent author, escalate to a different reviewer for genuine independence; same-session self-review is a fallback only.'
+  fi
+
   cat > "$pkt" <<EOF
 # review request
 
@@ -170,10 +260,10 @@ write_claim() {
 - Repo: ${SHARED_ROOT}
 - Branch: ${branch}
 - Target: ${url}
-- Version: v1
+- Version: v${next_version}
 - PR: #${pr}
-- Apparent author: ${author_hint}
-- Prior response: none
+- Apparent author: ${hint}
+- Prior response: $( [[ "$next_version" -gt 1 ]] && echo "see prior _REVIEWED packets in inbox" || echo "none" )
 - Verification: none
 - Constraints: cross-agent independence required
 - Deferred: none
@@ -199,29 +289,60 @@ as possible.
 Return findings sorted by Critical, High, Medium, Low. For each finding
 include file, line when applicable, issue, and suggested fix. Post the
 review to GitHub via \`gh pr review ${pr}\` with \`--body\` populated, before
-writing the signal file.
+writing the signal file.${extra}
 EOF
   echo "$pkt"
 }
 
+# Legacy single-arg claim subcommand: makes its own gh call. Used for
+# manual one-offs only.
+write_claim() {
+  local pr="$1"
+  local reviewer="$2"
+  local data
+  data=$("${GH[@]}" pr view "$pr" --json title,headRefName,url,reviews,commits 2>/dev/null) \
+    || { echo "gh pr view $pr failed" >&2; return 1; }
+  write_claim_from_data "$pr" "$reviewer" "$data"
+}
+
+# Hybrid fetch: one cheap pr list for metadata, then a per-PR pr view for
+# the heavy review/comment/commit fields. Bundling everything into pr list
+# blows the GitHub GraphQL 500k-node connection limit on busy repos. Per-PR
+# view calls are guarded so a transient gh failure abandons that PR for
+# this iteration but does not kill the loop (H2, M6).
 find_candidates() {
-  local out_json="${1:-}"
   local prs
-  prs=$("${GH[@]}" pr list --state open --json number,title,isDraft,reviewDecision,headRefName,url --limit 100)
-  echo "$prs" | jq -c '.[]' | while read -r pr_json; do
+  prs=$("${GH[@]}" pr list --state open \
+        --json number,title,isDraft,reviewDecision,headRefName,url \
+        --limit 100 2>/dev/null) \
+    || { echo "gh pr list failed" >&2; return 1; }
+  echo "$prs" | jq -c '.[]' | while read -r meta; do
     local n is_draft decision branch
-    n=$(echo "$pr_json" | jq -r .number)
-    is_draft=$(echo "$pr_json" | jq -r .isDraft)
-    decision=$(echo "$pr_json" | jq -r .reviewDecision)
-    branch=$(echo "$pr_json" | jq -r .headRefName)
+    n=$(echo "$meta" | jq -r .number)
+    is_draft=$(echo "$meta" | jq -r .isDraft)
+    decision=$(echo "$meta" | jq -r .reviewDecision)
+    branch=$(echo "$meta" | jq -r .headRefName)
     [[ "$is_draft" == "true" ]] && continue
     [[ "$decision" == "APPROVED" ]] && continue
-    is_claimed "$n" && continue
-    has_lgtm "$n" && continue
-    already_reviewed_at_head "$n" && continue
+    local detail
+    detail=$("${GH[@]}" pr view "$n" --json reviews,comments,commits 2>/dev/null) \
+      || { echo "gh pr view $n failed; skipping this iteration" >&2; continue; }
+    local data
+    data=$(jq -nc --argjson m "$meta" --argjson d "$detail" '$m + $d')
+    has_lgtm_in_data "$data" && continue
+    # Criterion 6: a formal GitHub review covers the current head.
+    formal_review_covers_head "$data" && continue
+    # Criterion 5: a prior claim packet exists AND its mtime is after the
+    # head commit time. Either the reviewer is mid-process (raw .md still
+    # waiting) or already responded (_REVIEWED.md). Either way the queue
+    # is current and the watcher should not re-claim until new commits
+    # land past the packet mtime.
+    if is_claimed "$n" && claim_covers_head "$n" "$data"; then
+      continue
+    fi
     local hint
     hint=$(author_hint "$n" "$branch")
-    echo "$pr_json" | jq -c --arg hint "$hint" '. + {author_hint: $hint}'
+    echo "$data" | jq -c --arg hint "$hint" '. + {author_hint: $hint}'
   done
 }
 
@@ -249,25 +370,41 @@ case "$cmd" in
   loop)
     need_gh; need_jq
     interval=600
+    reviewer=""
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --interval) interval="$2"; shift 2 ;;
+        --reviewer) reviewer="$2"; shift 2 ;;
         *) usage ;;
       esac
     done
+    case "$reviewer" in
+      claude|codex) ;;
+      *) echo "loop requires --reviewer claude|codex" >&2; exit 2 ;;
+    esac
+    # Single-watcher invariant: hold a non-blocking lockfile on the shared
+    # review/ directory keyed by reviewer side. Two concurrent watcher
+    # processes for the same side would otherwise race the
+    # is_claimed/write_claim window and produce duplicate packets (M5).
+    LOCK_FILE="${LOCK_DIR}/.watcher.${reviewer}.lock"
+    exec 9>"$LOCK_FILE"
+    if ! flock -n 9; then
+      echo "another watcher already holds $LOCK_FILE; refusing to start" >&2
+      exit 3
+    fi
+    trap 'kill 0 2>/dev/null; exit 130' INT TERM
     while true; do
-      while read -r line; do
-        [[ -z "$line" ]] && continue
-        n=$(echo "$line" | jq -r .number)
-        hint=$(echo "$line" | jq -r .author_hint)
-        # Reviewer side: if author hint = codex (different agent), this Claude
-        # session reviews directly -> claim in claude-prompts. If author hint
-        # is claude or unknown, we still claim in claude-prompts because the
-        # current session is Claude, and the review prompt itself enforces
-        # heightened scrutiny.
-        pkt=$(write_claim "$n" claude)
-        echo "$line" | jq -c --arg packet "$pkt" '. + {claim_packet: $packet}'
-      done < <(find_candidates)
+      if data=$(find_candidates); then
+        while read -r line; do
+          [[ -z "$line" ]] && continue
+          n=$(echo "$line" | jq -r .number)
+          # Re-fetch the per-PR slice to pass into write_claim_from_data;
+          # the candidate JSON is already complete, so no extra gh call.
+          pkt=$(write_claim_from_data "$n" "$reviewer" "$line") \
+            || { echo "claim write failed for PR $n; continuing" >&2; continue; }
+          echo "$line" | jq -c --arg packet "$pkt" '. + {claim_packet: $packet}'
+        done <<< "$data"
+      fi
       sleep "$interval"
     done
     ;;

@@ -16,32 +16,36 @@ A PR qualifies when **all** of the following hold:
 1. State is `OPEN` (unmerged).
 2. `isDraft == false`.
 3. `reviewDecision != APPROVED`.
-4. No comment or review body contains `LGTM` (case-insensitive, word boundary).
-5. **Unclaimed** — no prior request packet for this PR exists in the
-   reviewer-inbox directories the runner uses for cross-agent review (those
-   directories are gitignored runtime state; see [Inbox conventions](#inbox-conventions)
-   below).
-6. **No substantive review already on the current head.** The most recent
-   `CHANGES_REQUESTED` or `APPROVED` review whose body is at least 200
-   characters (i.e. a real review response, not a one-liner discussion
-   comment) must pre-date the most recent commit on the PR branch. If the
-   review is newer than the head commit, a previous reviewer (often a
-   different Claude session) has already covered this diff and the
-   author needs to push new commits before another review is useful.
+4. No review of state `COMMENTED` or `APPROVED` has a body containing the
+   word-bounded token `LGTM` (case-insensitive). PR-comment text is
+   ignored to avoid false positives from quoted or conditional mentions.
+5. **No prior claim packet covers the current head.** A claim packet
+   (raw `.md` waiting on a reviewer, or a renamed `_REVIEWED.md`) covers
+   the head when its filesystem `mtime` is strictly later than the head
+   commit's `committedDate`. New commits beyond the packet trigger a
+   fresh `vN+1` packet on the next iteration.
+6. **No formal GitHub review covers the current head.** The most recent
+   `CHANGES_REQUESTED` review with a non-empty body must have a
+   `submittedAt` strictly later than the head commit's `committedDate`
+   for the watcher to skip. Same-second ties err toward re-review.
 
-The fifth check is the duplicate-suppression mechanism within a single
-runner. The sixth check covers the cross-runner case where another
-session has already reviewed the current diff.
+Criterion 5 catches the case where a reviewer responded via
+`gh pr comment` (because GitHub blocks self-authored `gh pr review` on
+shared identities), so no formal review record exists. Criterion 6
+catches reviews submitted through the standard `gh pr review` path,
+including by humans or external collaborators. Together they handle the
+full matrix: fresh PRs, in-flight reviews, completed reviews, and
+authors who push new commits after a review.
 
 ## Subcommands
 
 | Subcommand                  | Purpose                                            |
 | --------------------------- | -------------------------------------------------- |
 | `find-candidates`           | List qualifying PRs as JSON lines (no claim).      |
-| `claim <pr> <side>`         | Write request packet for the given reviewer side.  |
+| `claim <pr> <side>`         | Write request packet for the given reviewer side. `side` is `claude` or `codex`. |
 | `is-claimed <pr>`           | Exit 0 if a packet already exists for this PR.     |
-| `author-hint <pr> [branch]` | Print apparent author kind: a, b, or `unknown`.    |
-| `loop [--interval N]`       | Poll forever, claim-and-emit one JSON line per new candidate. Default interval 600s. |
+| `author-hint <pr> [branch]` | Print apparent author: `claude`, `codex`, or `unknown`. |
+| `loop --reviewer <side> [--interval N]` | Poll forever, claim-and-emit one JSON line per new candidate. `side` selects the reviewer-inbox directory. Default interval 600s. Single-watcher invariant enforced via flock. |
 
 Each emitted JSON line includes `number`, `title`, `headRefName`, `url`,
 `author_hint`, and (in `loop` mode) `claim_packet` path.
@@ -74,8 +78,10 @@ for genuine independence. Same-session self-review is a fallback only.
 
 - **From the repo root** under any agentic runner:
   ```bash
-  bash scripts/pr_review_watcher.sh loop --interval 600
+  bash scripts/pr_review_watcher.sh loop --reviewer claude --interval 600
   ```
+  Replace `--reviewer claude` with `--reviewer codex` when the Codex side
+  drives the loop. The flag is required.
 - The runner subscribes to the loop's stdout (one JSON line per new
   candidate) and treats each line as a wake-up cue to read the request
   packet, run the review, and post findings via
