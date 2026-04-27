@@ -46,13 +46,20 @@ if [ "${1:-}" = "--summarize" ]; then
             echo "  $variant: no per-trial JSON"
             continue
         fi
+        # Wrap the per-variant load/print in try/except so one malformed
+        # meta.json or trial JSON (e.g. vLLM startup timeout that produced
+        # only a partial run dir) doesn't abort the whole table.
         python3 -c "
-import json, pathlib, sys
-m = json.load(open('$meta'))
-trial = json.load(open('${trials[0]}'))
-print(f'  {\"$variant\":12s}  success={trial.get(\"success\")}  '
-      f'turns={trial.get(\"turn_count\")}  tools={trial.get(\"tool_call_count\")}  '
-      f'duration={trial.get(\"runner_meta\",{}).get(\"duration_seconds\",0):.2f}s')
+import json, sys
+variant = '$variant'
+try:
+    m = json.load(open('$meta'))
+    trial = json.load(open('${trials[0]}'))
+    print(f'  {variant:12s}  success={trial.get(\"success\")}  '
+          f'turns={trial.get(\"turn_count\")}  tools={trial.get(\"tool_call_count\")}  '
+          f'duration={trial.get(\"runner_meta\",{}).get(\"duration_seconds\",0):.2f}s')
+except (FileNotFoundError, json.JSONDecodeError, KeyError) as exc:
+    print(f'  {variant:12s}  meta.json or trial JSON missing/malformed: {exc}')
 "
     done
     exit 0

@@ -99,7 +99,21 @@ setsid python3 -u -m vllm.entrypoints.openai.api_server \
     --quantization compressed-tensors \
     >"$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
-trap '[ -n "${VLLM_PID:-}" ] && kill "$VLLM_PID" 2>/dev/null || true' EXIT
+# `setsid` puts the leader and all its children in a new process group whose
+# pgid equals the leader's PID. Killing the pgid (-PID) reaps vLLM's worker
+# processes too; killing only the leader leaves workers pinned to the GPU
+# until Slurm hard-kills the job at the --time= boundary. Mirrors the cleanup
+# pattern in scripts/run_experiment.sh:698-710.
+VLLM_PGID="$VLLM_PID"
+cleanup_vllm() {
+    if [ -n "${VLLM_PGID:-}" ] && kill -0 -- "-$VLLM_PGID" 2>/dev/null; then
+        kill -TERM -- "-$VLLM_PGID" 2>/dev/null || true
+        sleep 2
+        kill -KILL -- "-$VLLM_PGID" 2>/dev/null || true
+        wait "$VLLM_PID" 2>/dev/null || true
+    fi
+}
+trap cleanup_vllm EXIT
 
 # Step 3: wait for /health
 echo "--- Waiting for /health ---"
@@ -139,7 +153,12 @@ echo "$COMPLETION" | tee "$OUT_DIR/completion.json"
 # Step 6: GPU memory snapshot (proves INT8 actually reduced memory vs FP16)
 echo ""
 echo "--- nvidia-smi snapshot ---"
-nvidia-smi --query-gpu=name,memory.used,memory.free,memory.total --format=csv | tee "$OUT_DIR/nvidia_smi.csv"
+# Filter to the GPU Slurm allocated. nvidia-smi does NOT honor CUDA_VISIBLE_DEVICES
+# on its own, so on multi-GPU nodes a bare query returns all GPUs and the
+# memory line for the wrong device.
+nvidia-smi --id="${CUDA_VISIBLE_DEVICES:-0}" \
+    --query-gpu=name,memory.used,memory.free,memory.total --format=csv \
+    | tee "$OUT_DIR/nvidia_smi.csv"
 
 # Step 7: write meta summary
 echo ""

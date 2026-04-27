@@ -787,8 +787,16 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
   # EXTRA_VLLM_ARGS: optional whitespace-separated extra CLI flags for the
   # vLLM server. Used by Cell C and the #29/#30 smoke configs to pass
   # --quantization, --kv-cache-dtype, --enable-prefix-caching, etc., without
-  # editing this script per experiment. Values are word-split (POSIX) so
-  # arguments with embedded whitespace need quoting at the source.
+  # editing this script per experiment.
+  #
+  # Quoting contract: values go through POSIX word-splitting on whitespace
+  # only — there is NO shell-metacharacter re-evaluation, so values like
+  # `--foo $HOME` or `--foo $(date)` will be passed literally and NOT
+  # expanded. If you need a value with embedded whitespace, you can't pass it
+  # via EXTRA_VLLM_ARGS today; promote it to its own config var instead.
+  # When passing via `sbatch --export=EXTRA_VLLM_ARGS="--foo bar"`, sbatch's
+  # own shell handles the outer quoting; this script then word-splits the
+  # received value once.
   if [ -n "${EXTRA_VLLM_ARGS:-}" ]; then
     # shellcheck disable=SC2206  # intentional word-splitting
     EXTRA_VLLM_ARGS_ARR=($EXTRA_VLLM_ARGS)

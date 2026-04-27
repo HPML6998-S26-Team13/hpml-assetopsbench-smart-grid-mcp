@@ -18,7 +18,7 @@ This doc covers `#29` and `#30`. `#31` is tracked separately.
 
 | Knob | Recommendation | Rationale |
 |---|---|---|
-| **INT8 quantization** | **Defer to Cell C v2.** Use FP16 for the canonical Cell C run. | vLLM 0.19.0 `--quantization` flag works only against pre-quantized HF checkpoints; we don't have an INT8 Llama-3.1-8B variant on the team checkout. Downloading + smoking a new model adds ~20 GB + bring-up time without a clear paper-side win for our workload. Use FP8 KV cache instead (next row) for a memory win that doesn't require model swap. |
+| **INT8 quantization** | **Defer to Cell C v2.** Use FP16 for the canonical Cell C run. | The headline measurement for Cell C is `(B − C) = recoverable MCP-transport optimization`. Adding INT8 to Cell C confounds that delta with model-side speedup and breaks the apples-to-apples comparison with FP16 Cells A/B. `--quantization compressed-tensors` is the production INT8 path but requires a pre-quantized HF checkpoint (we don't have one locally); `--quantization bitsandbytes` is the runtime path but is generally slower than CompressedTensors W8A8 marlin on Ampere. Use FP8 KV cache instead (next row) for a memory win that does not require a model swap. |
 | **KV-cache** | **Enable `--enable-prefix-caching` + `--kv-cache-dtype fp8`** | Multi-turn ReAct on Llama-3.1-8B with the same AOB system prompt across all scenarios is the canonical prefix-caching workload — every turn after the first re-uses the system-prompt prefix. FP8 KV cache halves KV memory at near-zero quality cost on this model size. Both are first-class in vLLM 0.19. |
 | **`--max-num-seqs`** | Leave default (`256`). Optionally drop to `4` for our sequential workload. | We're not batching multiple scenarios concurrently; lower max-num-seqs frees a small amount of memory but doesn't change steady-state. Default is fine. |
 | **`--gpu-memory-utilization`** | Leave default (`0.9`). | The L40S A6000 has plenty of headroom for an 8B FP16 model; squeezing this isn't justified by our workload. |
@@ -43,25 +43,33 @@ The relevant options for INT8-class deployment of Llama-3.1-8B-Instruct:
 
 ### Why we're deferring INT8
 
-1. **No INT8 Llama-3.1-8B-Instruct in the team `models/` directory.** The
-   canonical FP16 checkpoint is what `models/Llama-3.1-8B-Instruct/` holds.
-   Downloading a `compressed-tensors` w8a8 variant is ~16 GB + HF gating
-   approval steps + a config that points at the new path.
-2. **A6000 (Ampere arch on Insomnia) doesn't accelerate FP8 in tensor cores**;
-   the gain from FP8 weights on A6000 is mostly memory, not throughput.
-   For INT8, the speedup story is real (CompressedTensors W8A8 marlin kernels
-   are well-optimized) but only after the checkpoint swap.
-3. **Cell C's headline is "MCP optimized," not "model optimized."** The
-   Experiment 1 narrative is `(B - A) = MCP transport overhead` and
-   `(B - C) = recoverable optimization.` Most of the recoverable cost is in
-   the transport layer (batched MCP calls, connection reuse — Akshat's `#31`),
-   not the model. Mixing model-quantization changes into Cell C muddies that
-   signal: a (B - C) latency drop with INT8 attributes the win to the
-   transport when really the model got faster too. Better to land Cell C on
-   the same FP16 model as A/B and treat INT8 as a separate Cell D / scaling
-   experiment.
+1. **Signal purity for the `(B − C)` headline.** Cell C's purpose in the
+   Experiment 1 narrative is `(B − A) = MCP transport overhead` and
+   `(B − C) = recoverable optimization`. Most of the recoverable cost is in
+   the transport layer (batched MCP calls, connection reuse — Akshat's
+   `#31`), not in the model. If Cell C swaps the model precision at the same
+   time, a (B − C) latency drop attributes the win to the transport when in
+   fact the model got faster too. The methodologically clean answer is to
+   land Cell C on the same FP16 weights as A/B and treat INT8 as a separate
+   Cell D / model-scaling experiment. This is the argument a reviewer can't
+   push back on, so it leads.
+2. **No INT8 Llama-3.1-8B-Instruct checkpoint in the team `models/`
+   directory.** The canonical FP16 checkpoint is what
+   `models/Llama-3.1-8B-Instruct/` holds. The production INT8 path
+   (`--quantization compressed-tensors`, e.g.
+   `RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8`) requires
+   downloading a separate ~16 GB checkpoint plus HF gating. The runtime
+   path (`--quantization bitsandbytes`) avoids the checkpoint swap but is
+   reportedly slower than CompressedTensors W8A8 marlin on Ampere. Either
+   way it's a real-world inventory cost, not a code change.
+3. **Throughput story exists but is gated on the checkpoint.** On Ampere
+   (A6000) and Ada (L40S), CompressedTensors W8A8 marlin kernels are
+   well-optimized and the INT8 speedup is real — but only once we have a
+   pre-quantized checkpoint. Without it the lane has no measurable upside
+   over FP16. (FP8 weight quantization is a separate question and lives
+   under the KV-cache discussion below.)
 4. **Time budget.** Each new model takes ~10-20 min to download + a 5-10 min
-   smoke. With #25 still queued, INT8 work is realistically a separate-day
+   smoke. With `#25` still queued, INT8 work is realistically a separate-day
    item.
 
 ### Conditions under which to revive INT8
@@ -87,7 +95,7 @@ Run it only when the team agrees to revive INT8.
 | Knob | Default | Recommendation | Why |
 |---|---|---|---|
 | `--enable-prefix-caching` | off | **on** | AOB system prompt + tool catalog is identical across all turns and all scenarios. Prefix caching skips re-prefill of those tokens after the first turn. Direct win for ReAct workloads. Tested + stable in vLLM 0.19. |
-| `--kv-cache-dtype` | `auto` (FP16) | **`fp8`** (specifically `fp8_e4m3` on Ampere, autoselected) | Halves KV cache memory. On A6000 / L40S there's no FP8 compute speedup, but freed KV memory means longer effective context window or more concurrent requests if we ever need them. Quality impact on Llama-3.1-8B is negligible per published benchmarks. |
+| `--kv-cache-dtype` | `auto` (FP16) | **`fp8`** (specifically `fp8_e4m3` on Ampere, autoselected) | This is a KV **storage** precision change, not an attention-compute precision change. Attention math still runs at the model's native precision regardless of GPU FP8 tensor-core support (so the L40S's FP8 cores and the A6000's lack of them are both irrelevant here). The actual win is memory: halving KV cache size buys longer effective context window and more concurrent requests if we ever need them. Quality impact on Llama-3.1-8B is well under MMLU noise per published benchmarks. |
 | `--max-num-seqs` | 256 | leave default | Our workload is single-stream (one scenario at a time). Default is fine; lowering to 4 saves ~50 MB which is rounding error. |
 | `--gpu-memory-utilization` | 0.9 | leave default | The A6000 / L40S has enough headroom that squeezing this (e.g. to 0.95) buys back KV space we don't use. Not worth the OOM risk. |
 | `--block-size` | 16 | leave default | Default is well-tuned; smaller = more overhead, larger = wasted blocks. Not a measurable lever for our workload. |
