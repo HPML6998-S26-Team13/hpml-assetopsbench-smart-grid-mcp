@@ -28,7 +28,6 @@ import json
 import pathlib
 import sys
 
-
 CELL_DIRS = {
     "A": "benchmarks/cell_A_direct",
     "B": "benchmarks/cell_B_mcp_baseline",
@@ -53,27 +52,42 @@ def load_json(path: pathlib.Path) -> dict | None:
         return None
 
 
-def map_output_to_scenario(run_dir: pathlib.Path, repo_root: pathlib.Path) -> dict[pathlib.Path, pathlib.Path]:
+def map_output_to_scenario(
+    run_dir: pathlib.Path, repo_root: pathlib.Path
+) -> dict[pathlib.Path, pathlib.Path]:
     """Read latencies.jsonl and return {resolved_trial_output -> resolved_scenario_file}."""
     latencies_file = run_dir / "latencies.jsonl"
     out: dict[pathlib.Path, pathlib.Path] = {}
     if not latencies_file.exists():
         return out
-    for line_num, line in enumerate(latencies_file.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_num, line in enumerate(
+        latencies_file.read_text(encoding="utf-8").splitlines(), start=1
+    ):
         line = line.strip()
         if not line:
             continue
         try:
             row = json.loads(line)
         except json.JSONDecodeError:
-            print(f"  WARN: {latencies_file}:{line_num} unparseable, skipping", file=sys.stderr)
+            print(
+                f"  WARN: {latencies_file}:{line_num} unparseable, skipping",
+                file=sys.stderr,
+            )
             continue
         out_path_raw = row.get("output_path")
         scen_path_raw = row.get("scenario_file")
         if not out_path_raw or not scen_path_raw:
             continue
-        out_path = (repo_root / out_path_raw) if not pathlib.Path(out_path_raw).is_absolute() else pathlib.Path(out_path_raw)
-        scen_path = (repo_root / scen_path_raw) if not pathlib.Path(scen_path_raw).is_absolute() else pathlib.Path(scen_path_raw)
+        out_path = (
+            (repo_root / out_path_raw)
+            if not pathlib.Path(out_path_raw).is_absolute()
+            else pathlib.Path(out_path_raw)
+        )
+        scen_path = (
+            (repo_root / scen_path_raw)
+            if not pathlib.Path(scen_path_raw).is_absolute()
+            else pathlib.Path(scen_path_raw)
+        )
         try:
             out_path = out_path.resolve()
         except OSError:
@@ -115,7 +129,9 @@ def _derive_success(data: dict) -> bool | None:
     return bool(data.get("answer"))
 
 
-def backfill_run_dir(run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool) -> dict:
+def backfill_run_dir(
+    run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool
+) -> dict:
     stats = {
         "checked": 0,
         "already_canonical": 0,
@@ -169,11 +185,15 @@ def backfill_run_dir(run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool
                 stats["backfilled_success"] += 1
                 changed = True
         if changed and apply:
-            trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+            trial_file.write_text(
+                json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8"
+            )
     return stats
 
 
-def backfill_cell(cell_label: str, cell_path: pathlib.Path, repo_root: pathlib.Path, apply: bool) -> dict:
+def backfill_cell(
+    cell_label: str, cell_path: pathlib.Path, repo_root: pathlib.Path, apply: bool
+) -> dict:
     raw_dir = cell_path / "raw"
     totals = {
         "runs": 0,
@@ -190,7 +210,15 @@ def backfill_cell(cell_label: str, cell_path: pathlib.Path, repo_root: pathlib.P
     for run_dir in sorted(p for p in raw_dir.iterdir() if p.is_dir()):
         stats = backfill_run_dir(run_dir, repo_root, apply)
         totals["runs"] += 1
-        for k in ("checked", "already_canonical", "backfilled_scenario", "backfilled_success", "skipped_no_mapping", "skipped_no_scenario", "errors"):
+        for k in (
+            "checked",
+            "already_canonical",
+            "backfilled_scenario",
+            "backfilled_success",
+            "skipped_no_mapping",
+            "skipped_no_scenario",
+            "errors",
+        ):
             totals[k] += stats[k]
         if stats["checked"]:
             print(
@@ -204,12 +232,28 @@ def backfill_cell(cell_label: str, cell_path: pathlib.Path, repo_root: pathlib.P
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="Actually write changes (default: dry-run)")
-    parser.add_argument("--cell", action="append", choices=sorted(CELL_DIRS), help="Limit to one or more cells (default: all)")
-    parser.add_argument("--repo-root", type=pathlib.Path, default=None, help="Override repo root detection")
+    parser.add_argument(
+        "--apply", action="store_true", help="Actually write changes (default: dry-run)"
+    )
+    parser.add_argument(
+        "--cell",
+        action="append",
+        choices=sorted(CELL_DIRS),
+        help="Limit to one or more cells (default: all)",
+    )
+    parser.add_argument(
+        "--repo-root",
+        type=pathlib.Path,
+        default=None,
+        help="Override repo root detection",
+    )
     args = parser.parse_args()
 
-    repo_root = args.repo_root.resolve() if args.repo_root else repo_root_from(pathlib.Path.cwd())
+    repo_root = (
+        args.repo_root.resolve()
+        if args.repo_root
+        else repo_root_from(pathlib.Path.cwd())
+    )
     print(f"Repo root: {repo_root}")
     print(f"Mode:      {'APPLY (writing)' if args.apply else 'DRY-RUN (no changes)'}")
 
