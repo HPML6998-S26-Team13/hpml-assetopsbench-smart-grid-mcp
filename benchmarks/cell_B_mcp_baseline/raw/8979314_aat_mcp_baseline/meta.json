@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-04-27T01:02:44.998308+00:00",
+  "run_name": "8979314_aat_mcp_baseline",
+  "benchmark_config_path": "configs/aat_mcp_baseline.env",
+  "benchmark_summary_path": "benchmarks/cell_B_mcp_baseline/summary.json",
+  "finished_at": "2026-04-27T01:04:51.604301+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/qejvnoug",
+  "profiling_dir": "profiling/traces/8979314_cell_b",
+  "profiling_artifact": "profiling-qejvnoug",
+  "profiling_summary": {
+    "profiling/gpu_util_mean": 24.156626506024097,
+    "profiling/gpu_util_max": 100.0,
+    "profiling/mem_util_mean": 24.032128514056225,
+    "profiling/gpu_mem_used_mib_mean": 36024.899598393575,
+    "profiling/gpu_mem_used_mib_max": 42102.0,
+    "profiling/power_draw_w_mean": 119.06148594377511,
+    "profiling/power_draw_w_max": 272.14,
+    "profiling/nvidia_smi_samples": 249
+  }
+}

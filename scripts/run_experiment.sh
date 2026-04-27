@@ -753,8 +753,12 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
   if [ "$TORCH_PROFILE" = "1" ]; then
     [ -z "$TORCH_PROFILE_DIR" ] && TORCH_PROFILE_DIR="profiling/traces/${RUN_ID}_torch"
     mkdir -p "$TORCH_PROFILE_DIR"
-    export VLLM_TORCH_PROFILER_DIR="$TORCH_PROFILE_DIR"
-    echo "Torch profiler enabled: VLLM_TORCH_PROFILER_DIR=$TORCH_PROFILE_DIR" | tee -a "$HARNESS_LOG"
+    # vLLM 0.19.0 dropped the VLLM_TORCH_PROFILER_DIR env var; profiling is
+    # now enabled via --profiler-config CLI flag (see vllm/config/profiler.py
+    # and vllm/entrypoints/serve/profile/api_router.py). The path must be absolute.
+    TORCH_PROFILE_DIR_ABS="$(cd "$TORCH_PROFILE_DIR" && pwd)"
+    VLLM_SERVER_ARGS+=(--profiler-config "{\"profiler\":\"torch\",\"torch_profiler_dir\":\"$TORCH_PROFILE_DIR_ABS\"}")
+    echo "Torch profiler enabled: --profiler-config torch torch_profiler_dir=$TORCH_PROFILE_DIR_ABS" | tee -a "$HARNESS_LOG"
   fi
   if command -v setsid >/dev/null 2>&1; then
     setsid "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
