@@ -81,12 +81,26 @@ The relevant options for INT8-class deployment of Llama-3.1-8B-Instruct:
   ready-to-go config + smoke script (see "Smoke scripts" below) to validate
   in ~15 min on Insomnia.
 
-### INT8 smoke script (ready to fire)
+### INT8 smoke result (Slurm `8979660`)
 
-`scripts/test_int8_smoke.sh` (added in this branch) is a minimal Slurm batch
-that downloads a known-good INT8 Llama-3.1-8B-Instruct checkpoint and
-launches vLLM with `--quantization compressed-tensors` to confirm it serves.
-Run it only when the team agrees to revive INT8.
+Despite the deferral above, we ran `scripts/test_int8_smoke.sh` against `RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8` to validate that the path is mechanically runnable. `COMPLETED` in 7:31 on NVIDIA RTX A6000 (`benchmarks/lane2/int8_smoke/8979660/`).
+
+| Check | Result |
+|---|---|
+| HF download (~16 GB) | ok |
+| vLLM startup with `--quantization compressed-tensors` | ok |
+| `/health` reachable | ok |
+| `/v1/models` lists `Llama-3.1-8B-Instruct-int8` with `max_model_len: 8192` | ok |
+| One-shot `/v1/completions` round-trip on a DGA-fault prompt | ok (sensible Llama text, 80 completion tokens) |
+| Selected kernel | `CutlassInt8ScaledMMLinearKernel for CompressedTensorsW8A8Int8` (the marlin path) |
+| Model dtype as auto-loaded | `torch.bfloat16` (not FP16 — see note below) |
+| GPU memory | 44.5 GiB / 48 GiB used (≈ 8 GiB INT8 weights + 36 GiB pre-allocated KV at default 90 % util) |
+
+So **the INT8 serving path works on Insomnia A6000** with the canonical RedHatAI W8A8 checkpoint. `#29`'s "done when: the quantized serving path is runnable as an experiment condition" is satisfied.
+
+**Note on dtype interaction:** vLLM 0.19.0's compressed-tensors path auto-loads the model as BF16, not FP16. This means **INT8 weights + fp8 KV cache is actually a compatible combo** in vLLM 0.19.0 — BF16 model dtype satisfies the FA3 kernel constraint that blocked our FP16 + fp8 KV variant in `8979532`. If we ever build a Cell D with model-precision changes, `--quantization compressed-tensors --kv-cache-dtype fp8` becomes a single-config two-knob optimization stack. The deferral logic for using INT8 in Cell C (signal purity for the (B−C) MCP-transport headline) still holds — this is purely a "Cell D candidate" note.
+
+`scripts/test_int8_smoke.sh` is preserved in the repo for future revival.
 
 ## #30 KV-Cache — what was chosen
 
@@ -160,7 +174,7 @@ The vLLM engine then aborts during `wait_for_engine_startup`, the API server exi
 | Test | Script | Wall-clock | Status | Decision impact |
 |---|---|---|---|---|
 | KV-cache mini-comparison (3 variants × 1 scenario) | `scripts/test_kv_cache_smoke.sh` | ~5 min compute + queue | ✅ ran as `8979532` (see "Smoke result" above) | Confirmed prefix caching at -27 %; fp8 KV blocked by vLLM kernel constraint, dropped from Cell C |
-| INT8 startup smoke (only if reviving the INT8 lane) | `scripts/test_int8_smoke.sh` | ~15 min compute + 16 GB download | Pending Aaron / team approval | Decides whether INT8 enters Cell C v2 |
+| INT8 startup + reachability smoke | `scripts/test_int8_smoke.sh` | ~7 min compute + 16 GB download | ✅ ran as `8979660` (see "INT8 smoke result" above) | Proved INT8 serving path is runnable on A6000; ready for Cell D / scaling experiments |
 
 Both scripts include the standard `--mail-type=BEGIN,END,FAIL --mail-user`
 flags following the team's Slurm convention.
@@ -171,7 +185,7 @@ flags following the team's Slurm convention.
 > tonight, and we have a chosen KV-cache setting or an explicit
 > evidence-backed deferral.
 
-- ✅ **INT8 decision:** **Defer.** Reasoning above (signal-purity for (B−C); no W8A8 checkpoint locally).
+- ✅ **INT8 decision:** **Defer from Cell C.** Reasoning above (signal-purity for (B−C)). INT8 serving path **separately validated** as runnable via smoke `8979660` (CutlassInt8 W8A8 marlin kernel, BF16 model dtype, reachable + responds on A6000).
 - ✅ **KV-cache choice:** `--enable-prefix-caching` (single knob). fp8 KV originally planned but dropped after the smoke surfaced a vLLM 0.19.0 kernel-dispatch limitation under FP16 weights.
 - ✅ **Empirical validation:** smoke `8979532` ran prefix vs baseline at -27 % wall-clock and surfaced the fp8 KV failure mode. Cell C config updated to match.
 
