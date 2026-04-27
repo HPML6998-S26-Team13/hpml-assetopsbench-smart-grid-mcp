@@ -125,6 +125,17 @@ def main(argv: list[str]) -> int:
     bench_dir: pathlib.Path = args.benchmark_run_dir.resolve()
     prof_dir: pathlib.Path = args.profiling_dir.resolve()
 
+    # Repo root is two parents up from this script: profiling/scripts/ -> repo/.
+    # Used to relativize prof_dir before writing it into meta.json so committed
+    # artifacts don't leak personal scratch paths like
+    # /insomnia001/depts/edu/users/af3623/exp1-clone/profiling/traces/...
+    # which break for anyone reading the meta from the team checkout.
+    repo_root = pathlib.Path(__file__).resolve().parent.parent.parent
+    try:
+        prof_dir_for_meta = str(prof_dir.relative_to(repo_root))
+    except ValueError:
+        prof_dir_for_meta = str(prof_dir)
+
     if not bench_dir.is_dir():
         log.error("benchmark run dir does not exist: %s", bench_dir)
         return 1
@@ -200,10 +211,11 @@ def main(argv: list[str]) -> int:
         run.summary.update(stats)
 
     # Also annotate the run config with where the profiling dir lives so
-    # downstream notebooks can find the raw files on disk.
+    # downstream notebooks can find the raw files on disk. Use the
+    # repo-root-relative form when possible.
     run.config.update(
         {
-            "profiling_dir": str(prof_dir),
+            "profiling_dir": prof_dir_for_meta,
             "profiling_artifact": artifact_name,
         },
         allow_val_change=True,
@@ -212,8 +224,9 @@ def main(argv: list[str]) -> int:
     run.finish()
 
     # Write the profiling link back into the benchmark run's meta.json so
-    # the filesystem record matches what's in WandB.
-    meta["profiling_dir"] = str(prof_dir)
+    # the filesystem record matches what's in WandB. Relative path keeps the
+    # committed meta portable across team / personal-scratch checkouts.
+    meta["profiling_dir"] = prof_dir_for_meta
     meta["profiling_artifact"] = artifact_name
     if stats:
         meta.setdefault("profiling_summary", {}).update(stats)
