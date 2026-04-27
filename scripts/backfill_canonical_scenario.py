@@ -103,10 +103,13 @@ def _derive_success(data: dict) -> bool | None:
     raw = data.get("success")
     if isinstance(raw, bool):
         return raw
-    traj = data.get("trajectory") or data.get("history") or []
-    if not traj and not data.get("answer"):
+    # Match Notebook 03's history-first precedence so all three call sites
+    # (run_experiment.sh post-process, this backfill, notebook
+    # load_*_records) walk the same step array.
+    steps = data.get("history") or data.get("trajectory") or []
+    if not steps and not data.get("answer"):
         return None
-    for step in traj:
+    for step in steps:
         if _step_failed(step):
             return False
     return bool(data.get("answer"))
