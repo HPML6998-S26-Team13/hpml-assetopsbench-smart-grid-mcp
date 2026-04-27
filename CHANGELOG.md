@@ -12,6 +12,15 @@
   populated Apr 22 evidence pass, paper-safe wording guide, classification
   workflow, and artifact readiness ledger. The CSV export
   `results/metrics/failure_evidence_table.csv` stays owned by `#36` (Alex)
+- Added `docs/failure_visuals_mitigation.md` as the dedicated working surface
+  for `#64` (failure visuals + mitigation plan), split out of the combined
+  `docs/failure_analysis_scaffold.md` so each issue (`#35`, `#64`, `#36`,
+  `#5`) has its own reviewable PR. This doc carries the visuals scaffold,
+  figure-ready aggregation contract (one CSV per figure), mitigation ranking
+  rubric, the Apr 22 initial mitigation ranking, the mitigation experiment
+  card, and the promotion gate from `#64` into `#65` / `#66`. The table-side
+  exports (`mitigation_run_inventory.csv`, `mitigation_before_after.csv`)
+  stay owned by `#36` (Alex)
 
 ### Planning / Coordination
 
