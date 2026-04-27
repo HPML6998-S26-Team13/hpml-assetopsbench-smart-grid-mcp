@@ -895,18 +895,46 @@ with open(latency_file, "a", encoding="utf-8") as fh:
     fh.write(json.dumps(record) + "\n")
 PY
 
-    # Inject canonical scenario field into the trial output JSON.
-    # Notebook 03 (and any downstream cross-cell analysis) expects each per-trial
-    # JSON to carry data["scenario"] = <input scenario object> so it can match on
-    # scenario.id and aggregate over canonical records. This is a uniform post-
-    # processing step that handles every orchestration path (plan_execute,
-    # agent_as_tool, hybrid, verified_pe) and any upstream-only runner whose
-    # output we cannot directly modify (e.g. AOB plan-execute CLI for Cell Y
-    # baseline).
+    # Inject canonical scenario field + derive top-level success into the
+    # trial output JSON. Notebook 03 (and any downstream cross-cell analysis)
+    # expects each per-trial JSON to carry data["scenario"] = <input scenario
+    # object> AND a bool data["success"], so it can match on scenario.id and
+    # aggregate over canonical records. This is a uniform post-processing step
+    # that handles every orchestration path (plan_execute, agent_as_tool,
+    # hybrid, verified_pe) and any upstream-only runner whose output we cannot
+    # directly modify (e.g. AOB plan-execute CLI for Cell Y baseline, which
+    # writes per-step success in trajectory but no top-level success field).
     "$PYTHON_BIN" - "$SCENARIO_FILE" "$TRIAL_OUT" <<'PY'
 import json
 import pathlib
 import sys
+
+
+def _step_failed(step: dict) -> bool:
+    if not isinstance(step, dict):
+        return False
+    if step.get("success") is False:
+        return True
+    if step.get("error"):
+        return True
+    resp = step.get("response")
+    if isinstance(resp, dict) and resp.get("error"):
+        return True
+    return False
+
+
+def _derive_success(data: dict) -> bool | None:
+    raw = data.get("success")
+    if isinstance(raw, bool):
+        return raw
+    traj = data.get("trajectory") or data.get("history") or []
+    if not traj and not data.get("answer"):
+        return None
+    for step in traj:
+        if _step_failed(step):
+            return False
+    return bool(data.get("answer"))
+
 
 scenario_path, trial_path = sys.argv[1:]
 trial_file = pathlib.Path(trial_path)
@@ -923,6 +951,9 @@ try:
 except (OSError, json.JSONDecodeError):
     sys.exit(0)
 payload["scenario"] = scenario
+derived = _derive_success(payload)
+if derived is not None and not isinstance(payload.get("success"), bool):
+    payload["success"] = derived
 trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
 PY
   done

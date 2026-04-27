@@ -86,8 +86,42 @@ def map_output_to_scenario(run_dir: pathlib.Path, repo_root: pathlib.Path) -> di
     return out
 
 
+def _step_failed(step: dict) -> bool:
+    if not isinstance(step, dict):
+        return False
+    if step.get("success") is False:
+        return True
+    if step.get("error"):
+        return True
+    resp = step.get("response")
+    if isinstance(resp, dict) and resp.get("error"):
+        return True
+    return False
+
+
+def _derive_success(data: dict) -> bool | None:
+    raw = data.get("success")
+    if isinstance(raw, bool):
+        return raw
+    traj = data.get("trajectory") or data.get("history") or []
+    if not traj and not data.get("answer"):
+        return None
+    for step in traj:
+        if _step_failed(step):
+            return False
+    return bool(data.get("answer"))
+
+
 def backfill_run_dir(run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool) -> dict:
-    stats = {"checked": 0, "already_canonical": 0, "backfilled": 0, "skipped_no_mapping": 0, "skipped_no_scenario": 0, "errors": 0}
+    stats = {
+        "checked": 0,
+        "already_canonical": 0,
+        "backfilled_scenario": 0,
+        "backfilled_success": 0,
+        "skipped_no_mapping": 0,
+        "skipped_no_scenario": 0,
+        "errors": 0,
+    }
     if not run_dir.is_dir():
         return stats
     output_to_scenario = map_output_to_scenario(run_dir, repo_root)
@@ -101,7 +135,6 @@ def backfill_run_dir(run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool
             resolved = trial_file
         scen_path = output_to_scenario.get(resolved)
         if scen_path is None:
-            # fall back: filename stem may match scenario filename minus the cell prefix
             stats["skipped_no_mapping"] += 1
             continue
         scenario = load_json(scen_path)
@@ -112,32 +145,56 @@ def backfill_run_dir(run_dir: pathlib.Path, repo_root: pathlib.Path, apply: bool
         if payload is None or not isinstance(payload, dict):
             stats["errors"] += 1
             continue
+
         existing = payload.get("scenario")
-        if isinstance(existing, dict) and existing.get("id"):
+        scenario_already = isinstance(existing, dict) and existing.get("id")
+        success_already = isinstance(payload.get("success"), bool)
+
+        if scenario_already and success_already:
             stats["already_canonical"] += 1
             continue
-        payload["scenario"] = scenario
-        if apply:
+
+        changed = False
+        if not scenario_already:
+            payload["scenario"] = scenario
+            stats["backfilled_scenario"] += 1
+            changed = True
+        if not success_already:
+            derived = _derive_success(payload)
+            if derived is not None:
+                payload["success"] = derived
+                stats["backfilled_success"] += 1
+                changed = True
+        if changed and apply:
             trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
-        stats["backfilled"] += 1
     return stats
 
 
 def backfill_cell(cell_label: str, cell_path: pathlib.Path, repo_root: pathlib.Path, apply: bool) -> dict:
     raw_dir = cell_path / "raw"
-    totals = {"runs": 0, "checked": 0, "already_canonical": 0, "backfilled": 0, "skipped_no_mapping": 0, "skipped_no_scenario": 0, "errors": 0}
+    totals = {
+        "runs": 0,
+        "checked": 0,
+        "already_canonical": 0,
+        "backfilled_scenario": 0,
+        "backfilled_success": 0,
+        "skipped_no_mapping": 0,
+        "skipped_no_scenario": 0,
+        "errors": 0,
+    }
     if not raw_dir.is_dir():
         return totals
     for run_dir in sorted(p for p in raw_dir.iterdir() if p.is_dir()):
         stats = backfill_run_dir(run_dir, repo_root, apply)
         totals["runs"] += 1
-        for k in ("checked", "already_canonical", "backfilled", "skipped_no_mapping", "skipped_no_scenario", "errors"):
+        for k in ("checked", "already_canonical", "backfilled_scenario", "backfilled_success", "skipped_no_mapping", "skipped_no_scenario", "errors"):
             totals[k] += stats[k]
         if stats["checked"]:
             print(
                 f"  {cell_label}/{run_dir.name}: checked={stats['checked']} "
-                f"backfilled={stats['backfilled']} canonical={stats['already_canonical']} "
-                f"no_map={stats['skipped_no_mapping']} no_scen={stats['skipped_no_scenario']} errors={stats['errors']}"
+                f"+scen={stats['backfilled_scenario']} +success={stats['backfilled_success']} "
+                f"canonical={stats['already_canonical']} no_map={stats['skipped_no_mapping']} "
+                f"no_scen={stats['skipped_no_scenario']} errors={stats['errors']}"
             )
     return totals
 
@@ -154,7 +211,16 @@ def main() -> int:
     print(f"Mode:      {'APPLY (writing)' if args.apply else 'DRY-RUN (no changes)'}")
 
     cells_to_process = args.cell or sorted(CELL_DIRS)
-    grand = {"runs": 0, "checked": 0, "already_canonical": 0, "backfilled": 0, "skipped_no_mapping": 0, "skipped_no_scenario": 0, "errors": 0}
+    grand = {
+        "runs": 0,
+        "checked": 0,
+        "already_canonical": 0,
+        "backfilled_scenario": 0,
+        "backfilled_success": 0,
+        "skipped_no_mapping": 0,
+        "skipped_no_scenario": 0,
+        "errors": 0,
+    }
     for cell in cells_to_process:
         cell_path = repo_root / CELL_DIRS[cell]
         print(f"== Cell {cell}: {cell_path.relative_to(repo_root)} ==")
@@ -163,7 +229,8 @@ def main() -> int:
             grand[k] += totals[k]
         print(
             f"  cell totals: runs={totals['runs']} checked={totals['checked']} "
-            f"backfilled={totals['backfilled']} canonical={totals['already_canonical']}"
+            f"+scen={totals['backfilled_scenario']} +success={totals['backfilled_success']} "
+            f"canonical={totals['already_canonical']}"
         )
     print("\n== Sweep totals ==")
     for k, v in grand.items():
