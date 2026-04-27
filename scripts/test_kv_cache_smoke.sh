@@ -10,10 +10,18 @@
 #SBATCH --output=logs/lane2_kv_smoke_%j.out
 #
 # Lane 2 / #30 KV-cache mini-comparison.
-# Validates the chosen KV-cache pair (--enable-prefix-caching + --kv-cache-dtype fp8)
-# against the FP16 baseline using the canonical SGT-009 multi-domain scenario
-# through the AaT direct path. One run per variant; all variants use the same
-# model, scenario, and prompt template so latency deltas attribute to KV-cache.
+# Compares three KV-cache configurations against the FP16 baseline using the
+# canonical SGT-009 multi-domain scenario through the AaT direct path:
+#   1. baseline                                             (no KV optimization)
+#   2. --enable-prefix-caching                              (chosen for Cell C)
+#   3. --enable-prefix-caching --kv-cache-dtype fp8         (originally planned;
+#                                                           known to fail under
+#                                                           FP16 weights in
+#                                                           vLLM 0.19.0 FA3 —
+#                                                           see status doc)
+# One run per variant; all variants use the same model, scenario, and prompt
+# template so latency deltas attribute to KV-cache. The fp8 variant is
+# expected to fail at vLLM startup; the summary step degrades gracefully.
 #
 # Wall-clock ~10-20 min once allocated (3 vLLM startups + 1 trial each).
 #

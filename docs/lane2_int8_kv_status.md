@@ -18,7 +18,7 @@ This doc covers `#29` and `#30`. `#31` is tracked separately.
 
 | Knob | Recommendation | Rationale |
 |---|---|---|
-| **INT8 quantization** | **Defer to Cell C v2.** Use FP16 for the canonical Cell C run. | The headline measurement for Cell C is `(B − C) = recoverable MCP-transport optimization`. Adding INT8 to Cell C confounds that delta with model-side speedup and breaks the apples-to-apples comparison with FP16 Cells A/B. `--quantization compressed-tensors` is the production INT8 path but requires a pre-quantized HF checkpoint (we don't have one locally); `--quantization bitsandbytes` is the runtime path but is generally slower than CompressedTensors W8A8 marlin on Ampere. Use FP8 KV cache instead (next row) for a memory win that does not require a model swap. |
+| **INT8 quantization** | **Defer to Cell C v2.** Use FP16 for the canonical Cell C run. | The headline measurement for Cell C is `(B − C) = recoverable MCP-transport optimization`. Adding INT8 to Cell C confounds that delta with model-side speedup and breaks the apples-to-apples comparison with FP16 Cells A/B. `--quantization compressed-tensors` is the production INT8 path but requires a pre-quantized HF checkpoint (we now have one locally — validated via smoke `8979660`); `--quantization bitsandbytes` is the runtime path but is generally slower than CompressedTensors W8A8 marlin on Ampere. The KV-cache optimization (next row) is the only Lane 2 knob that ships in Cell C. |
 | **KV-cache** | **Enable `--enable-prefix-caching` only** (fp8 KV dropped — see smoke evidence below) | Multi-turn ReAct on Llama-3.1-8B with the same AOB system prompt across all scenarios is the canonical prefix-caching workload — every turn after the first re-uses the system-prompt prefix. **Smoke `8979532` measured prefix caching at 5.64 s vs 7.77 s baseline (-27 %).** `--kv-cache-dtype fp8` was the original second pick but failed in the smoke: vLLM 0.19.0 FlashAttention-3 kernel rejects fp8 KV under FP16 weights. Switching the model to BF16 to unlock fp8 KV would change inference precision and confound (B−A) and (B−C). Dropped to keep the signal clean. |
 | **`--max-num-seqs`** | Leave default (`256`). Optionally drop to `4` for our sequential workload. | We're not batching multiple scenarios concurrently; lower max-num-seqs frees a small amount of memory but doesn't change steady-state. Default is fine. |
 | **`--gpu-memory-utilization`** | Leave default (`0.9`). | The L40S A6000 has plenty of headroom for an 8B FP16 model; squeezing this isn't justified by our workload. |
@@ -160,8 +160,10 @@ The vLLM engine then aborts during `wait_for_engine_startup`, the API server exi
 
 `configs/aat_mcp_optimized.env` updated in this branch to:
 
-- Use the new `EXTRA_VLLM_ARGS="--enable-prefix-caching --kv-cache-dtype fp8"`
-  to enable the chosen KV optimizations
+- Use the new `EXTRA_VLLM_ARGS="--enable-prefix-caching"` to enable the
+  chosen KV optimization (fp8 KV originally planned but dropped after
+  smoke `8979532` surfaced an unsupported vLLM 0.19.0 kernel-dispatch
+  path under FP16 weights — see "#30 KV-Cache Smoke result" above)
 - `QUANTIZATION_MODE="fp16"` (no INT8 — see deferral above)
 - `TORCH_PROFILE=1` and `ENABLE_WANDB=1` for parity with Cell A/B
 - Still requires Akshat's `#31` for the actual MCP-transport optimization;

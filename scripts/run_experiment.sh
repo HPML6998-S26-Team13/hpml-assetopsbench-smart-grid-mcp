@@ -348,6 +348,15 @@ if os.environ.get("CONTRIBUTING_EXPERIMENTS"):
 if orchestration_mode == "agent_as_tool":
     payload["aat_parallel_tool_calls"] = os.environ.get("AAT_PARALLEL_TOOL_CALLS", "false")
 
+# Persist EXTRA_VLLM_ARGS into the benchmark config + meta so artifact
+# consumers (notebooks, WandB, paper tables) can recover the exact vLLM
+# optimization knobs that produced a run without re-reading harness.log.
+# Lane 2 / #30 specifically needs this for the prefix-cache / kv-dtype
+# distinction in Cell C.
+extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
+payload["vllm_extra_args"] = extra_vllm_args
+payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
+
 pathlib.Path(config_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 pathlib.Path(meta_path).write_text(
     json.dumps(
@@ -361,12 +370,18 @@ pathlib.Path(meta_path).write_text(
             # trajectory by cell / orchestration / model without
             # re-reading the cell-level config.json (which the next run
             # overwrites). Mirror the values from the cell config payload
-            # written above.
+            # written above. (PR #144)
             "experiment_cell": payload["experiment_cell"],
             "orchestration_mode": payload["orchestration_mode"],
             "mcp_mode": payload["mcp_mode"],
             "model_id": payload["model_id"],
             "experiment_family": payload["experiment_family"],
+            # vLLM extra args. Per-run meta records the exact optimization
+            # knobs that produced a run so notebooks / paper tables can
+            # recover the prefix-cache / kv-dtype / etc. choice without
+            # re-reading harness.log. (PR #129 / Lane 2)
+            "vllm_extra_args": payload["vllm_extra_args"],
+            "vllm_extra_args_list": payload["vllm_extra_args_list"],
         },
         indent=2,
     )
