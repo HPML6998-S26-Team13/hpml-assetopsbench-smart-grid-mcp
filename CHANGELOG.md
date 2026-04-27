@@ -2,6 +2,16 @@
 
 ## 2026-04-27
 
+### Config / Docs
+
+- Split the combined `#35/#64/#36/#5` staging scaffold into one PR per issue.
+  This PR refocuses `docs/failure_analysis_scaffold.md` on the `#36`
+  before/after metric pack only (export contract, comparison ledger,
+  comparison-ready status labels, fill order) and drops `docs/neurips_draft.md`
+  here since the paper-writing lane moved to its own `#5` PR. Cross-references
+  to the new `#35` taxonomy/evidence doc and `#64` visuals/mitigation doc are
+  added but those docs themselves land in their respective PRs (Alex)
+
 ### Planning / Coordination
 
 - Split Cell C analysis out of `#26` into `#86` (mirror of `#85`-from-`#25`
