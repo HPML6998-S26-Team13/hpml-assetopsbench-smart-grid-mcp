@@ -4,8 +4,10 @@
 *Owner: Aaron Fan (af3623)*
 
 Plan for producing the raw profiling + benchmark artifacts for Experiment 1
-(MCP overhead), issue `#25`. Notebook 02 (`#26`, Alex) consumes those
-artifacts to compute the `Direct → MCP-baseline → MCP-optimized` delta.
+(MCP overhead), issue `#25`. Notebook 02 consumes those artifacts to compute
+the `Direct → MCP-baseline → MCP-optimized` delta. Analysis is split into
+`#26` (Cell A/B, Alex) and `#86` (Cell C, Alex; mirror of `#85`-from-`#25`
+split on the capture side).
 
 ## Experimental cells
 
@@ -146,8 +148,8 @@ pipeline to produce the final report-ready results.
 
 ## Notebook 02 expectations
 
-`#26` does not need to wait for the final paper-scale run set before analysis
-starts. The expected cadence is:
+`#26` (Cell A/B) and `#86` (Cell C) do not need to wait for the final
+paper-scale run set before analysis starts. The expected cadence is:
 
 1. preflight and parser validation can now start from the AaT smoke artifacts:
    Cell A job `8962310_aat_direct_smoke_104` and Cell B job
@@ -169,5 +171,6 @@ starts. The expected cadence is:
   plus a separate upstream parity wrapper
 - `docs/wandb_schema.md` — field names used in config/summary JSON
 - `profiling/README.md` — capture wrapper usage + WandB linkage contract
-- Issues: `#25` (this), `#26` (Alex's notebook), `#31` (batched scheduling),
-  `#72` (WS4 parent), `#85`-`#88` (MCP hardening)
+- Issues: `#25` (this), `#26` (Alex's NB02 Cell A/B analysis), `#86` (Alex's
+  NB02 Cell C analysis), `#31` (batched scheduling), `#72` (WS4 parent),
+  `#85` (Cell C capture), `#87`-`#88` (MCP hardening)

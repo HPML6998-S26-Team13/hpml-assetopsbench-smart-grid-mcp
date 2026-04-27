@@ -181,7 +181,7 @@ Landed on canonical history during Week 2:
 Still open from the original W2 critical path / backlog:
 - final post-merge Insomnia reconciliation / proof closeout (`#111`)
 - Experiment 1 Cell A runner and the first real A/B/C captures (`#25`)
-- Experiment 1 / Experiment 2 execution artifacts that make Notebook 02 / Notebook 03 real rather than just scaffolded (`#26`, `#32`)
+- Experiment 1 / Experiment 2 execution artifacts that make Notebook 02 / Notebook 03 real rather than just scaffolded (`#26` / `#86` for NB02 Cell A/B + Cell C analysis, `#32` for NB03)
 - Problem Statement B generation / validation chain (`#50 -> #2 -> #51`)
 
 Current W3 focus:

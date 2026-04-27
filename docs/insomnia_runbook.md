@@ -68,6 +68,144 @@ sbatch scripts/run_experiment.sh configs/<cell>.env
 Scratch is **1 TB shared** across the edu account and **not backed up** — but
 everything important is in git or re-downloadable from HuggingFace.
 
+## Group permissions: keep the team checkout group-writable
+
+Every file or directory that any teammate needs to edit must be group-readable
+*and* group-writable. The shared parent at
+`/insomnia001/depts/edu/users/team13/` is owned by `wax1:somedu` with mode
+`drwxrws---` (770 + setgid). The setgid bit makes new files inherit the
+`somedu` group automatically; the `g+w` bit is what lets teammates push
+commits, edit configs, or run `git pull` into a worktree they didn't create.
+
+The default sshd `umask` on Insomnia is `0027`, which writes new files as
+`-rw-r-----` and new directories as `drwxr-x---`. That's the opposite of what
+we want for shared work — only the file's owner can edit it, even though the
+group is correct. **Set your interactive umask to `002`** so new artifacts
+land as `-rw-rw----` and `drwxrws---`:
+
+```bash
+# one-time, in ~/.bashrc:
+echo "umask 002" >> ~/.bashrc
+```
+
+Slurm jobs inherit the submitting shell's umask, so this also fixes job-emitted
+logs, `.out` files, and write-from-Python artifacts.
+
+If you encounter a tree where the perms have already drifted (typical sign:
+`git pull` works but `git checkout` of a teammate's branch fails with
+"unable to unlink"), repair it from the team root:
+
+```bash
+cd /insomnia001/depts/edu/users/team13
+# Recursive group rwx, capital X = exec only on dirs/already-exec files.
+# Skip git internals, venvs, and __pycache__.
+find <tree> \( -path "*/.git" -o -path "*/.git/*" \
+              -o -path "*/.venv*" -o -path "*/__pycache__/*" \) -prune \
+            -o -print0 | xargs -0 chmod g+rwX
+# Ensure setgid on every dir so future writes inherit somedu.
+find <tree> \( -path "*/.git" -o -path "*/.git/*" -o -path "*/.venv*" \) -prune \
+            -o -type d -print0 | xargs -0 chmod g+s
+```
+
+The upstream `AssetOpsBench/` clone under the same parent is intentionally
+left at owner-only mode; if you need to make a local change there, branch it
+into your own clone rather than mutating the shared copy.
+
+Two kinds of residue are expected after the sweep and not problems to chase:
+
+- **Worktree `.git` stub files** (e.g.
+  `worktrees/<name>/.git`) — these are owned by whoever created the worktree
+  and are deliberately excluded by the `*/.git` prune. Teammates never need
+  to write them.
+- **Slurm output files** (`logs/exp_*.out`) — owned by the user who
+  submitted the job. `chmod` requires being the file's owner, so each
+  teammate needs to run the recipe (or just `find . -user "$USER" ! -perm
+  -g+w -exec chmod g+rwX {} +`) once from their own account. Adding the
+  `umask 002` line above prevents this drift on all future writes.
+
+## Persistent ssh-agent: type your GitHub passphrase once per node
+
+By default the cluster does not start ssh-agent, so every `git push` /
+`git pull` / `ssh github.com` re-prompts for the passphrase on
+`~/.ssh/id_ed25519`. The fix is a small `~/.ssh/config` block plus a
+bashrc snippet that starts an agent on first login and reuses it across
+subsequent logins on the same login node. Net result: one passphrase
+prompt per login-node-reboot (typically weeks apart).
+
+There is no Linux equivalent of macOS `UseKeychain`, so the passphrase
+cannot be persisted across reboots — `ssh-agent` only caches it in
+process memory.
+
+**Step 1 — `~/.ssh/config` GitHub block:**
+
+```bash
+cat >> ~/.ssh/config <<'EOF'
+
+Host github.com
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+  AddKeysToAgent yes
+EOF
+chmod 600 ~/.ssh/config
+```
+
+`IdentitiesOnly yes` prevents the agent from offering every loaded key to
+GitHub (which can hit the server's `MaxAuthTries` and produce
+`Too many authentication failures`). `AddKeysToAgent yes` auto-loads the
+key into the agent on first use.
+
+**Step 2 — `~/.bashrc` snippet for persistent agent:**
+
+```bash
+cat >> ~/.bashrc <<'EOF'
+
+# Persistent ssh-agent: reuse an existing agent across logins on this node.
+# First ssh prompts for passphrase once; subsequent ssh ops are passphrase-free
+# until the agent dies (typically only at login-node reboot).
+SSH_ENV="$HOME/.ssh/agent-environment"
+__ssh_agent_start() {
+  ssh-agent -s | grep -v '^echo' > "$SSH_ENV"
+  chmod 600 "$SSH_ENV"
+}
+[ -f "$SSH_ENV" ] && . "$SSH_ENV" > /dev/null
+if [ -z "${SSH_AGENT_PID:-}" ] || ! kill -0 "$SSH_AGENT_PID" 2>/dev/null; then
+  __ssh_agent_start
+  . "$SSH_ENV" > /dev/null
+fi
+unset -f __ssh_agent_start
+EOF
+```
+
+**Watch out for the `kill -0 0` trap.** An earlier draft of this snippet
+used `${SSH_AGENT_PID:-0}` as the default. On Linux, `kill -0 0` targets
+the caller's *process group* and always succeeds — so the "is agent
+alive?" check passed even when no agent was running, and the start branch
+was never taken. The version above tests the variable for emptiness
+first.
+
+**Step 3 — prime the agent (one passphrase prompt, ever per node reboot):**
+
+```bash
+exec bash -l                # or: source ~/.bashrc
+ssh -T git@github.com       # prompts for passphrase, caches the key
+ssh-add -l                  # confirms the ed25519 key is loaded
+```
+
+After this, `git push`/`git pull` from Insomnia in any shell on this node
+runs without prompting until the agent dies.
+
+**Caveats:**
+
+- Login nodes are a small pool with DNS round-robin (`2402-login-001`,
+  `2402-login-002`, …). Each node has its own agent process. You will
+  re-enter the passphrase the first time you land on a node where the
+  agent isn't running yet.
+- Slurm jobs do not inherit your interactive agent. If a job needs to
+  `git push` it has to authenticate some other way (HTTPS token, separate
+  passphrase-less deploy key, etc.). For our workflow jobs only write
+  artifacts, and humans push from interactive sessions, so this hasn't
+  come up.
+
 ## CUDA: don't use `module load cuda`
 
 Insomnia's `cuda/12.3` module is broken — it points at `/usr/local/cuda-12.3/`

@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-04-27
+
+### Planning / Coordination
+
+- Split Cell C analysis out of `#26` into `#86` (mirror of `#85`-from-`#25`
+  capture-side split). `#26` now scopes to NB02 Cell A/B analysis; `#86` covers
+  NB02 Cell C analysis, gated on `#85`. Reopened `#26` (PR `#123` had used
+  `Closes #26` and auto-closed it on merge), scope-narrowed body, added
+  splinter cross-references. Posted formal audit comment on `#86`. Swept
+  generic `#26` references across active docs (`live_repo_summary.md`,
+  `experiment1_capture_plan.md`, `execution_plan.md`, `project_synopsis.md`,
+  `results/README.md`) to mention `#86` where the reference covered full
+  Cell A/B/C scope; left A/B-scoped references (e.g., shared Cell B
+  preflight) unchanged. (Alex)
+
 ## 2026-04-25
 
 ### Runtime / Config

@@ -1,3 +1,4 @@
 # Backlog
 
-- [ ] 2026-04-20 - Explore `claude_agent_sdk`: determine why AssetOpsBench imports it, whether it is installable in our environments, and whether any part of that dependency should be incorporated here to better mirror AssetOpsBench behavior even though this project does not directly use Claude-agent orchestration today. Source: Codex / user follow-up.
+- [x] 2026-04-20 - Explore `claude_agent_sdk`: determine why AssetOpsBench imports it, whether it is installable in our environments, and whether any part of that dependency should be incorporated here to better mirror AssetOpsBench behavior even though this project does not directly use Claude-agent orchestration today. Source: Codex / user follow-up. **Filed as #87 on 2026-04-27.**
+- [ ] 2026-04-27 - Review GitHub Project item descriptions plus issue/PR bodies and comments for broken commit links caused by history rewrites; update stale SHA references to current reachable commits or replace them with durable PR, issue, validation-log, Slurm-run, or artifact-path anchors. Source: Codex / user follow-up.

@@ -7,7 +7,7 @@ How the team executes the remaining ~4 weeks of work, organized in two parts:
 1. **Task dependency map** - which tasks block which, and what the critical path looks like
 2. **Benchmarking operations** - what running experiments actually looks like (it's mostly async batch jobs, not synchronous coordination)
 
-> **TL;DR:** The repo is no longer in pure setup mode. Canonical history now includes the first harness proof / judge / trajectory ladder (`#113`, `#114`), the merged Insomnia benchmark-Llama path (`#115`), the merged repo-local Verified PE / PE + Self-Ask runners with clean smoke proofs (`#119`), and the merged Notebook 02/03 consumer scaffolds (`#120`). The main remaining execution risk is now concentrated in `#111` (final post-merge proof run), `#25` (Cell A runner), and the still-missing real Experiment 1 / Experiment 2 capture sets that feed `#26` and `#32`.
+> **TL;DR:** The repo is no longer in pure setup mode. Canonical history now includes the first harness proof / judge / trajectory ladder (`#113`, `#114`), the merged Insomnia benchmark-Llama path (`#115`), the merged repo-local Verified PE / PE + Self-Ask runners with clean smoke proofs (`#119`), and the merged Notebook 02/03 consumer scaffolds (`#120`, plus the `#123` partial-readiness framework for NB02 and the `#136` preliminary-mode framework for NB03). The main remaining execution risk is now concentrated in `#111` (final post-merge proof run), `#25` (Cell A runner), and the still-missing real Experiment 1 / Experiment 2 capture sets that feed `#26` / `#86` (Cell A/B + Cell C analysis) and `#32`.
 
 ## Status note (Apr 21, 2026)
 
@@ -27,7 +27,7 @@ What still governs the near-term critical path:
 
 - `#111` for the final post-merge Insomnia proof / closeout pass
 - `#25` for the Cell A runner and the first real A/B/C capture chain
-- `#26` and `#32` for actual experiment execution artifacts rather than just notebook scaffolds
+- `#26` / `#86` (Cell A/B + Cell C analysis split) and `#32` for actual experiment execution artifacts rather than just notebook scaffolds
 - `#50 -> #2 -> #51` for the first believable Problem Statement B artifact chain
 
 Most important nuance after the Apr 20-21 merge wave:
