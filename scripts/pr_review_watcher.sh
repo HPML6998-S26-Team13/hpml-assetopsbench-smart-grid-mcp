@@ -25,15 +25,19 @@
 #   4. no review body of state COMMENTED|APPROVED contains a word-bounded
 #      LGTM (case-insensitive). PR-comment text is ignored to avoid false
 #      positives from quoted or conditional mentions.
-#   5. unclaimed: no file matching *PR<N>_* under review/claude-prompts/
-#      or review/codex-prompts/ recursively (case-insensitive).
-#   6. no substantive review (CHANGES_REQUESTED or APPROVED, non-empty
-#      body) was submitted on or after the head commit's committed time.
+#   5. no prior claim packet covers the current head: a top-level packet
+#      under review/claude-prompts/ or review/codex-prompts/ matching
+#      *_PR<N>_* (case-sensitive on the canonical slot, with _signal/ and
+#      other underscore-prefixed subdirs excluded), whose mtime is later
+#      than the head commit's committedDate.
+#   6. no formal GitHub review covers the current head: most recent
+#      CHANGES_REQUESTED review with non-empty body, submittedAt strictly
+#      after head_at.
 #
-# Re-emit semantics: criterion 5 alone does NOT skip a PR if criterion 6
-# would say the prior review is stale. A PR with an existing claim packet
-# whose head has since moved past the last review is re-claimed at the next
-# vN+1 version so the runner re-reviews the new diff.
+# Re-emit semantics: criteria 5 and 6 are independent skip predicates.
+# A PR is emitted (claimed) whenever both predicates say "not covered."
+# If an author pushes new commits past a prior packet or review, the
+# next iteration emits a vN+1 packet for the new diff.
 #
 # Author hint reads docs/coordination/shift_coordination_note__*.md and
 # picks the side whose note mentions PR #<N>, pull request <N>, pull/<N>,
@@ -62,7 +66,7 @@ GH=(gh --repo "$WATCHER_REPO")
 mkdir -p "$INBOX_CLAUDE" "$INBOX_CODEX" "$LOCK_DIR"
 
 usage() {
-  sed -n '2,45p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,44p' "$0" | sed 's/^# \{0,1\}//'
   exit 1
 }
 
@@ -74,15 +78,21 @@ need_jq() {
   command -v jq >/dev/null 2>&1 || { echo "jq required" >&2; exit 2; }
 }
 
-# Match any prior packet for this PR, including renamed _REVIEWED.md.
-# Case-sensitive on the canonical `_PR<N>_` slot so slugified content
-# (slugify lowercases everything) cannot collide with the PR-number slot.
-# Concrete failure case caught by adversarial v2 review:
-# 20260427_010000_ADHOC_PR50_watcher_pr137_fix-v1.md would have matched
-# `is_claimed 137` under the prior case-insensitive globs.
+# Match prior top-level claim packets for this PR, including renamed
+# _REVIEWED.md. Case-sensitive on the canonical `_PR<N>_` slot so
+# slugified content (slugify lowercases everything) cannot collide
+# with the PR-number slot. Excludes any underscore-prefixed subdirectory
+# (_signal/, _archive/, _templates/) so claim_covers_head's
+# sort-r|head-1 picks the actual claim packet rather than a signal
+# file. Without the path guard, LC_ALL=C locales (cron, CI, headless
+# containers) sort _signal/ paths first, so the signal mtime would
+# stand in for the packet mtime and silently skip PRs with stale
+# claims.
 existing_claims() {
   local pr="$1"
-  { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f -name "*_PR${pr}_*" 2>/dev/null \
+  { find "$INBOX_CLAUDE" "$INBOX_CODEX" -type f \
+      -name "*_PR${pr}_*" \
+      -not -path "*/_*/*" 2>/dev/null \
       || true; }
 }
 
@@ -389,6 +399,10 @@ case "$cmd" in
       claude|codex) ;;
       *) echo "loop requires --reviewer claude|codex" >&2; exit 2 ;;
     esac
+    case "$interval" in
+      ''|*[!0-9]*) echo "--interval must be a positive integer (seconds)" >&2; exit 2 ;;
+    esac
+    [[ "$interval" -gt 0 ]] || { echo "--interval must be > 0" >&2; exit 2; }
     # Single-watcher invariant: hold a non-blocking lockfile on the shared
     # review/ directory keyed by reviewer side. Two concurrent watcher
     # processes for the same side would otherwise race the
