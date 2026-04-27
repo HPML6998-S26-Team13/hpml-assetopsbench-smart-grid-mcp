@@ -39,12 +39,20 @@ The canonical `team13/main` lane has advanced since the Apr 26 refresh:
   `8970468_aat_mcp_baseline_upstream_smoke_104`).
 - Notebook 02 partial-readiness mode landed in PR `#123`; Notebook 03
   preliminary mode landed in PR `#136`.
-- Experiment 1 A/B canonical captures landed in PR `#130`.
+- Experiment 1 A/B canonical captures landed in PR `#130`. Job `8979314`
+  produced both `8979314_aat_direct` and `8979314_aat_mcp_baseline` over
+  scenario set `smartgrid_multi_domain` on `Llama-3.1-8B-Instruct`. Both
+  sides hit `success_rate=1.0` over 6 scenarios, so neither produced new
+  failure evidence rows; their value to `#35` is the per-trial latency,
+  tool-call, and `tool_error_count=0` baseline that any future PE-family
+  rerun will be classified against.
 
 These are readiness anchors, not final taxonomy evidence. They prove the AaT
 A/B paths can execute and emit artifacts; they do not yet replace the
 matched-trial `B/Y` or mitigation rerun evidence needed for final taxonomy
-counts and before/after claims.
+counts and before/after claims. The `under-constrained fault selection`
+pattern stays at evidence grade `illustrative` until a second Y-cell
+artifact reproduces it.
 
 ## Classification rule
 
@@ -117,10 +125,15 @@ This is the table `#35` should eventually fill.
 Historical validation-only rows may temporarily use `n/a` for `scenario_id`
 or `trial_index` when the raw scenario JSON is not committed in-tree. The
 final exported CSV for notebook joins should backfill concrete values
-wherever the raw benchmark artifacts exist.
+wherever the raw benchmark artifacts exist. Rows in the populated pass below
+that show `n/a` for these columns are historical-only entries from
+`docs/validation_log.md`; treat any row with concrete `scenario_id` /
+`trial_index` as paper-citable, and any row with `n/a` as discussion-only
+until a matched canonical capture lands.
 
-The CSV target is `results/metrics/failure_evidence_table.csv` (export
-contract owned by `#36`; see `docs/failure_analysis_scaffold.md`).
+The CSV target is `results/metrics/failure_evidence_table.csv` (schema owned
+by `#36` export contract; populated rows produced under `#35`; see
+`docs/failure_analysis_scaffold.md`).
 
 ## Initial evidence pass (Apr 22)
 
@@ -133,7 +146,7 @@ experiment matrix is already captured.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | `local-20260413-003914_pe_mcp_baseline_watsonx_smoke` | Y | `plan_execute` | `baseline` | `multi_01_end_to_end_fault_response` | `1` | final answer | task verification failure | final answer and work order choose low-temperature overheating even though `analyze_dga` returned `Normal / Inconclusive` | `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_pe_mcp_baseline_watsonx_smoke/2026-04-13_Y_llama-3-3-70b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json` | Step 5 returns dataset `fault_label = Low-temperature overheating`, Step 6 returns IEC diagnosis `Normal / Inconclusive`, and the answer never resolves the conflict before writing the work order | add explicit conflict-resolution / evidence-consistency check before final answer and WO creation | must-fix |
 | `issue18-smartgrid-smoke` | Y | `plan_execute` | `baseline` | `sgt003_t012_dga` | `1` | final answer | task verification failure | the scenario answer locks onto low-temperature overheating even though the formal DGA tool again returns `Normal / Inconclusive` | `benchmarks/cell_Y_plan_execute/raw/issue18-smartgrid-smoke/sgt003_t012_dga_run01.json` | The runner uses the dataset label and keyword search path after Step 2 contradicts the formal diagnostic output, which suggests a recurring failure mode rather than a one-off | require the chosen fault mode to cite the deciding tool output, not just any supporting label-like field | must-fix |
-| `validation_8760652` | Y | `plan_execute` | `baseline` | `n/a` | `n/a` | tool selection | specification failure | the run drifts to `Partial Discharge` after broad failure-mode search without a tightly grounded fault-selection step | `benchmarks/validation_output.json; benchmarks/validation_8760652.log` | The plan lists `list_failure_modes -> search_failure_modes -> get_sensor_correlation` without a clear explicit adjudication step, and the final answer converges on `FM-001 Partial Discharge` even though the task began from a thermal-overload symptom description | tighten PE prompts so probable-fault selection must be justified from named tool evidence before downstream actions | should-fix |
+| `validation_8760652` | Y | `plan_execute` | `baseline` | `n/a` | `n/a` | planning | specification failure | the plan ships without an explicit fault-selection adjudication step, and the run later drifts to `Partial Discharge` | `benchmarks/validation_output.json; benchmarks/validation_8760652.log` | The plan lists `list_failure_modes -> search_failure_modes -> get_sensor_correlation` without a clear explicit adjudication step before downstream tool selection. Per the failure-stage rule (earliest stage where the run becomes observably unrecoverable), the unrecoverable point is at `planning` — the missing adjudication step is what causes the later `tool selection` to drift. Final answer converges on `FM-001 Partial Discharge` even though the task began from a thermal-overload symptom description | tighten PE prompts so probable-fault selection must be justified from named tool evidence before downstream actions | should-fix |
 | `8850716_pe_self_ask_mcp_baseline_smoke` | Y | `plan_execute` | `baseline` | `n/a` | `n/a` | tool execution | inter-agent / orchestration failure | one scenario ends with terminal `Unknown server 'none'` while the wrapper still reports the run as completed | `docs/validation_log.md` | This is a concrete routing-contract failure between the runner and the tool layer; the validation log cites the failed terminal step and W&B run `y42u88h3` even though the raw per-scenario JSON is not committed in-tree | hard-fail unknown-server / bad-routing conditions and normalize them into explicit step errors | must-fix |
 | `8851966_verified_pe_mcp_baseline_smoke` | Z | `verified_pe` | `baseline` | `n/a` | `n/a` | verification | task verification failure | wrapper summary reports `pass=2` even though raw scenario outputs contain semantic failures | `docs/validation_log.md` | The benchmark accounting layer masked a real failure; the validation log cites the semantic mismatch and links the historical W&B run `0v3a5jqi` even though the raw per-scenario JSON is not committed in-tree | keep atomic error-promotion + success-accounting normalization in the runner and verify reruns against raw outputs | must-fix |
 
@@ -209,6 +222,8 @@ paper does not mix "runner is alive" with "failure pattern was observed."
 |---|---|---|---|---|
 | `8962310_aat_direct_smoke_104` | A | smoke success | direct-tool AaT path and artifact contract are runnable | final A-cell latency distribution or failure rates |
 | `8969519_aat_mcp_baseline_smoke_104` | B | smoke success | MCP-baseline AaT path and shared Cell B artifact shape are runnable | final shared `B/Y` orchestration comparison |
+| `8979314_aat_direct` | A | canonical capture | 6/6 scenario success on canonical scenario set; baseline latency / tool-call / tool-error metrics for any future PE-family or mitigation classification against this scenario set | judge-score, MCP latency, token, and profiling sample dims still NULL on the capture |
+| `8979314_aat_mcp_baseline` | B | canonical capture | 6/6 scenario success on canonical scenario set; baseline metrics for AaT MCP baseline against the same scenario set as `8979314_aat_direct` | same NULL columns as `8979314_aat_direct`; no failure rows produced (success_rate=1.0) |
 | `8970383_aat_mcp_baseline_upstream_smoke_104` | B parity | smoke success | upstream AOB runner parity against Smart Grid MCP servers | final performance comparison |
 | `8970468_aat_mcp_baseline_upstream_smoke_104` | B parity | repeat smoke success | parity result is repeatable on the same smoke scenario | final performance comparison |
 
