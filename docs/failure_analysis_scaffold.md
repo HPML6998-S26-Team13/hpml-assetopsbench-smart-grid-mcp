@@ -235,8 +235,8 @@ validation log:
 
 When the rerun lane fills in, the clean metric surfaces should be:
 
-- `results/metrics/failure_evidence_table.csv` (owned by `#35`; `#36`
-  consumes its join keys)
+- `results/metrics/failure_evidence_table.csv` (schema owned by `#36`
+  export contract; populated rows produced under `#35`)
 - `results/metrics/mitigation_run_inventory.csv`
 - `results/metrics/mitigation_before_after.csv`
 - `results/figures/failure_taxonomy_counts.png` (owned by `#64`)
