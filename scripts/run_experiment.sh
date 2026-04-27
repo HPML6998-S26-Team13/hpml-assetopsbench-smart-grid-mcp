@@ -894,6 +894,37 @@ record = {
 with open(latency_file, "a", encoding="utf-8") as fh:
     fh.write(json.dumps(record) + "\n")
 PY
+
+    # Inject canonical scenario field into the trial output JSON.
+    # Notebook 03 (and any downstream cross-cell analysis) expects each per-trial
+    # JSON to carry data["scenario"] = <input scenario object> so it can match on
+    # scenario.id and aggregate over canonical records. This is a uniform post-
+    # processing step that handles every orchestration path (plan_execute,
+    # agent_as_tool, hybrid, verified_pe) and any upstream-only runner whose
+    # output we cannot directly modify (e.g. AOB plan-execute CLI for Cell Y
+    # baseline).
+    "$PYTHON_BIN" - "$SCENARIO_FILE" "$TRIAL_OUT" <<'PY'
+import json
+import pathlib
+import sys
+
+scenario_path, trial_path = sys.argv[1:]
+trial_file = pathlib.Path(trial_path)
+if not trial_file.exists() or trial_file.stat().st_size == 0:
+    sys.exit(0)
+try:
+    payload = json.loads(trial_file.read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    sys.exit(0)
+if not isinstance(payload, dict):
+    sys.exit(0)
+try:
+    scenario = json.loads(pathlib.Path(scenario_path).read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError):
+    sys.exit(0)
+payload["scenario"] = scenario
+trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+PY
   done
 done
 
