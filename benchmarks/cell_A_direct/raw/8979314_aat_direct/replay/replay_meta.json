@@ -1,0 +1,12 @@
+{
+  "bench_run_dir": "benchmarks/cell_A_direct/raw/8979314_aat_direct",
+  "mcp_mode": "direct",
+  "model_id": "openai/Llama-3.1-8B-Instruct",
+  "host": "ins060",
+  "slurm_job_id": "8979314",
+  "start_ts": "2026-04-27T01:00:54Z",
+  "stop_ts": "2026-04-27T01:01:14Z",
+  "scenarios_replayed": 2,
+  "scenarios_passed": 1,
+  "scenarios_failed": 1
+}

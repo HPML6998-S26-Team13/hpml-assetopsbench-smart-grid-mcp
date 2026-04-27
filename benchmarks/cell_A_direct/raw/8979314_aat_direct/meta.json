@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-04-27T00:56:35.373978+00:00",
+  "run_name": "8979314_aat_direct",
+  "benchmark_config_path": "configs/aat_direct.env",
+  "benchmark_summary_path": "benchmarks/cell_A_direct/summary.json",
+  "finished_at": "2026-04-27T01:00:54.053803+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/vq976ljq",
+  "profiling_dir": "profiling/traces/8979314_cell_a",
+  "profiling_artifact": "profiling-vq976ljq",
+  "profiling_summary": {
+    "profiling/gpu_util_mean": 16.890140845070423,
+    "profiling/gpu_util_max": 100.0,
+    "profiling/mem_util_mean": 16.56056338028169,
+    "profiling/gpu_mem_used_mib_mean": 23809.498591549294,
+    "profiling/gpu_mem_used_mib_max": 42102.0,
+    "profiling/power_draw_w_mean": 95.65571830985915,
+    "profiling/power_draw_w_max": 273.3,
+    "profiling/nvidia_smi_samples": 355
+  }
+}
