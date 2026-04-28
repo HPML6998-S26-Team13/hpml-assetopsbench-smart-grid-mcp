@@ -1,0 +1,424 @@
+{
+  "question": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+  "effective_question": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "Based on the results, it is recommended to schedule immediate outage maintenance for transformer T-020. The DGA diagnostics indicate an Arc discharge fault (IEC code D2), which is associated with a critical failure mode (FM-006) characterized by high-energy arcing causing severe oil decomposition. The thermal anomaly trends show a stable but slightly increasing temperature trend, which may indicate a developing issue. Given the critical severity of the fault and the potential for significant downtime (estimated 72 hours), it is best to schedule immediate maintenance to prevent further damage and potential safety risks.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for transformer T-020.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify the DGA record into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios."
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-020.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dictionaries with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 4,
+      "task": "Detect anomalous sensor readings for the winding_temp_top_c sensor on transformer T-020 using a rolling z-score method.",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies."
+    },
+    {
+      "step": 5,
+      "task": "Compute the trend (slope) of the winding_temp_top_c sensor's readings over a time window for transformer T-020.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    },
+    {
+      "step": 6,
+      "task": "Search for failure modes associated with the fault classification from Task2.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dictionaries."
+    },
+    {
+      "step": 7,
+      "task": "Get the sensors and gases most strongly associated with the failure mode from Task6.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "A dictionary with keys: failure_mode_id, name, key_gases, description, iec_code, recommended_action."
+    },
+    {
+      "step": 8,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-020 based on the fault classification from Task2.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+    },
+    {
+      "step": 9,
+      "task": "Decide whether to schedule immediate outage maintenance or defer with heightened monitoring based on the results from Tasks 4, 5, 7, and 8.",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        4,
+        5,
+        7,
+        8
+      ],
+      "expected_output": "A natural-language answer."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for transformer T-020.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify the DGA record into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios."
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-020.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dictionaries with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 4,
+      "task": "Detect anomalous sensor readings for the winding_temp_top_c sensor on transformer T-020 using a rolling z-score method.",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies."
+    },
+    {
+      "step": 5,
+      "task": "Compute the trend (slope) of the winding_temp_top_c sensor's readings over a time window for transformer T-020.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    },
+    {
+      "step": 6,
+      "task": "Search for failure modes associated with the fault classification from Task2.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dictionaries."
+    },
+    {
+      "step": 7,
+      "task": "Get the sensors and gases most strongly associated with the failure mode from Task6.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "A dictionary with keys: failure_mode_id, name, key_gases, description, iec_code, recommended_action."
+    },
+    {
+      "step": 8,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-020 based on the fault classification from Task2.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 9; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for transformer T-020.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "tool": "get_dga_record"
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"sample_date\": \"2024-01-08T00:00:00\",\n  \"dissolved_h2_ppm\": 167.45,\n  \"dissolved_ch4_ppm\": 86.4,\n  \"dissolved_c2h2_ppm\": 28.71,\n  \"dissolved_c2h4_ppm\": 83.15,\n  \"dissolved_c2h6_ppm\": 39.55,\n  \"dissolved_co_ppm\": 634.2,\n  \"dissolved_co2_ppm\": 3546.15,\n  \"fault_label\": \"Arc discharge\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result is successful and does not indicate a need for replanning.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Classify the DGA record into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 167.45,
+        "ch4": 86.4,
+        "c2h2": 28.71,
+        "c2h4": 83.15,
+        "c2h6": 39.55,
+        "transformer_id": "T-020"
+      },
+      "response": "{\n  \"iec_code\": \"D2\",\n  \"diagnosis\": \"Arc discharge\",\n  \"r1_ch4_h2\": 0.516,\n  \"r2_c2h2_c2h4\": 0.3453,\n  \"r3_c2h4_c2h6\": 2.1024,\n  \"input_gases\": {\n    \"h2_ppm\": 167.45,\n    \"ch4_ppm\": 86.4,\n    \"c2h2_ppm\": 28.71,\n    \"c2h4_ppm\": 83.15,\n    \"c2h6_ppm\": 39.55\n  },\n  \"transformer_id\": \"T-020\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-020.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "params": {
+          "transformer_id": "T-020"
+        }
+      },
+      "response": "Error executing tool list_sensors: 1 validation error for list_sensorsArguments\ntransformer_id\n  Field required [type=missing, input_value={'tool': 'list_sensors', ...ansformer_id': 'T-020'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "retry",
+      "verifier_reason": "Error executing tool list_sensors: missing required field 'transformer_id'",
+      "retries_used": 1
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-020.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "transformer_id": "T-020"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result indicates a validation error, but the remaining planned steps do not suggest a change in the overall plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 1
+    },
+    {
+      "step": 4,
+      "task": "Detect anomalous sensor readings for the winding_temp_top_c sensor on transformer T-020 using a rolling z-score method.",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "sensor_id": "winding_temp_top_c",
+        "window_size": 720,
+        "z_threshold": 2.0
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 720,\n  \"z_threshold\": 2.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 31,\n  \"anomaly_rate_pct\": 4.31,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-01 19:00:00\",\n      \"value\": 75.612,\n      \"z_score\": 2.685\n    },\n    {\n      \"timestamp\": \"2024-01-02 00:00:00\",\n      \"value\": 63.133,\n      \"z_score\": 2.56\n    },\n    {\n      \"timestamp\": \"2024-01-02 04:00:00\",\n      \"value\": 143.658,\n      \"z_score\": 2.127\n    },\n    {\n      \"timestamp\": \"2024-01-02 07:00:00\",\n      \"value\": 152.571,\n      \"z_score\": 2.358\n    },\n    {\n      \"timestamp\": \"2024-01-03 07:00:00\",\n      \"value\": 62.014,\n      \"z_score\": 2.316\n    },\n    {\n      \"timestamp\": \"2024-01-03 12:00:00\",\n      \"value\": 55.685,\n      \"z_score\": 2.45\n    },\n    {\n      \"timestamp\": \"2024-01-04 15:00:00\",\n      \"value\": 153.878,\n      \"z_score\": 2.241\n    },\n    {\n      \"timestamp\": \"2024-01-05 02:00:00\",\n      \"value\": 58.267,\n      \"z_score\": 2.304\n    },\n    {\n      \"timestamp\": \"2024-01-06 14:00:00\",\n      \"value\": 151.236,\n      \"z_score\": 2.009\n    },\n    {\n      \"timestamp\": \"2024-01-08 14:00:00\",\n      \"value\": 169.513,\n      \"z_sco\n...[truncated 2150 chars]",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Anomalous sensor readings detected, but no clear indication to change the remaining plan.",
+      "verifier_updated_focus": "winding_temp_top_c sensor trend analysis",
+      "retries_used": 0
+    },
+    {
+      "step": 5,
+      "task": "Compute the trend (slope) of the winding_temp_top_c sensor's readings over a time window for transformer T-020.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "sensor_id": "winding_temp_top_c",
+        "start_time": "2024-01-01T00:00:00",
+        "end_time": "2024-01-08T00:00:00"
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 169,\n  \"start_time\": \"2024-01-01 00:00:00\",\n  \"end_time\": \"2024-01-08 00:00:00\",\n  \"mean_value\": 107.8589,\n  \"min_value\": 55.685,\n  \"max_value\": 153.878,\n  \"slope_per_day\": 0.274161,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0007\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result suggests no change in remaining plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 6,
+      "task": "Search for failure modes associated with the fault classification from Task2.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {
+        "query": "failure_modes associated with Arc discharge fault classification"
+      },
+      "response": "",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 7,
+      "task": "Get the sensors and gases most strongly associated with the failure mode from Task6.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {
+        "failure_mode_id": "FM-006",
+        "sensor_ids": [
+          "load_current_a",
+          "oil_temp_c",
+          "power_factor",
+          "voltage_hv_kv",
+          "voltage_lv_kv",
+          "winding_temp_top_c"
+        ],
+        "gas_ids": [
+          "h2_ppm",
+          "ch4_ppm",
+          "c2h2_ppm",
+          "c2h4_ppm",
+          "c2h6_ppm",
+          "co_ppm",
+          "co2_ppm"
+        ]
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-006\",\n  \"name\": \"Arc Discharge\",\n  \"dga_label\": \"Arc discharge\",\n  \"description\": \"High-energy arcing causing severe oil decomposition. Very high C2H2 and H2.\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"D2\",\n  \"key_gases\": [\n    \"C2H2\",\n    \"H2\",\n    \"C2H4\"\n  ],\n  \"recommended_action\": \"Immediate de-energization and emergency inspection\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result suggests no change in the remaining plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 8,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-020 based on the fault classification from Task2.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "severity": "critical",
+        "fault_type": "Arc Discharge"
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"severity\": \"critical\",\n  \"fault_type\": \"Arc Discharge\",\n  \"estimated_min_hours\": 48,\n  \"estimated_max_hours\": 120,\n  \"estimated_typical_hours\": 72,\n  \"source\": \"dataset_statistics_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-010",
+    "type": "Multi",
+    "text": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+    "category": "Cross-Domain Planning",
+    "characteristic_form": "The answer should integrate DGA-based diagnosis and trend/anomaly evidence, make a binary maintenance decision (immediate outage vs deferred monitoring), and provide an actionable work-order or monitoring plan.",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "tsfm.detect_anomalies",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "diagnostic evidence",
+        "trend evidence",
+        "final decision",
+        "action plan"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR",
+      "TSFM",
+      "WO"
+    ]
+  }
+}

@@ -87,8 +87,21 @@ MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
-VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-0}"
-VLLM_TOOL_CALL_PARSER="${VLLM_TOOL_CALL_PARSER:-}"
+VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-1}"
+# Default tool-call parser is model-family-aware. Llama-3.x → llama3_json
+# (the team's pinned `Llama-3.1-8B-Instruct`). Other families
+# (qwen, mistral, hermes) use distinct parsers; configs targeting those
+# models must override `VLLM_TOOL_CALL_PARSER` explicitly. The current
+# parser landscape changes with vLLM releases, so we don't try to
+# enumerate every family here — just pick a safe default for the model
+# the team actually runs and let other configs opt in.
+case "${MODEL_ID:-}" in
+  *llama-3*|*Llama-3*|*llama3*|*Llama3*) _DEFAULT_TOOL_CALL_PARSER=llama3_json ;;
+  *qwen*|*Qwen*) _DEFAULT_TOOL_CALL_PARSER=hermes ;;
+  *mistral*|*Mistral*) _DEFAULT_TOOL_CALL_PARSER=mistral ;;
+  *) _DEFAULT_TOOL_CALL_PARSER=llama3_json ;;  # safest single fallback for our pinned stack
+esac
+VLLM_TOOL_CALL_PARSER="${VLLM_TOOL_CALL_PARSER:-$_DEFAULT_TOOL_CALL_PARSER}"
 VLLM_STARTUP_TIMEOUT="${VLLM_STARTUP_TIMEOUT:-}"
 LAUNCH_VLLM="${LAUNCH_VLLM:-0}"
 AOB_PATH="${AOB_PATH:-$PROJECT_ROOT/../AssetOpsBench}"
@@ -343,6 +356,17 @@ pathlib.Path(meta_path).write_text(
             "run_name": run_name,
             "benchmark_config_path": payload["benchmark_config_path"],
             "benchmark_summary_path": payload["benchmark_summary_path"],
+            # Classifier fields. Per-run meta needs these so downstream
+            # scoring (`scripts/judge_trajectory.py`) can label each
+            # trajectory by cell / orchestration / model without
+            # re-reading the cell-level config.json (which the next run
+            # overwrites). Mirror the values from the cell config payload
+            # written above.
+            "experiment_cell": payload["experiment_cell"],
+            "orchestration_mode": payload["orchestration_mode"],
+            "mcp_mode": payload["mcp_mode"],
+            "model_id": payload["model_id"],
+            "experiment_family": payload["experiment_family"],
         },
         indent=2,
     )

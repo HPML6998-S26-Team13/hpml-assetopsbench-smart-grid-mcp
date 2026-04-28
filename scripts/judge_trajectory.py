@@ -49,6 +49,7 @@ import sys
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Repo-root relative path helper
@@ -304,20 +305,37 @@ def _summarise_plan(plan: list[dict]) -> str:
     return "\n".join(lines) if lines else "(no plan)"
 
 
-def _summarise_trajectory(trajectory: list[dict], max_chars: int = 800) -> str:
-    lines = []
-    for r in trajectory:
-        status = "OK" if r.get("success") else "ERR"
-        tool = r.get("tool") or "none"
-        server = r.get("server", "")
-        response = str(r.get("response", ""))[:200]
-        lines.append(
-            f"  [{status}] Step {r.get('step', '?')} [{server}] {tool}: {response}"
-        )
-    full = "\n".join(lines)
+def _summarise_trajectory(trajectory: Any, max_chars: int = 8000) -> str:
+    """Format a trajectory (any shape) as JSON text for the judge prompt.
+
+    Mirrors AOB's upstream `feat/evaluation-module` design (see
+    `src/evaluation/runner.py:_trajectory_to_text`): dump the trajectory
+    to JSON and let the judge LLM parse the shape itself. Works for all
+    runner outputs we emit:
+
+    - Plan-Execute / Verified PE: list of step dicts with
+      ``step / task / server / tool / tool_args / response / success / error``.
+    - Agent-as-Tool (OpenAI Agents SDK): list of turn dicts with
+      ``turn / role / content / tool_calls[]`` (each tool_call carries
+      ``name / arguments / call_id / output``).
+    - Upstream AOB ``plan-execute`` CLI: same as PE shape above.
+
+    Earlier per-shape structured-text formatting drove judge prompts
+    that rendered empty for AaT / SDK shapes (no ``step / server / tool``
+    keys at the top level). The JSON-dump approach is shape-agnostic,
+    matches AOB's upstream contract, and trades a small amount of prompt
+    formality for full coverage across runners. Cap at 8000 chars to
+    match AOB's ``trajectory_text[:8000]`` prompt slice.
+    """
+    if not trajectory:
+        return "(no trajectory)"
+    try:
+        full = json.dumps(trajectory, indent=2, default=str)
+    except (TypeError, ValueError):
+        full = str(trajectory)
     if len(full) > max_chars:
-        full = full[:max_chars] + "...(truncated)"
-    return full if full else "(no trajectory)"
+        full = full[:max_chars] + "\n...(truncated)"
+    return full
 
 
 def _extract_trial_index(trajectory_path: Path) -> int:
@@ -352,10 +370,36 @@ def score_trajectory(
     scenario_data = json.loads(scenario_path.read_text(encoding="utf-8"))
     meta_data = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path else {}
 
+    # The cell-level config.json carries `experiment_cell`,
+    # `orchestration_mode`, `mcp_mode`, and `model_id`; those classifier
+    # fields are not in the per-run meta.json today. Read the cell config
+    # alongside meta so downstream `experiment_cell` is correct (otherwise
+    # every score row defaults to "Y" / "plan_execute" / "baseline" and
+    # Notebook 03's per-cell join collapses).
+    config_data: dict = {}
+    if meta_path is not None:
+        cell_config_path = meta_path.parent.parent.parent / "config.json"
+        if cell_config_path.exists():
+            try:
+                config_data = json.loads(cell_config_path.read_text(encoding="utf-8"))
+            except Exception:  # never let config-read errors crash scoring
+                config_data = {}
+
+    def _classifier(field: str, default: str) -> str:
+        return meta_data.get(field) or config_data.get(field) or default
+
     question = traj_data.get("question", "")
     answer = traj_data.get("answer", "")
     plan = traj_data.get("plan", [])
-    trajectory = traj_data.get("trajectory", [])
+    # Either runner shape: PE-family writes ``trajectory``; AaT writes
+    # ``history``; AOB plan-execute writes ``trajectory``. Take whichever
+    # is present (history-first matches Notebook 03's `load_*_records`,
+    # `run_experiment.sh _derive_success`, and
+    # `backfill_canonical_scenario.py _derive_success` so all four
+    # call sites walk the same step array). Matches AOB
+    # ``feat/evaluation-module`` permissiveness on
+    # ``PersistedTrajectory.trajectory: Any``.
+    trajectory = traj_data.get("history") or traj_data.get("trajectory") or []
     characteristic_form = scenario_data.get("characteristic_form", "")
 
     plan_summary = _summarise_plan(plan)
@@ -388,10 +432,10 @@ def score_trajectory(
         "scenario_id": scenario_id,
         "scenario_file": _rel(scenario_path),
         "trial_index": _extract_trial_index(trajectory_path),
-        "experiment_cell": meta_data.get("experiment_cell", "Y"),
-        "orchestration_mode": meta_data.get("orchestration_mode", "plan_execute"),
-        "mcp_mode": meta_data.get("mcp_mode", "baseline"),
-        "model_id": meta_data.get("model_id", ""),
+        "experiment_cell": _classifier("experiment_cell", "Y"),
+        "orchestration_mode": _classifier("orchestration_mode", "plan_execute"),
+        "mcp_mode": _classifier("mcp_mode", "baseline"),
+        "model_id": _classifier("model_id", ""),
         "judge_model": judge_model,
         # 6 rubric dimensions (from AssetOpsBench evaluation_agent)
         "dim_task_completion": dims["task_completion"],
@@ -564,12 +608,18 @@ def _find_scenario(scenario_dir: Path, trajectory_path: Path) -> Path | None:
 
 
 def _is_trajectory_file(path: Path) -> bool:
-    """Return True if the JSON file looks like a plan-execute trajectory output."""
+    """Return True if the JSON file looks like a runner trajectory output.
+
+    Accepts any runner's per-trial JSON: plan-execute / Verified PE / AOB CLI
+    write ``trajectory``; AaT runner writes ``history``. Both shapes carry an
+    ``answer`` field. Matches AOB ``feat/evaluation-module``'s permissive
+    ``PersistedTrajectory.trajectory: Any``.
+    """
     if path.name in ("meta.json", "config.json", "summary.json"):
         return False
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-        return "answer" in data and "trajectory" in data
+        return "answer" in data and ("trajectory" in data or "history" in data)
     except Exception:
         return False
 

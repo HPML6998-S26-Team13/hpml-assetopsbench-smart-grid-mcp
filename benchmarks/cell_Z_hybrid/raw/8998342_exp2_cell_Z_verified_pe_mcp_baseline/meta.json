@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-04-28T00:11:55.062819+00:00",
+  "run_name": "8998342_exp2_cell_Z_verified_pe_mcp_baseline",
+  "benchmark_config_path": "configs/experiment2/exp2_cell_Z_verified_pe_mcp_baseline.env",
+  "benchmark_summary_path": "benchmarks/cell_Z_hybrid/summary.json",
+  "finished_at": "2026-04-28T00:27:15.400509+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/x2rhhqb7",
+  "profiling_dir": "profiling/traces/8998342_exp2_cell_Z_verified_pe_mcp_baseline_torch",
+  "profiling_artifact": "profiling-x2rhhqb7"
+}

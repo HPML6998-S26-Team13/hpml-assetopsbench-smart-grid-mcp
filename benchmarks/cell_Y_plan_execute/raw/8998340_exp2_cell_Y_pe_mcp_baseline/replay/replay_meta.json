@@ -1,0 +1,12 @@
+{
+  "bench_run_dir": "benchmarks/cell_Y_plan_execute/raw/8998340_exp2_cell_Y_pe_mcp_baseline",
+  "mcp_mode": "baseline",
+  "model_id": "openai/Llama-3.1-8B-Instruct",
+  "host": "ins083",
+  "slurm_job_id": "8998340",
+  "start_ts": "2026-04-28T00:22:11Z",
+  "stop_ts": "2026-04-28T00:23:03Z",
+  "scenarios_replayed": 2,
+  "scenarios_passed": 0,
+  "scenarios_failed": 2
+}
