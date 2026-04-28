@@ -151,12 +151,14 @@ fi
 # Step 4: verify /v1/models lists the INT8 served name. Fail closed: use
 # `--fail-with-body` so curl exits non-zero on HTTP 4xx/5xx instead of
 # silently writing the OpenAI error payload to disk and continuing to
-# "smoke complete". Then assert that the served name is actually present
-# in the response — vLLM happily lists the path basename if the
-# --served-model-name flag is misread.
+# "smoke complete". (curl rejects `-f` and `--fail-with-body` together
+# as mutually exclusive; we want the body-preserving form.) Then assert
+# that the served name is actually present in the response — vLLM
+# happily lists the path basename if the --served-model-name flag is
+# misread.
 echo ""
 echo "--- /v1/models ---"
-if ! curl -fsS --fail-with-body "http://127.0.0.1:$PORT/v1/models" \
+if ! curl -sS --fail-with-body "http://127.0.0.1:$PORT/v1/models" \
         -o "$OUT_DIR/models.json"; then
     echo "ERROR: /v1/models returned non-200" >&2
     cat "$OUT_DIR/models.json" >&2 || true
@@ -183,7 +185,7 @@ PY
 echo ""
 echo "--- Test completion ---"
 TEST_PROMPT="A power transformer with elevated H2 and C2H2 in DGA indicates"
-if ! curl -fsS --fail-with-body "http://127.0.0.1:$PORT/v1/completions" \
+if ! curl -sS --fail-with-body "http://127.0.0.1:$PORT/v1/completions" \
         -H "Content-Type: application/json" \
         -d "{\"model\":\"Llama-3.1-8B-Instruct-int8\",\"prompt\":\"$TEST_PROMPT\",\"max_tokens\":80,\"temperature\":0.1}" \
         -o "$OUT_DIR/completion.json"; then

@@ -49,7 +49,11 @@ if [ "${1:-}" = "--summarize" ]; then
             continue
         fi
         meta="$run_dir/meta.json"
-        trials=("$run_dir"/2026-*.json)
+        # Match the canonical per-trial filename glob used in
+        # scripts/run_experiment.sh:1035 (`*_run[0-9][0-9].json`). The prior
+        # `2026-*.json` form was hardcoded to the current year and would
+        # silently miss every trial after Dec 31.
+        trials=("$run_dir"/*_run[0-9][0-9].json)
         if [ ! -f "${trials[0]:-}" ]; then
             echo "  $variant: no per-trial JSON"
             continue

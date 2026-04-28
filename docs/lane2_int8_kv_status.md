@@ -53,24 +53,26 @@ The relevant options for INT8-class deployment of Llama-3.1-8B-Instruct:
    land Cell C on the same FP16 weights as A/B and treat INT8 as a separate
    Cell D / model-scaling experiment. This is the argument a reviewer can't
    push back on, so it leads.
-2. **No INT8 Llama-3.1-8B-Instruct checkpoint in the team `models/`
-   directory.** The canonical FP16 checkpoint is what
-   `models/Llama-3.1-8B-Instruct/` holds. The production INT8 path
-   (`--quantization compressed-tensors`, e.g.
-   `RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8`) requires
-   downloading a separate ~16 GB checkpoint plus HF gating. The runtime
-   path (`--quantization bitsandbytes`) avoids the checkpoint swap but is
-   reportedly slower than CompressedTensors W8A8 marlin on Ampere. Either
-   way it's a real-world inventory cost, not a code change.
-3. **Throughput story exists but is gated on the checkpoint.** On Ampere
-   (A6000) and Ada (L40S), CompressedTensors W8A8 marlin kernels are
-   well-optimized and the INT8 speedup is real — but only once we have a
-   pre-quantized checkpoint. Without it the lane has no measurable upside
-   over FP16. (FP8 weight quantization is a separate question and lives
-   under the KV-cache discussion below.)
-4. **Time budget.** Each new model takes ~10-20 min to download + a 5-10 min
-   smoke. With `#25` still queued, INT8 work is realistically a separate-day
-   item.
+2. **Inference-precision parity with Cells A/B.** Cells A and B already
+   captured at FP16 in `8979314`. vLLM's compressed-tensors path
+   auto-loads INT8 models as BF16 (validated in smoke `8979660` —
+   `dtype=torch.bfloat16` in the engine init log), so adding INT8 to
+   Cell C also flips the inference precision from FP16 to BF16. That
+   precision change alone could shift latency and quality independently
+   of the MCP-transport optimization the cell is meant to isolate. The
+   only way to land INT8 in Cell C cleanly would be to re-capture
+   Cells A/B at BF16 too — which is a separate experiment, not a
+   Lane 2 deliverable.
+3. **Throughput story exists and works on the team hardware** —
+   validated in smoke `8979660` on Insomnia A6000. vLLM picks
+   `CutlassInt8ScaledMMLinearKernel for CompressedTensorsW8A8Int8`
+   (the marlin path) and `/v1/completions` returns sensible Llama
+   text. The path is mechanically ready for any future Cell D /
+   model-scaling experiment; it just shouldn't enter Cell C for the
+   reasons in points 1 and 2.
+4. **Time budget.** Building INT8 into Cell C is realistically a
+   separate-day item: re-capturing A/B at BF16 + recapturing C with
+   INT8 is a full Experiment-1 redo, well outside the Lane 2 scope.
 
 ### Conditions under which to revive INT8
 
