@@ -49,6 +49,7 @@ import sys
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Repo-root relative path helper
@@ -304,7 +305,7 @@ def _summarise_plan(plan: list[dict]) -> str:
     return "\n".join(lines) if lines else "(no plan)"
 
 
-def _summarise_trajectory(trajectory, max_chars: int = 8000) -> str:
+def _summarise_trajectory(trajectory: Any, max_chars: int = 8000) -> str:
     """Format a trajectory (any shape) as JSON text for the judge prompt.
 
     Mirrors AOB's upstream `feat/evaluation-module` design (see
@@ -369,14 +370,36 @@ def score_trajectory(
     scenario_data = json.loads(scenario_path.read_text(encoding="utf-8"))
     meta_data = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path else {}
 
+    # The cell-level config.json carries `experiment_cell`,
+    # `orchestration_mode`, `mcp_mode`, and `model_id`; those classifier
+    # fields are not in the per-run meta.json today. Read the cell config
+    # alongside meta so downstream `experiment_cell` is correct (otherwise
+    # every score row defaults to "Y" / "plan_execute" / "baseline" and
+    # Notebook 03's per-cell join collapses).
+    config_data: dict = {}
+    if meta_path is not None:
+        cell_config_path = meta_path.parent.parent.parent / "config.json"
+        if cell_config_path.exists():
+            try:
+                config_data = json.loads(cell_config_path.read_text(encoding="utf-8"))
+            except Exception:  # never let config-read errors crash scoring
+                config_data = {}
+
+    def _classifier(field: str, default: str) -> str:
+        return meta_data.get(field) or config_data.get(field) or default
+
     question = traj_data.get("question", "")
     answer = traj_data.get("answer", "")
     plan = traj_data.get("plan", [])
     # Either runner shape: PE-family writes ``trajectory``; AaT writes
-    # ``history``; AOB plan-execute writes ``trajectory``. Take whichever is
-    # present (matches AOB ``feat/evaluation-module`` permissiveness on
-    # ``PersistedTrajectory.trajectory: Any``).
-    trajectory = traj_data.get("trajectory") or traj_data.get("history") or []
+    # ``history``; AOB plan-execute writes ``trajectory``. Take whichever
+    # is present (history-first matches Notebook 03's `load_*_records`,
+    # `run_experiment.sh _derive_success`, and
+    # `backfill_canonical_scenario.py _derive_success` so all four
+    # call sites walk the same step array). Matches AOB
+    # ``feat/evaluation-module`` permissiveness on
+    # ``PersistedTrajectory.trajectory: Any``.
+    trajectory = traj_data.get("history") or traj_data.get("trajectory") or []
     characteristic_form = scenario_data.get("characteristic_form", "")
 
     plan_summary = _summarise_plan(plan)
@@ -409,10 +432,10 @@ def score_trajectory(
         "scenario_id": scenario_id,
         "scenario_file": _rel(scenario_path),
         "trial_index": _extract_trial_index(trajectory_path),
-        "experiment_cell": meta_data.get("experiment_cell", "Y"),
-        "orchestration_mode": meta_data.get("orchestration_mode", "plan_execute"),
-        "mcp_mode": meta_data.get("mcp_mode", "baseline"),
-        "model_id": meta_data.get("model_id", ""),
+        "experiment_cell": _classifier("experiment_cell", "Y"),
+        "orchestration_mode": _classifier("orchestration_mode", "plan_execute"),
+        "mcp_mode": _classifier("mcp_mode", "baseline"),
+        "model_id": _classifier("model_id", ""),
         "judge_model": judge_model,
         # 6 rubric dimensions (from AssetOpsBench evaluation_agent)
         "dim_task_completion": dims["task_completion"],

@@ -1,6 +1,6 @@
 {
   "schema_version": "v1",
-  "scored_at": "2026-04-28T01:07:24.747314+00:00",
+  "scored_at": "2026-04-28T01:28:18.961107+00:00",
   "run_name": "8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline",
   "scenario_id": "SGT-010",
   "judge_model": "watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8",
