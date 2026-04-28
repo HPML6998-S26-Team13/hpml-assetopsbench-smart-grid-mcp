@@ -230,6 +230,32 @@ for cmd in python3 curl uv; do
   fi
 done
 
+# Resolve the GPU model name once at job start so config.json / summary.json
+# stamp the actual hardware (e.g. "NVIDIA RTX A6000", "NVIDIA L40S") instead
+# of "unknown". nvidia-smi does NOT honor CUDA_VISIBLE_DEVICES on its own, so
+# we filter explicitly. Falls back to "unknown" if nvidia-smi is missing
+# (login-node / non-GPU runs, dry runs) or the query fails. Caller-provided
+# GPU_TYPE wins so smoke / replay paths can override. (#132)
+#
+# Quirk: nvidia-smi prints diagnostic messages like "No devices were found"
+# to STDOUT and exits non-zero, so we must check the exit code rather than
+# only redirecting stderr — otherwise an error message lands as the GPU
+# name in the JSON.
+if [ -z "${GPU_TYPE:-}" ]; then
+  if command -v nvidia-smi >/dev/null 2>&1; then
+    if _gpu_name="$(nvidia-smi --id="${CUDA_VISIBLE_DEVICES:-0}" \
+        --query-gpu=name --format=csv,noheader 2>/dev/null)"; then
+      GPU_TYPE="$(printf '%s\n' "$_gpu_name" \
+          | head -1 \
+          | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+    fi
+    unset _gpu_name
+  fi
+  GPU_TYPE="${GPU_TYPE:-unknown}"
+fi
+export GPU_TYPE
+echo "GPU type: $GPU_TYPE"
+
 # Support both WatsonX env spellings across repos/tooling.
 if [ -n "${WATSONX_API_KEY:-}" ] && [ -z "${WATSONX_APIKEY:-}" ]; then
   export WATSONX_APIKEY="$WATSONX_API_KEY"
