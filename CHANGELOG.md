@@ -119,6 +119,84 @@
 
 ## 2026-04-27
 
+### Evaluation / Captures
+
+- Landed the first canonical Experiment 2 capture set on Insomnia at
+  Llama-3.1-8B-Instruct: `8998340_exp2_cell_Y_pe_mcp_baseline` (Plan-Execute,
+  3/6 pass), `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` (Plan-Execute +
+  Self-Ask, 6/6), `8998342_exp2_cell_Z_verified_pe_mcp_baseline` (Verified
+  PE, 6/6), and `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline`
+  (Verified PE + Self-Ask, 6/6). All four ran 3 trials × 2 multi-domain
+  scenarios = 6 runs/cell, matching the Exp 1 canonical depth from PR `#130`.
+  Cell B (`8979314_aat_mcp_baseline`) inherits from PR `#130` as the shared
+  Exp 1 / Exp 2 anchor — not re-run. Captures emitted natively in canonical
+  form (no retrofit) because the runner contract from PR `#143` writes
+  `data["scenario"]` and `data["success"]` per trial. PR `#144` (Alex)
+- Generated 6-dim Maverick-17B judge scores against
+  `watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8` for all 5
+  ready cells (A, B, Y, Y+SA, Z, Z+SA). Mean `score_6d` ranking inverts the
+  speed/completion ranking: Z + Self-Ask 0.833 (5/6 pass), Z 0.639 (4/6),
+  Y + Self-Ask 0.444 (3/6), B 0.278 (2/6), A 0.167 (1/6), Y baseline 0.111
+  (0/6). Per-trial Maverick prompts + raw responses captured under
+  `results/judge_logs/<run_name>/<scenario_id>_judge_log.json` for
+  reproducibility. Aggregate scores in
+  `results/metrics/scenario_scores.jsonl`. PR `#144` (Alex)
+- Audited Notebook 02 / 03 contracts against runner emission and closed
+  three gaps in PR `#143` and PR `#144`: per-trial JSONs now carry both
+  `data["scenario"]` (with the input scenario object incl. `id`) and a
+  `bool data["success"]`, derived from `trajectory` / `history` step
+  signals when the runner does not emit success natively (handles upstream
+  AOB `plan-execute` CLI for Cell Y baseline). Notebook 03 now reads
+  `history` first then `trajectory` across all four call sites for shape
+  consistency. The `failure_breakdown` aggregation widens `any_failure` to
+  `success == False` so AOB CLI output is counted correctly. The
+  Self-Ask ablation aggregator merges `latency_p50` / `latency_p95` from
+  the run inventory so `plot_self_ask_ablation` does not crash on missing
+  columns. Existing captures retrofit via
+  `scripts/backfill_canonical_scenario.py --apply` (idempotent;
+  history-first precedence). PR `#143` (Alex)
+- LLM judge (`scripts/judge_trajectory.py`) is now shape-agnostic: dumps
+  whatever trajectory the runner emits as JSON text and lets the judge
+  LLM parse the format (mirrors AOB's upstream `feat/evaluation-module`
+  design at `src/evaluation/runner.py:_trajectory_to_text`). Same 6-criterion
+  rubric (task_completion, data_retrieval_accuracy,
+  generalized_result_verification, agent_sequence_correct,
+  clarity_and_justification, hallucinations) as both Akshat's PR `#113`/`#114`
+  team-local judge and AOB's `feat/evaluation-module:src/evaluation/graders/llm_judge.py`.
+  Now scores AaT's `history` shape and PE-family `trajectory` shape
+  uniformly. Per-cell classifier fields (`experiment_cell`,
+  `orchestration_mode`, `mcp_mode`, `model_id`) read from per-run
+  `meta.json` first, falling back to cell-level `config.json` — fixes a
+  Critical bug where every score row defaulted to `experiment_cell=Y` and
+  collapsed Notebook 03's per-cell join. PR `#144` (Alex)
+- Defaulted `VLLM_ENABLE_AUTO_TOOL_CHOICE=1` and made
+  `VLLM_TOOL_CALL_PARSER` model-family-aware in `scripts/run_experiment.sh`
+  (`llama-3.x` → `llama3_json`, `qwen` → `hermes`, `mistral` → `mistral`,
+  fallback → `llama3_json`). Replay-phase always invokes `aat_runner`
+  regardless of the original cell's orchestration; non-AaT cells were
+  starting vLLM without the tool-choice flags and the replay invariably
+  failed with `litellm.BadRequestError: "auto" tool choice requires
+  --enable-auto-tool-choice and --tool-call-parser to be set`. The
+  underlying replay-phase / aat_runner-vs-cell-runner design tension is
+  pinned to backlog as a deeper investigation. PR `#144` (Alex)
+
+### Project board / coordination
+
+- Apr 27 size audit applied across the GitHub Project: bumped `#26`, `#104`,
+  `#58` to L; cut `#79`, `#96` to S and `#108` to L; filled `Estimate` field
+  for the bumped issues (`#23`=6, `#26`=10, `#104`=12). Round 3 placeholder
+  squashes also executed: `#95` → `#79`, `#91` → `#92`, `#84` → `#82`,
+  `#89` → `#88`. Round 1 load-balance reassignments and Round 2 writing
+  rebalance still pending team buy-in at Apr 28 sync. (Alex)
+- Posted comments on `#132` (gpu_type='unknown' fix — flagged W5→W4
+  bundling with `#135`) and `#135` (MAX_MODEL_LEN=32768 — confirmed same-day
+  W4 placement to land before W5 captures). (Alex)
+- Pinned a Dhaval question to `Final_Project/planning/Dhaval_Email_Thread.md`
+  (personal repo) on AOB's `feat/evaluation-module` branch:
+  upstream-merge timeline, judge-model intent (Maverick vs the branch's
+  Claude Opus default), and migration recommendation for our team-local
+  judge once the AOB module merges. (Alex)
+
 ### Config / Docs
 
 - Added `docs/failure_taxonomy_evidence.md` as the dedicated working surface

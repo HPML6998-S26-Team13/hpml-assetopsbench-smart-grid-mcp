@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-27 06:00 EDT*
+*Last updated: 2026-04-27 22:30 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-25 06:00 EDT -> 2026-04-27 06:00 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-25 22:30 EDT -> 2026-04-27 22:30 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -12,13 +12,56 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history is `team13/main@6046b26`. Since
-  the AaT design stack, `main` has also received PR `#127` / `b06f68d`
-  (AaT smoke hardening and validation proof), `4b9f039` (PS B support
-  artifacts), `ac01e12` (Experiment 1 A/B capture/profiling instrumentation),
-  and `6046b26` (three follow-up profiling instrumentation fixes). Alex's local
-  root `main` is synced to `team13/main`; do not push any local coordination
-  follow-up unless Alex asks.
+- **[V]** Current canonical remote history is `team13/main@9189fd1` (PR `#144`
+  squash). Today's stack on main, in order: PR `#142` (`0fe7255` — project-
+  board comment hygiene rule), `d4b0ded` (NeurIPS draft scaffold for `#5`),
+  `0a7a225` (PR `#143` — TRIALS=3 + canonical scenario contract + Notebook 03
+  audit fixes), `9189fd1` (PR `#144` — shape-agnostic judge + vLLM defaults +
+  4 Exp 2 first canonical captures + 6-dim judge scores). Alex's local root
+  `main` is synced; do not push any local coordination follow-up unless Alex
+  asks.
+- **[V]** Experiment 2 first canonical capture set landed via PR `#144`. All
+  four PE-family cells captured on Insomnia at TRIALS=3 × 2 multi-domain
+  scenarios (matching Exp 1's `8979314_*` depth from PR `#130`). Numbers
+  below report **completion-pass** (runner `success=True` per trial) — the
+  judge-pass-at-threshold view is the next bullet:
+  `8998340_exp2_cell_Y_pe_mcp_baseline` (3/6 completion),
+  `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` (6/6 completion),
+  `8998342_exp2_cell_Z_verified_pe_mcp_baseline` (6/6 completion),
+  `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` (6/6 completion).
+  Cell B inherits from PR `#130` (`8979314_aat_mcp_baseline`, 6/6 completion).
+  Captures emitted natively in canonical form — no retrofit needed because
+  PR `#143`'s runner contract writes `data["scenario"]` and `data["success"]`
+  per trial.
+- **[V]** First 6-dim Maverick-17B judge scores landed via PR `#144`. The
+  judge-pass column counts trials with `score_6d ≥ 0.6` per
+  `results/metrics/scenario_scores.jsonl`; this is independent of the
+  completion-pass column above (a trial can complete and still fail the
+  judge, or vice-versa). Quality ranking inverts the speed/completion
+  ranking: Z + Self-Ask `0.833` mean / 5/6 judge-pass, Z `0.639` / 4/6,
+  Y + Self-Ask `0.444` / 3/6, B `0.278` / 2/6, A `0.167` / 1/6, Y baseline
+  `0.111` / 0/6. Cell B is fastest at closing the orchestration loop but
+  only 2/6 trials clear the judge threshold; Z + Self-Ask is the actual
+  quality leader. Per-trial Maverick prompts + raw responses in
+  `results/judge_logs/<run>/<scenario_id>_judge_log.json` for
+  reproducibility. Self-Ask materially helps every cell that uses it.
+- **[V]** Apr 21 Team check-in #4 has its meeting record at
+  `planning/2026-04-21_meeting_notes.md`. The Apr 28 2:45 PM ET team call
+  feeds Alex's 3:30 PM ET Dhaval call. Tomorrow's call agenda should
+  surface: the quality results above, the Round 2 writing rebalance from
+  the Apr 27 audit (deferred for team buy-in), and the Dhaval question
+  pinned in `Final_Project/planning/Dhaval_Email_Thread.md` on AOB's
+  `feat/evaluation-module` upstream-merge timing and judge-model intent.
+- **[V]** Backlog pins added today (`pm/backlog.md`):
+  (a) final 5×6 canonical re-run across all cells (A/B/C/Y/Y+SA/Z/Z+SA)
+  once final scenario set is agreed (likely 2 multi + 4 single-domain reps);
+  (b) migrate to AOB's `feat/evaluation-module` (branch tip `fcff318` upstream)
+  once it merges to AOB main — write adapter from our per-trial JSON shape to
+  AOB's `PersistedTrajectory`, retire `scripts/judge_trajectory.py` after
+  parity is proven; (c) investigate vLLM replay-phase `aat_runner` design
+  more deeply (replay always invokes `aat_runner` regardless of cell —
+  whether it should be cell-aware or stay AaT-only is open); (d) PR↔Issue
+  linkage audit alongside the broken-commit-link sweep.
 - **[V]** Apr 21 Team check-in #4 now has a repo meeting record at
   `planning/2026-04-21_meeting_notes.md`. The Apr 28 agenda/prep docs point at
   that record while preserving current truth: #104 is closed / Done, #25 remains

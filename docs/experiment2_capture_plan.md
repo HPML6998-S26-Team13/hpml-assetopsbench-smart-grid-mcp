@@ -58,19 +58,40 @@ validation log entries.
 
 ## Current status
 
-- Cell B canonical capture exists (`8979314_aat_mcp_baseline`, PR `#130`,
-  merged 2026-04-27).
-- Cell Y has smoke-proven baseline at
-  `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_*` (Watsonx).
-- Cell Z has smoke-proven Verified PE at
-  `benchmarks/cell_Z_hybrid/raw/8857843_verified_pe_mcp_baseline_smoke`.
-- Cell Y + Self-Ask has smoke-proven baseline at
-  `benchmarks/cell_Y_plan_execute/raw/8857842_pe_self_ask_mcp_baseline_smoke`.
-- Cell Z + Self-Ask has no committed run yet.
+First canonical capture set landed via PR `#144` on 2026-04-27. All four
+PE-family cells captured at TRIALS=3 × 2 multi-domain scenarios on
+Insomnia / `Llama-3.1-8B-Instruct`:
 
-What remains for `#32` is the canonical Insomnia capture set on
-`Llama-3.1-8B-Instruct` so all four PE-family cells join cleanly to Cell B
-on `(scenario_set_hash, model_id)`.
+"Completion" = runner-level `success` field per trial (harness loop closed without
+error). "Judge-pass" = per-trial `score_6d ≥ 0.6` (the 6-dim Maverick rubric
+threshold). Both are independent: a trial can complete the loop and still fail
+the judge, or vice-versa.
+
+| Cell | Method | Run ID | Completion | Judge-pass (≥0.6) | Mean `score_6d` |
+|---|---|---|---:|---:|---:|
+| A | AaT direct (shared) | `8979314_aat_direct` (PR `#130`) | 6/6 | 1/6 | 0.167 |
+| B | AaT MCP baseline (shared) | `8979314_aat_mcp_baseline` (PR `#130`) | 6/6 | 2/6 | 0.278 |
+| Y | Plan-Execute | `8998340_exp2_cell_Y_pe_mcp_baseline` | 3/6 | 0/6 | 0.111 |
+| Y + Self-Ask | Plan-Execute + Self-Ask | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | 6/6 | 3/6 | 0.444 |
+| Z | Verified PE | `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | 6/6 | 4/6 | 0.639 |
+| Z + Self-Ask | Verified PE + Self-Ask | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | 6/6 | **5/6** | **0.833** |
+
+Pre-canonical smokes still on disk (kept as historical reference, not
+analysis sources):
+
+- Cell Y: `benchmarks/cell_Y_plan_execute/raw/local-20260413-003914_*` (Watsonx).
+- Cell Z: `benchmarks/cell_Z_hybrid/raw/8857843_verified_pe_mcp_baseline_smoke`.
+- Cell Y + Self-Ask: `benchmarks/cell_Y_plan_execute/raw/8857842_pe_self_ask_mcp_baseline_smoke`.
+
+Quality ranking inverts the speed/completion ranking: Z + Self-Ask leads
+(5/6 judge-pass, 0.833 mean), B is 4–7× faster end-to-end but only 2/6
+scenarios pass the judge. See `results/metrics/scenario_scores.jsonl` and
+per-trial logs at `results/judge_logs/<run>/<scenario_id>_judge_log.json`.
+
+What remains for `#32` is the eventual 5×6 final canonical re-run across
+all cells once the team agrees on the final scenario set (likely 2 multi
++ 4 single-domain reps, single-domain canonicalization pending). Pinned
+in `pm/backlog.md`.
 
 ## Runner dispatch
 
