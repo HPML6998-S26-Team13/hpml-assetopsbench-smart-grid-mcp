@@ -19,6 +19,7 @@ tensorboard
 # Data
 pandas
 numpy
+scipy  # statistical-fidelity validation: KS, AD, Wasserstein, chi-squared
 matplotlib
 seaborn
 

@@ -2,6 +2,25 @@
 
 ## 2026-04-28
 
+### Added
+
+- `data/scenarios/validate_realism_statistical.py` — Layer 3 statistical-fidelity
+  validator. Compares synthetic DGA gas distributions and fault-class proportions
+  against published real-world DGA data (or against the IEC TC 10 reference
+  prevalence when no real dataset is loaded). Six-test battery: KS, Anderson-
+  Darling, Wasserstein/EMD per gas; chi-squared on fault prevalence; conditional
+  KS per fault class; correlation-matrix delta. Markdown + JSON report card; non-
+  zero exit when any test fails. Adds `scipy` to `requirements.txt`.
+- `docs/dga_realism_statistical_validation.md` — working spec covering IEC 60599
+  (publication 66491) ingestion status, ranked real-DGA datasets (IEEE DataPort,
+  IEC TC 10 via Duval & dePablo 2001, Kaggle backstop), test rationale, TC 10
+  reference prevalence, acceptance thresholds, pre-May 4 plan, and PR #147 plug-in
+  point. Plugs L3 into the existing 6-criteria PS B rubric (`#51`).
+- `reports/realism_statistical_v0.md` — baseline run on the current 20-row
+  `data/processed/dga_records.csv`. Empirical signal: synthetic fault prevalence
+  diverges from TC 10 reference at chi-squared p=0.0007. Triggers the synthesis
+  tuning step (extend n + adjust per-fault gas means) in the v1 plan.
+
 ### Documentation
 
 - Expanded `docs/insomnia_runbook.md` with operational gaps surfaced after the
