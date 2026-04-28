@@ -71,7 +71,12 @@ log = logging.getLogger("generate_scenarios")
 
 SUPPORT_PATH = _REPO_ROOT / "docs" / "knowledge" / "scenario_generation_support.json"
 TEMPLATE_PATH = _REPO_ROOT / "docs" / "knowledge" / "generated_scenario_template.json"
-AUTHORING_DOC = _REPO_ROOT / "docs" / "knowledge" / "generated_scenario_authoring_and_ground_truth.md"
+AUTHORING_DOC = (
+    _REPO_ROOT
+    / "docs"
+    / "knowledge"
+    / "generated_scenario_authoring_and_ground_truth.md"
+)
 HANDCRAFTED_DIR = _REPO_ROOT / "data" / "scenarios"
 GENERATED_ROOT = _REPO_ROOT / "data" / "scenarios" / "generated"
 ASSET_CSV = _REPO_ROOT / "data" / "processed" / "asset_metadata.csv"
@@ -112,7 +117,9 @@ def _load_handcrafted() -> list[dict[str, Any]]:
     return out
 
 
-def _nearest_comparator(generated: dict[str, Any], corpus: list[dict[str, Any]]) -> dict[str, Any]:
+def _nearest_comparator(
+    generated: dict[str, Any], corpus: list[dict[str, Any]]
+) -> dict[str, Any]:
     """Find the canonical scenario most similar to the generated one.
 
     Similarity is rough on purpose: same `type`, then largest overlap of
@@ -217,9 +224,8 @@ def build_prompt(
     dga_block = ""
     if family_spec.get("primary_domain") == "FMSR" and dga_templates:
         dga_name = rng.choice(list(dga_templates.keys()))
-        dga_block = (
-            f"\n\nDGA TREND TEMPLATE (`{dga_name}`):\n"
-            + json.dumps(dga_templates[dga_name], indent=2)
+        dga_block = f"\n\nDGA TREND TEMPLATE (`{dga_name}`):\n" + json.dumps(
+            dga_templates[dga_name], indent=2
         )
 
     return f"""You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
@@ -242,7 +248,9 @@ OPERATIONAL CONTEXT (`{ctx_name}`):
 # ---------------------------------------------------------------------------
 
 
-def call_llm(prompt: str, model: str, *, temperature: float = 0.7, max_tokens: int = 1500) -> str:
+def call_llm(
+    prompt: str, model: str, *, temperature: float = 0.7, max_tokens: int = 1500
+) -> str:
     """Single round-trip to the LLM via LiteLLM. Returns raw assistant text."""
     try:
         import litellm  # type: ignore
@@ -252,8 +260,13 @@ def call_llm(prompt: str, model: str, *, temperature: float = 0.7, max_tokens: i
             "or run with --dry-run."
         ) from exc
 
-    log.info("calling %s (temperature=%.2f, max_tokens=%d, prompt_chars=%d)",
-             model, temperature, max_tokens, len(prompt))
+    log.info(
+        "calling %s (temperature=%.2f, max_tokens=%d, prompt_chars=%d)",
+        model,
+        temperature,
+        max_tokens,
+        len(prompt),
+    )
     response = litellm.completion(
         model=model,
         messages=[{"role": "user", "content": prompt}],
@@ -308,6 +321,7 @@ def validate_scenario(scenario: dict[str, Any], valid_asset_ids: set[str]) -> li
     disk; we round-trip through a tempfile so we share its exact rule set.
     """
     import tempfile
+
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = pathlib.Path(tmp) / f"{scenario.get('id', 'unknown')}.json"
         tmp_path.write_text(json.dumps(scenario, indent=2), encoding="utf-8")
@@ -320,7 +334,9 @@ def validate_scenario(scenario: dict[str, Any], valid_asset_ids: set[str]) -> li
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     p.add_argument(
         "--family",
         action="append",
@@ -418,8 +434,15 @@ def main() -> int:
             scenario_id = f"SGT-GEN-{next_id:03d}"
             prompt_label = f"family_{family}_{i + 1:03d}"
             prompt = build_prompt(family, family_spec, op_contexts, dga_templates, rng)
-            (out_dir / "prompts" / f"{prompt_label}.txt").write_text(prompt, encoding="utf-8")
-            log.info("[%s] built prompt (chars=%d) -> %s", scenario_id, len(prompt), prompt_label)
+            (out_dir / "prompts" / f"{prompt_label}.txt").write_text(
+                prompt, encoding="utf-8"
+            )
+            log.info(
+                "[%s] built prompt (chars=%d) -> %s",
+                scenario_id,
+                len(prompt),
+                prompt_label,
+            )
 
             if args.dry_run:
                 log.info("[%s] dry-run: skipping LLM call", scenario_id)
@@ -432,7 +455,9 @@ def main() -> int:
                 log.error("[%s] LLM call failed: %s", scenario_id, exc)
                 next_id += 1
                 continue
-            (out_dir / "raw_responses" / f"{prompt_label}.json").write_text(raw, encoding="utf-8")
+            (out_dir / "raw_responses" / f"{prompt_label}.json").write_text(
+                raw, encoding="utf-8"
+            )
 
             try:
                 scenario = parse_response(raw)
@@ -453,8 +478,11 @@ def main() -> int:
 
             errors = validate_scenario(scenario, valid_asset_ids)
             if errors:
-                log.warning("[%s] validation failed (%d errors); writing to invalid/ for inspection",
-                            scenario_id, len(errors))
+                log.warning(
+                    "[%s] validation failed (%d errors); writing to invalid/ for inspection",
+                    scenario_id,
+                    len(errors),
+                )
                 for err in errors:
                     log.warning("[%s]   %s", scenario_id, err)
                 invalid_dir = out_dir / "invalid"
@@ -465,7 +493,9 @@ def main() -> int:
                 )
             else:
                 target = out_dir / f"{scenario_id}.json"
-                target.write_text(json.dumps(scenario, indent=2) + "\n", encoding="utf-8")
+                target.write_text(
+                    json.dumps(scenario, indent=2) + "\n", encoding="utf-8"
+                )
                 scenarios_emitted.append(scenario)
                 log.info("[%s] OK -> %s", scenario_id, _display_path(target))
 
@@ -491,7 +521,9 @@ def main() -> int:
     (out_dir / "batch_manifest.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
     )
-    log.info("batch manifest written to %s", _display_path(out_dir / "batch_manifest.json"))
+    log.info(
+        "batch manifest written to %s", _display_path(out_dir / "batch_manifest.json")
+    )
     log.info("emitted %d scenario(s)", len(scenarios_emitted))
 
     return 0
