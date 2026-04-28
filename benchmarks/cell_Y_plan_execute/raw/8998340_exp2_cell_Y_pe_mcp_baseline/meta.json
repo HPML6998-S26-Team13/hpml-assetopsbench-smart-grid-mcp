@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-04-28T00:11:55.047302+00:00",
+  "run_name": "8998340_exp2_cell_Y_pe_mcp_baseline",
+  "benchmark_config_path": "configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env",
+  "benchmark_summary_path": "benchmarks/cell_Y_plan_execute/summary.json",
+  "finished_at": "2026-04-28T00:22:11.071726+00:00",
+  "pass": 3,
+  "fail": 3,
+  "total_runs": 6,
+  "run_status": "partial",
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/121l5dhn",
+  "profiling_dir": "profiling/traces/8998340_exp2_cell_Y_pe_mcp_baseline_torch",
+  "profiling_artifact": "profiling-121l5dhn"
+}

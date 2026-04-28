@@ -1,0 +1,20 @@
+{
+  "question": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+  "answer": "",
+  "success": false,
+  "error": "BadRequestError: litellm.BadRequestError: OpenAIException - \"auto\" tool choice requires --enable-auto-tool-choice and --tool-call-parser to be set",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 1.7439372539520264
+  }
+}

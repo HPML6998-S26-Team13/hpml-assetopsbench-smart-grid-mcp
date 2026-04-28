@@ -1,0 +1,715 @@
+=== vLLM GPU preflight ===
+Node: ins083
+SLURM_JOB_ID=8998340
+SLURM_JOB_GPUS=1
+SLURM_GPUS_ON_NODE=1
+CUDA_VISIBLE_DEVICES=0
+GPU 0: NVIDIA RTX A6000 (UUID: GPU-156f7399-4100-e58d-35ad-152dac424ea0)
+torch=2.10.0+cu128
+cuda_available=True
+cuda_device_count=1
+cuda_device_0=NVIDIA RTX A6000
+Torch profiler enabled: --profiler-config torch torch_profiler_dir=/insomnia001/depts/edu/users/team13/worktrees/exp2-recovery/profiling/traces/8998340_exp2_cell_Y_pe_mcp_baseline_torch
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:16:10  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:16:17] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:18] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:19] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:20] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:16:20  INFO      agent.plan_execute.runner  Planning...
+[92m20:16:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:16:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:16:40 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:16:40  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:16:40  INFO      agent.plan_execute.runner  Plan has 6 step(s).
+[04/27/26 20:16:40] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:41] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:42] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:16:43] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:16:43  INFO      agent.plan_execute.executor  Step 1/6 [iot]: List all sensor IDs available for transformer T-015
+20:16:43  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:16:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:16:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:16:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:16:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:16:44] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:16:45  INFO      agent.plan_execute.executor  Step 1 OK.
+20:16:45  INFO      agent.plan_execute.executor  Step 2/6 [iot]: Get recent sensor readings for transformer T-015 and each sensor ID
+20:16:45  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:16:45 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:16:45  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:16:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:16:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:16:46] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:16:47  INFO      agent.plan_execute.executor  Step 2 OK.
+20:16:47  INFO      agent.plan_execute.executor  Step 3/6 [tsfm]: Analyze sensor readings to detect anomalies
+20:16:47  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:16:47 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:16:47  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:16:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:16:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:16:54] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:16:54  INFO      agent.plan_execute.executor  Step 3 OK.
+20:16:54  INFO      agent.plan_execute.executor  Step 4/6 [fmsr]: Infer probable fault mode based on sensor readings and anomalies
+20:16:54  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:16:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:16:54  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:17:38 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:17:38  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:17:39] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:17:39  INFO      agent.plan_execute.executor  Step 4 OK.
+20:17:39  INFO      agent.plan_execute.executor  Step 5/6 [tsfm]: Estimate short-term risk over 30 days
+20:17:39  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:17:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:17:39  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:17:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:17:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:17:47] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:17:47  INFO      agent.plan_execute.executor  Step 5 OK.
+20:17:47  INFO      agent.plan_execute.executor  Step 6/6 [wo]: Create a maintenance work order recommendation
+20:17:47  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:17:47 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:17:47  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:17:55 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:17:55  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:17:55] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:17:56  INFO      agent.plan_execute.executor  Step 6 OK.
+20:17:56  INFO      agent.plan_execute.runner  Summarising...
+[92m20:17:56 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:17:56  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:18:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:18:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:18:08  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:18:09] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:10] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:10] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:11] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:18:11  INFO      agent.plan_execute.runner  Planning...
+[92m20:18:12 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:18:12  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:18:22 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:18:22  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:18:22  INFO      agent.plan_execute.runner  Plan has 6 step(s).
+[04/27/26 20:18:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:24] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:18:25] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:18:25  INFO      agent.plan_execute.executor  Step 1/6 [iot]: List all sensor IDs available for transformer T-015
+20:18:25  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:18:25 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:18:25  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:18:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:18:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:18:26] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:18:26  INFO      agent.plan_execute.executor  Step 1 OK.
+20:18:26  INFO      agent.plan_execute.executor  Step 2/6 [iot]: Get recent sensor readings for transformer T-015 and each sensor ID
+20:18:26  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:18:26 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:18:26  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:18:27 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:18:27  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:18:28] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:18:28  INFO      agent.plan_execute.executor  Step 2 OK.
+20:18:28  INFO      agent.plan_execute.executor  Step 3/6 [tsfm]: Analyze sensor readings to detect anomalies
+20:18:28  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:18:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:18:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:18:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:18:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:18:30] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:18:30  INFO      agent.plan_execute.executor  Step 3 OK.
+20:18:30  INFO      agent.plan_execute.executor  Step 4/6 [fmsr]: Infer probable fault mode based on sensor readings and anomalies
+20:18:30  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:18:30 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:18:30  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:10] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:10  INFO      agent.plan_execute.executor  Step 4 OK.
+20:19:10  INFO      agent.plan_execute.executor  Step 5/6 [tsfm]: Estimate short-term risk over 30 days
+20:19:10  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:19:10 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:10  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:11] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:11  INFO      agent.plan_execute.executor  Step 5 OK.
+20:19:11  INFO      agent.plan_execute.executor  Step 6/6 [wo]: Create a maintenance work order recommendation
+20:19:11  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:19:11 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:11  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:14] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:14  INFO      agent.plan_execute.executor  Step 6 OK.
+20:19:14  INFO      agent.plan_execute.runner  Summarising...
+[92m20:19:14 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:14  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:18 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:18  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:19:21  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:19:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:24] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:25] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:25  INFO      agent.plan_execute.runner  Planning...
+[92m20:19:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:27  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:19:37  INFO      agent.plan_execute.runner  Plan has 6 step(s).
+[04/27/26 20:19:38] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:39] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:40] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:19:41] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:41  INFO      agent.plan_execute.executor  Step 1/6 [iot]: List all sensor IDs available for transformer T-015
+20:19:41  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:19:41 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:41  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:42] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:42  INFO      agent.plan_execute.executor  Step 1 OK.
+20:19:42  INFO      agent.plan_execute.executor  Step 2/6 [iot]: Get recent sensor readings for transformer T-015 and each sensor ID
+20:19:42  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:19:42 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:42  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:44] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:44  INFO      agent.plan_execute.executor  Step 2 OK.
+20:19:44  INFO      agent.plan_execute.executor  Step 3/6 [tsfm]: Analyze sensor readings to detect anomalies
+20:19:44  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:19:44 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:44  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:19:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:19:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:19:46] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:19:46  INFO      agent.plan_execute.executor  Step 3 OK.
+20:19:46  INFO      agent.plan_execute.executor  Step 4/6 [fmsr]: Infer probable fault mode based on sensor readings and anomalies
+20:19:46  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:19:46 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:19:46  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:24 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:24  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:20:27] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:20:27  INFO      agent.plan_execute.executor  Step 4 OK.
+20:20:27  INFO      agent.plan_execute.executor  Step 5/6 [tsfm]: Estimate short-term risk over 30 days
+20:20:27  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:20:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:27  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:20:29] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:20:29  INFO      agent.plan_execute.executor  Step 5 OK.
+20:20:29  INFO      agent.plan_execute.executor  Step 6/6 [wo]: Create a maintenance work order recommendation
+20:20:29  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:20:29 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:29  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:31 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:31  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:20:31] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:20:32  INFO      agent.plan_execute.executor  Step 6 OK.
+20:20:32  INFO      agent.plan_execute.runner  Summarising...
+[92m20:20:32 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:32  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:20:38  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:20:38] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:20:39] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:20:40] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:20:41] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:20:41  INFO      agent.plan_execute.runner  Planning...
+[92m20:20:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:52 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:52  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:20:52  INFO      agent.plan_execute.runner  Plan has 7 step(s).
+[04/27/26 20:20:53] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:20:54] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:20:55] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:20:55  INFO      agent.plan_execute.executor  Step 1/7 [iot]: Retrieve DGA record for transformer T-020
+20:20:55  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:20:55 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:55  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:56 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:56  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:20:56] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'get_dga_record' not listed, no  server.py:488
+                             validation will be performed                       
+20:20:57  INFO      agent.plan_execute.executor  Step 1 OK.
+20:20:57  INFO      agent.plan_execute.executor  Step 2/7 [iot]: Analyze DGA record to determine fault type
+20:20:57  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:20:57 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:57  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:20:58 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:20:58  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:20:58] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'analyze_dga' not listed, no     server.py:488
+                             validation will be performed                       
+20:20:59  INFO      agent.plan_execute.executor  Step 2 OK.
+20:20:59  INFO      agent.plan_execute.executor  Step 3/7 [iot]: Retrieve thermal sensor readings for T-020
+20:20:59  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:20:59 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:20:59  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:00 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:00  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:00] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:01  INFO      agent.plan_execute.executor  Step 3 OK.
+20:21:01  INFO      agent.plan_execute.executor  Step 4/7 [tsfm]: Perform trend analysis on thermal sensor readings
+20:21:01  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:21:01 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:01  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:02] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:02  INFO      agent.plan_execute.executor  Step 4 OK.
+20:21:02  INFO      agent.plan_execute.executor  Step 5/7 [tsfm]: Detect anomalies in thermal sensor readings
+20:21:02  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:21:02 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:02  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:03 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:03  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:04] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:04  INFO      agent.plan_execute.executor  Step 5 OK.
+20:21:04  INFO      agent.plan_execute.executor  Step 6/7 [wo]: Estimate downtime for maintenance on T-020
+20:21:04  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:21:04 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:04  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:05 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:05  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:05] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:05  INFO      agent.plan_execute.executor  Step 6 OK.
+20:21:05  INFO      agent.plan_execute.executor  Step 7/7 [none]: Decide on maintenance schedule based on DGA diagnostics and thermal anomaly trends
+20:21:05  WARNING   agent.plan_execute.executor  Step 7 FAILED: Unknown server 'none'. Registered servers: ['iot', 'fmsr', 'tsfm', 'wo']
+20:21:05  INFO      agent.plan_execute.runner  Summarising...
+[92m20:21:05 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:05  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:21:08  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:21:09] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:10] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:10] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:11] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:11  INFO      agent.plan_execute.runner  Planning...
+[92m20:21:13 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:13  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:23 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:23  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:21:23  INFO      agent.plan_execute.runner  Plan has 7 step(s).
+[04/27/26 20:21:25] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:26] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:26] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:27  INFO      agent.plan_execute.executor  Step 1/7 [iot]: Retrieve DGA record for transformer T-020
+20:21:27  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:21:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:27  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:27 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:27  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:28] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'get_dga_record' not listed, no  server.py:488
+                             validation will be performed                       
+20:21:28  INFO      agent.plan_execute.executor  Step 1 OK.
+20:21:28  INFO      agent.plan_execute.executor  Step 2/7 [iot]: Analyze DGA record to determine fault type
+20:21:28  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:21:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:29 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:29  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:30] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'analyze_dga' not listed, no     server.py:488
+                             validation will be performed                       
+20:21:30  INFO      agent.plan_execute.executor  Step 2 OK.
+20:21:30  INFO      agent.plan_execute.executor  Step 3/7 [iot]: Retrieve thermal sensor readings for T-020
+20:21:30  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:21:30 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:30  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:31 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:31  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:32] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:32  INFO      agent.plan_execute.executor  Step 3 OK.
+20:21:32  INFO      agent.plan_execute.executor  Step 4/7 [tsfm]: Perform trend analysis on thermal sensor readings
+20:21:32  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:21:32 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:32  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:33 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:33  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:34] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:34  INFO      agent.plan_execute.executor  Step 4 OK.
+20:21:34  INFO      agent.plan_execute.executor  Step 5/7 [tsfm]: Detect anomalies in thermal sensor readings
+20:21:34  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:21:34 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:34  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:35 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:35  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:35] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:36  INFO      agent.plan_execute.executor  Step 5 OK.
+20:21:36  INFO      agent.plan_execute.executor  Step 6/7 [wo]: Estimate downtime for maintenance on T-020
+20:21:36  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:21:36 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:36  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:21:37] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:37  INFO      agent.plan_execute.executor  Step 6 OK.
+20:21:37  INFO      agent.plan_execute.executor  Step 7/7 [none]: Decide on maintenance schedule based on DGA diagnostics and thermal anomaly trends
+20:21:37  WARNING   agent.plan_execute.executor  Step 7 FAILED: Unknown server 'none'. Registered servers: ['iot', 'fmsr', 'tsfm', 'wo']
+20:21:37  INFO      agent.plan_execute.runner  Summarising...
+[92m20:21:37 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:37  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:38 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:38  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+warning: `VIRTUAL_ENV=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+20:21:40  INFO      agent.plan_execute.runner  Discovering server capabilities...
+[04/27/26 20:21:40] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:41] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:42] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:42] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:42  INFO      agent.plan_execute.runner  Planning...
+[92m20:21:45 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:45  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:54 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:54  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+20:21:54  INFO      agent.plan_execute.runner  Plan has 7 step(s).
+[04/27/26 20:21:56] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:57] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+[04/27/26 20:21:58] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:21:58  INFO      agent.plan_execute.executor  Step 1/7 [iot]: Retrieve DGA record for transformer T-020
+20:21:58  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m20:21:58 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:21:58  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:21:59 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:21:59  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:00] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'get_dga_record' not listed, no  server.py:488
+                             validation will be performed                       
+20:22:00  INFO      agent.plan_execute.executor  Step 1 OK.
+20:22:00  INFO      agent.plan_execute.executor  Step 2/7 [iot]: Analyze DGA record to determine fault type
+20:22:00  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m20:22:00 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:00  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:02] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    WARNING  Tool 'analyze_dga' not listed, no     server.py:488
+                             validation will be performed                       
+20:22:02  INFO      agent.plan_execute.executor  Step 2 OK.
+20:22:02  INFO      agent.plan_execute.executor  Step 3/7 [iot]: Retrieve thermal sensor readings for T-020
+20:22:02  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m20:22:02 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:02  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:03 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:03  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:03] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+[04/27/26 20:22:04] INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:22:04  INFO      agent.plan_execute.executor  Step 3 OK.
+20:22:04  INFO      agent.plan_execute.executor  Step 4/7 [tsfm]: Perform trend analysis on thermal sensor readings
+20:22:04  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m20:22:04 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:04  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:05 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:05  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:05] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:22:05  INFO      agent.plan_execute.executor  Step 4 OK.
+20:22:05  INFO      agent.plan_execute.executor  Step 5/7 [tsfm]: Detect anomalies in thermal sensor readings
+20:22:05  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m20:22:05 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:05  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:07] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:22:07  INFO      agent.plan_execute.executor  Step 5 OK.
+20:22:07  INFO      agent.plan_execute.executor  Step 6/7 [wo]: Estimate downtime for maintenance on T-020
+20:22:07  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m20:22:07 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:07  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:08 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:08  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[04/27/26 20:22:09] INFO     Processing request of type            server.py:720
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest                                   
+20:22:09  INFO      agent.plan_execute.executor  Step 6 OK.
+20:22:09  INFO      agent.plan_execute.executor  Step 7/7 [none]: Decide on maintenance schedule based on DGA diagnostics and thermal anomaly trends
+20:22:09  WARNING   agent.plan_execute.executor  Step 7 FAILED: Unknown server 'none'. Registered servers: ['iot', 'fmsr', 'tsfm', 'wo']
+20:22:09  INFO      agent.plan_execute.runner  Summarising...
+[92m20:22:09 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+20:22:09  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m20:22:10 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+20:22:10  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+run_vllm_torch_profile: starting profiler via http://127.0.0.1:8000/start_profile
+run_vllm_torch_profile: running target command
+  cmd: bash scripts/replay_scenarios.sh benchmarks/cell_Y_plan_execute/raw/8998340_exp2_cell_Y_pe_mcp_baseline baseline
+run_vllm_torch_profile: stopping profiler
+run_vllm_torch_profile: done. Target rc=0. Meta: profiling/traces/8998340_exp2_cell_Y_pe_mcp_baseline_torch/profile_meta.json
+INFO: resuming WandB run assetopsbench-smartgrid/assetopsbench-smartgrid/121l5dhn to attach profiling artifact profiling-121l5dhn
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /insomnia001/home/wax1/.netrc.
+wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run 121l5dhn
+wandb: Tracking run with wandb version 0.26.0
+wandb: Run data is saved locally in /insomnia001/depts/edu/users/team13/worktrees/exp2-recovery/wandb/run-20260427_202317-121l5dhn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Resuming run 8998341_exp2_cell_Y_pe_self_ask_mcp_baseline
+wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/121l5dhn
+wandb: updating run metadata; uploading artifact profiling-121l5dhn
+wandb: uploading artifact profiling-121l5dhn
+wandb: uploading wandb-metadata.json; uploading requirements.txt; uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run summary:
+wandb:  benchmark_config_path configs/experiment2/...
+wandb: benchmark_summary_path benchmarks/cell_Y_pl...
+wandb:        experiment_cell Y
+wandb:      experiment_family exp2_orchestration
+wandb:          failure_count 3
+wandb:            finished_at 2026-04-28T00:22:11....
+wandb:                git_sha 0a7a2250671f6e39d88e...
+wandb:               gpu_type unknown
+wandb:              host_name ins084
+wandb:   latency_seconds_mean 62.05879
+wandb:                    +19 ...
+wandb: 
+wandb: 🚀 View run 8998341_exp2_cell_Y_pe_self_ask_mcp_baseline at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/121l5dhn
+wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: Synced 4 W&B file(s), 0 media file(s), 5 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260427_202317-121l5dhn/logs
+INFO: logged profiling artifact profiling-121l5dhn and 0 summary stat(s)
