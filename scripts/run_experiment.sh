@@ -348,6 +348,15 @@ if os.environ.get("CONTRIBUTING_EXPERIMENTS"):
 if orchestration_mode == "agent_as_tool":
     payload["aat_parallel_tool_calls"] = os.environ.get("AAT_PARALLEL_TOOL_CALLS", "false")
 
+# Persist EXTRA_VLLM_ARGS into the benchmark config + meta so artifact
+# consumers (notebooks, WandB, paper tables) can recover the exact vLLM
+# optimization knobs that produced a run without re-reading harness.log.
+# Lane 2 / #30 specifically needs this for the prefix-cache / kv-dtype
+# distinction in Cell C.
+extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
+payload["vllm_extra_args"] = extra_vllm_args
+payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
+
 pathlib.Path(config_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 pathlib.Path(meta_path).write_text(
     json.dumps(
@@ -361,12 +370,18 @@ pathlib.Path(meta_path).write_text(
             # trajectory by cell / orchestration / model without
             # re-reading the cell-level config.json (which the next run
             # overwrites). Mirror the values from the cell config payload
-            # written above.
+            # written above. (PR #144)
             "experiment_cell": payload["experiment_cell"],
             "orchestration_mode": payload["orchestration_mode"],
             "mcp_mode": payload["mcp_mode"],
             "model_id": payload["model_id"],
             "experiment_family": payload["experiment_family"],
+            # vLLM extra args. Per-run meta records the exact optimization
+            # knobs that produced a run so notebooks / paper tables can
+            # recover the prefix-cache / kv-dtype / etc. choice without
+            # re-reading harness.log. (PR #129 / Lane 2)
+            "vllm_extra_args": payload["vllm_extra_args"],
+            "vllm_extra_args_list": payload["vllm_extra_args_list"],
         },
         indent=2,
     )
@@ -783,6 +798,25 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     TORCH_PROFILE_DIR_ABS="$(cd "$TORCH_PROFILE_DIR" && pwd)"
     VLLM_SERVER_ARGS+=(--profiler-config "{\"profiler\":\"torch\",\"torch_profiler_dir\":\"$TORCH_PROFILE_DIR_ABS\"}")
     echo "Torch profiler enabled: --profiler-config torch torch_profiler_dir=$TORCH_PROFILE_DIR_ABS" | tee -a "$HARNESS_LOG"
+  fi
+  # EXTRA_VLLM_ARGS: optional whitespace-separated extra CLI flags for the
+  # vLLM server. Used by Cell C and the #29/#30 smoke configs to pass
+  # --quantization, --kv-cache-dtype, --enable-prefix-caching, etc., without
+  # editing this script per experiment.
+  #
+  # Quoting contract: values go through POSIX word-splitting on whitespace
+  # only — there is NO shell-metacharacter re-evaluation, so values like
+  # `--foo $HOME` or `--foo $(date)` will be passed literally and NOT
+  # expanded. If you need a value with embedded whitespace, you can't pass it
+  # via EXTRA_VLLM_ARGS today; promote it to its own config var instead.
+  # When passing via `sbatch --export=EXTRA_VLLM_ARGS="--foo bar"`, sbatch's
+  # own shell handles the outer quoting; this script then word-splits the
+  # received value once.
+  if [ -n "${EXTRA_VLLM_ARGS:-}" ]; then
+    # shellcheck disable=SC2206  # intentional word-splitting
+    EXTRA_VLLM_ARGS_ARR=($EXTRA_VLLM_ARGS)
+    VLLM_SERVER_ARGS+=("${EXTRA_VLLM_ARGS_ARR[@]}")
+    echo "vLLM extra args: $EXTRA_VLLM_ARGS" | tee -a "$HARNESS_LOG"
   fi
   if command -v setsid >/dev/null 2>&1; then
     setsid "$PYTHON_BIN" "${VLLM_SERVER_ARGS[@]}" >"$VLLM_LOG" 2>&1 &
