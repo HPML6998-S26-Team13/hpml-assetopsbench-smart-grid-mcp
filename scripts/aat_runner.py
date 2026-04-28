@@ -363,11 +363,20 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
     from scripts.aat_tools_mcp import build_mcp_servers
 
     output_dir = Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = repo_root / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
     scenario_files = sorted(repo_root.glob(args.scenarios_glob))
     if not scenario_files:
         _LOG.error("no scenario files matched --scenarios-glob %r", args.scenarios_glob)
+        return 2
+
+    if args.mcp_mode != "optimized":
+        _LOG.error(
+            "--scenarios-glob is only supported with --mcp-mode optimized; got %r",
+            args.mcp_mode,
+        )
         return 2
 
     _LOG.info(
@@ -444,11 +453,15 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 if error_payload is not None:
                     _write_output(out_path, error_payload)
                     any_failed = True
+                    trial_ok = False
                 else:
                     output = _serialize_run_result(
                         args, prompt, result, duration, scenario_file=sf_rel
                     )
                     _write_output(out_path, output)
+                    trial_ok = output["success"]
+                    if not trial_ok:
+                        any_failed = True
                     if output["max_turns_exhausted"]:
                         _LOG.warning(
                             "max_turns=%d exhausted (%s trial %d)",
@@ -456,8 +469,6 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                             sf.name,
                             trial,
                         )
-                    if not output["success"]:
-                        any_failed = True
 
                 latency_records.append(
                     {
@@ -471,7 +482,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                     "wrote %s (%.1fs, success=%s)",
                     out_path.name,
                     duration,
-                    not any_failed,
+                    trial_ok,
                 )
 
     finally:

@@ -714,6 +714,11 @@ run_agent_as_tool_trial() {
 run_agent_as_tool_batch() {
   local out_dir="$1"
 
+  if [ -n "${AAT_RUNNER_TEMPLATE:-}" ]; then
+    echo "ERROR: AAT_RUNNER_TEMPLATE is not supported with MCP_MODE=optimized batch mode." >&2
+    return 1
+  fi
+
   local -a cmd=(
     uv run
     --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION"
@@ -922,7 +927,7 @@ TOTAL=0
 # Cell C optimized: run all scenarios in a single aat_runner.py call so MCP
 # subprocesses are reused across trials (reuse_mcp_connections).
 if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
-  run_agent_as_tool_batch "$RUN_DIR"
+  run_agent_as_tool_batch "$RUN_DIR" || true
   # Merge per-trial latency records into the canonical latencies.jsonl.
   if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
     cat "$RUN_DIR/_batch_latencies.jsonl" >>"$LATENCY_FILE"

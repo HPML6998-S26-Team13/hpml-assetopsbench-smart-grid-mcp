@@ -268,3 +268,62 @@ def test_runner_threads_litellm_env(monkeypatch):
     assert captured["max_turns"] == 30
     settings = captured["agent_kwargs"]["model_settings"]
     assert settings.kwargs["parallel_tool_calls"] is False
+
+
+def test_batch_mode_requires_output_dir():
+    from scripts.aat_runner import _main
+
+    args = argparse.Namespace(
+        scenarios_glob="data/scenarios/*.json",
+        output_dir=None,
+        prompt=None,
+        output=None,
+        model_id="x",
+        mcp_mode="optimized",
+        max_turns=30,
+        parallel_tool_calls=False,
+        verbose=False,
+        trials=1,
+        run_basename="batch",
+    )
+    assert asyncio.run(_main(args)) == 2
+
+
+def test_batch_mode_rejects_non_optimized_mcp_mode(tmp_path):
+    from scripts.aat_runner import _main
+
+    args = argparse.Namespace(
+        scenarios_glob="nonexistent_xyzzy_*.json",
+        output_dir=str(tmp_path),
+        prompt=None,
+        output=None,
+        model_id="x",
+        mcp_mode="direct",
+        max_turns=30,
+        parallel_tool_calls=False,
+        verbose=False,
+        trials=1,
+        run_basename="batch",
+    )
+    assert asyncio.run(_main(args)) == 2
+
+
+def test_batch_relative_output_dir_no_crash():
+    """Regression: relative --output-dir must not raise ValueError in relative_to()."""
+    from scripts.aat_runner import _main_multi
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    args = argparse.Namespace(
+        scenarios_glob="nonexistent_xyzzy_*.json",
+        output_dir="benchmarks/cell_C_mcp_optimized/raw/test-run",
+        model_id="x",
+        mcp_mode="optimized",
+        max_turns=30,
+        parallel_tool_calls=False,
+        trials=1,
+        run_basename="batch",
+    )
+    # Empty glob → returns 2 without launching MCP servers, but only after
+    # output_dir normalization — proving the ValueError is gone.
+    assert asyncio.run(_main_multi(args, repo_root)) == 2
