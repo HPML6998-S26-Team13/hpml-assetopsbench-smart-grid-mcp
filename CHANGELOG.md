@@ -21,6 +21,20 @@
   diverges from TC 10 reference at chi-squared p=0.0007. Triggers the synthesis
   tuning step (extend n + adjust per-fault gas means) in the v1 plan.
 
+### Changed
+
+- `docs/dga_realism_statistical_validation.md` § 2.4 — added three-way
+  fault-table divergence finding from comparing the licensed IEC 60599:2022
+  4th-ed scan against `transformer_standards.json` `fault_table` (Table B)
+  and `mcp_servers/fmsr_server/server.py` `_rogers_ratio()` (Table C). Worst
+  divergences: D1 R1, D1 R3, D2 R2, T2/T3 R3 boundary. Server's own
+  `server_rogers_table_note` already documents the C-vs-A drift. Pattern
+  (B↔C agreement > B↔A or C↔A) suggests both encodings derived from a
+  derivative source rather than IEC text. Pre-May 4 plan amended: new
+  task 2b (fix Tables B + C for at least PD/D1 R1; lockstep with FMSR
+  test fixtures). Companion analysis lives in personal-class-repo
+  `Final_Project/notes/20260428_iec60599_table_comparison.md`.
+
 ### Documentation
 
 - Expanded `docs/insomnia_runbook.md` with operational gaps surfaced after the

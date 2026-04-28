@@ -103,7 +103,87 @@ real-world scenarios?*
   Annex A. We have it transitively via Duval & dePablo 2001 reproduction
   (see § 4) but not as a primary file in the repo.
 
-### 2.4 Free-PDF acquisition status (Apr 28 search)
+### 2.4 Three-way fault-table divergence (added 2026-04-28, post-PR open)
+
+After this PR was opened, a full English-side scan of the IEC 60599:2022
+4th edition was obtained (Wayback Machine snapshot of `pstco.net` from
+2024-11-01; archived at `Final_Project/_iec_reference/` in the personal
+class repo, gitignored, copyright IEC 2022, personal-research use only).
+Table 1 of the standard was extracted and compared row-by-row against the
+two team-repo encodings.
+
+**Three different DGA-classification tables are currently in play. None
+of them agree with the others.**
+
+| Table | Where | Status |
+|-------|-------|--------|
+| **A — IEC 60599:2022 Table 1** | the standard, p.13 | ground truth |
+| **B — JSON `fault_table`** | `data/knowledge/transformer_standards.json` § `iec_60599.rogers_ratio_method.fault_table` | claims to be IEC; diverges on every electrical-discharge row |
+| **C — FMSR server `_rogers_ratio()`** | `mcp_servers/fmsr_server/server.py:53-296` (also documented in `transformer_standards.json` § `iec_60599.representative_gas_profiles.server_rogers_table_note`) | a third version; this is what runs at agent-call time |
+
+**Worst divergences (B vs A):**
+
+- **D1 R1**: JSON `≤ 0.1`; IEC `0.1 – 0.5` (no overlap on the ramp).
+- **D1 R3**: JSON `≤ 1.0`; IEC `> 1` (opposite half-line).
+- **D2 R2**: JSON `≥ 3.0`; IEC `0.6 – 2.5` (no overlap; different orders of magnitude).
+- **T2/T3 R3 boundary**: JSON puts `R3 = 3` in T3; IEC puts it in T2.
+
+**Server's own divergence note (`server_rogers_table_note`):** Tanisha
+already documents that the server's Rogers table diverges from IEC on PD,
+D1, D2, and T1. The note ends: *"Profiles below are calibrated to the
+server implementation, not the standard text."*
+
+**Pattern**: JSON ↔ Server agree more often than either ↔ IEC, suggesting
+both were derived from a derivative source (textbook, slide deck, or
+tutorial) rather than from IEC text directly. The Rogers Ratio name
+covers a family of tables — Rogers 1975, IEEE C57.104-1991 four-ratio,
+IEC 60599 three-ratio (1999/2007/2015/2022). Without explicit edition
+citations, drift is normal.
+
+**Implication for L3:** marginal-KS per gas may pass (gas magnitudes in
+the synthesis are physically plausible), but **conditional-KS per fault
+class will likely fail on D1, D2, T1**, because synthetic samples were
+generated to match the server's table — not IEC's. This explains the
+v0 baseline's chi² p = 0.0007 fault-prevalence divergence and predicts
+the shape of the v1 failures.
+
+**Recommended remediation** (ranked):
+1. Fix B and C in lockstep to match A; re-tune
+   `representative_gas_profiles.profiles`; update
+   `tests/test_fmsr_server.py` fixtures. Cost: high but one-time.
+2. Add a translation layer; tag synthetic samples with both the server's
+   code and the IEC-correct code; run L3 against IEC-correct only.
+3. Document the divergence as a known limitation; run L3 with the
+   server's table as ground truth (i.e., re-classify the real-world
+   dataset using the server's table before comparing). Lowest effort,
+   intellectually weakest.
+
+**Default plan:** strategy 1 for **PD / D1 R1** (the most-egregious row,
+mechanical fix); re-run L3; revisit remaining rows from data.
+
+**Other findings from the standard PDF:**
+
+- `meta.sources[0]` mislabels edition: says `"edition": "3rd"` with
+  `year: 2022`. 3rd ed. = 2015; 2022 = **4th ed.** Should be `"4th"`.
+- IEC Table 1 carries four NOTE rows the JSON does not encode. Most
+  relevant: **Note 4** — stray oil gassing produces PD-like patterns
+  but is not a real fault. Should be reflected in the synthesis as a
+  small "false-PD" fraction.
+- IEC § A covers seven equipment classes (power transformers, instrument
+  transformers, reactors, bushings, oil-filled cables, switching
+  equipment). We use only A.1 (power transformers). Final paper should
+  scope explicitly.
+- PDF p.37 includes Duval triangle percentage formulas
+  (`%C2H2`, `%CH4`, `%C2H4` normalized). Could add as a secondary
+  classifier in FMSR.
+
+**Companion analysis** (full row-by-row diff matrix, three-way pair
+agreement, action-item list): personal-class-repo
+`Final_Project/notes/20260428_iec60599_table_comparison.md`. That note
+is the source-of-record for any subsequent fix-the-table PR; this
+section is a summary.
+
+### 2.5 Free-PDF acquisition status (Apr 28 search)
 
 We searched in this session for legitimate-and-free access to the full PDF.
 
@@ -374,7 +454,8 @@ is loaded — and degrades cleanly.
 | # | Task | Owner | Day | Acceptance |
 |---|------|-------|-----|-----------|
 | 1 | Land L3 skeleton + this doc | Alex | Apr 28 | this PR merges |
-| 2 | Pin `transformer_standards.json` `meta.source` to IEC 60599 ed. 4 (2022) — or ed. 3 (2015) if that's what was actually used | Alex | Apr 29 | JSON `meta.source` field updated, CHANGELOG entry |
+| 2 | Pin `transformer_standards.json` `meta.sources[0]` to IEC 60599 4th ed. (2022) — current value `"3rd"` is wrong (3rd ed. = 2015). Doc-only fix. | Alex | Apr 29 | JSON `meta.sources[0].edition` = `"4th"`, CHANGELOG entry |
+| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 R1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 for the divergence summary; full diff matrix in personal-repo note `Final_Project/notes/20260428_iec60599_table_comparison.md`. | Alex (separate PR) | Apr 29 | JSON D1 R1 = `[0.1, 0.5]`, R3 = `[1.0, null]`; server `_rogers_ratio` updated; tests pass; representative gas profiles regenerated to match. |
 | 3 | Acquire IEEE DataPort DGA dataset (Columbia IEEE, or Kaggle backstop) | Alex | Apr 29 | `data/external/ieee_dataport_dga.csv` (or Kaggle equivalent) on disk |
 | 4 | First L3 run: `validate_realism_statistical.py` with real data | Alex | Apr 29 | `reports/realism_statistical_v1.md` exists |
 | 5 | Tune synthesis: if any test fails, adjust `data/generate_synthetic.py` per-fault gas means/stds, regenerate, re-run | Alex | Apr 30 – May 1 | majority of tests pass at v2 or v3 |
