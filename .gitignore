@@ -41,6 +41,7 @@ models/
 # Profiling traces (large)
 profiling/traces/
 *.pt.trace.json
+*.pt.trace.json.gz
 
 # WandB
 wandb/

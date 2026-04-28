@@ -23,7 +23,9 @@
 # benchmark's WandB run.
 #
 # Usage:
-#   sbatch --mail-type=BEGIN,END,FAIL --mail-user=$USER \
+#   # Set MAIL_USER once (e.g. in ~/.bashrc on Insomnia):
+#   #   export MAIL_USER="${USER}@columbia.edu"
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
 #       scripts/run_exp1_ab_capture.sh
 #
 # After the job completes, find artifacts at:
@@ -31,7 +33,7 @@
 #   benchmarks/cell_B_mcp_baseline/raw/<SLURM_JOB_ID>_aat_mcp_baseline/
 #   profiling/traces/<SLURM_JOB_ID>_cell_a/        (nvidia_smi.csv, capture_meta.json)
 #   profiling/traces/<SLURM_JOB_ID>_cell_b/
-#   profiling/traces/<SLURM_JOB_ID>_aat_direct_torch/     (pt.trace.json, if profiler ran)
+#   profiling/traces/<SLURM_JOB_ID>_aat_direct_torch/     (*.pt.trace.json.gz, if profiler ran)
 #   profiling/traces/<SLURM_JOB_ID>_aat_mcp_baseline_torch/
 #
 # To disable the torch-profiler replay for a faster run:
@@ -125,5 +127,6 @@ echo "       $CELL_B_BENCH/latencies.jsonl"
 echo "  5. Check torch profiler traces (if TORCH_PROFILE=1 was set in the configs):"
 echo "       profiling/traces/${JOB}_aat_direct_torch/"
 echo "       profiling/traces/${JOB}_aat_mcp_baseline_torch/"
-echo "     Open pt.trace.json in chrome://tracing or https://ui.perfetto.dev"
+echo "     vLLM 0.19 emits *.pt.trace.json.gz; open via https://ui.perfetto.dev (handles .gz)"
+echo "     or 'gunzip -k <file>.pt.trace.json.gz' first then chrome://tracing"
 echo "Finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)"

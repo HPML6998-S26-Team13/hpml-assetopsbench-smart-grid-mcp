@@ -1,5 +1,122 @@
 # Changelog
 
+## 2026-04-28
+
+### Documentation
+
+- Expanded `docs/insomnia_runbook.md` with operational gaps surfaced after the
+  Apr 27 PR `#143` / `#144` landings and the Apr 26 worktree-perms incident:
+  - New "Filesystem topology" section with ASCII tree of
+    `/insomnia001/depts/edu/users/team13/` (canonical checkout, `worktrees/`
+    sibling, `AssetOpsBench/` upstream, `.venv-insomnia/`), plus `quota -s`
+    and `df -h` storage-headroom commands.
+  - New "Worktrees on Insomnia" subsection: three-flavor `git worktree add`
+    recipe (existing local branch, remote-only branch via `-b`, brand-new
+    branch off `team13/main`) with explicit warning against passing a
+    remote-tracking ref directly (which detaches HEAD). Shared-venv guidance,
+    `worktrees/` parent perms gotcha (`drwxrws---` required or teammates
+    can't create new worktrees), and `git worktree remove --force`
+    data-loss warning.
+  - Foreground vLLM example split into "completions-only sanity serve" vs
+    "tool-call serve for any benchmark / AaT / PE reproduction."
+    `run_experiment.sh:90-104` defaults `VLLM_ENABLE_AUTO_TOOL_CHOICE=1`
+    and selects a model-family parser; the top-level Cell A / Cell B
+    configs pin those values explicitly, while `configs/experiment2/*.env`,
+    `configs/aat_mcp_optimized.env`, and the example configs inherit the
+    defaults. Manual reproductions need
+    `--enable-auto-tool-choice --tool-call-parser <parser>` regardless of
+    cell; the recipe now sources the target config so `MAX_MODEL_LEN`
+    matches what the harness expects (`32768` for Cell Y/Z PE configs;
+    `8192` for current Cell A/B AaT configs) instead of hard-coding `8192`,
+    AND re-applies the same `${VAR:-default}` shell defaults that
+    `run_experiment.sh:90-104` would (otherwise sourcing a Cell Y config
+    leaves `VLLM_SERVED_MODEL_NAME`, `VLLM_ENABLE_AUTO_TOOL_CHOICE`, and
+    `VLLM_TOOL_CALL_PARSER` empty and the manual launch fails on argument
+    validation).
+  - vLLM 0.19.0 torch profiler change documented across the full doc/script
+    cascade: `VLLM_TORCH_PROFILER_DIR` env var dropped, replaced by
+    `--profiler-config '{"profiler":"torch","torch_profiler_dir":"..."}'`
+    (absolute path, `run_experiment.sh:783-785`). `docs/insomnia_runbook.md`
+    Debugging section, `docs/runbook.md` § 4.3, `profiling/README.md`
+    PyTorch-Profiler section, and `profiling/scripts/run_vllm_torch_profile.sh`
+    header comments + error messages all updated. Canonical capture route is
+    now `TORCH_PROFILE=1 bash scripts/run_experiment.sh <config>`; the manual
+    foreground recipe is documented for ad-hoc debugging only and now warns
+    against env-prefix overrides (cell configs assign `LAUNCH_VLLM=1`
+    unconditionally, which clobbers `LAUNCH_VLLM=0` env values when the
+    script sources the config) — recommended targets are
+    `scripts/replay_scenarios.sh` or a direct `curl` against the foreground
+    server, with a temp-config copy reserved for full-harness runs.
+    `scripts/vllm_serve.sh` does not
+    currently inject `--profiler-config`, flagged in `profiling/README.md`
+    for future patch. Profiler artifact references updated from
+    `pt.trace.json` to the actual vLLM 0.19 form `*.pt.trace.json.gz`
+    (gzipped); `chrome://tracing` requires `gunzip -k` first,
+    `https://ui.perfetto.dev` accepts the `.gz` directly. `.gitignore`
+    extended to cover `*.pt.trace.json.gz` alongside the existing
+    `*.pt.trace.json` and `profiling/traces/` patterns.
+  - `profiling/README.md` § Status replaced (was "Apr 14, 2026" stub
+    documenting "first profiling runs scheduled for W3" — superseded by
+    actual proof runs in `docs/validation_log.md`). New text points to
+    `docs/validation_log.md` for capture provenance and
+    `docs/insomnia_runbook.md` for operational notes; notebook input
+    dependencies (`latencies.jsonl`, `nvidia_smi.csv`) retained.
+  - Manual profiler ad-hoc recipe rewritten to avoid the `LAUNCH_VLLM=1`
+    config-clobber footgun: cell configs assign `LAUNCH_VLLM=1` (not
+    `${LAUNCH_VLLM:-1}`), so an env-prefix `LAUNCH_VLLM=0` is overwritten
+    when `run_experiment.sh` sources the config. Doc now recommends
+    targeting `scripts/replay_scenarios.sh <bench-run-dir> direct` (skips
+    server launch, replays against existing `LITELLM_BASE_URL`) or a direct
+    `curl /v1/chat/completions` probe; the only safe full-harness path is
+    a temp config copy with `LAUNCH_VLLM=0` and `TORCH_PROFILE=0` appended
+    after the original assignment.
+  - `scripts/run_exp1_ab_capture.sh` stale `pt.trace.json` references
+    (lines 34, 128) updated to `*.pt.trace.json.gz` with explicit
+    perfetto/gunzip guidance, matching the doc cascade.
+  - `profile_meta.json` "notes" field (emitted by
+    `profiling/scripts/run_vllm_torch_profile.sh`) now mirrors the README
+    gzip wording so a shared trace artifact is self-explanatory without
+    the README.
+  - `docs/runbook.md` § 2.2 venv-recovery pointer fixed: replaced stale
+    quoted heading "If you need a newer vLLM" (does not exist in
+    `insomnia_runbook.md`) with the actual fragment
+    `#recreate-the-shared-env-when-needed`.
+  - New "Trial output contract (PR `#143`)" subsection: per-trial JSONs now
+    carry `data["scenario"]` (full source scenario JSON object, with
+    `scenario.id` consumed by Notebook 03) and `data["success"]` (preserved
+    if runner wrote a bool, otherwise derived from history step-failure
+    signals + answer truthiness). Default `TRIALS=3`. Documented retrofit
+    invocations: `python3 scripts/backfill_canonical_scenario.py [--apply]
+    [--cell A|B|C|Y|Z]` — script walks `benchmarks/cell_<X>/raw/<run_id>/`
+    from the repo root, no positional capture-dir.
+  - Email-notifications section rewritten to make
+    `MAIL_USER="${USER}@columbia.edu"` the default pattern, with a concrete
+    `sbatch ... scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env`
+    invocation.
+  - New "Excluding bad nodes" section with the `--exclude=ins082` pattern for
+    routing around individual nodes that surface
+    `RuntimeError: CUDA unknown error - this may be due to an incorrectly set up environment ...`
+    (multi-comma form for multiple bad nodes; RCS ticket advice if a node
+    stays bad >1 day).
+  - Compute-node hostname pattern (`ins0XX`) and live read commands
+    (`hostname`, `$SLURMD_NODENAME`) called out near the inference-test recipe.
+  - GPU-type list pinned to live `sinfo -o '%P %.6D %.20G %N'` output instead
+    of relying on the static A6000/L40/L40S/H100 enumeration.
+  - `requirements-insomnia.txt` overlay relationship explained
+    (`-r requirements.txt` head-line); pin updates: `mcp[cli]==1.27.0`
+    (was `>=1.26.0`), `openai-agents==0.14.5` added.
+  - `## See also` cross-links extended to `runbook.md` § WandB,
+    `governance/model_registry.yaml`, `scripts/run_experiment.sh`, and
+    `scripts/backfill_canonical_scenario.py`.
+  - `docs/runbook.md` last-updated bumped to 2026-04-28; obsolete
+    `../hpml-worktree-<branch>` worktree snippet replaced with cross-link to
+    `insomnia_runbook.md#worktrees-on-insomnia`; profiling cross-links
+    rewritten with explicit fragments
+    (`#pytorch-profiler-via-vllms-built-in-endpoints`,
+    `#debugging-foreground-vllm`).
+  - Last-updated dates bumped to 2026-04-28 in `docs/insomnia_runbook.md`,
+    `docs/runbook.md`, and `profiling/README.md`.
+
 ## 2026-04-27
 
 ### Config / Docs

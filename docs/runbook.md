@@ -1,6 +1,6 @@
 # Runbook
 
-*Last updated: 2026-04-24*
+*Last updated: 2026-04-28*
 *Infra owner: Aaron Fan (af3623) — eval-harness owner: Akshat Bhandari (ab6174)*
 
 Canonical reproducibility runbook. A teammate following this from scratch
@@ -86,13 +86,11 @@ cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 git pull
 ```
 
-If you need a personal worktree for experimental branches:
-
-```bash
-git worktree add ../hpml-worktree-<branch> <branch>
-```
-
-Run jobs from the main checkout; worktrees are for editing only.
+For per-branch worktrees on Insomnia, see
+[insomnia_runbook.md § Worktrees on Insomnia](insomnia_runbook.md#worktrees-on-insomnia)
+— worktrees go in the shared `/insomnia001/depts/edu/users/team13/worktrees/<slug>/`
+sibling, with explicit guidance on avoiding detached-HEAD checkouts. Run jobs
+from the main checkout; worktrees are for editing.
 
 ### 2.2 Verify the venv
 
@@ -122,7 +120,7 @@ python -c "import vllm; print(vllm.__version__)"
 
 **If the venv is missing or broken, coordinate with the owner before
 recreating.** Recreation steps live in
-[insomnia_runbook.md](insomnia_runbook.md) under "If you need a newer vLLM".
+[insomnia_runbook.md § Recreate the shared env when needed](insomnia_runbook.md#recreate-the-shared-env-when-needed).
 
 ### 2.3 Verify the model
 
@@ -290,10 +288,21 @@ host instead of the compute node. The wrapper should run inside the allocation.
 
 ### 4.3 PyTorch Profiler via vLLM
 
-vLLM has built-in `torch.profiler` support gated on the `VLLM_TORCH_PROFILER_DIR`
-env var. Start vLLM with the env var set, then drive capture with
-`run_vllm_torch_profile.sh`. Full recipe in
-[profiling/README.md#pytorch-profiler-via-vllms-built-in-endpoints](../profiling/README.md).
+vLLM has built-in `torch.profiler` support. **As of vLLM 0.19.0 the
+`VLLM_TORCH_PROFILER_DIR` env var was dropped** and replaced by a
+`--profiler-config` CLI flag taking JSON with an absolute path:
+
+```bash
+--profiler-config '{"profiler":"torch","torch_profiler_dir":"/abs/path/to/profiling/traces/<run-id>_torch"}'
+```
+
+`scripts/run_experiment.sh:783-785` builds this automatically when
+`TORCH_PROFILE=1` — the canonical capture route is
+`TORCH_PROFILE=1 bash scripts/run_experiment.sh <config>`. For manual
+debugging, drive capture with `run_vllm_torch_profile.sh`. Full recipe in
+[profiling/README.md#pytorch-profiler-via-vllms-built-in-endpoints](../profiling/README.md#pytorch-profiler-via-vllms-built-in-endpoints);
+operational notes in
+[insomnia_runbook.md § Debugging: foreground vLLM](insomnia_runbook.md#debugging-foreground-vllm).
 
 ### 4.4 Linking profiling outputs to the benchmark's WandB run
 
