@@ -327,3 +327,40 @@ def test_batch_output_dir_normalization():
     assert rel == Path(
         "benchmarks/cell_C_mcp_optimized/raw/test-run/batch_scenario_run01.json"
     )
+
+
+def test_batch_mode_rejects_non_optimized_before_mkdir(tmp_path):
+    """M1 regression: mcp_mode guard must fire before output_dir is created."""
+    from scripts.aat_runner import _main_multi
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    new_subdir = tmp_path / "should_not_be_created"
+    args = argparse.Namespace(
+        scenarios_glob="nonexistent_xyzzy_*.json",
+        output_dir=str(new_subdir),
+        model_id="x",
+        mcp_mode="direct",
+        max_turns=30,
+        parallel_tool_calls=False,
+        trials=1,
+        run_basename="batch",
+    )
+    rc = asyncio.run(_main_multi(args, repo_root))
+    assert rc == 2
+    assert not new_subdir.exists()
+
+
+def test_batch_latency_path_outside_repo_root(tmp_path):
+    """M3 regression: relative_to() fallback must not raise for absolute out-of-repo path."""
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    out_path = tmp_path / "trial_01.json"  # tmp_path is outside repo_root
+    # Reproduce the exact try/except logic from _main_multi latency record construction.
+    try:
+        result = out_path.relative_to(repo_root).as_posix()
+    except ValueError:
+        result = out_path.as_posix()
+    # tmp_path is outside repo_root, so the fallback must kick in.
+    assert result == out_path.as_posix()

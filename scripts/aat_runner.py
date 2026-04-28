@@ -360,6 +360,13 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
     per-trial JSON to args.output_dir, and appends a _batch_latencies.jsonl
     with per-trial latency records in the same format as latencies.jsonl.
     """
+    if args.mcp_mode != "optimized":
+        _LOG.error(
+            "--scenarios-glob is only supported with --mcp-mode optimized; got %r",
+            args.mcp_mode,
+        )
+        return 2
+
     from scripts.aat_tools_mcp import build_mcp_servers
 
     output_dir = Path(args.output_dir)
@@ -370,13 +377,6 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
     scenario_files = sorted(repo_root.glob(args.scenarios_glob))
     if not scenario_files:
         _LOG.error("no scenario files matched --scenarios-glob %r", args.scenarios_glob)
-        return 2
-
-    if args.mcp_mode != "optimized":
-        _LOG.error(
-            "--scenarios-glob is only supported with --mcp-mode optimized; got %r",
-            args.mcp_mode,
-        )
         return 2
 
     _LOG.info(
@@ -472,12 +472,16 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                             trial,
                         )
 
+                try:
+                    _rel_path = out_path.relative_to(repo_root).as_posix()
+                except ValueError:
+                    _rel_path = out_path.as_posix()
                 latency_records.append(
                     {
                         "scenario_file": sf_rel,
                         "trial_index": trial,
                         "latency_seconds": duration,
-                        "output_path": out_path.relative_to(repo_root).as_posix(),
+                        "output_path": _rel_path,
                     }
                 )
                 _LOG.info(

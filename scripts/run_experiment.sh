@@ -926,6 +926,7 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
     echo "ERROR: AAT_RUNNER_TEMPLATE is not supported with MCP_MODE=optimized batch mode." >&2
     exit 1
   fi
+  EXPECTED_TOTAL=$(( ${#SCENARIO_FILES[@]} * TRIALS ))
   run_agent_as_tool_batch "$RUN_DIR" || true
   # Merge per-trial latency records into the canonical latencies.jsonl.
   if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
@@ -941,6 +942,13 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
       FAIL=$((FAIL + 1))
     fi
   done
+  # Account for trials that never wrote output (e.g. MCP crash before any JSON).
+  MISSING=$(( EXPECTED_TOTAL - TOTAL ))
+  if [ "$MISSING" -gt 0 ]; then
+    echo "WARNING: $MISSING trial(s) missing from batch output — counting as failures" >&2
+    FAIL=$(( FAIL + MISSING ))
+    TOTAL=$(( TOTAL + MISSING ))
+  fi
 else
 
 for SCENARIO_FILE in "${SCENARIO_FILES[@]}"; do
