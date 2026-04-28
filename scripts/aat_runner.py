@@ -436,6 +436,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                         "turn_count": 0,
                         "tool_call_count": 0,
                         "history": [],
+                        "scenario": scenario_payload,
                         "runner_meta": {
                             "model_id": args.model_id,
                             "mcp_mode": args.mcp_mode,
@@ -458,6 +459,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                     output = _serialize_run_result(
                         args, prompt, result, duration, scenario_file=sf_rel
                     )
+                    output["scenario"] = scenario_payload
                     _write_output(out_path, output)
                     trial_ok = output["success"]
                     if not trial_ok:

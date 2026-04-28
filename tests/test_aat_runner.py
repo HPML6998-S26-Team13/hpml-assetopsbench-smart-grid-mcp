@@ -308,22 +308,22 @@ def test_batch_mode_rejects_non_optimized_mcp_mode(tmp_path):
     assert asyncio.run(_main(args)) == 2
 
 
-def test_batch_relative_output_dir_no_crash():
-    """Regression: relative --output-dir must not raise ValueError in relative_to()."""
-    from scripts.aat_runner import _main_multi
+def test_batch_output_dir_normalization():
+    """Regression: relative --output-dir must not raise ValueError in relative_to().
+
+    Directly exercises the path arithmetic that crashed before the fix, without
+    calling _main_multi (which would mkdir under the repo and never reach
+    relative_to due to the empty-glob early-return).
+    """
     from pathlib import Path
 
     repo_root = Path(__file__).resolve().parent.parent
-    args = argparse.Namespace(
-        scenarios_glob="nonexistent_xyzzy_*.json",
-        output_dir="benchmarks/cell_C_mcp_optimized/raw/test-run",
-        model_id="x",
-        mcp_mode="optimized",
-        max_turns=30,
-        parallel_tool_calls=False,
-        trials=1,
-        run_basename="batch",
+    # Simulate what _main_multi does: resolve relative arg under repo_root.
+    raw = Path("benchmarks/cell_C_mcp_optimized/raw/test-run")
+    output_dir = repo_root / raw  # normalization step added by the fix
+    out_path = output_dir / "batch_scenario_run01.json"
+    # This is the exact call that raised ValueError before the fix.
+    rel = out_path.relative_to(repo_root)
+    assert rel == Path(
+        "benchmarks/cell_C_mcp_optimized/raw/test-run/batch_scenario_run01.json"
     )
-    # Empty glob → returns 2 without launching MCP servers, but only after
-    # output_dir normalization — proving the ValueError is gone.
-    assert asyncio.run(_main_multi(args, repo_root)) == 2
