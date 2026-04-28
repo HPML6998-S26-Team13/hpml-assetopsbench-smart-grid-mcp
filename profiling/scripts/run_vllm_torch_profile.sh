@@ -1,18 +1,23 @@
 #!/bin/bash
 # PyTorch Profiler wrapper for vLLM-backed benchmark runs.
 #
-# vLLM ships with built-in torch.profiler support that activates when the env
-# var VLLM_TORCH_PROFILER_DIR points at a writable directory. When set, vLLM
-# exposes /start_profile and /stop_profile HTTP endpoints on the serve process
-# and writes Chrome-trace-compatible JSON files into the dir.
+# vLLM ships with built-in torch.profiler support that activates when the
+# server is launched with --profiler-config (vLLM >= 0.19.0; the older
+# VLLM_TORCH_PROFILER_DIR env-var path was removed). When the flag is set,
+# vLLM exposes /start_profile and /stop_profile HTTP endpoints on the serve
+# process and writes Chrome-trace-compatible JSON files into the configured
+# torch_profiler_dir.
 #
-# This script:
-#   1. Prepares the profiler output dir
-#   2. Launches vLLM with the env var set (reuses scripts/vllm_serve.sh logic
-#      via re-export — the serve script itself already inherits the environment)
-#   3. Waits for the server to become ready
-#   4. Hits /start_profile, runs the target command, hits /stop_profile
-#   5. Returns the exit code of the target command
+# This wrapper:
+#   1. Confirms the already-running vLLM server is reachable
+#   2. Hits /start_profile, runs the target command, hits /stop_profile
+#   3. Writes profile_meta.json alongside the trace
+#   4. Returns the exit code of the target command
+#
+# It does NOT launch vLLM. The canonical capture route is the benchmark
+# wrapper (TORCH_PROFILE=1 bash scripts/run_experiment.sh <config>), which
+# constructs the --profiler-config flag automatically. Use this script only
+# for ad-hoc / debugging captures against a manually-launched vLLM serve.
 #
 # Usage:
 #   bash profiling/scripts/run_vllm_torch_profile.sh <output_dir> \
@@ -27,18 +32,32 @@
 # IMPORTANT — ordering:
 #
 #   This wrapper assumes a vLLM server is ALREADY running in a separate
-#   Slurm allocation (or srun --pty shell) with VLLM_TORCH_PROFILER_DIR
-#   exported when the server was started. If vLLM wasn't started with the
-#   env var set, /start_profile returns an error and this script aborts.
+#   Slurm allocation (or srun --pty shell) and was launched with
+#   --profiler-config pointing at a writable absolute path. If vLLM wasn't
+#   started with the flag, /start_profile returns an error and this script
+#   aborts.
 #
-#   To start vLLM with profiling enabled:
-#     export VLLM_TORCH_PROFILER_DIR=/path/to/profiling/traces/<runid>
-#     sbatch --export=ALL scripts/vllm_serve.sh
+#   To start vLLM with profiling enabled (manual recipe):
+#     TRACE_DIR="$PWD/profiling/traces/<runid>_torch"
+#     mkdir -p "$TRACE_DIR"
+#     python -u -m vllm.entrypoints.openai.api_server \
+#         --model models/Llama-3.1-8B-Instruct \
+#         --served-model-name Llama-3.1-8B-Instruct \
+#         --port 8000 --max-model-len 32768 --dtype float16 \
+#         --enable-auto-tool-choice --tool-call-parser llama3_json \
+#         --profiler-config "{\"profiler\":\"torch\",\"torch_profiler_dir\":\"$TRACE_DIR\"}"
+#
+#   Or, more typically, use the benchmark wrapper:
+#     TORCH_PROFILE=1 bash scripts/run_experiment.sh <config>
+#   which handles the flag construction in run_experiment.sh:783-785.
 #
 # Output:
-#   $OUTPUT_DIR/pt.trace.json (Chrome trace, viewable in chrome://tracing
-#                              or https://ui.perfetto.dev)
-#   $OUTPUT_DIR/profile_meta.json (runid, timestamps, target command)
+#   $OUTPUT_DIR/*.pt.trace.json.gz (Chrome trace; vLLM 0.19 emits gzipped form.
+#                                   Open via https://ui.perfetto.dev directly,
+#                                   or `gunzip -k <file>.pt.trace.json.gz` and
+#                                   load the resulting .pt.trace.json in
+#                                   chrome://tracing)
+#   $OUTPUT_DIR/profile_meta.json  (runid, timestamps, target command)
 
 set -euo pipefail
 
@@ -66,7 +85,7 @@ mkdir -p "$OUTPUT_DIR"
 # Confirm vLLM is reachable and has profiling endpoints
 if ! curl -s "$BASE_URL/health" > /dev/null 2>&1; then
     echo "ERROR: vLLM not reachable at $BASE_URL/health" >&2
-    echo "       Start vLLM with VLLM_TORCH_PROFILER_DIR set before running this wrapper." >&2
+    echo "       Start vLLM with --profiler-config '{\"profiler\":\"torch\",\"torch_profiler_dir\":\"<abs-path>\"}' before running this wrapper." >&2
     exit 1
 fi
 
@@ -77,7 +96,7 @@ if [ "$START_RESP" != "200" ]; then
     echo "Response body:" >&2
     cat /tmp/start_profile.out >&2 || true
     echo "" >&2
-    echo "Most common cause: vLLM was not started with VLLM_TORCH_PROFILER_DIR set." >&2
+    echo "Most common cause: vLLM was not started with --profiler-config (vLLM >= 0.19.0)." >&2
     exit 1
 fi
 
@@ -116,9 +135,12 @@ meta = {
     "stop_ts": stop_ts,
     "target_command": cmd,
     "target_exit_code": cmd_rc,
-    "notes": "Chrome trace written by vLLM into the directory pointed at by "
-             "VLLM_TORCH_PROFILER_DIR. Open with chrome://tracing or "
-             "https://ui.perfetto.dev.",
+    "notes": "Chrome trace written by vLLM into the directory configured via "
+             "--profiler-config (vLLM >= 0.19.0). Emitted as gzipped "
+             "*.pt.trace.json.gz. Upload the .gz directly to "
+             "https://ui.perfetto.dev (handles gzip transparently), or "
+             "`gunzip -k <file>.pt.trace.json.gz` first and load the resulting "
+             ".pt.trace.json in chrome://tracing.",
 }
 with open(meta_path, "w") as f:
     json.dump(meta, f, indent=2)

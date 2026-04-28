@@ -1,6 +1,6 @@
 # Insomnia Runbook
 
-*Last updated: 2026-04-24*
+*Last updated: 2026-04-28*
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
@@ -19,6 +19,91 @@ setup, day-to-day cell submission, troubleshooting decision tree). This
 file (`insomnia_runbook.md`) is the cluster-specific gotcha reference that
 `runbook.md` links into. Start with `runbook.md` when onboarding;
 come back here when you hit a weird Slurm/CUDA/vLLM behavior.
+
+## Filesystem topology
+
+Everything Team 13 owns on Insomnia lives under a single shared parent directory.
+The canonical layout is:
+
+```
+/insomnia001/depts/edu/users/team13/
+├── hpml-assetopsbench-smart-grid-mcp/   # canonical team checkout (root worktree on main)
+│   ├── .venv-insomnia/                  # shared Python 3.11 env (uv-managed)
+│   ├── scripts/                         # run_experiment.sh, vllm_serve.sh, setup_insomnia.sh, ...
+│   ├── benchmarks/                      # Exp 1/2 capture trees (per-run JSONs, harness.log, vllm.log)
+│   ├── profiling/traces/                # Torch profiler outputs (per RUN_ID)
+│   └── logs/                            # exp_<jobid>.out Slurm output
+├── worktrees/<branch-slug>/             # per-branch git worktrees, sibling of canonical checkout
+└── AssetOpsBench/                       # upstream IBM clone (read-only, owner-only mode)
+```
+
+The parent directory is `drwxrws---` (`770 + setgid`) owned by `wax1:somedu`. The
+setgid bit makes new files inherit the `somedu` group; see "Group permissions"
+below for the `umask 002` convention that keeps everything group-writable.
+
+The upstream `AssetOpsBench/` clone is intentionally left at owner-only mode —
+do not chmod it. If you need a local change there, branch your own clone outside
+the team root rather than mutating the shared copy.
+
+To check your storage headroom on the edu scratch volume:
+
+```bash
+quota -s                                      # per-user usage and limits
+df -h /insomnia001/depts/edu/users/team13     # team scratch capacity
+```
+
+### Worktrees on Insomnia
+
+Per-branch work lives in `/insomnia001/depts/edu/users/team13/worktrees/<branch-slug>/`,
+**sibling of the canonical checkout, not nested under it**. Create a worktree from
+inside the canonical checkout:
+
+```bash
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+git fetch team13
+
+# Local branch already exists:
+git worktree add ../worktrees/<slug> <local-branch>
+
+# Remote branch exists but no local branch yet — create the local branch in
+# the worktree so commits aren't detached:
+git worktree add -b <local-branch> ../worktrees/<slug> team13/<remote-branch>
+
+# Brand-new branch off team13/main:
+git worktree add -b <new-branch> ../worktrees/<slug> team13/main
+```
+
+**Do not pass a remote-tracking ref directly** (e.g.
+`git worktree add ../worktrees/<slug> team13/foo`). Git interprets that as a
+detached-HEAD checkout of the remote ref — commits land detached and `git push`
+targets get murky. Always either reference an existing local branch or use
+`-b <local-branch>` to create one.
+
+Worktrees share the canonical `.venv-insomnia/` (one venv, multiple working trees).
+`cd ../worktrees/<slug> && source ../../hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/bin/activate`
+works fine; do not create a per-worktree venv.
+
+**Perms gotcha:** the `worktrees/` parent itself must be `drwxrws---` (group-writable
++ setgid), or teammates cannot create new worktrees under it. If `git worktree add`
+fails with "Permission denied" on the parent, ask the directory owner to fix:
+
+```bash
+chmod g+rwxs /insomnia001/depts/edu/users/team13/worktrees
+```
+
+Submodules don't auto-populate in new worktrees. If the project pulls in submodules
+(none today, but applies if added), run `git submodule update --init` after
+`git worktree add`.
+
+When done with a worktree, remove it from the canonical checkout:
+
+```bash
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+git worktree remove ../worktrees/<slug>
+```
+
+`git worktree remove --force` deletes untracked files inside the worktree without
+warning; copy out anything you want to keep first.
 
 ## Slurm: account, partition, QoS
 
@@ -274,13 +359,55 @@ That base now also carries the portable AssetOpsBench PE-client slice used by
 our repo-local Self-Ask PE / Verified PE runners:
 
 - `litellm==1.81.13`
-- `mcp[cli]>=1.26.0`
+- `mcp[cli]==1.27.0`
+- `openai-agents==0.14.5`
+
+`requirements-insomnia.txt` overlays the cluster-only stack on top of the base
+file via `-r requirements.txt` at its head, so a single
+`uv pip install -r requirements-insomnia.txt` resolves both layers together.
 
 So if an Insomnia proof run dies with `ModuleNotFoundError: litellm` or
 `ModuleNotFoundError: mcp`, the fix is usually not a bespoke `pip install` in
 the moment — it is to refresh the shared env against
 `requirements-insomnia.txt`. The matching model/runtime contract is now also
 captured in [governance/model_registry.yaml](governance/model_registry.yaml).
+
+### Trial output contract (PR #143)
+
+`scripts/run_experiment.sh` post-processes every per-trial JSON to inject two
+canonical fields:
+
+- `data["scenario"]` — the **full source scenario JSON object** (with
+  `scenario.id` as the key Notebook 03 consumes), copied from the scenario
+  file referenced in `latencies.jsonl`. Already-populated objects with an
+  `id` key are left alone (idempotent).
+- `data["success"]` — boolean or `None`. If the runner already wrote a bool,
+  it is preserved as-is. Otherwise `_derive_success` walks `history` first
+  (falls back to `trajectory`); any failed step → `False`; if neither
+  history/trajectory nor an answer exists → `None`; otherwise → `bool(answer)`.
+  **Not** derived from harness exit status or judge pass rate.
+
+Default `TRIALS=3`. Older captures predating PR #143 are missing these fields
+and get classified as `legacy` by Notebook 03's `canonical_rows` gate. Retrofit
+from the repo root:
+
+```bash
+# Dry-run sweep across all cells:
+python3 scripts/backfill_canonical_scenario.py
+
+# Apply to all cells:
+python3 scripts/backfill_canonical_scenario.py --apply
+
+# Apply to one cell only (A/B/C/Y/Z):
+python3 scripts/backfill_canonical_scenario.py --apply --cell B
+
+# Apply to a subset (--cell is repeatable via argparse action="append"):
+python3 scripts/backfill_canonical_scenario.py --apply --cell B --cell Y
+```
+
+The script has no positional capture-dir argument — it walks
+`benchmarks/cell_<X>/raw/<run_id>/` from the repo root for each selected cell.
+Pass `--repo-root <path>` to point at a non-default checkout.
 
 The repo-standard local Llama checkpoint revision is:
 
@@ -349,11 +476,75 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 # Quick sanity check (should print version, not crash)
 python -c "import vllm; print(vllm.__version__)"
 
-# Foreground vLLM
+# Completions-only sanity serve (raw /v1/completions smoke tests only — do NOT
+# use this as the basis for any captured benchmark / AaT / PE run):
 python -u -m vllm.entrypoints.openai.api_server \
     --model models/Llama-3.1-8B-Instruct \
+    --served-model-name Llama-3.1-8B-Instruct \
     --port 8000 --max-model-len 8192 --dtype float16
 ```
+
+**Use the tool-call serve for any benchmark / AaT / PE reproduction.** As of
+PR #144, `scripts/run_experiment.sh` defaults `VLLM_ENABLE_AUTO_TOOL_CHOICE=1`
+and selects a model-family parser automatically (`llama3_json` for the team's
+pinned Llama-3.1-8B-Instruct; see `run_experiment.sh:90-104`). The top-level
+Cell A / Cell B configs (`configs/aat_direct.env`, `configs/aat_mcp_baseline.env`,
+their `_smoke` and `_upstream_smoke` siblings) pin the values explicitly;
+`configs/experiment2/*.env`, `configs/aat_mcp_optimized.env`, and the example
+configs inherit the defaults. The wired flags become
+`--enable-auto-tool-choice --tool-call-parser <parser>` (see
+`run_experiment.sh:759-776`). Reproducing the serve manually without these
+flags hits `tool_choice=auto requires --enable-auto-tool-choice` the moment
+the harness makes its first tool-call request, regardless of cell.
+
+The matching manual recipe — **source the target config first** so
+`MAX_MODEL_LEN` matches what the harness expects (`32768` for Cell Y/Z PE
+configs; `8192` for current Cell A/B AaT configs). Many configs intentionally
+omit `VLLM_SERVED_MODEL_NAME`, `VLLM_ENABLE_AUTO_TOOL_CHOICE`, and
+`VLLM_TOOL_CALL_PARSER` because they inherit defaults from
+`scripts/run_experiment.sh:90-104`. Apply those defaults yourself before
+launching:
+
+```bash
+# Pull MAX_MODEL_LEN, VLLM_MODEL_PATH, etc. from the cell's config.
+set -a; source configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env; set +a
+
+# Apply the same defaults run_experiment.sh would. Adjust the parser case
+# block if you point at a non-Llama-3 model.
+VLLM_PORT="${VLLM_PORT:-8000}"
+VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
+VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
+VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-1}"
+case "${MODEL_ID:-}" in
+  *llama-3*|*Llama-3*|*llama3*|*Llama3*) _DEFAULT_PARSER=llama3_json ;;
+  *qwen*|*Qwen*) _DEFAULT_PARSER=hermes ;;
+  *mistral*|*Mistral*) _DEFAULT_PARSER=mistral ;;
+  *) _DEFAULT_PARSER=llama3_json ;;
+esac
+VLLM_TOOL_CALL_PARSER="${VLLM_TOOL_CALL_PARSER:-$_DEFAULT_PARSER}"
+
+python -u -m vllm.entrypoints.openai.api_server \
+    --model "$VLLM_MODEL_PATH" \
+    --served-model-name "$VLLM_SERVED_MODEL_NAME" \
+    --port "$VLLM_PORT" --max-model-len "$MAX_MODEL_LEN" --dtype float16 \
+    --enable-auto-tool-choice --tool-call-parser "$VLLM_TOOL_CALL_PARSER"
+```
+
+Hard-coding `--max-model-len 8192` here is a known gotcha: a Cell Y/Z replay
+will overflow the 8192 context window and either truncate or crash partway
+through (see `docs/validation_log.md` for prior occurrences).
+
+**Torch profiler flag changed.** vLLM 0.19.0 dropped the
+`VLLM_TORCH_PROFILER_DIR` env var. Profiling is now enabled via a CLI flag with
+an absolute path:
+
+```bash
+--profiler-config '{"profiler":"torch","torch_profiler_dir":"/abs/path/to/profiling/traces/<run-id>_torch"}'
+```
+
+`run_experiment.sh:783-785` builds this automatically when `TORCH_PROFILE=1`;
+manual reproductions need to construct it explicitly. Output traces land under
+`profiling/traces/${RUN_ID}_torch/`.
 
 Expect 1-3 minutes to "Uvicorn running on http://0.0.0.0:8000" — Python
 imports take ~30 seconds, model load to GPU another minute, CUDA graph capture
@@ -390,7 +581,16 @@ If you're SSHing from Ghostty, either start the SSH session with
 launching `tmux`.
 
 To test inference, open a second SSH session and `curl` against the compute
-node hostname (visible in your interactive shell prompt, e.g. `ins080`):
+node hostname. GPU compute nodes follow the `ins0XX` pattern (e.g. `ins080`,
+`ins082`, `ins103`). Read your assigned node from the interactive shell prompt,
+or programmatically:
+
+```bash
+hostname              # e.g. ins080
+echo "$SLURMD_NODENAME"   # same, set inside Slurm jobs
+```
+
+Then from a second login session:
 
 ```bash
 ssh <UNI>@insomnia.rcs.columbia.edu
@@ -401,34 +601,62 @@ curl http://ins080:8000/v1/completions \
 
 ## Email notifications on job state
 
-Queue waits can be hours, so always attach mail flags when you submit. Pattern:
+Queue waits can be hours. **Always attach mail flags when you submit** — the
+default invocation pattern across the team is:
 
 ```bash
-sbatch \
-    --mail-type=BEGIN,END,FAIL \
-    --mail-user=<UNI>@columbia.edu \
-    scripts/vllm_serve.sh
+# One-time setup in ~/.bashrc on Insomnia:
+export MAIL_USER="${USER}@columbia.edu"
+```
+
+Then every submit looks like:
+
+```bash
+sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
+    scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
 ```
 
 For interactive `srun` sessions:
 
 ```bash
-srun \
-    -A edu -p short --qos=short \
-    --gres=gpu:A6000:1 \
-    --time=00:30:00 \
-    --mail-type=BEGIN,END,FAIL \
-    --mail-user=<UNI>@columbia.edu \
+srun -A edu -p short --qos=short \
+    --gres=gpu:A6000:1 --time=00:30:00 \
+    --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
     --pty bash
 ```
-
-Convenience: `export MAIL_USER=<UNI>@columbia.edu` in your shell profile
-(`~/.bashrc` on Insomnia), then `sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" ...`.
 
 The committed scripts (`scripts/vllm_serve.sh`, `scripts/run_experiment.sh`)
 deliberately omit `#SBATCH --mail-user` so teammates running shared scripts
 don't get spammed with each other's job notifications. Pass the mail flags
 on the `sbatch` CLI per invocation instead.
+
+## Excluding bad nodes
+
+Individual GPU nodes occasionally land in a bad state where vLLM/PyTorch can't
+see the GPU, even though `sinfo` reports the node as Idle. Symptom in
+`logs/exp_<jobid>.out` or `vllm.log`:
+
+```
+RuntimeError: CUDA unknown error - this may be due to an incorrectly set up environment ...
+Setting the available devices to be zero.
+```
+
+When you hit this, identify the offending node from your job's
+`$SLURMD_NODENAME` (or the prompt in an interactive shell — e.g. `ins082`) and
+**re-submit with `--exclude=<node>`** so the scheduler routes around it:
+
+```bash
+sbatch --exclude=ins082 \
+    --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
+    scripts/run_experiment.sh "$cfg"
+```
+
+Multiple bad nodes: `--exclude=ins082,ins091`. The exclusion only affects this
+submission; subsequent submits without the flag remain eligible for the node.
+
+If a node stays bad across multiple submits over a day or more, file a ticket
+with RCS (`rcs-support@columbia.edu`) — they can drain and reboot it. A node
+that recovers on its own (typical) needs no follow-up.
 
 ## Queue waits
 
@@ -443,9 +671,15 @@ expect queue waits during weekday business hours. Some heuristics:
 - **`Priority`** just means you're in line; check estimated start with
   `squeue -u <UNI> --start`
 
-Llama-3.1-8B at FP16 fits on every GPU type Insomnia has (A6000 48 GB, L40/L40S
-48 GB, H100 80 GB), so `--gres=gpu:1` is the fastest path to a slot when the
-A6000 nodes are saturated.
+Llama-3.1-8B at FP16 fits on every GPU type Insomnia exposes to the `edu`
+account today (A6000 48 GB, L40/L40S 48 GB, H100 80 GB), so `--gres=gpu:1` is
+the fastest path to a slot when the A6000 nodes are saturated. For the
+authoritative live menu of partitions and GPU types:
+
+```bash
+sinfo -o '%P %.6D %.20G %N'      # partitions, node count, gres, nodelist
+sinfo -p short --Format='Gres'   # just the gres column
+```
 
 ## SSH multiplexing (avoid repeated Duo 2FA)
 
@@ -466,7 +700,14 @@ feature — it has nothing to do with login-node policy or job execution.
 
 ## See also
 
+- [runbook.md](runbook.md) — top-level reproducibility doc, including the
+  WandB setup section (`wandb login` once per node, `WANDB_API_KEY` /
+  `ENABLE_WANDB=1` / `WANDB_PROJECT` / `WANDB_ENTITY` / `WANDB_MODE` env vars
+  honored by `run_experiment.sh`)
 - [compute_plan.md](compute_plan.md) — phase-by-phase GPU allocation strategy
 - [slurm_cheatsheet.md](slurm_cheatsheet.md) — quick command reference for submit/status/logging/cancel flows
+- [governance/model_registry.yaml](governance/model_registry.yaml) — canonical model IDs, runtime pins, judge contract
 - [scripts/setup_insomnia.sh](../scripts/setup_insomnia.sh) — one-shot env setup with pinned versions
 - [scripts/vllm_serve.sh](../scripts/vllm_serve.sh) — Slurm job script for serving Llama-3.1-8B-Instruct
+- [scripts/run_experiment.sh](../scripts/run_experiment.sh) — benchmark wrapper (vLLM serve + harness + WandB + canonical scenario contract)
+- [scripts/backfill_canonical_scenario.py](../scripts/backfill_canonical_scenario.py) — retrofit pre-PR-#143 captures to canonical scenario/success contract

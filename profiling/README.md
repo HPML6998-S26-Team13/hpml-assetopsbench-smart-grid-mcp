@@ -1,14 +1,14 @@
 # profiling/
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-04-28*
 
-PyTorch Profiler / NVIDIA Nsight / `nvidia-smi` wrappers and captured traces. Traces are large binary files and are **gitignored by default** (`profiling/traces/` and `*.pt.trace.json` are excluded via `.gitignore`). Only the wrapper scripts and this README are tracked here.
+PyTorch Profiler / NVIDIA Nsight / `nvidia-smi` wrappers and captured traces. Traces are large binary files and are **gitignored by default** (`profiling/traces/`, `*.pt.trace.json`, and `*.pt.trace.json.gz` are excluded via `.gitignore`; vLLM 0.19 emits gzipped `*.pt.trace.json.gz`). Only the wrapper scripts and this README are tracked here.
 
 ## Structure
 
 ```
 profiling/
-├── traces/                  # GITIGNORED — actual .pt.trace.json / nsys reports / nvidia_smi.csv
+├── traces/                  # GITIGNORED — actual *.pt.trace.json.gz (vLLM 0.19) / nsys reports / nvidia_smi.csv
 ├── scripts/                 # wrapper scripts experimenters invoke
 │   ├── sample_nvidia_smi.sh        # background GPU utilization sampler (CSV)
 │   ├── run_nsight.sh               # `nsys profile` wrapper with stats post-proc
@@ -85,29 +85,101 @@ CAPTURE_NSYS=1 bash profiling/scripts/capture_around.sh profiling/traces/pe_base
 ### PyTorch Profiler via vLLM's built-in endpoints
 
 vLLM exposes `/start_profile` and `/stop_profile` HTTP routes that internally
-drive `torch.profiler`. They're only available if vLLM was launched with
-`VLLM_TORCH_PROFILER_DIR` pointing at a writable directory.
+drive `torch.profiler`. **As of vLLM 0.19.0 the `VLLM_TORCH_PROFILER_DIR` env
+var was dropped** — these endpoints are now only available if vLLM was
+launched with the `--profiler-config` CLI flag pointing at a writable
+absolute path:
 
-Start vLLM with profiling enabled:
-
-```bash
-export VLLM_TORCH_PROFILER_DIR=$PWD/profiling/traces/pt_$(date +%s)
-mkdir -p "$VLLM_TORCH_PROFILER_DIR"
-# --export=ALL ensures Slurm forwards the env var to the job
-sbatch --export=ALL scripts/vllm_serve.sh
+```
+--profiler-config '{"profiler":"torch","torch_profiler_dir":"/abs/path/to/profiling/traces/<run-id>_torch"}'
 ```
 
-Then, from the same compute node (via `srun --jobid=<id> --overlap --pty bash`)
-or over an SSH tunnel:
+The canonical end-to-end capture route is `TORCH_PROFILE=1` plus the normal
+benchmark wrapper, which builds the flag automatically (see
+`scripts/run_experiment.sh:783-785`):
 
 ```bash
-bash profiling/scripts/run_vllm_torch_profile.sh "$VLLM_TORCH_PROFILER_DIR" \
-    -- bash scripts/run_experiment.sh configs/pe_mcp_baseline.env
+TORCH_PROFILE=1 bash scripts/run_experiment.sh configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
 ```
+
+Output traces land under `profiling/traces/${RUN_ID}_torch/` alongside the
+benchmark capture.
+
+For manual ad-hoc debugging, start vLLM in the foreground with the flag set
+explicitly, then drive the wrapper:
+
+```bash
+TRACE_DIR="$PWD/profiling/traces/pt_$(date +%s)_torch"
+mkdir -p "$TRACE_DIR"
+
+# Foreground vLLM with profiling enabled (compute node):
+python -u -m vllm.entrypoints.openai.api_server \
+    --model models/Llama-3.1-8B-Instruct \
+    --served-model-name Llama-3.1-8B-Instruct \
+    --port 8000 --max-model-len 32768 --dtype float16 \
+    --enable-auto-tool-choice --tool-call-parser llama3_json \
+    --profiler-config "{\"profiler\":\"torch\",\"torch_profiler_dir\":\"$TRACE_DIR\"}"
+```
+
+Then from a second shell on the same compute node (via `srun --jobid=<id>
+--overlap --pty bash`) or over an SSH tunnel, drive the wrapper against a
+target that does NOT spawn its own vLLM. The right target is
+`scripts/replay_scenarios.sh` (uses the existing `LITELLM_BASE_URL`) or a
+direct `curl` against the foreground server — never `bash
+scripts/run_experiment.sh <cell-config>`, because the cell configs assign
+`LAUNCH_VLLM=1` unconditionally and override any `LAUNCH_VLLM=0` env prefix
+when the script sources them. That assignment-not-default form clobbers env
+values, so the harness would launch a second vLLM and collide on
+`VLLM_PORT=8000`.
+
+```bash
+# Recommended: replay scenarios from an existing benchmark run dir against the
+# already-running foreground vLLM. No new server is launched; the harness just
+# replays prompts.
+LITELLM_BASE_URL="http://127.0.0.1:8000/v1" \
+LITELLM_API_KEY="dummy-vllm-not-checked" \
+bash profiling/scripts/run_vllm_torch_profile.sh "$TRACE_DIR" \
+    -- bash scripts/replay_scenarios.sh \
+        benchmarks/cell_Y_plan_execute/raw/<run-id> direct
+```
+
+For an even smaller probe (skip the harness, just generate inference traffic):
+
+```bash
+bash profiling/scripts/run_vllm_torch_profile.sh "$TRACE_DIR" \
+    -- curl -s http://127.0.0.1:8000/v1/chat/completions \
+            -H 'Content-Type: application/json' \
+            -d '{"model":"Llama-3.1-8B-Instruct","messages":[{"role":"user","content":"ping"}]}'
+```
+
+If you really need to drive a full cell config under the foreground server,
+make a temp config that overrides `LAUNCH_VLLM`:
+
+```bash
+TMPCFG=/tmp/exp2_cell_Y_external_vllm.env
+cp configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env "$TMPCFG"
+printf '\nLAUNCH_VLLM=0\nTORCH_PROFILE=0\n' >> "$TMPCFG"
+
+LITELLM_BASE_URL="http://127.0.0.1:8000/v1" \
+LITELLM_API_KEY="dummy-vllm-not-checked" \
+bash profiling/scripts/run_vllm_torch_profile.sh "$TRACE_DIR" \
+    -- bash scripts/run_experiment.sh "$TMPCFG"
+```
+
+Trailing assignments override the original `LAUNCH_VLLM=1` because shell
+sourcing is order-sensitive — last assignment wins.
 
 The wrapper hits `/start_profile` before the command and `/stop_profile` after.
-Open the emitted `pt.trace.json` in `chrome://tracing` or
-<https://ui.perfetto.dev>.
+vLLM 0.19 emits the trace as a gzipped `*.pt.trace.json.gz` under the configured
+`torch_profiler_dir`. Open by either gunzipping first
+(`gunzip -k <file>.pt.trace.json.gz`) and loading the resulting `.pt.trace.json`
+in `chrome://tracing`, or upload the `.gz` directly to
+<https://ui.perfetto.dev> (which decompresses transparently).
+
+`scripts/vllm_serve.sh` does **not** currently inject `--profiler-config`, so
+launching the serve job and then expecting `/start_profile` to work will fail
+on vLLM 0.19. Either use the `TORCH_PROFILE=1` wrapper above, or extend
+`scripts/vllm_serve.sh` before driving the endpoints by hand.
 
 ### Nsight Systems
 
@@ -206,8 +278,11 @@ WANDB_MODE=offline python3 profiling/scripts/log_profiling_to_wandb.py \
     --benchmark-run-dir "$BENCH" --profiling-dir "$OUT"
 ```
 
-## Status (Apr 14, 2026)
+## Status
 
-- `sample_nvidia_smi.sh`, `run_nsight.sh`, `run_vllm_torch_profile.sh`, `capture_around.sh` landed Apr 14.
-- First profiling runs against the Plan-Execute smoke (`benchmarks/cell_Y_plan_execute/raw/...`) scheduled for W3 once the shared vLLM endpoint stabilizes on Insomnia.
-- Analysis notebooks (`notebooks/02_mcp_latency.ipynb`, etc.) owned by Alex; will consume `benchmarks/cell_<X>/raw/<run-id>/latencies.jsonl` + `profiling/traces/<run-id>/nvidia_smi.csv`.
+For current proof runs and capture provenance, see
+[docs/validation_log.md](../docs/validation_log.md). Operational notes live in
+[docs/insomnia_runbook.md](../docs/insomnia_runbook.md). Analysis notebooks
+(`notebooks/02_mcp_latency.ipynb`, `notebooks/03_orchestration_comparison.ipynb`)
+consume `benchmarks/cell_<X>/raw/<run-id>/latencies.jsonl` +
+`profiling/traces/<run-id>/nvidia_smi.csv` as their inputs.
