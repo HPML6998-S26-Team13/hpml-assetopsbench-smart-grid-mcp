@@ -53,7 +53,12 @@ data/scenarios/generated/<batch_id>/
                                   list of emitted scenario IDs
 ```
 
-`SGT-GEN-NNN.json` follows the same JSON schema as the hand-crafted scenarios under `data/scenarios/`, with provenance fields appended (`source_type=generated`, `family`, `generator_prompt_version`, `knowledge_plugin_version`, `generation_model`, `generation_date`, `batch_id`, `manual_cleanup`, `nearest_handcrafted`).
+`SGT-GEN-NNN.json` follows the canonical scenario schema (`id`, `type`, `text`, `category`, `characteristic_form`, `asset_id`, `expected_tools`, `domain_tags`, `difficulty`, `ground_truth`) plus two **nested** blocks required by [`docs/knowledge/generated_scenario_template.json`](knowledge/generated_scenario_template.json):
+
+- **`provenance`** — nested object with `source_type=generated`, `generator_prompt_version`, `knowledge_plugin_version` (sha256 prefix of the support file), `generation_model`, `generation_date`, `batch_id`, `manual_cleanup` (and `cleanup_notes` if `manual_cleanup=true`).
+- **`nearest_handcrafted_comparator`** — nested object with `scenario_id`, `scenario_file` (repo-relative path), `similarity_basis`, `novelty_note`, optional `nearest_match_weak`.
+
+The generator's in-memory validator enforces both nested blocks and explicitly rejects the legacy top-level shape (e.g. `source_type` at the top level, or the wrong field name `nearest_handcrafted`). A scenario lands in the valid output path only if it passes both the canonical scenario schema **and** the generated-scenario contract; otherwise it lands under `<batch_id>/invalid/` with the validator's error list.
 
 The validator (`data/scenarios/validate_scenarios.py`) intentionally only globs the top level of `data/scenarios/` (`*.json`), so a generated batch sitting under `data/scenarios/generated/` does **not** affect the team's CI gate. Generated scenarios must pass the team gate before being promoted into `data/scenarios/`.
 
@@ -81,9 +86,9 @@ python scripts/generate_scenarios.py \
     --seed 42
 ```
 
-Writes the assembled prompt(s) under `data/scenarios/generated/<batch_id>/prompts/` and an empty manifest. Use this to read what we're about to ask the model before spending credits.
+Writes the assembled prompt(s) under `data/scenarios/generated/<batch_id>/prompts/` and a manifest with the invocation record. Use this to read what we're about to ask the model before spending credits.
 
-### Single-family smoke (1 scenario, validator-clean)
+### Single-family smoke (1 scenario, contract-clean)
 
 ```bash
 python scripts/generate_scenarios.py \
@@ -97,31 +102,55 @@ Defaults: `--model watsonx/meta-llama/llama-3-3-70b-instruct`, `--temperature 0.
 
 ### First reviewable batch (one per family, 5 scenarios total)
 
-```bash
-for family in FMSR_DGA_DIAGNOSIS TSFM_RUL_FORECAST WO_CREATION IOT_SENSOR_ANALYSIS MULTI_DOMAIN_INCIDENT; do
-    python scripts/generate_scenarios.py \
-        --family "$family" \
-        --n 1 \
-        --batch-id first_review_$(date +%Y%m%d) \
-        --seed 42
-done
-```
-
-Runs five LLM calls, accumulates into one batch dir. Hand off the result to Akshat for the validation pass under `#53`.
-
-### Full target (PS B coverage: 18 scenarios)
+The CLI uses a single global `--n`, so build a multi-family batch by passing every family in **one invocation**:
 
 ```bash
 python scripts/generate_scenarios.py \
-    --family FMSR_DGA_DIAGNOSIS --n 4 \
-    --family TSFM_RUL_FORECAST --n 4 \
-    --family WO_CREATION --n 4 \
-    --family IOT_SENSOR_ANALYSIS --n 2 \
-    --family MULTI_DOMAIN_INCIDENT --n 4 \
-    --batch-id full_$(date +%Y%m%d)
+    --family FMSR_DGA_DIAGNOSIS \
+    --family TSFM_RUL_FORECAST \
+    --family WO_CREATION \
+    --family IOT_SENSOR_ANALYSIS \
+    --family MULTI_DOMAIN_INCIDENT \
+    --n 1 \
+    --batch-id first_review_$(date +%Y%m%d) \
+    --seed 42
 ```
 
-Note: `--family` repeated alongside per-family `--n` is not currently supported; the CLI uses a single `--n` for all `--family` values. For per-family count differences, run the script once per family with the desired `--n`.
+Each family generates `--n` scenarios in sequence, all numbered into the same batch as `SGT-GEN-001`...`SGT-GEN-005`. Hand off the result to Akshat for the validation pass under `#53`.
+
+### Adding more scenarios to an existing batch (`--append`)
+
+To keep adding scenarios into the same batch dir across separate invocations — e.g. iterating one family at a time, or topping up after a partial failure — use `--append`. Without it, the script refuses to write into a directory that already contains `SGT-GEN-NNN.json` files (this guards against the "same `--batch-id` overwrites previous output" footgun).
+
+```bash
+# First pass — fresh batch dir
+python scripts/generate_scenarios.py \
+    --family FMSR_DGA_DIAGNOSIS --n 2 \
+    --batch-id review_$(date +%Y%m%d) --seed 11
+
+# Later — add more scenarios to the same batch
+python scripts/generate_scenarios.py \
+    --family WO_CREATION --n 2 \
+    --batch-id review_$(date +%Y%m%d) --seed 22 \
+    --append
+```
+
+The second invocation continues numbering from `SGT-GEN-003` and appends a new entry to `batch_manifest.json:invocations[]` so every contributing pass is recorded. The cumulative `scenarios_emitted` list at the manifest top stays in sync.
+
+### Full PS B coverage target (18 scenarios across 5 families)
+
+The family matrix in `scenario_generation_support.json` calls for 4-4-4-2-4 = 18 scenarios across the five families. The CLI's single global `--n` doesn't allow different counts per family in one invocation, so use one invocation per family + `--append`:
+
+```bash
+BATCH=full_$(date +%Y%m%d)
+python scripts/generate_scenarios.py --family FMSR_DGA_DIAGNOSIS    --n 4 --batch-id "$BATCH" --seed 1
+python scripts/generate_scenarios.py --family TSFM_RUL_FORECAST     --n 4 --batch-id "$BATCH" --seed 2  --append
+python scripts/generate_scenarios.py --family WO_CREATION           --n 4 --batch-id "$BATCH" --seed 3  --append
+python scripts/generate_scenarios.py --family IOT_SENSOR_ANALYSIS   --n 2 --batch-id "$BATCH" --seed 4  --append
+python scripts/generate_scenarios.py --family MULTI_DOMAIN_INCIDENT --n 4 --batch-id "$BATCH" --seed 5  --append
+```
+
+This produces `SGT-GEN-001` through `SGT-GEN-018` in one batch dir with five invocation records in the manifest. Different `--seed` per family gives independent template/context selection without rerunning the generator.
 
 ## Reading a generated scenario
 

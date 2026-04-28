@@ -117,23 +117,24 @@ def _load_handcrafted() -> list[dict[str, Any]]:
     return out
 
 
-def _nearest_comparator(
+def _nearest_handcrafted_comparator(
     generated: dict[str, Any], corpus: list[dict[str, Any]]
 ) -> dict[str, Any]:
-    """Find the canonical scenario most similar to the generated one.
+    """Build the `nearest_handcrafted_comparator` block for the generated scenario.
 
-    Similarity is rough on purpose: same `type`, then largest overlap of
-    expected tools. Returns the structure required by the authoring doc
-    section 7. If nothing in the corpus shares the type, returns
-    `nearest_match_weak: true` and leaves comparison fields null.
+    Field shape matches `docs/knowledge/generated_scenario_template.json` —
+    `scenario_id`, `scenario_file`, `similarity_basis`, `novelty_note`, plus
+    optional `nearest_match_weak`. Similarity is rough on purpose: same
+    `type`, then largest overlap of expected tools. Path is repo-relative
+    (`data/scenarios/<file>`) so reviewers can open the comparator directly.
     """
     same_type = [s for s in corpus if s.get("type") == generated.get("type")]
     if not same_type:
         return {
             "scenario_id": None,
             "scenario_file": None,
-            "similarity_basis": None,
-            "novelty_note": "no canonical scenario with the same type exists",
+            "similarity_basis": "no canonical scenario shares this scenario's type",
+            "novelty_note": "no comparator basis available; treat as fully novel",
             "nearest_match_weak": True,
         }
 
@@ -144,15 +145,20 @@ def _nearest_comparator(
 
     best = max(same_type, key=_overlap)
     overlap_count = _overlap(best)
+    file_name = best.get("_file") or ""
     return {
         "scenario_id": best.get("id"),
-        "scenario_file": best.get("_file"),
+        "scenario_file": f"data/scenarios/{file_name}" if file_name else None,
         "similarity_basis": (
-            f"shares type={best.get('type')!r} and {overlap_count} tool(s)"
+            f"shares type={best.get('type')!r} and {overlap_count} expected_tools entr"
+            f"{'y' if overlap_count == 1 else 'ies'}"
             if overlap_count
-            else f"shares type={best.get('type')!r}; no tool overlap"
+            else f"shares type={best.get('type')!r}; no expected_tools overlap"
         ),
-        "novelty_note": None,
+        "novelty_note": (
+            "different generated context / templates; manual review should confirm "
+            "the generated scenario is materially distinct from the comparator"
+        ),
         "nearest_match_weak": overlap_count == 0,
     }
 
@@ -191,42 +197,110 @@ OUTPUT FORMAT (return one JSON object, no markdown fence):
   "text": "<the user-facing prompt, follows NO-HINT RULES>",
   "category": "<one of: Fault Diagnosis | Root Cause Analysis | Remaining Useful Life | Anomaly Detection | Trend Analysis | Maintenance Decision | Work Order Creation | Sensor Analysis | End-to-End Incident Response | Cross-Domain Planning>",
   "characteristic_form": "<one-sentence description of the answer's structure>",
-  "asset_id": "T-NNN",
+  "asset_id": "T-NNN",                                  // T-001 .. T-020
   "expected_tools": ["domain.tool", ...],               // every tool the ideal agent calls
   "domain_tags": ["FMSR", ...],                         // matches the type for single-domain; >=2 for Multi
   "difficulty": "easy" | "medium" | "hard",
   "ground_truth": {
-    "ideal_tool_sequence": ["domain.tool", ...],
+    "ideal_tool_sequence": ["domain.tool", ...],        // ordered, same entries as expected_tools
     "decisive_intermediate_values": { "<key>": "<value>", ... },
-    "final_value": "<concrete answer>",
-    "acceptance_criteria": ["<2-5 natural-language checks>"]
+    "final_value": { "<key>": "<value>", ... },         // concrete output (e.g. fault_label, rul_days)
+    "acceptance_criteria": ["agent <does X>", ...],     // 2-5 checks, each starting with "agent "
+    "must_include": ["<element>", ...]                  // coarse high-level answer elements
   }
 }
+
+DO NOT include `provenance` or `nearest_handcrafted_comparator` blocks in
+your output — the caller fills those after generation. DO NOT emit
+`source_type`, `generator_prompt_version`, `generation_model`, or any
+other generator-metadata field at the top level. The scenario JSON should
+contain ONLY the canonical scenario contract (id, type, text, category,
+characteristic_form, asset_id, expected_tools, domain_tags, difficulty,
+ground_truth).
+
 Return ONLY the JSON object. No commentary, no markdown fences, no explanation.
 """.strip()
+
+
+# Each family in scenario_generation_support.json maps to one or more
+# template subsections. Routing them into the prompt by family avoids
+# bloating non-FMSR prompts with DGA tables they don't need, and avoids
+# starving non-FMSR families of the templates they DO need (the v0.1 prompt
+# only injected DGA which silently broke WO / TSFM / IoT / Multi grounding).
+#
+# Sources are top-level keys in scenario_generation_support.json:
+#   dga_trend_templates           → templates: {name -> step list}
+#   event_alarm_templates          → templates: {name -> alarm pattern}
+#   work_order_playbook            → entries:   {name -> WO playbook entry}
+#   rul_health_context_templates   → templates: {name -> RUL context}
+FAMILY_TEMPLATE_ROUTES: dict[str, list[tuple[str, str, str]]] = {
+    # family                       (label                            , support_key                       , subkey)
+    "FMSR_DGA_DIAGNOSIS": [
+        ("DGA TREND TEMPLATE", "dga_trend_templates", "templates"),
+    ],
+    "TSFM_RUL_FORECAST": [
+        ("RUL/HEALTH CONTEXT TEMPLATE", "rul_health_context_templates", "templates"),
+    ],
+    "WO_CREATION": [
+        ("WORK-ORDER PLAYBOOK ENTRY", "work_order_playbook", "entries"),
+    ],
+    "IOT_SENSOR_ANALYSIS": [
+        ("EVENT/ALARM TEMPLATE", "event_alarm_templates", "templates"),
+    ],
+    "MULTI_DOMAIN_INCIDENT": [
+        # Multi-domain scenarios chain a triggering alarm → a DGA finding →
+        # a WO action, so all three template families are relevant.
+        ("EVENT/ALARM TEMPLATE", "event_alarm_templates", "templates"),
+        ("DGA TREND TEMPLATE", "dga_trend_templates", "templates"),
+        ("WORK-ORDER PLAYBOOK ENTRY", "work_order_playbook", "entries"),
+    ],
+}
+
+
+def _select_family_templates(
+    family_name: str,
+    support: dict[str, Any],
+    rng: random.Random,
+) -> str:
+    """Build the per-family template block for the prompt.
+
+    Returns one or more "LABEL (name):\\n<json>" sections separated by blank
+    lines, or an empty string if the family has no template route. Each section
+    is one randomly-picked entry from the relevant subsection of the support
+    data (e.g. one DGA trend template, one work-order playbook entry).
+    """
+    routes = FAMILY_TEMPLATE_ROUTES.get(family_name, [])
+    sections: list[str] = []
+    for label, support_key, subkey in routes:
+        block = support.get(support_key, {})
+        entries = block.get(subkey, {}) if isinstance(block, dict) else {}
+        if not entries:
+            continue
+        chosen = rng.choice(list(entries.keys()))
+        sections.append(
+            f"{label} (`{chosen}`):\n" + json.dumps(entries[chosen], indent=2)
+        )
+    return "\n\n".join(sections)
 
 
 def build_prompt(
     family_name: str,
     family_spec: dict[str, Any],
     operational_contexts: dict[str, Any],
-    dga_templates: dict[str, Any],
+    support: dict[str, Any],
     rng: random.Random,
 ) -> str:
     """Assemble the per-scenario LLM prompt from the support data.
 
-    Picks one operational context and (if FMSR) one DGA template to ground the
-    scenario. The model is given the support data verbatim plus the no-hint
-    rules and schema reminder.
+    Picks one operational context and the family-specific template
+    block(s) per `FAMILY_TEMPLATE_ROUTES`. The model is given the family
+    spec, operational context, routed templates, no-hint rules, and the
+    schema reminder.
     """
     ctx_name = rng.choice(list(operational_contexts.keys()))
     ctx = operational_contexts[ctx_name]
-    dga_block = ""
-    if family_spec.get("primary_domain") == "FMSR" and dga_templates:
-        dga_name = rng.choice(list(dga_templates.keys()))
-        dga_block = f"\n\nDGA TREND TEMPLATE (`{dga_name}`):\n" + json.dumps(
-            dga_templates[dga_name], indent=2
-        )
+    template_block = _select_family_templates(family_name, support, rng)
+    template_section = f"\n\n{template_block}" if template_block else ""
 
     return f"""You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
 
@@ -235,7 +309,7 @@ FAMILY SPEC:
 {json.dumps(family_spec, indent=2)}
 
 OPERATIONAL CONTEXT (`{ctx_name}`):
-{json.dumps(ctx, indent=2)}{dga_block}
+{json.dumps(ctx, indent=2)}{template_section}
 
 {NO_HINT_RULES}
 
@@ -291,6 +365,29 @@ def parse_response(raw: str) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
+# Field set required inside the nested `provenance` block, per
+# docs/knowledge/generated_scenario_template.json. `cleanup_notes` is
+# conditional (only emitted if manual_cleanup=true) and is not in this set.
+REQUIRED_PROVENANCE_FIELDS = frozenset(
+    {
+        "source_type",
+        "generator_prompt_version",
+        "knowledge_plugin_version",
+        "generation_model",
+        "generation_date",
+        "batch_id",
+        "manual_cleanup",
+    }
+)
+
+# Field set required inside the nested `nearest_handcrafted_comparator`
+# block, per the same template. `nearest_match_weak` is optional (only set
+# when no natural comparator exists).
+REQUIRED_COMPARATOR_FIELDS = frozenset(
+    {"scenario_id", "scenario_file", "similarity_basis", "novelty_note"}
+)
+
+
 def attach_provenance(
     scenario: dict[str, Any],
     *,
@@ -300,32 +397,134 @@ def attach_provenance(
     batch_id: str,
     knowledge_plugin_hash: str,
 ) -> dict[str, Any]:
-    """Set the SGT-GEN id and stamp source_type / generator metadata."""
+    """Stamp the SGT-GEN id and emit the nested `provenance` block.
+
+    Field shape matches the contract in
+    `docs/knowledge/generated_scenario_template.json` — provenance fields go
+    inside a single nested object, NOT at the scenario top level. The model
+    sometimes emits a partial top-level provenance from the prompt; this
+    function strips those so they don't shadow the canonical nested block.
+
+    `family` is also written at the top level (not in the template) because
+    the team's generation pipeline uses it as a routing key downstream; it
+    is not a contract field for the canonical scenario schema.
+    """
     scenario["id"] = scenario_id
-    scenario["source_type"] = "generated"
+    # Strip any stray top-level provenance fields the model may have emitted
+    # (some Llama responses copy fields into both top-level and the nested
+    # provenance block; the template only allows the nested form).
+    for stray in REQUIRED_PROVENANCE_FIELDS:
+        scenario.pop(stray, None)
+
+    provenance = scenario.setdefault("provenance", {})
+    provenance["source_type"] = "generated"
+    provenance["generator_prompt_version"] = PROMPT_VERSION
+    provenance["knowledge_plugin_version"] = knowledge_plugin_hash
+    provenance["generation_model"] = model
+    provenance["generation_date"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    provenance["batch_id"] = batch_id
+    # Manual cleanup defaults to false; humans flip it (and add cleanup_notes)
+    # when editing the scenario before promoting it to the canonical set.
+    provenance.setdefault("manual_cleanup", False)
+    if not provenance.get("manual_cleanup"):
+        # `cleanup_notes` is conditional on manual_cleanup=true; don't emit
+        # an empty/null value when no cleanup occurred.
+        provenance.pop("cleanup_notes", None)
+
+    # `family` is a generation-pipeline routing key, separate from the
+    # template's nested provenance contract. Keep it visible at top level.
     scenario["family"] = family
-    scenario["generator_prompt_version"] = PROMPT_VERSION
-    scenario["knowledge_plugin_version"] = knowledge_plugin_hash
-    scenario["generation_model"] = model
-    scenario["generation_date"] = dt.datetime.now(dt.timezone.utc).isoformat()
-    scenario["batch_id"] = batch_id
-    # Manual cleanup defaults to false; humans flip if they edit before commit.
-    scenario.setdefault("manual_cleanup", False)
     return scenario
 
 
-def validate_scenario(scenario: dict[str, Any], valid_asset_ids: set[str]) -> list[str]:
-    """Run the canonical validator over a single scenario in-memory.
+def _validate_generated_contract(scenario: dict[str, Any]) -> list[str]:
+    """Generator-only checks: enforce the PS B nested-provenance contract.
 
-    The team's `data/scenarios/validate_scenarios.py:validate_file` reads from
-    disk; we round-trip through a tempfile so we share its exact rule set.
+    The team validator (`data/scenarios/validate_scenarios.py`) covers the
+    canonical scenario schema (id / type / tools / etc.) but predates PS B,
+    so it does NOT know about the nested `provenance` and
+    `nearest_handcrafted_comparator` blocks introduced for generated
+    scenarios. Without this check, a malformed generated output (provenance
+    fields at the top level, comparator field renamed) would land in the
+    `valid` output path while silently violating the contract Akshat's #53
+    rubric will read against. Returns a list of human-readable error
+    strings; empty list means contract-clean.
+    """
+    errors: list[str] = []
+
+    provenance = scenario.get("provenance")
+    if not isinstance(provenance, dict):
+        errors.append(
+            "missing required nested `provenance` block (must be an object, not "
+            "top-level fields)"
+        )
+    else:
+        missing = REQUIRED_PROVENANCE_FIELDS.difference(provenance.keys())
+        if missing:
+            errors.append(
+                f"`provenance` block missing required fields: {sorted(missing)}"
+            )
+        if provenance.get("source_type") != "generated":
+            errors.append(
+                f"`provenance.source_type` must be 'generated', got "
+                f"{provenance.get('source_type')!r}"
+            )
+        if provenance.get("manual_cleanup") is True and not provenance.get(
+            "cleanup_notes"
+        ):
+            errors.append(
+                "`provenance.manual_cleanup=true` requires a non-empty "
+                "`cleanup_notes` field"
+            )
+
+    comparator = scenario.get("nearest_handcrafted_comparator")
+    if not isinstance(comparator, dict):
+        errors.append(
+            "missing required `nearest_handcrafted_comparator` block (must be an "
+            "object). The earlier `nearest_handcrafted` field name is wrong; rename "
+            "to `nearest_handcrafted_comparator` per the template."
+        )
+    else:
+        missing = REQUIRED_COMPARATOR_FIELDS.difference(comparator.keys())
+        if missing:
+            errors.append(
+                f"`nearest_handcrafted_comparator` missing required fields: "
+                f"{sorted(missing)}"
+            )
+
+    # Reject the legacy/wrong keys explicitly so a future code regression
+    # doesn't silently re-introduce them.
+    for stray in REQUIRED_PROVENANCE_FIELDS:
+        if stray in scenario:
+            errors.append(
+                f"top-level `{stray}` is not allowed; provenance fields belong inside "
+                f"the nested `provenance` block"
+            )
+    if "nearest_handcrafted" in scenario:
+        errors.append(
+            "`nearest_handcrafted` is the wrong field name; use "
+            "`nearest_handcrafted_comparator` per the template"
+        )
+
+    return errors
+
+
+def validate_scenario(scenario: dict[str, Any], valid_asset_ids: set[str]) -> list[str]:
+    """Run the canonical validator + generated-scenario contract check.
+
+    Combines the team's `validate_scenarios.py:validate_file` (canonical
+    schema, asset-id, tool / domain coherence) with the PS-B-specific
+    `_validate_generated_contract` (nested provenance + comparator). A
+    scenario is contract-clean only if BOTH return empty error lists.
     """
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = pathlib.Path(tmp) / f"{scenario.get('id', 'unknown')}.json"
         tmp_path.write_text(json.dumps(scenario, indent=2), encoding="utf-8")
-        return _validator.validate_file(tmp_path, valid_asset_ids)
+        canonical_errors = _validator.validate_file(tmp_path, valid_asset_ids)
+
+    return canonical_errors + _validate_generated_contract(scenario)
 
 
 # ---------------------------------------------------------------------------
@@ -388,8 +587,37 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Override the output directory. Default: data/scenarios/generated/<batch_id>/",
     )
+    p.add_argument(
+        "--append",
+        action="store_true",
+        help="Allow writing into a batch directory that already contains scenarios. "
+        "Without this flag, the script refuses to run if SGT-GEN-NNN.json files "
+        "already exist in the target dir, to prevent silent overwrite when the "
+        "same --batch-id is used across separate invocations. With --append, "
+        "next_id continues from max(existing SGT-GEN-NNN)+1 and the manifest is "
+        "merged.",
+    )
     p.add_argument("--verbose", action="store_true")
     return p.parse_args()
+
+
+def _scan_existing_batch(out_dir: pathlib.Path) -> tuple[int, list[str]]:
+    """Inspect an existing batch dir for SGT-GEN-NNN.json files.
+
+    Returns (next_id, existing_ids) where next_id is one past the highest
+    NNN found (so a fresh dir gives next_id=1 and an empty list). The
+    caller uses this to continue numbering across `--append` invocations.
+    """
+    existing: list[str] = []
+    max_n = 0
+    pattern = re.compile(r"^SGT-GEN-(\d{3,})\.json$")
+    if out_dir.is_dir():
+        for path in out_dir.iterdir():
+            m = pattern.match(path.name)
+            if m:
+                existing.append(path.stem)
+                max_n = max(max_n, int(m.group(1)))
+    return max_n + 1, sorted(existing)
 
 
 def main() -> int:
@@ -406,7 +634,6 @@ def main() -> int:
 
     family_matrix = support["scenario_family_matrix"]["families"]
     op_contexts = support["operational_context_profiles"]["profiles"]
-    dga_templates = support.get("dga_trend_templates", {}).get("templates", {})
 
     families = args.family or list(family_matrix.keys())
     rng = random.Random(args.seed) if args.seed is not None else random.Random()
@@ -421,19 +648,42 @@ def main() -> int:
     (out_dir / "prompts").mkdir(exist_ok=True)
     (out_dir / "raw_responses").mkdir(exist_ok=True)
 
+    # Refuse to silently overwrite an existing batch. Without this guard, the
+    # documented "loop one --batch-id across families" pattern would reset
+    # next_id=1 every iteration and rewrite SGT-GEN-001.json once per family.
+    next_id, existing_ids = _scan_existing_batch(out_dir)
+    if existing_ids and not args.append:
+        log.error(
+            "batch dir %s already contains %d scenario file(s) (%s..%s). "
+            "Pass --append to continue numbering from SGT-GEN-%03d, or pick a "
+            "different --batch-id.",
+            _display_path(out_dir),
+            len(existing_ids),
+            existing_ids[0],
+            existing_ids[-1],
+            next_id,
+        )
+        return 1
+
     log.info("batch_id=%s out_dir=%s dry_run=%s", batch_id, out_dir, args.dry_run)
     log.info("families=%s n=%d model=%s", families, args.n, args.model)
     log.info("knowledge_plugin_version=%s", knowledge_plugin_hash)
+    if args.append and existing_ids:
+        log.info(
+            "append mode: continuing from SGT-GEN-%03d (existing: %d scenario(s))",
+            next_id,
+            len(existing_ids),
+        )
 
     scenarios_emitted: list[dict[str, Any]] = []
-    next_id = 1
+    invocation_starting_id = next_id
 
     for family in families:
         family_spec = family_matrix[family]
         for i in range(args.n):
             scenario_id = f"SGT-GEN-{next_id:03d}"
-            prompt_label = f"family_{family}_{i + 1:03d}"
-            prompt = build_prompt(family, family_spec, op_contexts, dga_templates, rng)
+            prompt_label = f"{family}_{scenario_id}"
+            prompt = build_prompt(family, family_spec, op_contexts, support, rng)
             (out_dir / "prompts" / f"{prompt_label}.txt").write_text(
                 prompt, encoding="utf-8"
             )
@@ -474,7 +724,9 @@ def main() -> int:
                 batch_id=batch_id,
                 knowledge_plugin_hash=knowledge_plugin_hash,
             )
-            scenario["nearest_handcrafted"] = _nearest_comparator(scenario, handcrafted)
+            scenario["nearest_handcrafted_comparator"] = (
+                _nearest_handcrafted_comparator(scenario, handcrafted)
+            )
 
             errors = validate_scenario(scenario, valid_asset_ids)
             if errors:
@@ -502,29 +754,59 @@ def main() -> int:
             next_id += 1
 
     # Batch manifest summarises the run for reviewer + reproducibility.
-    manifest = {
-        "batch_id": batch_id,
-        "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+    # On --append, we LOAD any existing manifest and append a new
+    # `invocations` entry rather than rewriting top-level fields, so the
+    # batch keeps a faithful record of every generator pass that contributed
+    # to it (model / seed / families / count for each invocation).
+    manifest_path = out_dir / "batch_manifest.json"
+    invocation_record = {
+        "started_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "model": args.model,
         "temperature": args.temperature,
         "seed": args.seed,
         "families_requested": families,
         "n_per_family": args.n,
-        "prompt_version": PROMPT_VERSION,
-        "knowledge_plugin_version": knowledge_plugin_hash,
         "scenarios_emitted": [s["id"] for s in scenarios_emitted],
+        "starting_scenario_id": f"SGT-GEN-{invocation_starting_id:03d}",
         "dry_run": args.dry_run,
-        "generator_script": "scripts/generate_scenarios.py",
-        "support_data": SUPPORT_PATH.relative_to(_REPO_ROOT).as_posix(),
-        "handcrafted_corpus_size": len(handcrafted),
+        "append": args.append,
     }
-    (out_dir / "batch_manifest.json").write_text(
-        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
-    )
+
+    if args.append and manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest.setdefault("invocations", []).append(invocation_record)
+        # Keep the cumulative scenarios_emitted list in sync so consumers
+        # don't have to walk every invocation block.
+        cumulative = list(manifest.get("scenarios_emitted", []))
+        cumulative.extend(invocation_record["scenarios_emitted"])
+        # Deduplicate while preserving order in case an earlier append
+        # rewrote a scenario id (it shouldn't, but defensive).
+        seen: set[str] = set()
+        manifest["scenarios_emitted"] = [
+            i for i in cumulative if not (i in seen or seen.add(i))
+        ]
+        manifest["last_updated_at"] = invocation_record["started_at"]
+    else:
+        manifest = {
+            "batch_id": batch_id,
+            "created_at": invocation_record["started_at"],
+            "last_updated_at": invocation_record["started_at"],
+            "prompt_version": PROMPT_VERSION,
+            "knowledge_plugin_version": knowledge_plugin_hash,
+            "generator_script": "scripts/generate_scenarios.py",
+            "support_data": SUPPORT_PATH.relative_to(_REPO_ROOT).as_posix(),
+            "handcrafted_corpus_size": len(handcrafted),
+            "scenarios_emitted": list(invocation_record["scenarios_emitted"]),
+            "invocations": [invocation_record],
+        }
+
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    log.info("batch manifest written to %s", _display_path(manifest_path))
     log.info(
-        "batch manifest written to %s", _display_path(out_dir / "batch_manifest.json")
+        "emitted %d scenario(s) this invocation; batch total: %d",
+        len(scenarios_emitted),
+        len(manifest["scenarios_emitted"]),
     )
-    log.info("emitted %d scenario(s)", len(scenarios_emitted))
 
     return 0
 
