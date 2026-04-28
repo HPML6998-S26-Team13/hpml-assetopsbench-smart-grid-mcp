@@ -23,7 +23,9 @@
 # benchmark's WandB run.
 #
 # Usage:
-#   sbatch --mail-type=BEGIN,END,FAIL --mail-user=$USER \
+#   # Set MAIL_USER once (e.g. in ~/.bashrc on Insomnia):
+#   #   export MAIL_USER="${USER}@columbia.edu"
+#   sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
 #       scripts/run_exp1_ab_capture.sh
 #
 # After the job completes, find artifacts at:
