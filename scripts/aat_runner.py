@@ -428,13 +428,29 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 out_path = output_dir / out_name
 
                 start = time.time()
-                run_duration: float | None = None
-                error_payload: dict[str, Any] | None = None
+                trial_ok = False
                 try:
                     result = await runner.run(prompt)
-                    # Capture run-only duration here; full wall-clock (including
-                    # file write) is recorded below for latency_seconds.
+                    # Capture run-only duration (before file write) for
+                    # runner_meta.duration_seconds.  latency_seconds (below)
+                    # uses a post-write timestamp to match single-trial path
+                    # semantics where END_EPOCH includes file write.
                     run_duration = time.time() - start
+                    output = _serialize_run_result(
+                        args, prompt, result, run_duration, scenario_file=sf_rel
+                    )
+                    output["scenario"] = scenario_payload
+                    _write_output(out_path, output)
+                    trial_ok = output["success"]
+                    if not trial_ok:
+                        any_failed = True
+                    if output["max_turns_exhausted"]:
+                        _LOG.warning(
+                            "max_turns=%d exhausted (%s trial %d)",
+                            args.max_turns,
+                            sf.name,
+                            trial,
+                        )
                 except Exception as exc:
                     _LOG.exception(
                         "trial failed (%s trial %d): %s", sf.name, trial, exc
@@ -463,30 +479,8 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                             "scenario_file": sf_rel,
                         },
                     }
-
-                if error_payload is not None:
                     _write_output(out_path, error_payload)
                     any_failed = True
-                    trial_ok = False
-                else:
-                    # runner_meta.duration_seconds = run-only time (no file write),
-                    # consistent with the single-trial path's _serialize_run_result call.
-                    assert run_duration is not None
-                    output = _serialize_run_result(
-                        args, prompt, result, run_duration, scenario_file=sf_rel
-                    )
-                    output["scenario"] = scenario_payload
-                    _write_output(out_path, output)
-                    trial_ok = output["success"]
-                    if not trial_ok:
-                        any_failed = True
-                    if output["max_turns_exhausted"]:
-                        _LOG.warning(
-                            "max_turns=%d exhausted (%s trial %d)",
-                            args.max_turns,
-                            sf.name,
-                            trial,
-                        )
 
                 # Wall-clock ends after the JSON write to match single-trial
                 # path semantics (run_experiment.sh measures END_EPOCH after
@@ -503,10 +497,10 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                         "trial_index": trial,
                         "latency_seconds": duration,
                         "output_path": _rel_path,
-                        # One-time MCP setup cost amortized across all trials by
-                        # notebooks: total_cost = sum(latency_seconds) + mcp_setup_seconds.
-                        # Per-trial latency_seconds stays comparable to single-trial
-                        # path (which includes per-trial MCP setup in its wall-clock).
+                        # One-time MCP setup cost: notebooks can compute total
+                        # batch cost as sum(latency_seconds) + mcp_setup_seconds.
+                        # Per-trial latency_seconds remains comparable to the
+                        # single-trial path (where each trial pays MCP startup).
                         "mcp_setup_seconds": mcp_setup_seconds,
                     }
                 )
