@@ -395,7 +395,10 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
     any_failed = False
 
     try:
+        mcp_setup_start = time.time()
         mcp_servers = await build_mcp_servers(repo_root)
+        mcp_setup_seconds = time.time() - mcp_setup_start
+        _LOG.info("MCP servers ready (setup=%.1fs)", mcp_setup_seconds)
 
         runner = AaTRunner(
             model_id=args.model_id,
@@ -408,8 +411,12 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
         for sf in scenario_files:
             try:
                 scenario_payload = json.loads(sf.read_text(encoding="utf-8"))
+                if not isinstance(scenario_payload, dict):
+                    raise TypeError(
+                        f"scenario payload must be a JSON object, got {type(scenario_payload).__name__}"
+                    )
                 prompt = scenario_payload["text"]
-            except (json.JSONDecodeError, KeyError) as exc:
+            except (json.JSONDecodeError, KeyError, TypeError) as exc:
                 _LOG.error("skipping %s — failed to read prompt: %s", sf, exc)
                 any_failed = True
                 continue
@@ -421,9 +428,13 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 out_path = output_dir / out_name
 
                 start = time.time()
+                run_duration: float | None = None
                 error_payload: dict[str, Any] | None = None
                 try:
                     result = await runner.run(prompt)
+                    # Capture run-only duration here; full wall-clock (including
+                    # file write) is recorded below for latency_seconds.
+                    run_duration = time.time() - start
                 except Exception as exc:
                     _LOG.exception(
                         "trial failed (%s trial %d): %s", sf.name, trial, exc
@@ -453,15 +464,16 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                         },
                     }
 
-                duration = time.time() - start
-
                 if error_payload is not None:
                     _write_output(out_path, error_payload)
                     any_failed = True
                     trial_ok = False
                 else:
+                    # runner_meta.duration_seconds = run-only time (no file write),
+                    # consistent with the single-trial path's _serialize_run_result call.
+                    assert run_duration is not None
                     output = _serialize_run_result(
-                        args, prompt, result, duration, scenario_file=sf_rel
+                        args, prompt, result, run_duration, scenario_file=sf_rel
                     )
                     output["scenario"] = scenario_payload
                     _write_output(out_path, output)
@@ -476,6 +488,11 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                             trial,
                         )
 
+                # Wall-clock ends after the JSON write to match single-trial
+                # path semantics (run_experiment.sh measures END_EPOCH after
+                # the runner process exits, which includes the file write).
+                duration = time.time() - start
+
                 try:
                     _rel_path = out_path.relative_to(repo_root).as_posix()
                 except ValueError:
@@ -486,6 +503,11 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                         "trial_index": trial,
                         "latency_seconds": duration,
                         "output_path": _rel_path,
+                        # One-time MCP setup cost amortized across all trials by
+                        # notebooks: total_cost = sum(latency_seconds) + mcp_setup_seconds.
+                        # Per-trial latency_seconds stays comparable to single-trial
+                        # path (which includes per-trial MCP setup in its wall-clock).
+                        "mcp_setup_seconds": mcp_setup_seconds,
                     }
                 )
                 _LOG.info(
