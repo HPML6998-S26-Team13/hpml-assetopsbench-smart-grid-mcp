@@ -308,6 +308,29 @@ def test_batch_mode_rejects_non_optimized_mcp_mode(tmp_path):
     assert asyncio.run(_main(args)) == 2
 
 
+def test_batch_mode_rejects_zero_trials(tmp_path):
+    """--trials must be >= 1; zero/negative must return rc=2 without creating output dir."""
+    from scripts.aat_runner import _main_multi
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    new_subdir = tmp_path / "should_not_be_created"
+    for bad_trials in (0, -1):
+        args = argparse.Namespace(
+            scenarios_glob="nonexistent_xyzzy_*.json",
+            output_dir=str(new_subdir),
+            model_id="x",
+            mcp_mode="optimized",
+            max_turns=30,
+            parallel_tool_calls=False,
+            trials=bad_trials,
+            run_basename="batch",
+        )
+        rc = asyncio.run(_main_multi(args, repo_root))
+        assert rc == 2, f"expected rc=2 for trials={bad_trials}, got {rc}"
+        assert not new_subdir.exists(), f"output dir must not be created for trials={bad_trials}"
+
+
 def test_batch_output_dir_normalization():
     """Regression: relative --output-dir must not raise ValueError in relative_to().
 

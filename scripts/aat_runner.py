@@ -367,6 +367,10 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
         )
         return 2
 
+    if args.trials < 1:
+        _LOG.error("--trials must be >= 1; got %d", args.trials)
+        return 2
+
     from scripts.aat_tools_mcp import build_mcp_servers
 
     output_dir = Path(args.output_dir)
