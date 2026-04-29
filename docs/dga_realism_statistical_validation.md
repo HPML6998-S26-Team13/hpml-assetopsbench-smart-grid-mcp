@@ -102,22 +102,27 @@ real-world scenarios?*
   Annex A. We have it transitively via Duval & dePablo 2001 reproduction
   (see § 4) but not as a primary file in the repo.
 
-### 2.4 Three-way fault-table divergence (added 2026-04-28, post-PR open)
+### 2.4 Three-way fault-table divergence (added 2026-04-28; resolved 2026-04-29)
 
-After this PR was opened, a copy of IEC 60599:2022 (4th ed., publication
+After PR #148 was opened, a copy of IEC 60599:2022 (4th ed., publication
 66491) was obtained for personal-research review. Table 1 of the standard
 was extracted and compared row-by-row against the two team-repo encodings.
 Ask Alex for source-of-record details if you need to verify a specific
 range; the standard is paywalled and not redistributable.
 
-**Three different DGA-classification tables are currently in play. None
-of them agree with the others.**
+> **Status: RESOLVED in this PR (2b).** Both Table B (JSON `fault_table`)
+> and Table C (server `_rogers_ratio`) were rewritten to match IEC 60599:2022
+> Table 1 directly. `representative_gas_profiles.profiles` were regenerated
+> to round-trip via the new server table. The divergence summary below is
+> retained as historical context; the current state is **B = C = A**.
 
-| Table | Where | Status |
-|-------|-------|--------|
-| **A — IEC 60599:2022 Table 1** | the standard, p.13 | ground truth |
-| **B — JSON `fault_table`** | `data/knowledge/transformer_standards.json` § `iec_60599.rogers_ratio_method.fault_table` | claims to be IEC; diverges on every electrical-discharge row |
-| **C — FMSR server `_rogers_ratio()`** | `mcp_servers/fmsr_server/server.py:53-296` (also documented in `transformer_standards.json` § `iec_60599.representative_gas_profiles.server_rogers_table_note`) | a third version; this is what runs at agent-call time |
+**Pre-fix state — three different DGA-classification tables.**
+
+| Table | Where | Pre-fix status | Post-fix status (this PR) |
+|-------|-------|----------------|---------------------------|
+| **A — IEC 60599:2022 Table 1** | the standard, p.13 | ground truth | unchanged — ground truth |
+| **B — JSON `fault_table`** | `data/knowledge/transformer_standards.json` § `iec_60599.rogers_ratio_method.fault_table` | claimed IEC; diverged on every electrical-discharge row | rewritten to match A |
+| **C — FMSR server `_rogers_ratio()`** | `mcp_servers/fmsr_server/server.py:65-90` | a third version; the one that ran at agent-call time | rewritten to match A; profiles round-trip |
 
 **Worst divergences (B vs A):**
 
@@ -166,6 +171,12 @@ the shape of the v1 failures.
 **Default plan:** strategy 1 for **PD / D1 R1** (the most-egregious row,
 mechanical fix); re-run L3; revisit remaining rows from data.
 
+**Update 2026-04-29:** strategy 1 was applied across **all six fault rows**
+(PD, D1, D2, T1, T2, T3) in this PR rather than just PD / D1, because once
+we read the standard for those two rows the others were a one-line edit
+each. The L3 chi² baseline (now p = 0.0106 from v0) is expected to shift on
+re-run; report v1 will use the fixed table as ground truth.
+
 **Other findings from the standard PDF:**
 
 - `meta.sources[0]` mislabels edition: says `"edition": "3rd"` with
@@ -184,10 +195,10 @@ mechanical fix); re-run L3; revisit remaining rows from data.
 
 **Companion analysis** (full row-by-row diff matrix, three-way pair
 agreement, per-row contradiction descriptions): held by Alex outside this
-repo because it cites the paywalled IEC text. The team-visible substitutes
-are this § 2.4 summary plus Appendix B's three-way diff matrix, which
-together carry enough signal to scope the fix-the-table PR. Ping Alex
-if you need deeper detail before that PR lands.
+repo because it cites the paywalled IEC text. Used to scope the 2026-04-29
+table-fix PR. The team-visible substitutes are this § 2.4 summary plus
+Appendix B's three-way diff matrix (now historical post-fix). Ping Alex
+if you need to verify a specific bound for L3 v1 anomaly investigation.
 
 ### 2.5 Free-PDF acquisition status (Apr 28 search)
 
@@ -462,21 +473,32 @@ is loaded — and degrades cleanly.
 
 ## 7. Pre-May 4 plan
 
+Ownership shifted on 2026-04-29: Akshat takes over scenario-truth and L3
+validation; Alex retains the JSON/server reconciliation work he had personal
+research notes for, and shifts focus to AssetOpsBench fork refactor + project
+planning. Tanisha picks up paper / NeurIPS framing.
+
 | # | Task | Owner | Day | Acceptance |
 |---|------|-------|-----|-----------|
-| 1 | Land L3 skeleton + this doc | Alex | Apr 28 | this PR merges |
-| 2 | Pin `transformer_standards.json` `meta.sources[0]` to IEC 60599 4th ed. (2022) — current value `"3rd"` is wrong (3rd ed. = 2015). Doc-only fix. | Alex | Apr 29 | JSON `meta.sources[0].edition` = `"4th"`, CHANGELOG entry |
-| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 + Appendix B for the divergence summary; ask Alex for the full row-by-row working notes containing the canonical numeric bounds. | Alex (separate PR) | Apr 29 | JSON D1 R1 / R3 ranges replaced with IEC-canonical bounds (consult standard); server `_rogers_ratio` updated to match; tests pass; representative gas profiles regenerated. |
-| 3 | Acquire IEEE DataPort DGA dataset (Columbia IEEE, or Kaggle backstop) | Alex | Apr 29 | `data/external/ieee_dataport_dga.csv` (or Kaggle equivalent) on disk |
-| 4 | First L3 run: `validate_realism_statistical.py` with real data | Alex | Apr 29 | `reports/realism_statistical_v1.md` exists |
-| 5 | Tune synthesis: if any test fails, adjust `data/generate_synthetic.py` per-fault gas means/stds, regenerate, re-run | Alex | Apr 30 – May 1 | majority of tests pass at v2 or v3 |
-| 6 | Add L3 report-card figure to `reports/2026-05-04_final.pdf` § Methodology | Alex | May 2 | figure rendered, caption written |
-| 7 | Wire L3 into PR #147 promotion path: each accepted batch produces a `realism_statistical_<batch_id>.md` | Alex / Aaron | May 2–3 | scaffold extended, doc updated |
-| 8 | Mention dual-citation in paper: IEC 60599 + IEEE C57.104 + IEC TC 10 (via Duval 2001) | Alex | May 3 | references section updated |
+| 1 | Land L3 skeleton + this doc | Alex | Apr 28 | merged in PR #148 |
+| 2 | Pin `transformer_standards.json` `meta.sources[0]` to IEC 60599 4th ed. (2022) — old value `"3rd"` was wrong (3rd ed. = 2015). | Alex | Apr 29 | merged in this PR; `meta.sources[0].edition` = `"4th"` |
+| 2b | **Fix `fault_table` (JSON) and `_rogers_ratio` (server) to match IEC 60599:2022 Table 1.** All six fault rows (PD, D1, D2, T1, T2, T3) updated; `representative_gas_profiles` regenerated to round-trip; `tests/test_fmsr_server.py` fixtures updated in lockstep. | Alex | Apr 29 | merged in this PR; 23/23 fmsr tests pass; profiles round-trip via server |
+| 3 | Acquire IEEE DataPort DGA dataset (Columbia IEEE, or Kaggle backstop) | **Akshat** | by May 1 | `data/external/ieee_dataport_dga.xlsx` (or csv equivalent) on disk |
+| 4 | First L3 run: `validate_realism_statistical.py --real <dataset> --real-source ieee_dataport` | **Akshat** | May 1 | `reports/realism_statistical_v1.{md,json}` exist |
+| 5 | Tune synthesis: if tests fail, adjust `data/generate_synthetic.py` per-fault gas means/stds, regenerate, re-run | **Akshat** | May 1 – 2 | majority of L3 tests pass at v2 or v3 |
+| 6 | Add L3 report-card figure to final report § Methodology | **Akshat** + Tanisha | May 2 | figure rendered, caption written |
+| 7 | Wire L3 into PR #147 promotion path: each accepted batch produces a `realism_statistical_<batch_id>.md` | Aaron + Akshat | May 2–3 | scaffold extended, doc updated |
+| 8 | Refactor existing code to the AssetOpsBench fork; new GitHub Project planning page | **Alex** | Apr 30 – May 2 | refactor plan filed; migration PR open or merged; project board live |
+| 9 | NeurIPS / final paper framing — dual-citation IEC 60599 + IEEE C57.104 + IEC TC 10 (via Duval 2001); methodology / failure-taxonomy / final paper structure | **Tanisha** | May 1 – 3 | references section updated; paper outline circulated |
 
-**Hard contingency:** if no real dataset can be acquired by Apr 30, fall
-back to TC 10 reference prevalence chi-squared only and document the gap as
-a limitation in the paper. This is degraded but defensible.
+**Open in-flight PRs to finish first (Akshat + Aaron):** the three open team
+PRs at the time of this handoff — see `gh pr list --state open` for current
+state. Real-data acquisition and L3 v1 run are unblocked once those merge.
+
+**Hard contingency:** if no real dataset can be acquired by May 1, fall back
+to TC 10 reference prevalence chi-squared only and document the gap as a
+limitation in the paper. This is degraded but defensible. Alex's personal
+fallback dataset acquisition path (Columbia ILL) remains a backstop.
 
 ---
 
@@ -623,14 +645,12 @@ mkdir -p data/external
 
 ### 12.4 Decisions you'll need to make
 
-1. **Run L3 v1 before or after the table-fix PR (§ 7 task 2b)?**
-   - *Before*: faster, but conditional-KS will likely fail on D1/D2/T1 in
-     ways that require re-running after the table fix.
-   - *After*: cleaner, but blocked on someone (Alex or you) landing the
-     fix-the-table PR first.
-   - **Suggested:** run a v1 anyway *before* the fix to capture the "broken-
-     baseline" report card; that becomes evidence in the paper that the
-     reconciliation was necessary, not cosmetic.
+1. **Table-fix PR (§ 7 task 2b) — landed 2026-04-29.** Both `fault_table`
+   (JSON) and `_rogers_ratio` (server) now match IEC 60599:2022 Table 1.
+   Run L3 v1 against the fixed table directly. The pre-fix v0 baseline
+   (n=20, chi² p=0.0106) is preserved in `reports/realism_statistical_v0.{md,json}`
+   as the "broken-baseline" report card and remains useful evidence for the
+   paper's methodology section that the reconciliation was necessary.
 
 2. **Treat synthetic CO/CO2 data as out-of-scope for L3, or add a
    second IEEE-C57.104-style cellulose test?** § 9 currently flags this as
@@ -702,13 +722,20 @@ reading the standard against our code.
 
 ---
 
-## 14. Appendix B — Three-way diff matrix (full)
+## 14. Appendix B — Three-way diff matrix (historical, pre-2b)
+
+> **Status: historical.** This matrix describes the divergent state that
+> existed *before* the 2026-04-29 reconciliation PR. After that PR, B and C
+> were rewritten to match A — every cell below is now ✅ for B↔A and C↔A.
+> The matrix is preserved as evidence for the paper's methodology section
+> (we found and fixed a three-way disagreement) and as scaffolding for any
+> future re-validation.
 
 Tables under comparison (using JSON R-numbering throughout):
 
 - **A** = IEC 60599:2022 Table 1 (the canonical standard).
-- **B** = `data/knowledge/transformer_standards.json § iec_60599.rogers_ratio_method.fault_table`.
-- **C** = FMSR server `_rogers_ratio()` (per `server_rogers_table_note`).
+- **B** = `data/knowledge/transformer_standards.json § iec_60599.rogers_ratio_method.fault_table` *(pre-2b)*.
+- **C** = FMSR server `_rogers_ratio()` *(pre-2b)*.
 
 Per-pair-per-cell: ✅ matches; ⚠️ partial overlap or differing bounds;
 ❌ contradicts (no overlap or opposite half-line).

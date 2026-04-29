@@ -11,8 +11,13 @@ Covers:
 DGA contract assumptions documented below for harness authors (see also #11):
   - analyze_dga is fully deterministic: same inputs always yield the same output
   - IEC code "N" / "Normal / Inconclusive" is a valid output, not an error
-  - C2H2 >> C2H4 (ratio > 3) indicates high-energy arcing; Rogers table maps
-    R2 >= 3 → D2 ("High-Energy Electrical Discharge (Arcing)")
+  - The Rogers table follows IEC 60599:2022 Table 1 strictly. D2 ("Discharges
+    of high energy / arcing") requires R2 = C2H2/C2H4 ∈ [0.6, 2.5) AND
+    R3 ≥ 2.0 AND R1 ∈ [0.1, 1.0). Samples with R2 ≥ 2.5 fall outside D2 and
+    (if R1 ∈ [0.1, 0.5) and R2 ≥ 1.0 and R3 ≥ 1.0) classify as D1 instead.
+    This is per IEC's strict reading; some operational DGA tools relax D2's
+    R2 upper bound, but this server matches the standard. Boundary phrasing
+    here uses the encoded range convention: min-inclusive, max-exclusive.
   - All-zero inputs return "N" (no division by zero crash)
 """
 
@@ -169,10 +174,11 @@ def test_analyze_dga_deterministic():
 
 
 def test_analyze_dga_high_c2h2_ratio():
-    # Non-regression: T-018 profile (R1=0.17, R2=18.5, R3=8.67) returns N
-    # under the current Rogers table implementation.
+    # T-018 profile (R1=0.17, R2=18.5, R3=8.67) classifies as D1 under
+    # IEC 60599:2022 Table 1: R2=18.5 falls outside D2's [0.6, 2.5) cap,
+    # so D1 (R1 ∈ [0.1, 0.5), R2 ≥ 1, R3 ≥ 1) wins.
     result = analyze_dga(**_T018_GASES)
-    assert result["iec_code"] == "N"
+    assert result["iec_code"] == "D1"
 
 
 def test_analyze_dga_all_zeros_no_crash():
@@ -180,6 +186,49 @@ def test_analyze_dga_all_zeros_no_crash():
     assert "iec_code" in result
     # Zero gases → normal / inconclusive
     assert result["iec_code"] == "N"
+
+
+def test_analyze_dga_zero_c2h6_diverges_r3():
+    # Regression: zero denominator must produce a divergent ratio internally
+    # (so classification is correct), but the public output normalizes inf →
+    # null + r3_divergent: True for JSON safety.
+    result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=100, c2h6=0)
+    assert result["iec_code"] == "D2"
+    assert result["r3_c2h4_c2h6"] is None
+    assert result.get("r3_divergent") is True
+    # Strict JSON serialization must succeed (allow_nan=False catches inf).
+    _json.dumps(result, allow_nan=False)
+
+
+def test_analyze_dga_zero_c2h4_diverges_r2():
+    # Regression: c2h4=0, c2h2>0 → R2 diverges and R3 collapses to 0.
+    # Public output: r2_c2h2_c2h4 → null + r2_divergent: True.
+    result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=0, c2h6=30)
+    # R2 diverges, R3=0.0 (c2h4=0, c2h6>0). No fault row matches → N.
+    assert result["iec_code"] == "N"
+    assert result["r2_c2h2_c2h4"] is None
+    assert result.get("r2_divergent") is True
+    _json.dumps(result, allow_nan=False)
+
+
+def test_analyze_dga_zero_h2_diverges_r1():
+    # Regression: h2=0, ch4>0 → R1 diverges. Public r1_ch4_h2 → null + flag.
+    result = analyze_dga(h2=0, ch4=200, c2h2=2, c2h4=80, c2h6=120)
+    # R1 diverges, R2=0.025, R3=0.667 → T1 (R1>=1, R2 NS, R3<1).
+    assert result["iec_code"] == "T1"
+    assert result["r1_ch4_h2"] is None
+    assert result.get("r1_divergent") is True
+    _json.dumps(result, allow_nan=False)
+
+
+def test_analyze_dga_finite_ratios_have_no_divergent_flags():
+    # Non-regression: finite-ratio results must NOT carry r{1,2,3}_divergent
+    # keys at all (avoid surprising consumers with always-false flags).
+    result = analyze_dga(**_T018_GASES)
+    assert "r1_divergent" not in result
+    assert "r2_divergent" not in result
+    assert "r3_divergent" not in result
+    _json.dumps(result, allow_nan=False)
 
 
 def test_analyze_dga_without_transformer_id():

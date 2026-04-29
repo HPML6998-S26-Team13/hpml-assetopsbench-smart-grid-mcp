@@ -2,6 +2,142 @@
 
 ## 2026-04-29
 
+### Fixed (PR #149 review v2)
+
+- `mcp_servers/fmsr_server/server.py` — apply review v2 fixes:
+  - **High 1**: divergent ratios were leaking `math.inf` into the public
+    `analyze_dga` result, breaking strict JSON serialization
+    (`json.dumps(result, allow_nan=False)` raised on the zero-denominator
+    reproducer). Added `_ratio_field()` and `_build_result()` helpers
+    that normalize outbound ratio fields: a divergent ratio is now
+    reported as `null` plus a sibling `r{1,2,3}_divergent: true` flag.
+    Internal table matching still uses the true infinity, so
+    classification correctness is preserved. Finite-ratio results omit
+    the `*_divergent` keys entirely (avoids surprising consumers with
+    always-false flags).
+  - The `analyze_dga` tool docstring documents the divergent-flag
+    convention.
+  - **Low 2**: `data/knowledge/transformer_standards.json:47`
+    `match_order` boundary phrasing aligned to the encoded
+    min-inclusive/max-exclusive convention (`R2 ∈ [1.0, 2.5)`,
+    `R3 ≥ 2.0`); matches `range_semantics` and the server table now.
+- `tests/test_fmsr_server.py` — three zero-denominator regressions
+  reshaped to assert the new public output: ratio field is `None`,
+  `r{1,2,3}_divergent` is `True`, and `json.dumps(result, allow_nan=False)`
+  succeeds. Added `test_analyze_dga_finite_ratios_have_no_divergent_flags`
+  ensuring finite-ratio results stay clean. All 27 fmsr tests pass.
+
+### Fixed (PR #149 review v1)
+
+- `mcp_servers/fmsr_server/server.py` — apply review v1 fixes:
+  - **High 1**: zero-denominator collapse to 0.0 in `_rogers_ratio` could
+    silently misclassify samples. Reproducer at the v1 head: `h2=500,
+    ch4=200, c2h2=120, c2h4=100, c2h6=0` has R3=+inf (real ratio diverges)
+    and matches D2 row, but the prior code reported `iec_code=N` and
+    `r3_c2h4_c2h6=0.0`. Replaced inline `x / y if y > 0 else 0.0` with a
+    `_ratio()` helper that returns `math.inf` when denominator==0 and
+    numerator>0, `0.0` when both are zero, and the finite quotient
+    otherwise. The `_in_range` boundary checks already handle `math.inf`
+    correctly (inf >= lo passes; inf < hi fails for finite hi).
+  - **Low 4**: comments at server.py:67-69 + tests docstring at line 15
+    aligned to encoded boundary semantics (`R3 ≥ 2.0`, `R2 ∈ [1.0, 2.5)`)
+    so future boundary tests do not infer a stricter table.
+- `tests/test_fmsr_server.py` — three regression tests added for
+  zero-denominator divergence: `test_analyze_dga_zero_c2h6_diverges_r3`
+  (the High 1 reproducer; expects D2 + isinf(R3)),
+  `test_analyze_dga_zero_c2h4_diverges_r2` (R2=+inf falls outside D2 →
+  N), `test_analyze_dga_zero_h2_diverges_r1` (R1=+inf, R3<1 → T1). All 26
+  fmsr tests pass.
+- `data/knowledge/README.md` — **Medium 3**: D2 example block
+  refreshed to the new IEC-aligned profile (H2=500, CH4=200, C2H2=120,
+  C2H4=100, C2H6=30) with R1=0.40, R2=1.20, R3=3.33 noted; pointer to
+  `alignment_note` instead of removed `server_rogers_table_note`.
+- `docs/knowledge/scenario_generation_support.json` — **High 2**:
+  `dga_trend_templates` regenerated against IEC-aligned profiles.
+  - `endpoint_verification_note` updated with the new canonical profile
+    values and a regeneration date.
+  - `rising_hydrogen_pd`: terminal step uses new PD profile (R3=0.188);
+    intermediate steps re-tuned so R3 stays above 0.2 (PD ceiling) until
+    T-60.
+  - `accelerating_arc_d1_to_d2`: D1 + D2 endpoints replaced with new
+    canonical profiles; intermediate T-14 step (H2=500, CH4=120, C2H2=90,
+    C2H4=70, C2H6=40) verified D1; description rewritten to attribute
+    D1→D2 to R3 crossing 2.0 and R1 doubling.
+  - `thermal_t1_to_t3_progression`: T1, T2, T3 endpoints refreshed; T1
+    profile changed substantially (R1=2.00 instead of 0.50 — new T1 row
+    requires R1≥1).
+  - `stable_condition3_d1`: D1 endpoint + drift trajectory rewired
+    around the new D1 profile (C2H2=80, C2H4=60, C2H6=40); R3 stays
+    below D2's 2.0 threshold across all three steps.
+  - All 5 templates × 3 steps = 15 classifications verified to round-trip
+    via `_rogers_ratio`.
+
+### Changed — IEC 60599:2022 Table 1 reconciliation (§ 7 task 2b)
+
+- `mcp_servers/fmsr_server/server.py` — rewrite `_ROGERS_TABLE` to match
+  IEC 60599:2022 Table 1 (4th ed., publication 66491, p.13) for all six
+  fault rows (PD, D1, D2, T1, T2, T3). Prior table diverged on every
+  electrical-discharge row and on T1 R1; documented three-way divergence
+  in `docs/dga_realism_statistical_validation.md` § 2.4 + Appendix B.
+  - **D1 R1**: `[0.1, 1.0)` → `[0.1, 0.5)` (per IEC).
+  - **D1 R2**: `[0.1, 3.0)` → `[1.0, ∞)`.
+  - **D1 R3**: `[0, 1.0)` → `[1.0, ∞)`.
+  - **D2 R2**: `[0.1, 3.0)` → `[0.6, 2.5)`.
+  - **D2 R3**: `[1.0, ∞)` → `[2.0, ∞)`.
+  - **T1 R1**: `[0.1, 1.0)` → `[1.0, ∞)`. R2 changed to NS (any).
+  - **T1 R3**: `[1.0, 3.0)` → `[0, 1.0)`.
+  - **T2 R3**: `[1.0, 3.0)` → `[1.0, 4.0)`.
+  - **T3 R2**: `[0, 0.1)` → `[0, 0.2)`.
+  - **T3 R3**: `[3.0, ∞)` → `[4.0, ∞)`.
+  - **PD R1**: `[0.1, 1.0)` → `[0, 0.1)`. R3 changed `[0, 1.0)` → `[0, 0.2)`.
+  - **Match order** changed to most-severe first (D2, D1, T3, T2, T1, PD)
+    so first-match-wins resolves IEC's overlapping ranges toward the
+    higher-severity code.
+  - Adds explicit all-zero guard at the top of `_rogers_ratio` so a sample
+    with no detectable gases returns N (PD's R1/R3 ranges include 0 under
+    IEC, which would otherwise produce a spurious PD).
+- `data/knowledge/transformer_standards.json`:
+  - `meta.sources[0].edition` `"3rd"` → `"4th"` (3rd ed. = 2015; 2022 release
+    is 4th ed.). Added `publication_id: 66491`.
+  - `iec_60599.rogers_ratio_method.fault_table` rewritten to match the
+    server table 1:1. Adds explicit `range_semantics` and `match_order`
+    keys documenting the convention.
+  - `representative_gas_profiles.profiles` regenerated. All seven profiles
+    (PD, D1, D2, T1, T2, T3, N) verified to round-trip via
+    `analyze_dga`. Removes the `server_rogers_table_note` divergence
+    record (no longer applicable). Adds `alignment_note` capturing the
+    pre-fix → post-fix transition.
+  - `scenario_generator_hints.fault_diagnosis_scenario.example` updated
+    with new D2 profile values.
+- `tests/test_fmsr_server.py`:
+  - `test_analyze_dga_high_c2h2_ratio` (T-018: R1=0.17, R2=18.5, R3=8.67)
+    now expects `D1` (was `N`). Under strict IEC, R2 >> 2.5 falls outside
+    D2's `[0.6, 2.5)` cap, so D1 wins.
+  - Module docstring updated to reflect IEC contract (D2 R2 ∈ [0.6, 2.5),
+    samples with R2 >> 2.5 → D1).
+  - All 23 fmsr tests pass; 7/7 representative profiles round-trip.
+- `docs/dga_realism_statistical_validation.md`:
+  - § 2.4 marked **resolved**; pre-fix divergence retained as historical
+    context with post-fix status column.
+  - § 7 plan rewritten for new ownership split: Akshat owns scenario-truth
+    + L3 v1 + synthesis tuning; Alex owns this PR + AOB fork refactor +
+    project planning; Tanisha owns NeurIPS / final paper framing.
+  - § 12.4 (Akshat handoff decisions) updated: table-fix is no longer a
+    pending decision; v0 baseline (n=20, p=0.0106) preserved as evidence.
+  - § 14 Appendix B marked **historical (pre-2b)**.
+
+**Why all six rows in one PR (vs. only PD/D1 per the original § 2.4 plan):**
+once the standard's text was in front of us for two rows, the others were
+one-line edits each. Bundling them is cheaper for downstream consumers
+(PR #147 generator path) than landing two PRs.
+
+**Known downstream impact:** any synthetic scenarios already generated by
+PR #147 carry fault labels assigned under the pre-fix table. Re-classify
+or regenerate before treating them as IEC-compliant ground truth. The L3
+validator (`validate_realism_statistical.py`) is unaffected at the
+distribution level but its chi² fault-prevalence baseline will shift on
+re-run; v0 baseline preserved at `reports/realism_statistical_v0.{md,json}`.
+
 ### Fixed (PR #148 review v4)
 
 - `data/scenarios/validate_realism_statistical.py` — apply review v4 fixes:

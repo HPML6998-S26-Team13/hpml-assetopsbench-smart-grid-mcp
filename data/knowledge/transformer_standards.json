@@ -8,8 +8,9 @@
       {
         "id": "IEC_60599_2022",
         "title": "IEC 60599:2022 — Mineral oil-filled electrical equipment in service — Guidance on the interpretation of dissolved and free gases analysis",
-        "edition": "3rd",
-        "year": 2022
+        "edition": "4th",
+        "year": 2022,
+        "publication_id": 66491
       },
       {
         "id": "IEEE_C57_104_2019",
@@ -36,48 +37,21 @@
 
     "rogers_ratio_method": {
       "source": "IEC_60599_2022",
-      "description": "Classifies fault type from three gas ratios. A set of gas readings that matches no row defaults to N (normal or inconclusive). This is the method implemented in the fmsr_server analyze_dga tool.",
+      "description": "Classifies fault type from three gas ratios per IEC 60599:2022 Table 1 (4th ed., p.13). A set of gas readings that matches no row defaults to N (normal or inconclusive). The fmsr_server analyze_dga tool implements this exact table; ranges below are the contract.",
       "ratios": {
-        "R1": { "formula": "CH4 / H2",    "label": "Methane to Hydrogen" },
-        "R2": { "formula": "C2H2 / C2H4", "label": "Acetylene to Ethylene" },
-        "R3": { "formula": "C2H4 / C2H6", "label": "Ethylene to Ethane" }
+        "R1": { "formula": "CH4 / H2",    "label": "Methane to Hydrogen", "iec_table_column": "middle" },
+        "R2": { "formula": "C2H2 / C2H4", "label": "Acetylene to Ethylene", "iec_table_column": "first" },
+        "R3": { "formula": "C2H4 / C2H6", "label": "Ethylene to Ethane", "iec_table_column": "third" }
       },
+      "range_semantics": "Each *_range is [min_inclusive, max_exclusive]. null = unbounded. R2_range of [0, null] encodes IEC's 'NS' (non-significant whatever the value) since R2 is non-negative.",
+      "match_order": "Rows are evaluated most-severe first (D2, D1, T3, T2, T1, PD, then N as fall-through). This breaks ties toward the more severe code in regions where IEC ranges overlap. Following the encoded min-inclusive/max-exclusive convention, the D1/D2 overlap zone is R1 ∈ [0.1, 0.5), R2 ∈ [1.0, 2.5), R3 ≥ 2.0 — D2 wins.",
       "fault_table": [
-        {
-          "iec_code": "N",
-          "label": "Normal / Inconclusive",
-          "description": "Default result when gas ratios do not match any classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from iec_60599.representative_gas_profiles.profiles.",
-          "typical_cause": "Normal insulation aging, or mixed fault signatures that do not cleanly match a single pattern",
-          "severity": "low"
-        },
-        {
-          "iec_code": "PD",
-          "label": "Partial Discharge",
-          "R1_range": [0.0, 0.1],
-          "R2_range": [0.0, 0.1],
-          "R3_range": [0.0, 1.0],
-          "description": "Low-level ionization without bridging, typically in voids or cavities.",
-          "typical_cause": "Voids in insulation, gas cavities, high-moisture paper",
-          "severity": "medium",
-          "dominant_gas": "H2"
-        },
-        {
-          "iec_code": "D1",
-          "label": "Low-Energy Electrical Discharge",
-          "R1_range": [0.0, 0.1],
-          "R2_range": [0.1, 3.0],
-          "R3_range": [0.0, 1.0],
-          "description": "Sparking or corona discharge in oil or between surfaces.",
-          "typical_cause": "High electric field stress, floating potential, turn-to-turn incipient fault",
-          "severity": "medium-high",
-          "dominant_gases": ["H2", "C2H2"]
-        },
         {
           "iec_code": "D2",
           "label": "High-Energy Electrical Discharge (Arcing)",
-          "R1_range": [0.1, 3.0],
-          "R2_range": [3.0, null],
-          "R3_range": [3.0, null],
+          "R1_range": [0.1, 1.0],
+          "R2_range": [0.6, 2.5],
+          "R3_range": [2.0, null],
           "description": "Power-follow arc, flashover, or sustained arcing between conductors.",
           "typical_cause": "Insulation breakdown, winding short circuit, tap changer failure",
           "severity": "critical",
@@ -85,10 +59,44 @@
           "condition_4_trigger": true
         },
         {
+          "iec_code": "D1",
+          "label": "Low-Energy Electrical Discharge",
+          "R1_range": [0.1, 0.5],
+          "R2_range": [1.0, null],
+          "R3_range": [1.0, null],
+          "description": "Sparking or corona discharge in oil or between surfaces.",
+          "typical_cause": "High electric field stress, floating potential, turn-to-turn incipient fault",
+          "severity": "medium-high",
+          "dominant_gases": ["H2", "C2H2"]
+        },
+        {
+          "iec_code": "T3",
+          "label": "Thermal Fault — High Temperature (>700°C)",
+          "R1_range": [1.0, null],
+          "R2_range": [0.0, 0.2],
+          "R3_range": [4.0, null],
+          "description": "Severe thermal fault, carbonization of oil or paper.",
+          "typical_cause": "Core bolt fault, severe conductor overheating, cooling system failure",
+          "severity": "critical",
+          "dominant_gases": ["CH4", "C2H4"],
+          "condition_4_trigger": true
+        },
+        {
+          "iec_code": "T2",
+          "label": "Thermal Fault — Medium Temperature (300–700°C)",
+          "R1_range": [1.0, null],
+          "R2_range": [0.0, 0.1],
+          "R3_range": [1.0, 4.0],
+          "description": "Local overheating in oil or conductor, significant thermal degradation.",
+          "typical_cause": "Core hot spot, conductor short circuit, cooling blockage",
+          "severity": "high",
+          "dominant_gases": ["CH4", "C2H4", "C2H6"]
+        },
+        {
           "iec_code": "T1",
           "label": "Thermal Fault — Low Temperature (<300°C)",
           "R1_range": [1.0, null],
-          "R2_range": [0.0, 0.1],
+          "R2_range": [0.0, null],
           "R3_range": [0.0, 1.0],
           "description": "Mild local overheating, typically in solid insulation or mild conductor hot spot.",
           "typical_cause": "Circulating currents, overloading, insulation contact with hot surface",
@@ -96,43 +104,38 @@
           "dominant_gases": ["CH4", "C2H6"]
         },
         {
-          "iec_code": "T2",
-          "label": "Thermal Fault — Medium Temperature (300–700°C)",
-          "R1_range": [1.0, 3.0],
-          "R2_range": [0.0, 0.1],
-          "R3_range": [1.0, 3.0],
-          "description": "Local overheating in oil or conductor, significant thermal degradation.",
-          "typical_cause": "Core hot spot, conductor short circuit, cooling blockage",
-          "severity": "high",
-          "dominant_gases": ["CH4", "C2H4", "C2H6"]
+          "iec_code": "PD",
+          "label": "Partial Discharge",
+          "R1_range": [0.0, 0.1],
+          "R2_range": [0.0, null],
+          "R3_range": [0.0, 0.2],
+          "description": "Low-level ionization without bridging, typically in voids or cavities.",
+          "typical_cause": "Voids in insulation, gas cavities, high-moisture paper",
+          "severity": "medium",
+          "dominant_gas": "H2"
         },
         {
-          "iec_code": "T3",
-          "label": "Thermal Fault — High Temperature (>700°C)",
-          "R1_range": [3.0, null],
-          "R2_range": [0.0, 0.1],
-          "R3_range": [3.0, null],
-          "description": "Severe thermal fault, carbonization of oil or paper.",
-          "typical_cause": "Core bolt fault, severe conductor overheating, cooling system failure",
-          "severity": "critical",
-          "dominant_gases": ["CH4", "C2H4"],
-          "condition_4_trigger": true
+          "iec_code": "N",
+          "label": "Normal / Inconclusive",
+          "description": "Default result when gas ratios match no classified fault row. N is not a classified fault — it has no ratio ranges. Any gas combination that falls outside all other rows produces N. Do not attempt to target specific ratio ranges to generate an N scenario; instead use gas values from iec_60599.representative_gas_profiles.profiles.",
+          "typical_cause": "Normal insulation aging, or mixed fault signatures that do not cleanly match a single pattern",
+          "severity": "low"
         }
       ],
-      "generator_note": "IMPORTANT: Do not derive gas values from fault_table. The fault_table represents the IEC 60599 standard; the server implementation diverges on several rows (see server_rogers_table_note in representative_gas_profiles). Always use iec_60599.representative_gas_profiles.profiles as the source of gas values for scenario generation."
+      "generator_note": "fault_table now matches the fmsr_server implementation 1:1 — both encode IEC 60599:2022 Table 1. Either fault_table[*]_range or representative_gas_profiles.profiles is a valid source for scenario generation; profiles below are pre-validated to produce their declared iec_code via the server's analyze_dga tool."
     },
 
     "representative_gas_profiles": {
-      "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga. Use these as the basis for scenario gas inputs. Safe variation: ±10% per gas value preserves the target iec_code for all profiles. Do not use ±20% — several profiles sit close enough to ratio boundaries that larger variation flips the fault code.",
-      "server_rogers_table_note": "The fmsr_server Rogers table ranges are: PD=(R1:[0.1,1), R2:[0,0.1), R3:[0,1)), D1=(R1:[0.1,1), R2:[0.1,3), R3:[0,1)), D2=(R1:[0.1,1), R2:[0.1,3), R3:[1,inf)), T1=(R1:[0.1,1), R2:[0,0.1), R3:[1,3)), T2=(R1:[1,3), R2:[0,0.1), R3:[1,3)), T3=(R1:[3,inf), R2:[0,0.1), R3:[3,inf)). Key divergences from IEC 60599: (1) PD and D1 — standard requires R1 in [0,0.1) (H2 strongly dominant); server uses R1 in [0.1,1). Profiles with H2=500, CH4=100 (R1=0.2) are correct for the server but would not match the standard PD/D1 rows. (2) D2 — standard requires R2>3 (high acetylene ratio); server uses R2 in [0.1,3) with R3>=1. (3) T1 — standard requires R1>1 (CH4 dominant over H2); server requires R1 in [0.1,1) (H2 dominant). These are opposite. Profiles below are calibrated to the server implementation, not the standard text.",
+      "description": "Pre-computed gas values (ppm) verified to produce each fault code from fmsr_server.analyze_dga under IEC 60599:2022 Table 1. Use these as the basis for scenario gas inputs. Safe variation: ±10% per gas value preserves the target iec_code for all profiles. Do not exceed ±10% — several profiles sit close to IEC ratio boundaries (e.g., D2 R3=2, D1 R1=0.5) and larger variation flips the fault code. Server table and JSON fault_table are now in 1:1 agreement.",
+      "alignment_note": "Profiles regenerated 2026-04-29 to align with IEC 60599:2022 Table 1. Replaces the prior server-table-aligned profiles (which targeted divergent ranges PD R1∈[0.1,1) and D2 R2∈[0.1,3)). Any downstream consumer that hard-coded the prior ratio assumptions must be re-validated.",
       "profiles": {
-        "PD":  { "H2": 500, "CH4": 100, "C2H2": 3,  "C2H4": 60,  "C2H6": 80,  "CO": 250,  "CO2": 2200, "expected_iec_code": "PD" },
-        "D1":  { "H2": 500, "CH4": 100, "C2H2": 30, "C2H4": 80,  "C2H6": 100, "CO": 200,  "CO2": 1900, "expected_iec_code": "D1" },
-        "D2":  { "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,  "CO": 300,  "CO2": 2800, "expected_iec_code": "D2", "note": "Server D2 = moderate-severity arc discharge (R2 in [0.1,3)). IEC standard D2 = high-energy arcing with R2>3. Use condition_4_trigger flag from fault_table for catastrophic arcing scenarios." },
-        "T1":  { "H2": 200, "CH4": 100, "C2H2": 3,  "C2H4": 90,  "C2H6": 60,  "CO": 400,  "CO2": 3500, "expected_iec_code": "T1" },
-        "T2":  { "H2": 100, "CH4": 200, "C2H2": 2,  "C2H4": 150, "C2H6": 100, "CO": 450,  "CO2": 3800, "expected_iec_code": "T2" },
-        "T3":  { "H2": 150, "CH4": 600, "C2H2": 3,  "C2H4": 500, "C2H6": 100, "CO": 600,  "CO2": 5000, "expected_iec_code": "T3" },
-        "N":   { "H2": 90,  "CH4": 5,   "C2H2": 1,  "C2H4": 50,  "C2H6": 40,  "CO": 120,  "CO2": 1000, "expected_iec_code": "N"  }
+        "PD":  { "H2": 500, "CH4": 30,  "C2H2": 3,   "C2H4": 15,  "C2H6": 80,  "CO": 250,  "CO2": 2200, "expected_iec_code": "PD" },
+        "D1":  { "H2": 500, "CH4": 100, "C2H2": 80,  "C2H4": 60,  "C2H6": 40,  "CO": 200,  "CO2": 1900, "expected_iec_code": "D1" },
+        "D2":  { "H2": 500, "CH4": 200, "C2H2": 120, "C2H4": 100, "C2H6": 30,  "CO": 300,  "CO2": 2800, "expected_iec_code": "D2" },
+        "T1":  { "H2": 100, "CH4": 200, "C2H2": 2,   "C2H4": 80,  "C2H6": 120, "CO": 400,  "CO2": 3500, "expected_iec_code": "T1" },
+        "T2":  { "H2": 100, "CH4": 200, "C2H2": 2,   "C2H4": 150, "C2H6": 80,  "CO": 450,  "CO2": 3800, "expected_iec_code": "T2" },
+        "T3":  { "H2": 100, "CH4": 600, "C2H2": 3,   "C2H4": 500, "C2H6": 80,  "CO": 600,  "CO2": 5000, "expected_iec_code": "T3" },
+        "N":   { "H2": 90,  "CH4": 5,   "C2H2": 1,   "C2H4": 50,  "C2H6": 40,  "CO": 120,  "CO2": 1000, "expected_iec_code": "N"  }
       }
     }
   },
@@ -271,7 +274,7 @@
       "target_tool": "fmsr_server.analyze_dga",
       "gas_values": "Use iec_60599.representative_gas_profiles.profiles[iec_code] for the target fault code. Vary values ±10% to create distinct scenario instances. Do not exceed ±10% — some profiles sit close to ratio boundaries and larger variation flips the fault code.",
       "condition_level": "Derive from ieee_c57_104.gas_thresholds_ppm.gases — target Condition 2 or 3 for most scenarios (Condition 1 is trivially normal). Exception: faults with condition_4_trigger: true (D2, T3) naturally produce Condition 3–4 due to elevated C2H2 or C2H4; use Condition 4 gas values for those.",
-      "example": "For a D2 arcing scenario: use iec_60599.representative_gas_profiles.profiles[\"D2\"] (H2=500, CH4=100, C2H2=60, C2H4=120, C2H6=50). This gives R1=0.2, R2=0.5, R3=2.4, which the server maps to D2."
+      "example": "For a D2 arcing scenario: use iec_60599.representative_gas_profiles.profiles[\"D2\"] (H2=500, CH4=200, C2H2=120, C2H4=100, C2H6=30). This gives R1=0.4, R2=1.2, R3=3.33, which the server maps to D2 per IEC 60599:2022 Table 1."
     },
 
     "rul_risk_scenario": {
