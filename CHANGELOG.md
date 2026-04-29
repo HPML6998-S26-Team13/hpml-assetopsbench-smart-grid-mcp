@@ -2,6 +2,24 @@
 
 ## 2026-04-29
 
+### Fixed (PR #148 review v4)
+
+- `data/scenarios/validate_realism_statistical.py` — apply review v4 fixes:
+  - **High 1**: real fault labels are now validated after source-specific
+    mapping. Adds a `REAL_LABEL_ALIASES` table (`N` → `Normal`, IEC codes
+    pass through, common case-variants normalize). `load_real()` raises
+    `ValueError` on any post-mapping label not in `FAULT_CODES`, naming
+    the offenders. The chi-squared detail now reports both raw and
+    recognized real-row counts (`n_real_recognized=N/M`) so any future
+    drop is visible if validation is bypassed.
+  - **Medium 2**: `docs/dga_realism_statistical_validation.md` § 6.5
+    (Dependencies) updated to reflect the actual install contract: this
+    PR adds `scipy` and `openpyxl` to `requirements.txt`; `.xls` is
+    intentionally unsupported.
+  - **Low 3**: § 12.1 (Akshat handoff) example now uses `.xlsx` plus
+    `--real-source ieee_dataport` consistently; module docstring usage
+    example matches.
+
 ### Fixed (PR #148 review v3)
 
 - `data/scenarios/validate_realism_statistical.py` — apply review v3 fixes:

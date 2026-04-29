@@ -448,10 +448,15 @@ is loaded — and degrades cleanly.
 
 ### 6.5 Dependencies
 
-- `pandas`, `numpy`, `scipy` (all already in repo deps)
-- No new pin required; `scipy.stats.ks_2samp`,
+- `pandas` and `numpy` were already in `requirements.txt`.
+- `scipy` is added by this PR; `scipy.stats.ks_2samp`,
   `scipy.stats.anderson_ksamp`, `scipy.stats.wasserstein_distance`, and
   `scipy.stats.chisquare` cover the test battery.
+- `openpyxl` is added by this PR for `pd.read_excel(.xlsx)` so the IEEE
+  DataPort primary path works without extra setup.
+- Legacy `.xls` is intentionally NOT supported — it would require `xlrd`,
+  which is not pinned. Convert any `.xls` files to `.xlsx` (Excel /
+  LibreOffice "Save as") or `.csv` before running the validator.
 
 ---
 
@@ -578,14 +583,15 @@ git checkout team13/dat/realism-statistical-validation
 # Expect: "0/2 tests passed" (chi² fails vs TC 10 reference, real dataset missing)
 
 # 3. Pull the IEEE DataPort dataset (Columbia IEEE access required; Kaggle
-#    backstop if blocked) and re-run with --real
+#    backstop if blocked) and re-run with --real + --real-source
 mkdir -p data/external
-# … download dga.xlsx to data/external/ieee_dataport_dga.csv …
+# … download IEEE DataPort dga.xlsx to data/external/ieee_dataport_dga.xlsx …
 .venv/bin/python data/scenarios/validate_realism_statistical.py \
-    --synthetic data/processed/dga_records.csv \
-    --real      data/external/ieee_dataport_dga.csv \
-    --report    reports/realism_statistical_v1.md \
-    --json      reports/realism_statistical_v1.json
+    --synthetic   data/processed/dga_records.csv \
+    --real        data/external/ieee_dataport_dga.xlsx \
+    --real-source ieee_dataport \
+    --report      reports/realism_statistical_v1.md \
+    --json        reports/realism_statistical_v1.json
 ```
 
 ### 12.2 What you have

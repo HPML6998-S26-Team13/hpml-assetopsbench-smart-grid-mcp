@@ -18,13 +18,13 @@ acceptance thresholds, and the ranked dataset list.
 
 Usage:
     python3 data/scenarios/validate_realism_statistical.py \\
-        --synthetic data/processed/dga_records.csv \\
-        --real      data/external/ieee_dataport_dga.csv \\
-        --report    reports/realism_statistical_v1.md
+        --synthetic   data/processed/dga_records.csv \\
+        --real        data/external/ieee_dataport_dga.xlsx \\
+        --real-source ieee_dataport \\
+        --report      reports/realism_statistical_v1.md
 
-The --real path defaults to data/external/<dataset>.csv. If absent, the
-script emits a stub report listing which dataset(s) need to be acquired
-and from where.
+If --real is absent, the script emits a stub report listing which
+dataset(s) need to be acquired and from where.
 """
 
 from __future__ import annotations
@@ -97,6 +97,23 @@ REAL_LABEL_MAPS: dict[str, dict] = {
     "duval_2001_tc10": {
         # Duval & dePablo 2001 IEC TC 10 reproduction uses IEC codes natively
     },
+}
+
+# Canonical aliases applied to real fault labels AFTER any source-specific
+# REAL_LABEL_MAPS translation. Catches the common cases where a dataset
+# uses the IEC server's "N" code for Normal/Inconclusive, or a slightly
+# different spelling. Anything not handled here is treated as an unknown
+# label and rejected by load_real (Reviewer v4 H1).
+REAL_LABEL_ALIASES = {
+    "N": "Normal",
+    "Normal/Inconclusive": "Normal",
+    "normal": "Normal",
+    "pd": "PD",
+    "t1": "T1",
+    "t2": "T2",
+    "t3": "T3",
+    "d1": "D1",
+    "d2": "D2",
 }
 
 # Reference fault prevalence from IEC TC 10 published distribution.
@@ -239,11 +256,29 @@ def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | No
     else:
         df = pd.read_csv(path)
     df = _normalize_real_columns(df)
-    if "fault_label" in df.columns and source and source in REAL_LABEL_MAPS:
-        label_map = REAL_LABEL_MAPS[source]
-        if label_map:
-            df["fault_label"] = df["fault_label"].map(
-                lambda v: label_map.get(v, label_map.get(str(v), v))
+    if "fault_label" in df.columns:
+        if source and source in REAL_LABEL_MAPS:
+            label_map = REAL_LABEL_MAPS[source]
+            if label_map:
+                df["fault_label"] = df["fault_label"].map(
+                    lambda v: label_map.get(v, label_map.get(str(v), v))
+                )
+        # Apply canonical aliases (e.g. "N" -> "Normal") after source mapping
+        # so we accept both raw IEC codes and the small set of well-known
+        # aliases. Reviewer v4 H1.
+        df["fault_label"] = df["fault_label"].map(
+            lambda v: REAL_LABEL_ALIASES.get(v, v) if v is not None else v
+        )
+        # Validate every label maps to a known IEC fault code. Anything else
+        # would silently drop rows from the chi-squared reference, and the
+        # test could pass by accident on the surviving subset.
+        unknown = sorted(set(df["fault_label"].dropna().unique()) - set(FAULT_CODES))
+        if unknown:
+            raise ValueError(
+                f"real dataset has fault_label values not in FAULT_CODES "
+                f"({FAULT_CODES}): {unknown}. Add the source-specific "
+                f"translation to REAL_LABEL_MAPS[{source!r}] or extend "
+                f"REAL_LABEL_ALIASES, then re-run."
             )
     return df
 
@@ -469,6 +504,7 @@ def chi2_fault_prevalence(
             .astype(int)
         )
         n_real = int(real_counts.sum())
+        n_real_raw = int(len(real))
         if n_real == 0:
             return [
                 TestResult(
@@ -477,12 +513,23 @@ def chi2_fault_prevalence(
                     pvalue=None,
                     threshold=CHI2_PVALUE_PASS,
                     passed=False,
-                    detail="real dataset had zero rows mapping to any IEC fault code",
+                    detail=(
+                        f"real dataset had zero rows mapping to any IEC fault code "
+                        f"(n_real_raw={n_real_raw})"
+                    ),
                 )
             ]
         real_props = real_counts.values / n_real
         ref = _scale_to_total(real_props, n_syn)
-        ref_label = f"real (n_real={n_real}, scaled to n_syn)"
+        # Surface both raw and recognized counts so any future drop is visible
+        # even when validation slips through (Reviewer v4 H1 — "include both
+        # raw and recognized counts in the detail so dropped rows cannot hide").
+        real_count_note = (
+            f"n_real={n_real}"
+            if n_real == n_real_raw
+            else f"n_real_recognized={n_real}/{n_real_raw}"
+        )
+        ref_label = f"real ({real_count_note}, scaled to n_syn)"
     else:
         ref_props = (
             pd.Series(TC10_REFERENCE_PREVALENCE).reindex(FAULT_CODES).fillna(0).values
