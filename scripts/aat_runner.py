@@ -428,16 +428,16 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 out_path = output_dir / out_name
 
                 start = time.time()
+                # False is the correct safe default: exception path leaves it False.
                 trial_ok = False
                 try:
                     result = await runner.run(prompt)
-                    # Capture run-only duration (before file write) for
-                    # runner_meta.duration_seconds.  latency_seconds (below)
-                    # uses a post-write timestamp to match single-trial path
-                    # semantics where END_EPOCH includes file write.
-                    run_duration = time.time() - start
+                    # run_only_duration: excludes file write; used for
+                    # runner_meta.duration_seconds so it stays comparable to the
+                    # single-trial path's _serialize_run_result call.
+                    run_only_duration = time.time() - start
                     output = _serialize_run_result(
-                        args, prompt, result, run_duration, scenario_file=sf_rel
+                        args, prompt, result, run_only_duration, scenario_file=sf_rel
                     )
                     output["scenario"] = scenario_payload
                     _write_output(out_path, output)
@@ -482,10 +482,11 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                     _write_output(out_path, error_payload)
                     any_failed = True
 
-                # Wall-clock ends after the JSON write to match single-trial
-                # path semantics (run_experiment.sh measures END_EPOCH after
-                # the runner process exits, which includes the file write).
-                duration = time.time() - start
+                # wall_clock_duration: ends after the JSON write to match
+                # single-trial path semantics (run_experiment.sh measures
+                # END_EPOCH after the runner process exits, which includes
+                # the file write).
+                wall_clock_duration = time.time() - start
 
                 try:
                     _rel_path = out_path.relative_to(repo_root).as_posix()
@@ -495,7 +496,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                     {
                         "scenario_file": sf_rel,
                         "trial_index": trial,
-                        "latency_seconds": duration,
+                        "latency_seconds": wall_clock_duration,
                         "output_path": _rel_path,
                         # One-time MCP setup cost: notebooks can compute total
                         # batch cost as sum(latency_seconds) + mcp_setup_seconds.
@@ -507,7 +508,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 _LOG.info(
                     "wrote %s (%.1fs, success=%s)",
                     out_path.name,
-                    duration,
+                    wall_clock_duration,
                     trial_ok,
                 )
 
