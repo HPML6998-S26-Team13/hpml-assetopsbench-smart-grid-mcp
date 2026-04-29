@@ -2,6 +2,31 @@
 
 ## 2026-04-29
 
+### Fixed (PR #149 review v2)
+
+- `mcp_servers/fmsr_server/server.py` — apply review v2 fixes:
+  - **High 1**: divergent ratios were leaking `math.inf` into the public
+    `analyze_dga` result, breaking strict JSON serialization
+    (`json.dumps(result, allow_nan=False)` raised on the zero-denominator
+    reproducer). Added `_ratio_field()` and `_build_result()` helpers
+    that normalize outbound ratio fields: a divergent ratio is now
+    reported as `null` plus a sibling `r{1,2,3}_divergent: true` flag.
+    Internal table matching still uses the true infinity, so
+    classification correctness is preserved. Finite-ratio results omit
+    the `*_divergent` keys entirely (avoids surprising consumers with
+    always-false flags).
+  - The `analyze_dga` tool docstring documents the divergent-flag
+    convention.
+  - **Low 2**: `data/knowledge/transformer_standards.json:47`
+    `match_order` boundary phrasing aligned to the encoded
+    min-inclusive/max-exclusive convention (`R2 ∈ [1.0, 2.5)`,
+    `R3 ≥ 2.0`); matches `range_semantics` and the server table now.
+- `tests/test_fmsr_server.py` — three zero-denominator regressions
+  reshaped to assert the new public output: ratio field is `None`,
+  `r{1,2,3}_divergent` is `True`, and `json.dumps(result, allow_nan=False)`
+  succeeds. Added `test_analyze_dga_finite_ratios_have_no_divergent_flags`
+  ensuring finite-ratio results stay clean. All 27 fmsr tests pass.
+
 ### Fixed (PR #149 review v1)
 
 - `mcp_servers/fmsr_server/server.py` — apply review v1 fixes:

@@ -189,37 +189,46 @@ def test_analyze_dga_all_zeros_no_crash():
 
 
 def test_analyze_dga_zero_c2h6_diverges_r3():
-    # Regression: zero denominator must produce a divergent (inf) ratio, not 0.
-    # Sample matches D2 if R3 is treated as +inf; would silently misclassify as N
-    # if R3 collapses to 0.0 (the prior bug).
+    # Regression: zero denominator must produce a divergent ratio internally
+    # (so classification is correct), but the public output normalizes inf →
+    # null + r3_divergent: True for JSON safety.
     result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=100, c2h6=0)
     assert result["iec_code"] == "D2"
-    import math as _math
-
-    assert _math.isinf(result["r3_c2h4_c2h6"])
+    assert result["r3_c2h4_c2h6"] is None
+    assert result.get("r3_divergent") is True
+    # Strict JSON serialization must succeed (allow_nan=False catches inf).
+    _json.dumps(result, allow_nan=False)
 
 
 def test_analyze_dga_zero_c2h4_diverges_r2():
-    # Regression: zero denominator on R2 (c2h4=0). c2h2>0, c2h4=0 → R2=+inf,
-    # which falls outside D2's [0.6, 2.5) cap; iec_code must not silently
-    # become D2 just because a stale 0.0 collapse fits.
+    # Regression: c2h4=0, c2h2>0 → R2 diverges and R3 collapses to 0.
+    # Public output: r2_c2h2_c2h4 → null + r2_divergent: True.
     result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=0, c2h6=30)
-    # R2=+inf, R3=0.0 (c2h4=0, c2h6>0). No fault row matches → N.
+    # R2 diverges, R3=0.0 (c2h4=0, c2h6>0). No fault row matches → N.
     assert result["iec_code"] == "N"
-    import math as _math
-
-    assert _math.isinf(result["r2_c2h2_c2h4"])
+    assert result["r2_c2h2_c2h4"] is None
+    assert result.get("r2_divergent") is True
+    _json.dumps(result, allow_nan=False)
 
 
 def test_analyze_dga_zero_h2_diverges_r1():
-    # Regression: h2=0, ch4>0 → R1=+inf. Sample would match T1/T2/T3 candidates
-    # via R1 if other ratios fit, not silently fall to N.
+    # Regression: h2=0, ch4>0 → R1 diverges. Public r1_ch4_h2 → null + flag.
     result = analyze_dga(h2=0, ch4=200, c2h2=2, c2h4=80, c2h6=120)
-    # R1=+inf, R2=0.025, R3=0.667 → T1 (R1>=1, R2 NS, R3<1).
+    # R1 diverges, R2=0.025, R3=0.667 → T1 (R1>=1, R2 NS, R3<1).
     assert result["iec_code"] == "T1"
-    import math as _math
+    assert result["r1_ch4_h2"] is None
+    assert result.get("r1_divergent") is True
+    _json.dumps(result, allow_nan=False)
 
-    assert _math.isinf(result["r1_ch4_h2"])
+
+def test_analyze_dga_finite_ratios_have_no_divergent_flags():
+    # Non-regression: finite-ratio results must NOT carry r{1,2,3}_divergent
+    # keys at all (avoid surprising consumers with always-false flags).
+    result = analyze_dga(**_T018_GASES)
+    assert "r1_divergent" not in result
+    assert "r2_divergent" not in result
+    assert "r3_divergent" not in result
+    _json.dumps(result, allow_nan=False)
 
 
 def test_analyze_dga_without_transformer_id():

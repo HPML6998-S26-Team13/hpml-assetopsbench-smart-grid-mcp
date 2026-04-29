@@ -106,8 +106,27 @@ def _ratio(numerator: float, denominator: float) -> float:
     return math.inf if numerator > 0 else 0.0
 
 
+def _ratio_field(value: float) -> tuple:
+    """Normalize a ratio for JSON-safe outbound serialization.
+
+    Returns (json_safe_value, is_divergent). math.inf becomes None + True,
+    so `json.dumps(result, allow_nan=False)` succeeds on the public output.
+    Internal table matching keeps the raw float (including math.inf) — this
+    helper runs only at the dict-construction boundary.
+    """
+    if math.isinf(value):
+        return None, True
+    return round(value, 4), False
+
+
 def _rogers_ratio(h2: float, ch4: float, c2h2: float, c2h4: float, c2h6: float) -> dict:
-    """Apply Rogers Ratio method; return IEC code and description."""
+    """Apply Rogers Ratio method; return IEC code and description.
+
+    Output ratio fields are JSON-safe: a divergent ratio (zero denominator,
+    nonzero numerator) is reported as `null` with a sibling `r{1,2,3}_divergent: true`
+    flag rather than `inf`. Internal table matching uses the true infinity so
+    classification is correct.
+    """
     r1 = _ratio(ch4, h2)
     r2 = _ratio(c2h2, c2h4)
     r3 = _ratio(c2h4, c2h6)
@@ -130,21 +149,30 @@ def _rogers_ratio(h2: float, ch4: float, c2h2: float, c2h4: float, c2h6: float) 
             and _in_range(r2, *r2_range)
             and _in_range(r3, *r3_range)
         ):
-            return {
-                "iec_code": code,
-                "diagnosis": description,
-                "r1_ch4_h2": round(r1, 4),
-                "r2_c2h2_c2h4": round(r2, 4),
-                "r3_c2h4_c2h6": round(r3, 4),
-            }
+            return _build_result(code, description, r1, r2, r3)
 
-    return {
-        "iec_code": "N",
-        "diagnosis": "Normal / Inconclusive",
-        "r1_ch4_h2": round(r1, 4),
-        "r2_c2h2_c2h4": round(r2, 4),
-        "r3_c2h4_c2h6": round(r3, 4),
+    return _build_result("N", "Normal / Inconclusive", r1, r2, r3)
+
+
+def _build_result(code: str, description: str, r1: float, r2: float, r3: float) -> dict:
+    """Build the public analyze_dga result dict with JSON-safe ratio fields."""
+    r1_val, r1_div = _ratio_field(r1)
+    r2_val, r2_div = _ratio_field(r2)
+    r3_val, r3_div = _ratio_field(r3)
+    result = {
+        "iec_code": code,
+        "diagnosis": description,
+        "r1_ch4_h2": r1_val,
+        "r2_c2h2_c2h4": r2_val,
+        "r3_c2h4_c2h6": r3_val,
     }
+    if r1_div:
+        result["r1_divergent"] = True
+    if r2_div:
+        result["r2_divergent"] = True
+    if r3_div:
+        result["r3_divergent"] = True
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -286,6 +314,11 @@ def analyze_dga(
           transformer_id (if provided), iec_code, diagnosis,
           r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6,
           input_gases (echo of inputs).
+
+        Ratio fields are always JSON-safe: a divergent ratio (zero
+        denominator with nonzero numerator) is reported as `null` plus a
+        sibling `r{1,2,3}_divergent: true` flag, never as a non-finite float.
+        Finite-ratio results omit the `*_divergent` keys entirely.
     """
     # Coerce to float: LLMs sometimes pass numeric args as strings even when
     # the tool schema declares "type": "number".

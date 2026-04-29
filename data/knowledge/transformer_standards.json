@@ -44,7 +44,7 @@
         "R3": { "formula": "C2H4 / C2H6", "label": "Ethylene to Ethane", "iec_table_column": "third" }
       },
       "range_semantics": "Each *_range is [min_inclusive, max_exclusive]. null = unbounded. R2_range of [0, null] encodes IEC's 'NS' (non-significant whatever the value) since R2 is non-negative.",
-      "match_order": "Rows are evaluated most-severe first (D2, D1, T3, T2, T1, PD, then N as fall-through). This breaks ties toward the more severe code in regions where IEC ranges overlap (e.g., R1 ∈ [0.1, 0.5] AND R2 ∈ (1, 2.5] AND R3 > 2 → D2 wins over D1).",
+      "match_order": "Rows are evaluated most-severe first (D2, D1, T3, T2, T1, PD, then N as fall-through). This breaks ties toward the more severe code in regions where IEC ranges overlap. Following the encoded min-inclusive/max-exclusive convention, the D1/D2 overlap zone is R1 ∈ [0.1, 0.5), R2 ∈ [1.0, 2.5), R3 ≥ 2.0 — D2 wins.",
       "fault_table": [
         {
           "iec_code": "D2",
