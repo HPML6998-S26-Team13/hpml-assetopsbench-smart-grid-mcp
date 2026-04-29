@@ -714,6 +714,8 @@ run_agent_as_tool_trial() {
 run_agent_as_tool_batch() {
   local out_dir="$1"
 
+  export AAT_MCP_SERVER_PYTHON AAT_MCP_SERVER_LAUNCH_MODE AAT_MCP_CLIENT_TIMEOUT_SECONDS
+
   local -a cmd=(
     uv run
     --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION"

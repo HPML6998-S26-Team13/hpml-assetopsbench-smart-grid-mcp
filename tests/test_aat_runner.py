@@ -328,7 +328,9 @@ def test_batch_mode_rejects_zero_trials(tmp_path):
         )
         rc = asyncio.run(_main_multi(args, repo_root))
         assert rc == 2, f"expected rc=2 for trials={bad_trials}, got {rc}"
-        assert not new_subdir.exists(), f"output dir must not be created for trials={bad_trials}"
+        assert (
+            not new_subdir.exists()
+        ), f"output dir must not be created for trials={bad_trials}"
 
 
 def test_batch_output_dir_normalization():
