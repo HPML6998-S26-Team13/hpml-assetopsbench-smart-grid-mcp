@@ -19,6 +19,8 @@ tensorboard
 # Data
 pandas
 numpy
+scipy  # statistical-fidelity validation: KS, AD, Wasserstein, chi-squared
+openpyxl  # IEEE DataPort DGA dataset is published as .xlsx; pandas needs this engine to read it
 matplotlib
 seaborn
 

@@ -1,0 +1,28 @@
+{
+  "synthetic_path": "data/processed/dga_records.csv",
+  "real_path": null,
+  "n_synthetic": 20,
+  "n_real": null,
+  "tests": [
+    {
+      "name": "chi2_fault_prevalence",
+      "statistic": 16.666666666666664,
+      "pvalue": 0.01058961082225972,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "reference=TC10 reference, n_syn=20"
+    },
+    {
+      "name": "real_dataset_present",
+      "statistic": null,
+      "pvalue": null,
+      "threshold": 0.0,
+      "passed": false,
+      "detail": "No real dataset loaded; only TC10 reference prevalence was checked. Acquire a real DGA dataset (see docs/dga_realism_statistical_validation.md \u00a7 Datasets)."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "total": 2
+  }
+}
