@@ -11,8 +11,11 @@ Covers:
 DGA contract assumptions documented below for harness authors (see also #11):
   - analyze_dga is fully deterministic: same inputs always yield the same output
   - IEC code "N" / "Normal / Inconclusive" is a valid output, not an error
-  - C2H2 >> C2H4 (ratio > 3) indicates high-energy arcing; Rogers table maps
-    R2 >= 3 → D2 ("High-Energy Electrical Discharge (Arcing)")
+  - The Rogers table follows IEC 60599:2022 Table 1 strictly. D2 ("Discharges
+    of high energy / arcing") requires R2 = C2H2/C2H4 ∈ [0.6, 2.5) AND R3 > 2.
+    Samples with R2 >> 2.5 fall outside D2 and (if R1 ∈ [0.1, 0.5) and R3 ≥ 1)
+    classify as D1 instead. This is per IEC's strict reading; some operational
+    DGA tools relax D2's R2 upper bound, but this server matches the standard.
   - All-zero inputs return "N" (no division by zero crash)
 """
 
@@ -169,10 +172,11 @@ def test_analyze_dga_deterministic():
 
 
 def test_analyze_dga_high_c2h2_ratio():
-    # Non-regression: T-018 profile (R1=0.17, R2=18.5, R3=8.67) returns N
-    # under the current Rogers table implementation.
+    # T-018 profile (R1=0.17, R2=18.5, R3=8.67) classifies as D1 under
+    # IEC 60599:2022 Table 1: R2=18.5 falls outside D2's [0.6, 2.5) cap,
+    # so D1 (R1 ∈ [0.1, 0.5), R2 ≥ 1, R3 ≥ 1) wins.
     result = analyze_dga(**_T018_GASES)
-    assert result["iec_code"] == "N"
+    assert result["iec_code"] == "D1"
 
 
 def test_analyze_dga_all_zeros_no_crash():

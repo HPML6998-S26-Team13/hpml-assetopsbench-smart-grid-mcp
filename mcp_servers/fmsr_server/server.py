@@ -50,33 +50,33 @@ def _get_dga_records() -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
-# Rogers Ratio method (IEC 60599)
+# Rogers Ratio method (IEC 60599:2022 Table 1)
 # ---------------------------------------------------------------------------
-# A classic DGA interpretation algorithm.  It computes three gas ratios and
+# A classic DGA interpretation algorithm. It computes three gas ratios and
 # maps them to a fault code via a lookup table.
 #
-# Ratios:
-#   R1 = CH4 / H2
-#   R2 = C2H2 / C2H4
-#   R3 = C2H4 / C2H6
+# Ratios (using the JSON's R-numbering convention):
+#   R1 = CH4  / H2     (IEC Table 1 middle column)
+#   R2 = C2H2 / C2H4   (IEC Table 1 first column)
+#   R3 = C2H4 / C2H6   (IEC Table 1 third column)
 #
-# The lookup table below follows IEC 60599 Table 1.
+# The lookup table below follows IEC 60599:2022 Table 1 (4th edition, p.13).
+# "NS" in the standard ("non-significant whatever the value") is encoded as
+# (0, None) on R2 since gas ratios are non-negative.
+#
+# Order: most-severe first so first-match-wins resolves overlap toward the
+# more severe code (e.g., D2 wins over D1 in R1 ∈ [0.1, 0.5], R2 ∈ (1, 2.5),
+# R3 > 2).
 
 _ROGERS_TABLE = [
-    # (R1_range, R2_range, R3_range) → (code, description)
+    # (R1_range, R2_range, R3_range, code, description)
     # Each range is (min_inclusive, max_exclusive); None = no bound.
-    ((0.1, 1.0), (0, 0.1), (0, 1.0), "PD", "Partial discharge"),
-    ((0.1, 1.0), (0.1, 3.0), (0, 1.0), "D1", "Spark discharge"),
-    (
-        (0.1, 1.0),
-        (0.1, 3.0),
-        (1.0, None),
-        "D2",
-        "Arc discharge",
-    ),
-    ((0.1, 1.0), (0, 0.1), (1.0, 3.0), "T1", "Low-temperature overheating"),
-    ((1.0, 3.0), (0, 0.1), (1.0, 3.0), "T2", "Middle-temperature overheating"),
-    ((3.0, None), (0, 0.1), (3.0, None), "T3", "High-temperature overheating"),
+    ((0.1, 1.0), (0.6, 2.5), (2.0, None), "D2", "Discharges of high energy (arcing)"),
+    ((0.1, 0.5), (1.0, None), (1.0, None), "D1", "Discharges of low energy"),
+    ((1.0, None), (0, 0.2), (4.0, None), "T3", "Thermal fault, t > 700 °C"),
+    ((1.0, None), (0, 0.1), (1.0, 4.0), "T2", "Thermal fault, 300 °C < t < 700 °C"),
+    ((1.0, None), (0, None), (0, 1.0), "T1", "Thermal fault, t < 300 °C"),
+    ((0, 0.1), (0, None), (0, 0.2), "PD", "Partial discharges"),
 ]
 
 
@@ -94,6 +94,18 @@ def _rogers_ratio(h2: float, ch4: float, c2h2: float, c2h4: float, c2h6: float) 
     r1 = ch4 / h2 if h2 > 0 else 0.0
     r2 = c2h2 / c2h4 if c2h4 > 0 else 0.0
     r3 = c2h4 / c2h6 if c2h6 > 0 else 0.0
+
+    # All-zero gases → N. IEC 60599 Table 1 does not address the no-detectable-gas
+    # case explicitly; PD's R1/R3 ranges include 0 and would otherwise spuriously
+    # match. Operationally, no measurable gas means no fault, not partial discharge.
+    if h2 == 0 and ch4 == 0 and c2h2 == 0 and c2h4 == 0 and c2h6 == 0:
+        return {
+            "iec_code": "N",
+            "diagnosis": "Normal / Inconclusive",
+            "r1_ch4_h2": 0.0,
+            "r2_c2h2_c2h4": 0.0,
+            "r3_c2h4_c2h6": 0.0,
+        }
 
     for r1_range, r2_range, r3_range, code, description in _ROGERS_TABLE:
         if (
