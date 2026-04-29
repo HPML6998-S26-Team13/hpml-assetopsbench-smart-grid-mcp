@@ -60,20 +60,20 @@ FAULT_CODES = ["Normal", "PD", "T1", "T2", "T3", "D1", "D2"]
 # Update with empirical proportions once real dataset is loaded.
 TC10_REFERENCE_PREVALENCE = {
     "Normal": 0.27,
-    "PD":     0.07,
-    "T1":     0.13,
-    "T2":     0.10,
-    "T3":     0.13,
-    "D1":     0.13,
-    "D2":     0.17,
+    "PD": 0.07,
+    "T1": 0.13,
+    "T2": 0.10,
+    "T3": 0.13,
+    "D1": 0.13,
+    "D2": 0.17,
 }
 
 # Acceptance thresholds (see docs/dga_realism_statistical_validation.md).
-KS_PVALUE_PASS    = 0.05    # KS p > 0.05 -> distributions not distinguishable
+KS_PVALUE_PASS = 0.05  # KS p > 0.05 -> distributions not distinguishable
 EMD_NORMALIZED_PASS = 0.20  # EMD / std_real <= 0.2 -> close enough
-CHI2_PVALUE_PASS  = 0.05    # chi-squared p > 0.05 -> proportions not differ
-AD_PVALUE_PASS    = 0.05
-CORR_DELTA_PASS   = 0.20    # max(|corr_syn - corr_real|) <= 0.2
+CHI2_PVALUE_PASS = 0.05  # chi-squared p > 0.05 -> proportions not differ
+AD_PVALUE_PASS = 0.05
+CORR_DELTA_PASS = 0.20  # max(|corr_syn - corr_real|) <= 0.2
 
 
 # --- Dataclasses -------------------------------------------------------------
@@ -113,6 +113,7 @@ class ReportCard:
             if hasattr(x, "item"):
                 return x.item()
             return x
+
         return {
             "synthetic_path": self.synthetic_path,
             "real_path": self.real_path,
@@ -189,71 +190,102 @@ def _normalize_real_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 def ks_per_gas(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]:
     from scipy import stats
+
     results = []
     for gas in FAULT_GASES:
         syn_col = SYN_GAS_COLUMNS[gas]
         real_col = f"{gas}_ppm"
         if real_col not in real.columns:
-            results.append(TestResult(
-                name=f"ks_{gas}",
-                statistic=None, pvalue=None, threshold=KS_PVALUE_PASS,
-                passed=False, detail=f"real dataset missing column {real_col}",
-            ))
+            results.append(
+                TestResult(
+                    name=f"ks_{gas}",
+                    statistic=None,
+                    pvalue=None,
+                    threshold=KS_PVALUE_PASS,
+                    passed=False,
+                    detail=f"real dataset missing column {real_col}",
+                )
+            )
             continue
         s = syn[syn_col].dropna().values
         r = real[real_col].dropna().values
         if len(s) < 5 or len(r) < 5:
-            results.append(TestResult(
-                name=f"ks_{gas}",
-                statistic=None, pvalue=None, threshold=KS_PVALUE_PASS,
-                passed=False, detail=f"too few samples (n_syn={len(s)}, n_real={len(r)})",
-            ))
+            results.append(
+                TestResult(
+                    name=f"ks_{gas}",
+                    statistic=None,
+                    pvalue=None,
+                    threshold=KS_PVALUE_PASS,
+                    passed=False,
+                    detail=f"too few samples (n_syn={len(s)}, n_real={len(r)})",
+                )
+            )
             continue
         stat, p = stats.ks_2samp(s, r)
-        results.append(TestResult(
-            name=f"ks_{gas}",
-            statistic=float(stat), pvalue=float(p),
-            threshold=KS_PVALUE_PASS, passed=p > KS_PVALUE_PASS,
-        ))
+        results.append(
+            TestResult(
+                name=f"ks_{gas}",
+                statistic=float(stat),
+                pvalue=float(p),
+                threshold=KS_PVALUE_PASS,
+                passed=p > KS_PVALUE_PASS,
+            )
+        )
     return results
 
 
 def emd_per_gas(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]:
     from scipy import stats
+
     results = []
     for gas in FAULT_GASES:
         syn_col = SYN_GAS_COLUMNS[gas]
         real_col = f"{gas}_ppm"
         if real_col not in real.columns:
-            results.append(TestResult(
-                name=f"emd_{gas}", statistic=None, pvalue=None,
-                threshold=EMD_NORMALIZED_PASS, passed=False,
-                detail=f"real dataset missing column {real_col}",
-            ))
+            results.append(
+                TestResult(
+                    name=f"emd_{gas}",
+                    statistic=None,
+                    pvalue=None,
+                    threshold=EMD_NORMALIZED_PASS,
+                    passed=False,
+                    detail=f"real dataset missing column {real_col}",
+                )
+            )
             continue
         s = syn[syn_col].dropna().values
         r = real[real_col].dropna().values
         if len(s) < 5 or len(r) < 5:
-            results.append(TestResult(
-                name=f"emd_{gas}", statistic=None, pvalue=None,
-                threshold=EMD_NORMALIZED_PASS, passed=False,
-                detail=f"too few samples (n_syn={len(s)}, n_real={len(r)})",
-            ))
+            results.append(
+                TestResult(
+                    name=f"emd_{gas}",
+                    statistic=None,
+                    pvalue=None,
+                    threshold=EMD_NORMALIZED_PASS,
+                    passed=False,
+                    detail=f"too few samples (n_syn={len(s)}, n_real={len(r)})",
+                )
+            )
             continue
         emd = stats.wasserstein_distance(s, r)
         std_real = float(np.std(r)) or 1.0
         normalized = float(emd) / std_real
-        results.append(TestResult(
-            name=f"emd_{gas}", statistic=normalized, pvalue=None,
-            threshold=EMD_NORMALIZED_PASS,
-            passed=normalized <= EMD_NORMALIZED_PASS,
-            detail=f"raw_emd={emd:.3f}, std_real={std_real:.3f}",
-        ))
+        results.append(
+            TestResult(
+                name=f"emd_{gas}",
+                statistic=normalized,
+                pvalue=None,
+                threshold=EMD_NORMALIZED_PASS,
+                passed=normalized <= EMD_NORMALIZED_PASS,
+                detail=f"raw_emd={emd:.3f}, std_real={std_real:.3f}",
+            )
+        )
     return results
 
 
 def anderson_darling_per_gas(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]:
     from scipy import stats
+
     results = []
     for gas in FAULT_GASES:
         syn_col = SYN_GAS_COLUMNS[gas]
@@ -269,15 +301,26 @@ def anderson_darling_per_gas(syn: pd.DataFrame, real: pd.DataFrame) -> list[Test
             stat = float(ad.statistic)
             p = float(ad.significance_level) / 100.0
         except Exception as e:
-            results.append(TestResult(
-                name=f"ad_{gas}", statistic=None, pvalue=None,
-                threshold=AD_PVALUE_PASS, passed=False, detail=str(e),
-            ))
+            results.append(
+                TestResult(
+                    name=f"ad_{gas}",
+                    statistic=None,
+                    pvalue=None,
+                    threshold=AD_PVALUE_PASS,
+                    passed=False,
+                    detail=str(e),
+                )
+            )
             continue
-        results.append(TestResult(
-            name=f"ad_{gas}", statistic=stat, pvalue=p,
-            threshold=AD_PVALUE_PASS, passed=p > AD_PVALUE_PASS,
-        ))
+        results.append(
+            TestResult(
+                name=f"ad_{gas}",
+                statistic=stat,
+                pvalue=p,
+                threshold=AD_PVALUE_PASS,
+                passed=p > AD_PVALUE_PASS,
+            )
+        )
     return results
 
 
@@ -291,35 +334,53 @@ def chi2_fault_prevalence(
     TC10_REFERENCE_PREVALENCE).
     """
     from scipy import stats
-    syn_counts = syn["fault_label"].value_counts().reindex(FAULT_CODES).fillna(0).astype(int)
+
+    syn_counts = (
+        syn["fault_label"].value_counts().reindex(FAULT_CODES).fillna(0).astype(int)
+    )
     n_syn = int(syn_counts.sum())
     if real is not None and "fault_label" in real.columns:
-        real_counts = real["fault_label"].value_counts().reindex(FAULT_CODES).fillna(0).astype(int)
+        real_counts = (
+            real["fault_label"]
+            .value_counts()
+            .reindex(FAULT_CODES)
+            .fillna(0)
+            .astype(int)
+        )
         ref = real_counts.values
         ref_label = "real"
     else:
-        ref_props = pd.Series(TC10_REFERENCE_PREVALENCE).reindex(FAULT_CODES).fillna(0).values
+        ref_props = (
+            pd.Series(TC10_REFERENCE_PREVALENCE).reindex(FAULT_CODES).fillna(0).values
+        )
         ref = (ref_props * n_syn).round().astype(int)
         ref_label = "TC10 reference"
     try:
         stat, p = stats.chisquare(syn_counts.values, f_exp=ref)
     except ValueError as e:
-        return [TestResult(
+        return [
+            TestResult(
+                name="chi2_fault_prevalence",
+                statistic=None,
+                pvalue=None,
+                threshold=CHI2_PVALUE_PASS,
+                passed=False,
+                detail=f"chisquare failed: {e}",
+            )
+        ]
+    return [
+        TestResult(
             name="chi2_fault_prevalence",
-            statistic=None, pvalue=None, threshold=CHI2_PVALUE_PASS,
-            passed=False, detail=f"chisquare failed: {e}",
-        )]
-    return [TestResult(
-        name="chi2_fault_prevalence",
-        statistic=float(stat), pvalue=float(p),
-        threshold=CHI2_PVALUE_PASS, passed=p > CHI2_PVALUE_PASS,
-        detail=f"reference={ref_label}, n_syn={n_syn}",
-    )]
+            statistic=float(stat),
+            pvalue=float(p),
+            threshold=CHI2_PVALUE_PASS,
+            passed=p > CHI2_PVALUE_PASS,
+            detail=f"reference={ref_label}, n_syn={n_syn}",
+        )
+    ]
 
 
-def conditional_ks_per_fault(
-    syn: pd.DataFrame, real: pd.DataFrame
-) -> list[TestResult]:
+def conditional_ks_per_fault(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]:
     """Per-fault-class KS on each gas: gas | fault_class.
 
     Catches the case where marginal distributions match but
@@ -327,13 +388,19 @@ def conditional_ks_per_fault(
     realistic H2 mean but unrealistic CH4 mean).
     """
     from scipy import stats
+
     results = []
     if "fault_label" not in real.columns:
-        return [TestResult(
-            name="conditional_ks", statistic=None, pvalue=None,
-            threshold=KS_PVALUE_PASS, passed=False,
-            detail="real dataset has no fault_label column",
-        )]
+        return [
+            TestResult(
+                name="conditional_ks",
+                statistic=None,
+                pvalue=None,
+                threshold=KS_PVALUE_PASS,
+                passed=False,
+                detail="real dataset has no fault_label column",
+            )
+        ]
     for fault in FAULT_CODES:
         syn_sub = syn[syn["fault_label"] == fault]
         real_sub = real[real["fault_label"] == fault]
@@ -345,12 +412,16 @@ def conditional_ks_per_fault(
             if len(s) < 3 or len(r) < 3:
                 continue
             stat, p = stats.ks_2samp(s, r)
-            results.append(TestResult(
-                name=f"ks_{fault}_{gas}",
-                statistic=float(stat), pvalue=float(p),
-                threshold=KS_PVALUE_PASS, passed=p > KS_PVALUE_PASS,
-                detail=f"n_syn={len(s)}, n_real={len(r)}",
-            ))
+            results.append(
+                TestResult(
+                    name=f"ks_{fault}_{gas}",
+                    statistic=float(stat),
+                    pvalue=float(p),
+                    threshold=KS_PVALUE_PASS,
+                    passed=p > KS_PVALUE_PASS,
+                    detail=f"n_syn={len(s)}, n_real={len(r)}",
+                )
+            )
     return results
 
 
@@ -365,19 +436,29 @@ def correlation_delta(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]
     syn_gases = [SYN_GAS_COLUMNS[g] for g in FAULT_GASES]
     real_gases = [f"{g}_ppm" for g in FAULT_GASES if f"{g}_ppm" in real.columns]
     if len(real_gases) < 2:
-        return [TestResult(
-            name="corr_delta", statistic=None, pvalue=None,
-            threshold=CORR_DELTA_PASS, passed=False,
-            detail="real dataset has too few gas columns",
-        )]
+        return [
+            TestResult(
+                name="corr_delta",
+                statistic=None,
+                pvalue=None,
+                threshold=CORR_DELTA_PASS,
+                passed=False,
+                detail="real dataset has too few gas columns",
+            )
+        ]
     syn_corr = syn[syn_gases].corr().values
     real_corr = real[real_gases].corr().values
     delta = float(np.nanmax(np.abs(syn_corr - real_corr)))
-    return [TestResult(
-        name="corr_delta", statistic=delta, pvalue=None,
-        threshold=CORR_DELTA_PASS, passed=delta <= CORR_DELTA_PASS,
-        detail=f"max abs(corr_syn - corr_real) over {len(real_gases)} gases",
-    )]
+    return [
+        TestResult(
+            name="corr_delta",
+            statistic=delta,
+            pvalue=None,
+            threshold=CORR_DELTA_PASS,
+            passed=delta <= CORR_DELTA_PASS,
+            detail=f"max abs(corr_syn - corr_real) over {len(real_gases)} gases",
+        )
+    ]
 
 
 # --- Driver ------------------------------------------------------------------
@@ -392,14 +473,18 @@ def run_tests(syn: pd.DataFrame, real: pd.DataFrame | None) -> ReportCard:
     )
     rc.tests.extend(chi2_fault_prevalence(syn, real))
     if real is None:
-        rc.tests.append(TestResult(
-            name="real_dataset_present",
-            statistic=None, pvalue=None, threshold=0.0,
-            passed=False,
-            detail="No real dataset loaded; only TC10 reference prevalence "
-                   "was checked. Acquire a real DGA dataset (see "
-                   "docs/dga_realism_statistical_validation.md § Datasets).",
-        ))
+        rc.tests.append(
+            TestResult(
+                name="real_dataset_present",
+                statistic=None,
+                pvalue=None,
+                threshold=0.0,
+                passed=False,
+                detail="No real dataset loaded; only TC10 reference prevalence "
+                "was checked. Acquire a real DGA dataset (see "
+                "docs/dga_realism_statistical_validation.md § Datasets).",
+            )
+        )
         return rc
     rc.tests.extend(ks_per_gas(syn, real))
     rc.tests.extend(emd_per_gas(syn, real))
@@ -434,9 +519,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--synthetic", type=Path, required=True)
     parser.add_argument("--real", type=Path, default=None)
-    parser.add_argument("--report", type=Path, default=Path("reports/realism_statistical.md"))
-    parser.add_argument("--json", type=Path, default=None,
-                        help="optional JSON dump of full ReportCard")
+    parser.add_argument(
+        "--report", type=Path, default=Path("reports/realism_statistical.md")
+    )
+    parser.add_argument(
+        "--json", type=Path, default=None, help="optional JSON dump of full ReportCard"
+    )
     args = parser.parse_args(argv)
 
     syn = load_synthetic(args.synthetic)
