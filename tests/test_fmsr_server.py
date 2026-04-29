@@ -12,10 +12,12 @@ DGA contract assumptions documented below for harness authors (see also #11):
   - analyze_dga is fully deterministic: same inputs always yield the same output
   - IEC code "N" / "Normal / Inconclusive" is a valid output, not an error
   - The Rogers table follows IEC 60599:2022 Table 1 strictly. D2 ("Discharges
-    of high energy / arcing") requires R2 = C2H2/C2H4 ∈ [0.6, 2.5) AND R3 > 2.
-    Samples with R2 >> 2.5 fall outside D2 and (if R1 ∈ [0.1, 0.5) and R3 ≥ 1)
-    classify as D1 instead. This is per IEC's strict reading; some operational
-    DGA tools relax D2's R2 upper bound, but this server matches the standard.
+    of high energy / arcing") requires R2 = C2H2/C2H4 ∈ [0.6, 2.5) AND
+    R3 ≥ 2.0 AND R1 ∈ [0.1, 1.0). Samples with R2 ≥ 2.5 fall outside D2 and
+    (if R1 ∈ [0.1, 0.5) and R2 ≥ 1.0 and R3 ≥ 1.0) classify as D1 instead.
+    This is per IEC's strict reading; some operational DGA tools relax D2's
+    R2 upper bound, but this server matches the standard. Boundary phrasing
+    here uses the encoded range convention: min-inclusive, max-exclusive.
   - All-zero inputs return "N" (no division by zero crash)
 """
 
@@ -184,6 +186,40 @@ def test_analyze_dga_all_zeros_no_crash():
     assert "iec_code" in result
     # Zero gases → normal / inconclusive
     assert result["iec_code"] == "N"
+
+
+def test_analyze_dga_zero_c2h6_diverges_r3():
+    # Regression: zero denominator must produce a divergent (inf) ratio, not 0.
+    # Sample matches D2 if R3 is treated as +inf; would silently misclassify as N
+    # if R3 collapses to 0.0 (the prior bug).
+    result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=100, c2h6=0)
+    assert result["iec_code"] == "D2"
+    import math as _math
+
+    assert _math.isinf(result["r3_c2h4_c2h6"])
+
+
+def test_analyze_dga_zero_c2h4_diverges_r2():
+    # Regression: zero denominator on R2 (c2h4=0). c2h2>0, c2h4=0 → R2=+inf,
+    # which falls outside D2's [0.6, 2.5) cap; iec_code must not silently
+    # become D2 just because a stale 0.0 collapse fits.
+    result = analyze_dga(h2=500, ch4=200, c2h2=120, c2h4=0, c2h6=30)
+    # R2=+inf, R3=0.0 (c2h4=0, c2h6>0). No fault row matches → N.
+    assert result["iec_code"] == "N"
+    import math as _math
+
+    assert _math.isinf(result["r2_c2h2_c2h4"])
+
+
+def test_analyze_dga_zero_h2_diverges_r1():
+    # Regression: h2=0, ch4>0 → R1=+inf. Sample would match T1/T2/T3 candidates
+    # via R1 if other ratios fit, not silently fall to N.
+    result = analyze_dga(h2=0, ch4=200, c2h2=2, c2h4=80, c2h6=120)
+    # R1=+inf, R2=0.025, R3=0.667 → T1 (R1>=1, R2 NS, R3<1).
+    assert result["iec_code"] == "T1"
+    import math as _math
+
+    assert _math.isinf(result["r1_ch4_h2"])
 
 
 def test_analyze_dga_without_transformer_id():

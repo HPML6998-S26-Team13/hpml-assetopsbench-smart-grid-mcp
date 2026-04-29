@@ -43,25 +43,28 @@ code should be paired with IEEE C57.104 Condition 3–4 gas values.
 
 ### `iec_60599.representative_gas_profiles`
 
-Wrapper object with a `description`, a `server_rogers_table_note`, and a
-`profiles` map. **Always index via `.profiles[iec_code]`**, not directly on
-the wrapper. Pre-computed gas values (ppm) verified to produce each fault code
-from `fmsr_server.analyze_dga`. Vary each value ±10%; do not exceed ±10% —
-some profiles sit close to ratio boundaries and larger variation flips the
-fault code.
+Wrapper object with a `description`, an `alignment_note`, and a `profiles`
+map. **Always index via `.profiles[iec_code]`**, not directly on the wrapper.
+Pre-computed gas values (ppm) verified to produce each fault code from
+`fmsr_server.analyze_dga` under IEC 60599:2022 Table 1. Vary each value ±10%;
+do not exceed ±10% — some profiles sit close to IEC ratio boundaries
+(e.g., D2 R3=2, D1 R1=0.5) and larger variation flips the fault code.
 
 ```json
 "iec_60599": {
   "representative_gas_profiles": {
     "profiles": {
       "D2": {
-        "H2": 500, "CH4": 100, "C2H2": 60, "C2H4": 120, "C2H6": 50,
+        "H2": 500, "CH4": 200, "C2H2": 120, "C2H4": 100, "C2H6": 30,
         "CO": 300, "CO2": 2800, "expected_iec_code": "D2"
       }
     }
   }
 }
 ```
+
+(D2 ratios: R1=0.40, R2=1.20, R3=3.33 — matches IEC 60599:2022 Table 1
+D2 row R1 ∈ [0.1, 1), R2 ∈ [0.6, 2.5), R3 ≥ 2.)
 
 ### `ieee_c57_104.gas_thresholds_ppm`
 

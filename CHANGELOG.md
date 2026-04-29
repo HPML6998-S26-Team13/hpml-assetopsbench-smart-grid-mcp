@@ -2,6 +2,51 @@
 
 ## 2026-04-29
 
+### Fixed (PR #149 review v1)
+
+- `mcp_servers/fmsr_server/server.py` — apply review v1 fixes:
+  - **High 1**: zero-denominator collapse to 0.0 in `_rogers_ratio` could
+    silently misclassify samples. Reproducer at the v1 head: `h2=500,
+    ch4=200, c2h2=120, c2h4=100, c2h6=0` has R3=+inf (real ratio diverges)
+    and matches D2 row, but the prior code reported `iec_code=N` and
+    `r3_c2h4_c2h6=0.0`. Replaced inline `x / y if y > 0 else 0.0` with a
+    `_ratio()` helper that returns `math.inf` when denominator==0 and
+    numerator>0, `0.0` when both are zero, and the finite quotient
+    otherwise. The `_in_range` boundary checks already handle `math.inf`
+    correctly (inf >= lo passes; inf < hi fails for finite hi).
+  - **Low 4**: comments at server.py:67-69 + tests docstring at line 15
+    aligned to encoded boundary semantics (`R3 ≥ 2.0`, `R2 ∈ [1.0, 2.5)`)
+    so future boundary tests do not infer a stricter table.
+- `tests/test_fmsr_server.py` — three regression tests added for
+  zero-denominator divergence: `test_analyze_dga_zero_c2h6_diverges_r3`
+  (the High 1 reproducer; expects D2 + isinf(R3)),
+  `test_analyze_dga_zero_c2h4_diverges_r2` (R2=+inf falls outside D2 →
+  N), `test_analyze_dga_zero_h2_diverges_r1` (R1=+inf, R3<1 → T1). All 26
+  fmsr tests pass.
+- `data/knowledge/README.md` — **Medium 3**: D2 example block
+  refreshed to the new IEC-aligned profile (H2=500, CH4=200, C2H2=120,
+  C2H4=100, C2H6=30) with R1=0.40, R2=1.20, R3=3.33 noted; pointer to
+  `alignment_note` instead of removed `server_rogers_table_note`.
+- `docs/knowledge/scenario_generation_support.json` — **High 2**:
+  `dga_trend_templates` regenerated against IEC-aligned profiles.
+  - `endpoint_verification_note` updated with the new canonical profile
+    values and a regeneration date.
+  - `rising_hydrogen_pd`: terminal step uses new PD profile (R3=0.188);
+    intermediate steps re-tuned so R3 stays above 0.2 (PD ceiling) until
+    T-60.
+  - `accelerating_arc_d1_to_d2`: D1 + D2 endpoints replaced with new
+    canonical profiles; intermediate T-14 step (H2=500, CH4=120, C2H2=90,
+    C2H4=70, C2H6=40) verified D1; description rewritten to attribute
+    D1→D2 to R3 crossing 2.0 and R1 doubling.
+  - `thermal_t1_to_t3_progression`: T1, T2, T3 endpoints refreshed; T1
+    profile changed substantially (R1=2.00 instead of 0.50 — new T1 row
+    requires R1≥1).
+  - `stable_condition3_d1`: D1 endpoint + drift trajectory rewired
+    around the new D1 profile (C2H2=80, C2H4=60, C2H6=40); R3 stays
+    below D2's 2.0 threshold across all three steps.
+  - All 5 templates × 3 steps = 15 classifications verified to round-trip
+    via `_rogers_ratio`.
+
 ### Changed — IEC 60599:2022 Table 1 reconciliation (§ 7 task 2b)
 
 - `mcp_servers/fmsr_server/server.py` — rewrite `_ROGERS_TABLE` to match

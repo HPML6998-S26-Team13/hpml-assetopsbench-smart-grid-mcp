@@ -65,8 +65,9 @@ def _get_dga_records() -> pd.DataFrame:
 # (0, None) on R2 since gas ratios are non-negative.
 #
 # Order: most-severe first so first-match-wins resolves overlap toward the
-# more severe code (e.g., D2 wins over D1 in R1 ∈ [0.1, 0.5], R2 ∈ (1, 2.5),
-# R3 > 2).
+# more severe code (e.g., D2 wins over D1 in the overlap region
+# R1 ∈ [0.1, 0.5), R2 ∈ [1.0, 2.5), R3 ≥ 2.0). Boundary phrasing here mirrors
+# the encoded ranges (min-inclusive, max-exclusive).
 
 _ROGERS_TABLE = [
     # (R1_range, R2_range, R3_range, code, description)
@@ -88,12 +89,28 @@ def _in_range(value: float, lo, hi) -> bool:
     return True
 
 
+def _ratio(numerator: float, denominator: float) -> float:
+    """Compute a gas ratio with explicit zero-denominator handling.
+
+    - denominator > 0:                   numerator / denominator (finite)
+    - denominator == 0 and numerator > 0: math.inf (a real ratio that diverges)
+    - denominator == 0 and numerator == 0: 0.0 (genuinely no signal)
+
+    Returning math.inf for a divergent ratio is critical: collapsing it to 0.0
+    would silently drop samples into the wrong fault class (e.g., a sample with
+    nonzero CH4 and C2H4 but zero C2H6 has R3 = +inf and should match D2 if the
+    other ratios fit, not fall through to N).
+    """
+    if denominator > 0:
+        return numerator / denominator
+    return math.inf if numerator > 0 else 0.0
+
+
 def _rogers_ratio(h2: float, ch4: float, c2h2: float, c2h4: float, c2h6: float) -> dict:
     """Apply Rogers Ratio method; return IEC code and description."""
-    # Avoid division by zero
-    r1 = ch4 / h2 if h2 > 0 else 0.0
-    r2 = c2h2 / c2h4 if c2h4 > 0 else 0.0
-    r3 = c2h4 / c2h6 if c2h6 > 0 else 0.0
+    r1 = _ratio(ch4, h2)
+    r2 = _ratio(c2h2, c2h4)
+    r3 = _ratio(c2h4, c2h6)
 
     # All-zero gases → N. IEC 60599 Table 1 does not address the no-detectable-gas
     # case explicitly; PD's R1/R3 ranges include 0 and would otherwise spuriously
