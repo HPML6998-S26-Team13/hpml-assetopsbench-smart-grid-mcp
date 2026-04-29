@@ -545,3 +545,195 @@ Questions to follow up on, ordered by leverage:
 - **Gate B (Apr 30):** real dataset acquired; first L3 run produces a non-stub report.
 - **Gate C (May 2):** at minimum the chi-squared on fault prevalence and KS on H2 + C2H2 pass; remaining failing tests documented as limitations.
 - **Gate D (May 4):** L3 report-card cited in final paper as evidence of statistical realism.
+
+---
+
+## 12. Handoff to Akshat
+
+**Owner change:** Alex authored this scaffolding (skeleton + doc + v0
+baseline + table-divergence finding). **Akshat takes over L3 execution**
+from here (real-data acquisition, v1 run, tuning loop, final-paper figure).
+Issue `#53` already lists Akshat as owner of "validate auto-generated
+scenarios against hand-crafted reference set"; L3 is the quantitative arm
+of that validation lane.
+
+### 12.1 First three commands
+
+```bash
+# 1. Get on the branch (or use any worktree of your choice)
+cd <repo-root>
+git fetch team13
+git checkout team13/dat/realism-statistical-validation
+
+# 2. Sanity-check the skeleton runs
+.venv/bin/python data/scenarios/validate_realism_statistical.py \
+    --synthetic data/processed/dga_records.csv \
+    --report /tmp/r.md
+# Expect: "0/2 tests passed" (chi² fails vs TC 10 reference, real dataset missing)
+
+# 3. Pull the IEEE DataPort dataset (Columbia IEEE access required; Kaggle
+#    backstop if blocked) and re-run with --real
+mkdir -p data/external
+# … download dga.xlsx to data/external/ieee_dataport_dga.csv …
+.venv/bin/python data/scenarios/validate_realism_statistical.py \
+    --synthetic data/processed/dga_records.csv \
+    --real      data/external/ieee_dataport_dga.csv \
+    --report    reports/realism_statistical_v1.md \
+    --json      reports/realism_statistical_v1.json
+```
+
+### 12.2 What you have
+
+- Runnable script (`data/scenarios/validate_realism_statistical.py`),
+  black-clean, scipy in `requirements.txt`, smoke-tested.
+- This doc — methodology, datasets, thresholds, plan, plug-in for PR #147,
+  open questions.
+- v0 baseline in `reports/realism_statistical_v0.md` showing the
+  prevalence-divergence signal already exists.
+- Three-way fault-table divergence finding in § 2.4 — explains why
+  conditional-KS is likely to fail until the JSON / server tables are
+  reconciled with IEC.
+
+### 12.3 What you need to source
+
+- **IEC 60599:2022 PDF.** Alex's copy is in his personal class repo,
+  gitignored, and not redistributable (IEC copyright). Use Columbia ILL or
+  ask Dhaval for an IBM-licensed copy.
+- **IEEE DataPort DGA Dataset** (DOI 10.21227/27vy-h479) — primary target
+  per § 4. Columbia IEEE subscription should cover it; ask the engineering
+  library if not.
+- **Kaggle `failure-analysis-in-power-transformers-dataset`** — backstop
+  if IEEE DataPort is gated.
+- **Bashir et al. 2024** ("Optimized Synthetic Data Integration with
+  Transformer's DGA Data...") — the closest precedent paper for synthetic-
+  vs-real DGA validation methodology. Cite in final paper.
+
+### 12.4 Decisions you'll need to make
+
+1. **Run L3 v1 before or after the table-fix PR (§ 7 task 2b)?**
+   - *Before*: faster, but conditional-KS will likely fail on D1/D2/T1 in
+     ways that require re-running after the table fix.
+   - *After*: cleaner, but blocked on someone (Alex or you) landing the
+     fix-the-table PR first.
+   - **Suggested:** run a v1 anyway *before* the fix to capture the "broken-
+     baseline" report card; that becomes evidence in the paper that the
+     reconciliation was necessary, not cosmetic.
+
+2. **Treat synthetic CO/CO2 data as out-of-scope for L3, or add a
+   second IEEE-C57.104-style cellulose test?** § 9 currently flags this as
+   future work; if you have time, an extra two tests on CO + CO2 marginals
+   would strengthen the paper's "we covered both standards" claim.
+
+3. **Acceptance thresholds.** § 5.1 defaults: KS p > 0.05, EMD/std ≤ 0.20,
+   chi² p > 0.05, corr Δ ≤ 0.20. These are reasonable starting values from
+   the literature but can be tuned once you have a real-data baseline. Be
+   prepared to defend whatever threshold you set in the paper.
+
+4. **Sample size on the synthetic side.** `dga_records.csv` is currently
+   20 rows — too small for KS to be meaningful. Either extend
+   `make_dga_records()` to ~600 samples (30 days × 20 transformers) or
+   bootstrap from the existing 20. Bootstrapping is a one-line change but
+   doesn't add new physical signal.
+
+### 12.5 Where to ask for help
+
+- **Alex** for PR #148 / scaffolding-side questions, the IEC table
+  comparison, edition pinning, or the personal-repo full diff matrix.
+- **Aaron (afan2g, PR #147)** for the scenario-generator path and how L3
+  should hook into its promotion script.
+- **Dhaval** for IEC standard interpretation, IBM-internal datasets, or
+  whether IBM AssetOpsBench has an authoritative reference dataset.
+- **Tanisha** for `transformer_standards.json` provenance — she authored
+  it and will know what source the encoded ratio bounds came from.
+
+---
+
+## 13. Appendix A — IEC 60599:2022 Table 1 verbatim
+
+In the standard's own column notation:
+
+```
+Case  Characteristic fault              C2H2/C2H4    CH4/H2       C2H4/C2H6
+PD    Partial discharges                NS           < 0.1        < 0.2
+D1    Discharges of low energy          > 1          0.1 to 0.5   > 1
+D2    Discharges of high energy         0.6 to 2.5   0.1 to 1     > 2
+T1    Thermal fault t < 300 °C          NS           > 1 (NS)     < 1
+T2    Thermal fault 300 °C < t < 700 °C < 0.1        > 1          1 to 4
+T3    Thermal fault t > 700 °C          < 0.2        > 1          > 4
+```
+
+`NS` = "non-significant whatever the value" — treat as "any" in code.
+
+Notes from the standard text:
+- Note 1: some countries use `C2H2/C2H6` instead of `CH4/H2`; some use
+  slightly different ratio limits.
+- Note 2: gas-ratio calculation conditions in § 6.1 c).
+- Note 3: PD threshold stricter for instrument transformers (`CH4/H2 < 0.2`)
+  and bushings (`CH4/H2 < 0.07`).
+- Note 4: stray oil gassing produces PD-like patterns but is not a real
+  fault.
+
+In the JSON's R-numbering convention (`R1 = CH4/H2`, `R2 = C2H2/C2H4`,
+`R3 = C2H4/C2H6`):
+
+| Code | R1 (CH4/H2) | R2 (C2H2/C2H4) | R3 (C2H4/C2H6) |
+|------|-------------|----------------|----------------|
+| PD | < 0.1 | NS | < 0.2 |
+| D1 | 0.1 – 0.5 | > 1 | > 1 |
+| D2 | 0.1 – 1 | 0.6 – 2.5 | > 2 |
+| T1 | > 1 (NS) | NS | < 1 |
+| T2 | > 1 | < 0.1 | 1 – 4 |
+| T3 | > 1 | < 0.2 | > 4 |
+
+---
+
+## 14. Appendix B — Three-way diff matrix (full)
+
+Tables under comparison (using JSON R-numbering throughout):
+
+- **A** = IEC 60599:2022 Table 1 (the canonical standard).
+- **B** = `data/knowledge/transformer_standards.json § iec_60599.rogers_ratio_method.fault_table`.
+- **C** = FMSR server `_rogers_ratio()` (per `server_rogers_table_note`).
+
+Per-pair-per-cell: ✅ matches; ⚠️ partial overlap or differing bounds;
+❌ contradicts (no overlap or opposite half-line).
+
+| Code | Ratio | A↔B (IEC↔JSON) | A↔C (IEC↔Server) | B↔C (JSON↔Server) |
+|------|-------|----------------|------------------|-------------------|
+| PD | R1 | ✅ | ❌ | ❌ |
+| PD | R2 | ❌ | ✅ | ✅ |
+| PD | R3 | ❌ | ❌ | ✅ |
+| D1 | R1 | ❌ | ❌ | ❌ |
+| D1 | R2 | ⚠️ | ⚠️ | ✅ |
+| D1 | R3 | ❌ | ❌ | ✅ |
+| D2 | R1 | ⚠️ | ⚠️ | ⚠️ |
+| D2 | R2 | ❌ | ⚠️ | ❌ |
+| D2 | R3 | ⚠️ | ⚠️ | ❌ |
+| T1 | R1 | ⚠️ | ❌ | ❌ |
+| T1 | R2 | ❌ | ✅ | ✅ |
+| T1 | R3 | ✅ | ❌ | ❌ |
+| T2 | R1 | ⚠️ | ⚠️ | ✅ |
+| T2 | R2 | ✅ | ✅ | ✅ |
+| T2 | R3 | ⚠️ | ⚠️ | ✅ |
+| T3 | R1 | ⚠️ | ⚠️ | ✅ |
+| T3 | R2 | ⚠️ | ✅ | ⚠️ |
+| T3 | R3 | ⚠️ | ⚠️ | ✅ |
+
+**Pattern:** B↔C agree more often than either ↔ A — suggests both encodings
+trace to a derivative source (textbook, slide deck) rather than to IEC text
+directly.
+
+**Worst rows (any pair contradicts on multiple ratios):**
+- **D1**: B↔A contradicts on all three ratios. Highest priority for fix.
+- **PD**: B↔A contradicts on R2 and R3.
+- **T1**: B↔A contradicts on R2; C↔A contradicts on R1 and R3.
+
+**Specific contradictions worth flagging in code comments when fixing:**
+- D1 R1: JSON `[0, 0.1]` vs IEC `0.1 – 0.5` — JSON's range *ends* where IEC's
+  starts. Likely a transposition.
+- D1 R3: JSON `[0, 1.0]` vs IEC `> 1` — directly opposite half-lines.
+- D2 R2: JSON `[3, ∞)` vs IEC `0.6 – 2.5` — orders of magnitude apart.
+- T1 R3: JSON `[0, 1.0]` vs IEC `< 1` — JSON includes `R3 = 1` exactly
+  whereas IEC excludes it (open vs closed boundary).
+- T2/T3 R3: JSON splits at 3, IEC splits at 4 — values in `(3, 4]` are T3
+  per JSON but T2 per IEC.
