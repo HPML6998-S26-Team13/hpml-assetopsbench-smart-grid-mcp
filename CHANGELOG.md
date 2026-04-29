@@ -2,6 +2,40 @@
 
 ## 2026-04-29
 
+### Fixed (PR #148 review v2)
+
+- `data/scenarios/validate_realism_statistical.py` + `requirements.txt` —
+  apply review v2 fixes:
+  - **High 1**: added `openpyxl` to `requirements.txt`. The v4
+    fix introduced `pd.read_excel()` for IEEE DataPort's `.xlsx` files
+    but did not add the engine; a fresh environment built from the PR
+    would have failed before producing any L3 report.
+  - **High 2**: `correlation_delta()` now computes both correlation
+    matrices over the intersection of gas columns present in synthetic
+    and real, and emits a structured failing `TestResult` with
+    diagnostic detail when fewer than two gases are shared. Previously
+    a real dataset with only some gas columns triggered a numpy
+    broadcast `ValueError` (5x5 vs N x N).
+  - **Medium 3**: `chi2_fault_prevalence()` now detects the
+    "synthetic has rows in a class that the reference has zero
+    expected count for" case BEFORE calling SciPy and emits a
+    descriptive failing `TestResult` instead of allowing SciPy to
+    return NaN (which then leaked bare `NaN` into the JSON report).
+
+- `docs/dga_realism_statistical_validation.md` + `CHANGELOG.md` — apply
+  review v2 doc fixes:
+  - **Medium 4**: corrected stale `p = 0.0007` references in § 1 and
+    in the original Apr-28 Added entry; the v4-regenerated baseline is
+    `p = 0.0106` on `n_syn = 20`.
+  - **Medium 5**: removed remaining "licensed IEC" + personal-class-
+    repo path leak from the v2 Changelog entry; rewrote in team-visible
+    language matching § 2.4 ("ask Alex for working notes that cite the
+    paywalled standard").
+  - **Medium 6**: replaced the remaining numeric IEC range snippets in
+    § 2.4 + Appendix B with non-numeric contradiction summaries. Pull
+    canonical bounds from IEC 60599:2022 Table 1 directly (or from
+    Alex's working notes) when implementing the fix-the-table PR.
+
 ### Fixed (PR #148 review v1)
 
 - `data/scenarios/validate_realism_statistical.py` — apply review v1 fixes:
@@ -61,22 +95,24 @@
   point. Plugs L3 into the existing 6-criteria PS B rubric (`#51`).
 - `reports/realism_statistical_v0.md` — baseline run on the current 20-row
   `data/processed/dga_records.csv`. Empirical signal: synthetic fault prevalence
-  diverges from TC 10 reference at chi-squared p=0.0007. Triggers the synthesis
+  diverges from TC 10 reference at chi-squared p=0.0106 (post-v4 regenerated;
+  the original commit recorded p=0.0007 but was operating on only 10 of 20 rows
+  due to a label-mapping bug fixed in v4). Triggers the synthesis
   tuning step (extend n + adjust per-fault gas means) in the v1 plan.
 
 ### Changed
 
 - `docs/dga_realism_statistical_validation.md` § 2.4 — added three-way
-  fault-table divergence finding from comparing the licensed IEC 60599:2022
-  4th-ed scan against `transformer_standards.json` `fault_table` (Table B)
-  and `mcp_servers/fmsr_server/server.py` `_rogers_ratio()` (Table C). Worst
-  divergences: D1 R1, D1 R3, D2 R2, T2/T3 R3 boundary. Server's own
+  fault-table divergence finding from comparing IEC 60599:2022 Table 1 against
+  `transformer_standards.json` `fault_table` (Table B) and
+  `mcp_servers/fmsr_server/server.py` `_rogers_ratio()` (Table C). Worst
+  divergences are on D1, D2, and the T2/T3 boundary; the server's own
   `server_rogers_table_note` already documents the C-vs-A drift. Pattern
   (B↔C agreement > B↔A or C↔A) suggests both encodings derived from a
   derivative source rather than IEC text. Pre-May 4 plan amended: new
-  task 2b (fix Tables B + C for at least PD/D1 R1; lockstep with FMSR
-  test fixtures). Companion analysis lives in personal-class-repo
-  `Final_Project/notes/20260428_iec60599_table_comparison.md`.
+  task 2b (fix Tables B + C for at least PD/D1; lockstep with FMSR test
+  fixtures). The full row-by-row working notes are held by Alex outside
+  this repo because they cite the paywalled IEC text.
 
 ### Documentation
 

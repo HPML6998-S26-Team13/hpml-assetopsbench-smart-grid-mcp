@@ -121,10 +121,17 @@ of them agree with the others.**
 
 **Worst divergences (B vs A):**
 
-- **D1 R1**: JSON `≤ 0.1`; IEC `0.1 – 0.5` (no overlap on the ramp).
-- **D1 R3**: JSON `≤ 1.0`; IEC `> 1` (opposite half-line).
-- **D2 R2**: JSON `≥ 3.0`; IEC `0.6 – 2.5` (no overlap; different orders of magnitude).
-- **T2/T3 R3 boundary**: JSON puts `R3 = 3` in T3; IEC puts it in T2.
+- **D1 R1**: JSON's range and IEC's range do not overlap — JSON's range
+  ends where IEC's range begins.
+- **D1 R3**: JSON and IEC sit on opposite half-lines.
+- **D2 R2**: JSON and IEC do not overlap; the bounds differ by an order
+  of magnitude.
+- **T2/T3 R3 boundary**: JSON and IEC place the dividing value into
+  different fault classes.
+
+(Exact numeric thresholds are in IEC 60599:2022 Table 1. Consult the
+licensed standard or Alex's working notes for the bounds; we deliberately
+omit them here to keep this team-visible doc free of paywalled content.)
 
 **Server's own divergence note (`server_rogers_table_note`):** Tanisha
 already documents that the server's Rogers table diverges from IEC on PD,
@@ -142,7 +149,7 @@ citations, drift is normal.
 the synthesis are physically plausible), but **conditional-KS per fault
 class will likely fail on D1, D2, T1**, because synthetic samples were
 generated to match the server's table — not IEC's. This explains the
-v0 baseline's chi² p = 0.0007 fault-prevalence divergence and predicts
+v0 baseline's chi² p = 0.0106 fault-prevalence divergence and predicts
 the shape of the v1 failures.
 
 **Recommended remediation** (ranked):
@@ -454,7 +461,7 @@ is loaded — and degrades cleanly.
 |---|------|-------|-----|-----------|
 | 1 | Land L3 skeleton + this doc | Alex | Apr 28 | this PR merges |
 | 2 | Pin `transformer_standards.json` `meta.sources[0]` to IEC 60599 4th ed. (2022) — current value `"3rd"` is wrong (3rd ed. = 2015). Doc-only fix. | Alex | Apr 29 | JSON `meta.sources[0].edition` = `"4th"`, CHANGELOG entry |
-| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 R1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 + Appendix B for the divergence summary; ask Alex for the full row-by-row working notes. | Alex (separate PR) | Apr 29 | JSON D1 R1 = `[0.1, 0.5]`, R3 = `[1.0, null]`; server `_rogers_ratio` updated; tests pass; representative gas profiles regenerated to match. |
+| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 + Appendix B for the divergence summary; ask Alex for the full row-by-row working notes containing the canonical numeric bounds. | Alex (separate PR) | Apr 29 | JSON D1 R1 / R3 ranges replaced with IEC-canonical bounds (consult standard); server `_rogers_ratio` updated to match; tests pass; representative gas profiles regenerated. |
 | 3 | Acquire IEEE DataPort DGA dataset (Columbia IEEE, or Kaggle backstop) | Alex | Apr 29 | `data/external/ieee_dataport_dga.csv` (or Kaggle equivalent) on disk |
 | 4 | First L3 run: `validate_realism_statistical.py` with real data | Alex | Apr 29 | `reports/realism_statistical_v1.md` exists |
 | 5 | Tune synthesis: if any test fails, adjust `data/generate_synthetic.py` per-fault gas means/stds, regenerate, re-run | Alex | Apr 30 – May 1 | majority of tests pass at v2 or v3 |
@@ -730,12 +737,19 @@ directly.
 - **PD**: B↔A contradicts on R2 and R3.
 - **T1**: B↔A contradicts on R2; C↔A contradicts on R1 and R3.
 
-**Specific contradictions worth flagging in code comments when fixing:**
-- D1 R1: JSON `[0, 0.1]` vs IEC `0.1 – 0.5` — JSON's range *ends* where IEC's
-  starts. Likely a transposition.
-- D1 R3: JSON `[0, 1.0]` vs IEC `> 1` — directly opposite half-lines.
-- D2 R2: JSON `[3, ∞)` vs IEC `0.6 – 2.5` — orders of magnitude apart.
-- T1 R3: JSON `[0, 1.0]` vs IEC `< 1` — JSON includes `R3 = 1` exactly
-  whereas IEC excludes it (open vs closed boundary).
-- T2/T3 R3: JSON splits at 3, IEC splits at 4 — values in `(3, 4]` are T3
-  per JSON but T2 per IEC.
+**Specific contradictions worth flagging in code comments when fixing**
+(non-numeric phrasing — pull the canonical bounds from IEC 60599:2022
+Table 1 directly, or from Alex's working notes; do not transcribe them
+into this team-visible doc):
+
+- **D1 R1**: JSON's range and IEC's range do not overlap; JSON's range ends
+  where IEC's range begins. Possible column transposition during the
+  original encoding.
+- **D1 R3**: JSON and IEC fall on opposite half-lines (one bounded above,
+  the other below).
+- **D2 R2**: JSON and IEC do not overlap; the bounds differ by roughly an
+  order of magnitude.
+- **T1 R3**: JSON's bound is closed at the same value where IEC's bound is
+  open — open-vs-closed boundary mismatch.
+- **T2/T3 R3 boundary**: JSON places the dividing value in T3; IEC places
+  it (and the surrounding interval) in T2.

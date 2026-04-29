@@ -481,6 +481,32 @@ def chi2_fault_prevalence(
         )
         ref = _scale_to_total(ref_props, n_syn)
         ref_label = "TC10 reference"
+    # Pre-check: SciPy chisquare divides by zero on cells where expected==0
+    # but observed>0, returning NaN statistic/p-value (and emitting bare
+    # NaN to JSON, which is not strict JSON). Detect the precondition
+    # failure here and report which classes are missing from the reference
+    # rather than producing an uninterpretable result. Reviewer v2 M3.
+    zero_exp_observed = [
+        FAULT_CODES[i]
+        for i in range(len(FAULT_CODES))
+        if ref[i] == 0 and syn_counts.values[i] > 0
+    ]
+    if zero_exp_observed:
+        return [
+            TestResult(
+                name="chi2_fault_prevalence",
+                statistic=None,
+                pvalue=None,
+                threshold=CHI2_PVALUE_PASS,
+                passed=False,
+                detail=(
+                    f"reference={ref_label} has zero expected count for "
+                    f"classes {zero_exp_observed} but synthetic has rows "
+                    f"there; chi-squared undefined. Acquire a real dataset "
+                    f"covering those classes or apply a documented pseudocount."
+                ),
+            )
+        ]
     try:
         stat, p = stats.chisquare(syn_counts.values, f_exp=ref)
     except ValueError as e:
@@ -598,9 +624,11 @@ def correlation_delta(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]
     in arcing). If our synthesis emits uncorrelated noise, this
     catches it.
     """
-    syn_gases = [SYN_GAS_COLUMNS[g] for g in FAULT_GASES]
-    real_gases = [f"{g}_ppm" for g in FAULT_GASES if f"{g}_ppm" in real.columns]
-    if len(real_gases) < 2:
+    # Use only the gas columns present in BOTH frames; otherwise the two
+    # correlation matrices have different shapes and `np.abs(syn - real)`
+    # raises a broadcast ValueError. Reviewer v2 H2.
+    shared = [g for g in FAULT_GASES if f"{g}_ppm" in real.columns]
+    if len(shared) < 2:
         return [
             TestResult(
                 name="corr_delta",
@@ -608,11 +636,22 @@ def correlation_delta(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]
                 pvalue=None,
                 threshold=CORR_DELTA_PASS,
                 passed=False,
-                detail="real dataset has too few gas columns",
+                detail=(
+                    f"real dataset has too few shared gas columns "
+                    f"(found {len(shared)}: {shared}); need >=2"
+                ),
             )
         ]
-    syn_corr = syn[syn_gases].corr().values
-    real_corr = real[real_gases].corr().values
+    if len(shared) < len(FAULT_GASES):
+        # Partial overlap: emit a result on the intersection but flag it.
+        detail_suffix = (
+            f" (computed over shared {len(shared)} of {len(FAULT_GASES)} "
+            f"gases: {shared})"
+        )
+    else:
+        detail_suffix = ""
+    syn_corr = syn[[SYN_GAS_COLUMNS[g] for g in shared]].corr().values
+    real_corr = real[[f"{g}_ppm" for g in shared]].corr().values
     delta = float(np.nanmax(np.abs(syn_corr - real_corr)))
     return [
         TestResult(
@@ -621,7 +660,7 @@ def correlation_delta(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]
             pvalue=None,
             threshold=CORR_DELTA_PASS,
             passed=delta <= CORR_DELTA_PASS,
-            detail=f"max abs(corr_syn - corr_real) over {len(real_gases)} gases",
+            detail=f"max abs(corr_syn - corr_real) over {len(shared)} gases{detail_suffix}",
         )
     ]
 
