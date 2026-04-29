@@ -1,5 +1,48 @@
 # Changelog
 
+## 2026-04-29
+
+### Fixed (PR #148 review v1)
+
+- `data/scenarios/validate_realism_statistical.py` — apply review v1 fixes:
+  - **Critical 1**: synthetic fault labels now mapped to IEC codes through
+    `PROJECT_LABEL_TO_IEC` before chi-squared counting, so the headline test
+    no longer silently drops rows. The v0 baseline now reports `n_syn=20` (was 10
+    out of 20). `load_synthetic` raises `ValueError` on unmapped labels rather
+    than dropping them, so future generator changes fail loudly instead of
+    quietly.
+  - **High 2**: chi-squared real-vs-synthetic comparison now scales real
+    proportions to `n_syn` via largest-remainder rounding (`_scale_to_total`),
+    so SciPy's "observed and expected totals must match" precondition is
+    always satisfied regardless of real-dataset row count.
+  - **High 3**: Anderson-Darling now uses `ad.pvalue` directly (modern SciPy
+    returns it on the `[0, 1]` scale). The previous `/ 100` divisor turned
+    capped 0.25 p-values into 0.0025 and failed every AD test.
+  - **Medium 5**: `load_real()` now reads `.xlsx`/`.xls` files in addition to
+    CSV, and accepts a `--real-source` flag selecting from `REAL_LABEL_MAPS`
+    (currently includes the IEEE DataPort integer-fault-code map; placeholders
+    for Kaggle and Duval 2001 TC 10 reproductions).
+  - **Medium 6**: `conditional_ks_per_fault()` now emits a structured
+    failing `TestResult` when a real dataset is missing a gas column, mirroring
+    the behavior of the marginal KS / EMD paths instead of crashing with
+    `KeyError`.
+  - **Medium 8**: `_md_cell()` helper escapes `|` and newlines/CR before
+    rendering test details into the Markdown report table.
+  - **Low 9**: removed unused `Callable` import.
+- `docs/dga_realism_statistical_validation.md` — apply review v1 doc fixes:
+  - **High 4**: removed verbatim IEC 60599:2022 Table 1 reproduction from
+    Appendix A. Replaced with a reconciliation procedure, citation block,
+    and a non-verbatim implementation summary that points back to the diff
+    pattern in Appendix B (which only describes our internal tables vs the
+    standard's, not the standard's content).
+  - **Medium 7**: removed personal-class-repo path references from the
+    tracked doc; replaced with team-visible language ("ask Alex", "external
+    citation"). The full row-by-row working notes still exist; they're held
+    by Alex outside this repo because they cite paywalled IEC text.
+- `reports/realism_statistical_v0.md` + `.json` — regenerated against the
+  corrected validator. Chi-squared on full 20-row synthetic vs TC 10 reference
+  is now `χ²=16.67, p=0.0106` (was `23.33, p=0.0007` operating on 10 rows).
+
 ## 2026-04-28
 
 ### Added

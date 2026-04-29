@@ -6,11 +6,11 @@
   "tests": [
     {
       "name": "chi2_fault_prevalence",
-      "statistic": 23.333333333333332,
-      "pvalue": 0.0006921881397879359,
+      "statistic": 16.666666666666664,
+      "pvalue": 0.01058961082225972,
       "threshold": 0.05,
       "passed": false,
-      "detail": "reference=TC10 reference, n_syn=10"
+      "detail": "reference=TC10 reference, n_syn=20"
     },
     {
       "name": "real_dataset_present",

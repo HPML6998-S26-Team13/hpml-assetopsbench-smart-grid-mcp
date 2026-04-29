@@ -29,15 +29,14 @@ artifacts already validate scenarios at increasing depth:
 | **L2** Narrative realism | "would a transformer engineer recognize this as plausible work?" | `docs/scenario_realism_validation.md`, `docs/ps_b_evaluation_methodology.md`, mentor review (Dhaval), Akshat in `#53` |
 | **L3** Statistical fidelity | do the gas-concentration distributions and fault-class proportions in our synthetic dataset resemble published real-world DGA data? | **this doc + `data/scenarios/validate_realism_statistical.py`** |
 
-L3 was previously implicit. The Apr 28 conversation around
+L3 was previously implicit. The Apr 28 review of
 [PR #147](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/pull/147)
 (Aaron's `aaron/issue2-scenario-generator` scaffold, +1031/-0) and the
-Dhaval pre-call Q&A bank
-(`Final_Project/planning/2026-04-28_smartgridbench_qa_bank.md` § "Knowledge
-artifacts" + § "What is realism") made the gap explicit: we have a strong
-narrative-realism story but no quantitative claim that synthetic gas
-distributions match field data. Without L3 we cannot defend the synthetic
-foundation in the May 4 final report.
+Dhaval pre-call Q&A pass made the gap explicit: we have a strong
+narrative-realism story (mentor + domain-expert review of scenario text)
+but no quantitative claim that synthetic gas distributions match field
+data. Without L3 we cannot defend the synthetic foundation in the May 4
+final report.
 
 **Why now:** PR #147 lands the generator path that will produce the first
 reviewable batch. Akshat's `#53` validation pass needs to point at *both*
@@ -105,12 +104,11 @@ real-world scenarios?*
 
 ### 2.4 Three-way fault-table divergence (added 2026-04-28, post-PR open)
 
-After this PR was opened, a full English-side scan of the IEC 60599:2022
-4th edition was obtained (Wayback Machine snapshot of `pstco.net` from
-2024-11-01; archived at `Final_Project/_iec_reference/` in the personal
-class repo, gitignored, copyright IEC 2022, personal-research use only).
-Table 1 of the standard was extracted and compared row-by-row against the
-two team-repo encodings.
+After this PR was opened, a copy of IEC 60599:2022 (4th ed., publication
+66491) was obtained for personal-research review. Table 1 of the standard
+was extracted and compared row-by-row against the two team-repo encodings.
+Ask Alex for source-of-record details if you need to verify a specific
+range; the standard is paywalled and not redistributable.
 
 **Three different DGA-classification tables are currently in play. None
 of them agree with the others.**
@@ -178,10 +176,11 @@ mechanical fix); re-run L3; revisit remaining rows from data.
   classifier in FMSR.
 
 **Companion analysis** (full row-by-row diff matrix, three-way pair
-agreement, action-item list): personal-class-repo
-`Final_Project/notes/20260428_iec60599_table_comparison.md`. That note
-is the source-of-record for any subsequent fix-the-table PR; this
-section is a summary.
+agreement, per-row contradiction descriptions): held by Alex outside this
+repo because it cites the paywalled IEC text. The team-visible substitutes
+are this § 2.4 summary plus Appendix B's three-way diff matrix, which
+together carry enough signal to scope the fix-the-table PR. Ping Alex
+if you need deeper detail before that PR lands.
 
 ### 2.5 Free-PDF acquisition status (Apr 28 search)
 
@@ -455,7 +454,7 @@ is loaded — and degrades cleanly.
 |---|------|-------|-----|-----------|
 | 1 | Land L3 skeleton + this doc | Alex | Apr 28 | this PR merges |
 | 2 | Pin `transformer_standards.json` `meta.sources[0]` to IEC 60599 4th ed. (2022) — current value `"3rd"` is wrong (3rd ed. = 2015). Doc-only fix. | Alex | Apr 29 | JSON `meta.sources[0].edition` = `"4th"`, CHANGELOG entry |
-| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 R1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 for the divergence summary; full diff matrix in personal-repo note `Final_Project/notes/20260428_iec60599_table_comparison.md`. | Alex (separate PR) | Apr 29 | JSON D1 R1 = `[0.1, 0.5]`, R3 = `[1.0, null]`; server `_rogers_ratio` updated; tests pass; representative gas profiles regenerated to match. |
+| 2b | **Fix Table B (`fault_table`) and Table C (server `_rogers_ratio`) to match IEC 60599 Table 1** for at least PD and D1 R1 (the most-egregious rows). Update `tests/test_fmsr_server.py` fixtures in lockstep. See § 2.4 + Appendix B for the divergence summary; ask Alex for the full row-by-row working notes. | Alex (separate PR) | Apr 29 | JSON D1 R1 = `[0.1, 0.5]`, R3 = `[1.0, null]`; server `_rogers_ratio` updated; tests pass; representative gas profiles regenerated to match. |
 | 3 | Acquire IEEE DataPort DGA dataset (Columbia IEEE, or Kaggle backstop) | Alex | Apr 29 | `data/external/ieee_dataport_dga.csv` (or Kaggle equivalent) on disk |
 | 4 | First L3 run: `validate_realism_statistical.py` with real data | Alex | Apr 29 | `reports/realism_statistical_v1.md` exists |
 | 5 | Tune synthesis: if any test fails, adjust `data/generate_synthetic.py` per-fault gas means/stds, regenerate, re-run | Alex | Apr 30 – May 1 | majority of tests pass at v2 or v3 |
@@ -520,7 +519,7 @@ Questions to follow up on, ordered by leverage:
 - Dissanayake, T. (2026). *DGA dataset.* IEEE DataPort. DOI [10.21227/27vy-h479](https://ieee-dataport.org/documents/dga-dataset).
 - Bashir et al. (2024). *Optimized Synthetic Data Integration with Transformer's DGA Data for Improved ML-Based Fault Identification.* ResearchGate publication 381933991.
 - IBM AssetOpsBench upstream: [github.com/IBM/AssetOpsBench](https://github.com/IBM/AssetOpsBench).
-- Personal-repo Q&A bank: `Final_Project/planning/2026-04-28_smartgridbench_qa_bank.md` (especially § "Knowledge artifacts" and § "What is realism").
+- Apr 28 mentor pre-call Q&A pass — § "Knowledge artifacts" and § "What is realism" capture how the L3 vs L2 split was reached. Owner Alex; ask if you need it.
 - Team-repo PS B methodology: `docs/ps_b_evaluation_methodology.md` (Issue `#51`).
 - Team-repo narrative realism: `docs/scenario_realism_validation.md`.
 - PR #147: [PS B scenario generator scaffold (#2 prototype)](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/pull/147), branch `aaron/issue2-scenario-generator`, author afan2g, opened 2026-04-28.
@@ -596,9 +595,10 @@ mkdir -p data/external
 
 ### 12.3 What you need to source
 
-- **IEC 60599:2022 PDF.** Alex's copy is in his personal class repo,
-  gitignored, and not redistributable (IEC copyright). Use Columbia ILL or
-  ask Dhaval for an IBM-licensed copy.
+- **IEC 60599:2022 PDF.** Standard is paywalled; sourcing it is on you.
+  Use Columbia ILL (engineering library), ask Dhaval for an IBM-licensed
+  copy, or check team-share for a licensed copy. Don't commit it to the
+  repo regardless of source.
 - **IEEE DataPort DGA Dataset** (DOI 10.21227/27vy-h479) — primary target
   per § 4. Columbia IEEE subscription should cover it; ask the engineering
   library if not.
@@ -638,7 +638,8 @@ mkdir -p data/external
 ### 12.5 Where to ask for help
 
 - **Alex** for PR #148 / scaffolding-side questions, the IEC table
-  comparison, edition pinning, or the personal-repo full diff matrix.
+  comparison, edition pinning, or the row-by-row working notes that don't
+  live in this repo.
 - **Aaron (afan2g, PR #147)** for the scenario-generator path and how L3
   should hook into its promotion script.
 - **Dhaval** for IEC standard interpretation, IBM-internal datasets, or
@@ -648,42 +649,43 @@ mkdir -p data/external
 
 ---
 
-## 13. Appendix A — IEC 60599:2022 Table 1 verbatim
+## 13. Appendix A — Canonical reference for fault-table reconciliation
 
-In the standard's own column notation:
+The canonical fault-classification table is **IEC 60599:2022 Table 1**
+(publication 66491, p. 13). The standard is paywalled; do not reproduce
+its table contents verbatim in this repo.
 
-```
-Case  Characteristic fault              C2H2/C2H4    CH4/H2       C2H4/C2H6
-PD    Partial discharges                NS           < 0.1        < 0.2
-D1    Discharges of low energy          > 1          0.1 to 0.5   > 1
-D2    Discharges of high energy         0.6 to 2.5   0.1 to 1     > 2
-T1    Thermal fault t < 300 °C          NS           > 1 (NS)     < 1
-T2    Thermal fault 300 °C < t < 700 °C < 0.1        > 1          1 to 4
-T3    Thermal fault t > 700 °C          < 0.2        > 1          > 4
-```
+**To reconcile Tables B and C with the standard:**
 
-`NS` = "non-significant whatever the value" — treat as "any" in code.
+1. Acquire IEC 60599:2022 through Columbia ILL or an IBM-licensed copy
+   (see § 12.3). Do not commit the PDF.
+2. Read Table 1 directly from the standard. The table maps six
+   electrical-discharge / thermal fault cases (`PD`, `D1`, `D2`, `T1`,
+   `T2`, `T3`) to ranges of the three Rogers Ratios; cells labelled
+   `NS` mean "non-significant whatever the value" and translate to
+   "any" in code.
+3. Cross-reference the four Notes accompanying Table 1. Two of them
+   matter for our scope: (a) the standard documents stricter PD
+   thresholds for instrument transformers and bushings (we don't
+   model those, but should mention the limitation in the paper), and
+   (b) stray oil gassing is called out as producing PD-like signatures
+   that are not real faults (worth modeling as a small false-PD
+   fraction in synthesis).
+4. Apply the three remediation strategies in § 2.4 in order. The
+   diff-pattern table in Appendix B identifies which rows are most
+   urgent to fix without restating the standard's content.
 
-Notes from the standard text:
-- Note 1: some countries use `C2H2/C2H6` instead of `CH4/H2`; some use
-  slightly different ratio limits.
-- Note 2: gas-ratio calculation conditions in § 6.1 c).
-- Note 3: PD threshold stricter for instrument transformers (`CH4/H2 < 0.2`)
-  and bushings (`CH4/H2 < 0.07`).
-- Note 4: stray oil gassing produces PD-like patterns but is not a real
-  fault.
+**Internal R-numbering (JSON convention):** `R1 = CH4/H2`,
+`R2 = C2H2/C2H4`, `R3 = C2H4/C2H6`. The IEC standard uses different
+column ordering; consult § 1 of this doc for the conversion when
+reading the standard against our code.
 
-In the JSON's R-numbering convention (`R1 = CH4/H2`, `R2 = C2H2/C2H4`,
-`R3 = C2H4/C2H6`):
-
-| Code | R1 (CH4/H2) | R2 (C2H2/C2H4) | R3 (C2H4/C2H6) |
-|------|-------------|----------------|----------------|
-| PD | < 0.1 | NS | < 0.2 |
-| D1 | 0.1 – 0.5 | > 1 | > 1 |
-| D2 | 0.1 – 1 | 0.6 – 2.5 | > 2 |
-| T1 | > 1 (NS) | NS | < 1 |
-| T2 | > 1 | < 0.1 | 1 – 4 |
-| T3 | > 1 | < 0.2 | > 4 |
+**Citation for the final paper:**
+- IEC 60599:2022, *Mineral oil-filled electrical equipment in service —
+  Guidance on the interpretation of dissolved and free gases analysis*,
+  Edition 4.0, International Electrotechnical Commission, Geneva,
+  2022-05.
+- IEC publication ID 66491. ICS 17.220.99 / 29.040.10 / 29.180. TC 10.
 
 ---
 
