@@ -214,7 +214,10 @@ def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | No
     """
     Load real DGA dataset.
 
-    Supported file types: .csv, .xlsx, .xls (XLSX requires `openpyxl`).
+    Supported file types: .csv, .xlsx (XLSX uses `openpyxl`, which is in
+    `requirements.txt`). Legacy .xls files require `xlrd`, which is not
+    pinned; convert .xls → .xlsx or .csv before loading.
+
     Expected post-normalization columns:
         h2_ppm, ch4_ppm, c2h2_ppm, c2h4_ppm, c2h6_ppm, fault_label
 
@@ -226,8 +229,13 @@ def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | No
     if path is None or not path.exists():
         return None
     suffix = path.suffix.lower()
-    if suffix in (".xlsx", ".xls"):
+    if suffix == ".xlsx":
         df = pd.read_excel(path)
+    elif suffix == ".xls":
+        raise ValueError(
+            f"Legacy .xls is not supported (requires `xlrd` which is not in "
+            f"requirements.txt). Convert {path} to .xlsx or .csv first."
+        )
     else:
         df = pd.read_csv(path)
     df = _normalize_real_columns(df)
@@ -481,15 +489,13 @@ def chi2_fault_prevalence(
         )
         ref = _scale_to_total(ref_props, n_syn)
         ref_label = "TC10 reference"
-    # Pre-check: SciPy chisquare divides by zero on cells where expected==0
-    # but observed>0, returning NaN statistic/p-value (and emitting bare
-    # NaN to JSON, which is not strict JSON). Detect the precondition
-    # failure here and report which classes are missing from the reference
-    # rather than producing an uninterpretable result. Reviewer v2 M3.
+    # Two distinct precondition failures both produce NaN stat/p in SciPy
+    # and bare-NaN in JSON. Handle them upfront. Reviewer v2 M3 + v3 H1.
+    obs = syn_counts.values
+    # (a) Reference has zero expected count for a class where synthetic has
+    #     rows. chi² is undefined (divide-by-zero on the term).
     zero_exp_observed = [
-        FAULT_CODES[i]
-        for i in range(len(FAULT_CODES))
-        if ref[i] == 0 and syn_counts.values[i] > 0
+        FAULT_CODES[i] for i in range(len(FAULT_CODES)) if ref[i] == 0 and obs[i] > 0
     ]
     if zero_exp_observed:
         return [
@@ -507,8 +513,37 @@ def chi2_fault_prevalence(
                 ),
             )
         ]
+    # (b) Both observed and expected are zero for some classes. SciPy returns
+    #     NaN for the corresponding terms when this happens. Drop those
+    #     classes before the test rather than letting NaN leak into the report.
+    keep = [i for i in range(len(FAULT_CODES)) if not (ref[i] == 0 and obs[i] == 0)]
+    if len(keep) < len(FAULT_CODES):
+        dropped = [FAULT_CODES[i] for i in range(len(FAULT_CODES)) if i not in keep]
+        obs = obs[keep]
+        ref_kept = ref[keep]
+        # Re-scale ref so observed and expected totals still match exactly.
+        ref_kept = _scale_to_total(
+            ref_kept.astype(float) / ref_kept.sum() if ref_kept.sum() > 0 else ref_kept,
+            int(obs.sum()),
+        )
+        ref = ref_kept
+        ref_label = f"{ref_label}; dropped empty classes {dropped}"
+    if len(obs) < 2:
+        return [
+            TestResult(
+                name="chi2_fault_prevalence",
+                statistic=None,
+                pvalue=None,
+                threshold=CHI2_PVALUE_PASS,
+                passed=False,
+                detail=(
+                    f"after dropping empty classes only {len(obs)} classes remain; "
+                    f"chi-squared needs >= 2 categories"
+                ),
+            )
+        ]
     try:
-        stat, p = stats.chisquare(syn_counts.values, f_exp=ref)
+        stat, p = stats.chisquare(obs, f_exp=ref)
     except ValueError as e:
         return [
             TestResult(
@@ -520,6 +555,20 @@ def chi2_fault_prevalence(
                 detail=f"chisquare failed: {e}",
             )
         ]
+    if not (np.isfinite(stat) and np.isfinite(p)):
+        return [
+            TestResult(
+                name="chi2_fault_prevalence",
+                statistic=None,
+                pvalue=None,
+                threshold=CHI2_PVALUE_PASS,
+                passed=False,
+                detail=(
+                    f"chisquare returned non-finite result (stat={stat}, p={p}); "
+                    f"reference={ref_label}, observed sum={int(obs.sum())}"
+                ),
+            )
+        ]
     return [
         TestResult(
             name="chi2_fault_prevalence",
@@ -527,7 +576,7 @@ def chi2_fault_prevalence(
             pvalue=float(p),
             threshold=CHI2_PVALUE_PASS,
             passed=p > CHI2_PVALUE_PASS,
-            detail=f"reference={ref_label}, n_syn={n_syn}",
+            detail=f"reference={ref_label}, n_syn={int(obs.sum())}",
         )
     ]
 
@@ -652,7 +701,38 @@ def correlation_delta(syn: pd.DataFrame, real: pd.DataFrame) -> list[TestResult]
         detail_suffix = ""
     syn_corr = syn[[SYN_GAS_COLUMNS[g] for g in shared]].corr().values
     real_corr = real[[f"{g}_ppm" for g in shared]].corr().values
-    delta = float(np.nanmax(np.abs(syn_corr - real_corr)))
+    abs_delta = np.abs(syn_corr - real_corr)
+    # If a gas column is constant in either frame, pandas' .corr() emits NaN
+    # everywhere for that row/column. np.nanmax over an all-NaN array yields
+    # NaN, which then leaks into the JSON report. Detect and report. v3 H1.
+    if not np.any(np.isfinite(abs_delta)):
+        return [
+            TestResult(
+                name="corr_delta",
+                statistic=None,
+                pvalue=None,
+                threshold=CORR_DELTA_PASS,
+                passed=False,
+                detail=(
+                    "correlation matrix is all-NaN (likely a constant gas "
+                    f"column in synthetic or real over shared gases {shared})"
+                ),
+            )
+        ]
+    delta = float(np.nanmax(abs_delta))
+    if not np.isfinite(delta):
+        return [
+            TestResult(
+                name="corr_delta",
+                statistic=None,
+                pvalue=None,
+                threshold=CORR_DELTA_PASS,
+                passed=False,
+                detail=(
+                    f"correlation delta is non-finite (stat={delta}); shared gases={shared}"
+                ),
+            )
+        ]
     return [
         TestResult(
             name="corr_delta",
@@ -760,7 +840,10 @@ def main(argv: list[str] | None = None) -> int:
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(render_markdown(rc))
     if args.json:
-        args.json.write_text(json.dumps(rc.to_dict(), indent=2))
+        # allow_nan=False makes any future non-finite metric a hard error at
+        # report-write time rather than silently emitting bare NaN (which
+        # is not strict JSON and fails downstream consumers). v3 H1.
+        args.json.write_text(json.dumps(rc.to_dict(), indent=2, allow_nan=False))
 
     print(f"Wrote {args.report}: {rc.n_passed}/{rc.n_total} tests passed")
     return 0 if rc.n_passed == rc.n_total else 1

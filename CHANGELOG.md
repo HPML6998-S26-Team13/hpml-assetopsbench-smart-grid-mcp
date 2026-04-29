@@ -2,6 +2,30 @@
 
 ## 2026-04-29
 
+### Fixed (PR #148 review v3)
+
+- `data/scenarios/validate_realism_statistical.py` — apply review v3 fixes:
+  - **High 1**: NaN no longer leaks into report. Three changes:
+    (a) `chi2_fault_prevalence()` now drops classes where both observed
+    and expected are zero before calling `stats.chisquare()` (SciPy
+    returned NaN for those terms even with the v5 zero-expected guard);
+    rescales the trimmed reference so totals still match.
+    (b) Adds a post-test finiteness guard so any future non-finite
+    statistic is reported as a structured failure.
+    (c) `correlation_delta()` checks for all-NaN delta (which happens
+    when a gas column is constant in either frame) and returns a
+    descriptive failure instead of `np.nanmax` returning NaN.
+    JSON dump now uses `allow_nan=False` so any future non-finite
+    metric fails loudly during report generation rather than emitting
+    bare `NaN` to the JSON file.
+  - **Medium 2**: `load_real()` no longer claims `.xls` support. The
+    v4 fix added `.xls` to the routing table but `xlrd` is not in
+    `requirements.txt`. Routing `.xls` now raises `ValueError` with
+    instructions to convert to `.xlsx` or `.csv`.
+  - **Medium 3**: PR body updated separately on GitHub (the previous
+    body still referenced the pre-v4 `p = 0.0007` baseline and didn't
+    list `openpyxl`).
+
 ### Fixed (PR #148 review v2)
 
 - `data/scenarios/validate_realism_statistical.py` + `requirements.txt` —
