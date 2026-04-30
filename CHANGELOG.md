@@ -291,8 +291,43 @@ re-run; v0 baseline preserved at `reports/realism_statistical_v0.{md,json}`.
   task 2b (fix Tables B + C for at least PD/D1; lockstep with FMSR test
   fixtures). The full row-by-row working notes are held by Alex outside
   this repo because they cite the paywalled IEC text.
+- `scripts/run_experiment.sh:1130` — replay phase now guarded by
+  `ORCHESTRATION=agent_as_tool`. Previously the post-benchmark torch-profiler
+  replay invoked `replay_scenarios.sh` (which always drives `aat_runner.py`)
+  regardless of the originating cell's orchestration mode. For PE / Verified
+  PE cells (Y, Z) the AaT-shaped replay produced a torch trace under the
+  cell's `raw/<run>/profiling/` directory that didn't represent the cell's
+  actual workload. Cell A/B/C behavior is unchanged (replay still fires).
+  Cell Y/Z get an explicit "SKIPPED" message and rely on main-loop profiling
+  for coverage. Resolves `pm/backlog.md` 2026-04-27 pin (c). Full design
+  rationale in `docs/replay_phase_analysis.md`.
 
 ### Documentation
+
+- New `docs/replay_phase_analysis.md` — two-question investigation of the
+  vLLM replay phase: (Q1) "first prefill repeats on warmup" is intentional
+  steady-state capture by design; (Q2) replay-cell-awareness resolved by
+  Option 1 — skip replay for non-AaT cells.
+- New `docs/methods_python_version_disclosure.md` — paper-section disclosure
+  language for the Cell Y vanilla Plan-Execute Python 3.12 vs others 3.11
+  fairness-contract caveat. Includes paper-ready paragraph with the
+  interpreter-overhead-vs-model-time argument and TODOs for a strict-parity
+  ablation.
+- New `docs/plans/aob-extraction.md` + companion `docs/plans/aob-extraction_spec.md`
+  — 4-phase plan + spec for extracting Smart Grid Bench artifacts from the
+  team repo into Alex's AssetOpsBench fork (`eggrollofchaos/AssetOpsBench`)
+  with eventual upstream PR(s) to `IBM/AssetOpsBench`. Phase 1 covers
+  `feat/evaluation-module` adoption + SG-per-trial-JSON adapter (resolves
+  `pm/backlog.md` 2026-04-27 pin (b) once parity proven). Phases 2-3 cover
+  Smart Grid 7th-domain + orchestration-runners upstreaming.
+- Updated `profiling/README.md` and `docs/insomnia_runbook.md` to document
+  the new replay-phase skip behavior for non-AaT cells; recommended-recipe
+  example switched from `cell_Y_plan_execute` to `cell_A_direct` to avoid
+  modeling the misleading replay path.
+- Fixed 4 broken commit-link refs in `docs/coordination/live_repo_summary.md`
+  and `docs/coordination/repo_summary_history.md` (PR `#125` `b480604` →
+  `1001a32`; PR `#126` `8548b8a` → `a12b102`; both noted as
+  post-Apr-27-rewrite).
 
 - Expanded `docs/insomnia_runbook.md` with operational gaps surfaced after the
   Apr 27 PR `#143` / `#144` landings and the Apr 26 worktree-perms incident:

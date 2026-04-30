@@ -199,8 +199,8 @@ shared Insomnia environment.
 
 ### Proof retained from the live summary
 
-- PR `#125` merged as `b480604`.
-- The shared Insomnia checkout was fast-forwarded to `main@b480604`.
+- PR `#125` merged as `1001a32` (post-Apr-27-rewrite SHA; pre-rewrite hash was `b480604`).
+- The shared Insomnia checkout was fast-forwarded to `main@1001a32`.
 - `bash -n scripts/setup_insomnia.sh` passed.
 - The shared `.venv-insomnia` package metadata matched the newer stack:
   `torch==2.10.0`, `vllm==0.19.0`, `transformers==4.57.6`,

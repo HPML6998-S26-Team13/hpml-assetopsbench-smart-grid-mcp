@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-27 22:30 EDT*
+*Last updated: 2026-04-30 03:55 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-25 22:30 EDT -> 2026-04-27 22:30 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-28 03:55 EDT -> 2026-04-30 03:55 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -12,14 +12,57 @@
 
 ## 1. Executive Snapshot
 
-- **[V]** Current canonical remote history is `team13/main@9189fd1` (PR `#144`
-  squash). Today's stack on main, in order: PR `#142` (`0fe7255` — project-
-  board comment hygiene rule), `d4b0ded` (NeurIPS draft scaffold for `#5`),
-  `0a7a225` (PR `#143` — TRIALS=3 + canonical scenario contract + Notebook 03
-  audit fixes), `9189fd1` (PR `#144` — shape-agnostic judge + vLLM defaults +
-  4 Exp 2 first canonical captures + 6-dim judge scores). Alex's local root
-  `main` is synced; do not push any local coordination follow-up unless Alex
-  asks.
+### Current truth (2026-04-30)
+
+- **[V]** Canonical `team13/main` is now at **`8f6b2e8`** (just pushed by
+  Alex / claude `1c34dbff`: AOB extraction plan + Phases 0-3 first review
+  pass + replay-phase guard). Stack on main since the prior summary
+  (`9189fd1`), in chronological merge order:
+  - `78449d3` — PR `#146` Insomnia runbook + profiling docs (Alex)
+  - `1be87ec` — PR `#129` Lane 2 KV-cache choice + INT8 deferral + smoke
+    scripts (Aaron, closes `#29` `#30`)
+  - `bdf8b7c` — PR `#145` Pre-W5 capture pipeline hardening (Aaron,
+    closes `#132` `#135`)
+  - `e90d9b8` — PR `#147` PS B scenario generator scaffold (#2 prototype,
+    Aaron)
+  - `23e9eed` — PR `#148` L3 statistical-fidelity validator + DGA realism
+    doc (Alex)
+  - `a73b260` — PR `#149` IEC 60599:2022 Rogers-Ratio fault_table fix
+    (Alex; § 7 task 2b)
+  - `f6c6e5d` — PR `#134` Cell C optimized batched MCP runner (Akshat,
+    closes `#31`)
+  - `8f6b2e8` — AOB extraction plan + Phases 0-3 first review pass +
+    replay-phase guard (this push, no PR)
+- **[V]** **Cell C optimized MCP is now real** via PR `#134` (closes `#31`).
+  This unblocks the Cell C dependency chain in `#25` (full Experiment 1
+  capture), `#86` (Cell C analysis), and the (B−C) MCP-overhead headline.
+- **[V]** **AOB extraction Phases 0/1/2/3a+3b are code-complete** in Alex's
+  fork at `~/coding/AssetOpsBench`, on a linear 3-branch stack:
+  `aob/sg-evaluation-adapter @ c7bc99e` → `aob/sg-domain-port @ bece2fa` →
+  `aob/sg-orchestration-runners @ 0892b92`. 4 cross-agent review iterations
+  (Codex `3ab548b5` reviewer) settled on **0/0/0/0 LGTM** at v4. Phase 4
+  (upstream PR(s) to `IBM/AssetOpsBench`) explicitly deferred per user —
+  "won't be for a while". Phase 3c (team-AaT batch mode port from
+  `_main_multi`) deferred → D6. Plan/spec/deferred docs at
+  `docs/plans/aob-extraction{,_spec,_deferred}.md` (force-added through the
+  `docs/plans/` gitignore exclusion).
+- **[V]** **Replay-phase guard** for `TORCH_PROFILE` at
+  `scripts/run_experiment.sh:1130` now skips the replay phase when
+  `ORCHESTRATION != agent_as_tool` (resolves backlog pin (c)). Analysis at
+  `docs/replay_phase_analysis.md`. Per-cell `REPLAY_RUNNER` knob is a
+  Future pin in `pm/backlog.md` (D11).
+- **[V]** **Six-dim Maverick-17B judge scores** from PR `#144` remain the
+  current quality view, unchanged: Z+SA `0.833` (5/6), Z `0.639` (4/6),
+  Y+SA `0.444` (3/6), B `0.278` (2/6), A `0.167` (1/6), Y `0.111` (0/6).
+  Cell C judge view will land once a #134 capture run uses the optimized
+  path against the same canonical scenario set.
+- **[V]** **PR backlog state**: open PRs are now just `#112` (Copilot SWE
+  Agent, `CHANGES_REQUESTED`, low priority) and `#128` (PS B support data,
+  `CHANGES_REQUESTED`, two Critical DGA findings). Drafts `#123` and
+  `#124` remain open. PR `#1` is a setup test artifact; ignore in audits
+  per persistent feedback.
+
+### Older still-live truth (older than emphasis window, retained)
 - **[V]** Experiment 2 first canonical capture set landed via PR `#144`. All
   four PE-family cells captured on Insomnia at TRIALS=3 × 2 multi-domain
   scenarios (matching Exp 1's `8979314_*` depth from PR `#130`). Numbers
@@ -136,7 +179,8 @@
   remaining gap is full Experiment 1 capture material: agreed `multi_*.json`
   slice, 3 trials, and Cell C after the optimized MCP lane is ready.
 - **[V]** `#111` is closed after PR `#125` landed the final Insomnia HF CLI fix and
-  the shared Insomnia checkout was verified on `main@b480604`.
+  the shared Insomnia checkout was verified on `main@1001a32`
+  (post-Apr-27-rewrite SHA; pre-rewrite hash was `b480604`).
 - **[V]** `#112` is the main older open PR still lagging. It still has `CHANGES_REQUESTED`; the remaining work is in Akshat’s lane.
 
 ---
@@ -145,6 +189,15 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-30 03:55 | `8f6b2e8` | `team13/main` | AOB extraction plan + Phases 0-3 first review pass + replay-phase guard. Doc-only on team-repo side; the actual code lives on the AOB-fork branch stack. Squash of 6 local commits including the v1-v4 Codex review iterations. |
+| 2026-04-30 01:54 | `f6c6e5d` (PR `#134`) | `team13/main` | **Cell C optimized batched MCP merged** (Akshat). Closes `#31`. Unblocks `#25` Cell C capture and `#86` Cell C analysis. |
+| 2026-04-29 23:34 | AOB extraction v4 LGTM 0/0/0/0 | `review/codex-prompts/_signal/...v4_response-ready.md` | Cross-agent review of AOB extraction Phases 0/1/2/3a+3b reached final clean state across 4 iterations against Codex `3ab548b5`. |
+| 2026-04-29 13:19 | `a73b260` (PR `#149`) | `team13/main` | IEC 60599:2022 Rogers-Ratio table fix + JSON-safe divergent ratios in `mcp_servers/fmsr_server/server.py`. The same fixes were ported into the AOB fork as v2 review fix `bece2fa` on `aob/sg-domain-port`. |
+| 2026-04-29 06:23 | `23e9eed` (PR `#148`) | `team13/main` | PS B L3 statistical-fidelity validator + DGA realism doc (Alex). |
+| 2026-04-28 22:33 | `bdf8b7c` (PR `#145`) | `team13/main` | Pre-W5 capture pipeline hardening (Aaron). Closes `#132` `#135`. |
+| 2026-04-28 22:31 | `e90d9b8` (PR `#147`) | `team13/main` | PS B scenario generator scaffold (Aaron, #2 prototype). |
+| 2026-04-28 18:11 | `78449d3` (PR `#146`) | `team13/main` | Insomnia runbook + profiling docs cascade (Alex), aligning with PR `#143`/`#144`. |
+| 2026-04-28 17:53 | `1be87ec` (PR `#129`) | `team13/main` | Lane 2 KV-cache choice + INT8 deferral + smoke scripts (Aaron). Closes `#29` `#30`. |
 | 2026-04-27 06:00 | `team13/main` rewritten via force-push | `team13/main` | History rewrite removed PR `#137` watcher squash; `a66319f` (PR `#130`) co-author trailer trimmed; `9e08488` (PR `#136`) commit body condensed. Cross-agent PR-review tooling now lives only in Alex's personal class repo (`~/coding/Classes/COMS-E6998/Final_Project/tools/`), not here. Per CLAUDE.md hard rule 11, the watcher script, runbook, backlog entries, and CHANGELOG block were preserved in personal `Final_Project/PROJECT.md` "Files moved" / "Scrubbed paragraphs" sections. Teammates with local clones must `git fetch team13 && git reset --hard team13/main` (after stashing in-progress work) to pick up the rewrite. |
 | 2026-04-26 evening | `team13/main@6046b26` | `team13/main` | Local root fast-forwarded to canonical team main after PS B support artifacts and Experiment 1 capture/profiling instrumentation landed. |
 | 2026-04-26 afternoon | PR `#128` head `1146ca4` | open PR | PS B support-data corrections are still not clean: two Critical DGA trajectory findings and two Medium explanation fixes remain. |
@@ -154,7 +207,7 @@
 | 2026-04-25/26 | `46edc87` + Slurm `8962310`, `8969519`, `8970383`, `8970468` | feature branch / Insomnia | AaT Cell A, team-runner Cell B, and upstream AOB `OpenAIAgentRunner` parity are all smoke-proven on the SGT-009 / T-015 scenario; the parity path now has two successful runs. |
 | 2026-04-24 evening | `c61538e` | `team13/main` | Aaron's AaT runner stack was squashed into three shared-main commits: shared runner, Cell A/B configs/smokes, and design docs. The feature branch now carries the follow-up fixes/proofs on top. |
 | 2026-04-24 evening | `planning/2026-04-21_meeting_notes.md` | local `main` -> feature branch | Ported the Apr 21 Team check-in #4 notes from the stale local reconciliation branch, then updated Apr 28 agenda/prep to point at the meeting record while preserving current issue truth. |
-| 2026-04-24 13:08 | PR `#126` / `8548b8a` | `team13/main` | Root coordination/docs stack merged after review feedback was addressed: live-summary window sync, AaT runner design CHANGELOG entry, orchestration heading cleanup, and a clean squash body replacing the malformed intermediate commit message. |
+| 2026-04-24 13:08 | PR `#126` / `a12b102` | `team13/main` | Root coordination/docs stack merged after review feedback was addressed: live-summary window sync, AaT runner design CHANGELOG entry, orchestration heading cleanup, and a clean squash body replacing the malformed intermediate commit message. (Post-Apr-27-rewrite SHA; pre-rewrite hash was `8548b8a`.) |
 | 2026-04-22 01:42 | `7bd2165` | local `main` | Refreshed the live summary to state explicitly that PE already uses thin repo-local wrappers around the AOB `PlanExecuteRunner` path, while vanilla AaT still needs the analogous wrapper around `OpenAIAgentRunner`. |
 | 2026-04-22 03:09 | local `#26/#32/#34` staging pass | draft PR `#123` branch | Tightened the experiment-matrix story into actual scaffolding on the staging branch: added Y/Z baseline Self-Ask configs, replaced the stale Z legacy-hybrid config there, updated Notebook 03 to support staged Y/Z then B/Y analysis, and updated Notebook 02 to treat the first Cell B artifact as a shared-anchor milestone. Those concrete config/notebook edits are not part of PR `#125`. |
 | 2026-04-22 03:15 | local Notebook 02 / 03 execution | draft PR `#123` branch | Notebook execution confirmed the staged logic compiles and runs on the staging branch. Current canonical repo-state result: Y has the canonical baseline surface; Z / Self-Ask follow-ons are smoke-proven but not yet canonical-analysis-ready because the promoted configs and raw scenario JSONs are not merged. |
@@ -239,27 +292,27 @@
 
 ## 4. Active Findings / Open Loops
 
-1. **`#25` Cell A runner**
-   - **[V]** Config scaffolds, direct adapter, profiling↔W&B plumbing, and the
-     shared AaT runner are now present on the active fix branch.
-   - **[V]** Cell A smoke succeeded on Insomnia as job `8962310`; this is no
-     longer a missing-runner issue.
-   - **[?]** Remaining `#25` work is the full capture set, not the smoke proof:
-     `multi_*.json`, 3 trials, A/B first, and Cell C after the optimized MCP
-     stack is ready.
+1. **`#25` Experiment 1 full capture**
+   - **[V]** Cells A/B/C all have runners merged on main. Cell A/B smoke
+     anchors from `codex-fnd/aat-smoke-fix` (jobs `8962310`, `8969519`,
+     `8970383`, `8970468`); Cell C optimized batched runner just merged
+     via PR `#134` (closes `#31`).
+   - **[?]** Remaining is the agreed-scenario full capture set across A/B/C
+     at the planned trial depth. Backlog pin (a) targets the final 5×6
+     canonical re-run once team agrees on the final scenario set.
 
-2. **`#26` / `#86` / `#32` need execution data**
-   - **[V]** Notebook scaffolds are merged. NB02 partial-readiness framework merged via PR `#123`; NB03 preliminary mode framework merged via PR `#136`.
-   - **[V]** `#26` covers Cell A/B analysis; `#86` covers the Cell C analysis splinter (mirror of `#85`-from-`#25` split on the capture side).
-   - **[V]** Remaining blocker is real capture generation:
-     - Experiment 1: Cell A / B / C
-     - Experiment 2: Cell B / Y / Z
-   - **[V]** Important nuance after the local Apr 22 staging pass:
-     - Y is the canonical PE baseline
-     - PE + Self-Ask and Verified PE have smoke-proven runner paths
-     - Z / Self-Ask follow-ons still need promoted canonical configs and raw artifacts before they are analysis-ready
-     - Cell B now has a one-scenario AaT smoke anchor; the honest Experiment 2
-       core claim still needs the agreed raw run set
+2. **`#26` / `#86` / `#32` Notebook 02/03 execution data**
+   - **[V]** Notebook scaffolds merged. NB02 partial-readiness framework
+     merged via PR `#123`; NB03 preliminary mode framework merged via PR
+     `#136`.
+   - **[V]** `#26` covers Cell A/B analysis; `#86` covers the Cell C
+     analysis splinter; `#32` covers the Experiment 2 PE-family
+     analysis. PR `#144` already landed Exp 2 first canonical (Cell
+     Y/Y+SA/Z/Z+SA) plus 6-dim judge scores; Cell B inherits from PR
+     `#130`'s `8979314_*`. Now that PR `#134` merged, Cell C captures
+     can run against the optimized path.
+   - **[?]** Remaining is the final 5×6 canonical re-run once scenario
+     set + trial count are agreed (backlog pin (a)).
 
 3. **`#112` still needs another pass**
    - **[V]** Still open with `CHANGES_REQUESTED`.
@@ -278,12 +331,21 @@
 
 ### Recently merged and effectively settled
 
-- **PR `#113`** → closes `#3`, `#17`, `#18`
-- **PR `#114`** → closes `#20`
-- **PR `#115`** → closes `#9`, `#10`, `#11`, `#12`, `#58`
-- **PR `#119`** → closes `#23`, `#24`
-- **PR `#120`** → updates `#26`, `#32` but intentionally does not close them
+- **PR `#134`** → closes `#31` (Cell C optimized batched MCP, 2026-04-30)
+- **PR `#149`** → IEC 60599:2022 Rogers-Ratio fix (no auto-close, 2026-04-29)
+- **PR `#148`** → PS B L3 statistical-fidelity validator (no auto-close, 2026-04-29)
+- **PR `#147`** → PS B scenario generator #2 prototype (no auto-close, 2026-04-28)
+- **PR `#146`** → Insomnia runbook + profiling docs (no auto-close, 2026-04-28)
+- **PR `#145`** → closes `#132`, `#135` (Pre-W5 capture hardening, 2026-04-28)
+- **PR `#129`** → closes `#29`, `#30` (Lane 2 KV/INT8, 2026-04-28)
+- **PR `#144`** → Exp 2 first canonical + judge scores (2026-04-28)
+- **PR `#143`** → TRIALS=3 + canonical scenario contract (2026-04-27)
 - **PR `#127`** → closes `#104`
+- **PR `#120`** → updates `#26`, `#32` but intentionally does not close them
+- **PR `#119`** → closes `#23`, `#24`
+- **PR `#115`** → closes `#9`, `#10`, `#11`, `#12`, `#58`
+- **PR `#114`** → closes `#20`
+- **PR `#113`** → closes `#3`, `#17`, `#18`
 
 ### Still-open issues that matter most
 

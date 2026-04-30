@@ -530,9 +530,21 @@ python -u -m vllm.entrypoints.openai.api_server \
     --enable-auto-tool-choice --tool-call-parser "$VLLM_TOOL_CALL_PARSER"
 ```
 
-Hard-coding `--max-model-len 8192` here is a known gotcha: a Cell Y/Z replay
-will overflow the 8192 context window and either truncate or crash partway
-through (see `docs/validation_log.md` for prior occurrences).
+Hard-coding `--max-model-len 8192` here is a known gotcha for any manual
+replay against Cell Y/Z scenarios: PE and Verified PE multi-step plans
+overflow the 8192 context window and either truncate or crash partway
+through (see `docs/validation_log.md` for prior occurrences). The
+`run_experiment.sh` harness sets `MAX_MODEL_LEN=32768` by default, so
+manual recipes need to match that value.
+
+**Replay phase is AaT-only.** `run_experiment.sh` runs the post-benchmark
+torch-profiler replay only when `ORCHESTRATION=agent_as_tool` (Cell A, B, C).
+For PE / Verified PE cells (Y, Z) the harness skips the replay phase
+automatically because `replay_scenarios.sh` always drives `aat_runner.py`,
+which would produce a misleading AaT-shaped trace under the cell's
+directory. Profile coverage for non-AaT cells happens during the main
+benchmark loop. See `docs/replay_phase_analysis.md` for the full design
+rationale.
 
 **Torch profiler flag changed.** vLLM 0.19.0 dropped the
 `VLLM_TORCH_PROFILER_DIR` env var. Profiling is now enabled via a CLI flag with

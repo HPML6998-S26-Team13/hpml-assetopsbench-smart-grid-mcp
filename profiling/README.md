@@ -136,11 +136,19 @@ values, so the harness would launch a second vLLM and collide on
 # Recommended: replay scenarios from an existing benchmark run dir against the
 # already-running foreground vLLM. No new server is launched; the harness just
 # replays prompts.
+#
+# NOTE: replay_scenarios.sh always drives aat_runner.py, so this recipe makes
+# sense for AaT cells (A, B, C) only. For PE / Verified PE cells (Y, Z) the
+# `run_experiment.sh` harness now skips the replay phase by default — see
+# docs/replay_phase_analysis.md for the rationale. If you want a manual
+# AaT-shaped replay against PE/Verified PE scenarios anyway (rare), point this
+# command at the Y/Z run directory and accept that the trace shows AaT
+# semantics, not the cell's actual orchestration.
 LITELLM_BASE_URL="http://127.0.0.1:8000/v1" \
 LITELLM_API_KEY="dummy-vllm-not-checked" \
 bash profiling/scripts/run_vllm_torch_profile.sh "$TRACE_DIR" \
     -- bash scripts/replay_scenarios.sh \
-        benchmarks/cell_Y_plan_execute/raw/<run-id> direct
+        benchmarks/cell_A_direct/raw/<run-id> direct
 ```
 
 For an even smaller probe (skip the harness, just generate inference traffic):

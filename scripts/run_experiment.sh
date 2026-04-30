@@ -1227,7 +1227,13 @@ meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
 
-if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAUNCH_VLLM" = "1" ]; then
+if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAUNCH_VLLM" = "1" ] && [ "$ORCHESTRATION" = "agent_as_tool" ]; then
+  # Replay phase always invokes scripts/aat_runner.py, so it only makes sense
+  # for AaT cells (A, B, C). For PE / Verified PE cells, an AaT replay would
+  # produce a trace shaped like the AaT loop rather than the cell's actual
+  # multi-step orchestration — see docs/replay_phase_analysis.md. Profile
+  # coverage for non-AaT cells happens during the main benchmark loop above
+  # (vLLM captures whatever requests hit it while TORCH_PROFILE=1).
   echo ""
   echo "=== Torch profiler replay pass ==="
   echo "Profiler dir: $TORCH_PROFILE_DIR"
@@ -1241,6 +1247,11 @@ if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAU
   else
     echo "WARNING: torch profiler replay failed (non-fatal; nvidia-smi capture unaffected)"
   fi
+elif [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAUNCH_VLLM" = "1" ]; then
+  echo ""
+  echo "=== Torch profiler replay pass — SKIPPED ==="
+  echo "Skipping replay for ORCHESTRATION=$ORCHESTRATION (replay only fires for agent_as_tool)."
+  echo "Main-loop profiling covered the cell's actual workload; see docs/replay_phase_analysis.md."
 fi
 
 if [ "$ENABLE_WANDB" = "1" ]; then
