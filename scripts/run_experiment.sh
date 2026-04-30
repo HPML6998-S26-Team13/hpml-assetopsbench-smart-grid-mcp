@@ -711,6 +711,31 @@ run_agent_as_tool_trial() {
   (cd "$REPO_ROOT" && "${cmd[@]}") >>"$HARNESS_LOG" 2>&1
 }
 
+run_agent_as_tool_batch() {
+  local out_dir="$1"
+
+  export AAT_MCP_SERVER_PYTHON AAT_MCP_SERVER_LAUNCH_MODE AAT_MCP_CLIENT_TIMEOUT_SECONDS
+
+  local -a cmd=(
+    uv run
+    --with "openai-agents==$AAT_OPENAI_AGENTS_VERSION"
+    --with "mcp[cli]==$AAT_MCP_VERSION"
+    --with "litellm==$AAT_LITELLM_VERSION"
+    python scripts/aat_runner.py
+    --scenarios-glob "$SCENARIOS_GLOB"
+    --trials "$TRIALS"
+    --output-dir "$out_dir"
+    --run-basename "$RUN_BASENAME"
+    --model-id "$MODEL_ID"
+    --mcp-mode "$MCP_MODE"
+    --parallel-tool-calls "$AAT_PARALLEL_TOOL_CALLS"
+  )
+  if [ "$HARNESS_VERBOSE" = "1" ]; then
+    cmd+=(--verbose)
+  fi
+  (cd "$REPO_ROOT" && "${cmd[@]}") >>"$HARNESS_LOG" 2>&1
+}
+
 run_verified_pe_trial() {
   local prompt="$1"
   local out_path="$2"
@@ -896,6 +921,38 @@ FAIL=0
 TOTAL=0
 : >"$LATENCY_FILE"
 
+# Cell C optimized: run all scenarios in a single aat_runner.py call so MCP
+# subprocesses are reused across trials (reuse_mcp_connections).
+if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
+  if [ -n "${AAT_RUNNER_TEMPLATE:-}" ]; then
+    echo "ERROR: AAT_RUNNER_TEMPLATE is not supported with MCP_MODE=optimized batch mode." >&2
+    exit 1
+  fi
+  EXPECTED_TOTAL=$(( ${#SCENARIO_FILES[@]} * TRIALS ))
+  run_agent_as_tool_batch "$RUN_DIR" || true
+  # Merge per-trial latency records into the canonical latencies.jsonl.
+  if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
+    cat "$RUN_DIR/_batch_latencies.jsonl" >>"$LATENCY_FILE"
+  fi
+  # Count pass/fail — RUN_BASENAME prefix safely excludes meta.json etc.
+  for trial_json in "$RUN_DIR/${RUN_BASENAME}"_*.json; do
+    [ -f "$trial_json" ] || continue
+    TOTAL=$((TOTAL + 1))
+    if trial_succeeded "$trial_json"; then
+      PASS=$((PASS + 1))
+    else
+      FAIL=$((FAIL + 1))
+    fi
+  done
+  # Account for trials that never wrote output (e.g. MCP crash before any JSON).
+  MISSING=$(( EXPECTED_TOTAL - TOTAL ))
+  if [ "$MISSING" -gt 0 ]; then
+    echo "WARNING: $MISSING trial(s) missing from batch output — counting as failures" >&2
+    FAIL=$(( FAIL + MISSING ))
+    TOTAL=$(( TOTAL + MISSING ))
+  fi
+else
+
 for SCENARIO_FILE in "${SCENARIO_FILES[@]}"; do
   SCENARIO_BASENAME="$(basename "$SCENARIO_FILE" .json)"
   PROMPT="$("$PYTHON_BIN" - "$SCENARIO_FILE" <<'PY'
@@ -1040,6 +1097,8 @@ PY
   done
 done
 
+fi  # end of per-scenario/per-trial loop (skipped for MCP_MODE=optimized batch path)
+
 "$PYTHON_BIN" - "$SUMMARY_FILE" "$CONFIG_FILE" "$META_FILE" "$LATENCY_FILE" "$RUN_DIR" "$PASS" "$FAIL" "$TOTAL" <<'PY'
 import json
 import pathlib
@@ -1050,11 +1109,24 @@ from datetime import datetime, timezone
 summary_path, config_path, meta_path, latency_path, run_dir, passed, failed, total = sys.argv[1:]
 config = json.loads(pathlib.Path(config_path).read_text(encoding="utf-8"))
 meta = json.loads(pathlib.Path(meta_path).read_text(encoding="utf-8"))
-latencies = [
-    json.loads(line)["latency_seconds"]
+latency_records = [
+    json.loads(line)
     for line in pathlib.Path(latency_path).read_text(encoding="utf-8").splitlines()
     if line.strip()
 ]
+latencies = [
+    record["latency_seconds"]
+    for record in latency_records
+    if isinstance(record.get("latency_seconds"), (int, float))
+]
+mcp_setup_values = [
+    record["mcp_setup_seconds"]
+    for record in latency_records
+    if isinstance(record.get("mcp_setup_seconds"), (int, float))
+    and record["mcp_setup_seconds"] > 0
+]
+mcp_setup_seconds = max(mcp_setup_values) if mcp_setup_values else None
+wall_clock_seconds_total = sum(latencies) + (mcp_setup_seconds or 0)
 
 tool_call_total = 0
 tool_call_trials = 0
@@ -1124,10 +1196,11 @@ summary = {
     "scenarios_completed": int(passed),
     "success_rate": (int(passed) / int(total)) if int(total) else 0.0,
     "failure_count": int(failed),
-    "wall_clock_seconds_total": sum(latencies),
+    "wall_clock_seconds_total": wall_clock_seconds_total,
     "latency_seconds_mean": statistics.mean(latencies) if latencies else None,
     "latency_seconds_p50": percentile(latencies, 50),
     "latency_seconds_p95": percentile(latencies, 95),
+    "mcp_setup_seconds": mcp_setup_seconds,
     "tokens_per_second_mean": None,
     "input_tokens_total": None,
     "output_tokens_total": None,
@@ -1150,6 +1223,7 @@ meta["pass"] = int(passed)
 meta["fail"] = int(failed)
 meta["total_runs"] = int(total)
 meta["run_status"] = summary["run_status"]
+meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
 

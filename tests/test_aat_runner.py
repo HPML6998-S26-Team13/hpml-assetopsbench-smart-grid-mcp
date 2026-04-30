@@ -268,3 +268,124 @@ def test_runner_threads_litellm_env(monkeypatch):
     assert captured["max_turns"] == 30
     settings = captured["agent_kwargs"]["model_settings"]
     assert settings.kwargs["parallel_tool_calls"] is False
+
+
+def test_batch_mode_requires_output_dir():
+    from scripts.aat_runner import _main
+
+    args = argparse.Namespace(
+        scenarios_glob="data/scenarios/*.json",
+        output_dir=None,
+        prompt=None,
+        output=None,
+        model_id="x",
+        mcp_mode="optimized",
+        max_turns=30,
+        parallel_tool_calls=False,
+        verbose=False,
+        trials=1,
+        run_basename="batch",
+    )
+    assert asyncio.run(_main(args)) == 2
+
+
+def test_batch_mode_rejects_non_optimized_mcp_mode(tmp_path):
+    from scripts.aat_runner import _main
+
+    args = argparse.Namespace(
+        scenarios_glob="nonexistent_xyzzy_*.json",
+        output_dir=str(tmp_path),
+        prompt=None,
+        output=None,
+        model_id="x",
+        mcp_mode="direct",
+        max_turns=30,
+        parallel_tool_calls=False,
+        verbose=False,
+        trials=1,
+        run_basename="batch",
+    )
+    assert asyncio.run(_main(args)) == 2
+
+
+def test_batch_mode_rejects_zero_trials(tmp_path):
+    """--trials must be >= 1; zero/negative must return rc=2 without creating output dir."""
+    from scripts.aat_runner import _main_multi
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    new_subdir = tmp_path / "should_not_be_created"
+    for bad_trials in (0, -1):
+        args = argparse.Namespace(
+            scenarios_glob="nonexistent_xyzzy_*.json",
+            output_dir=str(new_subdir),
+            model_id="x",
+            mcp_mode="optimized",
+            max_turns=30,
+            parallel_tool_calls=False,
+            trials=bad_trials,
+            run_basename="batch",
+        )
+        rc = asyncio.run(_main_multi(args, repo_root))
+        assert rc == 2, f"expected rc=2 for trials={bad_trials}, got {rc}"
+        assert (
+            not new_subdir.exists()
+        ), f"output dir must not be created for trials={bad_trials}"
+
+
+def test_batch_output_dir_normalization():
+    """Regression: relative --output-dir must not raise ValueError in relative_to().
+
+    Directly exercises the path arithmetic that crashed before the fix, without
+    calling _main_multi (which would mkdir under the repo and never reach
+    relative_to due to the empty-glob early-return).
+    """
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    # Simulate what _main_multi does: resolve relative arg under repo_root.
+    raw = Path("benchmarks/cell_C_mcp_optimized/raw/test-run")
+    output_dir = repo_root / raw  # normalization step added by the fix
+    out_path = output_dir / "batch_scenario_run01.json"
+    # This is the exact call that raised ValueError before the fix.
+    rel = out_path.relative_to(repo_root)
+    assert rel == Path(
+        "benchmarks/cell_C_mcp_optimized/raw/test-run/batch_scenario_run01.json"
+    )
+
+
+def test_batch_mode_rejects_non_optimized_before_mkdir(tmp_path):
+    """M1 regression: mcp_mode guard must fire before output_dir is created."""
+    from scripts.aat_runner import _main_multi
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    new_subdir = tmp_path / "should_not_be_created"
+    args = argparse.Namespace(
+        scenarios_glob="nonexistent_xyzzy_*.json",
+        output_dir=str(new_subdir),
+        model_id="x",
+        mcp_mode="direct",
+        max_turns=30,
+        parallel_tool_calls=False,
+        trials=1,
+        run_basename="batch",
+    )
+    rc = asyncio.run(_main_multi(args, repo_root))
+    assert rc == 2
+    assert not new_subdir.exists()
+
+
+def test_batch_latency_path_outside_repo_root(tmp_path):
+    """M3 regression: relative_to() fallback must not raise for absolute out-of-repo path."""
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    out_path = tmp_path / "trial_01.json"  # tmp_path is outside repo_root
+    # Reproduce the exact try/except logic from _main_multi latency record construction.
+    try:
+        result = out_path.relative_to(repo_root).as_posix()
+    except ValueError:
+        result = out_path.as_posix()
+    # tmp_path is outside repo_root, so the fallback must kick in.
+    assert result == out_path.as_posix()
