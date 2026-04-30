@@ -18,6 +18,63 @@ For each proof entry, record:
 - what the run proves
 - caveats / follow-ups
 
+## 2026-04-30 — Z + Self-Ask + D optimized PE-family ablation proof (`#85`, informs `#32`)
+
+- **Scope:** Exploratory best-engineered PE-family ablation: Verified PE +
+  Self-Ask with optimized MCP persistent sessions and the Cell D
+  compressed-INT8 / BF16 / fp8-KV / prefix-cache serving profile.
+- **Scenario set:** `data/scenarios/multi_*.json`, 2 scenarios × 3 trials = 6
+  trial artifacts.
+- **Model:** self-hosted `openai/Llama-3.1-8B-Instruct-int8` through local
+  vLLM on Insomnia.
+- **Branch / git SHA:** `team13/main@eb7019b3ebeb3e3b6848ab4b0c8b4bf0fa21ab44`
+  in the shared Insomnia checkout.
+- **Config:** `configs/experiment2/exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized.env`.
+- **Run id / Slurm job id:** `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized`.
+- **Node / Slurm state:** `ins084`, `COMPLETED 0:0`, elapsed `00:12:38`.
+- **W&B:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/48nqpclw
+- **Primary artifacts:**
+  - `benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/meta.json`
+  - `benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/harness.log`
+  - `benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/vllm.log`
+  - `benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/latencies.jsonl`
+  - `benchmarks/cell_ZSD/config.json`, `benchmarks/cell_ZSD/summary.json`
+  - `results/metrics/scenario_scores.jsonl`
+  - `results/judge_logs/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/SGT-009_run{01,02,03}_judge_log.json`
+  - `results/judge_logs/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized/SGT-010_run{01,02,03}_judge_log.json`
+  - W&B profiling artifact `profiling-48nqpclw`
+- **Per-trial latencies:** `114.28`, `78.44`, `86.72`, `31.89`, `30.41`,
+  `29.47` s.
+- **Judge result:** Maverick-17B six-dimension judge scored all six ZSD trials
+  with `score_6d` values `0.3333`, `0.5`, `0.0`, `0.8333`, `1.0`, `1.0`;
+  mean `0.6111`, p50 `0.8333`, pass rate `3 / 6` at threshold `0.6`.
+
+What this proves:
+
+- The PE-family optimized MCP extension is real on Insomnia: the runner reused
+  initialized MCP sessions, reached all four Smart Grid MCP servers, executed
+  model/tool loops, and completed `6 / 6` with `tool_error_count=0`.
+- The model-side stack was the intended Cell D serving profile. `vllm.log`
+  records `dtype=torch.bfloat16`, `quantization=compressed-tensors`,
+  `kv_cache_dtype=fp8`, `enable_prefix_caching=True`, and the compressed-tensor
+  Cutlass INT8 kernel.
+- The ZSD run is slower than the AaT optimized-serving arm but materially
+  better on the current six-dimension judge than Cells C/D: mean `0.6111` and
+  `3 / 6` judge-pass versus D mean `0.1667` and `1 / 6`.
+
+Caveats / follow-ups:
+
+- This is an exploratory ablation, not part of the clean core matrix. It stacks
+  verifier logic, Self-Ask, optimized MCP persistent sessions, and model-side
+  serving changes, so it is best interpreted as a PE-family ceiling.
+- Failed boundary runs are intentionally not committed as proof artifacts:
+  `9073604` reached model/tool execution but had partial completion and stdout
+  JSON pollution; `9074217` exposed an Insomnia AOB portability mismatch in the
+  first `MAX_TOKENS` wrapper. Commits `9be831b` and `eb7019b` fixed those
+  boundaries before the successful `9074775` rerun.
+- Final paper-grade reruns should still freeze a scenario set and trial count
+  across the core matrix before promoting this beyond an ablation/sidebar.
+
 ## 2026-04-30 — Experiment 1 Cell D optimized-serving capture and judge proof (`#85`)
 
 - **Scope:** Exploratory Cell D optimized-serving AaT capture for the

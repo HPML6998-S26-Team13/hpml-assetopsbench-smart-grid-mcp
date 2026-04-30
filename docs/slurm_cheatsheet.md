@@ -1,11 +1,11 @@
 # Slurm Cheatsheet
 
 *Created: 2026-04-12*  
-*Last updated: 2026-04-20*
+*Last updated: 2026-04-30*
 
 Quick command-first reference for common Slurm operations on Insomnia.
 Use this when you just want to submit a job, get an interactive GPU shell,
-watch a running allocation, or recover from common `sbatch` / `srun`
+check a running allocation, or recover from common `sbatch` / `srun`
 confusion.
 
 For Insomnia-specific setup and serving guidance, see
@@ -28,6 +28,10 @@ Two important realities on Insomnia:
 
 - **Anything that imports `torch` / `vllm` / `transformers` belongs on a compute
   node, not the login node.**
+- **Keep Slurm controller checks human-paced.** RCS warned us in Apr 2026 about
+  bursty login-node controller traffic; do not use sub-minute `squeue` /
+  `sacct` polling or tight `watch` loops. Scope every query to a job ID or
+  your user; never fall back to global `squeue` / `sacct`.
 - **Slurm log paths are resolved relative to the submit directory**
   (`$SLURM_SUBMIT_DIR`), so submit from the repo root or use `--chdir=...`.
 
@@ -141,6 +145,8 @@ All live jobs for your user:
 
 ```bash
 squeue -u <UNI>
+# or:
+squeue --me
 ```
 
 One job:
@@ -161,10 +167,12 @@ Detailed job info:
 scontrol show job <JOBID>
 ```
 
-Watch it live:
+If you need to refresh, use a one-shot check and wait at least a minute before
+the next one:
 
 ```bash
-watch -n 15 'squeue -j <JOBID>'
+squeue -j <JOBID>
+# wait 60-120 seconds before running another Slurm controller query
 ```
 
 ## See whether a job is still live or already finished
@@ -180,6 +188,13 @@ Use `sacct` for historical status:
 
 ```bash
 sacct -j <JOBID> --format=JobID,JobName,State,ExitCode
+```
+
+If you do not have the job ID, scope by user instead of running global
+accounting queries:
+
+```bash
+sacct -u <UNI> --format=JobID,JobName,State,ExitCode
 ```
 
 ## See how long the job waited in queue

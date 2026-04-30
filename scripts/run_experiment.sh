@@ -115,6 +115,7 @@ MODEL_PROVIDER="${MODEL_PROVIDER:-unknown}"
 SERVING_STACK="${SERVING_STACK:-unknown}"
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-0}"
+export MAX_TOKENS
 JUDGE_MODEL="${JUDGE_MODEL:-}"
 AAT_RUNNER_TEMPLATE="${AAT_RUNNER_TEMPLATE:-}"
 AAT_OPENAI_AGENTS_VERSION="${AAT_OPENAI_AGENTS_VERSION:-0.14.5}"
@@ -494,13 +495,14 @@ run_plan_execute_trial() {
       --json
       --model-id "$MODEL_ID"
       --aob-path "$AOB_PATH"
+      --mcp-mode "$MCP_MODE"
     )
     if [ "$HARNESS_VERBOSE" = "1" ]; then
       wrapper_cmd+=(--verbose --show-plan --show-trajectory)
     fi
     wrapper_cmd+=("${SERVER_ARGS[@]}")
     wrapper_cmd+=("$prompt")
-    (cd "$REPO_ROOT" && "${wrapper_cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+    run_json_stdout_trial "$out_path" "$REPO_ROOT" "${wrapper_cmd[@]}"
     return
   fi
   local -a cmd=(uv run plan-execute --json --model-id "$MODEL_ID")
@@ -510,6 +512,78 @@ run_plan_execute_trial() {
   cmd+=("${SERVER_ARGS[@]}")
   cmd+=("$prompt")
   (cd "$AOB_PATH" && "${cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+}
+
+run_json_stdout_trial() {
+  local out_path="$1"
+  local cwd="$2"
+  shift 2
+
+  local raw_path="${out_path}.stdout"
+  local rc=0
+  (cd "$cwd" && "$@") >"$raw_path" 2>>"$HARNESS_LOG" || rc=$?
+  if "$PYTHON_BIN" - "$raw_path" "$out_path" >>"$HARNESS_LOG" 2>&1 <<'PY'
+import json
+import pathlib
+import sys
+
+raw_path = pathlib.Path(sys.argv[1])
+out_path = pathlib.Path(sys.argv[2])
+raw = raw_path.read_text(encoding="utf-8", errors="replace")
+decoder = json.JSONDecoder()
+
+for index, char in enumerate(raw):
+    if char != "{":
+        continue
+    try:
+        payload, end = decoder.raw_decode(raw[index:])
+    except json.JSONDecodeError:
+        continue
+    trailing = raw[index + end :].strip()
+    if trailing:
+        continue
+    if index:
+        print(
+            f"Sanitized {raw_path.name}: removed {index} leading non-JSON characters before runner JSON.",
+            file=sys.stderr,
+        )
+    out_path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    raw_path.unlink(missing_ok=True)
+    raise SystemExit(0)
+
+print(
+    f"ERROR: could not extract a complete JSON object from runner stdout {raw_path}",
+    file=sys.stderr,
+)
+excerpt = raw.strip()
+if len(excerpt) > 4000:
+    excerpt = excerpt[:4000] + "...[truncated]"
+out_path.write_text(
+    json.dumps(
+        {
+            "success": False,
+            "failed_steps": [],
+            "history": [],
+            "answer": "",
+            "error": (
+                "Runner produced no complete JSON object on stdout; "
+                "see harness.log for stderr and traceback details."
+            ),
+            "raw_stdout_excerpt": excerpt,
+        },
+        indent=2,
+    )
+    + "\n",
+    encoding="utf-8",
+)
+raw_path.unlink(missing_ok=True)
+raise SystemExit(1)
+PY
+  then
+    return "$rc"
+  fi
+
+  return 1
 }
 
 preflight_repo_local_orchestration_runtime() {
@@ -755,6 +829,7 @@ run_verified_pe_trial() {
     --json
     --model-id "$MODEL_ID"
     --aob-path "$AOB_PATH"
+    --mcp-mode "$MCP_MODE"
   )
   if [ "$ENABLE_SELF_ASK" != "1" ]; then
     cmd+=(--disable-self-ask)
@@ -763,7 +838,7 @@ run_verified_pe_trial() {
     cmd+=(--verbose --show-plan --show-trajectory)
   fi
   cmd+=("$prompt")
-  (cd "$REPO_ROOT" && "${cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
+  run_json_stdout_trial "$out_path" "$REPO_ROOT" "${cmd[@]}"
 }
 
 trial_succeeded() {

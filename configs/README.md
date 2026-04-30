@@ -31,7 +31,8 @@ The execution-facing config convention is:
   optimized AaT MCP transport with model-side INT8/BF16/fp8-KV serving
 - `configs/experiment2/` for the extra Experiment 2 templates that do not
   already exist on `main` (currently the Plan-Execute / Cell Y lane and the
-  optional Cell Z follow-on plus the PE-family Self-Ask ablations)
+  optional Cell Z follow-on plus the PE-family Self-Ask and optimized-serving
+  ablations)
 
 The active cell mapping is:
 
@@ -45,11 +46,12 @@ The active cell mapping is:
 | Y + Self-Ask | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_self_ask_mcp_baseline.env` |
 | Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_mcp_baseline.env` |
 | Z + Self-Ask | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_self_ask_mcp_baseline.env` |
+| Z + Self-Ask + D | Verified PE + Self-Ask | optimized + model-side | `experiment2/exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized.env` |
 
 ## Required keys
 
 - `EXPERIMENT_NAME` — short label; becomes part of the run ID
-- `EXPERIMENT_CELL` — one of `A`, `B`, `C`, `Y`, `Z`
+- `EXPERIMENT_CELL` — one of `A`, `B`, `C`, `D`, `Y`, `Z`, `ZSD`
 - `EXPERIMENT_FAMILY` — e.g. `exp1_mcp_overhead`, `exp2_orchestration`, `smoke`
 - `SCENARIOS_GLOB` — scenario files relative to repo root
 - `SCENARIO_SET_NAME` — stable label for the scenario pack
@@ -120,7 +122,7 @@ Outputs follow the canonical `benchmarks/` shape:
 
 ## Status
 
-As of Apr 20, 2026:
+As of Apr 30, 2026:
 
 - Plan-Execute wiring is implemented through AssetOpsBench's canonical
   `plan-execute` CLI with explicit Smart Grid server overrides.
@@ -132,3 +134,9 @@ As of Apr 20, 2026:
 - Verified PE / PE + Self-Ask are already runnable on the canonical harness
   path. Cell Z raw run set still needs to be captured before Z is a
   notebook-ready follow-on lane.
+- Repo-local PE-family runners can use `MCP_MODE=optimized` to reuse initialized
+  MCP stdio sessions inside a scenario run. The first committed user is the
+  exploratory `ZSD` config, which stacks Verified PE + Self-Ask with the Cell D
+  INT8/BF16/fp8-KV serving profile. Slurm job
+  `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` is the first
+  successful ZSD proof run (`6 / 6`, W&B `48nqpclw`, judge mean `0.611`).

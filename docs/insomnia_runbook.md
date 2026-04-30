@@ -446,6 +446,16 @@ login nodes will be terminated**. Even `import vllm` is enough to draw a
 warning email — the import pulls in torch and CUDA libs, which is enough load
 to upset the shared head node.
 
+RCS has also warned us about bursty Slurm controller traffic from the login
+node, with observed peaks around 3 controller requests/sec. Keep Slurm checks
+one-shot and human-paced: do not run sub-minute `squeue` / `sacct` polling,
+avoid tight `watch` loops, and space out large status sweeps. Always scope
+controller queries to your own jobs: prefer `squeue -j <JOBID>`, `squeue -u
+<UNI>`, or `squeue --me`; for accounting history, use `sacct -j <JOBID>` or
+`sacct -u <UNI>`. Do not fall back to global `squeue` / `sacct` queries.
+Prefer Slurm log files, run artifacts, and W&B/profiler links once a job is
+running.
+
 Always grab a compute node first:
 
 ```bash

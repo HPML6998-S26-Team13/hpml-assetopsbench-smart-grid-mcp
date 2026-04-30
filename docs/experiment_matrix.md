@@ -21,8 +21,9 @@ Current recommended matrix:
 | Experiment 1 / 2 | B | AaT | baseline | planned | shared anchor |
 | Experiment 1 | C | AaT | optimized | captured + judged once | optimized transport |
 | Follow-on | D | AaT | optimized + model-side | captured + judged once | optimized transport plus INT8/BF16/fp8-KV serving |
-| Experiment 2 | Y | Plan-Execute | baseline | runnable | core orchestration baseline |
-| Experiment 2 | Z | Verified PE | baseline | smoke-proven follow-on; canonical config pending | optional third method |
+| Experiment 2 | Y | Plan-Execute | baseline | captured + judged once | core orchestration baseline |
+| Experiment 2 | Z | Verified PE | baseline | captured + judged once | optional third method |
+| Follow-on ablation | ZSD | Verified PE + Self-Ask | optimized + model-side | captured + judged once | best-engineered PE-family ceiling |
 
 Current recommendation on trials:
 
@@ -48,14 +49,15 @@ What we can honestly run on the current runner surface right now:
 
 | Condition | Status | Why |
 |---|---|---|
-| `Y` | canonical runnable now | canonical PE baseline config and proof already exist |
-| `Y + Self-Ask` | smoke-runnable; canonical config pending | repo-local Self-Ask PE path is proven, but this PR does not add the Experiment 2 config or raw run set |
-| `Z` | smoke-runnable; canonical config pending | repo-local Verified PE path is proven, but the committed Experiment 2 Z config still needs promotion from its legacy placeholder |
-| `Z + Self-Ask` | smoke-runnable; canonical config pending | the Verified PE runner supports the clarification hook, but the canonical config and raw run set are still follow-on work |
+| `Y` | analysis-ready first capture | canonical PE baseline config and first judged raw run set exist |
+| `Y + Self-Ask` | analysis-ready first capture | repo-local Self-Ask PE path has a first judged raw run set |
+| `Z` | analysis-ready first capture | repo-local Verified PE path has a first judged raw run set |
+| `Z + Self-Ask` | analysis-ready first capture | Verified PE + Self-Ask has a first judged raw run set and is the current quality leader |
 | `B` | smoke-runnable; full capture pending | AaT MCP-baseline smoke succeeded in Slurm job `8969519`; upstream `OpenAIAgentRunner` parity succeeded in Slurm job `8970383`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
 | `A` | smoke-runnable; full capture pending | AaT direct smoke succeeded in Slurm job `8962310`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
 | `C` | analysis-ready first capture | Slurm job `9071639_aat_mcp_optimized` completed `6 / 6` with optimized batch/connection reuse and prefix caching; judge mean `0.167`, pass `0 / 6` |
 | `D` | analysis-ready exploratory capture | Slurm job `9073472_aat_mcp_model_optimized` completed `6 / 6` with Cell C transport plus compressed INT8/BF16/fp8-KV serving; replay `2 / 2`, profiler `profiling-pmwzatie`, judge mean `0.167`, pass `1 / 6` |
+| `Z + Self-Ask + D` | analysis-ready exploratory ablation | Slurm job `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` completed `6 / 6` with persistent MCP sessions plus the Cell D INT8/BF16/fp8-KV serving profile; judge mean `0.611`, pass `3 / 6` |
 
 Important distinction:
 
@@ -77,9 +79,10 @@ Important honesty rule:
   INT8 checkpoint, BF16 dtype, and fp8 KV cache. Treat D as a follow-on
   "optimized serving" condition, not as evidence for the clean A/B/C transport
   delta.
-- The repo should still treat `Y/Z + Self-Ask + MCP optimized` as a planned
-  follow-on condition, not a current runnable claim, until the optimized
-  transport is explicitly wired and proven outside AaT.
+- `MCP_MODE=optimized` is now wired for repo-local PE-family runners as a
+  behaviorally distinct persistent-session path. The first committed follow-on
+  is `Z + Self-Ask + D`; job `9074775` is its first successful Insomnia proof
+  and judge-scored capture.
 
 ## Core design rule
 
@@ -192,6 +195,18 @@ Recommendation: **do not run as a full matrix**.
 Keep 70B as a spot-check lane only. The repo docs already treat 70B that way,
 and that is the right tradeoff for time, cost discipline, and interpretability.
 
+### Custom WatsonX deployment
+
+Decision: **do not pursue a custom WatsonX deployment for the May 2026
+submission**.
+
+Hosted WatsonX 70B remains useful as a model-scale spot check, but it should not
+be labeled as prefix-cached (`P`) or quantized/model-serving (`Q`) evidence
+unless IBM exposes runtime metadata for those knobs. A custom WatsonX deployment
+could make the serving stack more inspectable, but it adds access, quota,
+hourly billing, model-upload, and runtime-debugging risk too close to the due
+date. Use Insomnia-local vLLM for `P`/`Q` claims.
+
 ## Recommended sequence
 
 1. Land the honest core cells: `A`, `B`, `C`, `Y`.
@@ -203,7 +218,8 @@ and that is the right tradeoff for time, cost discipline, and interpretability.
 4. Treat Self-Ask as a PE-family ablation, not a headline cell explosion.
 5. If the optimized MCP transport becomes behaviorally real outside AaT, run
    `Y + Self-Ask + MCP optimized`.
-6. Only after that, consider `Z + Self-Ask + MCP optimized`.
+6. Run `Z + Self-Ask + D` as the current best-engineered PE-family ceiling now
+   that the Cell D serving path has clean replay/judge proof.
 
 ## Promotion rule for optional follow-ons
 
@@ -247,8 +263,8 @@ Default mitigation / extension lane:
 - `Y + Self-Ask` after canonical config promotion
 - `Z + Self-Ask` after canonical config promotion
 - if extra time exists: `Y + Self-Ask + MCP optimized`
-- `Z + Self-Ask + D` as the strongest current ablation once the queued proof run
-  succeeds and is judged
+- `Z + Self-Ask + D` as the strongest current ablation, now with first proof
+  from job `9074775`
 
 That keeps the story sharp:
 

@@ -31,6 +31,13 @@ benchmarks/
 - **Summary files** are regenerated from `raw/` via a notebook in `notebooks/` — never edit by hand
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
+- **Raw logs are intentionally unsanitized.** Files such as `harness.log` and
+  `vllm.log` preserve the runner's original stdout/stderr, including ANSI
+  escape sequences, debug output, and trailing whitespace. Do not use
+  repository-wide whitespace checks over committed `benchmarks/*/raw/`
+  directories as a merge gate; scope those checks to code/docs, or sanitize a
+  separate derived artifact under `results/` when a publication-clean log is
+  needed.
 
 ## Status (Apr 20, 2026)
 

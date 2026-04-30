@@ -2,8 +2,27 @@
 
 ## 2026-04-30
 
+### Documentation
+
+- `benchmarks/README.md` — document the raw benchmark log convention:
+  committed `harness.log` / `vllm.log` files preserve original runner output
+  and may contain ANSI/debug text or trailing whitespace, so repository-wide
+  whitespace checks should exclude `benchmarks/*/raw/` and publication-clean
+  logs should be derived separately under `results/`.
+
 ### Validated
 
+- Recorded the first successful exploratory Z + Self-Ask + D optimized
+  PE-family ablation: Slurm job
+  `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` on
+  Insomnia `ins084`, `6 / 6` success, W&B `48nqpclw`, `tool_error_count=0`,
+  and canonical artifacts under
+  `benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized`.
+  The run stacks Verified PE + Self-Ask with optimized MCP persistent sessions
+  and the Cell D INT8/BF16/fp8-KV serving profile.
+- Generated six-dimension Maverick-17B judge scores for ZSD job `9074775`:
+  six per-trial rows in `results/metrics/scenario_scores.jsonl`, mean
+  `score_6d=0.611`, p50 `0.833`, and pass rate `3 / 6` at threshold `0.6`.
 - Recorded the first successful exploratory Cell D optimized-serving capture:
   Slurm job `9073472_aat_mcp_model_optimized` on Insomnia `ins084`, `6 / 6`
   success, W&B `pmwzatie`, replay `2 / 2`, profiler artifact
@@ -27,6 +46,15 @@
 
 ### Changed
 
+- Hardened repo-local PE-family follow-on runs after ZSD job `9073604`
+  exposed two ablation-specific failure boundaries: LiteLLM diagnostics could
+  prepend text to stdout and corrupt per-trial JSON files, and the 8192-token
+  INT8 context window could be exceeded by verifier/replan prompts with the
+  inherited 2048 output-token request. `run_experiment.sh` now sanitizes
+  wrapper stdout into canonical JSON, `orchestration_utils.py` honors
+  `MAX_TOKENS` for repo-local PE-family LiteLLM calls, and the ZSD config caps
+  generations at 1024 tokens. Plan normalization also accepts short server
+  aliases such as `i` for `iot`.
 - `configs/aat_mcp_optimized.env` now keeps
   `AAT_PARALLEL_TOOL_CALLS=false` for the canonical Insomnia vLLM /
   Llama-3.1-8B-Instruct path. Job `9071621` reached model/tool execution but
@@ -44,6 +72,11 @@
 - Fixed the AaT torch-profiler replay environment so model-variant cells replay
   against the same `MODEL_ID` and MCP bootstrap settings as the parent
   benchmark run instead of falling back to the default FP16 served model.
+- Added PE-family optimized MCP execution for follow-on ablations: repo-local
+  Plan-Execute/Verified PE runners can now request `MCP_MODE=optimized` and
+  reuse initialized MCP stdio sessions inside a scenario run. Added the
+  exploratory `Z + Self-Ask + D` config that stacks Verified PE + Self-Ask with
+  the Cell D INT8/BF16/fp8-KV serving profile.
 - Fixed run metadata export for model-optimized cells so `config.json` and
   per-run `meta.json` record `VLLM_DTYPE` and `EXTRA_VLLM_ARGS` from sourced
   configs instead of falling back to Python subprocess defaults.

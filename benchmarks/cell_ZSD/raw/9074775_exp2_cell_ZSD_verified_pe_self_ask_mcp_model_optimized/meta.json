@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-04-30T07:59:07.038151+00:00",
+  "run_name": "9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized",
+  "benchmark_config_path": "configs/experiment2/exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized.env",
+  "benchmark_summary_path": "benchmarks/cell_ZSD/summary.json",
+  "experiment_cell": "ZSD",
+  "orchestration_mode": "verified_pe",
+  "mcp_mode": "optimized",
+  "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+  "experiment_family": "exp2_orchestration_ablation",
+  "vllm_dtype": "bfloat16",
+  "vllm_extra_args": "--quantization compressed-tensors --kv-cache-dtype fp8 --enable-prefix-caching",
+  "vllm_extra_args_list": [
+    "--quantization",
+    "compressed-tensors",
+    "--kv-cache-dtype",
+    "fp8",
+    "--enable-prefix-caching"
+  ],
+  "finished_at": "2026-04-30T08:11:14.307679+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "mcp_setup_seconds": null,
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/48nqpclw",
+  "profiling_dir": "profiling/traces/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized_torch",
+  "profiling_artifact": "profiling-48nqpclw"
+}

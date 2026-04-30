@@ -206,7 +206,7 @@ We searched in this session for legitimate-and-free access to the full PDF.
 
 | Source | Result | Notes |
 |--------|--------|-------|
-| `pstco.net/wp-content/uploads/2023/04/IEC-60599-2022.pdf` | unreachable from this network (HTTP 000) | claimed full standard; likely unauthorized re-host; verify legality before use |
+| `(third-party host, likely unauthorized)` | unreachable from this network (HTTP 000) | claimed full standard; likely unauthorized re-host; verify legality before use |
 | `cdn.standards.iteh.ai/.../IEC-60599-2022.pdf` (sample) | downloaded, **15 pages of 80** | preview only — ToC, foreword, intro |
 | iteh.ai CMV variant | downloaded, **14 pages** | "commented version" preview |
 | Anna's Archive (`annas-archive.gd`) | **no 2022 4th ed.** | older eds present (2007/2008/2015/2016); 3rd ed. 2015 is the closest practical fallback (same Rogers Ratio fault table) |

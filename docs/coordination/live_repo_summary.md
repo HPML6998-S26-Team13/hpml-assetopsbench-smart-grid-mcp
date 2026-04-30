@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-30 03:19 EDT*
+*Last updated: 2026-04-30 04:17 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-28 03:19 EDT -> 2026-04-30 03:19 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-28 04:17 EDT -> 2026-04-30 04:17 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -14,11 +14,21 @@
 
 ### Current truth (2026-04-30)
 
-- **[V]** Canonical `team13/main` is at **`35efc6f`** before the current Cell D
+- **[V]** Canonical `team13/main` is at **`eb7019b`** before the current ZSD
   proof-doc commit. Recent main since the Cell C capture proof now includes
-  Cell C artifacts/judge rows, exploratory Cell D config + replay fix,
+  Cell C/D artifacts and judge rows, exploratory Cell D config + replay fix,
   PE-family `MCP_MODE=optimized` support for the `Z + Self-Ask + D` ablation,
-  and the metadata export fix for `VLLM_DTYPE` / `EXTRA_VLLM_ARGS`.
+  metadata export for model-optimized cells, and two ZSD hardening commits
+  (`9be831b`, `eb7019b`).
+- **[V]** **Z + Self-Ask + D now has a successful Insomnia proof and judge
+  result.** After two failed boundary runs (`9073604` partial/stdout JSON
+  pollution; `9074217` max-token wrapper portability), commit `eb7019b` produced
+  Slurm job `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` on
+  `ins084`: `6 / 6`, `run_status: success`, W&B `48nqpclw`,
+  `tool_error_count=0`, and vLLM proof for compressed INT8 + BF16 + fp8-KV +
+  prefix caching. Maverick-17B judge scoring is complete: mean `score_6d=0.611`,
+  p50 `0.833`, pass rate `3/6`. Treat it as a best-engineered PE-family
+  ablation/ceiling, not a clean core-matrix cell.
 - **[V]** **Cell D optimized-serving now has a successful Insomnia capture and
   judge proof.** Slurm job `9073472_aat_mcp_model_optimized` ran on `ins084`
   from `team13/main@ec17dc7`, completed `6 / 6`, `run_status: success`, W&B
@@ -56,11 +66,12 @@
   `ORCHESTRATION != agent_as_tool` (resolves backlog pin (c)). Analysis at
   `docs/replay_phase_analysis.md`. Per-cell `REPLAY_RUNNER` knob is a
   Future pin in `pm/backlog.md` (D11).
-- **[V]** **Six-dim Maverick-17B judge scores** now include Cell C and D. Current
-  quality view: Z+SA `0.833` (5/6), Z `0.639` (4/6), Y+SA `0.444` (3/6),
-  B `0.278` (2/6), A `0.167` (1/6), C `0.167` (0/6), D `0.167` (1/6),
-  Y `0.111` (0/6). Clean execution for C/D therefore does not imply
-  judge-quality success.
+- **[V]** **Six-dim Maverick-17B judge scores** now include Cell C, D, and ZSD.
+  Current quality view: Z+SA `0.833` (5/6), Z `0.639` (4/6), ZSD `0.611`
+  (3/6), Y+SA `0.444` (3/6), B `0.278` (2/6), A `0.167` (1/6), C `0.167`
+  (0/6), D `0.167` (1/6), Y `0.111` (0/6). Clean execution for C/D therefore
+  does not imply judge-quality success; ZSD is the first optimized-serving
+  PE-family run to clear the `0.6` mean neighborhood.
 - **[V]** **PR backlog state**: open PRs are now just `#112` (Copilot SWE
   Agent, `CHANGES_REQUESTED`, low priority) and `#128` (PS B support data,
   `CHANGES_REQUESTED`, two Critical DGA findings). Drafts `#123` and
@@ -197,6 +208,7 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-30 04:11 | Slurm `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` | Insomnia `ins084` | **First successful Z+Self-Ask+D ablation**: 6/6, W&B `48nqpclw`, optimized MCP persistent sessions + Cell D serving stack, judge mean `0.611`, pass 3/6. |
 | 2026-04-30 03:13 | Slurm `9073472_aat_mcp_model_optimized` | Insomnia `ins084` | **First successful Cell D optimized-serving capture**: 6/6, W&B `pmwzatie`, replay 2/2, profiler `profiling-pmwzatie`; vLLM proves compressed INT8 + BF16 + fp8-KV + prefix caching. Judge mean `0.167`, pass 1/6. |
 | 2026-04-30 00:36 | Slurm `9071639_aat_mcp_optimized` | Insomnia `ins083` | **First successful Cell C optimized capture**: 6/6, W&B `ifz8xfhm`, replay 2/2, profiler `profiling-ifz8xfhm`; uses batch/connection reuse + prefix caching with `parallel_tool_calls=false`. |
 | 2026-04-30 03:55 | `8f6b2e8` | `team13/main` | AOB extraction plan + Phases 0-3 first review pass + replay-phase guard. Doc-only on team-repo side; the actual code lives on the AOB-fork branch stack. Squash of 6 local commits including the v1-v4 Codex review iterations. |
@@ -321,7 +333,9 @@
      Y/Y+SA/Z/Z+SA) plus 6-dim judge scores; Cell B inherits from PR
      `#130`'s `8979314_*`; Cell C now has
      `9071639_aat_mcp_optimized` plus judge rows/logs; Cell D has
-     exploratory `9073472_aat_mcp_model_optimized` plus judge rows/logs.
+     exploratory `9073472_aat_mcp_model_optimized` plus judge rows/logs; ZSD
+     has exploratory `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized`
+     plus judge rows/logs.
    - **[?]** Remaining is the final 5×6 canonical re-run once scenario
      set + trial count are agreed (backlog pin (a)).
 
@@ -365,7 +379,7 @@
 | `#25` | Aaron implementation lane | A/B/C first full-shape captures exist for B/C (`8979314`, `9071639`), with Cell C judge scored `0/6`; exploratory D is captured/judged in `9073472`; remaining work is Notebook 02 promotion + final 5×6 canonical rerun |
 | `#26` | analysis/results lane | NB02 Cell A/B analysis; partial-readiness framework merged via PR `#123`; needs real Cell A/B captures |
 | `#86` | analysis/results lane | NB02 Cell C analysis (split from `#26` after PR `#123`); first Cell C capture + judge set is `9071639`, ready for parser/figure promotion |
-| `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Cell B now has an AaT smoke anchor, but final Experiment 2 raw run set is still pending |
+| `#32` | analysis/results lane | Notebook 03 scaffold merged; first canonical PE-family set is in PR `#144`; exploratory ZSD ablation proof is `9074775`; remaining work is final 5×6 canonical rerun / paper promotion |
 | `#83` / `#90` | Tanisha PS B lane | support artifacts partly on main; PR `#128` still has Critical support-data fixes |
 
 ### Older open PR

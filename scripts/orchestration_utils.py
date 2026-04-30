@@ -7,8 +7,11 @@ import logging
 import os
 import re
 import sys
+from contextlib import AsyncExitStack
 from dataclasses import dataclass
+from datetime import timedelta
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 LOG_FORMAT = "%(asctime)s  %(levelname)-8s  %(name)s  %(message)s"
@@ -139,6 +142,16 @@ def build_parser(prog: str, description: str) -> argparse.ArgumentParser:
         help="Register an MCP server as NAME=PATH. Repeatable.",
     )
     parser.add_argument(
+        "--mcp-mode",
+        choices=("baseline", "optimized"),
+        default=os.environ.get("MCP_MODE", "baseline"),
+        help=(
+            "MCP execution mode for repo-local PE-family runners. "
+            "baseline opens stdio sessions per AOB Executor call; optimized "
+            "reuses initialized MCP sessions across descriptions and tool calls."
+        ),
+    )
+    parser.add_argument(
         "--aob-path",
         default="",
         metavar="PATH",
@@ -230,9 +243,51 @@ def preflight_aob_runtime_dependencies() -> None:
 
 
 def build_llm(model_id: str):
+    max_tokens = int(os.environ.get("MAX_TOKENS", "0") or "0")
+    if max_tokens > 0:
+        return _MaxTokensLiteLLMBackend(model_id=model_id, max_tokens=max_tokens)
+
     from llm.litellm import LiteLLMBackend
 
     return LiteLLMBackend(model_id=model_id)
+
+
+class _MaxTokensLiteLLMBackend:
+    """Repo-local LiteLLM wrapper for small-context ablation configs."""
+
+    def __init__(self, model_id: str, max_tokens: int) -> None:
+        self._model_id = model_id
+        self._max_tokens = max_tokens
+
+    def generate(self, prompt: str, temperature: float = 0.0) -> str:
+        return self.generate_with_usage(prompt, temperature).text
+
+    def generate_with_usage(self, prompt: str, temperature: float = 0.0):
+        import litellm
+
+        kwargs: dict[str, Any] = {
+            "model": self._model_id,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": temperature,
+            "max_tokens": self._max_tokens,
+        }
+
+        if self._model_id.startswith("watsonx/"):
+            kwargs["api_key"] = os.environ["WATSONX_APIKEY"]
+            kwargs["project_id"] = os.environ["WATSONX_PROJECT_ID"]
+            if url := os.environ.get("WATSONX_URL"):
+                kwargs["api_base"] = url
+        else:
+            kwargs["api_key"] = os.environ["LITELLM_API_KEY"]
+            kwargs["api_base"] = os.environ["LITELLM_BASE_URL"]
+
+        response = litellm.completion(**kwargs)
+        usage = getattr(response, "usage", None)
+        return SimpleNamespace(
+            text=response.choices[0].message.content,
+            input_tokens=int(getattr(usage, "prompt_tokens", 0) or 0),
+            output_tokens=int(getattr(usage, "completion_tokens", 0) or 0),
+        )
 
 
 PLANNING_GUARDRAILS = """\
@@ -263,6 +318,18 @@ PLANNER_NOTES = {
         "Use winding_temp_top_c, not winding_temp_c.",
         "Do not use DGA gas names as TSFM sensor_ids.",
     ],
+}
+
+SERVER_ALIASES = {
+    "i": "iot",
+    "iot_server": "iot",
+    "f": "fmsr",
+    "fmsr_server": "fmsr",
+    "t": "tsfm",
+    "ts": "tsfm",
+    "tsfm_server": "tsfm",
+    "w": "wo",
+    "wo_server": "wo",
 }
 
 TOOL_SCHEMA_HINTS = {
@@ -336,6 +403,256 @@ def effective_server_paths(entries: list[str], repo_root: Path) -> dict[str, Pat
     return resolved
 
 
+def build_executor(llm, server_paths: dict[str, Path], *, mcp_mode: str = "baseline"):
+    """Build the PE-family step executor for the requested MCP mode."""
+    if mcp_mode == "baseline":
+        from plan_execute.executor import Executor
+
+        return Executor(llm, server_paths)
+    if mcp_mode == "optimized":
+        return ReusedMCPExecutor(llm, server_paths, resolve_repo_root())
+    raise ValueError(f"Unsupported MCP mode for PE-family runner: {mcp_mode!r}")
+
+
+async def close_executor(executor: Any) -> None:
+    """Best-effort close hook for executors that keep MCP sessions open."""
+    close = getattr(executor, "aclose", None)
+    if close is not None:
+        await close()
+
+
+async def build_tool_catalog_for_executor(
+    executor: Any,
+    server_paths: dict[str, Path],
+) -> dict[str, dict[str, dict[str, str]]]:
+    """Return tool catalog, using the optimized executor cache when available."""
+    if hasattr(executor, "get_tool_catalog"):
+        return await executor.get_tool_catalog()
+    return await build_tool_catalog(server_paths)
+
+
+def _server_tool_catalog(
+    server_name: str,
+    tools: list[dict[str, Any]],
+) -> dict[str, dict[str, str]]:
+    server_catalog: dict[str, dict[str, str]] = {}
+    for tool in tools:
+        parameters = []
+        for param in tool.get("parameters", []):
+            hint = TOOL_SCHEMA_HINTS.get((server_name, tool["name"], param["name"]))
+            rendered = hint or f"{param['type']}{'?' if not param['required'] else ''}"
+            parameters.append(f"{param['name']}: {rendered}")
+        server_catalog[tool["name"]] = {
+            "description": tool.get("description", "").strip(),
+            "schema": ", ".join(parameters),
+        }
+    return server_catalog
+
+
+def _tool_dicts_from_mcp_result(result: Any) -> list[dict[str, Any]]:
+    tools = []
+    for tool in result.tools:
+        schema = tool.inputSchema or {}
+        props = schema.get("properties", {})
+        required = set(schema.get("required", []))
+        parameters = [
+            {
+                "name": key,
+                "type": value.get("type", "any"),
+                "required": key in required,
+            }
+            for key, value in props.items()
+        ]
+        tools.append(
+            {
+                "name": tool.name,
+                "description": tool.description or "",
+                "parameters": parameters,
+            }
+        )
+    return tools
+
+
+def _optimized_stdio_params(repo_root: Path, server_path: Path):
+    """Build stdio params using the same warmed bootstrap as AaT MCP runs."""
+    from mcp import StdioServerParameters
+
+    bootstrap = repo_root / "scripts" / "aat_mcp_server_bootstrap.py"
+    if not bootstrap.exists():
+        raise FileNotFoundError(f"MCP server bootstrap missing: {bootstrap}")
+
+    launch_mode = os.environ.get("AAT_MCP_SERVER_LAUNCH_MODE", "python").lower()
+    env = {**os.environ, "PYTHONUNBUFFERED": "1", "AAT_MCP_REPO_ROOT": str(repo_root)}
+
+    if launch_mode == "uv":
+        deps = ["mcp[cli]==1.27.0", "pandas", "numpy"]
+        return StdioServerParameters(
+            command="uv",
+            args=[
+                "run",
+                *(arg for dep in deps for arg in ("--with", dep)),
+                "python",
+                "-u",
+                str(bootstrap),
+                str(server_path),
+            ],
+            cwd=str(repo_root),
+            env=env,
+        )
+    if launch_mode != "python":
+        raise ValueError(
+            "AAT_MCP_SERVER_LAUNCH_MODE must be either 'python' or 'uv', "
+            f"got {launch_mode!r}"
+        )
+
+    server_python = os.environ.get("AAT_MCP_SERVER_PYTHON") or sys.executable
+    return StdioServerParameters(
+        command=server_python,
+        args=["-u", str(bootstrap), str(server_path)],
+        cwd=str(repo_root),
+        env=env,
+    )
+
+
+class ReusedMCPExecutor:
+    """PE-family executor that reuses initialized MCP stdio sessions.
+
+    AOB's baseline Executor opens a fresh stdio MCP client for every list-tools
+    and call-tool operation. This variant keeps one initialized session per
+    server for a whole scenario run, which is the PE-family analogue of the
+    Cell C connection-reuse optimization.
+    """
+
+    def __init__(self, llm, server_paths: dict[str, Path], repo_root: Path) -> None:
+        self._llm = llm
+        self._server_paths = server_paths
+        self._repo_root = repo_root
+        self._stack = AsyncExitStack()
+        self._sessions: dict[str, Any] = {}
+        self._tool_cache: dict[str, list[dict[str, Any]]] = {}
+
+    async def aclose(self) -> None:
+        await self._stack.aclose()
+        self._sessions.clear()
+        self._tool_cache.clear()
+
+    async def _session(self, server_name: str):
+        if server_name in self._sessions:
+            return self._sessions[server_name]
+        from mcp import ClientSession
+        from mcp.client.stdio import stdio_client
+
+        server_path = self._server_paths[server_name]
+        params = _optimized_stdio_params(self._repo_root, Path(server_path).resolve())
+        read, write = await self._stack.enter_async_context(stdio_client(params))
+        timeout_seconds = float(os.environ.get("AAT_MCP_CLIENT_TIMEOUT_SECONDS", "120"))
+        session = await self._stack.enter_async_context(
+            ClientSession(
+                read,
+                write,
+                read_timeout_seconds=timedelta(seconds=timeout_seconds),
+            )
+        )
+        await session.initialize()
+        self._sessions[server_name] = session
+        _LOG.info(
+            "Connected optimized MCP server %s via %s", server_name, params.command
+        )
+        return session
+
+    async def _tools(self, server_name: str) -> list[dict[str, Any]]:
+        if server_name not in self._tool_cache:
+            session = await self._session(server_name)
+            result = await session.list_tools()
+            self._tool_cache[server_name] = _tool_dicts_from_mcp_result(result)
+        return self._tool_cache[server_name]
+
+    async def get_tool_catalog(self) -> dict[str, dict[str, dict[str, str]]]:
+        catalog: dict[str, dict[str, dict[str, str]]] = {}
+        for server_name in self._server_paths:
+            catalog[server_name] = _server_tool_catalog(
+                server_name,
+                await self._tools(server_name),
+            )
+        return catalog
+
+    async def get_server_descriptions(self) -> dict[str, str]:
+        descriptions: dict[str, str] = {}
+        for server_name in self._server_paths:
+            tools = await self._tools(server_name)
+            lines = []
+            for tool in tools:
+                params = ", ".join(
+                    f"{p['name']}: {p['type']}{'?' if not p['required'] else ''}"
+                    for p in tool.get("parameters", [])
+                )
+                lines.append(f"  - {tool['name']}({params}): {tool['description']}")
+            descriptions[server_name] = "\n".join(lines)
+        return descriptions
+
+    async def execute_step(
+        self,
+        step,
+        context: dict[int, Any],
+        question: str,
+        tool_schema: str = "",
+    ):
+        from plan_execute.executor import _extract_content, _resolve_args_with_llm
+        from plan_execute.models import StepResult
+
+        if step.server not in self._server_paths:
+            return StepResult(
+                step_number=step.step_number,
+                task=step.task,
+                server=step.server,
+                response="",
+                error=(
+                    f"Unknown server '{step.server}'. "
+                    f"Registered servers: {list(self._server_paths)}"
+                ),
+            )
+
+        if not step.tool or step.tool.lower() in ("none", "null"):
+            return StepResult(
+                step_number=step.step_number,
+                task=step.task,
+                server=step.server,
+                response=step.expected_output,
+                tool=step.tool,
+                tool_args=step.tool_args,
+            )
+
+        try:
+            resolved_args = await _resolve_args_with_llm(
+                question,
+                step.task,
+                step.tool,
+                tool_schema,
+                context,
+                self._llm,
+            )
+            session = await self._session(step.server)
+            result = await session.call_tool(step.tool, resolved_args)
+            return StepResult(
+                step_number=step.step_number,
+                task=step.task,
+                server=step.server,
+                response=_extract_content(result.content),
+                tool=step.tool,
+                tool_args=resolved_args,
+            )
+        except Exception as exc:  # noqa: BLE001
+            return StepResult(
+                step_number=step.step_number,
+                task=step.task,
+                server=step.server,
+                response="",
+                error=str(exc),
+                tool=step.tool,
+                tool_args=step.tool_args,
+            )
+
+
 def build_planning_question(question: str) -> str:
     return question.strip() + "\n\n" + PLANNING_GUARDRAILS.strip()
 
@@ -352,20 +669,7 @@ async def build_tool_catalog(
         except Exception:  # noqa: BLE001
             catalog[name] = {}
             continue
-        server_catalog: dict[str, dict[str, str]] = {}
-        for tool in tools:
-            parameters = []
-            for param in tool.get("parameters", []):
-                hint = TOOL_SCHEMA_HINTS.get((name, tool["name"], param["name"]))
-                rendered = hint or (
-                    f"{param['type']}{'?' if not param['required'] else ''}"
-                )
-                parameters.append(f"{param['name']}: {rendered}")
-            server_catalog[tool["name"]] = {
-                "description": tool.get("description", "").strip(),
-                "schema": ", ".join(parameters),
-            }
-        catalog[name] = server_catalog
+        catalog[name] = _server_tool_catalog(name, tools)
     return catalog
 
 
@@ -413,6 +717,14 @@ def normalize_plan_steps(
         server_key = server.lower()
         tool_key = tool
         is_terminal = index == len(ordered_steps) - 1
+
+        if server_key in SERVER_ALIASES:
+            normalized_server = SERVER_ALIASES[server_key]
+            setattr(step, "server", normalized_server)
+            server_key = normalized_server
+            warnings.append(
+                f"Normalized server alias {server!r} to {normalized_server} for step {step.step_number}."
+            )
 
         if tool_key.lower() in {"", "none", "null"}:
             if server_key in {"", "none", "null"} and is_terminal:

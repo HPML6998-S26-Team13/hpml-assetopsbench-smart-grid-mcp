@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import asyncio
+import os
 import sys
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -10,13 +13,17 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from orchestration_utils import (  # noqa: E402
     available_sensor_ids,
+    build_parser,
     build_planner_descriptions,
     build_planning_question,
+    build_tool_catalog_for_executor,
     canonicalize_step_result,
+    close_executor,
     compact_step_for_context,
     compact_verifier_result,
     SelfAskDecision,
     VerificationDecision,
+    build_llm,
     build_retry_question,
     build_suffix_replan_question,
     effective_server_paths,
@@ -72,6 +79,70 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertIn("get_sensor_correlation only", rendered)
         self.assertIn("Canonical tool signatures:", rendered)
 
+    def test_build_parser_reads_mcp_mode_environment_default(self):
+        with patch.dict(os.environ, {"MCP_MODE": "optimized"}):
+            parser = build_parser("runner", "Test runner.")
+        args = parser.parse_args(["Investigate transformer T-015."])
+        self.assertEqual(args.mcp_mode, "optimized")
+
+    def test_build_llm_honors_max_tokens_without_aob_usage_class(self):
+        captured = {}
+
+        def completion(**kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(
+                choices=[SimpleNamespace(message=SimpleNamespace(content="ok"))],
+                usage=SimpleNamespace(prompt_tokens=3, completion_tokens=2),
+            )
+
+        fake_litellm = SimpleNamespace(completion=completion)
+        with patch.dict(
+            os.environ,
+            {
+                "MAX_TOKENS": "17",
+                "LITELLM_API_KEY": "key",
+                "LITELLM_BASE_URL": "http://127.0.0.1:8000",
+            },
+        ), patch.dict(sys.modules, {"litellm": fake_litellm}):
+            llm = build_llm("openai/test-model")
+            result = llm.generate_with_usage("prompt")
+
+        self.assertEqual(result.text, "ok")
+        self.assertEqual(result.input_tokens, 3)
+        self.assertEqual(result.output_tokens, 2)
+        self.assertEqual(captured["max_tokens"], 17)
+
+    def test_build_tool_catalog_for_executor_prefers_executor_cache(self):
+        class Executor:
+            def __init__(self):
+                self.called = False
+
+            async def get_tool_catalog(self):
+                self.called = True
+                return {"iot": {"list_assets": {"description": "", "schema": ""}}}
+
+        executor = Executor()
+        result = asyncio.run(
+            build_tool_catalog_for_executor(
+                executor,
+                {"iot": REPO_ROOT / "does_not_need_to_exist.py"},
+            )
+        )
+        self.assertTrue(executor.called)
+        self.assertIn("list_assets", result["iot"])
+
+    def test_close_executor_awaits_optional_aclose(self):
+        class Executor:
+            def __init__(self):
+                self.closed = False
+
+            async def aclose(self):
+                self.closed = True
+
+        executor = Executor()
+        asyncio.run(close_executor(executor))
+        self.assertTrue(executor.closed)
+
     def test_normalize_plan_steps_reroutes_unique_tool_server(self):
         class Step:
             def __init__(self, step_number, task, server, tool, dependencies=None):
@@ -105,6 +176,31 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertEqual(plan.steps[1].server, "fmsr")
         self.assertEqual(plan.steps[1].dependencies, [1])
         self.assertTrue(any("Rerouted step 1" in warning for warning in warnings))
+
+    def test_normalize_plan_steps_accepts_short_server_aliases(self):
+        class Step:
+            def __init__(self, step_number, task, server, tool, dependencies=None):
+                self.step_number = step_number
+                self.task = task
+                self.server = server
+                self.tool = tool
+                self.tool_args = {}
+                self.dependencies = dependencies or []
+                self.expected_output = ""
+
+        class Plan:
+            def __init__(self, steps):
+                self.steps = steps
+
+        plan = Plan([Step(1, "List transformer sensors", "i", "list_sensors")])
+        tool_catalog = {
+            "iot": {"list_sensors": {"description": "", "schema": ""}},
+        }
+        warnings = normalize_plan_steps(plan, tool_catalog)
+        self.assertEqual(plan.steps[0].server, "iot")
+        self.assertTrue(
+            any("Normalized server alias" in warning for warning in warnings)
+        )
 
     def test_normalize_plan_steps_drops_terminal_none_step(self):
         class Step:
