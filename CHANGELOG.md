@@ -32,6 +32,26 @@
   whitespace checks should exclude `benchmarks/*/raw/` and publication-clean
   logs should be derived separately under `results/`.
 
+- `docs/dga_realism_statistical_validation.md` — doc reframe pointing
+  §§ 2.4 / 9 / 12.5 / 14 to PR #149's `fault_table` JSON + FMSR server
+  `_rogers_ratio()` as the canonical encoding of IEC 60599:2022 Table 1.
+  - § 2.4 / § 14 cross-reference the JSON encoding instead of "ask Alex"
+    or external sources.
+  - § 9 risks: edition-mismatch row marked resolved (PR #149); new row
+    added for stray-gassing under-representation as actionable Akshat
+    decision based on v1 chi² results.
+  - § 12.5 help map cleaned up: Alex retains AOB-refactor scope, Tanisha
+    retains paper framing scope.
+  - § 13 Appendix A rewritten as a citation + encoding-conventions
+    pointer. Bibliography path documented (purchase via webstore.iec.ch
+    ~CHF 364 or Columbia ILL before paper submission). Notes paraphrased
+    rather than reproduced, in line with IEC copyright.
+
+- `docs/coordination/live_repo_summary.md` — slid emphasis window to
+  2026-04-30 15:30 EDT; added PR #150 to Active review PRs.
+
+No code or behavior changes from PR #150 (doc-only).
+
 ### Validated
 
 - Recorded the first successful exploratory Z + Self-Ask + D optimized

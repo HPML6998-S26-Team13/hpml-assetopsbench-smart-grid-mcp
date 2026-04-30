@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-30 04:17 EDT*
+*Last updated: 2026-04-30 15:30 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-28 04:17 EDT -> 2026-04-30 04:17 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-28 15:30 EDT -> 2026-04-30 15:30 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -72,11 +72,14 @@
   (0/6), D `0.167` (1/6), Y `0.111` (0/6). Clean execution for C/D therefore
   does not imply judge-quality success; ZSD is the first optimized-serving
   PE-family run to clear the `0.6` mean neighborhood.
-- **[V]** **PR backlog state**: open PRs are now just `#112` (Copilot SWE
-  Agent, `CHANGES_REQUESTED`, low priority) and `#128` (PS B support data,
-  `CHANGES_REQUESTED`, two Critical DGA findings). Drafts `#123` and
-  `#124` remain open. PR `#1` is a setup test artifact; ignore in audits
-  per persistent feedback.
+- **[V]** **PR backlog state**: open PRs are `#112` (Copilot SWE
+  Agent, `CHANGES_REQUESTED`, low priority), `#128` (PS B support data,
+  `CHANGES_REQUESTED`, two Critical DGA findings), and PR `#150`
+  (this shift's IEC doc reframe — points §§ 2.4/9/12.5/14 to PR #149
+  JSON encoding as canonical; cleans up "ask Alex / paywalled" language;
+  doc-only follow-up to merged PR #149; v1 review enqueued). Drafts
+  `#123` and `#124` remain open. PR `#1` is a setup test artifact; ignore
+  in audits per persistent feedback.
 
 ### Older still-live truth (older than emphasis window, retained)
 - **[V]** Experiment 2 first canonical capture set landed via PR `#144`. All
@@ -400,6 +403,7 @@
 | PR | Author | Status | Notes |
 |---|---|---|---|
 | `#128` | Tanisha | `CHANGES_REQUESTED`, merge state dirty | PS B support-data corrections; two Critical DGA trajectory findings remain |
+| `#150` | Alex (Claude `f8db261c`) | open, doc-only reframe | Doc reframe pointing §§ 2.4/9/12.5/14 to PR #149 JSON encoding; cleans up "ask Alex / paywalled" language. Reviewer is `codex 3ab548b5` (persistent file-based, codex-prompts inbox) |
 
 ---
 
