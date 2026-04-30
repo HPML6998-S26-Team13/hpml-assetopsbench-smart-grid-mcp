@@ -1,6 +1,6 @@
 # Failure Visuals + Mitigation Plan for `#64`
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-04-30*
 *Owner: Alex Xin (strategy lane stays here for `#64`)*
 *Issue: `#64`*
 
@@ -19,6 +19,9 @@ surface on 2026-04-27 so each issue has its own reviewable PR.
 - `results/metrics/failure_evidence_table.csv` — primary table behind
   taxonomy and stage figures (owned by `#36` export contract; populated by
   `#35`)
+- `results/metrics/failure_taxonomy_counts.csv` and
+  `results/metrics/failure_stage_cell_counts.csv` — derived figure-source
+  tables rendered from the evidence table
 - `results/metrics/mitigation_run_inventory.csv` — primary table behind the
   mitigation priority figure
 - `results/metrics/mitigation_before_after.csv` — primary table behind the
@@ -41,6 +44,53 @@ The canonical `team13/main` lane has advanced since the Apr 26 refresh:
 These are figure-readiness anchors for downstream visuals: the canonical Cell
 A/B captures are the first artifacts where a mitigation rerun can plausibly
 land in the same scenario set that the figures cite.
+
+## Apr 30 taxonomy export status
+
+`results/metrics/failure_evidence_table.csv` now exists and carries 35
+judge-failed rows across A/B/C/D/Y/Z/ZSD. The current largest pattern is
+`missing-evidence final answer` (18 rows), followed by orchestration-contract
+patterns: `tool routing or argument-contract failure` (7 rows) and
+`tool-call sequencing failure` (6 rows). That changes the immediate visual
+priority from "make the table real" to "render the taxonomy counts and stage
+heatmap from the table."
+
+The current first mitigation candidate should be:
+
+| Field | Value |
+|---|---|
+| `mitigation_name` | `missing_evidence_final_answer_guard` |
+| `target_pattern` | final answers / work orders emitted after required sensor, DGA, trend, or RUL evidence is missing, empty, or untrusted |
+| `hypothesis` | refusing to finalize when required evidence is absent will reduce the largest current failure class without changing the experiment grid |
+| `before_run` | current rows in `results/metrics/failure_evidence_table.csv` with symptom `missing-evidence final answer` |
+| `after_run_plan` | rerun the same frozen scenario set under the same cell with the guard enabled |
+| `primary_metric` | count of `missing-evidence final answer` rows after rerun |
+| `stop_condition` | the guard does not reduce that count, or it converts failures into low-value refusals without improving judge pass rate |
+
+## Apr 30 figure + inventory status
+
+The first figure-source pass is now rendered by
+`scripts/render_failure_taxonomy_figures.py`, which uses only the Python
+standard library and reads `results/metrics/failure_evidence_table.csv`.
+
+Generated tables:
+
+- `results/metrics/failure_taxonomy_counts.csv`
+- `results/metrics/failure_symptom_counts.csv`
+- `results/metrics/failure_stage_cell_counts.csv`
+- `results/metrics/mitigation_run_inventory.csv`
+
+Generated figures:
+
+- `results/figures/failure_taxonomy_counts.svg`
+- `results/figures/failure_stage_cell_heatmap.svg`
+- `results/figures/mitigation_priority_table.svg`
+
+`mitigation_run_inventory.csv` is a planning / control table, not an outcome
+claim. It selects `missing_evidence_final_answer_guard` as the first lane and
+keeps the other recurring classes as queued candidates. `after_run` and
+`after_status` intentionally remain empty / `pending_rerun` until a real
+matched rerun exists.
 
 ## Visuals scaffold
 
@@ -170,9 +220,9 @@ when it requires:
 
 ## Worked card: rank-2 first promotion
 
-The first concrete mitigation card under the rubric above. Targets the
-dominant `task verification failure` pattern surfaced by PR `#138`'s
-populated evidence pass.
+The earlier concrete mitigation card under the rubric above. It remains useful
+as a narrower PE-family check, but the Apr 30 CSV export shows a broader
+missing-evidence guard is now the first candidate to evaluate.
 
 | Field | Value |
 |---|---|
@@ -228,13 +278,10 @@ baseline.
 
 The artifact gap that still bounds this lane:
 
-1. populated rows on `failure_evidence_table.csv` (schema owned by `#36`
-   export contract; populated rows produced under `#35`) so the taxonomy
-   bar chart and the stage-by-cell heatmap have real counts, not
-   illustrative placeholders
-2. one matched mitigation rerun pair where both the before and after rows are
+1. one matched mitigation rerun pair where both the before and after rows are
    populated end-to-end on `mitigation_before_after.csv` so the comparison
    figure is `comparison_ready` (per `#36` status labels)
-3. agreement on which one mitigation goes first into `#65` / `#66` (current
-   recommendation: rank 2, final-answer evidence consistency check, since it
-   targets the dominant `task verification failure` pattern)
+2. implementation agreement for `missing_evidence_final_answer_guard` in
+   `#65` / `#66`
+3. refresh the rendered SVGs after any final scenario/rerun sweep changes the
+   evidence table

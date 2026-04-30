@@ -132,6 +132,24 @@ No code or behavior changes from PR #150 (doc-only).
 
 ### Changed
 
+- Added the first CSV-backed failure taxonomy export:
+  `results/metrics/failure_evidence_table.csv` classifies 35 judge-failed rows
+  from `results/metrics/scenario_scores.jsonl` into Berkeley-style failure
+  labels for `#35`, with docs refreshed in
+  `docs/failure_taxonomy_evidence.md`,
+  `docs/failure_visuals_mitigation.md`,
+  `docs/failure_analysis_scaffold.md`, and `results/README.md`.
+- Added `scripts/render_failure_taxonomy_figures.py` plus the first
+  failure-analysis derived outputs:
+  `results/metrics/failure_taxonomy_counts.csv`,
+  `results/metrics/failure_symptom_counts.csv`,
+  `results/metrics/failure_stage_cell_counts.csv`,
+  `results/metrics/mitigation_run_inventory.csv`,
+  `results/figures/failure_taxonomy_counts.svg`,
+  `results/figures/failure_stage_cell_heatmap.svg`, and
+  `results/figures/mitigation_priority_table.svg`. The mitigation inventory
+  selects `missing_evidence_final_answer_guard` as the first follow-on lane
+  while keeping after-run claims pending until a matched rerun exists.
 - Hardened repo-local PE-family follow-on runs after ZSD job `9073604`
   exposed two ablation-specific failure boundaries: LiteLLM diagnostics could
   prepend text to stdout and corrupt per-trial JSON files, and the 8192-token
