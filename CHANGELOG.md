@@ -2,6 +2,28 @@
 
 ## 2026-04-30
 
+### AOB extraction (in fork `~/coding/AssetOpsBench`, local-only)
+
+- Phases 0/1/2/3a+3b+3c all code-complete on a linear 4-branch stack:
+  `aob/sg-evaluation-adapter @ c7bc99e` → `aob/sg-domain-port @ bece2fa`
+  → `aob/sg-orchestration-runners @ 0892b92` →
+  `aob/sg-aat-batch-mode @ 6872cea` (integration tip). 177/177 full
+  agent suite green; 60/60 evaluation; 25/25 Smart Grid; 35 new
+  plan-execute tests; 10 new run_batch tests.
+- Two cross-agent review tracks against Codex `3ab548b5`, both LGTM
+  0/0/0/0 at v4 — original Phases 0/1/2/3a+3b (4 iterations) + Phase 3c
+  team-AaT batch mode (4 iterations).
+- Phase 3c lands `OpenAIAgentRunner.run_batch(prompts, trials)` with MCP
+  connection reuse via single `AsyncExitStack`, plus
+  `parallel_tool_calls` constructor knob (default `False`). Per-trial
+  errors captured in new `AgentResult.error` field instead of aborting
+  the batch. Empty `prompts` and `trials < 1` rejected with
+  `ValueError` before any MCP server is constructed.
+- D5 (cross-branch scenario validation) and D6 (team-AaT batch-mode
+  port) closed in `docs/plans/aob-extraction_deferred.md`.
+- Branches local-only on fork; not pushed to `origin/eggrollofchaos`.
+  Phase 4 (upstream PR(s) to `IBM/AssetOpsBench`) explicitly deferred.
+
 ### Documentation
 
 - `benchmarks/README.md` — document the raw benchmark log convention:
