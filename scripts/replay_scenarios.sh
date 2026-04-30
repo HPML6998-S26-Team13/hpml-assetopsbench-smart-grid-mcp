@@ -17,7 +17,7 @@
 # Arguments:
 #   bench_run_dir   Path to benchmarks/cell_X/raw/<run-id>/
 #                   Must contain latencies.jsonl (written by run_experiment.sh).
-#   mcp_mode        direct | baseline  (default: direct)
+#   mcp_mode        direct | baseline | optimized  (default: direct)
 #                   Passed to aat_runner.py --mcp-mode.
 #
 # Environment (all optional — inherit from the parent run_experiment.sh env):

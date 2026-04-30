@@ -71,6 +71,12 @@ Range: [0.0, 1.0]. Default pass threshold: 0.6 (4 out of 6 dimensions good).
 | `suggestions` | string | Judge's actionable feedback, or empty string |
 | `trajectory_file` | string | Path to the source trajectory JSON |
 
+When `scripts/judge_trajectory.py` is run with `--log-dir`, full prompt /
+response audit logs are written per scored trial at
+`results/judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`. The JSONL
+file remains the canonical aggregate table; the audit logs are reproducibility
+evidence for individual calls.
+
 ## Judge Model
 
 Default: `watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8`

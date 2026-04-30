@@ -87,6 +87,9 @@ MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
+VLLM_DTYPE="${VLLM_DTYPE:-float16}"
+EXTRA_VLLM_ARGS="${EXTRA_VLLM_ARGS:-}"
+export VLLM_DTYPE EXTRA_VLLM_ARGS
 VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-1}"
 # Default tool-call parser is model-family-aware. Llama-3.x → llama3_json
 # (the team's pinned `Llama-3.1-8B-Instruct`). Other families
@@ -380,6 +383,7 @@ if orchestration_mode == "agent_as_tool":
 # Lane 2 / #30 specifically needs this for the prefix-cache / kv-dtype
 # distinction in Cell C.
 extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
+payload["vllm_dtype"] = os.environ.get("VLLM_DTYPE", "float16")
 payload["vllm_extra_args"] = extra_vllm_args
 payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
 
@@ -406,6 +410,7 @@ pathlib.Path(meta_path).write_text(
             # knobs that produced a run so notebooks / paper tables can
             # recover the prefix-cache / kv-dtype / etc. choice without
             # re-reading harness.log. (PR #129 / Lane 2)
+            "vllm_dtype": payload["vllm_dtype"],
             "vllm_extra_args": payload["vllm_extra_args"],
             "vllm_extra_args_list": payload["vllm_extra_args_list"],
         },
@@ -830,7 +835,7 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     --host 127.0.0.1
     --port "$VLLM_PORT"
     --max-model-len "$MAX_MODEL_LEN"
-    --dtype float16
+    --dtype "$VLLM_DTYPE"
   )
   if [ "$VLLM_ENABLE_AUTO_TOOL_CHOICE" = "1" ]; then
     if [ -z "$VLLM_TOOL_CALL_PARSER" ]; then
@@ -1237,8 +1242,14 @@ if [ "${TORCH_PROFILE:-0}" = "1" ] && [ -n "${TORCH_PROFILE_DIR:-}" ] && [ "$LAU
   echo ""
   echo "=== Torch profiler replay pass ==="
   echo "Profiler dir: $TORCH_PROFILE_DIR"
-  # Export VLLM_PORT so run_vllm_torch_profile.sh (a subprocess) sees it.
-  export VLLM_PORT
+  # Export the parent run's model + AaT runtime settings so replay uses the
+  # exact same local-vLLM served model and MCP bootstrap mode as the benchmark.
+  # This matters for model-variant cells such as D, where vLLM exposes only
+  # `Llama-3.1-8B-Instruct-int8`.
+  export VLLM_PORT MODEL_ID
+  export AAT_OPENAI_AGENTS_VERSION AAT_MCP_VERSION AAT_LITELLM_VERSION
+  export AAT_PARALLEL_TOOL_CALLS AAT_MCP_SERVER_PYTHON AAT_MCP_SERVER_LAUNCH_MODE
+  export HARNESS_VERBOSE SERVER_IOT_PATH SERVER_FMSR_PATH SERVER_TSFM_PATH SERVER_WO_PATH
   if VLLM_PORT="$VLLM_PORT" bash profiling/scripts/run_vllm_torch_profile.sh \
       "$TORCH_PROFILE_DIR" \
       -- bash scripts/replay_scenarios.sh "$RUN_DIR" "$MCP_MODE" \

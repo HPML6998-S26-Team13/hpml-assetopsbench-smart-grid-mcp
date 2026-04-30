@@ -1,8 +1,8 @@
 # Live Repo Summary — Active State
 
-*Last updated: 2026-04-30 03:55 EDT*
+*Last updated: 2026-04-30 03:19 EDT*
 *Configured emphasis window: 48 hours by default for this repo; widen or shrink the window by repo cadence.*
-*Current emphasis window: 2026-04-28 03:55 EDT -> 2026-04-30 03:55 EDT, with older still-live blockers retained as needed.*
+*Current emphasis window: 2026-04-28 03:19 EDT -> 2026-04-30 03:19 EDT, with older still-live blockers retained as needed.*
 *Window update convention: when `Last updated` changes, slide this window to match unless the start point is intentionally anchored; if anchored, say so explicitly here.*
 *Audience: incoming coding agent. Use this for current state. Older or removed detail lives in `docs/coordination/repo_summary_history.md`; do not evict material solely because it is older than the configured window.*
 
@@ -14,28 +14,33 @@
 
 ### Current truth (2026-04-30)
 
-- **[V]** Canonical `team13/main` is now at **`8f6b2e8`** (just pushed by
-  Alex / claude `1c34dbff`: AOB extraction plan + Phases 0-3 first review
-  pass + replay-phase guard). Stack on main since the prior summary
-  (`9189fd1`), in chronological merge order:
-  - `78449d3` — PR `#146` Insomnia runbook + profiling docs (Alex)
-  - `1be87ec` — PR `#129` Lane 2 KV-cache choice + INT8 deferral + smoke
-    scripts (Aaron, closes `#29` `#30`)
-  - `bdf8b7c` — PR `#145` Pre-W5 capture pipeline hardening (Aaron,
-    closes `#132` `#135`)
-  - `e90d9b8` — PR `#147` PS B scenario generator scaffold (#2 prototype,
-    Aaron)
-  - `23e9eed` — PR `#148` L3 statistical-fidelity validator + DGA realism
-    doc (Alex)
-  - `a73b260` — PR `#149` IEC 60599:2022 Rogers-Ratio fault_table fix
-    (Alex; § 7 task 2b)
-  - `f6c6e5d` — PR `#134` Cell C optimized batched MCP runner (Akshat,
-    closes `#31`)
-  - `8f6b2e8` — AOB extraction plan + Phases 0-3 first review pass +
-    replay-phase guard (this push, no PR)
-- **[V]** **Cell C optimized MCP is now real** via PR `#134` (closes `#31`).
-  This unblocks the Cell C dependency chain in `#25` (full Experiment 1
-  capture), `#86` (Cell C analysis), and the (B−C) MCP-overhead headline.
+- **[V]** Canonical `team13/main` is at **`35efc6f`** before the current Cell D
+  proof-doc commit. Recent main since the Cell C capture proof now includes
+  Cell C artifacts/judge rows, exploratory Cell D config + replay fix,
+  PE-family `MCP_MODE=optimized` support for the `Z + Self-Ask + D` ablation,
+  and the metadata export fix for `VLLM_DTYPE` / `EXTRA_VLLM_ARGS`.
+- **[V]** **Cell D optimized-serving now has a successful Insomnia capture and
+  judge proof.** Slurm job `9073472_aat_mcp_model_optimized` ran on `ins084`
+  from `team13/main@ec17dc7`, completed `6 / 6`, `run_status: success`, W&B
+  `pmwzatie`, replay `2 / 2`, and profiler artifact `profiling-pmwzatie`.
+  The vLLM log proves compressed-tensors INT8 loading, BF16 execution, fp8 KV
+  cache, prefix caching, and the compressed-tensors Cutlass INT8 kernel. Judge
+  scoring is complete for all six trajectories: mean `score_6d=0.167`, p50
+  `0.0`, pass rate `1/6`. Cell D remains exploratory because it changes
+  serving stack and transport, so it does not replace the clean A/B/C
+  transport-only comparison.
+- **[V]** **Cell C optimized MCP now has a successful Insomnia capture.**
+  Slurm job `9071639_aat_mcp_optimized` ran on `ins083` from
+  `team13/main@7e8d169`, completed `6 / 6`, `run_status: success`, W&B
+  `ifz8xfhm`, replay `2 / 2`, and profiler artifact `profiling-ifz8xfhm`.
+  The proof used the optimized batch/connection-reuse runner and prefix
+  caching, but disabled `parallel_tool_calls` because job `9071621` proved the
+  vLLM/Llama path rejects parallel tool-call requests. Notebook 02 can now
+  compute the first real `(B-C)` headline against Cell B job
+  `8979314_aat_mcp_baseline`: aggregate p50 `12.91s -> 6.99s` (~`5.92s`
+  faster), with a slower mean due to the first Cell C cold-prefix trial.
+  Maverick-17B judge scoring is also complete for all six Cell C trajectories:
+  mean `score_6d=0.167`, p50 `0.167`, pass rate `0/6`.
 - **[V]** **AOB extraction Phases 0/1/2/3a+3b are code-complete** in Alex's
   fork at `~/coding/AssetOpsBench`, on a linear 3-branch stack:
   `aob/sg-evaluation-adapter @ c7bc99e` → `aob/sg-domain-port @ bece2fa` →
@@ -51,11 +56,11 @@
   `ORCHESTRATION != agent_as_tool` (resolves backlog pin (c)). Analysis at
   `docs/replay_phase_analysis.md`. Per-cell `REPLAY_RUNNER` knob is a
   Future pin in `pm/backlog.md` (D11).
-- **[V]** **Six-dim Maverick-17B judge scores** from PR `#144` remain the
-  current quality view, unchanged: Z+SA `0.833` (5/6), Z `0.639` (4/6),
-  Y+SA `0.444` (3/6), B `0.278` (2/6), A `0.167` (1/6), Y `0.111` (0/6).
-  Cell C judge view will land once a #134 capture run uses the optimized
-  path against the same canonical scenario set.
+- **[V]** **Six-dim Maverick-17B judge scores** now include Cell C and D. Current
+  quality view: Z+SA `0.833` (5/6), Z `0.639` (4/6), Y+SA `0.444` (3/6),
+  B `0.278` (2/6), A `0.167` (1/6), C `0.167` (0/6), D `0.167` (1/6),
+  Y `0.111` (0/6). Clean execution for C/D therefore does not imply
+  judge-quality success.
 - **[V]** **PR backlog state**: open PRs are now just `#112` (Copilot SWE
   Agent, `CHANGES_REQUESTED`, low priority) and `#128` (PS B support data,
   `CHANGES_REQUESTED`, two Critical DGA findings). Drafts `#123` and
@@ -85,9 +90,10 @@
   Y + Self-Ask `0.444` / 3/6, B `0.278` / 2/6, A `0.167` / 1/6, Y baseline
   `0.111` / 0/6. Cell B is fastest at closing the orchestration loop but
   only 2/6 trials clear the judge threshold; Z + Self-Ask is the actual
-  quality leader. Per-trial Maverick prompts + raw responses in
-  `results/judge_logs/<run>/<scenario_id>_judge_log.json` for
-  reproducibility. Self-Ask materially helps every cell that uses it.
+  quality leader. Per-trial Maverick prompts + raw responses now use
+  `results/judge_logs/<run>/<scenario_id>_runNN_judge_log.json` for
+  reproducibility on new scoring runs. Self-Ask materially helps every cell
+  that uses it.
 - **[V]** Apr 21 Team check-in #4 has its meeting record at
   `planning/2026-04-21_meeting_notes.md`. The Apr 28 2:45 PM ET team call
   feeds Alex's 3:30 PM ET Dhaval call. Tomorrow's call agenda should
@@ -123,9 +129,9 @@
   is `team13/main@6046b26` / the merged PR `#127` history. These used self-hosted
   `openai/Llama-3.1-8B-Instruct` on Insomnia and emitted canonical raw
   artifacts under `benchmarks/cell_{A_direct,B_mcp_baseline}/`. This clears
-  the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gives
-  `#25` an A/B smoke anchor; full `multi_*.json` / 3-trial A/B captures still
-  remain, with Cell C waiting on optimized MCP readiness.
+  the `#104` runner/MCP-bootstrap/upstream-parity proof boundary and gave
+  `#25` its A/B smoke anchor; later full-shape captures now include Cell B
+  `8979314` and Cell C `9071639`.
 - **[V]** `#104` is now closed / Done on GitHub after PR `#127` merged. Treat
   future references to `#104` as historical proof, not an active blocker.
 - **[V]** PR `#128` is the active PS B correction/review lane. Baseline support
@@ -175,9 +181,11 @@
 - **[V]** Team issue bodies no longer carry the duplicated planning boilerplate.
   - the single-source explanation now lives in `docs/README.md`
   - archived planning tracker/spec references remain documented there, not repeated on every issue
-- **[V]** `#25` has moved past the missing-runner gate for Cells A/B. The
-  remaining gap is full Experiment 1 capture material: agreed `multi_*.json`
-  slice, 3 trials, and Cell C after the optimized MCP lane is ready.
+- **[V]** `#25` has moved past the missing-runner gate for Cells A/B/C. The
+  remaining gap is now final paper-grade reruns / analysis promotion, not
+  basic runner availability: Cell C job `9071639` provides the first successful
+  optimized capture on the same `multi_*.json` × 3-trial shape as Cell B job
+  `8979314`.
 - **[V]** `#111` is closed after PR `#125` landed the final Insomnia HF CLI fix and
   the shared Insomnia checkout was verified on `main@1001a32`
   (post-Apr-27-rewrite SHA; pre-rewrite hash was `b480604`).
@@ -189,6 +197,8 @@
 
 | When (EDT) | Ref | Where | Why it matters |
 |---|---|---|---|
+| 2026-04-30 03:13 | Slurm `9073472_aat_mcp_model_optimized` | Insomnia `ins084` | **First successful Cell D optimized-serving capture**: 6/6, W&B `pmwzatie`, replay 2/2, profiler `profiling-pmwzatie`; vLLM proves compressed INT8 + BF16 + fp8-KV + prefix caching. Judge mean `0.167`, pass 1/6. |
+| 2026-04-30 00:36 | Slurm `9071639_aat_mcp_optimized` | Insomnia `ins083` | **First successful Cell C optimized capture**: 6/6, W&B `ifz8xfhm`, replay 2/2, profiler `profiling-ifz8xfhm`; uses batch/connection reuse + prefix caching with `parallel_tool_calls=false`. |
 | 2026-04-30 03:55 | `8f6b2e8` | `team13/main` | AOB extraction plan + Phases 0-3 first review pass + replay-phase guard. Doc-only on team-repo side; the actual code lives on the AOB-fork branch stack. Squash of 6 local commits including the v1-v4 Codex review iterations. |
 | 2026-04-30 01:54 | `f6c6e5d` (PR `#134`) | `team13/main` | **Cell C optimized batched MCP merged** (Akshat). Closes `#31`. Unblocks `#25` Cell C capture and `#86` Cell C analysis. |
 | 2026-04-29 23:34 | AOB extraction v4 LGTM 0/0/0/0 | `review/codex-prompts/_signal/...v4_response-ready.md` | Cross-agent review of AOB extraction Phases 0/1/2/3a+3b reached final clean state across 4 iterations against Codex `3ab548b5`. |
@@ -262,14 +272,13 @@
 - **[V]** The mainline proof snapshots committed in-tree are:
   - `benchmarks/cell_Y_plan_execute/{config.json,summary.json}`
   - `benchmarks/cell_Z_hybrid/{config.json,summary.json}`
-- **[V]** Vanilla **Agent-as-Tool is smoke-tested for Cells A/B** on
-  `codex-fnd/aat-smoke-fix`. The team wrapper uses one OpenAI Agents SDK loop
-  with the pinned AOB prompt; Cell A supplies direct callables and Cell B
-  supplies MCP stdio servers. Proof anchors: Cell A Slurm job `8962310`,
-  Cell B Slurm job `8969519`, and upstream AOB `OpenAIAgentRunner` parity
-  Slurm jobs `8970383` and `8970468`. `docs/validation_log.md` records these
-  proof anchors. Remaining AaT-adjacent work is Cell C once the optimized MCP
-  lane lands and the full `#25` capture slice.
+- **[V]** Vanilla **Agent-as-Tool is proven for Cells A/B/C**. The team
+  wrapper uses one OpenAI Agents SDK loop with the pinned AOB prompt; Cell A
+  supplies direct callables, Cell B supplies MCP stdio servers, and Cell C uses
+  the optimized MCP batch/connection-reuse path. Proof anchors: Cell A Slurm
+  job `8962310`, Cell B smoke `8969519`, upstream AOB `OpenAIAgentRunner`
+  parity jobs `8970383` and `8970468`, full Cell B baseline job `8979314`, and
+  full Cell C optimized job `9071639`.
 
 ### Active execution lanes
 
@@ -295,10 +304,11 @@
 1. **`#25` Experiment 1 full capture**
    - **[V]** Cells A/B/C all have runners merged on main. Cell A/B smoke
      anchors from `codex-fnd/aat-smoke-fix` (jobs `8962310`, `8969519`,
-     `8970383`, `8970468`); Cell C optimized batched runner just merged
-     via PR `#134` (closes `#31`).
-   - **[?]** Remaining is the agreed-scenario full capture set across A/B/C
-     at the planned trial depth. Backlog pin (a) targets the final 5×6
+     `8970383`, `8970468`); Cell B full baseline job `8979314`; Cell C
+     optimized full-shape job `9071639` plus Cell C judge rows/logs. Cell D
+     exploratory optimized-serving job `9073472` is also captured/judged, but
+     remains outside the A/B/C fairness contract.
+   - **[?]** Remaining is promotion into Notebook 02 and the final 5×6
      canonical re-run once team agrees on the final scenario set.
 
 2. **`#26` / `#86` / `#32` Notebook 02/03 execution data**
@@ -309,8 +319,9 @@
      analysis splinter; `#32` covers the Experiment 2 PE-family
      analysis. PR `#144` already landed Exp 2 first canonical (Cell
      Y/Y+SA/Z/Z+SA) plus 6-dim judge scores; Cell B inherits from PR
-     `#130`'s `8979314_*`. Now that PR `#134` merged, Cell C captures
-     can run against the optimized path.
+     `#130`'s `8979314_*`; Cell C now has
+     `9071639_aat_mcp_optimized` plus judge rows/logs; Cell D has
+     exploratory `9073472_aat_mcp_model_optimized` plus judge rows/logs.
    - **[?]** Remaining is the final 5×6 canonical re-run once scenario
      set + trial count are agreed (backlog pin (a)).
 
@@ -351,9 +362,9 @@
 
 | Issue | Owner signal | Current state |
 |---|---|---|
-| `#25` | Aaron implementation lane | A/B smoke artifacts exist; full `multi_*.json` / 3-trial A/B capture still pending; Cell C waits on optimized MCP |
+| `#25` | Aaron implementation lane | A/B/C first full-shape captures exist for B/C (`8979314`, `9071639`), with Cell C judge scored `0/6`; exploratory D is captured/judged in `9073472`; remaining work is Notebook 02 promotion + final 5×6 canonical rerun |
 | `#26` | analysis/results lane | NB02 Cell A/B analysis; partial-readiness framework merged via PR `#123`; needs real Cell A/B captures |
-| `#86` | analysis/results lane | NB02 Cell C analysis (split from `#26` after PR `#123`); gated on `#85` Cell C capture |
+| `#86` | analysis/results lane | NB02 Cell C analysis (split from `#26` after PR `#123`); first Cell C capture + judge set is `9071639`, ready for parser/figure promotion |
 | `#32` | analysis/results lane | Notebook 03 scaffold merged; Y can start when raw PE artifacts exist; Cell B now has an AaT smoke anchor, but final Experiment 2 raw run set is still pending |
 | `#83` / `#90` | Tanisha PS B lane | support artifacts partly on main; PR `#128` still has Critical support-data fixes |
 
@@ -399,8 +410,8 @@
 ## 7. Recommended Next Steps
 
 1. **Proceed to `#25` full capture planning.**
-   - Use the proven A/B smoke path for the real `multi_*.json`, 3-trial
-     capture set. Keep Cell C gated on the optimized MCP workstream.
+   - Promote the proven full-shape Cell B (`8979314`) and Cell C (`9071639`)
+     artifacts into Notebook 02, then plan the final matched A/B/C rerun set.
 2. **Use Cell B smoke artifacts to unblock Notebook 02/03 contract checks.**
 3. **Fix PR `#128` before treating PS B support data as final evidence.**
 4. **Use the Apr 28 team call to prepare Alex's 3:30 PM ET Dhaval proof/blocker summary.**

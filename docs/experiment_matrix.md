@@ -1,6 +1,6 @@
 # Experiment Matrix and Follow-On Conditions
 
-*Last updated: 2026-04-22*
+*Last updated: 2026-04-30*
 *Owner: Alex Xin*
 *Issues: core framing for `#25`, `#32`, `#35`, `#64`, `#5`*
 
@@ -19,7 +19,8 @@ Current recommended matrix:
 |---|---|---|---|---|---|
 | Experiment 1 | A | AaT | direct | planned | transport baseline |
 | Experiment 1 / 2 | B | AaT | baseline | planned | shared anchor |
-| Experiment 1 | C | AaT | optimized | planned | optimized transport |
+| Experiment 1 | C | AaT | optimized | captured + judged once | optimized transport |
+| Follow-on | D | AaT | optimized + model-side | captured + judged once | optimized transport plus INT8/BF16/fp8-KV serving |
 | Experiment 2 | Y | Plan-Execute | baseline | runnable | core orchestration baseline |
 | Experiment 2 | Z | Verified PE | baseline | smoke-proven follow-on; canonical config pending | optional third method |
 
@@ -53,7 +54,8 @@ What we can honestly run on the current runner surface right now:
 | `Z + Self-Ask` | smoke-runnable; canonical config pending | the Verified PE runner supports the clarification hook, but the canonical config and raw run set are still follow-on work |
 | `B` | smoke-runnable; full capture pending | AaT MCP-baseline smoke succeeded in Slurm job `8969519`; upstream `OpenAIAgentRunner` parity succeeded in Slurm job `8970383`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
 | `A` | smoke-runnable; full capture pending | AaT direct smoke succeeded in Slurm job `8962310`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
-| `C` | pending | waits on `#25`, plus the Cell C optimization lane |
+| `C` | analysis-ready first capture | Slurm job `9071639_aat_mcp_optimized` completed `6 / 6` with optimized batch/connection reuse and prefix caching; judge mean `0.167`, pass `0 / 6` |
+| `D` | analysis-ready exploratory capture | Slurm job `9073472_aat_mcp_model_optimized` completed `6 / 6` with Cell C transport plus compressed INT8/BF16/fp8-KV serving; replay `2 / 2`, profiler `profiling-pmwzatie`, judge mean `0.167`, pass `1 / 6` |
 
 Important distinction:
 
@@ -66,11 +68,18 @@ Important distinction:
 
 Important honesty rule:
 
-- `MCP_MODE=optimized` is already part of the paper framing, but it is **not yet
-  a behaviorally distinct PE-family transport path** on canonical history.
-- So the repo should treat `Y/Z + Self-Ask + MCP optimized` as a **planned
-  follow-on condition**, not a current runnable claim, until the Cell C
-  optimization stack is real enough to reuse outside AaT.
+- `MCP_MODE=optimized` is now a behaviorally distinct AaT transport path for
+  Cell C. On the Insomnia vLLM / Llama-3.1-8B-Instruct path it means batch
+  runner + MCP connection reuse + prefix caching, with sequential tool-call
+  turns (`AAT_PARALLEL_TOOL_CALLS=false`).
+- Exploratory Cell D deliberately changes the serving stack too: it uses the
+  same optimized AaT MCP transport as Cell C, then adds the compressed-tensors
+  INT8 checkpoint, BF16 dtype, and fp8 KV cache. Treat D as a follow-on
+  "optimized serving" condition, not as evidence for the clean A/B/C transport
+  delta.
+- The repo should still treat `Y/Z + Self-Ask + MCP optimized` as a planned
+  follow-on condition, not a current runnable claim, until the optimized
+  transport is explicitly wired and proven outside AaT.
 
 ## Core design rule
 
@@ -238,7 +247,8 @@ Default mitigation / extension lane:
 - `Y + Self-Ask` after canonical config promotion
 - `Z + Self-Ask` after canonical config promotion
 - if extra time exists: `Y + Self-Ask + MCP optimized`
-- only after that: `Z + Self-Ask + MCP optimized`
+- `Z + Self-Ask + D` as the strongest current ablation once the queued proof run
+  succeeds and is judged
 
 That keeps the story sharp:
 

@@ -27,6 +27,8 @@ The execution-facing config convention is:
 
 - `configs/aat_{direct,mcp_baseline,mcp_optimized}.env` for the canonical
   Experiment 1 Cell A / B / C runs
+- `configs/aat_mcp_model_optimized.env` for exploratory Cell D, which stacks
+  optimized AaT MCP transport with model-side INT8/BF16/fp8-KV serving
 - `configs/experiment2/` for the extra Experiment 2 templates that do not
   already exist on `main` (currently the Plan-Execute / Cell Y lane and the
   optional Cell Z follow-on plus the PE-family Self-Ask ablations)
@@ -38,6 +40,7 @@ The active cell mapping is:
 | A | Agent-as-Tool | direct | `aat_direct.env` |
 | B | Agent-as-Tool | baseline | `aat_mcp_baseline.env` |
 | C | Agent-as-Tool | optimized | `aat_mcp_optimized.env` |
+| D | Agent-as-Tool | optimized + model-side | `aat_mcp_model_optimized.env` |
 | Y | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_mcp_baseline.env` |
 | Y + Self-Ask | Plan-Execute | baseline | `experiment2/exp2_cell_Y_pe_self_ask_mcp_baseline.env` |
 | Z | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_mcp_baseline.env` |
@@ -62,6 +65,8 @@ The active cell mapping is:
   WandB run after the benchmark finishes
 - `LAUNCH_VLLM` — when `1`, launch the local vLLM server first and point
   AssetOpsBench's LiteLLM client at `http://127.0.0.1:<port>/v1`
+- `VLLM_DTYPE` — vLLM `--dtype`; defaults to `float16`, but Cell D uses
+  `bfloat16` for the compressed-tensors INT8 / fp8-KV stack
 - `AOB_PATH` — path to the sibling AssetOpsBench checkout; defaults to
   `../AssetOpsBench` relative to the shared project root, so it also works from
   a git worktree

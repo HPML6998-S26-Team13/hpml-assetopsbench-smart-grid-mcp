@@ -1,6 +1,6 @@
 # Experiment 1 Capture Plan
 
-*Last updated: 2026-04-26*
+*Last updated: 2026-04-30*
 *Owner: Aaron Fan (af3623)*
 
 Plan for producing the raw profiling + benchmark artifacts for Experiment 1
@@ -15,7 +15,8 @@ split on the capture side).
 |---|---|---|---|---|
 | **A** | Agent-as-Tool (ReAct) | direct | In-process Python call via `mcp_servers/direct_adapter.py` | `configs/aat_direct.env` |
 | **B** | Agent-as-Tool (ReAct) | baseline | MCP JSON-RPC over stdio, default server config | `configs/aat_mcp_baseline.env` |
-| **C** | Agent-as-Tool (ReAct) | optimized | MCP JSON-RPC with batched tool calls + connection reuse | `configs/aat_mcp_optimized.env` |
+| **C** | Agent-as-Tool (ReAct) | optimized | MCP JSON-RPC with batch runner + connection reuse + prefix caching | `configs/aat_mcp_optimized.env` |
+| **D** | Agent-as-Tool (ReAct) | optimized + model-side | Exploratory optimized-serving follow-on: Cell C transport plus compressed-tensors INT8 / BF16 / fp8-KV | `configs/aat_mcp_model_optimized.env` |
 
 Fairness contract: **all three cells use the same underlying 21 tool
 functions, the same scenarios, the same prompt template, the same model and
@@ -34,6 +35,11 @@ issues feed Cell C as follows:
 
 Those tasks may use small targeted sweeps or smoke checks. The Experiment 1
 headline result remains A / B / C.
+
+Cell D is a follow-on serving stack, not part of the A/B/C fairness contract:
+it intentionally changes model precision/quantization in addition to using the
+Cell C transport path. Use it to explore a "best optimized local serving" arm
+after the transport-only comparison is understood.
 
 Shared cell B: it also doubles as the AaT baseline for Experiment 2
 (orchestration comparison) — `CONTRIBUTING_EXPERIMENTS` on its config
@@ -66,16 +72,22 @@ and the tool source selected by cell:
 | A | `mcp_servers.direct_adapter` direct callables | Slurm job `8962310_aat_direct_smoke_104`, `1 / 1` success, 4 tool calls |
 | B | MCP stdio to the four Smart Grid servers | Slurm job `8969519_aat_mcp_baseline_smoke_104`, `1 / 1` success, 4 MCP tool calls |
 | B parity | Upstream AOB `OpenAIAgentRunner` Python API with Smart Grid server paths | Slurm jobs `8970383_aat_mcp_baseline_upstream_smoke_104` and `8970468_aat_mcp_baseline_upstream_smoke_104`, both `1 / 1` success |
-| C | optimized MCP transport | waits on the optimized MCP lane |
+| C | optimized MCP transport | Slurm job `9071639_aat_mcp_optimized`, `6 / 6` success, W&B `ifz8xfhm`, replay `2 / 2`, profiler `profiling-ifz8xfhm`, judge mean `0.167` / pass `0 / 6` |
+| D | optimized MCP transport + model-side INT8/BF16/fp8-KV | Slurm job `9073472_aat_mcp_model_optimized`, `6 / 6` success, W&B `pmwzatie`, replay `2 / 2`, profiler `profiling-pmwzatie`, judge mean `0.167` / pass `1 / 6` |
 
-What remains for `#25` is the report-facing capture set, not the smoke runner:
+What remains for `#25` is report-facing consolidation and final reruns, not
+the smoke runner:
 
-- run A/B across the agreed `multi_*.json` slice with 3 trials first
-- add Cell C when the optimized MCP implementation is behaviorally ready
+- promote the current Cell B / Cell C captures and judge rows into Notebook 02
+- run or confirm the matching Cell A capture for the agreed `multi_*.json`
+  slice at the same trial depth
 - decide whether raw scenario JSONs are committed, summarized in-tree with
   validation-log references, or kept on Insomnia with live artifact paths
-- keep Notebook 02 parser checks moving on the smoke artifacts while the full
-  capture set runs
+- rerun the final A/B/C set at the final paper trial depth once the team freezes
+  the scenario set
+- treat Cell D as an exploratory systems ablation only: it is useful for
+  optimized-serving evidence and follow-on PE-family runs, but it should not
+  replace the clean A/B/C transport comparison
 
 ## Dependencies across the team
 
@@ -84,12 +96,23 @@ What remains for `#25` is the report-facing capture set, not the smoke runner:
 | A | full `multi_*.json` / 3-trial capture | Aaron | smoke-proven, capture pending |
 | A | WandB/profiling link | Aaron | done in `01043c5` |
 | B | full `multi_*.json` / 3-trial capture | Aaron | smoke-proven, capture pending |
-| C | optimized MCP transport chosen and wired into the Cell C config | Akshat / Tanisha / Aaron | pending optimized lane |
+| C | optimized MCP transport chosen and wired into the Cell C config | Akshat / Tanisha / Aaron | first full-shape capture + judge scoring done in job `9071639`; final rerun still pending |
+
+Cell C nuance: job `9071621` proved that `AAT_PARALLEL_TOOL_CALLS=true` is not
+compatible with the Insomnia vLLM / Llama-3.1-8B-Instruct path (`This model
+only supports single tool-calls at once!`). The successful canonical Cell C
+shape keeps the batch runner, MCP connection reuse, and prefix caching, but
+uses sequential tool-call turns via `AAT_PARALLEL_TOOL_CALLS=false`.
 
 These blockers are mostly for the **final canonical A / B / C capture set**.
 The team can still start best-effort runs on the current scenario slice as soon
 as a cell becomes runnable, rather than waiting for every downstream refinement
 task to finish.
+
+Capture closeout rule as of Apr 28: a successful run is not publication-ready
+until `scripts/judge_trajectory.py` has scored the per-trial trajectory JSONs
+and `results/metrics/scenario_scores.jsonl` contains the matching
+`(run_name, scenario_id, trial_index)` rows.
 
 ## Capture pipeline per cell
 

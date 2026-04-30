@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-04-30T06:59:59.227887+00:00",
+  "run_name": "9073472_aat_mcp_model_optimized",
+  "benchmark_config_path": "configs/aat_mcp_model_optimized.env",
+  "benchmark_summary_path": "benchmarks/cell_D/summary.json",
+  "experiment_cell": "D",
+  "orchestration_mode": "agent_as_tool",
+  "mcp_mode": "optimized",
+  "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+  "experiment_family": "exp1_model_optimization",
+  "vllm_dtype": "bfloat16",
+  "vllm_extra_args": "--quantization compressed-tensors --kv-cache-dtype fp8 --enable-prefix-caching",
+  "vllm_extra_args_list": [
+    "--quantization",
+    "compressed-tensors",
+    "--kv-cache-dtype",
+    "fp8",
+    "--enable-prefix-caching"
+  ],
+  "metadata_correction_note": "Corrected after run 9073472 because the pre-35efc6f metadata writer read unexported VLLM_DTYPE/EXTRA_VLLM_ARGS shell variables. The emitted harness.log and vllm.log prove this serving stack.",
+  "finished_at": "2026-04-30T07:07:16.316368+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "mcp_setup_seconds": 14.638018131256104,
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/pmwzatie",
+  "profiling_dir": "profiling/traces/9073472_aat_mcp_model_optimized_torch",
+  "profiling_artifact": "profiling-pmwzatie"
+}

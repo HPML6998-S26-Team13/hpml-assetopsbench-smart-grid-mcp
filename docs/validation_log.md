@@ -1,6 +1,6 @@
 # Validation Log
 
-*Last updated: 2026-04-26*
+*Last updated: 2026-04-30*
 
 Canonical log for live serve / benchmark / profiling proofs. Use this file for
 concrete run records, not the runbooks.
@@ -17,6 +17,153 @@ For each proof entry, record:
 - primary artifacts
 - what the run proves
 - caveats / follow-ups
+
+## 2026-04-30 — Experiment 1 Cell D optimized-serving capture and judge proof (`#85`)
+
+- **Scope:** Exploratory Cell D optimized-serving AaT capture for the
+  `multi_*.json` slice. Cell D uses the Cell C optimized MCP transport and
+  additionally changes the serving stack to compressed INT8 weights, BF16
+  execution, fp8 KV cache, and prefix caching.
+- **Scenario set:** `data/scenarios/multi_*.json`, 2 scenarios × 3 trials = 6
+  trial artifacts.
+- **Model:** self-hosted `openai/Llama-3.1-8B-Instruct-int8` through local
+  vLLM on Insomnia.
+- **Branch / git SHA:** `team13/main@ec17dc781f0d703fa365ba348e82ed4b38afb222`
+  in the shared Insomnia checkout for the run.
+- **Config:** `configs/aat_mcp_model_optimized.env`.
+- **Run id / Slurm job id:** `9073472_aat_mcp_model_optimized`.
+- **Node / Slurm state:** `ins084`, `COMPLETED 0:0`, elapsed `00:10:01`.
+- **W&B:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/pmwzatie
+- **Primary artifacts:**
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/meta.json`
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/harness.log`
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/vllm.log`
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/latencies.jsonl`
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/_batch_latencies.jsonl`
+  - `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized/replay/replay_meta.json`
+  - `benchmarks/cell_D/config.json`, `benchmarks/cell_D/summary.json`
+  - `results/metrics/scenario_scores.jsonl`
+  - `results/judge_logs/9073472_aat_mcp_model_optimized/SGT-009_run{01,02,03}_judge_log.json`
+  - `results/judge_logs/9073472_aat_mcp_model_optimized/SGT-010_run{01,02,03}_judge_log.json`
+  - profiler trace directory `profiling/traces/9073472_aat_mcp_model_optimized_torch`
+  - W&B profiling artifact `profiling-pmwzatie`
+- **Per-trial latencies:** `18.67`, `8.05`, `6.30`, `3.77`, `6.04`, `4.77` s
+  with one-time `mcp_setup_seconds=14.64`.
+- **Judge result:** Maverick-17B six-dimension judge scored all six Cell D
+  trials with `score_6d` values `0.0`, `0.0`, `0.0`, `0.3333`, `0.6667`,
+  `0.0`; mean `0.1667`, p50 `0.0`, pass rate `1 / 6` at threshold `0.6`.
+
+What this proves:
+
+- Cell D runs end-to-end on the same first-capture Experiment 1 slice:
+  `run_status: "success"`, `6 / 6` complete, `tool_error_count=0`, and
+  `tool_call_count_total=18`.
+- The serving stack loaded the INT8 checkpoint and vLLM selected
+  `CutlassInt8ScaledMMLinearKernel for CompressedTensorsW8A8Int8`. The
+  `vllm.log` engine config records `dtype=torch.bfloat16`,
+  `quantization=compressed-tensors`, `kv_cache_dtype=fp8`, and
+  `enable_prefix_caching=True`.
+- Replay/profiling completed after the benchmark run:
+  `replay_scenarios` passed both unique scenarios and the torch profiler trace
+  was linked to W&B.
+- Post-hoc LLM-as-judge scoring completed for all six per-trial trajectories
+  and emitted per-trial audit logs.
+
+Caveats / follow-ups:
+
+- Cell D is not part of the clean A/B/C transport-only fairness contract. It is
+  an optimized-serving ablation that changes model precision/quantization in
+  addition to MCP transport.
+- The run was emitted before commit `35efc6f` exported
+  `VLLM_DTYPE` / `EXTRA_VLLM_ARGS` for the Python metadata writer. The synced
+  `benchmarks/cell_D/config.json` and per-run `meta.json` have an explicit
+  `metadata_correction_note`; `harness.log` and `vllm.log` are the primary proof
+  that the serving stack used BF16, compressed tensors, fp8 KV cache, and prefix
+  caching. Commit `35efc6f` fixes future runs, including ZSD.
+- Quality remains poor despite the faster optimized-serving execution. The one
+  passing judge trial is not enough to promote D beyond exploratory status; use
+  this as latency/systems evidence and motivation for PE-family optimized
+  follow-ons.
+
+## 2026-04-30 — Experiment 1 Cell C optimized MCP capture (`#85`, unblocks `#86`)
+
+- **Scope:** Experiment 1 Cell C optimized MCP capture for the `multi_*.json`
+  slice, matching the Cell B baseline depth from job `8979314`
+- **Scenario set:** `data/scenarios/multi_*.json`, 2 scenarios × 3 trials = 6
+  trial artifacts
+- **Model:** self-hosted `openai/Llama-3.1-8B-Instruct` through local vLLM on
+  Insomnia
+- **Branch / git SHA:** `team13/main@7e8d169c7c0789378762b59219694e9b83964b67`
+  in the shared Insomnia checkout
+- **Config:** `configs/aat_mcp_optimized_singletool_runtime.env` during the
+  proof run; this is the merged `configs/aat_mcp_optimized.env` with
+  `AAT_PARALLEL_TOOL_CALLS=false` after the local vLLM path rejected parallel
+  tool calls
+- **Run id / Slurm job id:** `9071639_aat_mcp_optimized`
+- **Node / Slurm state:** `ins083`, `COMPLETED 0:0`, elapsed `00:19:07`
+- **W&B:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/ifz8xfhm
+- **Primary artifacts:** live artifacts in the shared Insomnia checkout:
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/meta.json`
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/harness.log`
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/vllm.log`
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/latencies.jsonl`
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/_batch_latencies.jsonl`
+  - `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized/replay/replay_meta.json`
+  - `benchmarks/cell_C_mcp_optimized/config.json`, `benchmarks/cell_C_mcp_optimized/summary.json`
+  - `results/metrics/scenario_scores.jsonl`
+  - `results/judge_logs/9071639_aat_mcp_optimized/SGT-009_run{01,02,03}_judge_log.json`
+  - `results/judge_logs/9071639_aat_mcp_optimized/SGT-010_run{01,02,03}_judge_log.json`
+  - profiler trace directory `profiling/traces/9071639_aat_mcp_optimized_torch`
+  - W&B profiling artifact `profiling-ifz8xfhm`
+- **Per-trial latencies:** `60.24`, `10.99`, `7.81`, `6.87`, `6.67`, `6.99` s
+  with one-time `mcp_setup_seconds=39.07`
+- **Comparison anchor:** Cell B baseline job `8979314_aat_mcp_baseline`
+  (`run_status: success`, 6 / 6, p50 `12.91` s, mean `13.38` s)
+- **Judge result:** Maverick-17B six-dimension judge scored all six Cell C
+  trials with `score_6d` values `0.1667`, `0.1667`, `0.0`, `0.1667`,
+  `0.1667`, `0.3333`; mean `0.1667`, p50 `0.1667`, pass rate `0 / 6`
+  at threshold `0.6`
+
+What this proves:
+
+- Cell C now runs end-to-end on the canonical multi-scenario Experiment 1 slice:
+  `run_status: "success"`, `6 / 6` complete, `tool_error_count=0`, and
+  `tool_call_count_total=18`
+- the optimized batch runner keeps the four Smart Grid MCP servers alive across
+  all six trials and writes canonical per-trial JSON, `_batch_latencies.jsonl`,
+  `latencies.jsonl`, `summary.json`, and `meta.json`
+- vLLM prefix caching was active in the serving layer; `vllm.log` reported
+  prefix-cache hit rates rising through the run
+- replay/profiling completed after the benchmark run:
+  `replay_scenarios` passed both unique scenarios and the torch profiler trace
+  was linked to W&B
+- post-hoc LLM-as-judge scoring completed for all six per-trial trajectories
+  and emitted per-trial audit logs
+- Notebook 02 can now compute the first real `(B - C)` MCP-overhead headline.
+  Using the aggregate summary fields, Cell C p50 was `6.99` s versus Cell B
+  p50 `12.91` s (about `5.92` s faster at p50). The Cell C mean was slower
+  (`16.60` s versus `13.38` s) because the first optimized trial paid a large
+  cold-start / first-prefix cost; excluding that first Cell C trial gives a
+  steady-state mean near `7.87` s.
+
+Caveats / follow-ups:
+
+- job `9071621_aat_mcp_optimized` is negative evidence for
+  `AAT_PARALLEL_TOOL_CALLS=true`: it reached vLLM, MCP bootstrap, model
+  requests, and tool execution, but all six trials failed with
+  `This model only supports single tool-calls at once!`
+- the canonical Cell C config should keep `AAT_PARALLEL_TOOL_CALLS=false` for
+  the Insomnia vLLM / Llama-3.1-8B-Instruct path unless a future model/parser
+  combination proves true parallel tool-call support
+- `ins082` should stay excluded on future Insomnia submits; the earlier
+  `9071602` attempt failed before vLLM because the node could not expose a GPU
+  to `nvidia-smi`
+- the execution path is clean, but the judge result is poor: `0 / 6`
+  trajectories pass the current `score_6d >= 0.6` threshold, mainly because
+  the agent failed to retrieve/ground the required evidence before answering
+- this is the first successful Cell C capture, not the final paper-grade
+  5-trial run set; final reruns should use the same scenario/model surface as
+  the final A/B captures
 
 ## 2026-04-25/26 — Agent-as-Tool Cell A/B and upstream parity smoke proofs (`#104`, unblocks `#25`)
 
@@ -109,7 +256,8 @@ Caveats / follow-ups:
 - Cell A was proven on an earlier branch tip before the final Cell B runtime
   hardening; the code-path changes after that point were MCP/vLLM compatibility
   fixes and did not change the direct tool surface
-- Cell C still waits on the optimized MCP stack (`#29`, `#30`, `#31`, `#33`)
+- Cell C is now proven separately in the Apr 30 entry above; at the time of
+  these smoke proofs it was still pending optimized MCP readiness.
 - the upstream parity proof uses AOB's `OpenAIAgentRunner` Python API rather
   than the `openai-agent` CLI because the CLI cannot pass Smart Grid
   `server_paths`; the wrapper keeps AOB's agent loop and patches only the MCP
@@ -301,7 +449,8 @@ Three fixes to the team's instrumentation infrastructure that the first run atte
 
 ### Caveats / follow-ups
 
-- Cell C (MCP optimized) is gated on `#31` (batched tool-call scheduling) and Aaron's `#29` (INT8) / `#30` (KV-cache, PR `#129`); not part of this capture.
+- Cell C (MCP optimized) was not part of this Apr 26 A/B capture; the Apr 30
+  Cell C entry above supersedes the old optimized-lane gate.
 - `profiling/traces/` is gitignored. Paths above point at the live Insomnia checkout. The WandB Artifact uploads are the portable copies.
 - Cell A's torch-profiler **replay pass** got `pass=1 fail=1`: `multi_01_end_to_end_fault_response` hit `ContextWindowExceededError` (8193 vs 8192 tokens). Non-fatal — the main scenario loop's 6/6 is the canonical capture; the replay only feeds the second torch-profiler trace. Bumping `MAX_MODEL_LEN` to 16384 in the configs is a follow-up tweak, not in this PR's scope.
 - Run was executed from a personal scratch clone at `/insomnia001/depts/edu/users/af3623/exp1-clone/` because the team-shared checkout's `.git/objects` had perm issues for non-`wax1` writers. Personal clone symlinks `models/` and `.venv-insomnia/` from the shared checkout for storage efficiency.

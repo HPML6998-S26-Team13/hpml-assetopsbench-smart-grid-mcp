@@ -364,7 +364,7 @@ def score_trajectory(
 
     Appends a JSONL record to out_path.  If log_dir is given, also writes a
     full judge audit log (prompt + raw Maverick response + parsed dims) to
-    ``log_dir/<run_name>/<scenario_id>_judge_log.json``.
+    ``log_dir/<run_name>/<scenario_id>_runNN_judge_log.json``.
     """
     traj_data = json.loads(trajectory_path.read_text(encoding="utf-8"))
     scenario_data = json.loads(scenario_path.read_text(encoding="utf-8"))
@@ -462,12 +462,14 @@ def score_trajectory(
     if log_dir is not None:
         run_log_dir = log_dir / run_name
         run_log_dir.mkdir(parents=True, exist_ok=True)
-        log_file = run_log_dir / f"{scenario_id}_judge_log.json"
+        trial_index = record["trial_index"]
+        log_file = run_log_dir / f"{scenario_id}_run{trial_index:02d}_judge_log.json"
         judge_log = {
             "schema_version": "v1",
             "scored_at": scored_at,
             "run_name": run_name,
             "scenario_id": scenario_id,
+            "trial_index": trial_index,
             "judge_model": judge_model,
             "trajectory_file": _rel(trajectory_path),
             "scenario_file": _rel(scenario_path),
@@ -555,7 +557,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "If set, save a full judge audit log (prompt + raw response + dims) to "
-            "LOG_DIR/<run_name>/<scenario_id>_judge_log.json"
+            "LOG_DIR/<run_name>/<scenario_id>_runNN_judge_log.json"
         ),
     )
     return p

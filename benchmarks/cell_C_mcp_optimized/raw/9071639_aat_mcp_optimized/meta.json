@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-04-30T04:20:08.279932+00:00",
+  "run_name": "9071639_aat_mcp_optimized",
+  "benchmark_config_path": "configs/aat_mcp_optimized_singletool_runtime.env",
+  "benchmark_summary_path": "benchmarks/cell_C_mcp_optimized/summary.json",
+  "experiment_cell": "C",
+  "orchestration_mode": "agent_as_tool",
+  "mcp_mode": "optimized",
+  "model_id": "openai/Llama-3.1-8B-Instruct",
+  "experiment_family": "exp1_mcp_overhead",
+  "vllm_extra_args": "",
+  "vllm_extra_args_list": [],
+  "finished_at": "2026-04-30T04:36:15.207330+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "mcp_setup_seconds": 39.068636655807495,
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/ifz8xfhm",
+  "profiling_dir": "profiling/traces/9071639_aat_mcp_optimized_torch",
+  "profiling_artifact": "profiling-ifz8xfhm"
+}

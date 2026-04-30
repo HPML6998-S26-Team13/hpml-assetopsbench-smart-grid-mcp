@@ -1,5 +1,53 @@
 # Changelog
 
+## 2026-04-30
+
+### Validated
+
+- Recorded the first successful exploratory Cell D optimized-serving capture:
+  Slurm job `9073472_aat_mcp_model_optimized` on Insomnia `ins084`, `6 / 6`
+  success, W&B `pmwzatie`, replay `2 / 2`, profiler artifact
+  `profiling-pmwzatie`, and canonical artifacts under
+  `benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized`. The vLLM log proves
+  compressed-tensors INT8 loading, BF16 execution, fp8 KV cache, prefix
+  caching, and the compressed-tensors Cutlass INT8 kernel.
+- Generated six-dimension Maverick-17B judge scores for Cell D job `9073472`:
+  six per-trial rows in `results/metrics/scenario_scores.jsonl`, mean
+  `score_6d=0.167`, p50 `0.0`, and pass rate `1 / 6` at threshold `0.6`.
+- Recorded the first successful Experiment 1 Cell C optimized capture:
+  Slurm job `9071639_aat_mcp_optimized` on Insomnia `ins083`, `6 / 6`
+  success, W&B `ifz8xfhm`, replay `2 / 2`, profiler artifact
+  `profiling-ifz8xfhm`, and canonical artifacts under
+  `benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized`.
+  This gives Notebook 02 a first real `(B-C)` MCP-overhead comparison against
+  Cell B job `8979314_aat_mcp_baseline`.
+- Generated six-dimension Maverick-17B judge scores for Cell C job `9071639`:
+  six per-trial rows in `results/metrics/scenario_scores.jsonl`, mean
+  `score_6d=0.167`, p50 `0.167`, and pass rate `0 / 6` at threshold `0.6`.
+
+### Changed
+
+- `configs/aat_mcp_optimized.env` now keeps
+  `AAT_PARALLEL_TOOL_CALLS=false` for the canonical Insomnia vLLM /
+  Llama-3.1-8B-Instruct path. Job `9071621` reached model/tool execution but
+  failed all six trials because vLLM rejected parallel tool-call requests; the
+  successful Cell C shape preserves batch/connection reuse plus prefix caching
+  with sequential tool-call turns.
+- `scripts/judge_trajectory.py` now writes audit logs with trial-indexed
+  filenames (`<scenario_id>_runNN_judge_log.json`) so multi-trial scoring no
+  longer overwrites earlier trials for the same scenario.
+- Added exploratory Cell D config `configs/aat_mcp_model_optimized.env` for
+  AaT optimized MCP plus compressed-tensors INT8, BF16 dtype, fp8 KV cache, and
+  prefix caching. `scripts/run_experiment.sh` now exposes `VLLM_DTYPE` so this
+  does not rely on duplicate `--dtype` flags; existing cells still default to
+  `float16`.
+- Fixed the AaT torch-profiler replay environment so model-variant cells replay
+  against the same `MODEL_ID` and MCP bootstrap settings as the parent
+  benchmark run instead of falling back to the default FP16 served model.
+- Fixed run metadata export for model-optimized cells so `config.json` and
+  per-run `meta.json` record `VLLM_DTYPE` and `EXTRA_VLLM_ARGS` from sourced
+  configs instead of falling back to Python subprocess defaults.
+
 ## 2026-04-29
 
 ### Fixed (PR #149 review v2)
