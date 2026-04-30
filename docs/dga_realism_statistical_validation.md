@@ -104,39 +104,34 @@ real-world scenarios?*
 
 ### 2.4 Three-way fault-table divergence (added 2026-04-28; resolved 2026-04-29)
 
-After PR #148 was opened, a copy of IEC 60599:2022 (4th ed., publication
-66491) was obtained for personal-research review. Table 1 of the standard
-was extracted and compared row-by-row against the two team-repo encodings.
-Ask Alex for source-of-record details if you need to verify a specific
-range; the standard is paywalled and not redistributable.
+PR #149 encodes Table 1 1:1 in the JSON `fault_table` and the FMSR server's
+`_rogers_ratio()` — those are the canonical reconciliation contract; § 13
+Appendix A provides citation, encoding conventions, and a paraphrased note
+summary.
 
-> **Status: RESOLVED in this PR (2b).** Both Table B (JSON `fault_table`)
+> **Status: RESOLVED in PR #149 (2b).** Both Table B (JSON `fault_table`)
 > and Table C (server `_rogers_ratio`) were rewritten to match IEC 60599:2022
-> Table 1 directly. `representative_gas_profiles.profiles` were regenerated
-> to round-trip via the new server table. The divergence summary below is
-> retained as historical context; the current state is **B = C = A**.
+> Table 1 directly in PR #149. `representative_gas_profiles.profiles` were
+> regenerated to round-trip via the new server table. The divergence summary
+> below is retained as historical context; the current state is **B = C = A**.
 
 **Pre-fix state — three different DGA-classification tables.**
 
-| Table | Where | Pre-fix status | Post-fix status (this PR) |
+| Table | Where | Pre-fix status | Post-fix status (PR #149) |
 |-------|-------|----------------|---------------------------|
-| **A — IEC 60599:2022 Table 1** | the standard, p.13 | ground truth | unchanged — ground truth |
+| **A — IEC 60599:2022 Table 1** | the standard, Table 1 | ground truth | unchanged — ground truth |
 | **B — JSON `fault_table`** | `data/knowledge/transformer_standards.json` § `iec_60599.rogers_ratio_method.fault_table` | claimed IEC; diverged on every electrical-discharge row | rewritten to match A |
 | **C — FMSR server `_rogers_ratio()`** | `mcp_servers/fmsr_server/server.py:65-90` | a third version; the one that ran at agent-call time | rewritten to match A; profiles round-trip |
 
 **Worst divergences (B vs A):**
 
-- **D1 R1**: JSON's range and IEC's range do not overlap — JSON's range
-  ends where IEC's range begins.
-- **D1 R3**: JSON and IEC sit on opposite half-lines.
-- **D2 R2**: JSON and IEC do not overlap; the bounds differ by an order
-  of magnitude.
-- **T2/T3 R3 boundary**: JSON and IEC place the dividing value into
-  different fault classes.
+- **D1 R1**: JSON's pre-fix encoding `[0, 0.1]` did not overlap IEC's range — JSON's range ended where IEC's range began.
+- **D1 R3**: JSON's pre-fix `[0, 1.0]` and IEC sat on opposite half-lines.
+- **D2 R2**: JSON's pre-fix `[3.0, ∞)` did not overlap IEC; the bounds differed by an order of magnitude.
+- **T2/T3 R3 boundary**: JSON and IEC placed the dividing value into different fault classes.
 
-(Exact numeric thresholds are in IEC 60599:2022 Table 1. Consult the
-licensed standard or Alex's working notes for the bounds; we deliberately
-omit them here to keep this team-visible doc free of paywalled content.)
+(Canonical encoding lives in PR #149's `fault_table` JSON; § 13 Appendix A
+gives citation + encoding conventions.)
 
 **Server's own divergence note (`server_rogers_table_note`):** Tanisha
 already documents that the server's Rogers table diverges from IEC on PD,
@@ -194,11 +189,10 @@ re-run; report v1 will use the fixed table as ground truth.
   classifier in FMSR.
 
 **Companion analysis** (full row-by-row diff matrix, three-way pair
-agreement, per-row contradiction descriptions): held by Alex outside this
-repo because it cites the paywalled IEC text. Used to scope the 2026-04-29
-table-fix PR. The team-visible substitutes are this § 2.4 summary plus
-Appendix B's three-way diff matrix (now historical post-fix). Ping Alex
-if you need to verify a specific bound for L3 v1 anomaly investigation.
+agreement, per-row contradiction descriptions): see Appendix B (§ 14)
+for the historical pre-fix divergence matrix preserved as
+paper-methodology evidence. Canonical post-fix bounds live in PR #149's
+JSON `fault_table` encoding.
 
 ### 2.5 Free-PDF acquisition status (Apr 28 search)
 
@@ -529,9 +523,18 @@ Questions to follow up on, ordered by leverage:
   L3 as "directional, not significance-tested" until n grows. Decision:
   prefer (a) — extend `make_dga_records()` to emit 30 days × 20
   transformers = 600 samples.
-- **Edition mismatch.** If `transformer_standards.json` was sourced from
-  IEC 60599 3rd ed. (2015), but we cite 4th ed. (2022) in the paper, that's
-  a defendable but noteworthy gap. Pin the edition explicitly.
+- **Edition mismatch.** Resolved in PR #149 — `meta.sources[0].edition`
+  pinned to `"4th"` and `publication_id: 66491` added.
+- **Stray gassing under-representation (per IEC 60599:2022 Note 4 on
+  Table 1).** Real-world DGA datasets contain a small fraction of
+  "fake-PD" samples (PD-like ratio signature but no actual fault) caused
+  by stray oil gassing; these are tagged `Normal` (or as stray gassing),
+  not PD. Our synthesis currently does not emit any. If v1 chi² shows
+  synthetic PD over-represented relative to real (or, equivalently, real
+  Normal-class ratio mass at PD-like ratios is not matched in synthetic),
+  add ~3-5% `Normal_StrayGassing` samples with PD-like ratios but a
+  `Normal` ground-truth label. Owner: **Akshat** (decide based on v1
+  results; not blocking).
 - **Label-encoding mismatch across datasets.** IEEE DataPort uses integer
   fault codes; IEC 60599 uses alpha codes (PD/T1/T2/T3/D1/D2). Adapter
   function `_normalize_real_columns()` handles column names but not yet
@@ -670,55 +673,81 @@ mkdir -p data/external
 
 ### 12.5 Where to ask for help
 
-- **Alex** for PR #148 / scaffolding-side questions, the IEC table
-  comparison, edition pinning, or the row-by-row working notes that don't
-  live in this repo.
+- **Alex** for PR #148/#149 / scaffolding-side questions, AOB fork
+  refactor coordination, or anything around how L3 hooks into the
+  PS B promotion path.
 - **Aaron (afan2g, PR #147)** for the scenario-generator path and how L3
   should hook into its promotion script.
-- **Dhaval** for IEC standard interpretation, IBM-internal datasets, or
-  whether IBM AssetOpsBench has an authoritative reference dataset.
-- **Tanisha** for `transformer_standards.json` provenance — she authored
-  it and will know what source the encoded ratio bounds came from.
+- **Dhaval** for IEC standard interpretation edge cases, IBM-internal
+  datasets, or whether IBM AssetOpsBench has an authoritative
+  reference dataset.
+- **Tanisha** for `transformer_standards.json` historical provenance
+  (she authored it pre-PR #149 reconciliation), and for NeurIPS / final
+  paper framing.
 
 ---
 
-## 13. Appendix A — Canonical reference for fault-table reconciliation
+## 13. Appendix A — IEC 60599:2022 Table 1 reference (citation + encoding pointer)
 
-The canonical fault-classification table is **IEC 60599:2022 Table 1**
-(publication 66491, p. 13). The standard is paywalled; do not reproduce
-its table contents verbatim in this repo.
-
-**To reconcile Tables B and C with the standard:**
-
-1. Acquire IEC 60599:2022 through Columbia ILL or an IBM-licensed copy
-   (see § 12.3). Do not commit the PDF.
-2. Read Table 1 directly from the standard. The table maps six
-   electrical-discharge / thermal fault cases (`PD`, `D1`, `D2`, `T1`,
-   `T2`, `T3`) to ranges of the three Rogers Ratios; cells labelled
-   `NS` mean "non-significant whatever the value" and translate to
-   "any" in code.
-3. Cross-reference the four Notes accompanying Table 1. Two of them
-   matter for our scope: (a) the standard documents stricter PD
-   thresholds for instrument transformers and bushings (we don't
-   model those, but should mention the limitation in the paper), and
-   (b) stray oil gassing is called out as producing PD-like signatures
-   that are not real faults (worth modeling as a small false-PD
-   fraction in synthesis).
-4. Apply the three remediation strategies in § 2.4 in order. The
-   diff-pattern table in Appendix B identifies which rows are most
-   urgent to fix without restating the standard's content.
+The canonical fault-classification table for this codebase is **IEC 60599:2022
+Table 1**. PR #149 encodes the table 1:1 in
+`data/knowledge/transformer_standards.json` § `iec_60599.rogers_ratio_method.fault_table`
+and `mcp_servers/fmsr_server/server.py:_rogers_ratio()`. Both are the
+operational source of truth for the codebase; consult them for the exact
+numeric bounds, NS handling, all-zero guards, and match order.
 
 **Internal R-numbering (JSON convention):** `R1 = CH4/H2`,
-`R2 = C2H2/C2H4`, `R3 = C2H4/C2H6`. The IEC standard uses different
-column ordering; consult § 1 of this doc for the conversion when
-reading the standard against our code.
+`R2 = C2H2/C2H4`, `R3 = C2H4/C2H6`. The IEC standard uses a different
+column ordering; the JSON encoding's mapping is the conversion of record.
+
+**Encoding choices in our code (not in the standard):**
+- `NS` ("non-significant") is encoded as `(0, None)` in range tuples.
+- Bounds use the inclusive-low / exclusive-high convention to avoid
+  ambiguous tie-breaking on boundary values.
+- Match order is most-severe first (D2, D1, T3, T2, T1, PD, then N
+  fall-through), so first-match-wins resolves IEC's overlapping ranges
+  toward the more severe code.
+- All-zero gas readings would otherwise spuriously match PD (R1 and R3
+  ranges include 0); the server handles this with an explicit guard
+  returning N.
+
+**Notes accompanying Table 1 in the standard** (paraphrased for context;
+consult the standard directly for canonical text):
+
+1. **Country/ratio variations.** Some countries use different ratio
+   definitions or limits. Our codebase follows the primary IEC table.
+2. **Calculation conditions.** Bookkeeping detail in IEC § 6.1; not
+   actionable for our classifier.
+3. **Equipment-specific PD thresholds.** Instrument transformers and
+   bushings carry stricter PD thresholds than power transformers. Our
+   synthesis is power-transformer-only (Annex A.1 scope); the paper
+   should explicitly state this scope limitation.
+4. **Stray gassing.** Stray oil gassing produces PD-like ratio
+   signatures even in fault-free transformers, so real datasets contain
+   a small fraction of "fake-PD" Normal samples. **Synthesis-side
+   enhancement available**: emit ~3-5% of synthetic samples with PD-like
+   ratios but a `fault_label = "Normal_StrayGassing"` tag. Trigger
+   condition (per § 9): only if v1 chi² shows synthetic PD
+   over-represented relative to real, since adding more `Normal`-tagged
+   PD-like samples does not raise synthetic PD count. Owner: **Akshat**
+   (decide based on v1 results; not blocking).
+
+**Equipment scope:** the standard covers seven equipment classes; we
+use Annex A.1 power transformers only. Final paper should explicitly
+scope to this class.
 
 **Citation for the final paper:**
+
 - IEC 60599:2022, *Mineral oil-filled electrical equipment in service —
   Guidance on the interpretation of dissolved and free gases analysis*,
   Edition 4.0, International Electrotechnical Commission, Geneva,
   2022-05.
 - IEC publication ID 66491. ICS 17.220.99 / 29.040.10 / 29.180. TC 10.
+
+**Acquisition for paper bibliography**: an officially licensed copy will
+be obtained before paper submission — purchase via webstore.iec.ch
+(~CHF 364), or via Columbia ILL if it lands first. The PDF is not
+committed to either repo regardless of source.
 
 ---
 
@@ -771,9 +800,7 @@ directly.
 - **T1**: B↔A contradicts on R2; C↔A contradicts on R1 and R3.
 
 **Specific contradictions worth flagging in code comments when fixing**
-(non-numeric phrasing — pull the canonical bounds from IEC 60599:2022
-Table 1 directly, or from Alex's working notes; do not transcribe them
-into this team-visible doc):
+(canonical bounds in PR #149's JSON `fault_table` encoding):
 
 - **D1 R1**: JSON's range and IEC's range do not overlap; JSON's range ends
   where IEC's range begins. Possible column transposition during the
