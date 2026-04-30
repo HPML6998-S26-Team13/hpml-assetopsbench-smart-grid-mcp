@@ -130,10 +130,11 @@ These fields should be written into `wandb.summary` once the run completes.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `wall_clock_seconds_total` | number | yes | Total runtime for the whole run |
+| `wall_clock_seconds_total` | number | yes | Total runtime for the whole run; for optimized AaT batch runs this includes one-time MCP setup once plus per-trial latencies |
 | `latency_seconds_mean` | number | yes | Mean end-to-end latency per scenario-trial |
 | `latency_seconds_p50` | number | yes | Median |
 | `latency_seconds_p95` | number | yes | Tail latency |
+| `mcp_setup_seconds` | number | recommended for optimized AaT batch runs | One-time MCP connection setup cost kept separate from per-trial latency rows and folded into `wall_clock_seconds_total` once |
 | `tokens_per_second_mean` | number | recommended | For inference / throughput comparisons |
 
 ### Token usage

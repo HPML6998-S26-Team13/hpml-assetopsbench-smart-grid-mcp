@@ -112,7 +112,7 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "direct = Cell A in-process callables; "
             "baseline = Cell B MCP stdio; "
-            "optimized = Cell C MCP stdio with parallel tool calls enabled"
+            "optimized = Cell C MCP stdio (parallel tool calls configured separately)"
         ),
     )
     p.add_argument(
@@ -432,9 +432,9 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
                 trial_ok = False
                 try:
                     result = await runner.run(prompt)
-                    # run_only_duration: excludes file write; used for
-                    # runner_meta.duration_seconds so it stays comparable to the
-                    # single-trial path's _serialize_run_result call.
+                    # run_only_duration measures only runner.run(prompt).
+                    # It excludes file write and later shared-resource cleanup,
+                    # so batch runner_meta.duration_seconds is run-only time.
                     run_only_duration = time.time() - start
                     output = _serialize_run_result(
                         args, prompt, result, run_only_duration, scenario_file=sf_rel

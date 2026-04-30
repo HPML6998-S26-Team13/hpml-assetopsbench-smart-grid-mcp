@@ -1109,11 +1109,24 @@ from datetime import datetime, timezone
 summary_path, config_path, meta_path, latency_path, run_dir, passed, failed, total = sys.argv[1:]
 config = json.loads(pathlib.Path(config_path).read_text(encoding="utf-8"))
 meta = json.loads(pathlib.Path(meta_path).read_text(encoding="utf-8"))
-latencies = [
-    json.loads(line)["latency_seconds"]
+latency_records = [
+    json.loads(line)
     for line in pathlib.Path(latency_path).read_text(encoding="utf-8").splitlines()
     if line.strip()
 ]
+latencies = [
+    record["latency_seconds"]
+    for record in latency_records
+    if isinstance(record.get("latency_seconds"), (int, float))
+]
+mcp_setup_values = [
+    record["mcp_setup_seconds"]
+    for record in latency_records
+    if isinstance(record.get("mcp_setup_seconds"), (int, float))
+    and record["mcp_setup_seconds"] > 0
+]
+mcp_setup_seconds = max(mcp_setup_values) if mcp_setup_values else None
+wall_clock_seconds_total = sum(latencies) + (mcp_setup_seconds or 0)
 
 tool_call_total = 0
 tool_call_trials = 0
@@ -1183,10 +1196,11 @@ summary = {
     "scenarios_completed": int(passed),
     "success_rate": (int(passed) / int(total)) if int(total) else 0.0,
     "failure_count": int(failed),
-    "wall_clock_seconds_total": sum(latencies),
+    "wall_clock_seconds_total": wall_clock_seconds_total,
     "latency_seconds_mean": statistics.mean(latencies) if latencies else None,
     "latency_seconds_p50": percentile(latencies, 50),
     "latency_seconds_p95": percentile(latencies, 95),
+    "mcp_setup_seconds": mcp_setup_seconds,
     "tokens_per_second_mean": None,
     "input_tokens_total": None,
     "output_tokens_total": None,
@@ -1209,6 +1223,8 @@ meta["pass"] = int(passed)
 meta["fail"] = int(failed)
 meta["total_runs"] = int(total)
 meta["run_status"] = summary["run_status"]
+if summary["mcp_setup_seconds"] is not None:
+    meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
 
