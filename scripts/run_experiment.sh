@@ -1223,8 +1223,7 @@ meta["pass"] = int(passed)
 meta["fail"] = int(failed)
 meta["total_runs"] = int(total)
 meta["run_status"] = summary["run_status"]
-if summary["mcp_setup_seconds"] is not None:
-    meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
+meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
 

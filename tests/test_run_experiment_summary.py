@@ -95,3 +95,50 @@ def test_summary_includes_batch_mcp_setup_once(tmp_path):
     assert summary["latency_seconds_p95"] == 3.0
     assert summary["mcp_setup_seconds"] == 5.0
     assert meta["mcp_setup_seconds"] == 5.0
+
+
+def test_summary_records_null_mcp_setup_when_absent(tmp_path):
+    """Non-batch summaries keep the setup field present with a null value."""
+    repo_root = Path(__file__).resolve().parent.parent
+    summary_py = _extract_summary_python(repo_root)
+
+    summary_path = tmp_path / "summary.json"
+    config_path = tmp_path / "config.json"
+    meta_path = tmp_path / "meta.json"
+    latency_path = tmp_path / "latencies.jsonl"
+    run_dir = tmp_path / "raw" / "test-run"
+    run_dir.mkdir(parents=True)
+
+    config_path.write_text(
+        json.dumps(_base_config(summary_path), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    meta_path.write_text(json.dumps({"started_at": "now"}) + "\n", encoding="utf-8")
+    latency_path.write_text(
+        json.dumps({"latency_seconds": 2.0}) + "\n",
+        encoding="utf-8",
+    )
+
+    subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            summary_py,
+            str(summary_path),
+            str(config_path),
+            str(meta_path),
+            str(latency_path),
+            str(run_dir),
+            "1",
+            "0",
+            "1",
+        ],
+        check=True,
+    )
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+
+    assert summary["wall_clock_seconds_total"] == 2.0
+    assert summary["mcp_setup_seconds"] is None
+    assert meta["mcp_setup_seconds"] is None
