@@ -326,8 +326,10 @@ These should be described as follow-ons, not core conditions:
 
 - `Y + Self-Ask`
 - `Z + Self-Ask`
-- if time allows, `Y + Self-Ask + MCP optimized`
-- then, if still justified, `Z + Self-Ask + MCP optimized`
+- `Y + Self-Ask + missing-evidence detection guard`
+- `Z + Self-Ask + missing-evidence detection guard`
+- if time allows after those rows exist, a bounded missing-evidence
+  retry/replan recovery rung on the same two family lanes
 
 Draft paragraph:
 
@@ -338,6 +340,11 @@ is easier to inspect and reason about operationally. That makes PE-family
 mitigations scientifically useful: they are not a retreat from the benchmark
 story, but a way to ask whether a more enterprise-aligned orchestration can
 recover some of the quality gap through bounded reasoning and systems fixes.
+The mitigation ladder should not be presented as a new full experiment grid.
+The clean paper framing is baseline PE-family behavior, then a truthfulness
+guard that detects unsupported finalization, then an optional recovery rung
+that gives the runner one bounded chance to repair missing evidence before
+final answer or work-order creation.
 
 ### 5. Evaluation and Analysis Plan
 
@@ -462,6 +469,18 @@ PE-family artifacts. It cannot yet say that any one mitigation closes the gap to
 Agent-as-Tool or improves judge quality on the final benchmark set. The right
 structure is to show the recurring pattern first, then show only the bounded
 before/after reruns that the repo can actually support.
+
+Draft paragraph:
+
+The missing-evidence guard is best interpreted as an accounting and safety
+mitigation rather than a capability improvement by itself. It can reduce nominal
+success rate because unsupported confident completions become explicit failures.
+That is still valuable: production-oriented reporting should not count a
+maintenance recommendation as successful when the required evidence was absent.
+If time permits, the natural next rung is a recovery guard that reuses the same
+detector to retry the missing evidence step or replan the dependent suffix before
+finalization. We evaluate this as a ladder on `Y + Self-Ask` and `Z + Self-Ask`,
+not as every mitigation crossed with every cell.
 
 ### 7. Reproducibility and Limitations
 
@@ -591,6 +610,8 @@ analysis preliminary.
 - the paper lane should treat AaT vs vanilla PE as the honest core comparison
 - PE-family mitigations exist, but they should remain follow-on evidence unless
   they earn central status through clean artifacts
+- mitigation-ladder testing should use `Y + Self-Ask` and `Z + Self-Ask` first;
+  avoid a full cell-by-mitigation permutation grid
 
 ## Landed sibling artifact inputs
 

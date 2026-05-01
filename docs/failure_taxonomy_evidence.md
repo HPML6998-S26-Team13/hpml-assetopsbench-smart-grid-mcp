@@ -1,6 +1,6 @@
 # Failure Taxonomy + Evidence Table for `#35`
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-01*
 *Owner: Alex Xin (lane), Akshat Bhandari (Round 1 reassignment for evidence
 fill-in)*
 *Issue: `#35`*
@@ -81,7 +81,7 @@ Current symptom counts:
 
 | Symptom | Rows | Candidate mitigation |
 |---|---:|---|
-| missing-evidence final answer | 18 | block final answers and work orders when required evidence retrieval fails or returns empty |
+| missing-evidence final answer | 18 | first block unsafe final answers / work orders with `missing_evidence_final_answer_guard`; then test bounded retry / suffix replan as `missing_evidence_retry_replan_guard` |
 | tool routing or argument-contract failure | 7 | validate tool arguments and aliases before calls; hard-fail bad routing as explicit step errors |
 | tool-call sequencing failure | 6 | require evidence acquisition before inference, risk estimation, or work-order creation |
 | under-constrained fault/risk adjudication | 4 | add an explicit adjudication step that cites the deciding tool evidence |
@@ -276,6 +276,13 @@ the exported table actually supports that count on comparable artifacts.
 The goal is not a giant spreadsheet. The goal is a defensible set of
 recurring failure patterns we can cite in the paper and act on in code.
 
+For mitigation planning, keep the repeated taxonomy pass separate from the
+mitigation ladder. New full reruns will likely add more classified failures, but
+the ladder should not become a full permutation grid. The first two family lanes
+are `Y + Self-Ask` and `Z + Self-Ask`; the first rung detects unsafe finalization
+after missing evidence, the second rung should try bounded evidence repair, and
+adjudication should follow only once deciding evidence exists.
+
 ## Artifact readiness ledger
 
 Track successful readiness proofs separately from classified failures so the
@@ -309,5 +316,10 @@ The artifact gap that still bounds this lane:
 2. use `results/figures/failure_taxonomy_counts.svg` and
    `results/figures/failure_stage_cell_heatmap.svg` for the first #64 figure
    pass
-3. implement or explicitly defer the selected `#65/#66` mitigation lane:
-   `missing_evidence_final_answer_guard`
+3. run and judge the guarded `Y + Self-Ask` and `Z + Self-Ask` reruns for
+   `missing_evidence_final_answer_guard`, then populate the #66 before/after
+   table
+4. refresh `failure_evidence_table.csv` only if new judged rows change the
+   taxonomy or paper examples
+5. if the detection-only rerun shows useful signal, promote the next rung:
+   `missing_evidence_retry_replan_guard`

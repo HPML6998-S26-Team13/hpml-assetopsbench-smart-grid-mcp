@@ -87,10 +87,11 @@ Generated figures:
 - `results/figures/mitigation_priority_table.svg`
 
 `mitigation_run_inventory.csv` is a planning / control table, not an outcome
-claim. It selects `missing_evidence_final_answer_guard` as the first lane and
-keeps the other recurring classes as queued candidates. `after_run` and
-`after_status` intentionally remain empty / `pending_rerun` until a real
-matched rerun exists.
+claim. It now tracks five lanes: the implemented
+`missing_evidence_final_answer_guard` detector pending guarded reruns, the
+dependent `missing_evidence_retry_replan_guard` recovery candidate pending
+implementation, and three lower-priority candidates. Completed after-run claims
+stay absent until matched reruns exist.
 
 ## May 1 mitigation implementation status
 
@@ -110,6 +111,37 @@ The first selected lane is now implemented as a deterministic benchmark guard:
 This clears the implementation side of `#65`; it does **not** clear `#66`
 until one of those configs produces matched after-run artifacts and the
 comparison table is populated.
+
+## May 1 mitigation ladder policy
+
+Run mitigation as a **ladder**, not a full Cartesian product of cells and
+guardrails. The first family lanes are:
+
+| Family lane | Baseline anchor | Why this lane |
+|---|---|---|
+| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | PE-family runner with the clarification mitigation enabled, but without verifier recovery |
+| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | best current PE-family quality lane, already has verifier retry/replan substrate |
+
+The ladder should advance in this order:
+
+| Rung | Stable name | Relationship to earlier rung | What it proves |
+|---:|---|---|---|
+| 0 | baseline | no mitigation-ladder flag | current PE-family behavior |
+| 1 | `missing_evidence_final_answer_guard` | detection/accounting layer | how many clean-looking completions were unsafe because evidence was missing |
+| 2 | `missing_evidence_retry_replan_guard` | depends on the same detector from rung 1 | whether bounded retry / suffix replan can repair evidence gaps inside one trial |
+| 3 | `explicit_fault_risk_adjudication_step` | downstream of evidence repair | whether final fault/risk choice improves once the deciding evidence exists |
+
+Treat rung 1 as a truthfulness gate. In production, a system should not finalize
+a maintenance recommendation or create a work order when required evidence is
+missing. In the benchmark, that means future production-oriented / mitigation
+runs should keep the detection guard on once it is adopted. For historical
+comparison, the unguarded baseline rows stay visible; do not silently rewrite
+them into guarded baselines.
+
+Do **not** run every mitigation against every cell by default. Promote the next
+rung only when the prior rung has produced a measurable before/after row, or
+when the new rung answers a specific paper question that the prior rung cannot.
+This avoids a combinatorial grid while preserving attribution.
 
 ## Visuals scaffold
 
@@ -237,11 +269,12 @@ when it requires:
 - a rerun command line that diverges from the baseline in a way the
   diff-against-baseline cannot show in one line.
 
-## Worked card: rank-2 first promotion
+## Historical worked card: earlier rank-2 promotion
 
-The earlier concrete mitigation card under the rubric above. It remains useful
-as a narrower PE-family check, but the Apr 30 CSV export shows a broader
-missing-evidence guard is now the first candidate to evaluate.
+This earlier concrete mitigation card remains useful as a narrower PE-family
+example, but it is superseded for current planning by the May 1
+detector/recovery ladder. Current rank 2 is
+`missing_evidence_retry_replan_guard`, not the consistency-check card below.
 
 | Field | Value |
 |---|---|

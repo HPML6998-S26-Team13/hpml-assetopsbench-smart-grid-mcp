@@ -62,11 +62,10 @@ and `mitigation_before_after.csv`.
 
 The first mitigation planning table is also populated:
 `results/metrics/mitigation_run_inventory.csv`. This is a lane inventory, not
-a before/after result. It selects
-`missing_evidence_final_answer_guard` as the first implementation candidate
-because `missing-evidence final answer` is the largest recurring symptom in
-the current evidence table (`18 / 35` rows). `after_run` stays empty and
-`after_status=pending_rerun` until a matched rerun exists.
+a before/after result. It now records the implemented detector row as pending
+guarded Y+SA / Z+SA reruns, the retry/replan recovery row as a dependent
+candidate after those detector rows exist, and three lower-priority candidates.
+No completed after-run claim exists yet.
 
 ## May 1 guard and rerun scaffold status
 
@@ -93,6 +92,27 @@ The guard turns misleading clean completion into explicit mitigation metadata:
 and `hits`. A trial is marked unsuccessful only when missing/untrusted
 evidence is followed by a substantive final answer or work-order emission.
 
+### Mitigation ladder lanes
+
+Use two PE-family lanes for the mitigation ladder:
+
+| Family lane | Baseline run | Detection-only rerun | Recovery rerun |
+|---|---|---|---|
+| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | future `missing_evidence_retry_replan_guard` config |
+| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | future Verified PE recovery config using bounded retry / suffix replan |
+
+Interpretation:
+
+- The detection-only guard is an accounting / truthfulness gate. It can reduce
+  nominal `success_rate` because it turns unsupported confident completions into
+  explicit failures.
+- The recovery rung should reuse the same missing-evidence detector during
+  execution, then retry the evidence-producing step or replan only the dependent
+  suffix. It is still one benchmark trial; it does not increase `TRIALS`.
+- The adjudication rung should wait until evidence detection / repair is
+  measured, because fault/risk adjudication is meaningful only when the deciding
+  evidence exists.
+
 ## Before/after metric pack
 
 These metrics should be collected per cell and per rerun wave so each row of
@@ -110,6 +130,7 @@ These metrics should be collected per cell and per rerun wave so each row of
 - mean `failed_steps`
 - mean `tool_error_count`
 - recovery rate
+- `repair_attempt_count` and `repair_success_rate` for the recovery rung
 - mean `history_length`
 - mean `verification.replans_used` for `Z`
 
@@ -167,8 +188,10 @@ reruns against this lane have not yet landed.
 | Verified PE (smoke) | `8851966_verified_pe_mcp_baseline_smoke` | `8857843_verified_pe_mcp_baseline_smoke` | semantic failures masked by wrapper success accounting | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=93.59`, `latency_seconds_p95=139.64`, `tool_call_count_mean=10.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
 | AaT transport baseline (Cell A) | n/a (this is the baseline) | `8979314_aat_direct` | n/a | clean `6/6` canonical capture | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=73.13`, `latency_seconds_mean=12.19`, `latency_seconds_p50=11.47`, `latency_seconds_p95=18.57`, `tool_call_count_total=20`, `tool_call_count_mean=3.33`, `tool_error_count=0` | tokens / judge / MCP latency dims unpopulated on Cell A by definition |
 | AaT transport baseline (Cell B) | `8979314_aat_direct` | `8979314_aat_mcp_baseline` | clean Cell A (6/6) | clean Cell B (6/6) | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=80.30`, `latency_seconds_mean=13.38`, `latency_seconds_p50=12.91`, `latency_seconds_p95=16.65`, `tool_call_count_total=21`, `tool_call_count_mean=3.50`, `tool_error_count=0` | `mcp_latency_seconds_mean`, `mcp_latency_seconds_p95`, `tool_latency_seconds_mean`, token / judge dims still NULL on the capture |
-| Missing-evidence guard (PE + Self-Ask) | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
-| Missing-evidence guard (Verified PE + Self-Ask) | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
+| Detection guard (PE + Self-Ask) | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
+| Detection guard (Verified PE + Self-Ask) | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
+| Evidence repair retry/replan (PE + Self-Ask) | detection-guard after-run for `Y + Self-Ask` | future recovery rerun | depends on detection-only row | `candidate_next` | no implementation yet | implement bounded retry/replan guard only after the detection-only row exists |
+| Evidence repair retry/replan (Verified PE + Self-Ask) | detection-guard after-run for `Z + Self-Ask` | future recovery rerun | depends on detection-only row | `candidate_next` | no implementation yet | reuse Verified PE retry/suffix-replan substrate, but drive it from deterministic missing-evidence detection |
 
 Same job (`8979314`) produced both Cell A and Cell B captures, so the
 transport-overhead row pairs the two sides under one job ID. Observed
@@ -182,6 +205,22 @@ latency dims.
 When mitigation reruns against this AaT transport baseline land, append
 rows in the same shape and update the `comparison_ready` status when both
 sides have a complete metric pack.
+
+### Ladder comparison rule
+
+Do not compare all mitigation permutations. Each row should compare only one
+transition:
+
+| Compare | Question answered |
+|---|---|
+| baseline -> detection guard | how many unsafe clean completions were hidden by the baseline |
+| detection guard -> repair retry/replan | how many evidence gaps can become supported successes with bounded recovery |
+| repair retry/replan -> adjudication | whether final fault/risk choice improves once evidence is available |
+
+The detection guard should be treated as a de facto requirement for
+production-oriented reporting after it is adopted. Keep old unguarded baselines
+for comparability, but do not claim a future production-safe run unless the
+truthfulness gate is active or an equivalent evidence gate is present.
 
 ## Export contract by file
 
@@ -203,8 +242,10 @@ read these tables, not the raw run JSON.
 - one row per mitigation lane
 - required columns: `lane`, `mitigation_name`, `before_run`, `after_run`,
   `before_status`, `after_status`, `notes`
-- current status: populated with one selected lane and three queued candidate
-  lanes; no after-run claims yet
+- current status: populated with five lanes: one implemented detector pending
+  guarded reruns, one dependent retry/replan recovery candidate pending
+  implementation, and three lower-priority candidates; no completed after-run
+  claims yet
 
 `results/metrics/mitigation_before_after.csv`
 
@@ -291,9 +332,11 @@ When the rerun lane fills in, the clean metric surfaces should be:
   export contract; populated rows produced under `#35`)
 - `results/metrics/mitigation_run_inventory.csv`
 - `results/metrics/mitigation_before_after.csv`
-- `results/figures/failure_taxonomy_counts.png` (owned by `#64`)
-- `results/figures/mitigation_before_after.png` (owned by `#64`; `#36`
-  supplies the table behind it)
+- `results/figures/failure_taxonomy_counts.svg` (owned by `#64`)
+- `results/figures/failure_stage_cell_heatmap.svg` (owned by `#64`)
+- `results/figures/mitigation_priority_table.svg` (owned by `#64`)
+- future before/after mitigation figure once `mitigation_before_after.csv`
+  has real guarded rerun rows (`#36` supplies the table behind it)
 
 ## Minimum deliverable definition
 
@@ -308,8 +351,12 @@ For `#36`:
 `#36` should avoid accidental apples-to-oranges reruns. Keep these rules:
 
 - compare one mitigation lane at a time
+- advance the ladder on `Y + Self-Ask` and `Z + Self-Ask` before considering
+  other cells
 - hold `cell`, `orchestration_mode`, `mcp_mode`, `model_id`, and scenario set
   fixed unless the mitigation itself is the variable under study
+- keep detection-only rows separate from recovery rows; the recovery rung is a
+  superset of the detector, not an orthogonal factor to permute
 - do not treat historical smoke proofs and final canonical benchmark captures
   as one pooled dataset
 - if the before-side artifact lacks a field that the after-side export has,
@@ -347,7 +394,8 @@ If new artifacts arrive gradually, fill the exports in this order:
 1. `failure_evidence_table.csv` (done for the first judge-derived pass; needs
    refresh only if final reruns change judge rows)
 2. `mitigation_run_inventory.csv` (done for the first mitigation lane
-   selection and now marks the selected lane implemented pending rerun)
+   selection and now marks the selected lane implemented pending rerun; the
+   next candidate rung is `missing_evidence_retry_replan_guard`)
 3. `mitigation_before_after.csv` (schema exists; populate after guarded rerun)
 4. only then render before/after figures (`#64`'s lane)
 
