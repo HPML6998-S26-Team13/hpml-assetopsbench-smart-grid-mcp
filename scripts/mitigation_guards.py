@@ -198,7 +198,10 @@ def _missing_evidence_scan(
                     "source": record["source"],
                     "tool": record["tool"],
                     "reason": reason,
-                    "excerpt": _excerpt(record.get("response") or record.get("error")),
+                    "excerpt": _excerpt(
+                        _effective_response(record.get("response"))
+                        or record.get("error")
+                    ),
                 },
             )
             continue
@@ -257,7 +260,7 @@ def _missing_evidence_reason(record: dict[str, Any]) -> str | None:
     if record.get("error"):
         return "tool step recorded an error"
 
-    response = record.get("response")
+    response = _effective_response(record.get("response"))
     parsed = _parse_json_like(response)
     if parsed == []:
         return "tool response was an empty list"
@@ -327,6 +330,7 @@ def _is_evidence_limited_answer(answer: str) -> bool:
 
 
 def _parse_json_like(value: Any) -> Any:
+    value = _effective_response(value)
     if isinstance(value, (dict, list)):
         return value
     if not isinstance(value, str):
@@ -349,6 +353,7 @@ def _parse_json_like(value: Any) -> Any:
 
 
 def _text(value: Any) -> str:
+    value = _effective_response(value)
     if isinstance(value, str):
         return value
     if value is None:
@@ -365,12 +370,12 @@ def _evidence_key(record: dict[str, Any]) -> tuple[str, tuple[tuple[str, str], .
     tool = str(record.get("tool") or "").lower()
     parts = _target_parts(record.get("args"))
     if not parts:
-        parts = _target_parts(record.get("response"))
+        parts = _target_parts(_effective_response(record.get("response")))
     return (tool, parts or UNKNOWN_TARGET)
 
 
 def _target_parts(value: Any) -> tuple[tuple[str, str], ...]:
-    parsed = _parse_json_like(value)
+    parsed = _parse_json_like(_effective_response(value))
     found: dict[str, str] = {}
 
     def collect(candidate: Any) -> None:
@@ -384,6 +389,21 @@ def _target_parts(value: Any) -> tuple[tuple[str, str], ...]:
 
     collect(parsed)
     return tuple(sorted(found.items()))
+
+
+def _effective_response(value: Any) -> Any:
+    if isinstance(value, dict):
+        if value.get("type") == "text" and "text" in value:
+            return _effective_response(value.get("text"))
+        if isinstance(value.get("content"), list):
+            return _effective_response(value.get("content"))
+        return value
+    if isinstance(value, list):
+        unwrapped = [_effective_response(item) for item in value]
+        if unwrapped and all(isinstance(item, str) for item in unwrapped):
+            return "\n".join(unwrapped)
+        return unwrapped
+    return value
 
 
 def _clear_repaired_hit(

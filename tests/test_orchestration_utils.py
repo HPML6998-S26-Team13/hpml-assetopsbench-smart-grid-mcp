@@ -947,6 +947,42 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertFalse(guarded["success"])
         self.assertTrue(guarded["mitigation_guard"]["blocked_work_order"])
 
+    def test_missing_evidence_guard_unwraps_aat_text_envelopes(self):
+        outputs = [
+            {"type": "text", "text": "[]"},
+            {"type": "text", "text": '{"readings": []}'},
+            {"content": [{"type": "text", "text": '{"readings": []}'}]},
+        ]
+        for output in outputs:
+            with self.subTest(output=output):
+                payload = {
+                    "answer": "Schedule immediate maintenance using the empty evidence.",
+                    "success": True,
+                    "history": [
+                        {
+                            "turn": 1,
+                            "tool_calls": [
+                                {
+                                    "name": "get_sensor_readings",
+                                    "arguments": {
+                                        "transformer_id": "T-015",
+                                        "sensor_id": "winding_temp_top_c",
+                                    },
+                                    "output": output,
+                                }
+                            ],
+                        }
+                    ],
+                }
+
+                guarded = apply_missing_evidence_final_answer_guard(
+                    payload,
+                    enabled=True,
+                )
+
+                self.assertFalse(guarded["success"])
+                self.assertTrue(guarded["mitigation_guard"]["triggered"])
+
 
 if __name__ == "__main__":
     unittest.main()
