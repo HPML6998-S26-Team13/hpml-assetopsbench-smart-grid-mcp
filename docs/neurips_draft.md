@@ -570,16 +570,16 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Experiment 1 latency figure | `results/metrics/notebook02_latency_summary.csv`, `results/metrics/notebook02_mcp_overhead.csv`, and `results/figures/notebook02_latency_comparison.png` from Notebook 02 |
 | Experiment 2 orchestration figure | `results/metrics/notebook03_orchestration_comparison.csv` and companion figure from Notebook 03 |
 | PE-family follow-on figure | `results/metrics/notebook03_pe_family_follow_on.csv` once Y/Z are both analysis-ready |
-| Failure taxonomy table | Pending PR `#151`: `results/metrics/failure_evidence_table.csv` from `docs/failure_analysis_scaffold.md` contract |
-| Failure taxonomy count figure | Pending PR `#151`: `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
-| Failure stage heatmap | Pending PR `#151`: `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
-| Mitigation priority table | Pending PR `#151`: `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
+| Failure taxonomy table | `results/metrics/failure_evidence_table.csv` from the `docs/failure_analysis_scaffold.md` contract |
+| Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
+| Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
+| Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
 | Mitigation before/after figure | `results/metrics/mitigation_before_after.csv` and rendered figure |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |
 
-Rows marked pending PR `#151` are planning links to the sibling failure-taxonomy
-artifact branch; do not cite those paths as main-branch facts until that PR, or
-an equivalent artifact PR, lands.
+The failure-taxonomy CSV/SVG artifacts are now on `main` via PR #151, so the
+draft can cite those paths as repo facts while still labeling the underlying
+analysis preliminary.
 
 ## Facts we can already say safely
 
@@ -592,11 +592,11 @@ an equivalent artifact PR, lands.
 - PE-family mitigations exist, but they should remain follow-on evidence unless
   they earn central status through clean artifacts
 
-## Pending sibling artifact inputs
+## Landed sibling artifact inputs
 
-- PR `#151` is the current source of the failure-taxonomy CSV/SVG artifacts. If
-  it lands, this draft can promote the 35 judge-failed row count and the
-  `18 / 35` task-verification-failure headline from pending input to safe fact.
+- PR #151 landed the failure-taxonomy CSV/SVG artifacts on `main`. This draft
+  can now use the 35 judge-failed row count and the `18 / 35`
+  task-verification-failure headline as preliminary repo-backed facts.
 
 ## Draft deliverable status for `#39`
 
