@@ -1,9 +1,9 @@
 # NeurIPS Draft Scaffold
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-05-01*
 *Owner: Alex Xin (writing shepherd; section co-authoring under discussion for
 Apr 28 team sync)*
-*Issue: `#5`*
+*Issues: `#5`, `#39`; class-report back-port tracked in `#40`*
 
 This doc is the live draft scaffold for the NeurIPS 2026 Datasets & Benchmarks
 paper lane. It used to live alongside the failure-analysis scaffold inside
@@ -15,6 +15,8 @@ final paper — it is the canonical writing surface for:
 - stable claims we can already support
 - figure / table slots
 - draft prose that should later move into Overleaf cleanly
+
+Companion conversion surface: `docs/final_report_backport_scaffold.md`.
 
 ## Working title
 
@@ -569,6 +571,9 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Experiment 2 orchestration figure | `results/metrics/notebook03_orchestration_comparison.csv` and companion figure from Notebook 03 |
 | PE-family follow-on figure | `results/metrics/notebook03_pe_family_follow_on.csv` once Y/Z are both analysis-ready |
 | Failure taxonomy table | `results/metrics/failure_evidence_table.csv` from `docs/failure_analysis_scaffold.md` contract |
+| Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
+| Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
+| Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
 | Mitigation before/after figure | `results/metrics/mitigation_before_after.csv` and rendered figure |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |
 
@@ -579,9 +584,31 @@ Keep the paper-writing lane tied to concrete repo outputs:
   proofs
 - the repo has AaT Cell A/B smoke proofs and upstream parity smoke proofs
 - the repo has Notebook 02 / Notebook 03 analysis scaffolds
+- the current scored artifact set has 35 judge-failed rows in
+  `results/metrics/failure_evidence_table.csv`; the dominant class is task
+  verification failure (`18 / 35`), mainly missing-evidence final answers
 - the paper lane should treat AaT vs vanilla PE as the honest core comparison
 - PE-family mitigations exist, but they should remain follow-on evidence unless
   they earn central status through clean artifacts
+
+## Draft deliverable status for `#39`
+
+This file is now the active NeurIPS writing surface, not just an abstract note.
+It has the title, abstract, contribution list, claim ledger, section scaffold,
+draft prose blocks, figure/table slots, artifact map, and teammate fact asks.
+
+What is still missing before `#39` is complete:
+
+- final result paragraphs after the A/B/C and B/Y analysis exports are frozen
+- final figure captions tied to the committed figure files
+- references formatted in the NeurIPS style
+- Overleaf / LaTeX transfer and compile proof
+
+## Back-port handoff for `#40`
+
+The class final report should be derived from this NeurIPS surface, not written
+as a second independent draft. Use `docs/final_report_backport_scaffold.md` as
+the conversion checklist and section map.
 
 ## Facts we should not over-claim yet
 
