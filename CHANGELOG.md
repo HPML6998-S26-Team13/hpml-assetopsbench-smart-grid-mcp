@@ -2,6 +2,15 @@
 
 ## 2026-05-01
 
+### Changed
+
+- Added a paper/report delivery scaffold for `#5`, `#39`, and `#40`:
+  `docs/neurips_draft.md` now records its issue scope, current NeurIPS draft
+  completion state, failure-taxonomy figure links, and the handoff to the class
+  report back-port; `docs/final_report_backport_scaffold.md` defines the IEEE
+  section map, drift-control rules, figure/table requirements, and conversion
+  checklist.
+
 ### Removed / migrated
 
 - `docs/coordination/` directory removed from this team repo and migrated
