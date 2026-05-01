@@ -65,6 +65,10 @@ The active cell mapping is:
   servers into `plan-execute`
 - `ENABLE_WANDB` — when `1`, write the canonical config + summary fields to a
   WandB run after the benchmark finishes
+- `ENABLE_MISSING_EVIDENCE_GUARD` — when `1`, apply the
+  `missing_evidence_final_answer_guard` during trial post-processing. This is
+  the #65 mitigation toggle for matched #66 reruns: all non-mitigation config
+  fields should stay aligned with the before-side run.
 - `LAUNCH_VLLM` — when `1`, launch the local vLLM server first and point
   AssetOpsBench's LiteLLM client at `http://127.0.0.1:<port>/v1`
 - `VLLM_DTYPE` — vLLM `--dtype`; defaults to `float16`, but Cell D uses
@@ -140,3 +144,7 @@ As of Apr 30, 2026:
   INT8/BF16/fp8-KV serving profile. Slurm job
   `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` is the first
   successful ZSD proof run (`6 / 6`, W&B `48nqpclw`, judge mean `0.611`).
+- `configs/mitigation/` contains matched-rerun templates for the first
+  selected mitigation lane,
+  `missing_evidence_final_answer_guard`. They should be run only as
+  before/after follow-ons, not folded into the core Experiment 2 baseline.

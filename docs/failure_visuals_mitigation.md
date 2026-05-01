@@ -1,6 +1,6 @@
 # Failure Visuals + Mitigation Plan for `#64`
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-01*
 *Owner: Alex Xin (strategy lane stays here for `#64`)*
 *Issue: `#64`*
 
@@ -91,6 +91,25 @@ claim. It selects `missing_evidence_final_answer_guard` as the first lane and
 keeps the other recurring classes as queued candidates. `after_run` and
 `after_status` intentionally remain empty / `pending_rerun` until a real
 matched rerun exists.
+
+## May 1 mitigation implementation status
+
+The first selected lane is now implemented as a deterministic benchmark guard:
+
+- `scripts/mitigation_guards.py` owns
+  `missing_evidence_final_answer_guard`.
+- `scripts/run_experiment.sh` applies it during trial post-processing when
+  `ENABLE_MISSING_EVIDENCE_GUARD=1`.
+- The guard scans `history` / `trajectory` for evidence-tool outputs that are
+  missing, empty, or untrusted, then blocks a clean final answer or work-order
+  success when a substantive answer follows that evidence gap.
+- Guarded rerun templates live at
+  `configs/mitigation/missing_evidence_guard_pe_self_ask.env` and
+  `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env`.
+
+This clears the implementation side of `#65`; it does **not** clear `#66`
+until one of those configs produces matched after-run artifacts and the
+comparison table is populated.
 
 ## Visuals scaffold
 
@@ -281,7 +300,7 @@ The artifact gap that still bounds this lane:
 1. one matched mitigation rerun pair where both the before and after rows are
    populated end-to-end on `mitigation_before_after.csv` so the comparison
    figure is `comparison_ready` (per `#36` status labels)
-2. implementation agreement for `missing_evidence_final_answer_guard` in
-   `#65` / `#66`
+2. run either guarded config under the same model/scenario/trial shape as its
+   before-side baseline
 3. refresh the rendered SVGs after any final scenario/rerun sweep changes the
    evidence table
