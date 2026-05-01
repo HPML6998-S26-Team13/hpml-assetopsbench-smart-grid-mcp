@@ -33,7 +33,7 @@ first and then back-port it here.
 | Models and Data Description | Benchmark Extension + `docs/data_pipeline.tex` | Emphasize source datasets, shared `transformer_id`, scenarios, and four tool domains. |
 | Training and Profiling Methodology | System Design + runbook/profiling docs | The class heading says training, but our work is inference/profiling; phrase the section as serving, orchestration, and profiling methodology. |
 | Performance Tuning Methodology | Experiment 1 Cell C / D / ZSD optimization discussion | Separate clean transport optimization from exploratory optimized-serving ablations. |
-| Experimental Results | Results + failure analysis sections | Use Notebook 02/03 exports, failure taxonomy figures, and validation ledger references. |
+| Experimental Results | Results + failure analysis sections | Use Notebook 02/03 exports, validation ledger references, and failure taxonomy figures after PR `#151` or equivalent artifacts land. |
 | Conclusion | Discussion / limitations / future work | Keep claims conservative; include AOB upstream path as future work, not a deadline blocker. |
 
 ## Required report figures and tables
@@ -42,8 +42,8 @@ Minimum report-ready set:
 
 - Experiment 1 latency comparison from Notebook 02.
 - Experiment 2 orchestration comparison from Notebook 03.
-- Failure taxonomy count figure.
-- Failure stage-by-cell heatmap.
+- Failure taxonomy count figure after PR `#151` or equivalent artifacts land.
+- Failure stage-by-cell heatmap after PR `#151` or equivalent artifacts land.
 - Experiment matrix / trial-policy table.
 - Artifact ledger table with Slurm run IDs and repo paths.
 
