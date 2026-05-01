@@ -20,7 +20,7 @@ EVIDENCE_TOOLS = {
     "get_rul",
     "forecast_rul",
     "list_fault_records",
-    "get_fault_history",
+    "get_fault_record",
 }
 
 WORK_ORDER_TOOLS = {
@@ -69,6 +69,15 @@ EMPTY_EVIDENCE_KEYS = {
     "results",
 }
 
+TARGET_FIELD_KEYS = {
+    "transformer_id",
+    "sensor_id",
+    "fault_id",
+    "failure_mode_id",
+}
+
+UNKNOWN_TARGET = (("*", "*"),)
+
 
 def env_flag_enabled(value: Any) -> bool:
     """Return true for the standard bash/env truthy spellings."""
@@ -91,8 +100,7 @@ def apply_missing_evidence_final_answer_guard(
     if not enabled:
         return payload
 
-    hits = _missing_evidence_hits(payload)
-    work_order_after_missing = _work_order_after_first_hit(payload, hits)
+    hits, work_order_after_missing = _missing_evidence_scan(payload)
     answer = str(payload.get("answer") or "").strip()
     answer_already_limited = _is_evidence_limited_answer(answer)
     should_block = bool(hits) and (
@@ -167,39 +175,40 @@ def _blocked_answer(
     )
 
 
-def _missing_evidence_hits(payload: dict[str, Any]) -> list[dict[str, str]]:
-    hits = []
+def _missing_evidence_scan(
+    payload: dict[str, Any],
+) -> tuple[list[dict[str, str]], bool]:
+    unresolved_hits = {}
+    work_order_hits = []
     for record in _iter_tool_records(payload):
         tool = record["tool"].lower()
+        if tool in WORK_ORDER_TOOLS and unresolved_hits and not work_order_hits:
+            work_order_hits = list(unresolved_hits.values())
+            continue
+
         if not tool or tool not in EVIDENCE_TOOLS:
             continue
+
         reason = _missing_evidence_reason(record)
-        if not reason:
+        key = _evidence_key(record)
+        if reason:
+            unresolved_hits.setdefault(
+                key,
+                {
+                    "source": record["source"],
+                    "tool": record["tool"],
+                    "reason": reason,
+                    "excerpt": _excerpt(record.get("response") or record.get("error")),
+                },
+            )
             continue
-        hits.append(
-            {
-                "source": record["source"],
-                "tool": record["tool"],
-                "reason": reason,
-                "excerpt": _excerpt(record.get("response") or record.get("error")),
-            }
-        )
-    return hits
 
+        _clear_repaired_hit(unresolved_hits, record)
 
-def _work_order_after_first_hit(
-    payload: dict[str, Any],
-    hits: list[dict[str, str]],
-) -> bool:
-    if not hits:
-        return False
-    first_order = _source_order(hits[0]["source"])
-    for record in _iter_tool_records(payload):
-        if record["tool"].lower() not in WORK_ORDER_TOOLS:
-            continue
-        if _source_order(record["source"]) > first_order:
-            return True
-    return False
+    final_hits = list(unresolved_hits.values())
+    if work_order_hits:
+        return _dedupe_hits(work_order_hits + final_hits), True
+    return final_hits, False
 
 
 def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -221,6 +230,7 @@ def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
                     {
                         "source": f"{source}.tool_calls[{call_index}]",
                         "tool": str(call.get("name") or call.get("tool") or ""),
+                        "args": call.get("arguments") or call.get("tool_args"),
                         "response": call.get("output") or call.get("response"),
                         "error": call.get("error"),
                         "success": call.get("success", True),
@@ -231,6 +241,7 @@ def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
             {
                 "source": source,
                 "tool": str(step.get("tool") or ""),
+                "args": step.get("tool_args") or step.get("arguments"),
                 "response": step.get("response"),
                 "error": step.get("error"),
                 "success": step.get("success", True),
@@ -240,6 +251,7 @@ def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _missing_evidence_reason(record: dict[str, Any]) -> str | None:
+    tool = str(record.get("tool") or "").lower()
     if record.get("success") is False:
         return "tool step was marked unsuccessful"
     if record.get("error"):
@@ -252,7 +264,7 @@ def _missing_evidence_reason(record: dict[str, Any]) -> str | None:
     if isinstance(parsed, dict):
         if parsed.get("error"):
             return "tool response carried an error field"
-        empty_key = _first_empty_evidence_key(parsed)
+        empty_key = _first_empty_evidence_key(parsed, tool=tool)
         if empty_key:
             return f"tool response had empty evidence field {empty_key!r}"
     if isinstance(parsed, list) and not parsed:
@@ -267,15 +279,45 @@ def _missing_evidence_reason(record: dict[str, Any]) -> str | None:
     return None
 
 
-def _first_empty_evidence_key(value: dict[str, Any]) -> str | None:
+def _first_empty_evidence_key(
+    value: dict[str, Any],
+    *,
+    tool: str | None = None,
+) -> str | None:
     for key, item in value.items():
-        if key in EMPTY_EVIDENCE_KEYS and item in (None, "", [], {}):
+        if _is_empty_evidence_value(tool, key, item, value):
             return key
         if isinstance(item, dict):
-            nested = _first_empty_evidence_key(item)
+            nested = _first_empty_evidence_key(item, tool=tool)
             if nested:
                 return f"{key}.{nested}"
     return None
+
+
+def _is_empty_evidence_value(
+    tool: str | None,
+    key: str,
+    item: Any,
+    parent: dict[str, Any],
+) -> bool:
+    if key not in EMPTY_EVIDENCE_KEYS or item not in (None, "", [], {}):
+        return False
+    if (
+        tool == "detect_anomalies"
+        and key == "anomalies"
+        and _positive_number(parent.get("total_readings"))
+    ):
+        return False
+    return True
+
+
+def _positive_number(value: Any) -> bool:
+    if isinstance(value, bool):
+        return False
+    try:
+        return float(value) > 0
+    except (TypeError, ValueError):
+        return False
 
 
 def _is_evidence_limited_answer(answer: str) -> bool:
@@ -319,10 +361,47 @@ def _excerpt(value: Any, *, limit: int = 240) -> str:
     return text if len(text) <= limit else text[:limit] + "...[truncated]"
 
 
-def _source_order(source: str) -> tuple[int, int]:
-    numbers = [int(part) for part in re.findall(r"\[(\d+)\]", source)]
-    if not numbers:
-        return (10**9, 10**9)
-    if len(numbers) == 1:
-        return (numbers[0], -1)
-    return (numbers[0], numbers[1])
+def _evidence_key(record: dict[str, Any]) -> tuple[str, tuple[tuple[str, str], ...]]:
+    tool = str(record.get("tool") or "").lower()
+    parts = _target_parts(record.get("args"))
+    if not parts:
+        parts = _target_parts(record.get("response"))
+    return (tool, parts or UNKNOWN_TARGET)
+
+
+def _target_parts(value: Any) -> tuple[tuple[str, str], ...]:
+    parsed = _parse_json_like(value)
+    found: dict[str, str] = {}
+
+    def collect(candidate: Any) -> None:
+        if not isinstance(candidate, dict):
+            return
+        for key, item in candidate.items():
+            if key in TARGET_FIELD_KEYS and item not in (None, "", [], {}):
+                found[key] = str(item)
+            elif isinstance(item, dict):
+                collect(item)
+
+    collect(parsed)
+    return tuple(sorted(found.items()))
+
+
+def _clear_repaired_hit(
+    unresolved_hits: dict[tuple[str, tuple[tuple[str, str], ...]], dict[str, str]],
+    record: dict[str, Any],
+) -> None:
+    exact_key = _evidence_key(record)
+    unresolved_hits.pop(exact_key, None)
+    unresolved_hits.pop((exact_key[0], UNKNOWN_TARGET), None)
+
+
+def _dedupe_hits(hits: list[dict[str, str]]) -> list[dict[str, str]]:
+    deduped = []
+    seen = set()
+    for hit in hits:
+        key = (hit["source"], hit.get("tool") or "", hit.get("reason") or "")
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(hit)
+    return deduped

@@ -774,6 +774,151 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertFalse(guarded["mitigation_guard"]["blocked_final_answer"])
         self.assertTrue(guarded["mitigation_guard"]["evidence_limited_answer"])
 
+    def test_missing_evidence_guard_allows_successful_retry_before_answer(self):
+        payload = {
+            "answer": "Create the work order using the repaired winding temperature evidence.",
+            "success": True,
+            "failed_steps": [],
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": "No readings found for transformer T-015.",
+                    "error": None,
+                    "success": True,
+                },
+                {
+                    "step": 1,
+                    "task": "Retry sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": '{"readings": [{"timestamp": "2024-01-01T00:00:00", "value": 87.5}]}',
+                    "error": None,
+                    "success": True,
+                },
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertTrue(guarded["success"])
+        self.assertFalse(guarded["mitigation_guard"]["triggered"])
+        self.assertEqual(guarded["failed_steps"], [])
+
+    def test_missing_evidence_guard_blocks_work_order_before_retry(self):
+        payload = {
+            "answer": "Work order created, then evidence was repaired.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": "No readings found for transformer T-015.",
+                    "error": None,
+                    "success": True,
+                },
+                {
+                    "step": 2,
+                    "task": "Create work order",
+                    "server": "wo",
+                    "tool": "create_work_order",
+                    "tool_args": {"transformer_id": "T-015"},
+                    "response": '{"work_order_id": "WO-123"}',
+                    "error": None,
+                    "success": True,
+                },
+                {
+                    "step": 1,
+                    "task": "Retry sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": '{"readings": [{"timestamp": "2024-01-01T00:00:00", "value": 87.5}]}',
+                    "error": None,
+                    "success": True,
+                },
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertFalse(guarded["success"])
+        self.assertTrue(guarded["mitigation_guard"]["blocked_work_order"])
+
+    def test_missing_evidence_guard_allows_valid_no_anomaly_result(self):
+        payload = {
+            "answer": "No anomalies were found, so defer outage and monitor.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Detect anomalies",
+                    "server": "tsfm",
+                    "tool": "detect_anomalies",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": (
+                        '{"transformer_id": "T-015", "sensor_id": "winding_temp_top_c", '
+                        '"total_readings": 720, "anomaly_count": 0, "anomalies": []}'
+                    ),
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertTrue(guarded["success"])
+        self.assertFalse(guarded["mitigation_guard"]["triggered"])
+
+    def test_missing_evidence_guard_scans_get_fault_record(self):
+        payload = {
+            "answer": "Use the missing fault record to schedule repair.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch fault record",
+                    "server": "wo",
+                    "tool": "get_fault_record",
+                    "tool_args": {"fault_id": "F999"},
+                    "response": '{"error": "Fault record F999 not found."}',
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertFalse(guarded["success"])
+        self.assertEqual(
+            guarded["mitigation_guard"]["hits"][0]["tool"],
+            "get_fault_record",
+        )
+
     def test_missing_evidence_guard_scans_aat_tool_calls(self):
         payload = {
             "answer": "Created a work order for immediate repair.",
