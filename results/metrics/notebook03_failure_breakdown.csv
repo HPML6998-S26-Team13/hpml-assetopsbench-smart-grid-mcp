@@ -1,2 +1,4 @@
-cell,label,scenarios,any_failure,recovered,recovery_rate,note
-,,,,,,Failure breakdown deferred - no canonical scenario rows yet.
+cell,label,scenarios,any_failure,recovered,recovery_rate
+B,AaT (MCP baseline),6,0,0,
+Y,Plan-Execute,6,3,0,0.0
+Z,Verified PE,6,0,0,

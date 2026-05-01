@@ -1,4 +1,4 @@
 metric,n_pairs,median_seconds,p95_seconds,note
 MCP transport overhead (B - A),6,0.022991538047790527,7.561325669288635,
-Optimization delta (B - C),0,,,deferred - missing cell(s): ['C']
-Net overhead after optimization (C - A),0,,,deferred - missing cell(s): ['C']
+Optimization delta (B - C),6,4.250802516937256,8.277505099773407,
+Net overhead after optimization (C - A),6,-1.9376617670059204,31.181604027748108,

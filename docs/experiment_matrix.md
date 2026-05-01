@@ -1,6 +1,6 @@
 # Experiment Matrix and Follow-On Conditions
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-01*
 *Owner: Alex Xin*
 *Issues: core framing for `#25`, `#32`, `#35`, `#64`, `#5`*
 
@@ -13,17 +13,21 @@ This note keeps the experiment matrix honest and small. It distinguishes:
 
 ## Short answer
 
-Current recommended matrix:
+Current first-capture results table. A machine-readable copy lives at
+`results/metrics/experiment_matrix_summary.csv`; the focused optimized-serving
+follow-on deltas live at `results/metrics/optimized_serving_ablation.csv`.
 
-| Track | Cell | Orchestration | MCP mode | Status | Role |
-|---|---|---|---|---|---|
-| Experiment 1 | A | AaT | direct | planned | transport baseline |
-| Experiment 1 / 2 | B | AaT | baseline | planned | shared anchor |
-| Experiment 1 | C | AaT | optimized | captured + judged once | optimized transport |
-| Follow-on | D | AaT | optimized + model-side | captured + judged once | optimized transport plus INT8/BF16/fp8-KV serving |
-| Experiment 2 | Y | Plan-Execute | baseline | captured + judged once | core orchestration baseline |
-| Experiment 2 | Z | Verified PE | baseline | captured + judged once | optional third method |
-| Follow-on ablation | ZSD | Verified PE + Self-Ask | optimized + model-side | captured + judged once | best-engineered PE-family ceiling |
+| Legacy | Display code | Meaning | Run | Status | N | Canonical | Success | p50 latency | p95 latency | Judge score | Judge pass |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| A | AT-I | Agent-as-Tool direct Python tools | `8979314_aat_direct` | success | 6 | 6/6 | 1.00 | 12.15 | 17.29 | 0.167 | 1/6 (16.7%) |
+| B | AT-M | Agent-as-Tool MCP baseline | `8979314_aat_mcp_baseline` | success | 6 | 6/6 | 1.00 | 13.09 | 16.27 | 0.278 | 2/6 (33.3%) |
+| C | AT-TP | Agent-as-Tool optimized MCP transport + prefix cache | `9071639_aat_mcp_optimized` | success | 6 | 6/6 | 1.00 | 7.40 | 47.93 | 0.167 | 0/6 (0.0%) |
+| D | AT-TPQ | Agent-as-Tool optimized MCP transport + INT8/BF16/fp8 KV | `9073472_aat_mcp_model_optimized` | success | 6 | 6/6 | 1.00 | 6.17 | 16.01 | 0.167 | 1/6 (16.7%) |
+| Y | PE-M | Plan-Execute MCP baseline | `8998340_exp2_cell_Y_pe_mcp_baseline` | partial | 6 | 6/6 | 0.50 | 52.06 | 116.32 | 0.111 | 0/6 (0.0%) |
+| YS | PE-S-M | Plan-Execute + Self-Ask MCP baseline | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | success | 6 | 6/6 | 1.00 | 59.00 | 83.20 | 0.444 | 3/6 (50.0%) |
+| Z | V-M | Verified PE MCP baseline | `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | success | 6 | 6/6 | 1.00 | 119.64 | 152.36 | 0.639 | 4/6 (66.7%) |
+| ZS | V-S-M | Verified PE + Self-Ask MCP baseline | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | success | 6 | 6/6 | 1.00 | 33.78 | 58.03 | 0.833 | 5/6 (83.3%) |
+| ZSD | V-S-TPQ | Verified PE + Self-Ask + optimized MCP/model stack | `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` | success | 6 | 6/6 | 1.00 | 55.17 | 107.39 | 0.611 | 3/6 (50.0%) |
 
 Current recommendation on trials:
 
@@ -43,20 +47,51 @@ So yes: `Cell A + Scenario 1 + Llama-3.1-8B-Instruct + 5 trials` means five
 independent runs under the same config, then aggregate in `summary.json` and the
 analysis notebooks.
 
+## Inspecting a run
+
+Every row above has a raw run directory under `benchmarks/cell_*/raw/<run-name>/`.
+For example, to inspect `8979314_aat_direct`:
+
+- run-level metadata: `benchmarks/cell_A_direct/raw/8979314_aat_direct/meta.json`
+- per-trial latencies: `benchmarks/cell_A_direct/raw/8979314_aat_direct/latencies.jsonl`
+- per-trial trajectories: `benchmarks/cell_A_direct/raw/8979314_aat_direct/*_runNN.json`
+- runner logs: `benchmarks/cell_A_direct/raw/8979314_aat_direct/harness.log` and `vllm.log`
+- replay proof: `benchmarks/cell_A_direct/raw/8979314_aat_direct/replay/`
+- cell-level summary snapshot: `benchmarks/cell_A_direct/summary.json`
+- judge rows: `results/metrics/scenario_scores.jsonl` filtered by `run_name`
+- judge audit logs: `results/judge_logs/8979314_aat_direct/`
+
+The same pattern works for B/C/D/Y/Z/ZS/ZSD. The CSV summary includes the raw
+directory path so a notebook or script can jump from the compact table to full
+artifacts.
+
+## Optimized Serving Ablation
+
+The exploratory optimized-serving comparison is intentionally separated from
+the core A/B/C and B/Y/Z notebook tables:
+
+| Comparison | Baseline | Variant | p50 delta | p95 delta | Judge score delta | Judge pass delta | Interpretation |
+|---|---|---|---:|---:|---:|---:|---|
+| AaT optimized serving over optimized transport | AT-TP `9071639_aat_mcp_optimized` | AT-TPQ `9073472_aat_mcp_model_optimized` | -1.23 | -31.92 | +0.000 | +0.167 | Cell D improved first-capture AaT latency versus Cell C, but judge quality stayed equally weak. |
+| Verified PE + Self-Ask optimized serving | V-S-M `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | V-S-TPQ `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` | +21.39 | +49.36 | -0.222 | -0.333 | Adding optimized serving to the current best PE-family runner slowed the first-capture run and reduced judge pass rate. |
+
+Machine-readable copy:
+`results/metrics/optimized_serving_ablation.csv`.
+
 ## Runnable today vs pending
 
 What we can honestly run on the current runner surface right now:
 
 | Condition | Status | Why |
 |---|---|---|
-| `Y` | analysis-ready first capture | canonical PE baseline config and first judged raw run set exist |
-| `Y + Self-Ask` | analysis-ready first capture | repo-local Self-Ask PE path has a first judged raw run set |
-| `Z` | analysis-ready first capture | repo-local Verified PE path has a first judged raw run set |
-| `Z + Self-Ask` | analysis-ready first capture | Verified PE + Self-Ask has a first judged raw run set and is the current quality leader |
-| `B` | smoke-runnable; full capture pending | AaT MCP-baseline smoke succeeded in Slurm job `8969519`; upstream `OpenAIAgentRunner` parity succeeded in Slurm job `8970383`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
-| `A` | smoke-runnable; full capture pending | AaT direct smoke succeeded in Slurm job `8962310`; full `multi_*.json` / 3-trial capture still belongs to `#25` |
+| `A` | analysis-ready first capture | Slurm job `8979314_aat_direct` completed `6 / 6`, with judge rows and canonical scenario embedding |
+| `B` | analysis-ready first capture | Slurm job `8979314_aat_mcp_baseline` completed `6 / 6`, with judge rows and canonical shared-anchor metadata for Experiments 1 and 2 |
 | `C` | analysis-ready first capture | Slurm job `9071639_aat_mcp_optimized` completed `6 / 6` with optimized batch/connection reuse and prefix caching; judge mean `0.167`, pass `0 / 6` |
 | `D` | analysis-ready exploratory capture | Slurm job `9073472_aat_mcp_model_optimized` completed `6 / 6` with Cell C transport plus compressed INT8/BF16/fp8-KV serving; replay `2 / 2`, profiler `profiling-pmwzatie`, judge mean `0.167`, pass `1 / 6` |
+| `Y` | analysis-ready first capture | Slurm job `8998340_exp2_cell_Y_pe_mcp_baseline` completed `3 / 6` successful trials; judge mean `0.111`, pass `0 / 6` |
+| `Y + Self-Ask` | analysis-ready first capture | Slurm job `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` completed `6 / 6`; judge mean `0.444`, pass `3 / 6` |
+| `Z` | analysis-ready first capture | Slurm job `8998342_exp2_cell_Z_verified_pe_mcp_baseline` completed `6 / 6`; judge mean `0.639`, pass `4 / 6` |
+| `Z + Self-Ask` | analysis-ready first capture | Slurm job `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` completed `6 / 6`; judge mean `0.833`, pass `5 / 6` |
 | `Z + Self-Ask + D` | analysis-ready exploratory ablation | Slurm job `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` completed `6 / 6` with persistent MCP sessions plus the Cell D INT8/BF16/fp8-KV serving profile; judge mean `0.611`, pass `3 / 6` |
 
 Important distinction:
@@ -65,8 +100,9 @@ Important distinction:
   execute a condition.
 - **Analysis-ready** means the canonical config has produced raw per-scenario
   JSONs under `benchmarks/cell_*/raw/<run-id>/` for the notebook contract.
-- Current canonical history has the PE-family smoke proofs, but not the full
-  canonical Z / Self-Ask Experiment 2 raw run sets.
+- Current canonical history has first-capture, judge-scored raw run sets for
+  A/B/C/Y/Z plus the Self-Ask and optimized-serving follow-ons. The remaining
+  paper-depth gap is scale, not basic runner/artifact availability.
 
 Important honesty rule:
 

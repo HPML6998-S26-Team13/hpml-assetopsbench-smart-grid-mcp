@@ -1,0 +1,10 @@
+legacy_cell,display_code,meaning,run_name,status,n_trials,canonical_trials,success_rate,latency_p50_seconds,latency_p95_seconds,judge_score_mean,judge_pass_count,judge_trial_count,judge_pass_rate,run_dir
+A,AT-I,Agent-as-Tool direct Python tools,8979314_aat_direct,success,6,6/6,1.0,12.15,17.29,0.167,1,6,0.167,benchmarks/cell_A_direct/raw/8979314_aat_direct
+B,AT-M,Agent-as-Tool MCP baseline,8979314_aat_mcp_baseline,success,6,6/6,1.0,13.09,16.27,0.278,2,6,0.333,benchmarks/cell_B_mcp_baseline/raw/8979314_aat_mcp_baseline
+C,AT-TP,Agent-as-Tool optimized MCP transport + prefix cache,9071639_aat_mcp_optimized,success,6,6/6,1.0,7.40,47.93,0.167,0,6,0.000,benchmarks/cell_C_mcp_optimized/raw/9071639_aat_mcp_optimized
+D,AT-TPQ,Agent-as-Tool optimized MCP transport + INT8/BF16/fp8 KV,9073472_aat_mcp_model_optimized,success,6,6/6,1.0,6.17,16.01,0.167,1,6,0.167,benchmarks/cell_D/raw/9073472_aat_mcp_model_optimized
+Y,PE-M,Plan-Execute MCP baseline,8998340_exp2_cell_Y_pe_mcp_baseline,partial,6,6/6,0.5,52.06,116.32,0.111,0,6,0.000,benchmarks/cell_Y_plan_execute/raw/8998340_exp2_cell_Y_pe_mcp_baseline
+YS,PE-S-M,Plan-Execute + Self-Ask MCP baseline,8998341_exp2_cell_Y_pe_self_ask_mcp_baseline,success,6,6/6,1.0,59.00,83.20,0.444,3,6,0.500,benchmarks/cell_Y_plan_execute/raw/8998341_exp2_cell_Y_pe_self_ask_mcp_baseline
+Z,V-M,Verified PE MCP baseline,8998342_exp2_cell_Z_verified_pe_mcp_baseline,success,6,6/6,1.0,119.64,152.36,0.639,4,6,0.667,benchmarks/cell_Z_hybrid/raw/8998342_exp2_cell_Z_verified_pe_mcp_baseline
+ZS,V-S-M,Verified PE + Self-Ask MCP baseline,8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline,success,6,6/6,1.0,33.78,58.03,0.833,5,6,0.833,benchmarks/cell_Z_hybrid/raw/8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline
+ZSD,V-S-TPQ,Verified PE + Self-Ask + optimized MCP/model stack,9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized,success,6,6/6,1.0,55.17,107.39,0.611,3,6,0.500,benchmarks/cell_ZSD/raw/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized

@@ -31,9 +31,11 @@ import sys
 CELL_DIRS = {
     "A": "benchmarks/cell_A_direct",
     "B": "benchmarks/cell_B_mcp_baseline",
+    "C": "benchmarks/cell_C_mcp_optimized",
+    "D": "benchmarks/cell_D",
     "Y": "benchmarks/cell_Y_plan_execute",
     "Z": "benchmarks/cell_Z_hybrid",
-    "C": "benchmarks/cell_C_mcp_optimized",
+    "ZSD": "benchmarks/cell_ZSD",
 }
 
 

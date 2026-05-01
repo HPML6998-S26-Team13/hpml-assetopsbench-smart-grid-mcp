@@ -20,5 +20,9 @@
     "profiling/power_draw_w_mean": 119.06148594377511,
     "profiling/power_draw_w_max": 272.14,
     "profiling/nvidia_smi_samples": 249
-  }
+  },
+  "contributing_experiments": [
+    "exp1_mcp_overhead",
+    "exp2_orchestration"
+  ]
 }

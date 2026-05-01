@@ -1,2 +1,5 @@
-cell,comparison_label,variant_key,variant_label,run_id,run_name,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,note
-,,,,,,,,,,,,Self-Ask ablation deferred - need a ready baseline/self-ask run pair for Y and/or Z.
+cell,comparison_label,variant_key,variant_label,run_id,run_name,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,judge_scenarios,judge_score_mean,judge_pass_rate,latency_p50,latency_p95
+Y,Plan-Execute Self-Ask ablation,baseline,Plan-Execute,8998340_exp2_cell_Y_pe_mcp_baseline,8998340_exp2_cell_Y_pe_mcp_baseline,6,0.5,0.0,6.5,0.5,,6,0.11111666666666666,0.0,52.062857031822205,116.31605935096741
+Y,Plan-Execute Self-Ask ablation,self_ask,Plan-Execute + Self-Ask,8998341_exp2_cell_Y_pe_self_ask_mcp_baseline,8998341_exp2_cell_Y_pe_self_ask_mcp_baseline,6,1.0,0.0,9.5,0.0,,6,0.4444333333333333,0.5,58.99742317199707,83.1953974366188
+Z,Verified PE Self-Ask ablation,baseline,Verified PE,8998342_exp2_cell_Z_verified_pe_mcp_baseline,8998342_exp2_cell_Z_verified_pe_mcp_baseline,6,1.0,0.0,12.0,0.0,0.0,6,0.6389,0.6666666666666666,119.6429032087326,152.36492240428925
+Z,Verified PE Self-Ask ablation,self_ask,Verified PE + Self-Ask,8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline,8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline,6,1.0,0.0,10.0,0.0,0.0,6,0.8333333333333334,0.8333333333333334,33.779747009277344,58.034166157245636

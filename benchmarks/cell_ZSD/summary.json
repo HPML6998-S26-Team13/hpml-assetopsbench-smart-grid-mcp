@@ -37,10 +37,10 @@
   "mcp_latency_seconds_p95": null,
   "tool_latency_seconds_mean": null,
   "tool_error_count": 0,
-  "judge_score_mean": null,
-  "judge_score_p50": null,
-  "judge_score_p95": null,
-  "judge_score_p5": null,
-  "judge_pass_rate": null,
+  "judge_score_mean": 0.6111,
+  "judge_score_p50": 0.5,
+  "judge_score_p95": 1.0,
+  "judge_score_p5": 0.0,
+  "judge_pass_rate": 0.5,
   "finished_at": "2026-04-30T08:11:14.307679+00:00"
 }

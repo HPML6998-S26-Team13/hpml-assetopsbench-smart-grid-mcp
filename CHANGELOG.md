@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-05-01
+
+### Validated
+
+- Backfilled judge-score summary fields into the committed first-capture
+  `summary.json` snapshots for A/B/C/D/Y/Z/ZSD, normalizing each snapshot from
+  its own run-local `meta.json`, `latencies.jsonl`, per-trial JSONs, and
+  `results/metrics/scenario_scores.jsonl`.
+- Added `results/metrics/optimized_serving_ablation.csv` and linked it from
+  `docs/experiment_matrix.md` / `results/README.md` so the exploratory Cell D
+  and ZSD serving-stack deltas are findable without mixing them into the core
+  notebook tables.
+- Extended `scripts/backfill_canonical_scenario.py` to recognize D and ZSD raw
+  artifact directories for future canonical-scenario consistency checks.
+
 ## 2026-04-30
 
 ### AOB extraction (in fork `~/coding/AssetOpsBench`, local-only)
@@ -54,6 +69,13 @@ No code or behavior changes from PR #150 (doc-only).
 
 ### Validated
 
+- Backfilled the first-capture Experiment 1/2 analysis surfaces after Cell C/D/ZSD
+  landed: A/B raw trial JSONs now carry canonical `scenario` objects, Cell B
+  metadata records its shared `exp1_mcp_overhead` + `exp2_orchestration` role,
+  Notebook 02 exports full A/B/C MCP-overhead rows, and Notebook 03 exports
+  canonical B/Y/Z, PE-family, Self-Ask, and failure-breakdown aggregates.
+  Added `results/metrics/experiment_matrix_summary.csv` plus the human-facing
+  results table and run-inspection guide in `docs/experiment_matrix.md`.
 - Recorded the first successful exploratory Z + Self-Ask + D optimized
   PE-family ablation: Slurm job
   `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` on

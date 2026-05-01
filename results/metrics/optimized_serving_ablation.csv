@@ -1,0 +1,3 @@
+comparison,baseline_code,baseline_run,variant_code,variant_run,latency_p50_delta_seconds,latency_p95_delta_seconds,judge_score_delta,judge_pass_rate_delta,interpretation
+AaT optimized serving over optimized transport,AT-TP,9071639_aat_mcp_optimized,AT-TPQ,9073472_aat_mcp_model_optimized,-1.23,-31.92,0.000,0.167,"Cell D improved first-capture AaT latency versus Cell C, but judge quality stayed equally weak."
+Verified PE + Self-Ask optimized serving,V-S-M,8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline,V-S-TPQ,9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized,21.39,49.36,-0.222,-0.333,"Adding optimized serving to the current best PE-family runner slowed the first-capture run and reduced judge pass rate."

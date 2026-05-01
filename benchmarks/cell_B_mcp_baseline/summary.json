@@ -8,7 +8,10 @@
   "benchmark_summary_path": "benchmarks/cell_B_mcp_baseline/summary.json",
   "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/qejvnoug",
   "experiment_family": "exp1_mcp_overhead",
-  "contributing_experiments": [],
+  "contributing_experiments": [
+    "exp1_mcp_overhead",
+    "exp2_orchestration"
+  ],
   "experiment_cell": "B",
   "orchestration_mode": "agent_as_tool",
   "mcp_mode": "baseline",
@@ -36,10 +39,10 @@
   "mcp_latency_seconds_p95": null,
   "tool_latency_seconds_mean": null,
   "tool_error_count": 0,
-  "judge_score_mean": null,
-  "judge_score_p50": null,
-  "judge_score_p95": null,
-  "judge_score_p5": null,
-  "judge_pass_rate": null,
+  "judge_score_mean": 0.2777833333333333,
+  "judge_score_p50": 0.0,
+  "judge_score_p95": 0.6667,
+  "judge_score_p5": 0.0,
+  "judge_pass_rate": 0.3333333333333333,
   "finished_at": "2026-04-27T01:04:51.604301+00:00"
 }

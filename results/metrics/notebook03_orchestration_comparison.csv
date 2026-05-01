@@ -1,2 +1,4 @@
-cell,label,mode,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,note
-,,,,,,,,,"Core Experiment 2 comparison deferred (refused): incompatible metadata - scenario_set_name mismatch across ['B', 'Y']: {'B': 'smartgrid_multi_domain', 'Y': 'smartgrid_multi_domain_smoke'}"
+cell,label,mode,scenarios,success_rate,mean_failed_steps,mean_history_length,mean_tool_errors,mean_replans,judge_scenarios,judge_score_mean,judge_pass_rate
+B,AaT (MCP baseline),canonical,6,1.0,0.0,2.0,0.0,,6,0.2777833333333333,0.3333333333333333
+Y,Plan-Execute,canonical,6,0.5,0.0,6.5,0.5,,6,0.11111666666666666,0.0
+Z,Verified PE,canonical,6,1.0,0.0,12.0,0.0,0.0,6,0.6389,0.6666666666666666

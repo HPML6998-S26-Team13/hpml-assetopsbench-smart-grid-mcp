@@ -10,7 +10,10 @@
   "benchmark_summary_path": "benchmarks/cell_B_mcp_baseline/summary.json",
   "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/qejvnoug",
   "experiment_family": "exp1_mcp_overhead",
-  "contributing_experiments": [],
+  "contributing_experiments": [
+    "exp1_mcp_overhead",
+    "exp2_orchestration"
+  ],
   "experiment_cell": "B",
   "orchestration_mode": "agent_as_tool",
   "mcp_mode": "baseline",

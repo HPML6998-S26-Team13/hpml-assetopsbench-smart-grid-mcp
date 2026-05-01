@@ -1,6 +1,6 @@
 # results/
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-01*
 
 Curated, reproducible metrics and figures emitted by notebooks. Most content
 here is expected to come from `benchmarks/` once the experiment lanes are
@@ -12,6 +12,8 @@ analysis pipeline can live here too.
 ```
 results/
 ├── metrics/               # cleaned CSVs/JSONL that figures and tables are computed from
+│   ├── experiment_matrix_summary.csv  # compact row-per-condition result table
+│   ├── optimized_serving_ablation.csv  # Cell D / ZSD focused follow-on deltas
 │   ├── baseline_latency.csv        # one row per (scenario, model, trial)
 │   ├── optimized_latency.csv
 │   ├── orchestration_accuracy.csv  # per scenario × orchestration condition
@@ -32,17 +34,29 @@ results/
 - WandB exports are snapshots in time. If a WandB run is deleted or the project is wiped, the exports here are the only remaining record.
 - `scenario_scores.jsonl` should retain the run-level join keys needed to line up with WandB and benchmark artifacts, especially `run_name`, `wandb_run_url`, `scenario_id`, `trial_index`, `experiment_cell`, `orchestration_mode`, `mcp_mode`, and `judge_model`.
 - Per-trial judge audit logs live under `judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`.
+- `experiment_matrix_summary.csv` is the compact "what ran?" table. It keeps
+  legacy cell names, display-code names, run names, latency, judge-score, and
+  raw-directory links together. The human-facing copy lives in
+  [../docs/experiment_matrix.md](../docs/experiment_matrix.md).
+- `optimized_serving_ablation.csv` keeps the focused D/ZSD follow-on deltas
+  separate from the core notebook tables, so exploratory serving-stack results
+  do not blur the main Experiment 1 / Experiment 2 claims.
 - Filenames should be **stable** (so the paper can reference them by path) — avoid renames once a figure is committed to a report draft.
 
 ## Status (Apr 30, 2026)
 
-Partially populated:
+First-capture populated:
 
 - Notebook 01 now writes a reproducible dataset-exploration figure and summary
   CSVs here
 - benchmark-derived judge metrics now include the first Experiment 1 / 2
-  capture rows for A/B/C/D/Y/Z and Self-Ask variants; Notebook-cleaned
-  aggregate CSVs/figures are still in progress
+  capture rows for A/B/C/D/Y/Z and Self-Ask variants
+- Notebook 02 now exports full first-capture A/B/C MCP-overhead metrics and
+  figure outputs
+- Notebook 03 now exports first-capture B/Y/Z orchestration comparison,
+  PE-family follow-on, Self-Ask ablation, and failure-breakdown metrics/figures
+- the focused optimized-serving follow-on table is exported as
+  `results/metrics/optimized_serving_ablation.csv`
 
 What changed since the original scaffold:
 
@@ -54,17 +68,18 @@ What changed since the original scaffold:
 - raw benchmark proof artifacts now exist under `benchmarks/cell_*` for the
   first Insomnia capture sets, including Cell C job `9071639` and exploratory
   Cell D job `9073472`
+- `results/metrics/experiment_matrix_summary.csv` is the compact entry point
+  for run lookup across A/B/C/D/Y/YS/Z/ZS/ZSD
+- `results/metrics/optimized_serving_ablation.csv` captures the two current
+  D/ZSD deltas: Cell D versus Cell C, and ZSD versus Z + Self-Ask baseline
 - `results/metrics/scenario_scores.jsonl` is the canonical LLM-as-judge table;
   new judging runs also write per-trial audit logs under
   `results/judge_logs/<run_name>/`
 - shared WandB runs are linked from the benchmark `summary.json` / `meta.json`
   files and mirrored into judge rows where available
 
-What still needs to happen before this directory should fill up:
+What still needs to happen before this directory should be paper-final:
 
-- final paper-depth Experiment 1 captures (`#25`)
-- Notebook 02 transition from parser/preflight scaffold into real Experiment 1
-  cleaned metrics / figures once Cells A / B / C exist (`#26` Cell A/B analysis,
-  `#86` Cell C analysis)
-- Notebook 03 transition from preliminary judge metrics into final
-  orchestration-comparison figures once the canonical reruns are frozen
+- final paper-depth captures at the agreed 5-trial / broader-scenario grid
+- replacement of first-capture CSVs/figures with the frozen final run set
+- optional 70B spot-check rows once the hosted WatsonX configs are run and judged
