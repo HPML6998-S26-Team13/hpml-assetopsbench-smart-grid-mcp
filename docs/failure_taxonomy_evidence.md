@@ -1,6 +1,6 @@
 # Failure Taxonomy + Evidence Table for `#35`
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-04-30*
 *Owner: Alex Xin (lane), Akshat Bhandari (Round 1 reassignment for evidence
 fill-in)*
 *Issue: `#35`*
@@ -21,6 +21,8 @@ This file used to live as one of three sections inside the combined
 - `benchmarks/cell_*/summary.json` — aggregate per-run metrics
 - `results/metrics/scenario_scores.jsonl` — judge score and pass-rate joins
   when populated
+- `results/metrics/failure_evidence_table.csv` — current classified failure
+  table, one row per judge-failed trial
 - `docs/validation_log.md` — canonical proof runs and caveats
 - `notebooks/03_orchestration_comparison.ipynb` — orchestration-level failure
   summaries
@@ -42,17 +44,72 @@ The canonical `team13/main` lane has advanced since the Apr 26 refresh:
 - Experiment 1 A/B canonical captures landed in PR `#130`. Job `8979314`
   produced both `8979314_aat_direct` and `8979314_aat_mcp_baseline` over
   scenario set `smartgrid_multi_domain` on `Llama-3.1-8B-Instruct`. Both
-  sides hit `success_rate=1.0` over 6 scenarios, so neither produced new
-  failure evidence rows; their value to `#35` is the per-trial latency,
-  tool-call, and `tool_error_count=0` baseline that any future PE-family
-  rerun will be classified against.
+  sides hit runner `success_rate=1.0` over 6 scenarios and produced no
+  runner-level failures or tool errors. Later judge scoring still contributes
+  A/B answer-quality failure rows to the taxonomy table; the distinction is
+  execution health versus final-answer correctness. Their value to `#35` is the
+  per-trial latency, tool-call, and `tool_error_count=0` baseline that any
+  future PE-family rerun will be classified against.
 
-These are readiness anchors, not final taxonomy evidence. They prove the AaT
-A/B paths can execute and emit artifacts; they do not yet replace the
-matched-trial `B/Y` or mitigation rerun evidence needed for final taxonomy
-counts and before/after claims. The `under-constrained fault selection`
-pattern stays at evidence grade `illustrative` until a second Y-cell
-artifact reproduces it.
+These are execution-readiness anchors and partial taxonomy inputs, not final
+mitigation evidence. They prove the AaT A/B paths can execute and emit
+artifacts; they do not yet replace the matched mitigation rerun evidence needed
+for before/after claims. The `under-constrained fault selection` pattern stays
+at evidence grade `illustrative` until a second Y-cell artifact reproduces it.
+
+## Apr 30 status refresh
+
+The taxonomy lane now has a first real CSV export:
+`results/metrics/failure_evidence_table.csv`.
+
+That file classifies the **35 judge-failed rows** in
+`results/metrics/scenario_scores.jsonl` across the currently scored cells:
+A, B, C, D, Y, Z, and ZSD. The export is still a judge-derived taxonomy pass,
+not a hand-audited final paper table; its labels come from the six judge
+dimensions, judge suggestions, and representative trajectory checks where the
+failure class was ambiguous.
+
+Current top-level counts:
+
+| Taxonomy label | Rows | Read |
+|---|---:|---|
+| task verification failure | 18 | missing or empty evidence is not treated as a stop condition before final answer / work-order emission |
+| inter-agent / orchestration failure | 13 | tool sequencing, tool-argument, or routing contracts break the intended execution path |
+| specification failure | 4 | fault/risk adjudication remains under-specified even when some evidence is available |
+
+Current symptom counts:
+
+| Symptom | Rows | Candidate mitigation |
+|---|---:|---|
+| missing-evidence final answer | 18 | block final answers and work orders when required evidence retrieval fails or returns empty |
+| tool routing or argument-contract failure | 7 | validate tool arguments and aliases before calls; hard-fail bad routing as explicit step errors |
+| tool-call sequencing failure | 6 | require evidence acquisition before inference, risk estimation, or work-order creation |
+| under-constrained fault/risk adjudication | 4 | add an explicit adjudication step that cites the deciding tool evidence |
+
+Cell distribution in the current export:
+
+| Cell | Failed rows classified |
+|---|---:|
+| Y | 9 |
+| C | 6 |
+| A | 5 |
+| D | 5 |
+| B | 4 |
+| Z | 3 |
+| ZSD | 3 |
+
+The important read is not "C/D are bad" or "ZSD solves it." The sharper read
+is that **clean execution and judge-quality success are separable**. Several
+runs finish `success=True` while still failing the judge because they proceed
+with missing evidence, wrong tool order, or under-justified fault
+adjudication. That is exactly the failure-analysis story this table should
+feed.
+
+The representative-row audit gate is accepted for the current scaffold: every
+row has a concrete artifact path, and representative rows from each symptom
+class were checked against their judge-log artifacts before rendering the first
+summary figures. If final reruns add or replace judge rows, rerun the renderer
+and refresh this section rather than editing the counts by hand.
 
 ## Classification rule
 
@@ -133,11 +190,13 @@ until a matched canonical capture lands.
 
 The CSV target is `results/metrics/failure_evidence_table.csv` (schema owned
 by `#36` export contract; populated rows produced under `#35`; see
-`docs/failure_analysis_scaffold.md`).
+`docs/failure_analysis_scaffold.md`). As of 2026-04-30 it contains 35
+judge-failed rows. The next pass should manually audit representative rows
+before the paper cites exact category counts.
 
 ## Initial evidence pass (Apr 22)
 
-This is the first populated pass using artifacts already available on
+This is the historical first populated pass using artifacts already available on
 canonical history or explicitly cited in `docs/validation_log.md`. It is
 enough to start the mitigation discussion without pretending the full
 experiment matrix is already captured.
@@ -179,13 +238,17 @@ actually shown:
 
 Current grade by pattern:
 
-- answer/tool inconsistency: **recurring**
-- wrapper-level masking: **recurring**
-- under-constrained fault selection: **illustrative**
+- missing-evidence final answer: **recurring** (18 judge-failed rows)
+- tool routing or argument-contract failure: **recurring** (7 judge-failed rows)
+- tool-call sequencing failure: **recurring** (6 judge-failed rows)
+- under-constrained fault / risk adjudication: **recurring with cautious
+  wording** (4 judge-failed rows)
 
-That means the paper can already discuss the first two as repeated patterns,
-while the third should still be framed more cautiously until another
-matching artifact lands.
+That means the paper can safely say the current scored artifact set shows
+repeated **evidence-grounding** and **orchestration-contract** failures. The
+specification/adjudication pattern is also repeated in the judge-derived table,
+but should still be phrased more cautiously than the dominant evidence-grounding
+pattern because it is lower-count and more interpretation-heavy.
 
 ### Paper-safe wording guide
 
@@ -226,6 +289,9 @@ paper does not mix "runner is alive" with "failure pattern was observed."
 | `8979314_aat_mcp_baseline` | B | canonical capture | 6/6 scenario success on canonical scenario set; baseline metrics for AaT MCP baseline against the same scenario set as `8979314_aat_direct` | same NULL columns as `8979314_aat_direct`; no failure rows produced (success_rate=1.0) |
 | `8970383_aat_mcp_baseline_upstream_smoke_104` | B parity | smoke success | upstream AOB runner parity against Smart Grid MCP servers | final performance comparison |
 | `8970468_aat_mcp_baseline_upstream_smoke_104` | B parity | repeat smoke success | parity result is repeatable on the same smoke scenario | final performance comparison |
+| `9071639_aat_mcp_optimized` | C | canonical capture | optimized MCP Cell C executes 6/6 and supports the first real `(B-C)` transport comparison | judge pass remains 0/6; taxonomy rows show execution success does not imply answer quality |
+| `9073472_aat_mcp_model_optimized` | D | exploratory capture | optimized-serving AaT arm executes 6/6 with INT8/BF16/fp8-KV proof | exploratory only; judge pass 1/6 and not part of clean A/B/C fairness contract |
+| `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` | ZSD | exploratory capture | Verified PE + Self-Ask + optimized MCP + optimized serving executes 6/6; judge mean is 0.611 | best-engineered ablation, not a clean core-matrix cell |
 
 ## Minimum deliverable definition
 
@@ -238,10 +304,10 @@ For `#35`:
 
 The artifact gap that still bounds this lane:
 
-1. paired Y-cell PE-baseline reruns that match scenarios already represented
-   in the Apr 22 pass (turns the `under-constrained fault selection` row from
-   `illustrative` to `recurring`)
-2. canonical Cell B captures from PR `#130` so the orchestration comparison
-   can ground its failures in the same scenario set the paper claims
-3. judge-score joins from `results/metrics/scenario_scores.jsonl` once that
-   pipeline produces matched scores per `(run_name, scenario_id, trial_index)`
+1. keep `failure_evidence_table.csv` refreshed if final scenario/rerun sweeps
+   add judge rows
+2. use `results/figures/failure_taxonomy_counts.svg` and
+   `results/figures/failure_stage_cell_heatmap.svg` for the first #64 figure
+   pass
+3. implement or explicitly defer the selected `#65/#66` mitigation lane:
+   `missing_evidence_final_answer_guard`

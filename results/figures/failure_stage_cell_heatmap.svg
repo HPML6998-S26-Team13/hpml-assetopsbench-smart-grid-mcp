@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 858 418">
+<rect width="100%" height="100%" fill="#fbf7ef"/>
+<text x="40" y="42" font-family="Georgia, serif" font-size="28" fill="#1b1b1b">Failure stage by cell</text>
+<text x="40" y="68" font-family="Verdana, sans-serif" font-size="13" fill="#5b5147">Darker cells indicate more judge-failed rows in that stage/cell bucket</text>
+<text x="232.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">A</text>
+<text x="316.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">B</text>
+<text x="400.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">C</text>
+<text x="484.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">D</text>
+<text x="568.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">Y</text>
+<text x="652.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">Z</text>
+<text x="736.0" y="76" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" font-weight="700" fill="#26231f">ZSD</text>
+<text x="40" y="124" font-family="Verdana, sans-serif" font-size="14" fill="#26231f">planning</text>
+<rect x="190" y="94" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="230.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="274" y="94" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="314.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="358" y="94" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="398.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="442" y="94" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="482.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="526" y="94" width="80" height="44" rx="5" fill="rgb(255,167,149)" stroke="#d7c6b2"/>
+<text x="566.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">3</text>
+<rect x="610" y="94" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="650.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="694" y="94" width="80" height="44" rx="5" fill="rgb(255,219,201)" stroke="#d7c6b2"/>
+<text x="734.0" y="123" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">1</text>
+<text x="40" y="172" font-family="Verdana, sans-serif" font-size="14" fill="#26231f">tool selection</text>
+<rect x="190" y="142" width="80" height="44" rx="5" fill="rgb(255,219,201)" stroke="#d7c6b2"/>
+<text x="230.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">1</text>
+<rect x="274" y="142" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="314.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="358" y="142" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="398.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="442" y="142" width="80" height="44" rx="5" fill="rgb(255,167,149)" stroke="#d7c6b2"/>
+<text x="482.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">3</text>
+<rect x="526" y="142" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="566.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="610" y="142" width="80" height="44" rx="5" fill="rgb(255,193,175)" stroke="#d7c6b2"/>
+<text x="650.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">2</text>
+<rect x="694" y="142" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="734.0" y="171" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<text x="40" y="220" font-family="Verdana, sans-serif" font-size="14" fill="#26231f">tool execution</text>
+<rect x="190" y="190" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="230.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="274" y="190" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="314.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="358" y="190" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="398.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="442" y="190" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="482.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="526" y="190" width="80" height="44" rx="5" fill="rgb(255,141,123)" stroke="#d7c6b2"/>
+<text x="566.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">4</text>
+<rect x="610" y="190" width="80" height="44" rx="5" fill="rgb(255,219,201)" stroke="#d7c6b2"/>
+<text x="650.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">1</text>
+<rect x="694" y="190" width="80" height="44" rx="5" fill="rgb(255,193,175)" stroke="#d7c6b2"/>
+<text x="734.0" y="219" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">2</text>
+<text x="40" y="268" font-family="Verdana, sans-serif" font-size="14" fill="#26231f">verification</text>
+<rect x="190" y="238" width="80" height="44" rx="5" fill="rgb(255,141,123)" stroke="#d7c6b2"/>
+<text x="230.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">4</text>
+<rect x="274" y="238" width="80" height="44" rx="5" fill="rgb(255,141,123)" stroke="#d7c6b2"/>
+<text x="314.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">4</text>
+<rect x="358" y="238" width="80" height="44" rx="5" fill="rgb(255,90,72)" stroke="#d7c6b2"/>
+<text x="398.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">6</text>
+<rect x="442" y="238" width="80" height="44" rx="5" fill="rgb(255,193,175)" stroke="#d7c6b2"/>
+<text x="482.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">2</text>
+<rect x="526" y="238" width="80" height="44" rx="5" fill="rgb(255,193,175)" stroke="#d7c6b2"/>
+<text x="566.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">2</text>
+<rect x="610" y="238" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="650.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="694" y="238" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="734.0" y="267" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<text x="40" y="316" font-family="Verdana, sans-serif" font-size="14" fill="#26231f">final answer</text>
+<rect x="190" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="230.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="274" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="314.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="358" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="398.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="442" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="482.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="526" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="566.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="610" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="650.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+<rect x="694" y="286" width="80" height="44" rx="5" fill="#f2eadf" stroke="#d7c6b2"/>
+<text x="734.0" y="315" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#26231f">0</text>
+</svg>

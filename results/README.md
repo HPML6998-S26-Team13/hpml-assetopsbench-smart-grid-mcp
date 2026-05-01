@@ -17,11 +17,18 @@ results/
 │   ├── baseline_latency.csv        # one row per (scenario, model, trial)
 │   ├── optimized_latency.csv
 │   ├── orchestration_accuracy.csv  # per scenario × orchestration condition
-│   └── scenario_scores.jsonl       # LLM-as-Judge scoring outputs
+│   ├── scenario_scores.jsonl       # LLM-as-Judge scoring outputs
+│   ├── failure_evidence_table.csv  # classified judge-failed rows for #35/#64/#36
+│   ├── failure_taxonomy_counts.csv # derived taxonomy-count source table
+│   ├── failure_stage_cell_counts.csv
+│   └── mitigation_run_inventory.csv
 ├── figures/               # publication-ready PDFs/PNGs
 │   ├── fig1_pipeline_overview.pdf
 │   ├── fig2_latency_breakdown.pdf
-│   └── fig3_orchestration_accuracy.pdf
+│   ├── fig3_orchestration_accuracy.pdf
+│   ├── failure_taxonomy_counts.svg
+│   ├── failure_stage_cell_heatmap.svg
+│   └── mitigation_priority_table.svg
 └── wandb_exports/         # periodic snapshots of WandB runs for long-term reproducibility
     └── 2026-04-20_week3_exports.json
 ```
@@ -33,6 +40,10 @@ results/
 - **Don't edit files in this dir by hand** — regenerate from notebooks. If you catch yourself tweaking a PDF directly, that's a smell.
 - WandB exports are snapshots in time. If a WandB run is deleted or the project is wiped, the exports here are the only remaining record.
 - `scenario_scores.jsonl` should retain the run-level join keys needed to line up with WandB and benchmark artifacts, especially `run_name`, `wandb_run_url`, `scenario_id`, `trial_index`, `experiment_cell`, `orchestration_mode`, `mcp_mode`, and `judge_model`.
+- `failure_evidence_table.csv` classifies judge-failed rows from `scenario_scores.jsonl` into the failure taxonomy used by `docs/failure_taxonomy_evidence.md`.
+- `scripts/render_failure_taxonomy_figures.py` regenerates the taxonomy
+  summary CSVs, mitigation inventory, and SVG figures from
+  `failure_evidence_table.csv`.
 - Per-trial judge audit logs live under `judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`.
 - `experiment_matrix_summary.csv` is the compact "what ran?" table. It keeps
   legacy cell names, display-code names, run names, latency, judge-score, and
@@ -75,6 +86,17 @@ What changed since the original scaffold:
 - `results/metrics/scenario_scores.jsonl` is the canonical LLM-as-judge table;
   new judging runs also write per-trial audit logs under
   `results/judge_logs/<run_name>/`
+- `results/metrics/failure_evidence_table.csv` now provides the first
+  CSV-backed failure-taxonomy pass for the 35 judge-failed rows in the current
+  scoring set
+- failure-analysis figure sources now exist:
+  - `results/metrics/failure_taxonomy_counts.csv`
+  - `results/metrics/failure_symptom_counts.csv`
+  - `results/metrics/failure_stage_cell_counts.csv`
+  - `results/metrics/mitigation_run_inventory.csv`
+  - `results/figures/failure_taxonomy_counts.svg`
+  - `results/figures/failure_stage_cell_heatmap.svg`
+  - `results/figures/mitigation_priority_table.svg`
 - shared WandB runs are linked from the benchmark `summary.json` / `meta.json`
   files and mirrored into judge rows where available
 

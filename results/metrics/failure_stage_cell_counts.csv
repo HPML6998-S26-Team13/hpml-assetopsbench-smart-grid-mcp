@@ -1,0 +1,6 @@
+failure_stage,A,B,C,D,Y,Z,ZSD,total
+planning,0,0,0,0,3,0,1,4
+tool selection,1,0,0,3,0,2,0,6
+tool execution,0,0,0,0,4,1,2,7
+verification,4,4,6,2,2,0,0,18
+final answer,0,0,0,0,0,0,0,0

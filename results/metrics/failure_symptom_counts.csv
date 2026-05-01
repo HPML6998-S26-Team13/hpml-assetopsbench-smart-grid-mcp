@@ -1,0 +1,5 @@
+symptom,rows,percent,dominant_taxonomy_label,candidate_mitigation
+missing-evidence final answer,18,51.4,task verification failure,block final answers/work orders when required evidence retrieval fails or returns empty
+tool routing or argument-contract failure,7,20.0,inter-agent / orchestration failure,validate tool arguments/aliases before calls and hard-fail bad routing as explicit step errors
+tool-call sequencing failure,6,17.1,inter-agent / orchestration failure,add a stage-aware plan/execution guard requiring evidence acquisition before inference and work-order creation
+under-constrained fault/risk adjudication,4,11.4,specification failure,add an explicit fault/risk adjudication step that cites the deciding tool evidence

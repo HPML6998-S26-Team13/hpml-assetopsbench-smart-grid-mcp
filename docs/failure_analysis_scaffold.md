@@ -1,6 +1,6 @@
 # Before/After Metric Pack for `#36`
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-04-30*
 *Owner: Alex Xin*
 *Issue: `#36`*
 
@@ -50,6 +50,23 @@ Since the Apr 26 refresh, the canonical `team13/main` lane has advanced:
 - These artifacts now define the live "before" baseline — any future
   mitigation rerun must pair against the same scenario set, model, and
   capture wrapper to keep the comparison honest.
+
+## Apr 30 export status
+
+`results/metrics/failure_evidence_table.csv` is now populated with 35
+judge-failed rows from `results/metrics/scenario_scores.jsonl`. That clears
+the first fill target for `#35` and gives `#64` a concrete source table for
+taxonomy-count and stage-by-cell visuals. It does **not** make before/after
+mitigation claims comparison-ready; those still need matched after-side reruns
+and `mitigation_before_after.csv`.
+
+The first mitigation planning table is also populated:
+`results/metrics/mitigation_run_inventory.csv`. This is a lane inventory, not
+a before/after result. It selects
+`missing_evidence_final_answer_guard` as the first implementation candidate
+because `missing-evidence final answer` is the largest recurring symptom in
+the current evidence table (`18 / 35` rows). `after_run` stays empty and
+`after_status=pending_rerun` until a matched rerun exists.
 
 ## Before/after metric pack
 
@@ -159,6 +176,8 @@ read these tables, not the raw run JSON.
 - one row per mitigation lane
 - required columns: `lane`, `mitigation_name`, `before_run`, `after_run`,
   `before_status`, `after_status`, `notes`
+- current status: populated with one selected lane and three queued candidate
+  lanes; no after-run claims yet
 
 `results/metrics/mitigation_before_after.csv`
 
@@ -292,10 +311,12 @@ carry the columns the figure or paper sentence will actually read.
 
 If new artifacts arrive gradually, fill the exports in this order:
 
-1. `failure_evidence_table.csv` (in `#35`'s lane)
-2. `mitigation_run_inventory.csv`
+1. `failure_evidence_table.csv` (done for the first judge-derived pass; needs
+   refresh only if final reruns change judge rows)
+2. `mitigation_run_inventory.csv` (done for the first mitigation lane
+   selection)
 3. `mitigation_before_after.csv`
-4. only then render the figures (`#64`'s lane)
+4. only then render before/after figures (`#64`'s lane)
 
 That order preserves the evidence trail even when the figure lane is still
 waiting on one missing rerun.
