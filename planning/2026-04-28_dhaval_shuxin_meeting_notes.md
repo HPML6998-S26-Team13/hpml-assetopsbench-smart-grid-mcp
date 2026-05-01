@@ -16,8 +16,7 @@ This note preserves the Apr 28 mentor-meeting state and guidance. Since then,
 PRs #134, #145, #147, #148, and #149 have merged, and Cell C, Cell D, and
 Z + Self-Ask + D proof captures plus Maverick judge rows are on main. Treat
 this file as the mentor guidance and scope-rationale record; use the GitHub
-Project board and `docs/coordination/live_repo_summary.md` for current task
-status.
+Project board for current task status.
 
 ## Summary
 
@@ -64,8 +63,7 @@ status.
 ## Action Items Captured on Apr 28
 
 Current execution status has moved since this meeting; see the GitHub Project
-board and `docs/coordination/live_repo_summary.md` before treating any checkbox
-here as live work.
+board before treating any checkbox here as live work.
 
 - [ ] Team: read the NeurIPS 2026 Datasets & Benchmarks call and choose one defensible evaluation-centric framing.
 - [ ] Alex: produce a final-week delivery plan that separates class deliverables, NeurIPS deliverables, and AOB upstream contribution work.

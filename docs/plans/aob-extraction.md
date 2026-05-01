@@ -18,9 +18,9 @@ upstream PRs to `IBM/AssetOpsBench`.
   question; resolved separately in `docs/replay_phase_analysis.md` (Option 1
   recommended); the cell-aware-replay mechanics are referenced here only as a
   potential future AOB-side feature.
-- `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot bullets
-  covering the AOB code-dive 2026-04-27 (Y baseline runs upstream Plan-Execute
-  on Python 3.12; PE/Verified PE/Self-Ask wrappers in our `scripts/` are thin
+- Personal-repo `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot
+  bullets covering the AOB code-dive 2026-04-27 (Y baseline runs upstream
+  Plan-Execute on Python 3.12; PE/Verified PE/Self-Ask wrappers in our `scripts/` are thin
   repo-local layers around the AOB `plan_execute` slice; vanilla AaT now has
   `scripts/aat_runner.py` after `#104` closure).
 - `Final_Project/planning/Dhaval_Email_Thread.md` Apr 28 entry — the four
@@ -82,8 +82,9 @@ upstream PRs to `IBM/AssetOpsBench`.
   as research artifacts.
 - Migrating Slurm/Insomnia operational docs (`docs/runbook.md`,
   `docs/insomnia_runbook.md`) — those are repo-cluster-specific.
-- Migrating coordination infrastructure (`docs/coordination/*`,
-  `pm/backlog.md`) — team-repo-only.
+- Migrating coordination infrastructure (`pm/backlog.md`) — team-repo-only.
+  Live agent-coordination state was moved to personal repo on 2026-04-30
+  (`/Users/wax/coding/Classes/COMS-E6998/docs/coordination/`).
 - Renaming our team-repo cell directories or summary.json schemas.
 
 ## Phases
@@ -375,6 +376,6 @@ PRs per the cadence decided in Q-UPSTREAM-PR-CADENCE.
 - Companion spec: [aob-extraction_spec.md](aob-extraction_spec.md)
 - Backlog pin (b): `pm/backlog.md` 2026-04-27 — `feat/evaluation-module` migration
 - Backlog pin (c): resolved in `docs/replay_phase_analysis.md` (separate plan track)
-- Live state: `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot
+- Live state: personal-repo `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot
 - AOB code dive notes: `docs/orchestration_wiring.md`
 - Dhaval coordination: `Final_Project/planning/Dhaval_Email_Thread.md` (personal repo)

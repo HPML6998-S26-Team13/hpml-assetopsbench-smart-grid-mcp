@@ -14,8 +14,7 @@ holds, but the PR-status section below is now historical: PRs #145, #134,
 #147, #148, and #149 have since merged, and Cell C, Cell D, and
 Z + Self-Ask + D proof captures plus Maverick judge rows are on main. Use this
 document for cut-line rationale and upstream-AOB strategy; use the GitHub
-Project board and `docs/coordination/live_repo_summary.md` for current task
-status.
+Project board for current task status.
 
 ## Hard Deadlines
 

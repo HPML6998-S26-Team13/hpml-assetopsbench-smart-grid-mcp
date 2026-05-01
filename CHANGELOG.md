@@ -2,6 +2,28 @@
 
 ## 2026-05-01
 
+### Removed / migrated
+
+- `docs/coordination/` directory removed from this team repo and migrated
+  to Alex's personal class repo at
+  `/Users/wax/coding/Classes/COMS-E6998/docs/coordination/`. Files moved
+  (tracked): `live_repo_summary.md`, `repo_summary_history.md`,
+  `shift_coordination_note_template.md`. Per-session
+  `shift_coordination_note__*.md` files (untracked) were also relocated.
+  Rationale: the coordination tooling is Alex-only; teammates do not
+  operate it. Personal-repo privacy lets full-detail orchestration
+  lessons (commit refs, URL patterns, copyright reasoning) stay durable
+  without public-repo audit risk.
+- Reference updates in `CLAUDE.md` (MECE convention section, hard
+  rule 10, canonical-docs list), `.claude/rules/planning-docs.md`,
+  `planning/2026-04-28_meeting_notes.md`,
+  `planning/2026-04-28_post_meeting_action_plan.md`,
+  `planning/2026-04-28_dhaval_shuxin_meeting_notes.md`,
+  `docs/plans/aob-extraction.md`, `docs/plans/aob-extraction_spec.md` —
+  meeting notes now point at the GitHub Project board for current task
+  status; plan docs point at the personal-repo coordination dir; CLAUDE.md
+  documents the move and the new cross-repo location for future agents.
+
 ### Validated
 
 - Backfilled judge-score summary fields into the committed first-capture

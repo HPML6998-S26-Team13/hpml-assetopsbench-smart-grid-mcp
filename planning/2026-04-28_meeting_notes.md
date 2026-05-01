@@ -15,8 +15,7 @@ The team also aligned on how to present open work honestly: Cell C optimization 
 This note preserves the Apr 28 team-sync snapshot. Since then, PRs #134, #145,
 #147, #148, and #149 have merged, and the repo now has Cell C, Cell D, and
 Z + Self-Ask + D proof captures plus Maverick judge rows on main. Treat this
-file as historical meeting context; use the GitHub Project board and
-`docs/coordination/live_repo_summary.md` for current task status.
+file as historical meeting context; use the GitHub Project board for current task status.
 
 ## Summary
 
@@ -73,8 +72,7 @@ file as historical meeting context; use the GitHub Project board and
 ## Action Items Captured on Apr 28
 
 Current execution status has moved since this meeting; see the GitHub Project
-board and `docs/coordination/live_repo_summary.md` before treating any checkbox
-here as live work.
+board before treating any checkbox here as live work.
 
 - [ ] Alex: convert the team sync and Dhaval / Shuxin meeting into canonical meeting notes, a final-week action plan, and a personal reconciliation update.
 - [ ] Alex: use the Dhaval / Shuxin guidance to reframe the class report, NeurIPS draft, and deck around scenarios, validation, LLM-as-judge, and measured system behavior.
@@ -87,4 +85,4 @@ here as live work.
 ## Notes
 
 - The transcript source also captured some transition into the following Dhaval / Shuxin meeting. This file records the team-sync portion only; the mentor meeting has its own record at `planning/2026-04-28_dhaval_shuxin_meeting_notes.md`.
-- Where repo state moved after the meeting, the canonical status is the GitHub Project plus `docs/coordination/live_repo_summary.md`; this note records the meeting record, not every subsequent GitHub edit.
+- Where repo state moved after the meeting, the canonical status is the GitHub Project board; this note records the meeting record, not every subsequent GitHub edit.

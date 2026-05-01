@@ -280,7 +280,7 @@ Items that don't block May 6 deadline but should be tracked:
 - AOB upstream: https://github.com/IBM/AssetOpsBench
 - Alex's fork: https://github.com/eggrollofchaos/AssetOpsBench
 - AOB feat/evaluation-module branch tip: `fcff318`
-- Live state context: `docs/coordination/live_repo_summary.md`
+- Live state context: personal-repo `docs/coordination/live_repo_summary.md`
 - Dhaval coordination: `Final_Project/planning/Dhaval_Email_Thread.md` (personal repo)
 - Replay-phase analysis (separate but related): `docs/replay_phase_analysis.md`
 - Y baseline 3.12 disclosure (separate but related): `docs/methods_python_version_disclosure.md`
