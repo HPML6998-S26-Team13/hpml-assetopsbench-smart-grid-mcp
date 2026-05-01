@@ -44,17 +44,18 @@ The canonical `team13/main` lane has advanced since the Apr 26 refresh:
 - Experiment 1 A/B canonical captures landed in PR `#130`. Job `8979314`
   produced both `8979314_aat_direct` and `8979314_aat_mcp_baseline` over
   scenario set `smartgrid_multi_domain` on `Llama-3.1-8B-Instruct`. Both
-  sides hit `success_rate=1.0` over 6 scenarios, so neither produced new
-  failure evidence rows; their value to `#35` is the per-trial latency,
-  tool-call, and `tool_error_count=0` baseline that any future PE-family
-  rerun will be classified against.
+  sides hit runner `success_rate=1.0` over 6 scenarios and produced no
+  runner-level failures or tool errors. Later judge scoring still contributes
+  A/B answer-quality failure rows to the taxonomy table; the distinction is
+  execution health versus final-answer correctness. Their value to `#35` is the
+  per-trial latency, tool-call, and `tool_error_count=0` baseline that any
+  future PE-family rerun will be classified against.
 
-These are readiness anchors, not final taxonomy evidence. They prove the AaT
-A/B paths can execute and emit artifacts; they do not yet replace the
-matched-trial `B/Y` or mitigation rerun evidence needed for final taxonomy
-counts and before/after claims. The `under-constrained fault selection`
-pattern stays at evidence grade `illustrative` until a second Y-cell
-artifact reproduces it.
+These are execution-readiness anchors and partial taxonomy inputs, not final
+mitigation evidence. They prove the AaT A/B paths can execute and emit
+artifacts; they do not yet replace the matched mitigation rerun evidence needed
+for before/after claims. The `under-constrained fault selection` pattern stays
+at evidence grade `illustrative` until a second Y-cell artifact reproduces it.
 
 ## Apr 30 status refresh
 
