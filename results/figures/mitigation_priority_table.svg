@@ -13,7 +13,7 @@
 <text x="88" y="118" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">missing_evidence_final_answer_guard</text>
 <text x="398" y="118" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">18</text>
 <text x="558" y="118" font-family="Verdana, sans-serif" font-size="12" fill="#26231f">final answer or work order emitted after required evidence is missing, empty, or untrusted</text>
-<text x="1078" y="118" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">selected_pending_implementation</text>
+<text x="1078" y="118" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">implemented_pending_rerun</text>
 <rect x="24" y="164" width="1172" height="66" rx="6" fill="#f1e6d6" stroke="#dbc8af"/>
 <text x="34" y="192" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">2</text>
 <text x="88" y="192" font-family="Verdana, sans-serif" font-size="13" fill="#26231f">strict_tool_routing_contract</text>

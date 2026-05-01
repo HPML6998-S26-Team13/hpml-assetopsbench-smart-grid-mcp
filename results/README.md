@@ -21,7 +21,8 @@ results/
 │   ├── failure_evidence_table.csv  # classified judge-failed rows for #35/#64/#36
 │   ├── failure_taxonomy_counts.csv # derived taxonomy-count source table
 │   ├── failure_stage_cell_counts.csv
-│   └── mitigation_run_inventory.csv
+│   ├── mitigation_run_inventory.csv
+│   └── mitigation_before_after.csv # header-only until matched reruns land
 ├── figures/               # publication-ready PDFs/PNGs
 │   ├── fig1_pipeline_overview.pdf
 │   ├── fig2_latency_breakdown.pdf
@@ -44,6 +45,9 @@ results/
 - `scripts/render_failure_taxonomy_figures.py` regenerates the taxonomy
   summary CSVs, mitigation inventory, and SVG figures from
   `failure_evidence_table.csv`.
+- `mitigation_before_after.csv` is the #66 comparison export contract. It is
+  header-only until a guarded rerun lands; do not treat its presence as an
+  after-run result.
 - Per-trial judge audit logs live under `judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`.
 - `experiment_matrix_summary.csv` is the compact "what ran?" table. It keeps
   legacy cell names, display-code names, run names, latency, judge-score, and
@@ -94,6 +98,7 @@ What changed since the original scaffold:
   - `results/metrics/failure_symptom_counts.csv`
   - `results/metrics/failure_stage_cell_counts.csv`
   - `results/metrics/mitigation_run_inventory.csv`
+  - `results/metrics/mitigation_before_after.csv` (schema only; no after-run rows yet)
   - `results/figures/failure_taxonomy_counts.svg`
   - `results/figures/failure_stage_cell_heatmap.svg`
   - `results/figures/mitigation_priority_table.svg`

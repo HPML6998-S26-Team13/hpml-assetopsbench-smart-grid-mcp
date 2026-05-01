@@ -130,6 +130,7 @@ TORCH_PROFILE_DIR="${TORCH_PROFILE_DIR:-}"
 HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
 VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
 ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
+ENABLE_MISSING_EVIDENCE_GUARD="${ENABLE_MISSING_EVIDENCE_GUARD:-0}"
 
 SERVER_IOT_PATH="${SERVER_IOT_PATH:-$REPO_ROOT/mcp_servers/iot_server/server.py}"
 SERVER_FMSR_PATH="${SERVER_FMSR_PATH:-$REPO_ROOT/mcp_servers/fmsr_server/server.py}"
@@ -377,6 +378,10 @@ if os.environ.get("CONTRIBUTING_EXPERIMENTS"):
 
 if orchestration_mode == "agent_as_tool":
     payload["aat_parallel_tool_calls"] = os.environ.get("AAT_PARALLEL_TOOL_CALLS", "false")
+payload["missing_evidence_guard"] = (
+    os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD", "0").strip().lower()
+    in {"1", "true", "yes", "on"}
+)
 
 # Persist EXTRA_VLLM_ARGS into the benchmark config + meta so artifact
 # consumers (notebooks, WandB, paper tables) can recover the exact vLLM
@@ -407,6 +412,7 @@ pathlib.Path(meta_path).write_text(
             "mcp_mode": payload["mcp_mode"],
             "model_id": payload["model_id"],
             "experiment_family": payload["experiment_family"],
+            "missing_evidence_guard": payload["missing_evidence_guard"],
             # vLLM extra args. Per-run meta records the exact optimization
             # knobs that produced a run so notebooks / paper tables can
             # recover the prefix-cache / kv-dtype / etc. choice without
@@ -755,6 +761,7 @@ run_external_orchestration_trial() {
     AAT_MCP_CLIENT_TIMEOUT_SECONDS="$AAT_MCP_CLIENT_TIMEOUT_SECONDS" \
     AAT_PARALLEL_TOOL_CALLS="$AAT_PARALLEL_TOOL_CALLS" \
     ENABLE_SELF_ASK="$ENABLE_SELF_ASK" \
+    ENABLE_MISSING_EVIDENCE_GUARD="$ENABLE_MISSING_EVIDENCE_GUARD" \
     HARNESS_VERBOSE="$HARNESS_VERBOSE" \
     SERVER_IOT_PATH="$SERVER_IOT_PATH" \
     SERVER_FMSR_PATH="$SERVER_FMSR_PATH" \
@@ -1096,8 +1103,14 @@ PY
     # top-level success field).
     "$PYTHON_BIN" - "$SCENARIO_FILE" "$TRIAL_OUT" <<'PY'
 import json
+import os
 import pathlib
 import sys
+
+from scripts.mitigation_guards import (
+    apply_missing_evidence_final_answer_guard,
+    env_flag_enabled,
+)
 
 
 def _step_failed(step: dict) -> bool:
@@ -1144,6 +1157,10 @@ try:
 except (OSError, json.JSONDecodeError):
     sys.exit(0)
 payload["scenario"] = scenario
+apply_missing_evidence_final_answer_guard(
+    payload,
+    enabled=env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD")),
+)
 derived = _derive_success(payload)
 if derived is not None and not isinstance(payload.get("success"), bool):
     payload["success"] = derived
@@ -1271,6 +1288,7 @@ summary = {
             "slurm_job_id",
         )
     },
+    "missing_evidence_guard": bool(config.get("missing_evidence_guard", False)),
     "run_status": "success" if int(failed) == 0 else ("partial" if int(passed) > 0 else "failed"),
     "scenarios_attempted": int(total),
     "scenarios_completed": int(passed),

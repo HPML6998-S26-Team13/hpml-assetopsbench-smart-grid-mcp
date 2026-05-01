@@ -42,6 +42,10 @@ from orchestration_utils import (  # noqa: E402
     tool_schema_for_step,
     verify_step,
 )
+from mitigation_guards import (  # noqa: E402
+    apply_missing_evidence_final_answer_guard,
+    env_flag_enabled,
+)
 
 
 class DummyLLM:
@@ -708,6 +712,95 @@ class OrchestrationUtilsTests(unittest.TestCase):
                 preflight_aob_runtime_dependencies()
         self.assertIn("litellm", str(exc.exception))
         self.assertIn("requirements-insomnia.txt", str(exc.exception))
+
+    def test_env_flag_enabled_accepts_standard_truthy_values(self):
+        self.assertTrue(env_flag_enabled("1"))
+        self.assertTrue(env_flag_enabled("true"))
+        self.assertFalse(env_flag_enabled("0"))
+        self.assertFalse(env_flag_enabled(""))
+
+    def test_missing_evidence_guard_blocks_substantive_final_answer(self):
+        payload = {
+            "answer": "Schedule immediate maintenance for transformer T-015.",
+            "success": True,
+            "failed_steps": [],
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {"sensor_id": "winding_temp_top_c"},
+                    "response": '{"readings": []}',
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertFalse(guarded["success"])
+        self.assertIn("Mitigation guard blocked", guarded["answer"])
+        self.assertTrue(guarded["mitigation_guard"]["triggered"])
+        self.assertTrue(guarded["mitigation_guard"]["blocked_final_answer"])
+        self.assertEqual(
+            guarded["failed_steps"][-1]["tool"],
+            "missing_evidence_final_answer_guard",
+        )
+
+    def test_missing_evidence_guard_allows_evidence_limited_answer(self):
+        payload = {
+            "answer": "Cannot determine the maintenance decision because sensor evidence is missing.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {"sensor_id": "winding_temp_top_c"},
+                    "response": "No readings found for transformer T-015.",
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertTrue(guarded["success"])
+        self.assertTrue(guarded["mitigation_guard"]["triggered"])
+        self.assertFalse(guarded["mitigation_guard"]["blocked_final_answer"])
+        self.assertTrue(guarded["mitigation_guard"]["evidence_limited_answer"])
+
+    def test_missing_evidence_guard_scans_aat_tool_calls(self):
+        payload = {
+            "answer": "Created a work order for immediate repair.",
+            "success": True,
+            "history": [
+                {
+                    "turn": 1,
+                    "tool_calls": [
+                        {
+                            "name": "get_sensor_readings",
+                            "arguments": {"sensor_id": "oil_temp_c"},
+                            "output": "No data found for transformer T-020.",
+                        },
+                        {
+                            "name": "create_work_order",
+                            "arguments": {"transformer_id": "T-020"},
+                            "output": "WO-123",
+                        },
+                    ],
+                }
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertFalse(guarded["success"])
+        self.assertTrue(guarded["mitigation_guard"]["blocked_work_order"])
 
 
 if __name__ == "__main__":

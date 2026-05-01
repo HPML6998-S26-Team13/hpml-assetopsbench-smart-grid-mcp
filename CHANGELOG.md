@@ -4,6 +4,18 @@
 
 ### Changed
 
+- Implemented the first failure-taxonomy mitigation lane for `#65` /
+  `#66`: `scripts/mitigation_guards.py` adds the
+  `missing_evidence_final_answer_guard`, and `scripts/run_experiment.sh`
+  applies it when `ENABLE_MISSING_EVIDENCE_GUARD=1`. The guard scans
+  emitted trial trajectories for missing, empty, or untrusted evidence and
+  blocks clean final-answer / work-order success when a substantive answer
+  follows that gap.
+- Added guarded mitigation rerun configs under `configs/mitigation/` for
+  PE + Self-Ask and Verified PE + Self-Ask, plus the header-only
+  `results/metrics/mitigation_before_after.csv` contract for #66. These
+  scaffold matched reruns without claiming after-run improvement before
+  Insomnia artifacts exist.
 - Added a paper/report delivery scaffold for `#5`, `#39`, and `#40`:
   `docs/neurips_draft.md` now records its issue scope, current NeurIPS draft
   completion state, failure-taxonomy figure links, and the handoff to the class

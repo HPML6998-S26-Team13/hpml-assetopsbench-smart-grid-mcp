@@ -187,9 +187,7 @@ def write_mitigation_inventory(rows: list[dict[str, str]]) -> list[dict[str, obj
                 "stop_condition": spec["stop_condition"],
                 "owner_issue": "#64 -> #65/#66",
                 "implementation_status": (
-                    "selected_pending_implementation"
-                    if spec["rank"] == "1"
-                    else "candidate"
+                    "implemented_pending_rerun" if spec["rank"] == "1" else "candidate"
                 ),
             }
         )

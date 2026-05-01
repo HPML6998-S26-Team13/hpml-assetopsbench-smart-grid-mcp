@@ -1,6 +1,6 @@
 # scripts/
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-05-01*
 
 Executable entrypoints and helper utilities for the repo. If you know roughly
 what you want to do but not which command to run, start here.
@@ -30,6 +30,7 @@ what you want to do but not which command to run, start here.
 | [plan_execute_self_ask_runner.py](plan_execute_self_ask_runner.py) | Repo-local PE + Self-Ask runner |
 | [verified_pe_runner.py](verified_pe_runner.py) | Repo-local Verified PE runner |
 | [orchestration_utils.py](orchestration_utils.py) | Shared planning / execution / summarization helpers used by the runners |
+| [mitigation_guards.py](mitigation_guards.py) | Deterministic post-processing guards used by mitigation reruns, including `missing_evidence_final_answer_guard` |
 
 ## Evaluation / analysis helpers
 

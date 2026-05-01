@@ -1,6 +1,6 @@
 # Before/After Metric Pack for `#36`
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-01*
 *Owner: Alex Xin*
 *Issue: `#36`*
 
@@ -67,6 +67,31 @@ a before/after result. It selects
 because `missing-evidence final answer` is the largest recurring symptom in
 the current evidence table (`18 / 35` rows). `after_run` stays empty and
 `after_status=pending_rerun` until a matched rerun exists.
+
+## May 1 guard and rerun scaffold status
+
+The selected `missing_evidence_final_answer_guard` is now implemented in the
+benchmark stack and can be enabled with one config variable:
+`ENABLE_MISSING_EVIDENCE_GUARD=1`.
+
+Implementation surfaces:
+
+- `scripts/mitigation_guards.py` — deterministic guard logic and metadata.
+- `scripts/run_experiment.sh` — applies the guard to every per-trial payload
+  during post-processing and records `missing_evidence_guard` in config,
+  summary, and meta JSON.
+- `configs/mitigation/missing_evidence_guard_pe_self_ask.env` — matched
+  rerun template for the PE + Self-Ask lane.
+- `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` —
+  matched rerun template for the Verified PE + Self-Ask lane.
+- `results/metrics/mitigation_before_after.csv` — header-only comparison
+  export contract. It intentionally contains no data rows until real rerun
+  artifacts exist.
+
+The guard turns misleading clean completion into explicit mitigation metadata:
+`mitigation_guard.triggered`, `blocked_final_answer`, `blocked_work_order`,
+and `hits`. A trial is marked unsuccessful only when missing/untrusted
+evidence is followed by a substantive final answer or work-order emission.
 
 ## Before/after metric pack
 
@@ -142,6 +167,8 @@ reruns against this lane have not yet landed.
 | Verified PE (smoke) | `8851966_verified_pe_mcp_baseline_smoke` | `8857843_verified_pe_mcp_baseline_smoke` | semantic failures masked by wrapper success accounting | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=93.59`, `latency_seconds_p95=139.64`, `tool_call_count_mean=10.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
 | AaT transport baseline (Cell A) | n/a (this is the baseline) | `8979314_aat_direct` | n/a | clean `6/6` canonical capture | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=73.13`, `latency_seconds_mean=12.19`, `latency_seconds_p50=11.47`, `latency_seconds_p95=18.57`, `tool_call_count_total=20`, `tool_call_count_mean=3.33`, `tool_error_count=0` | tokens / judge / MCP latency dims unpopulated on Cell A by definition |
 | AaT transport baseline (Cell B) | `8979314_aat_direct` | `8979314_aat_mcp_baseline` | clean Cell A (6/6) | clean Cell B (6/6) | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=80.30`, `latency_seconds_mean=13.38`, `latency_seconds_p50=12.91`, `latency_seconds_p95=16.65`, `tool_call_count_total=21`, `tool_call_count_mean=3.50`, `tool_error_count=0` | `mcp_latency_seconds_mean`, `mcp_latency_seconds_p95`, `tool_latency_seconds_mean`, token / judge dims still NULL on the capture |
+| Missing-evidence guard (PE + Self-Ask) | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
+| Missing-evidence guard (Verified PE + Self-Ask) | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
 
 Same job (`8979314`) produced both Cell A and Cell B captures, so the
 transport-overhead row pairs the two sides under one job ID. Observed
@@ -182,6 +209,7 @@ read these tables, not the raw run JSON.
 `results/metrics/mitigation_before_after.csv`
 
 - one row per `(lane, phase, run_name)`
+- current status: schema/header exists; no after-run rows yet
 - required columns (organized by group; column order can stay flexible as
   long as every column appears):
 
@@ -219,6 +247,11 @@ read these tables, not the raw run JSON.
   that the capture has not produced for a given row (e.g., judge scores when
   judge data is not yet wired) stay NULL on that row but the column must
   exist on the CSV.
+
+  Mitigation fields appended for `#65` / `#66`:
+  `mitigation_name`, `mitigation_enabled`,
+  `mitigation_guard_triggered`, `mitigation_guard_blocked_final_answer`,
+  `mitigation_guard_blocked_work_order`, `comparison_status`, and `notes`.
 
 ## Current safe claims
 
@@ -314,8 +347,8 @@ If new artifacts arrive gradually, fill the exports in this order:
 1. `failure_evidence_table.csv` (done for the first judge-derived pass; needs
    refresh only if final reruns change judge rows)
 2. `mitigation_run_inventory.csv` (done for the first mitigation lane
-   selection)
-3. `mitigation_before_after.csv`
+   selection and now marks the selected lane implemented pending rerun)
+3. `mitigation_before_after.csv` (schema exists; populate after guarded rerun)
 4. only then render before/after figures (`#64`'s lane)
 
 That order preserves the evidence trail even when the figure lane is still
