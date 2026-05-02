@@ -1,0 +1,23 @@
+{
+  "id": "SGT-013",
+  "type": "FMSR",
+  "text": "Field technicians on T-003 reported intermittent audible discharge sounds during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "category": "Symptom-Driven Failure Mode Lookup",
+  "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+  "asset_id": "T-003",
+  "expected_tools": [
+    "fmsr.search_failure_modes",
+    "fmsr.get_sensor_correlation"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "matched failure mode",
+      "rationale",
+      "correlated sensors"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

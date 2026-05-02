@@ -1,0 +1,27 @@
+{
+  "id": "SGT-019",
+  "type": "Multi",
+  "text": "T-004 has been carrying near-peak load for several weeks. Review its recent sensor telemetry, analyze any thermal trends, and assess whether the current condition poses a risk to sustained operation over the next 90 days.",
+  "category": "Thermal Risk Assessment",
+  "characteristic_form": "The answer should summarize relevant IoT sensor readings, report the thermal trend direction and rate, flag any anomalies, and give a 90-day operational risk assessment.",
+  "asset_id": "T-004",
+  "expected_tools": [
+    "iot.get_sensor_readings",
+    "tsfm.trend_analysis",
+    "tsfm.detect_anomalies",
+    "tsfm.forecast_rul"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "sensor telemetry summary",
+      "thermal trend finding",
+      "anomaly findings",
+      "90-day operational risk assessment"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "IoT",
+    "TSFM"
+  ]
+}

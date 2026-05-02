@@ -1,0 +1,22 @@
+{
+  "id": "SGT-011",
+  "type": "IoT",
+  "text": "Identify all transformers in the fleet currently showing degraded or poor health status. For each flagged asset, retrieve its nameplate data and summarize which units require prioritized attention.",
+  "category": "Fleet Health Assessment",
+  "characteristic_form": "The answer should enumerate degraded assets by ID, include nameplate metadata for each, and rank or flag the units most in need of follow-up.",
+  "expected_tools": [
+    "iot.list_assets",
+    "iot.get_asset_metadata"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "list of degraded asset IDs",
+      "nameplate data per asset",
+      "prioritization or ranking"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "IoT"
+  ]
+}

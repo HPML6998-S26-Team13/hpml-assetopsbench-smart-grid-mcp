@@ -1,0 +1,26 @@
+{
+  "id": "SGT-016",
+  "type": "TSFM",
+  "text": "T-001 is a critical substation transformer with no spare unit available. Assess its remaining useful life, check for anomalies across its sensor suite over the past 30 days, and determine whether the current condition supports continued operation through the next planned 90-day maintenance window.",
+  "category": "Comprehensive Health Assessment",
+  "characteristic_form": "The answer should report an RUL estimate, identify any anomalies in the past 30 days, and give a clear go/no-go recommendation for the 90-day operating window, noting the no-spare constraint.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "tsfm.get_rul",
+    "tsfm.forecast_rul",
+    "tsfm.detect_anomalies",
+    "tsfm.trend_analysis"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "RUL estimate",
+      "anomaly findings",
+      "90-day go/no-go recommendation",
+      "no-spare constraint acknowledged"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "TSFM"
+  ]
+}

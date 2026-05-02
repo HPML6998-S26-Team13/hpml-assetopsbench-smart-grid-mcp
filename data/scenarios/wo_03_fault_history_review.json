@@ -1,0 +1,23 @@
+{
+  "id": "SGT-017",
+  "type": "WO",
+  "text": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+  "category": "Pre-Maintenance Review",
+  "characteristic_form": "The answer should list recent fault records for T-009, summarize open work orders, and state whether any item requires escalation with a brief justification.",
+  "asset_id": "T-009",
+  "expected_tools": [
+    "wo.list_fault_records",
+    "wo.list_work_orders"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "fault record summary",
+      "open work order summary",
+      "escalation decision with justification"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "WO"
+  ]
+}
