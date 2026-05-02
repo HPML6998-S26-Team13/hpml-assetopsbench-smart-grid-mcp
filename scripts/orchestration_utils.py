@@ -134,6 +134,12 @@ def load_missing_evidence_repair_config() -> MissingEvidenceRepairConfig:
             "ENABLE_MISSING_EVIDENCE_GUARD=1 so repaired runs keep the "
             "truthfulness/accounting gate active."
         )
+    if not enabled:
+        return MissingEvidenceRepairConfig(
+            enabled=False,
+            max_attempts=0,
+            max_attempts_per_target=0,
+        )
     return MissingEvidenceRepairConfig(
         enabled=enabled,
         max_attempts=_positive_int_env("MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS", 2),
@@ -195,6 +201,7 @@ def current_missing_evidence_hit(
             current_source_prefix + "."
         ):
             return hit
+    for hit in scan["hits"]:
         if current_step is not None and hit.get("step") == current_step:
             return hit
     return None

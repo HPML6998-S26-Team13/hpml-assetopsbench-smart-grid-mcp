@@ -261,7 +261,20 @@ async def _run(args) -> None:
                         "unrepaired",
                         new_step=step.step_number,
                     )
-                    if remaining_steps and replans_used < args.max_replans:
+                    if (
+                        remaining_steps
+                        and replans_used < args.max_replans
+                        and can_retry_missing_evidence(
+                            repair_config,
+                            repair_state,
+                            repair_hit,
+                            repair_attempts_by_target,
+                        )
+                    ):
+                        key = repair_target_key(repair_hit)
+                        repair_attempts_by_target[key] = (
+                            repair_attempts_by_target.get(key, 0) + 1
+                        )
                         detector_replan_attempt = record_missing_evidence_retry_attempt(
                             repair_state,
                             repair_hit,

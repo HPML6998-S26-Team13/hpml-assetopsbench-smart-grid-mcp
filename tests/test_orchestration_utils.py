@@ -17,6 +17,7 @@ from orchestration_utils import (  # noqa: E402
     build_planner_descriptions,
     build_planning_question,
     build_tool_catalog_for_executor,
+    can_retry_missing_evidence,
     canonicalize_step_result,
     close_executor,
     compact_step_for_context,
@@ -38,7 +39,9 @@ from orchestration_utils import (  # noqa: E402
     parse_json_object,
     preflight_aob_runtime_dependencies,
     repair_sensor_task_text,
+    repair_target_key,
     response_error_payload,
+    record_missing_evidence_retry_attempt,
     serialize_step_result,
     should_skip_invalid_sensor_step,
     summarize_answer,
@@ -800,6 +803,79 @@ class OrchestrationUtilsTests(unittest.TestCase):
                 "requires ENABLE_MISSING_EVIDENCE_GUARD",
             ):
                 load_missing_evidence_repair_config()
+
+    def test_repair_config_ignores_budget_env_when_disabled(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_MISSING_EVIDENCE_REPAIR": "0",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "0",
+                "MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS": "0",
+                "MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET": "not-an-int",
+            },
+        ):
+            config = load_missing_evidence_repair_config()
+
+        self.assertFalse(config.enabled)
+        self.assertEqual(config.max_attempts, 0)
+        self.assertEqual(config.max_attempts_per_target, 0)
+
+    def test_current_missing_evidence_hit_prefers_current_retry_hit(self):
+        first_miss = {
+            "step": 1,
+            "task": "Fetch sensor readings",
+            "server": "iot",
+            "tool": "get_sensor_readings",
+            "tool_args": {
+                "transformer_id": "T-015",
+                "sensor_id": "winding_temp_top_c",
+            },
+            "response": '{"readings": []}',
+            "error": None,
+            "success": True,
+        }
+        current_miss = {
+            **first_miss,
+            "tool_args": {
+                "transformer_id": "T-015",
+                "sensor_id": "oil_temp_c",
+            },
+            "response": "No readings found for transformer T-015.",
+        }
+
+        hit = current_missing_evidence_hit([first_miss, current_miss], current_miss)
+
+        self.assertIsNotNone(hit)
+        self.assertEqual(hit["target"]["sensor_id"], "oil_temp_c")
+        self.assertIn("history[1]", hit["source"])
+
+    def test_detector_replan_budget_guard_blocks_after_total_attempts_exhausted(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_MISSING_EVIDENCE_REPAIR": "1",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "1",
+                "MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS": "1",
+                "MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET": "2",
+            },
+        ):
+            config = load_missing_evidence_repair_config()
+        state = build_missing_evidence_repair_state(config)
+        hit = {
+            "step": 2,
+            "tool": "get_sensor_readings",
+            "target": {
+                "transformer_id": "T-015",
+                "sensor_id": "winding_temp_top_c",
+            },
+            "reason": "tool response was empty",
+        }
+        record_missing_evidence_retry_attempt(state, hit, action="retry_step")
+        target_attempts = {repair_target_key(hit): 1}
+
+        self.assertFalse(
+            can_retry_missing_evidence(config, state, hit, target_attempts)
+        )
 
     def test_repair_state_finalizes_after_successful_retry(self):
         with patch.dict(
