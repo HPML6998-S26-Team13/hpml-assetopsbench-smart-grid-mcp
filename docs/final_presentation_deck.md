@@ -92,7 +92,8 @@ Table:
 
 Source:
 
-`mcp_servers/`, `data/scenarios/README.md`, `docs/data_pipeline.tex`
+`mcp_servers/`, `data/scenarios/README.md`, `docs/data_pipeline.tex`,
+`data/scenarios/*.json`, `data/scenarios/negative_checks/*.json`, PR #156.
 
 ### Slide 4 - Scenario Corpus Status
 
@@ -232,6 +233,13 @@ Visual:
 Use `results/figures/failure_taxonomy_counts.svg` and
 `results/figures/failure_stage_cell_heatmap.svg`.
 
+Source:
+
+`results/metrics/failure_taxonomy_counts.csv`,
+`results/metrics/failure_stage_cell_counts.csv`,
+`results/figures/failure_taxonomy_counts.svg`,
+`results/figures/failure_stage_cell_heatmap.svg`
+
 Speaker note:
 
 "The important thing here is that a run can complete and still be semantically
@@ -272,7 +280,8 @@ Proof objects:
 - metrics under `results/metrics/`
 - figures under `results/figures/`
 - Overleaf NeurIPS project with official 2026 template
-- AOB upstream package path in progress
+- Team 13 AOB fork package/planning path in progress; IBM upstreaming remains
+  future work until an upstream PR is opened.
 
 Visual:
 
