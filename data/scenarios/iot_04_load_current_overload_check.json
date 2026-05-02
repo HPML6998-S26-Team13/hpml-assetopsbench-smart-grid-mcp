@@ -1,20 +1,20 @@
 {
   "id": "SGT-012",
   "type": "IoT",
-  "text": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether the transformer operated above its rated capacity at any point during that window.",
-  "category": "Overload Assessment",
-  "characteristic_form": "The answer should retrieve load current readings for T-005, state whether any reading exceeded rated capacity, and identify when the peak exceedance occurred or confirm no exceedance.",
+  "text": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred.",
+  "category": "Load Current Monitoring",
+  "characteristic_form": "The answer should retrieve load current readings for T-005, compute or reference a recent baseline, state whether readings are elevated above that baseline, and report the peak value and timestamp.",
   "asset_id": "T-005",
   "expected_tools": [
-    "iot.get_asset_metadata",
     "iot.list_sensors",
     "iot.get_sensor_readings"
   ],
   "ground_truth": {
     "must_include": [
       "load current readings",
-      "rated capacity reference",
-      "overload decision with supporting evidence"
+      "baseline or mean reference",
+      "peak value and timestamp",
+      "elevated vs normal assessment"
     ]
   },
   "difficulty": "medium",
