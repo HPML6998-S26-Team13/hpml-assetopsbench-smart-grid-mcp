@@ -1,0 +1,26 @@
+{
+  "id": "SGT-019",
+  "type": "Multi",
+  "text": "T-004's oil temperature has been trending upward while the unit carries near-peak load. Review the recent sensor readings and forecast whether the transformer can safely sustain current load levels for the next 90 days without exceeding thermal limits.",
+  "category": "Thermal Risk Forecast",
+  "characteristic_form": "The answer should summarize IoT thermal sensor evidence, provide a 90-day RUL or risk forecast, flag any anomalies, and give a clear continue/derate/intervene recommendation.",
+  "asset_id": "T-004",
+  "expected_tools": [
+    "iot.get_sensor_readings",
+    "tsfm.detect_anomalies",
+    "tsfm.forecast_rul"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "thermal sensor evidence",
+      "90-day forecast",
+      "anomaly findings",
+      "operational recommendation"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "IoT",
+    "TSFM"
+  ]
+}

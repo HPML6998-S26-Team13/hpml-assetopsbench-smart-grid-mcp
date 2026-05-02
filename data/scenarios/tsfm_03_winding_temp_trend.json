@@ -1,0 +1,22 @@
+{
+  "id": "SGT-015",
+  "type": "TSFM",
+  "text": "T-002's winding temperature sensor readings have been rising gradually over the past month. Analyze the trend to determine whether the rate of increase is accelerating and estimate the implied time before the trajectory reaches an actionable level.",
+  "category": "Sensor Trend Analysis",
+  "characteristic_form": "The answer should quantify the trend direction and rate for the winding temperature sensor, state whether the rate is accelerating or stable, and provide a time-horizon estimate.",
+  "asset_id": "T-002",
+  "expected_tools": [
+    "tsfm.trend_analysis"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "trend direction and rate",
+      "accelerating vs stable characterization",
+      "time horizon estimate"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "TSFM"
+  ]
+}

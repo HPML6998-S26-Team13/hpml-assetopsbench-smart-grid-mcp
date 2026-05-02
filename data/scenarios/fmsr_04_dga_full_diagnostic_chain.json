@@ -1,0 +1,25 @@
+{
+  "id": "SGT-014",
+  "type": "FMSR",
+  "text": "T-007's most recent oil sample has returned unusual results from the laboratory. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "category": "Full DGA Diagnostic Chain",
+  "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+  "asset_id": "T-007",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "fmsr.search_failure_modes",
+    "fmsr.get_sensor_correlation"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "fault mode from DGA",
+      "matched failure mechanism",
+      "sensors for ongoing monitoring"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

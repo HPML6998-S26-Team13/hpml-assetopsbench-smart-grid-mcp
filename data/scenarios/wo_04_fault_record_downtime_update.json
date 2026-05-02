@@ -1,0 +1,25 @@
+{
+  "id": "SGT-018",
+  "type": "WO",
+  "text": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected outage duration for the required repairs, and update the existing work order with the downtime estimate and an appropriate task scope.",
+  "category": "Work Order Update",
+  "characteristic_form": "The answer should retrieve the fault record, provide a downtime estimate with rationale, and confirm the work order was updated with the estimate and task scope.",
+  "asset_id": "T-006",
+  "expected_tools": [
+    "wo.list_fault_records",
+    "wo.get_fault_record",
+    "wo.estimate_downtime",
+    "wo.update_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "fault record details",
+      "downtime estimate",
+      "work order updated"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "WO"
+  ]
+}

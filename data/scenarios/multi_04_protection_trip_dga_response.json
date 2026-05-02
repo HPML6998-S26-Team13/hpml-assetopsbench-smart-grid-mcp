@@ -1,0 +1,27 @@
+{
+  "id": "SGT-020",
+  "type": "Multi",
+  "text": "T-008 tripped on differential protection overnight. Review its DGA oil-sample data to identify the probable fault cause, then check the fault record history and issue a corrective work order with the appropriate priority.",
+  "category": "Protection Trip Response",
+  "characteristic_form": "The answer should identify the fault cause from DGA analysis, reference any prior fault history relevant to the trip, and produce a corrective work order with a priority level justified by the DGA findings.",
+  "asset_id": "T-008",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "wo.list_fault_records",
+    "wo.create_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA-based fault cause",
+      "fault history context",
+      "corrective work order",
+      "priority justified by DGA evidence"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR",
+    "WO"
+  ]
+}
