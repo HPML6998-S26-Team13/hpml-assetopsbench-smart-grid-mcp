@@ -1,8 +1,8 @@
 # NeurIPS Abstract Outline and Title Candidates
 
-*Last updated: 2026-04-20*  
-*Owner: Alex Xin*  
-*Issue: [#77](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/77)*
+*Last updated: 2026-05-02*
+*Owner: Alex Xin*
+*Issues: #47, with historical scaffold #77*
 
 This note turns the paper lane into a concrete abstract plan early, before the
 final writing crunch. It is not the final abstract. It is the working scaffold
@@ -181,6 +181,35 @@ benchmark paper lane.
 
 If the final title does adopt **SmartGridBench**, the abstract opening can be
 rewritten to name it explicitly.
+
+## May 2 Abstract Candidate for Submission
+
+Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
+maintenance, even though these workflows require exactly the kind of multi-tool
+reasoning that industrial LLM agents are expected to perform: telemetry
+inspection, fault diagnosis, degradation forecasting, and work-order planning.
+We present SmartGridBench, a Smart Grid transformer-maintenance extension of
+AssetOpsBench that adds transformer scenarios, public-data-backed asset
+records, and four tool domains exposed through the Model Context Protocol
+(MCP). The benchmark is designed to make two usually conflated systems choices
+measurable: the transport cost of MCP relative to direct tool invocation, and
+the behavioral effect of orchestration strategies such as Agent-as-Tool,
+Plan-Execute, and Verified Plan-Execute when the tool surface is held fixed.
+Current artifacts show a runnable end-to-end benchmark path with committed
+scenario outputs, profiling links, Weights & Biases runs, LLM-as-judge scores,
+and failure-taxonomy exports. Preliminary six-trial captures show that MCP
+standardization introduces measurable overhead in direct comparisons, that
+persistent optimized MCP sessions can reduce steady-state latency but do not by
+themselves improve answer quality, and that PE-family mitigations such as
+Self-Ask and verification can materially change judged quality. We also treat
+scenario realism, generated-scenario circularity, and failure accounting as
+first-class benchmark artifacts rather than post-hoc notes. SmartGridBench
+therefore contributes both a new industrial benchmark domain and an auditable
+systems study of protocol and orchestration choices in tool-using agents.
+
+Submission caveat: if the abstract form enforces a tighter word budget, remove
+the sentence beginning "Preliminary six-trial captures..." first, then fold the
+result gist into the prior sentence.
 
 ## What still needs teammate fact bullets
 

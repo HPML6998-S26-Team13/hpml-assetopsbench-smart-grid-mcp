@@ -1,9 +1,9 @@
 # NeurIPS Draft Scaffold
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 *Owner: Alex Xin (writing shepherd; section co-authoring under discussion for
 Apr 28 team sync)*
-*Issues: `#5`, `#39`; class-report back-port tracked in `#40`*
+*Issues: `#5`, `#39`, `#47`, `#48`; class-report back-port tracked in `#40`*
 
 This doc is the live draft scaffold for the NeurIPS 2026 Datasets & Benchmarks
 paper lane. It used to live alongside the failure-analysis scaffold inside
@@ -17,6 +17,31 @@ final paper — it is the canonical writing surface for:
 - draft prose that should later move into Overleaf cleanly
 
 Companion conversion surface: `docs/final_report_backport_scaffold.md`.
+Submission control surface: `docs/neurips_submission_packet.md`.
+
+## May 2 submission status
+
+The NeurIPS lane is now a live submission lane rather than only a paper
+scaffold. The Overleaf project at
+https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 has ingested the
+official NeurIPS 2026 template package from the NeurIPS CFP and is configured
+for anonymous Evaluations & Datasets submission mode
+(`\usepackage[eandd]{neurips_2026}`). The remaining LaTeX gate is visual
+compile proof in Overleaf plus completion of the NeurIPS checklist.
+
+Deadline posture from the final-week plan:
+
+| Deliverable | Deadline |
+|---|---|
+| NeurIPS abstract | 2026-05-04 23:59 AOE |
+| NeurIPS full paper | 2026-05-06 23:59 AOE |
+| Class presentation | 2026-05-07 15:00 ET |
+| Class final report | 2026-05-08 23:59 ET |
+
+Writing stance: use the current six-trial captures and failure taxonomy as
+paper-backed evidence now; promote additional scenario counts, mitigation
+reruns, or 70B/context-window appendix evidence only after those artifacts are
+on canonical history or explicitly labeled as pending/appendix.
 
 ## Working title
 
@@ -41,26 +66,30 @@ quietly folded into the baseline comparison.
 
 ## Draft abstract
 
-Draft paragraph:
+Draft paragraph to transfer into Overleaf:
 
+Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
+maintenance, even though these workflows require exactly the kind of multi-tool
+reasoning that industrial LLM agents are expected to perform: telemetry
+inspection, fault diagnosis, degradation forecasting, and work-order planning.
 We present SmartGridBench, a Smart Grid transformer-maintenance extension of
-AssetOpsBench designed to evaluate industrial agents that must combine
-telemetry inspection, failure diagnosis, degradation forecasting, and
-maintenance planning. The benchmark exposes four tool domains through
-MCP-backed Smart Grid servers and keeps one benchmark-facing artifact contract
-across direct-tool, MCP, and orchestration conditions. We use this extension to
-study two questions that are usually conflated: what latency cost MCP
-standardization introduces relative to direct tool calls, and how orchestration
-choices such as Agent-as-Tool and Plan-Execute affect benchmark behavior when
-transport is held fixed. The core study therefore separates transport
-comparison (`A/B/C`) from orchestration comparison (`B/Y`, with optional `Z`)
-rather than running an uncontrolled full matrix. Beyond baseline comparison, we
-also treat failure analysis as a first-class benchmark artifact: committed runs
-already expose recurring answer/tool inconsistency and wrapper-level accounting
-failures, which motivates a measurable mitigation lane for PE-family methods.
-This framing keeps the paper honest about what is already proven, while still
-showing how protocol design, orchestration structure, and evidence discipline
-interact in industrial-agent benchmarking.
+AssetOpsBench that adds transformer scenarios, public-data-backed asset
+records, and four tool domains exposed through the Model Context Protocol
+(MCP). The benchmark is designed to make two usually conflated systems choices
+measurable: the transport cost of MCP relative to direct tool invocation, and
+the behavioral effect of orchestration strategies such as Agent-as-Tool,
+Plan-Execute, and Verified Plan-Execute when the tool surface is held fixed.
+Current artifacts show a runnable end-to-end benchmark path with committed
+scenario outputs, profiling links, Weights & Biases runs, LLM-as-judge scores,
+and failure-taxonomy exports. Preliminary six-trial captures show that MCP
+standardization introduces measurable overhead in direct comparisons, that
+persistent optimized MCP sessions can reduce steady-state latency but do not by
+themselves improve answer quality, and that PE-family mitigations such as
+Self-Ask and verification can materially change judged quality. We also treat
+scenario realism, generated-scenario circularity, and failure accounting as
+first-class benchmark artifacts rather than post-hoc notes. SmartGridBench
+therefore contributes both a new industrial benchmark domain and an auditable
+systems study of protocol and orchestration choices in tool-using agents.
 
 ## Working contribution list
 
@@ -100,6 +129,8 @@ Use this table to keep the draft aligned with what the repo can actually prove.
 | AaT Cell A/B runner surface exists and can emit canonical smoke artifacts | `docs/validation_log.md`, jobs `8962310` and `8969519`; upstream parity jobs `8970383`, `8970468` | safe now as smoke proof |
 | AaT Cell A/B canonical captures exist on the same scenario set, same model, same job | `benchmarks/cell_A_direct/summary.json` and `benchmarks/cell_B_mcp_baseline/summary.json` from job `8979314` (PR `#130`); 6 scenarios per side, `Llama-3.1-8B-Instruct`, scenario set `smartgrid_multi_domain` (hash `ca66cd16…2691e48`); both sides hit `success_rate=1.0`, `failure_count=0`, `tool_error_count=0` | safe now as a paired one-job baseline |
 | PE-family failures show recurring correctness/accounting issues worth classifying | `docs/failure_taxonomy_evidence.md`, committed Y/Z artifacts, `docs/validation_log.md` | safe now |
+| Official NeurIPS 2026 submission surface exists | Overleaf project `69f5a380e638a31066dc0bd1`, commit `7e361de`, official `neurips_2026` package and `checklist.tex` | safe now |
+| Scenario corpus is on track for the 30-scenario floor | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-crafted scenarios; generator-accepted scenarios still pending | pending; do not present 30 as complete until merged/validated |
 | Indicative AaT MCP transport overhead (Cell B − Cell A) on the canonical scenario set | job `8979314` paired summaries: latency mean `+1.20s` (`+9.8%`), wall-clock total `+7.17s` (`+9.8%`), tool-call mean `+0.17` (`+5.0%`), zero tool errors | safe now as one-job, six-scenario evidence; **not** safe as a final transport-overhead distribution |
 | Full transport result across `A/B/C` | final comparable captures under `benchmarks/cell_A_direct/`, `cell_B_mcp_baseline/`, `cell_C_mcp_optimized/` with repeat trials and judge data | partial: one-job A/B pair exists from `8979314`; first Cell C capture/judge set exists from `9071639`; final 5-trial matched rerun still missing |
 | Final orchestration comparison across shared `B/Y` anchor | final comparable shared-cell artifacts plus judge outputs | blocked |
@@ -394,6 +425,32 @@ When final numbers land, keep the results section ordered this way:
 That order prevents the paper from front-loading mitigation wins before the
 baseline matrix is actually established.
 
+### Current results snapshot for first full draft
+
+Use this table as the first Overleaf results skeleton. It is paper-useful now,
+but every caption should call it a six-trial first-capture summary unless final
+matched reruns replace it.
+
+| Cell | Meaning | Run | Trials | p50 latency | p95 latency | Judge mean | Judge pass |
+|---|---|---|---:|---:|---:|---:|---:|
+| `A` / `AT-I` | AaT direct Python tools | `8979314_aat_direct` | 6 | 12.15s | 17.29s | 0.167 | 1/6 |
+| `B` / `AT-M` | AaT MCP baseline | `8979314_aat_mcp_baseline` | 6 | 13.09s | 16.27s | 0.278 | 2/6 |
+| `C` / `AT-TP` | AaT optimized MCP transport + prefix cache | `9071639_aat_mcp_optimized` | 6 | 7.40s | 47.93s | 0.167 | 0/6 |
+| `Y` / `PE-M` | Plan-Execute MCP baseline | `8998340_exp2_cell_Y_pe_mcp_baseline` | 6 | 52.06s | 116.32s | 0.111 | 0/6 |
+| `Z` / `V-M` | Verified PE MCP baseline | `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | 6 | 119.64s | 152.36s | 0.639 | 4/6 |
+| `YS` / `PE-S-M` | Plan-Execute + Self-Ask | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | 6 | 59.00s | 83.20s | 0.444 | 3/6 |
+| `ZS` / `V-S-M` | Verified PE + Self-Ask | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | 6 | 33.78s | 58.03s | 0.833 | 5/6 |
+
+Draft sentence:
+
+Across the first six-trial evidence set, optimized persistent MCP sessions
+reduced steady-state AaT latency but did not improve judged answer quality,
+while PE-family variants showed that clarification and verification can matter
+more for semantic quality than transport alone. The strongest current
+PE-family row is Verified PE + Self-Ask (`ZS`), with mean judge score `0.833`
+and `5/6` judge-pass, but it should be framed as a follow-on mitigation lane
+rather than the vanilla orchestration baseline.
+
 ### Preliminary Experiment 1 numbers (one job, six scenarios)
 
 The first canonical transport-overhead measurement is now committed. PR
@@ -630,7 +687,8 @@ What is still missing before `#39` is complete:
 - final result paragraphs after the A/B/C and B/Y analysis exports are frozen
 - final figure captions tied to the committed figure files
 - references formatted in the NeurIPS style
-- Overleaf / LaTeX transfer and compile proof
+- Overleaf / LaTeX visual compile proof with the 2026 template
+- completed NeurIPS checklist answers
 
 ## Back-port handoff for `#40`
 
