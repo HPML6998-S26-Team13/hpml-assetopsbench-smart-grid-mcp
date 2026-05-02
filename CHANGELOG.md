@@ -4,6 +4,11 @@
 
 ### Changed
 
+- Documented the mitigation-ladder policy for `#64` / `#66`: use `Y +
+  Self-Ask` and `Z + Self-Ask` as the family lanes, treat
+  `missing_evidence_final_answer_guard` as the detection / truthfulness gate,
+  record `missing_evidence_retry_replan_guard` as the next recovery rung, and
+  avoid a full cell-by-mitigation permutation grid.
 - Implemented the first failure-taxonomy mitigation lane for `#65` /
   `#66`: `scripts/mitigation_guards.py` adds the
   `missing_evidence_final_answer_guard`, and `scripts/run_experiment.sh`

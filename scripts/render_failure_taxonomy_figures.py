@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import html
+import textwrap
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -29,17 +30,60 @@ STAGE_ORDER = [
 MITIGATION_SPECS = [
     {
         "rank": "1",
-        "lane": "evidence_grounding",
+        "lane": "evidence_grounding_detection",
         "mitigation_name": "missing_evidence_final_answer_guard",
         "symptom": "missing-evidence final answer",
         "target_pattern": "final answer or work order emitted after required evidence is missing, empty, or untrusted",
         "primary_metric": "count of missing-evidence final answer rows after rerun",
-        "secondary_metrics": "judge_pass_rate, success_rate, latency_seconds_mean",
+        "secondary_metrics": "judge_pass_rate, success_rate, latency_seconds_mean, mitigation_guard_triggered",
         "stop_condition": "no reduction in target rows or low-value refusals without judge-pass improvement",
-        "notes": "Selected first because it is the largest recurring class in the current evidence table.",
+        "notes": (
+            "Selected first because it is the largest recurring class in the current evidence table. "
+            "This is the truthfulness/accounting gate for the mitigation ladder: detect missing evidence "
+            "and block unsafe finalization; it does not retry."
+        ),
+        "after_run": (
+            "pending guarded family reruns: "
+            "configs/mitigation/missing_evidence_guard_pe_self_ask.env; "
+            "configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env"
+        ),
+        "implementation_status": "implemented_pending_rerun",
     },
     {
         "rank": "2",
+        "lane": "evidence_repair",
+        "mitigation_name": "missing_evidence_retry_replan_guard",
+        "symptom": "missing-evidence final answer",
+        "target_pattern": (
+            "missing evidence detected before finalization; evidence can potentially be repaired "
+            "by retrying the failed read-only step or replanning downstream steps"
+        ),
+        "primary_metric": "supported_success_after_repair_rate",
+        "secondary_metrics": (
+            "judge_pass_rate, latency_seconds_mean, tool_call_count_mean, "
+            "mitigation_guard_triggered, repair_attempt_count"
+        ),
+        "stop_condition": (
+            "no supported-success increase or excessive latency/tool-call growth relative to "
+            "detection-only guard"
+        ),
+        "notes": (
+            "Next mitigation-ladder rung. Reuse the missing-evidence detector during execution; "
+            "retry the evidence-producing step with a bounded budget and replan the dependent suffix "
+            "before final answer / work-order creation. Runs only after the detection-only guard is measured."
+        ),
+        "before_run": (
+            "pending detection-guard after-runs for family lanes: "
+            "Y+Self-Ask and Z+Self-Ask"
+        ),
+        "after_run": "future recovery rerun after detection-only baselines exist",
+        "before_status": "candidate_after_detection",
+        "after_status": "pending_implementation",
+        "owner_issue": "#64 -> future #65/#66 follow-up",
+        "implementation_status": "candidate_next",
+    },
+    {
+        "rank": "3",
         "lane": "routing_contract",
         "mitigation_name": "strict_tool_routing_contract",
         "symptom": "tool routing or argument-contract failure",
@@ -50,7 +94,7 @@ MITIGATION_SPECS = [
         "notes": "Candidate lane; parts are already visible in the ZSD hardening history.",
     },
     {
-        "rank": "3",
+        "rank": "4",
         "lane": "evidence_sequence",
         "mitigation_name": "required_evidence_sequence_guard",
         "symptom": "tool-call sequencing failure",
@@ -58,10 +102,13 @@ MITIGATION_SPECS = [
         "primary_metric": "count of tool-call sequencing rows after rerun",
         "secondary_metrics": "history_length, failed_steps_mean, judge_pass_rate",
         "stop_condition": "agent still reasons past missing required evidence",
-        "notes": "Candidate lane; overlaps with planner/verifier ordering and should follow the simpler final-answer guard.",
+        "notes": (
+            "Candidate lane; overlaps with missing-evidence repair and should not be run as a "
+            "separate permutation until the detection and repair rungs are measured."
+        ),
     },
     {
-        "rank": "4",
+        "rank": "5",
         "lane": "fault_adjudication",
         "mitigation_name": "explicit_fault_risk_adjudication_step",
         "symptom": "under-constrained fault/risk adjudication",
@@ -69,7 +116,10 @@ MITIGATION_SPECS = [
         "primary_metric": "count of under-constrained adjudication rows after rerun",
         "secondary_metrics": "clarity_and_justification judge dimension, judge_pass_rate",
         "stop_condition": "adjudication remains vague or does not cite deciding tool evidence",
-        "notes": "Candidate lane; useful for paper framing but lower-count than evidence grounding.",
+        "notes": (
+            "Candidate downstream lane. Evaluate after evidence detection/repair because adjudication "
+            "is meaningful only when the deciding evidence exists."
+        ),
     },
 ]
 
@@ -93,6 +143,11 @@ def pct(numerator: int, denominator: int) -> str:
 
 def xml(text: object) -> str:
     return html.escape(str(text), quote=True)
+
+
+def wrap_lines(text: object, width: int) -> list[str]:
+    lines = textwrap.wrap(str(text), width=width, break_long_words=False)
+    return lines or [""]
 
 
 def write_taxonomy_counts(rows: list[dict[str, str]]) -> list[dict[str, object]]:
@@ -174,10 +229,16 @@ def write_mitigation_inventory(rows: list[dict[str, str]]) -> list[dict[str, obj
             {
                 "lane": spec["lane"],
                 "mitigation_name": spec["mitigation_name"],
-                "before_run": f"results/metrics/failure_evidence_table.csv:symptom={spec['symptom']}",
-                "after_run": "",
-                "before_status": f"current_count={evidence_rows}",
-                "after_status": "pending_rerun",
+                "before_run": spec.get(
+                    "before_run",
+                    f"results/metrics/failure_evidence_table.csv:symptom={spec['symptom']}",
+                ),
+                "after_run": spec.get("after_run", ""),
+                "before_status": spec.get(
+                    "before_status",
+                    f"current_count={evidence_rows}",
+                ),
+                "after_status": spec.get("after_status", "pending_rerun"),
                 "notes": spec["notes"],
                 "rank": spec["rank"],
                 "target_pattern": spec["target_pattern"],
@@ -185,10 +246,8 @@ def write_mitigation_inventory(rows: list[dict[str, str]]) -> list[dict[str, obj
                 "primary_metric": spec["primary_metric"],
                 "secondary_metrics": spec["secondary_metrics"],
                 "stop_condition": spec["stop_condition"],
-                "owner_issue": "#64 -> #65/#66",
-                "implementation_status": (
-                    "implemented_pending_rerun" if spec["rank"] == "1" else "candidate"
-                ),
+                "owner_issue": spec.get("owner_issue", "#64 -> #65/#66"),
+                "implementation_status": spec.get("implementation_status", "candidate"),
             }
         )
     fieldnames = [
@@ -281,9 +340,9 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
 
 
 def svg_mitigation_table(rows: list[dict[str, object]], path: Path) -> None:
-    width, row_h = 1220, 74
+    width, row_h = 1340, 104
     height = 118 + row_h * len(rows)
-    cols = [54, 310, 160, 520, 150]
+    cols = [54, 310, 150, 570, 230]
     headings = ["#", "Mitigation", "Evidence rows", "Target pattern", "Status"]
     x_positions = [34]
     for w in cols[:-1]:
@@ -292,7 +351,7 @@ def svg_mitigation_table(rows: list[dict[str, object]], path: Path) -> None:
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="#fbf7ef"/>',
         '<text x="34" y="42" font-family="Georgia, serif" font-size="28" fill="#1b1b1b">Mitigation inventory</text>',
-        '<text x="34" y="68" font-family="Verdana, sans-serif" font-size="13" fill="#5b5147">Selected first lane plus queued candidates from mitigation_run_inventory.csv</text>',
+        '<text x="34" y="68" font-family="Verdana, sans-serif" font-size="13" fill="#5b5147">Five-lane ladder: detector first, repair/adjudication only after evidence gates are measured</text>',
     ]
     header_y = 92
     parts.append(
@@ -309,17 +368,24 @@ def svg_mitigation_table(rows: list[dict[str, object]], path: Path) -> None:
             f'<rect x="24" y="{y - 28}" width="{width - 48}" height="{row_h - 8}" rx="6" fill="{fill}" stroke="#dbc8af"/>'
         )
         values = [
-            row["rank"],
-            row["mitigation_name"],
-            row["evidence_rows"],
-            row["target_pattern"],
-            row["implementation_status"],
+            (row["rank"], 4, 13),
+            (row["mitigation_name"], 31, 13),
+            (row["evidence_rows"], 10, 13),
+            (row["target_pattern"], 70, 12),
+            (
+                {
+                    "implemented_pending_rerun": "implemented / pending rerun",
+                    "candidate_next": "candidate next",
+                }.get(str(row["implementation_status"]), row["implementation_status"]),
+                24,
+                12,
+            ),
         ]
-        for x, value in zip(x_positions, values):
-            font_size = 12 if x == x_positions[3] else 13
-            parts.append(
-                f'<text x="{x}" y="{y}" font-family="Verdana, sans-serif" font-size="{font_size}" fill="#26231f">{xml(value)}</text>'
-            )
+        for x, (value, wrap_width, font_size) in zip(x_positions, values):
+            for line_i, line in enumerate(wrap_lines(value, wrap_width)[:4]):
+                parts.append(
+                    f'<text x="{x}" y="{y - 8 + line_i * 16}" font-family="Verdana, sans-serif" font-size="{font_size}" fill="#26231f">{xml(line)}</text>'
+                )
     parts.append("</svg>")
     path.write_text("\n".join(parts) + "\n")
 
