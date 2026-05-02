@@ -1,6 +1,6 @@
 # Before/After Metric Pack for `#36`
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 *Owner: Alex Xin*
 *Issue: `#36`*
 
@@ -63,9 +63,9 @@ and `mitigation_before_after.csv`.
 The first mitigation planning table is also populated:
 `results/metrics/mitigation_run_inventory.csv`. This is a lane inventory, not
 a before/after result. It now records the implemented detector row as pending
-guarded Y+SA / Z+SA reruns, the retry/replan recovery row as a dependent
-candidate after those detector rows exist, and three lower-priority candidates.
-No completed after-run claim exists yet.
+guarded Y+SA / Z+SA reruns, the retry/replan recovery and explicit
+fault/risk adjudication rows as spec-ready but not runnable, and two
+lower-priority candidates. No completed after-run claim exists yet.
 
 ## May 1 guard and rerun scaffold status
 
@@ -98,8 +98,8 @@ Use two PE-family lanes for the mitigation ladder:
 
 | Family lane | Baseline run | Detection-only rerun | Recovery rerun |
 |---|---|---|---|
-| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | future `missing_evidence_retry_replan_guard` config |
-| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | future Verified PE recovery config using bounded retry / suffix replan |
+| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | spec-ready, no runnable config yet |
+| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | spec-ready, no runnable config yet |
 
 Interpretation:
 
@@ -112,6 +112,24 @@ Interpretation:
 - The adjudication rung should wait until evidence detection / repair is
   measured, because fault/risk adjudication is meaningful only when the deciding
   evidence exists.
+
+## May 2 recovery / adjudication spec
+
+`docs/mitigation_recovery_adjudication.md` is now the canonical design surface
+for the two follow-on rungs:
+
+- `missing_evidence_retry_replan_guard` is a dependent recovery layer, not an
+  orthogonal factor. It requires the detection guard, retries only read-only
+  evidence-producing steps, replans only unexecuted suffix steps, and records
+  every attempt in `mitigation_repair`.
+- `explicit_fault_risk_adjudication_step` is a structured pre-finalization
+  decision object. It must cite deciding tool evidence, record rejected
+  alternatives, and refuse when deciding evidence is missing.
+
+Neither rung is runnable yet. The future config keys are reserved in
+`configs/README.md`, but no env template should set them until
+`scripts/plan_execute_self_ask_runner.py` and `scripts/verified_pe_runner.py`
+consume them.
 
 ## Before/after metric pack
 
@@ -190,8 +208,9 @@ reruns against this lane have not yet landed.
 | AaT transport baseline (Cell B) | `8979314_aat_direct` | `8979314_aat_mcp_baseline` | clean Cell A (6/6) | clean Cell B (6/6) | `success_rate=1.0`, `failure_count=0`, `wall_clock_seconds_total=80.30`, `latency_seconds_mean=13.38`, `latency_seconds_p50=12.91`, `latency_seconds_p95=16.65`, `tool_call_count_total=21`, `tool_call_count_mean=3.50`, `tool_error_count=0` | `mcp_latency_seconds_mean`, `mcp_latency_seconds_p95`, `tool_latency_seconds_mean`, token / judge dims still NULL on the capture |
 | Detection guard (PE + Self-Ask) | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
 | Detection guard (Verified PE + Self-Ask) | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | pending guarded rerun | first-capture baseline exists | `pending_rerun` via `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | no after-side metrics yet | run guarded config, judge outputs, then populate `mitigation_before_after.csv` |
-| Evidence repair retry/replan (PE + Self-Ask) | detection-guard after-run for `Y + Self-Ask` | future recovery rerun | depends on detection-only row | `candidate_next` | no implementation yet | implement bounded retry/replan guard only after the detection-only row exists |
-| Evidence repair retry/replan (Verified PE + Self-Ask) | detection-guard after-run for `Z + Self-Ask` | future recovery rerun | depends on detection-only row | `candidate_next` | no implementation yet | reuse Verified PE retry/suffix-replan substrate, but drive it from deterministic missing-evidence detection |
+| Evidence repair retry/replan (PE + Self-Ask) | detection-guard after-run for `Y + Self-Ask` | future recovery rerun | depends on detection-only row | `spec_ready_pending_implementation` | no implementation yet | implement bounded retry/replan guard only after the detection-only row exists |
+| Evidence repair retry/replan (Verified PE + Self-Ask) | detection-guard after-run for `Z + Self-Ask` | future recovery rerun | depends on detection-only row | `spec_ready_pending_implementation` | no implementation yet | reuse Verified PE retry/suffix-replan substrate, but drive it from deterministic missing-evidence detection |
+| Explicit fault/risk adjudication | recovery row or detection-only row with deciding evidence present | future adjudication rerun | depends on active evidence gate | `spec_ready_deferred_until_repair` | no implementation yet | add structured adjudication object only after evidence detection/repair provides deciding evidence |
 
 Same job (`8979314`) produced both Cell A and Cell B captures, so the
 transport-overhead row pairs the two sides under one job ID. Observed
@@ -243,9 +262,10 @@ read these tables, not the raw run JSON.
 - required columns: `lane`, `mitigation_name`, `before_run`, `after_run`,
   `before_status`, `after_status`, `notes`
 - current status: populated with five lanes: one implemented detector pending
-  guarded reruns, one dependent retry/replan recovery candidate pending
-  implementation, and three lower-priority candidates; no completed after-run
-  claims yet
+  guarded reruns, one spec-ready retry/replan recovery row pending
+  implementation, one spec-ready adjudication row deferred until evidence repair
+  is measured, and two lower-priority candidates; no completed after-run claims
+  yet
 
 `results/metrics/mitigation_before_after.csv`
 
@@ -292,7 +312,9 @@ read these tables, not the raw run JSON.
   Mitigation fields appended for `#65` / `#66`:
   `mitigation_name`, `mitigation_enabled`,
   `mitigation_guard_triggered`, `mitigation_guard_blocked_final_answer`,
-  `mitigation_guard_blocked_work_order`, `comparison_status`, and `notes`.
+  `mitigation_guard_blocked_work_order`, `repair_attempt_count`,
+  `repair_success_rate`, `supported_success_after_repair_rate`,
+  `fault_risk_adjudication_decision`, `comparison_status`, and `notes`.
 
 ## Current safe claims
 
@@ -394,8 +416,9 @@ If new artifacts arrive gradually, fill the exports in this order:
 1. `failure_evidence_table.csv` (done for the first judge-derived pass; needs
    refresh only if final reruns change judge rows)
 2. `mitigation_run_inventory.csv` (done for the first mitigation lane
-   selection and now marks the selected lane implemented pending rerun; the
-   next candidate rung is `missing_evidence_retry_replan_guard`)
+   selection and now marks the selected lane implemented pending rerun, the
+   recovery rung spec-ready pending implementation, and the adjudication rung
+   spec-ready but deferred until evidence repair is measured)
 3. `mitigation_before_after.csv` (schema exists; populate after guarded rerun)
 4. only then render before/after figures (`#64`'s lane)
 

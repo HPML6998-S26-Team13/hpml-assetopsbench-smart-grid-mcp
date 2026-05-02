@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-05-02
+
+### Changed
+
+- Added `docs/mitigation_recovery_adjudication.md`, an implementation-ready
+  spec for the follow-on mitigation ladder: bounded missing-evidence
+  retry/replan recovery and explicit fault/risk adjudication. The spec keeps
+  recovery dependent on the existing detection guard and marks future config
+  keys as reserved until runner code consumes them.
+- Refreshed the #64 / #66 / #36 / #5 documentation surfaces so mitigation
+  planning distinguishes implemented detection, spec-ready recovery, and
+  deferred adjudication without claiming rerun evidence that does not exist.
+- Regenerated the mitigation inventory and priority figure labels so
+  `missing_evidence_retry_replan_guard` is `spec_ready_pending_implementation`
+  and `explicit_fault_risk_adjudication_step` is
+  `spec_ready_deferred_until_repair`.
+
 ## 2026-05-01
 
 ### Changed

@@ -1,6 +1,6 @@
 # results/
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 
 Curated, reproducible metrics and figures emitted by notebooks. Most content
 here is expected to come from `benchmarks/` once the experiment lanes are
@@ -48,6 +48,11 @@ results/
 - `mitigation_before_after.csv` is the #66 comparison export contract. It is
   header-only until a guarded rerun lands; do not treat its presence as an
   after-run result.
+- `mitigation_run_inventory.csv` now distinguishes implemented/pending-rerun
+  detector work from spec-ready but not-yet-runnable recovery/adjudication
+  rungs. See
+  [../docs/mitigation_recovery_adjudication.md](../docs/mitigation_recovery_adjudication.md)
+  before adding recovery or adjudication rows.
 - Per-trial judge audit logs live under `judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`.
 - `experiment_matrix_summary.csv` is the compact "what ran?" table. It keeps
   legacy cell names, display-code names, run names, latency, judge-score, and

@@ -330,6 +330,8 @@ These should be described as follow-ons, not core conditions:
 - `Z + Self-Ask + missing-evidence detection guard`
 - if time allows after those rows exist, a bounded missing-evidence
   retry/replan recovery rung on the same two family lanes
+- after evidence repair is measured, an explicit fault/risk adjudication rung
+  that requires named deciding evidence before finalization
 
 Draft paragraph:
 
@@ -344,7 +346,10 @@ The mitigation ladder should not be presented as a new full experiment grid.
 The clean paper framing is baseline PE-family behavior, then a truthfulness
 guard that detects unsupported finalization, then an optional recovery rung
 that gives the runner one bounded chance to repair missing evidence before
-final answer or work-order creation.
+final answer or work-order creation. If the recovery rung lands cleanly, the
+next paper-useful follow-on is not another transport cell; it is a structured
+fault/risk adjudication step that forces the runner to cite deciding tool
+evidence or refuse to finalize.
 
 ### 5. Evaluation and Analysis Plan
 
@@ -480,7 +485,9 @@ maintenance recommendation as successful when the required evidence was absent.
 If time permits, the natural next rung is a recovery guard that reuses the same
 detector to retry the missing evidence step or replan the dependent suffix before
 finalization. We evaluate this as a ladder on `Y + Self-Ask` and `Z + Self-Ask`,
-not as every mitigation crossed with every cell.
+not as every mitigation crossed with every cell. The adjudication rung is
+downstream of that evidence gate: it is only meaningful when the deciding
+sensor, DGA, trend, RUL, or fault-record evidence exists and can be cited.
 
 ### 7. Reproducibility and Limitations
 
@@ -594,6 +601,7 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
 | Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
 | Mitigation before/after figure | `results/metrics/mitigation_before_after.csv` and rendered figure |
+| Recovery/adjudication mitigation spec | `docs/mitigation_recovery_adjudication.md` |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |
 
 The failure-taxonomy CSV/SVG artifacts are now on `main` via PR #151, so the

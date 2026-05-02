@@ -1,6 +1,6 @@
 # Failure Visuals + Mitigation Plan for `#64`
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 *Owner: Alex Xin (strategy lane stays here for `#64`)*
 *Issue: `#64`*
 
@@ -28,6 +28,8 @@ surface on 2026-04-27 so each issue has its own reviewable PR.
   before/after comparison figure
 - `docs/failure_taxonomy_evidence.md` — labels and pattern reads that justify
   each mitigation rank
+- `docs/mitigation_recovery_adjudication.md` — implementation-ready spec for
+  the retry/replan recovery and explicit adjudication rungs
 - `docs/validation_log.md` — canonical run-history index for the rerun pairs
 
 ## Apr 27 status refresh
@@ -142,6 +144,25 @@ Do **not** run every mitigation against every cell by default. Promote the next
 rung only when the prior rung has produced a measurable before/after row, or
 when the new rung answers a specific paper question that the prior rung cannot.
 This avoids a combinatorial grid while preserving attribution.
+
+## May 2 recovery / adjudication spec status
+
+`docs/mitigation_recovery_adjudication.md` now defines the two unimplemented
+follow-on rungs in enough detail for a later implementation branch:
+
+| Rung | Status | Implementation point | First runnable lane |
+|---:|---|---|---|
+| 2 | spec-ready, pending implementation | expose partial-history detector results from `scripts/mitigation_guards.py`, then wrap PE-family step execution with a bounded retry / suffix-replan loop | `Y + Self-Ask`, then `Z + Self-Ask` |
+| 3 | spec-ready, deferred until evidence repair is measured | add a structured pre-finalization adjudication object that cites deciding tool evidence and rejected alternatives | `Z + Self-Ask` after rung 1 or rung 2 evidence exists |
+
+No runnable recovery/adjudication configs should be added until the runner
+consumes the corresponding flags. Reserved future keys are documented in the
+spec and in `configs/README.md`, but they are not active behavior yet.
+
+The key design decision: retry/replan is not a new experiment axis. It is a
+dependent recovery rung that must keep the detection guard on. Adjudication is
+downstream of evidence repair because it cannot make a trustworthy fault/risk
+choice when the deciding evidence is absent.
 
 ## Visuals scaffold
 
@@ -335,5 +356,10 @@ The artifact gap that still bounds this lane:
    figure is `comparison_ready` (per `#36` status labels)
 2. run either guarded config under the same model/scenario/trial shape as its
    before-side baseline
-3. refresh the rendered SVGs after any final scenario/rerun sweep changes the
+3. implement the retry/replan recovery rung only after the detection-only rows
+   exist, keeping the guard active and recording repair attempts separately
+4. implement explicit adjudication only after evidence repair has at least one
+   measured row or after a detection-only row proves the deciding evidence is
+   already present
+5. refresh the rendered SVGs after any final scenario/rerun sweep changes the
    evidence table

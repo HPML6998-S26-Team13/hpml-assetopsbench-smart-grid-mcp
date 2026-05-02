@@ -93,6 +93,20 @@ The active cell mapping is:
 These are intentionally explicit. AaT now has a default benchmark dispatch
 path; templates are reserved for parity smoke checks and one-off variants.
 
+### Reserved mitigation keys
+
+These keys are reserved for the recovery/adjudication follow-on spec in
+[../docs/mitigation_recovery_adjudication.md](../docs/mitigation_recovery_adjudication.md).
+They are **not runnable yet** and should not be set in submitted configs until
+the PE-family runners consume them.
+
+| Key | Intended future behavior |
+|---|---|
+| `ENABLE_MISSING_EVIDENCE_REPAIR` | enable `missing_evidence_retry_replan_guard`; should require `ENABLE_MISSING_EVIDENCE_GUARD=1` |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | cap detector-driven repair attempts per trial |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | cap retries per unresolved evidence target |
+| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | enable structured pre-finalization fault/risk adjudication |
+
 ## Running
 
 Dry-run the wiring first:
