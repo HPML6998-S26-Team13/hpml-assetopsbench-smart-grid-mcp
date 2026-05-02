@@ -49,8 +49,8 @@ results/
   header-only until a guarded rerun lands; do not treat its presence as an
   after-run result.
 - `mitigation_run_inventory.csv` now distinguishes implemented/pending-rerun
-  detector work from spec-ready but not-yet-runnable recovery/adjudication
-  rungs. See
+  detector and recovery work from spec-ready but not-yet-runnable adjudication.
+  See
   [../docs/mitigation_recovery_adjudication.md](../docs/mitigation_recovery_adjudication.md)
   before adding recovery or adjudication rows.
 - Per-trial judge audit logs live under `judge_logs/<run_name>/<scenario_id>_runNN_judge_log.json`.

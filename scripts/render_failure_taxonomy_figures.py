@@ -70,18 +70,22 @@ MITIGATION_SPECS = [
         "notes": (
             "Next mitigation-ladder rung. Reuse the missing-evidence detector during execution; "
             "retry the evidence-producing step with a bounded budget and replan the dependent suffix "
-            "before final answer / work-order creation. Spec is ready; implementation and reruns wait "
-            "until the detection-only guard is measured."
+            "before final answer / work-order creation. Implemented in the PE-family local runners; "
+            "reruns wait until detection-only guard rows exist."
         ),
         "before_run": (
             "pending detection-guard after-runs for family lanes: "
             "Y+Self-Ask and Z+Self-Ask"
         ),
-        "after_run": "future recovery rerun after detection-only baselines exist",
+        "after_run": (
+            "pending recovery family reruns: "
+            "configs/mitigation/missing_evidence_repair_pe_self_ask.env; "
+            "configs/mitigation/missing_evidence_repair_verified_pe_self_ask.env"
+        ),
         "before_status": "candidate_after_detection",
-        "after_status": "spec_ready_pending_implementation",
+        "after_status": "pending_rerun",
         "owner_issue": "#64/#66",
-        "implementation_status": "spec_ready_pending_implementation",
+        "implementation_status": "implemented_pending_rerun",
     },
     {
         "rank": "3",

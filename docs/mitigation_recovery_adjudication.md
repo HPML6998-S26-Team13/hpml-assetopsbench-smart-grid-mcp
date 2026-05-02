@@ -4,9 +4,10 @@
 *Issues: #64, #66, #36, #5*
 
 This doc specifies the two mitigation-ladder rungs that come after
-`missing_evidence_final_answer_guard`. It is intentionally implementation-ready
-but not yet runnable: no config in this branch should imply that recovery or
-adjudication is wired into the runner until the code lands and is tested.
+`missing_evidence_final_answer_guard`. The retry/replan recovery rung is now
+wired into the repo-local PE-family runners on this branch. The explicit
+fault/risk adjudication rung remains a design spec and should not be enabled in
+configs until runner code consumes it.
 
 ## Scope
 
@@ -30,6 +31,9 @@ question:
 
 ## Rung 2: missing-evidence retry/replan guard
 
+Status: implemented on this branch for `Y + Self-Ask` and `Z + Self-Ask`,
+pending Insomnia reruns and judge rows.
+
 ### Intent
 
 Rung 2 turns the rung-1 detector from a terminal accounting gate into a bounded
@@ -51,8 +55,8 @@ orthogonal factor:
 baseline -> detection guard -> retry/replan recovery
 ```
 
-Future runtime enforcement should reject the recovery flag unless the detection
-guard is also enabled.
+Runtime enforcement rejects the recovery flag unless the detection guard is
+also enabled.
 
 ### Trigger
 
@@ -67,9 +71,8 @@ evidence-producing step when practical. Trigger recovery when all are true:
 
 Do not trigger recovery for valid negative evidence. For example, an empty
 `detect_anomalies` result can be a meaningful "no anomaly detected" payload,
-not a missing-evidence failure. The detector implementation must distinguish
-tool-specific valid-empty results from generic empty/missing records before
-this rung becomes runnable.
+not a missing-evidence failure. The detector distinguishes tool-specific
+valid-empty results from generic empty/missing records before scheduling repair.
 
 ### Allowed actions
 
@@ -100,9 +103,8 @@ attempt per trial and only widen after a clean smoke.
 
 ### Runner integration
 
-For `Y + Self-Ask`, add a small deterministic recovery loop around the existing
-step execution loop in `scripts/plan_execute_self_ask_runner.py`. The loop
-should:
+For `Y + Self-Ask`, `scripts/plan_execute_self_ask_runner.py` now wraps the
+existing step execution loop with deterministic recovery. The loop:
 
 - serialize the step result
 - call the detector helper against the partial history
@@ -110,14 +112,15 @@ should:
   that step as the unresolved source
 - otherwise leave the history untouched and allow rung 1 to block finalization
 
-For `Z + Self-Ask`, reuse the existing Verified PE retry/suffix-replan substrate
-in `scripts/verified_pe_runner.py`, but drive the decision from deterministic
-missing-evidence detection instead of only from the LLM verifier. The artifact
-should distinguish verifier-driven recovery from detector-driven recovery.
+For `Z + Self-Ask`, `scripts/verified_pe_runner.py` reuses the existing
+Verified PE retry/suffix-replan substrate, but can drive the decision from
+deterministic missing-evidence detection instead of only from the LLM verifier.
+The artifact distinguishes verifier-driven recovery from detector-driven
+recovery.
 
-The shared detector code should live in `scripts/mitigation_guards.py`, with a
-public helper that can scan partial histories and return unresolved evidence
-hits without mutating the final payload.
+The shared detector code lives in `scripts/mitigation_guards.py`; the public
+`scan_missing_evidence()` helper scans partial histories and returns unresolved
+evidence hits without mutating the final payload.
 
 ### Artifact schema
 
@@ -264,15 +267,14 @@ machine-checkable before the natural-language answer is written.
 
 ## Reserved config keys
 
-These names are reserved for the future implementation. They should not be used
-in runnable configs until the runner consumes them:
+These names are part of the mitigation ladder contract:
 
-| Key | Meaning |
-|---|---|
-| `ENABLE_MISSING_EVIDENCE_REPAIR` | enables rung 2 recovery; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
-| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | max total detector-driven repair attempts per trial |
-| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | max detector-driven retries per unresolved evidence target |
-| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | enables rung 3 structured adjudication |
+| Key | Status | Meaning |
+|---|---|---|
+| `ENABLE_MISSING_EVIDENCE_REPAIR` | runnable | enables rung 2 recovery; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | runnable | max total detector-driven repair attempts per trial |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | runnable | max detector-driven retries per unresolved evidence target |
+| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | reserved | future rung 3 structured adjudication |
 
 ## Verification plan
 

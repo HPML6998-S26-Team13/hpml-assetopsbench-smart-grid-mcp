@@ -12,17 +12,27 @@ from orchestration_utils import (
     build_parser,
     build_planner_descriptions,
     build_planning_question,
+    build_missing_evidence_repair_state,
+    build_retry_question,
     build_tool_catalog_for_executor,
     bootstrap_aob,
     canonicalize_step_result,
     close_executor,
     compact_step_for_context,
+    can_retry_missing_evidence,
+    current_missing_evidence_hit,
     effective_server_paths,
+    finalize_missing_evidence_repair_state,
+    load_missing_evidence_repair_config,
+    mark_missing_evidence_attempt_result,
+    mark_missing_evidence_unrepaired,
     maybe_self_ask,
     normalize_plan_steps,
     preflight_aob_runtime_dependencies,
     print_history,
     print_plan,
+    record_missing_evidence_retry_attempt,
+    repair_target_key,
     repair_sensor_task_text,
     resolve_aob_path,
     resolve_repo_root,
@@ -33,6 +43,7 @@ from orchestration_utils import (
     setup_logging,
     summarize_answer,
     tool_schema_for_step,
+    VerificationDecision,
 )
 
 _LOG = logging.getLogger(__name__)
@@ -51,6 +62,9 @@ async def _run(args) -> None:
 
     planner = Planner(llm)
     executor = build_executor(llm, server_paths, mcp_mode=args.mcp_mode)
+    repair_config = load_missing_evidence_repair_config()
+    repair_state = build_missing_evidence_repair_state(repair_config)
+    repair_attempts_by_target = {}
 
     try:
         self_ask = maybe_self_ask(args.question, llm)
@@ -68,42 +82,112 @@ async def _run(args) -> None:
         context = {}
         trajectory = []
         for step in ordered_steps:
-            sensors = available_sensor_ids(context)
-            step.task, repair_warning = repair_sensor_task_text(step.task, sensors)
-            if repair_warning:
-                _LOG.info("%s", repair_warning)
-            should_skip, skip_reason = should_skip_invalid_sensor_step(step, sensors)
-            if should_skip:
-                result = SimpleNamespace(
-                    step_number=step.step_number,
-                    task=step.task,
-                    server=step.server,
-                    tool=step.tool,
-                    tool_args=getattr(step, "tool_args", {}),
-                    response=skip_reason,
-                    error=None,
-                    success=True,
-                    runner_repair="invalid_iot_dga_sensor_lookup",
-                    runner_repair_reason=skip_reason,
+            step_question = self_ask.augmented_question
+            pending_repair_attempt = None
+            while True:
+                sensors = available_sensor_ids(context)
+                step.task, repair_warning = repair_sensor_task_text(step.task, sensors)
+                if repair_warning:
+                    _LOG.info("%s", repair_warning)
+                should_skip, skip_reason = should_skip_invalid_sensor_step(
+                    step, sensors
                 )
+                if should_skip:
+                    result = SimpleNamespace(
+                        step_number=step.step_number,
+                        task=step.task,
+                        server=step.server,
+                        tool=step.tool,
+                        tool_args=getattr(step, "tool_args", {}),
+                        response=skip_reason,
+                        error=None,
+                        success=True,
+                        runner_repair="invalid_iot_dga_sensor_lookup",
+                        runner_repair_reason=skip_reason,
+                    )
+                    context[step.step_number] = result
+                    trajectory.append(result)
+                    _LOG.info("%s", skip_reason)
+                    break
+                tool_schema = tool_schema_for_step(tool_catalog, step.server, step.tool)
+                result = await executor.execute_step(
+                    step,
+                    context,
+                    step_question,
+                    tool_schema=tool_schema,
+                )
+                canonicalize_step_result(result)
+                compact_step_for_context(result)
+                entry = serialize_step_result(result)
+                partial_history = [
+                    serialize_step_result(prior) for prior in trajectory
+                ] + [entry]
+                hit = (
+                    current_missing_evidence_hit(partial_history, entry)
+                    if repair_config.enabled
+                    else None
+                )
+
+                if pending_repair_attempt and not hit:
+                    mark_missing_evidence_attempt_result(
+                        repair_state,
+                        pending_repair_attempt,
+                        "repaired",
+                        new_step=step.step_number,
+                    )
+
+                if hit and can_retry_missing_evidence(
+                    repair_config,
+                    repair_state,
+                    hit,
+                    repair_attempts_by_target,
+                ):
+                    key = repair_target_key(hit)
+                    repair_attempts_by_target[key] = (
+                        repair_attempts_by_target.get(key, 0) + 1
+                    )
+                    pending_repair_attempt = record_missing_evidence_retry_attempt(
+                        repair_state,
+                        hit,
+                    )
+                    retries_used = repair_attempts_by_target[key]
+                    step_question = build_retry_question(
+                        args.question,
+                        self_ask.augmented_question,
+                        step,
+                        entry,
+                        VerificationDecision(
+                            decision="retry",
+                            reason=hit.get("reason")
+                            or "Missing evidence detected before finalization.",
+                            updated_focus="Repair the missing evidence before answering.",
+                        ),
+                        retries_used,
+                    )
+                    trajectory.append(result)
+                    _LOG.info(
+                        "Missing-evidence repair scheduled retry for step %d.",
+                        step.step_number,
+                    )
+                    continue
+
+                if hit:
+                    mark_missing_evidence_attempt_result(
+                        repair_state,
+                        pending_repair_attempt,
+                        "unrepaired",
+                        new_step=step.step_number,
+                    )
+                    mark_missing_evidence_unrepaired(repair_state, hit)
+
                 context[step.step_number] = result
                 trajectory.append(result)
-                _LOG.info("%s", skip_reason)
-                continue
-            tool_schema = tool_schema_for_step(tool_catalog, step.server, step.tool)
-            result = await executor.execute_step(
-                step,
-                context,
-                self_ask.augmented_question,
-                tool_schema=tool_schema,
-            )
-            canonicalize_step_result(result)
-            compact_step_for_context(result)
-            context[step.step_number] = result
-            trajectory.append(result)
+                break
 
         plan_payload = serialize_plan(plan)
         history_payload = [serialize_step_result(result) for result in trajectory]
+        if repair_config.enabled:
+            finalize_missing_evidence_repair_state(repair_state, history_payload)
         failed_steps = summarize_terminal_failures(history_payload)
         answer = summarize_answer(args.question, history_payload, llm)
 
@@ -123,6 +207,8 @@ async def _run(args) -> None:
             "plan_normalization_warnings": normalization_warnings,
             "history": history_payload,
         }
+        if repair_config.enabled:
+            output["mitigation_repair"] = repair_state
     finally:
         await close_executor(executor)
 

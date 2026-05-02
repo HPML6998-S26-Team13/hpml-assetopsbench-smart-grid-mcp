@@ -23,11 +23,15 @@ from orchestration_utils import (  # noqa: E402
     compact_verifier_result,
     SelfAskDecision,
     VerificationDecision,
+    build_missing_evidence_repair_state,
     build_llm,
     build_retry_question,
     build_suffix_replan_question,
+    current_missing_evidence_hit,
     effective_server_paths,
+    finalize_missing_evidence_repair_state,
     generate_suffix_plan,
+    load_missing_evidence_repair_config,
     maybe_self_ask,
     normalize_plan_steps,
     normalize_response_text,
@@ -43,8 +47,10 @@ from orchestration_utils import (  # noqa: E402
     verify_step,
 )
 from mitigation_guards import (  # noqa: E402
+    MISSING_EVIDENCE_REPAIR_NAME,
     apply_missing_evidence_final_answer_guard,
     env_flag_enabled,
+    scan_missing_evidence,
 )
 
 
@@ -748,6 +754,100 @@ class OrchestrationUtilsTests(unittest.TestCase):
             guarded["failed_steps"][-1]["tool"],
             "missing_evidence_final_answer_guard",
         )
+
+    def test_scan_missing_evidence_returns_hit_without_mutating_payload(self):
+        payload = {
+            "answer": "Schedule immediate maintenance for transformer T-015.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch sensor readings",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-015",
+                        "sensor_id": "winding_temp_top_c",
+                    },
+                    "response": '{"readings": []}',
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        scan = scan_missing_evidence(payload)
+
+        self.assertTrue(scan["triggered"])
+        self.assertEqual(scan["hits"][0]["step"], 1)
+        self.assertEqual(scan["hits"][0]["tool"], "get_sensor_readings")
+        self.assertEqual(
+            scan["hits"][0]["target"],
+            {"transformer_id": "T-015", "sensor_id": "winding_temp_top_c"},
+        )
+        self.assertNotIn("mitigation_guard", payload)
+
+    def test_repair_config_requires_missing_evidence_guard(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_MISSING_EVIDENCE_REPAIR": "1",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "0",
+            },
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "requires ENABLE_MISSING_EVIDENCE_GUARD",
+            ):
+                load_missing_evidence_repair_config()
+
+    def test_repair_state_finalizes_after_successful_retry(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_MISSING_EVIDENCE_REPAIR": "1",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "1",
+            },
+        ):
+            config = load_missing_evidence_repair_config()
+        state = build_missing_evidence_repair_state(config)
+        missing_entry = {
+            "step": 1,
+            "task": "Fetch sensor readings",
+            "server": "iot",
+            "tool": "get_sensor_readings",
+            "tool_args": {
+                "transformer_id": "T-015",
+                "sensor_id": "winding_temp_top_c",
+            },
+            "response": '{"readings": []}',
+            "error": None,
+            "success": True,
+        }
+        hit = current_missing_evidence_hit([missing_entry], missing_entry)
+        self.assertIsNotNone(hit)
+        state["triggered"] = True
+        state["attempts"].append(
+            {
+                "attempt_index": 1,
+                "source_step": hit["step"],
+                "tool": hit["tool"],
+                "target": hit["target"],
+                "reason": hit["reason"],
+                "action": "retry_step",
+                "result": "scheduled",
+            }
+        )
+        repaired_entry = {
+            **missing_entry,
+            "response": '{"readings": [{"timestamp": "2024-01-01T00:00:00", "value": 87.5}]}',
+        }
+
+        finalize_missing_evidence_repair_state(state, [missing_entry, repaired_entry])
+
+        self.assertEqual(state["name"], MISSING_EVIDENCE_REPAIR_NAME)
+        self.assertTrue(state["repaired"])
+        self.assertEqual(state["final_decision"], "continue")
 
     def test_missing_evidence_guard_allows_evidence_limited_answer(self):
         payload = {

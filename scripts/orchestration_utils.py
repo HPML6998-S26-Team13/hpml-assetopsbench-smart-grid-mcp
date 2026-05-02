@@ -115,6 +115,184 @@ class VerificationDecision:
     updated_focus: str
 
 
+@dataclass
+class MissingEvidenceRepairConfig:
+    enabled: bool
+    max_attempts: int
+    max_attempts_per_target: int
+
+
+def load_missing_evidence_repair_config() -> MissingEvidenceRepairConfig:
+    """Read default-off missing-evidence recovery config from environment."""
+    from mitigation_guards import env_flag_enabled
+
+    enabled = env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_REPAIR"))
+    guard_enabled = env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD"))
+    if enabled and not guard_enabled:
+        raise RuntimeError(
+            "ENABLE_MISSING_EVIDENCE_REPAIR=1 requires "
+            "ENABLE_MISSING_EVIDENCE_GUARD=1 so repaired runs keep the "
+            "truthfulness/accounting gate active."
+        )
+    return MissingEvidenceRepairConfig(
+        enabled=enabled,
+        max_attempts=_positive_int_env("MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS", 2),
+        max_attempts_per_target=_positive_int_env(
+            "MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET",
+            1,
+        ),
+    )
+
+
+def _positive_int_env(name: str, default: int) -> int:
+    raw = os.environ.get(name, str(default))
+    try:
+        value = int(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be a positive integer, got {raw!r}.") from exc
+    if value < 1:
+        raise RuntimeError(f"{name} must be a positive integer, got {raw!r}.")
+    return value
+
+
+def build_missing_evidence_repair_state(
+    config: MissingEvidenceRepairConfig,
+) -> dict[str, Any]:
+    from mitigation_guards import (
+        MISSING_EVIDENCE_GUARD_NAME,
+        MISSING_EVIDENCE_REPAIR_NAME,
+    )
+
+    return {
+        "name": MISSING_EVIDENCE_REPAIR_NAME,
+        "enabled": bool(config.enabled),
+        "detector": MISSING_EVIDENCE_GUARD_NAME,
+        "triggered": False,
+        "attempts": [],
+        "repaired": False,
+        "final_decision": "disabled" if not config.enabled else "not_triggered",
+    }
+
+
+def current_missing_evidence_hit(
+    history: list[dict[str, Any]],
+    current_entry: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Return the unresolved detector hit caused by the current history entry."""
+    if not history:
+        return None
+    from mitigation_guards import scan_missing_evidence
+
+    scan = scan_missing_evidence({"history": history})
+    if not scan["triggered"]:
+        return None
+
+    current_source_prefix = f"history[{len(history) - 1}]"
+    current_step = current_entry.get("step")
+    for hit in scan["hits"]:
+        source = str(hit.get("source") or "")
+        if source == current_source_prefix or source.startswith(
+            current_source_prefix + "."
+        ):
+            return hit
+        if current_step is not None and hit.get("step") == current_step:
+            return hit
+    return None
+
+
+def repair_target_key(hit: dict[str, Any]) -> tuple[str, tuple[tuple[str, str], ...]]:
+    target = hit.get("target")
+    target_parts = ()
+    if isinstance(target, dict):
+        target_parts = tuple(sorted((str(k), str(v)) for k, v in target.items()))
+    return (str(hit.get("tool") or ""), target_parts)
+
+
+def can_retry_missing_evidence(
+    config: MissingEvidenceRepairConfig,
+    state: dict[str, Any],
+    hit: dict[str, Any],
+    target_attempts: dict[tuple[str, tuple[tuple[str, str], ...]], int],
+) -> bool:
+    if not config.enabled:
+        return False
+    if len(state.get("attempts", [])) >= config.max_attempts:
+        return False
+    key = repair_target_key(hit)
+    return target_attempts.get(key, 0) < config.max_attempts_per_target
+
+
+def record_missing_evidence_retry_attempt(
+    state: dict[str, Any],
+    hit: dict[str, Any],
+    *,
+    action: str = "retry_step",
+) -> dict[str, Any]:
+    state["triggered"] = True
+    state["final_decision"] = "repair_attempted"
+    attempt = {
+        "attempt_index": len(state.get("attempts", [])) + 1,
+        "source_step": hit.get("step"),
+        "tool": hit.get("tool"),
+        "target": hit.get("target") or {},
+        "reason": hit.get("reason"),
+        "action": action,
+        "result": "scheduled",
+    }
+    state.setdefault("attempts", []).append(attempt)
+    return attempt
+
+
+def mark_missing_evidence_attempt_result(
+    state: dict[str, Any],
+    attempt: dict[str, Any] | None,
+    result: str,
+    *,
+    new_step: int | None = None,
+) -> None:
+    if attempt is None:
+        return
+    attempt["result"] = result
+    if new_step is not None:
+        attempt["new_step"] = new_step
+    if result == "repaired":
+        state["repaired"] = True
+        state["final_decision"] = "continue"
+
+
+def mark_missing_evidence_unrepaired(
+    state: dict[str, Any],
+    hit: dict[str, Any] | None,
+) -> None:
+    if hit:
+        state["triggered"] = True
+        state["final_decision"] = "block_finalization"
+    elif state.get("triggered") and state.get("final_decision") == "repair_attempted":
+        state["final_decision"] = "continue"
+
+
+def finalize_missing_evidence_repair_state(
+    state: dict[str, Any],
+    history: list[dict[str, Any]],
+) -> None:
+    """Finalize repair metadata against the terminal history."""
+    if not state.get("enabled"):
+        return
+    from mitigation_guards import scan_missing_evidence
+
+    scan = scan_missing_evidence({"history": history})
+    if scan["triggered"]:
+        state["triggered"] = True
+        state["final_decision"] = "block_finalization"
+        state["unresolved_hits"] = scan["hits"]
+        return
+    if state.get("triggered"):
+        state["repaired"] = True
+        state["final_decision"] = "continue"
+    else:
+        state["final_decision"] = "not_triggered"
+
+
 def setup_logging(verbose: bool) -> None:
     level = logging.INFO if verbose else logging.WARNING
     handler = logging.StreamHandler(sys.stderr)
