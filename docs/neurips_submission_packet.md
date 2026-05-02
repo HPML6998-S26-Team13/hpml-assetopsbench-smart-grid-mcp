@@ -5,15 +5,16 @@
 *Issues: #5, #39, #47, #48*
 
 This packet is the deadline-facing control surface for the NeurIPS 2026
-Datasets & Benchmarks submission. It summarizes what can already go into the
+Evaluations & Datasets submission. It summarizes what can already go into the
 paper, what still needs a final evidence pass, and where the LaTeX submission
-surface lives.
+surface lives. NeurIPS previously used the Datasets & Benchmarks track name for
+this submission lane.
 
 ## Submission Surface
 
 | Field | Current value |
 |---|---|
-| Venue | NeurIPS 2026 Datasets & Benchmarks Track |
+| Venue | NeurIPS 2026 Evaluations & Datasets Track (formerly Datasets & Benchmarks) |
 | Abstract deadline | 2026-05-04 23:59 AOE |
 | Full-paper deadline | 2026-05-06 23:59 AOE |
 | Overleaf project | https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 |

@@ -5,8 +5,8 @@
 Apr 28 team sync)*
 *Issues: `#5`, `#39`, `#47`, `#48`; class-report back-port tracked in `#40`*
 
-This doc is the live draft scaffold for the NeurIPS 2026 Datasets & Benchmarks
-paper lane. It used to live alongside the failure-analysis scaffold inside
+This doc is the live draft scaffold for the NeurIPS 2026 Evaluations & Datasets
+paper lane (formerly Datasets & Benchmarks). It used to live alongside the failure-analysis scaffold inside
 PR `#124`; on 2026-04-27 each issue (`#35`, `#64`, `#36`, `#5`) was split into
 its own PR so the four lanes can ship independently. This file is not the
 final paper — it is the canonical writing surface for:
@@ -458,15 +458,15 @@ The first canonical transport-overhead measurement is now committed. PR
 job (`8979314`) on `Llama-3.1-8B-Instruct`, running 6 scenarios per side
 over the canonical scenario set `smartgrid_multi_domain` (hash
 `ca66cd16…2691e48`). Both sides hit `success_rate=1.0` with zero tool
-errors. Pairing the two summaries gives the first concrete (Cell B −
-Cell A) row:
+errors. Pairing the Notebook 02 latency export with the experiment-matrix
+summary gives the first concrete paper-facing (Cell B − Cell A) row:
 
 | Metric | Cell A (direct) | Cell B (MCP baseline) | Δ (B − A) | Δ % |
 |---|---:|---:|---:|---:|
 | `wall_clock_seconds_total` | 73.13 | 80.30 | +7.17 | +9.8% |
 | `latency_seconds_mean` | 12.19 | 13.38 | +1.20 | +9.8% |
-| `latency_seconds_p50` | 11.47 | 12.91 | +1.44 | +12.6% |
-| `latency_seconds_p95` | 18.57 | 16.65 | −1.92 | −10.3% |
+| `latency_seconds_p50` | 12.15 | 13.09 | +0.94 | +7.7% |
+| `latency_seconds_p95` | 17.29 | 16.27 | −1.02 | −5.9% |
 | `tool_call_count_total` | 20 | 21 | +1 | +5.0% |
 | `tool_call_count_mean` | 3.33 | 3.50 | +0.17 | +5.0% |
 | `tool_error_count` | 0 | 0 | 0 | n/a |

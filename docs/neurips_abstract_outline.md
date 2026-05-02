@@ -10,7 +10,7 @@ the final abstract should be written from.
 
 ## Working constraints
 
-- Target venue: **NeurIPS 2026 Datasets & Benchmarks Track**
+- Target venue: **NeurIPS 2026 Evaluations & Datasets Track** (formerly Datasets & Benchmarks)
 - Abstract should read as one tight paragraph, not a mini-outline
 - Current default is **seven sentences**, not four - four is too compressed for
   this paper because the abstract still needs room for five sentence-level
