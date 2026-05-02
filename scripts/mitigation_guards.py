@@ -7,6 +7,7 @@ import re
 from typing import Any
 
 MISSING_EVIDENCE_GUARD_NAME = "missing_evidence_final_answer_guard"
+MISSING_EVIDENCE_REPAIR_NAME = "missing_evidence_retry_replan_guard"
 
 EVIDENCE_TOOLS = {
     "get_asset_metadata",
@@ -144,8 +145,24 @@ def apply_missing_evidence_final_answer_guard(
     return payload
 
 
+def scan_missing_evidence(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return deterministic missing-evidence hits without mutating payload."""
+    hits, work_order_after_missing = _missing_evidence_scan(payload)
+    return {
+        "name": MISSING_EVIDENCE_GUARD_NAME,
+        "triggered": bool(hits),
+        "blocked_work_order": bool(work_order_after_missing),
+        "hits": hits,
+        "reason": (
+            _guard_reason(hits, work_order_after_missing)
+            if hits
+            else "No missing or untrusted evidence signal detected."
+        ),
+    }
+
+
 def _guard_reason(
-    hits: list[dict[str, str]],
+    hits: list[dict[str, Any]],
     work_order_after_missing: bool,
 ) -> str:
     first = hits[0]
@@ -159,7 +176,7 @@ def _guard_reason(
 
 
 def _blocked_answer(
-    hits: list[dict[str, str]],
+    hits: list[dict[str, Any]],
     work_order_after_missing: bool,
 ) -> str:
     first = hits[0]
@@ -177,7 +194,7 @@ def _blocked_answer(
 
 def _missing_evidence_scan(
     payload: dict[str, Any],
-) -> tuple[list[dict[str, str]], bool]:
+) -> tuple[list[dict[str, Any]], bool]:
     unresolved_hits = {}
     work_order_hits = []
     for record in _iter_tool_records(payload):
@@ -196,8 +213,10 @@ def _missing_evidence_scan(
                 key,
                 {
                     "source": record["source"],
+                    "step": record.get("step"),
                     "tool": record["tool"],
                     "reason": reason,
+                    "target": _target_dict(record),
                     "excerpt": _excerpt(
                         _effective_response(record.get("response"))
                         or record.get("error")
@@ -232,6 +251,7 @@ def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
                 records.append(
                     {
                         "source": f"{source}.tool_calls[{call_index}]",
+                        "step": step.get("step"),
                         "tool": str(call.get("name") or call.get("tool") or ""),
                         "args": call.get("arguments") or call.get("tool_args"),
                         "response": call.get("output") or call.get("response"),
@@ -243,6 +263,7 @@ def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
         records.append(
             {
                 "source": source,
+                "step": step.get("step"),
                 "tool": str(step.get("tool") or ""),
                 "args": step.get("tool_args") or step.get("arguments"),
                 "response": step.get("response"),
@@ -374,6 +395,13 @@ def _evidence_key(record: dict[str, Any]) -> tuple[str, tuple[tuple[str, str], .
     return (tool, parts or UNKNOWN_TARGET)
 
 
+def _target_dict(record: dict[str, Any]) -> dict[str, str]:
+    parts = _target_parts(record.get("args"))
+    if not parts:
+        parts = _target_parts(_effective_response(record.get("response")))
+    return {key: value for key, value in parts if key != "*"}
+
+
 def _target_parts(value: Any) -> tuple[tuple[str, str], ...]:
     parsed = _parse_json_like(_effective_response(value))
     found: dict[str, str] = {}
@@ -415,7 +443,7 @@ def _clear_repaired_hit(
     unresolved_hits.pop((exact_key[0], UNKNOWN_TARGET), None)
 
 
-def _dedupe_hits(hits: list[dict[str, str]]) -> list[dict[str, str]]:
+def _dedupe_hits(hits: list[dict[str, Any]]) -> list[dict[str, Any]]:
     deduped = []
     seen = set()
     for hit in hits:

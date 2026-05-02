@@ -15,19 +15,28 @@ from orchestration_utils import (
     build_parser,
     build_planner_descriptions,
     build_planning_question,
+    build_missing_evidence_repair_state,
     build_retry_question,
     build_suffix_replan_question,
     build_tool_catalog_for_executor,
     canonicalize_step_result,
+    can_retry_missing_evidence,
     close_executor,
     compact_step_for_context,
+    current_missing_evidence_hit,
     effective_server_paths,
+    finalize_missing_evidence_repair_state,
     generate_suffix_plan,
+    load_missing_evidence_repair_config,
+    mark_missing_evidence_attempt_result,
+    mark_missing_evidence_unrepaired,
     maybe_self_ask,
     normalize_plan_steps,
     preflight_aob_runtime_dependencies,
     print_history,
     print_plan,
+    record_missing_evidence_retry_attempt,
+    repair_target_key,
     renumber_plan,
     repair_sensor_task_text,
     resolve_aob_path,
@@ -82,6 +91,9 @@ async def _run(args) -> None:
     server_paths = effective_server_paths(args.servers, repo_root)
     planner = Planner(llm)
     executor = build_executor(llm, server_paths, mcp_mode=args.mcp_mode)
+    repair_config = load_missing_evidence_repair_config()
+    repair_state = build_missing_evidence_repair_state(repair_config)
+    repair_attempts_by_target = {}
 
     try:
         self_ask = (
@@ -115,6 +127,7 @@ async def _run(args) -> None:
             step = active_steps[step_index]
             retries_used = 0
             step_question = self_ask.augmented_question
+            pending_repair_attempt = None
 
             while True:
                 sensors = available_sensor_ids(context)
@@ -156,6 +169,63 @@ async def _run(args) -> None:
                 canonicalize_step_result(result)
                 compact_step_for_context(result)
                 remaining_steps = active_steps[step_index + 1 :]
+                base_entry = serialize_step_result(result)
+                repair_hit = (
+                    current_missing_evidence_hit(history + [base_entry], base_entry)
+                    if repair_config.enabled
+                    else None
+                )
+
+                if pending_repair_attempt and not repair_hit:
+                    mark_missing_evidence_attempt_result(
+                        repair_state,
+                        pending_repair_attempt,
+                        "repaired",
+                        new_step=step.step_number,
+                    )
+
+                if repair_hit and can_retry_missing_evidence(
+                    repair_config,
+                    repair_state,
+                    repair_hit,
+                    repair_attempts_by_target,
+                ):
+                    key = repair_target_key(repair_hit)
+                    repair_attempts_by_target[key] = (
+                        repair_attempts_by_target.get(key, 0) + 1
+                    )
+                    pending_repair_attempt = record_missing_evidence_retry_attempt(
+                        repair_state,
+                        repair_hit,
+                    )
+                    retries_used = max(retries_used, repair_attempts_by_target[key])
+                    history.append(
+                        serialize_step_result(
+                            result,
+                            verifier_decision="missing_evidence_retry",
+                            verifier_reason=repair_hit.get("reason")
+                            or "Missing evidence detected before finalization.",
+                            retries_used=retries_used,
+                        )
+                    )
+                    step_question = build_retry_question(
+                        args.question,
+                        self_ask.augmented_question,
+                        step,
+                        base_entry,
+                        VerificationDecision(
+                            decision="retry",
+                            reason=repair_hit.get("reason")
+                            or "Missing evidence detected before finalization.",
+                            updated_focus="Repair the missing evidence before answering.",
+                        ),
+                        retries_used,
+                    )
+                    _LOG.info(
+                        "Missing-evidence repair scheduled retry for step %d.",
+                        step.step_number,
+                    )
+                    continue
 
                 if not result.success:
                     entry = serialize_step_result(
@@ -168,7 +238,7 @@ async def _run(args) -> None:
                     context[step.step_number] = result
                     break
 
-                provisional_entry = serialize_step_result(result)
+                provisional_entry = base_entry
                 if not provisional_entry["success"]:
                     history.append(
                         serialize_step_result(
@@ -182,15 +252,60 @@ async def _run(args) -> None:
                     context[step.step_number] = result
                     break
 
-                verdict = verify_step(
-                    args.question,
-                    self_ask.augmented_question,
-                    step,
-                    provisional_entry,
-                    history,
-                    remaining_steps,
-                    llm,
-                )
+                detector_replan_verdict = None
+                detector_replan_attempt = None
+                if repair_hit:
+                    mark_missing_evidence_attempt_result(
+                        repair_state,
+                        pending_repair_attempt,
+                        "unrepaired",
+                        new_step=step.step_number,
+                    )
+                    if (
+                        remaining_steps
+                        and replans_used < args.max_replans
+                        and can_retry_missing_evidence(
+                            repair_config,
+                            repair_state,
+                            repair_hit,
+                            repair_attempts_by_target,
+                        )
+                    ):
+                        key = repair_target_key(repair_hit)
+                        repair_attempts_by_target[key] = (
+                            repair_attempts_by_target.get(key, 0) + 1
+                        )
+                        detector_replan_attempt = record_missing_evidence_retry_attempt(
+                            repair_state,
+                            repair_hit,
+                            action="replan_suffix",
+                        )
+                        detector_replan_verdict = VerificationDecision(
+                            decision="replan_suffix",
+                            reason=(
+                                repair_hit.get("reason")
+                                or "Missing evidence detected before finalization."
+                            ),
+                            updated_focus=(
+                                "Repair the unresolved evidence gap before final answer "
+                                "or work-order creation."
+                            ),
+                        )
+                    else:
+                        mark_missing_evidence_unrepaired(repair_state, repair_hit)
+
+                if detector_replan_verdict is not None:
+                    verdict = detector_replan_verdict
+                else:
+                    verdict = verify_step(
+                        args.question,
+                        self_ask.augmented_question,
+                        step,
+                        provisional_entry,
+                        history,
+                        remaining_steps,
+                        llm,
+                    )
 
                 if (
                     verdict.decision == "retry"
@@ -259,7 +374,19 @@ async def _run(args) -> None:
                     )
                     if suffix_plan is None:
                         history[-1]["verifier_replan_error"] = replan_error
+                        mark_missing_evidence_attempt_result(
+                            repair_state,
+                            detector_replan_attempt,
+                            "replan_failed",
+                            new_step=step.step_number,
+                        )
                     else:
+                        mark_missing_evidence_attempt_result(
+                            repair_state,
+                            detector_replan_attempt,
+                            "suffix_replanned",
+                            new_step=step.step_number,
+                        )
                         history[-1]["verifier_replan_raw_plan"] = serialize_steps(
                             suffix_plan.steps
                         )
@@ -290,6 +417,8 @@ async def _run(args) -> None:
         await close_executor(executor)
 
     answer = summarize_answer(args.question, history, llm)
+    if repair_config.enabled:
+        finalize_missing_evidence_repair_state(repair_state, history)
     failed_steps = summarize_terminal_failures(history)
     output = {
         "question": args.question,
@@ -313,6 +442,8 @@ async def _run(args) -> None:
         "plan_normalization_warnings": normalization_warnings,
         "history": history,
     }
+    if repair_config.enabled:
+        output["mitigation_repair"] = repair_state
 
     if args.output_json:
         print(json.dumps(output, indent=2))

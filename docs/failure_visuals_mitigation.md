@@ -1,6 +1,6 @@
 # Failure Visuals + Mitigation Plan for `#64`
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 *Owner: Alex Xin (strategy lane stays here for `#64`)*
 *Issue: `#64`*
 
@@ -28,6 +28,8 @@ surface on 2026-04-27 so each issue has its own reviewable PR.
   before/after comparison figure
 - `docs/failure_taxonomy_evidence.md` — labels and pattern reads that justify
   each mitigation rank
+- `docs/mitigation_recovery_adjudication.md` — implementation-ready spec for
+  the retry/replan recovery and explicit adjudication rungs
 - `docs/validation_log.md` — canonical run-history index for the rerun pairs
 
 ## Apr 27 status refresh
@@ -89,9 +91,9 @@ Generated figures:
 `mitigation_run_inventory.csv` is a planning / control table, not an outcome
 claim. It now tracks five lanes: the implemented
 `missing_evidence_final_answer_guard` detector pending guarded reruns, the
-dependent `missing_evidence_retry_replan_guard` recovery candidate pending
-implementation, and three lower-priority candidates. Completed after-run claims
-stay absent until matched reruns exist.
+dependent `missing_evidence_retry_replan_guard` recovery implementation pending
+reruns, one spec-ready adjudication candidate, and two lower-priority
+candidates. Completed after-run claims stay absent until matched reruns exist.
 
 ## May 1 mitigation implementation status
 
@@ -142,6 +144,25 @@ Do **not** run every mitigation against every cell by default. Promote the next
 rung only when the prior rung has produced a measurable before/after row, or
 when the new rung answers a specific paper question that the prior rung cannot.
 This avoids a combinatorial grid while preserving attribution.
+
+## May 2 recovery / adjudication implementation status
+
+`docs/mitigation_recovery_adjudication.md` now defines the two follow-on rungs.
+The recovery rung is implemented in the repo-local PE-family runners; the
+adjudication rung remains deferred until evidence repair is measured.
+
+| Rung | Status | Implementation point | First runnable lane |
+|---:|---|---|---|
+| 2 | implemented, pending rerun | public partial-history detector in `scripts/mitigation_guards.py`; bounded retry in `scripts/plan_execute_self_ask_runner.py`; retry plus detector-driven suffix replan in `scripts/verified_pe_runner.py` | `Y + Self-Ask`, then `Z + Self-Ask` |
+| 3 | spec-ready, deferred until evidence repair is measured | add a structured pre-finalization adjudication object that cites deciding tool evidence and rejected alternatives | `Z + Self-Ask` after rung 1 or rung 2 evidence exists |
+
+Recovery configs are now available under `configs/mitigation/`. Do not add an
+adjudication config until the runner consumes the reserved adjudication flag.
+
+The key design decision: retry/replan is not a new experiment axis. It is a
+dependent recovery rung that must keep the detection guard on. Adjudication is
+downstream of evidence repair because it cannot make a trustworthy fault/risk
+choice when the deciding evidence is absent.
 
 ## Visuals scaffold
 
@@ -335,5 +356,10 @@ The artifact gap that still bounds this lane:
    figure is `comparison_ready` (per `#36` status labels)
 2. run either guarded config under the same model/scenario/trial shape as its
    before-side baseline
-3. refresh the rendered SVGs after any final scenario/rerun sweep changes the
+3. run the retry/replan recovery rung only after the detection-only rows exist,
+   keeping the guard active and recording repair attempts separately
+4. implement explicit adjudication only after evidence repair has at least one
+   measured row or after a detection-only row proves the deciding evidence is
+   already present
+5. refresh the rendered SVGs after any final scenario/rerun sweep changes the
    evidence table

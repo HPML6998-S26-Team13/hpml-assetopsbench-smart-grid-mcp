@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-05-02
+
+### Changed
+
+- Added `docs/mitigation_recovery_adjudication.md`, an implementation-ready
+  spec for the follow-on mitigation ladder: bounded missing-evidence
+  retry/replan recovery and explicit fault/risk adjudication. The spec keeps
+  recovery dependent on the existing detection guard and marks the adjudication
+  key as reserved until runner code consumes it.
+- Implemented the `missing_evidence_retry_replan_guard` for repo-local
+  PE-family runners. PE + Self-Ask can retry bounded read-only
+  evidence-producing steps; Verified PE + Self-Ask can also drive suffix
+  replanning from deterministic missing-evidence detection. Added matched
+  recovery rerun configs under `configs/mitigation/`.
+- Refreshed the #64 / #66 / #36 / #5 documentation surfaces so mitigation
+  planning distinguishes implemented detection, implemented recovery, and
+  deferred adjudication without claiming rerun evidence that does not exist.
+- Regenerated the mitigation inventory and priority figure labels so
+  `missing_evidence_retry_replan_guard` is `implemented_pending_rerun`
+  and `explicit_fault_risk_adjudication_step` is
+  `spec_ready_deferred_until_repair`.
+
 ## 2026-05-01
 
 ### Changed

@@ -70,17 +70,22 @@ MITIGATION_SPECS = [
         "notes": (
             "Next mitigation-ladder rung. Reuse the missing-evidence detector during execution; "
             "retry the evidence-producing step with a bounded budget and replan the dependent suffix "
-            "before final answer / work-order creation. Runs only after the detection-only guard is measured."
+            "before final answer / work-order creation. Implemented in the PE-family local runners; "
+            "reruns wait until detection-only guard rows exist."
         ),
         "before_run": (
             "pending detection-guard after-runs for family lanes: "
             "Y+Self-Ask and Z+Self-Ask"
         ),
-        "after_run": "future recovery rerun after detection-only baselines exist",
+        "after_run": (
+            "pending recovery family reruns: "
+            "configs/mitigation/missing_evidence_repair_pe_self_ask.env; "
+            "configs/mitigation/missing_evidence_repair_verified_pe_self_ask.env"
+        ),
         "before_status": "candidate_after_detection",
-        "after_status": "pending_implementation",
-        "owner_issue": "#64 -> future #65/#66 follow-up",
-        "implementation_status": "candidate_next",
+        "after_status": "pending_rerun",
+        "owner_issue": "#64/#66",
+        "implementation_status": "implemented_pending_rerun",
     },
     {
         "rank": "3",
@@ -114,12 +119,21 @@ MITIGATION_SPECS = [
         "symptom": "under-constrained fault/risk adjudication",
         "target_pattern": "fault or risk choice remains under-justified when multiple evidence sources compete",
         "primary_metric": "count of under-constrained adjudication rows after rerun",
-        "secondary_metrics": "clarity_and_justification judge dimension, judge_pass_rate",
+        "secondary_metrics": (
+            "clarity_and_justification judge dimension, judge_pass_rate, "
+            "wrong_fault_label_count, work_order_consistency"
+        ),
         "stop_condition": "adjudication remains vague or does not cite deciding tool evidence",
         "notes": (
-            "Candidate downstream lane. Evaluate after evidence detection/repair because adjudication "
-            "is meaningful only when the deciding evidence exists."
+            "Spec-ready downstream lane. Evaluate after evidence detection/repair because adjudication "
+            "is meaningful only when the deciding evidence exists; finalization must cite concrete tool evidence."
         ),
+        "before_run": "recovery row or detection-only row with deciding evidence present",
+        "after_run": "future adjudication rerun after evidence gate is active",
+        "before_status": "candidate_after_recovery",
+        "after_status": "spec_ready_deferred_until_repair",
+        "owner_issue": "#64/#66",
+        "implementation_status": "spec_ready_deferred_until_repair",
     },
 ]
 
@@ -376,6 +390,8 @@ def svg_mitigation_table(rows: list[dict[str, object]], path: Path) -> None:
                 {
                     "implemented_pending_rerun": "implemented / pending rerun",
                     "candidate_next": "candidate next",
+                    "spec_ready_pending_implementation": "spec ready / pending impl",
+                    "spec_ready_deferred_until_repair": "spec ready / deferred",
                 }.get(str(row["implementation_status"]), row["implementation_status"]),
                 24,
                 12,

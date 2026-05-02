@@ -69,6 +69,14 @@ The active cell mapping is:
   `missing_evidence_final_answer_guard` during trial post-processing. This is
   the #65 mitigation toggle for matched #66 reruns: all non-mitigation config
   fields should stay aligned with the before-side run.
+- `ENABLE_MISSING_EVIDENCE_REPAIR` — when `1`, enable the PE-family
+  `missing_evidence_retry_replan_guard` inside the runner. This requires
+  `ENABLE_MISSING_EVIDENCE_GUARD=1` so the detection/accounting gate remains
+  active after recovery attempts.
+- `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` — maximum detector-driven repair
+  attempts per trial; defaults to `2`.
+- `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` — maximum detector-driven
+  retries per unresolved evidence target; defaults to `1`.
 - `LAUNCH_VLLM` — when `1`, launch the local vLLM server first and point
   AssetOpsBench's LiteLLM client at `http://127.0.0.1:<port>/v1`
 - `VLLM_DTYPE` — vLLM `--dtype`; defaults to `float16`, but Cell D uses
@@ -92,6 +100,18 @@ The active cell mapping is:
 
 These are intentionally explicit. AaT now has a default benchmark dispatch
 path; templates are reserved for parity smoke checks and one-off variants.
+
+### Mitigation ladder keys
+
+These keys implement or reserve the recovery/adjudication follow-on spec in
+[../docs/mitigation_recovery_adjudication.md](../docs/mitigation_recovery_adjudication.md).
+
+| Key | Status | Behavior |
+|---|---|
+| `ENABLE_MISSING_EVIDENCE_REPAIR` | runnable for PE-family local runners | enables `missing_evidence_retry_replan_guard`; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | runnable | caps detector-driven repair attempts per trial |
+| `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | runnable | caps retries per unresolved evidence target |
+| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | reserved | future structured pre-finalization fault/risk adjudication; do not set until runner code consumes it |
 
 ## Running
 

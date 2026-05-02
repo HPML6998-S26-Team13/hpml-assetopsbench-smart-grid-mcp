@@ -131,6 +131,11 @@ HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
 VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
 ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
 ENABLE_MISSING_EVIDENCE_GUARD="${ENABLE_MISSING_EVIDENCE_GUARD:-0}"
+ENABLE_MISSING_EVIDENCE_REPAIR="${ENABLE_MISSING_EVIDENCE_REPAIR:-0}"
+MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS="${MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS:-2}"
+MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET="${MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET:-1}"
+export ENABLE_MISSING_EVIDENCE_GUARD ENABLE_MISSING_EVIDENCE_REPAIR
+export MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET
 
 SERVER_IOT_PATH="${SERVER_IOT_PATH:-$REPO_ROOT/mcp_servers/iot_server/server.py}"
 SERVER_FMSR_PATH="${SERVER_FMSR_PATH:-$REPO_ROOT/mcp_servers/fmsr_server/server.py}"
@@ -382,6 +387,16 @@ payload["missing_evidence_guard"] = (
     os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD", "0").strip().lower()
     in {"1", "true", "yes", "on"}
 )
+payload["missing_evidence_repair"] = (
+    os.environ.get("ENABLE_MISSING_EVIDENCE_REPAIR", "0").strip().lower()
+    in {"1", "true", "yes", "on"}
+)
+payload["missing_evidence_repair_max_attempts"] = int(
+    os.environ.get("MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS", "2")
+)
+payload["missing_evidence_repair_max_attempts_per_target"] = int(
+    os.environ.get("MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET", "1")
+)
 
 # Persist EXTRA_VLLM_ARGS into the benchmark config + meta so artifact
 # consumers (notebooks, WandB, paper tables) can recover the exact vLLM
@@ -413,6 +428,13 @@ pathlib.Path(meta_path).write_text(
             "model_id": payload["model_id"],
             "experiment_family": payload["experiment_family"],
             "missing_evidence_guard": payload["missing_evidence_guard"],
+            "missing_evidence_repair": payload["missing_evidence_repair"],
+            "missing_evidence_repair_max_attempts": payload[
+                "missing_evidence_repair_max_attempts"
+            ],
+            "missing_evidence_repair_max_attempts_per_target": payload[
+                "missing_evidence_repair_max_attempts_per_target"
+            ],
             # vLLM extra args. Per-run meta records the exact optimization
             # knobs that produced a run so notebooks / paper tables can
             # recover the prefix-cache / kv-dtype / etc. choice without
@@ -762,6 +784,9 @@ run_external_orchestration_trial() {
     AAT_PARALLEL_TOOL_CALLS="$AAT_PARALLEL_TOOL_CALLS" \
     ENABLE_SELF_ASK="$ENABLE_SELF_ASK" \
     ENABLE_MISSING_EVIDENCE_GUARD="$ENABLE_MISSING_EVIDENCE_GUARD" \
+    ENABLE_MISSING_EVIDENCE_REPAIR="$ENABLE_MISSING_EVIDENCE_REPAIR" \
+    MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS="$MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS" \
+    MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET="$MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET" \
     HARNESS_VERBOSE="$HARNESS_VERBOSE" \
     SERVER_IOT_PATH="$SERVER_IOT_PATH" \
     SERVER_FMSR_PATH="$SERVER_FMSR_PATH" \
@@ -1289,6 +1314,9 @@ summary = {
         )
     },
     "missing_evidence_guard": bool(config.get("missing_evidence_guard", False)),
+    "missing_evidence_repair": bool(config.get("missing_evidence_repair", False)),
+    "missing_evidence_repair_max_attempts": config.get("missing_evidence_repair_max_attempts"),
+    "missing_evidence_repair_max_attempts_per_target": config.get("missing_evidence_repair_max_attempts_per_target"),
     "run_status": "success" if int(failed) == 0 else ("partial" if int(passed) > 0 else "failed"),
     "scenarios_attempted": int(total),
     "scenarios_completed": int(passed),
