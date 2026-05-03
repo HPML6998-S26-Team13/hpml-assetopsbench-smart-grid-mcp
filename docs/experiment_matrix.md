@@ -168,8 +168,9 @@ Self-Ask is a **runner variant**, not a new official cell ID.
 | Verified PE without Self-Ask | `Z` with `ENABLE_SELF_ASK=0` |
 
 This matters for both notebooks and the paper. We should present Self-Ask as a
-mitigation / ablation toggle on top of PE-family methods, not as a whole new
-benchmark axis unless it becomes central enough to deserve that promotion.
+PE-family ablation/family-lane toggle: visible as `YS` and `ZS` in matrix
+tables, but not expanded into a full new benchmark axis across every transport
+and mitigation condition.
 
 This also means the right near-term Experiment 2 order is:
 
@@ -189,22 +190,22 @@ For the current missing-evidence ladder, the dense slice is:
 
 ```text
 family lane: Y + Self-Ask, Z + Self-Ask
-mitigation rung: baseline, detection guard, repair/replan recovery
+mitigation rung: baseline, detection guard, repair/replan recovery, adjudication
 scenario: data/scenarios/multi_*.json
 trial: 1..TRIALS
 ```
 
-The baseline rung already exists through `8998341` and `8998343`. The #66
-runner plan therefore executes only the two new mitigation rungs for the two
-family lanes, then records the outcome in
-`results/metrics/mitigation_before_after.csv`.
+Earlier plans reused the historical baseline rung from `8998341` and `8998343`.
+The current GCP A100 #66 run instead executes fresh matched baselines plus the
+three post-baseline mitigation rungs for the two family lanes, then records the
+outcome in `results/metrics/mitigation_before_after.csv`.
 
 This is closer to a sparse tensor slice than a new all-cells matrix. If the
 scenario set later expands to 30 scenarios and the final trial target becomes
 5, the mitigation slice is:
 
 ```text
-2 family lanes x 3 rungs x 30 scenarios x 5 trials
+2 family lanes x 4 rungs x 30 scenarios x 5 trials
 ```
 
 It is not:

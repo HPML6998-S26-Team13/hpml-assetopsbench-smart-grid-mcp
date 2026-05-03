@@ -123,6 +123,18 @@ If any of these fields change, the run is no longer directly comparable to the
 baseline anchors above. Mark it `incomparable` in the handoff package unless
 Alex explicitly approves a new comparison baseline.
 
+## Runtime patch dependency
+
+The May 3 GCP A100 evidence package was captured from a VM checkout with the
+runtime patch preserved at
+`benchmarks/gcp_a100_final_20260503/logs/gcp_a100_runtime_patch_20260503T160400Z.diff`.
+That patch updates PE-family imports from `plan_execute.*` to
+`agent.plan_execute.*` for the current AssetOpsBench package layout and routes
+vanilla `Y` through the repo-local PE wrapper. A fresh GCP checkout must either
+apply that patch or provide an equivalent `agent.plan_execute` import path
+before rerunning the GCP A100 PE/Verified-PE cohorts; otherwise the run can fail
+at import/CLI argument boundaries before producing trajectories.
+
 ## Execution order
 
 Run in this order. The current overnight plan executes all four tiers, including

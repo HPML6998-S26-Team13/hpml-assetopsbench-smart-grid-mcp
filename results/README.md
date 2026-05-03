@@ -85,6 +85,9 @@ Final-six GCP A100 capture populated:
   `results/metrics/gcp_a100_mitigation_4tier_summary.csv`, covering the full
   baseline -> detection guard -> retry/replan repair -> adjudication ladder for
   YS and ZS
+- The mitigation baselines are independent matched reruns, not pointers to the
+  matrix rows. Expect small run-to-run variance at 6 scenarios x 5 trials; for
+  example, ZS is 15/30 in the matrix row and 17/30 in the mitigation baseline.
 - `results/metrics/scenario_scores.jsonl` includes the appended GCP A100 judge
   rows; per-trial judge audit logs live under `results/judge_logs/<run_name>/`
 - raw run directories for the GCP A100 matrix, follow-ons, and mitigation rows

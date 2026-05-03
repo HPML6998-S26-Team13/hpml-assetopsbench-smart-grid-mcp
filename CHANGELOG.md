@@ -48,7 +48,7 @@
 - Updated the #66 mitigation rerun operator plan for the final-six GCP A100
   path: four tiers including matched baseline, five trials per scenario, 30
   trajectory files per config, batch-wrapper resume/judge commands, and 240
-  expected judge rows for the full mitigation cohort.
+  expected judge rows for the full mitigation cohort. Refs #66.
 - Recorded the final-six GCP A100 evidence package: 11 judged non-mitigation
   matrix/follow-on rows, 8 judged four-tier mitigation rows, appended judge
   scores, per-trial judge logs, preserved run configs, and compact summary
