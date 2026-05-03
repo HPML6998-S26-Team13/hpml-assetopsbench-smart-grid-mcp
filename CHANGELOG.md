@@ -13,7 +13,7 @@
   ladder is implemented/planned while outcome measurement still waits on #66
   reruns.
 - Added the first editable final-presentation PPTX draft at
-  `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`
+  `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
   docs / report inventory to record the May 3 build status, layout QA result, and
   remaining scenario, mitigation, and dry-run gates. Refs #44; issue remains

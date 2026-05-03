@@ -35,3 +35,21 @@ __pycache__/
 *.zip
 *.tar
 *.gz
+
+# CodeGraphContext recommended baseline additions
+.venv*/
+.idea/
+.vscode/
+*.pyc
+*.pyo
+*.egg-info/
+.tox/
+coverage/
+.next/
+*.log
+*.sqlite*
+*.bz2
+*.xz
+*.zst
+*.7z
+*.rar
