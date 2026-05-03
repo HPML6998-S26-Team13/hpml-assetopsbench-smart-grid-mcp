@@ -1357,11 +1357,42 @@ wall_clock_seconds_total = sum(latencies) + (mcp_setup_seconds or 0)
 
 tool_call_total = 0
 tool_call_trials = 0
+# Per-trial token usage, aggregated for summary.json (#133). Tokens are
+# captured by aat_runner.py from the Agents SDK RunContextWrapper.usage and
+# written into payload["usage"] on each trial JSON. Trials with missing /
+# null usage are excluded from the totals so the summary distinguishes
+# "no data" (None) from "zero tokens" (0).
+input_tokens_total = 0
+output_tokens_total = 0
+total_tokens_total = 0
+usage_trials = 0
 for output_path in sorted(pathlib.Path(run_dir).glob("*_run[0-9][0-9].json")):
     try:
         payload = json.loads(output_path.read_text(encoding="utf-8"))
     except Exception:
         continue
+    usage = payload.get("usage")
+    if isinstance(usage, dict):
+        i_t = usage.get("input_tokens")
+        o_t = usage.get("output_tokens")
+        t_t = usage.get("total_tokens")
+        # Only count trials that report at least input + output. Treat
+        # explicit None as missing (not zero).
+        if (
+            isinstance(i_t, int)
+            and not isinstance(i_t, bool)
+            and i_t >= 0
+            and isinstance(o_t, int)
+            and not isinstance(o_t, bool)
+            and o_t >= 0
+        ):
+            input_tokens_total += i_t
+            output_tokens_total += o_t
+            if isinstance(t_t, int) and not isinstance(t_t, bool) and t_t >= 0:
+                total_tokens_total += t_t
+            else:
+                total_tokens_total += i_t + o_t
+            usage_trials += 1
     explicit_tool_calls = payload.get("tool_call_count")
     if (
         isinstance(explicit_tool_calls, int)
@@ -1435,9 +1466,21 @@ summary = {
     "latency_seconds_p50": percentile(latencies, 50),
     "latency_seconds_p95": percentile(latencies, 95),
     "mcp_setup_seconds": mcp_setup_seconds,
-    "tokens_per_second_mean": None,
-    "input_tokens_total": None,
-    "output_tokens_total": None,
+    # End-to-end agent throughput. Denominator is wall_clock_seconds_total
+    # which includes tool-call round-trips, MCP serialization, and
+    # orchestration time — NOT just model decode. Per #133 / Alex's review:
+    # label this "end-to-end agent throughput", not "model decode tok/s".
+    # Null when no trial reported usage (e.g. older runs predating the
+    # aat_runner.py usage capture in #131/#133 PR).
+    "tokens_per_second_mean": (
+        (output_tokens_total / wall_clock_seconds_total)
+        if usage_trials and wall_clock_seconds_total
+        else None
+    ),
+    "input_tokens_total": input_tokens_total if usage_trials else None,
+    "output_tokens_total": output_tokens_total if usage_trials else None,
+    "total_tokens_total": total_tokens_total if usage_trials else None,
+    "tokens_usage_trial_count": usage_trials,
     "tool_call_count_total": tool_call_total if tool_call_trials else None,
     "tool_call_count_mean": (tool_call_total / tool_call_trials) if tool_call_trials else None,
     "mcp_latency_seconds_mean": None,

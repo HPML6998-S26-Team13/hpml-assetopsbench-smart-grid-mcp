@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import datetime as _dt
 import json
 import logging
 import os
@@ -49,6 +50,61 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 _LOG = logging.getLogger("aat_runner")
+
+
+def _json_default(obj: Any) -> Any:
+    """JSON encoder for trial output payloads. Type-specific, fail-closed.
+
+    Replaces the prior `default=str` which silently stringified anything —
+    fine for `pandas.Timestamp`/`datetime` (roundtrippable ISO-8601) but
+    lossy for `numpy.ndarray` (str() truncates above ~1000 elements per
+    `numpy.set_printoptions`) and outright wrong for `pandas.DataFrame`
+    (str() is the human-readable table). #131 / PR #130 review Medium 5.
+
+    Accept: stdlib datetime + date, plus pandas.Timestamp and
+    numpy.datetime64 if those packages are importable. Anything else
+    raises TypeError so the caller sees the failure instead of a
+    silently-corrupted artifact downstream.
+    """
+    if isinstance(obj, (_dt.datetime, _dt.date)):
+        return obj.isoformat()
+
+    # pandas / numpy are optional dependencies — import lazily and fall
+    # through to TypeError if absent so we don't pretend to handle them.
+    try:
+        import pandas as _pd  # type: ignore
+
+        if isinstance(obj, _pd.Timestamp):
+            # pandas.Timestamp.isoformat() is roundtrippable.
+            return obj.isoformat()
+    except ImportError:
+        pass
+    try:
+        import numpy as _np  # type: ignore
+
+        if isinstance(obj, _np.datetime64):
+            # `_np.datetime64` doesn't have isoformat(); cast through pandas
+            # if available for an ISO string, else emit the str() form which
+            # IS roundtrippable for datetime64 specifically (e.g.
+            # '2026-04-28T17:00:00.000000000').
+            try:
+                import pandas as _pd  # type: ignore
+
+                return _pd.Timestamp(obj).isoformat()
+            except ImportError:
+                return str(obj)
+    except ImportError:
+        pass
+
+    raise TypeError(
+        f"unserializable type {type(obj).__module__}.{type(obj).__name__!r}: "
+        f"{_json_default.__module__} only handles datetime / date / "
+        f"pandas.Timestamp / numpy.datetime64. If a tool is returning a "
+        f"numpy array or pandas DataFrame, convert it inside the tool to a "
+        f"plain list/dict before returning, since str() on those types is "
+        f"silently lossy."
+    )
+
 
 # Importable without the SDK installed, so unit tests can patch before import.
 # Real imports happen lazily inside _main().
@@ -289,6 +345,26 @@ def _serialize_run_result(
     except Exception:
         sdk_version = "unknown"
 
+    # Token usage — pulled from the OpenAI Agents SDK's
+    # RunContextWrapper.usage. The SDK accumulates per-LLM-call counters
+    # across the run loop, so this single read covers every turn the
+    # agent took. Missing on stubbed test results / older SDKs; fall
+    # through to None values so summary aggregation can detect missing
+    # data instead of treating it as zero. (#133 / PR #130 review Low 9)
+    usage_block: dict[str, Any] = {
+        "input_tokens": None,
+        "output_tokens": None,
+        "total_tokens": None,
+        "requests": None,
+    }
+    ctx_wrapper = getattr(result, "context_wrapper", None)
+    sdk_usage = getattr(ctx_wrapper, "usage", None) if ctx_wrapper else None
+    if sdk_usage is not None:
+        for field_name in ("input_tokens", "output_tokens", "total_tokens", "requests"):
+            value = getattr(sdk_usage, field_name, None)
+            if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+                usage_block[field_name] = value
+
     return {
         "question": prompt,
         "answer": answer,
@@ -297,6 +373,7 @@ def _serialize_run_result(
         "max_turns_exhausted": max_turns_reached,
         "turn_count": turn,
         "tool_call_count": tool_call_count,
+        "usage": usage_block,
         "history": history,
         "runner_meta": {
             "model_id": args.model_id,
@@ -313,7 +390,10 @@ def _serialize_run_result(
 
 def _write_output(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(payload, indent=2, default=_json_default) + "\n",
+        encoding="utf-8",
+    )
 
 
 @dataclass
