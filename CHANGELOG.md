@@ -25,6 +25,9 @@
   marked as created, the Markdown draft is positioned as a working conversion
   surface rather than a submitted report, and final IEEE export remains gated on
   NeurIPS compile/checklist/source freeze.
+- Added the `#54` Problem Statement B paper subsection to
+  `docs/neurips_draft.md`, preserving Tanisha's methodology/circularity framing
+  while updating the status for PR #156 and PR #163 evidence.
 - Corrected the IEEE report's Experiment 2 source notes so `YS` / `ZS`
   Self-Ask rows cite `results/metrics/notebook03_self_ask_ablation.csv` and
   `results/metrics/experiment_matrix_summary.csv`, not

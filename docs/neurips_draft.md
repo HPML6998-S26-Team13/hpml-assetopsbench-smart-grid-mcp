@@ -154,7 +154,7 @@ Use this table to keep the draft aligned with what the repo can actually prove.
 | AaT Cell A/B canonical captures exist on the same scenario set, same model, same job | `benchmarks/cell_A_direct/summary.json` and `benchmarks/cell_B_mcp_baseline/summary.json` from job `8979314` (PR `#130`); 6 scenarios per side, `Llama-3.1-8B-Instruct`, scenario set `smartgrid_multi_domain` (hash `ca66cd16…2691e48`); both sides hit `success_rate=1.0`, `failure_count=0`, `tool_error_count=0` | safe now as a paired one-job baseline |
 | PE-family failures show recurring correctness/accounting issues worth classifying | `docs/failure_taxonomy_evidence.md`, committed Y/Z artifacts, `docs/validation_log.md` | safe now |
 | Official NeurIPS 2026 submission surface exists | Overleaf project `69f5a380e638a31066dc0bd1`, commit `7e361de`, official `neurips_2026` package and `checklist.tex` | safe now |
-| Scenario corpus is on track for the 30-scenario floor | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-crafted scenarios; generator-accepted scenarios still pending | pending; do not present 30 as complete until merged/validated |
+| Scenario corpus is on track for the 30-scenario floor | `team13/main` has 21 hand-crafted main scenarios after PR #156; PR #163 adds 5 generated review candidates under `data/scenarios/generated/first_review_20260502/`; generator acceptance in #53 still pending | pending; do not present 30 as complete until generated candidates are validated/promoted |
 | Indicative AaT MCP transport overhead (Cell B − Cell A) on the canonical scenario set | job `8979314` paired summaries: latency mean `+1.20s` (`+9.8%`), wall-clock total `+7.17s` (`+9.8%`), tool-call mean `+0.17` (`+5.0%`), zero tool errors | safe now as one-job, six-scenario evidence; **not** safe as a final transport-overhead distribution |
 | Full transport result across `A/B/C` | final comparable captures under `benchmarks/cell_A_direct/`, `cell_B_mcp_baseline/`, `cell_C_mcp_optimized/` with repeat trials and judge data | partial: one-job A/B pair exists from `8979314`; first Cell C capture/judge set exists from `9071639`; final 5-trial matched rerun still missing |
 | Final orchestration comparison across shared `B/Y` anchor | final comparable shared-cell artifacts plus judge outputs | blocked |
@@ -260,6 +260,96 @@ Statement B follow-ons, where automatically generated scenarios could otherwise
 recycle domain language without preserving operational coherence. The repo
 therefore treats realism validation and circularity handling as part of the
 benchmark contract rather than an afterthought.
+
+### 2.6 Problem Statement B: Automated Scenario Generation
+
+Draft paragraph:
+
+Problem Statement B extends the hand-crafted scenario corpus through automated
+scenario generation rather than replacing it. The generator
+(`scripts/generate_scenarios.py`) consumes the scenario-generation Knowledge
+Plugin (`docs/knowledge/scenario_generation_support.json`), the no-hint
+authoring contract
+(`docs/knowledge/generated_scenario_authoring_and_ground_truth.md`), and the
+current hand-crafted corpus. The hand-crafted set is used for comparator
+assignment and novelty checks, not as a claim that generated scenarios are an
+independent test set. Generation uses WatsonX-hosted Llama-3.3-70B-Instruct at
+`temperature=0.7` and writes reproducibility artifacts under
+`data/scenarios/generated/<batch_id>/`: parsed candidate JSON files, exact
+prompts, raw model responses, and a batch manifest.
+
+Draft paragraph:
+
+The current first-review batch, `first_review_20260502`, contains five
+validator-clean generated candidates (`SGT-GEN-001` through `SGT-GEN-005`),
+one from each configured generator family: FMSR DGA diagnosis, TSFM RUL
+forecast, WO creation, IoT sensor analysis, and multi-domain incident
+response. The batch is evidence that the generator can produce structurally
+valid Smart Grid scenario candidates, not evidence that those candidates are
+already accepted into the canonical benchmark. Generated files deliberately
+remain outside the top-level `data/scenarios/*.json` validation glob until #53
+assigns dispositions and any accepted scenarios are promoted individually.
+
+Draft paragraph:
+
+Each generated candidate carries nested provenance and comparator metadata.
+The required `provenance` block records source type, generator prompt version,
+Knowledge Plugin hash, generation model, generation date, batch ID, and manual
+cleanup status. The required `nearest_handcrafted_comparator` block records the
+closest hand-crafted scenario by scenario ID, repo-relative path, similarity
+basis, novelty note, and whether the nearest match is weak. The generator-side
+validator rejects missing provenance, top-level legacy provenance fields, and
+the older `nearest_handcrafted` field name. This keeps generated-candidate
+lineage visible enough for the paper to separate hand-authored, generated, and
+manually cleaned-up artifacts.
+
+Draft paragraph:
+
+Generated scenarios pass through a staged validation policy before entering
+benchmark analysis. Stage 0 checks schema validity, MCP tool-name validity, and
+provenance/comparator completeness. Stage 1 forces an explicit nearest
+hand-crafted comparator so novelty is judged against an operationally similar
+task rather than against a vague domain label. Stage 2 rates realism, novelty,
+tool-path validity, and benchmark usefulness. Stage 3 maps those ratings into
+one of five dispositions: `accept`, `accept_with_edits`, `reject_duplicate`,
+`reject_unusable`, or `reject_structural`. A batch is useful for downstream
+analysis only if at least 70% of candidates reach `accept` or
+`accept_with_edits` and fewer than 20% are `reject_duplicate`; this threshold is
+a paper-defensibility bar, not a formal independence proof.
+
+Draft paragraph:
+
+The generated-scenario lane also introduces a structural circularity that the
+paper should disclose directly. The Knowledge Plugin encodes the same Smart
+Grid domain structure, MCP tool schemas, and IEC 60599:2022 Rogers Ratio DGA
+logic that the FMSR server uses when `analyze_dga` classifies dissolved-gas
+records. A generated DGA task can therefore be shaped by the same encoded
+domain rules that later define the tool-level answer. That does not make the
+generated set useless, but it does mean generated scenarios are a controlled
+coverage extension and stress-test surface, not an unbiased external
+validation set.
+
+Draft paragraph:
+
+Two controls bound that circularity. First, the authoring contract prohibits
+leaking IEC codes, ratio thresholds, gas concentrations, or direct tool hints in
+the task text, so the agent must still retrieve data, call the relevant tools,
+and ground its answer in tool outputs. Second, the comparator and validation
+process rejects near-duplicates and tool-path mismatches instead of counting
+surface paraphrases as new benchmark coverage. The final paper should report
+generated and hand-crafted scenario results separately and keep the #53
+acceptance status visible. If the generated batch clears validation, it
+supports a measured coverage-expansion claim; if it fails, that is still useful
+evidence about the difficulty of automated industrial benchmark authoring.
+
+Status note for #54:
+
+PR #156 has landed the hand-crafted corpus expansion to 21 main scenarios, and
+PR #163 has landed the first generated candidate batch with structural
+validation. What remains outside this subsection is the #53 human validation
+pass and any generated-vs-hand-crafted comparison table. Until those land, this
+section should claim methodology, provenance, and circularity controls, but not
+final generated-scenario benchmark results or a completed 30-scenario floor.
 
 ### 3. System Design
 
