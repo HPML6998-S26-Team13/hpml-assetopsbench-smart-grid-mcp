@@ -213,7 +213,7 @@ Expected proof:
 
 ### Phase 1-2: Runner Resume Core
 
-- [ ] `scripts/run_experiment.sh`
+- [x] `scripts/run_experiment.sh`
   - **Task:** Add `SMARTGRID_RUN_ID`, `SMARTGRID_RESUME`,
     `SMARTGRID_FORCE_RERUN`, and `SMARTGRID_RESUME_REQUIRE_LATENCY`; use the
     Python helper for trial status and latency-row writes; skip completed
@@ -222,7 +222,7 @@ Expected proof:
     complete failure, and one partial stdout causes exactly two skips and one
     rerun; summary counts match terminal JSON state.
 
-- [ ] `scripts/gcp_resume_state.py`
+- [x] `scripts/gcp_resume_state.py`
   - **Task:** New testable helper for trial identity resolution, valid JSON
     detection, latency-row lookup/dedupe, manifest event writes, and summary
     inventory support.
@@ -230,11 +230,11 @@ Expected proof:
     missing latency, invalid JSON, dangling stdout, duplicate latency rows, and
     date-prefix changes across restarts.
 
-- [ ] `tests/test_gcp_resume_state.py`
+- [x] `tests/test_gcp_resume_state.py`
   - **Task:** Cover the Python helper with temporary run dirs and JSONL sidecars.
   - **Acceptance:** tests pass without importing torch, vLLM, or external SDKs.
 
-- [ ] `tests/test_run_experiment_summary.py`
+- [x] `tests/test_run_experiment_summary.py`
   - **Task:** Extend the existing summary-generation tests for resume-mode
     fields (`resume_skipped_count`, `resume_rerun_count`) and partial/failure
     status semantics.
@@ -243,14 +243,14 @@ Expected proof:
 
 ### Phase 3: GCP Batch Launcher
 
-- [ ] `scripts/run_gcp_context_batch.sh`
+- [x] `scripts/run_gcp_context_batch.sh`
   - **Task:** Add canonical seven-row GCP batch launcher with restart-safe batch
     state, GCP provenance env, compiler/runtime preflight, resume mode, per-row
     judge, retained-disk auto-delete preflight, and TSV/JSON manifest.
   - **Acceptance:** shellcheck/bash syntax passes; dry-run mode writes stable
     batch state; restart after a completed mock row skips that row.
 
-- [ ] `configs/gcp_context_closeout.tsv`
+- [x] `configs/gcp_context_closeout.tsv`
   - **Task:** Store the row label/config mapping consumed by the batch launcher
     instead of hard-coding arrays in multiple places.
   - **Acceptance:** launcher rejects unknown labels and fails fast if any config
@@ -258,28 +258,28 @@ Expected proof:
 
 ### Phase 4: Judge and Score Dedupe
 
-- [ ] `scripts/judge_trajectory.py`
+- [x] `scripts/judge_trajectory.py`
   - **Task:** Add idempotent `--skip-existing` behavior keyed by
     `(run_name, scenario_id, trial_index, judge_model)` or delegate that
     filtering to a shared helper.
   - **Acceptance:** rerunning judge on the same run dir does not append
     duplicates by default.
 
-- [ ] `tests/test_judge_trajectory.py`
+- [x] `tests/test_judge_trajectory.py`
   - **Task:** Add focused tests for duplicate score-row detection and forced
     rejudge behavior.
   - **Acceptance:** test uses local temp JSONL files and does not call WatsonX.
 
 ### Phase 5-6: Artifact Recovery and Docs
 
-- [ ] `scripts/gcp_pull_context_artifacts.sh`
+- [x] `scripts/gcp_pull_context_artifacts.sh`
   - **Task:** Pull run dirs/logs/judge logs from a no-external-IP VM over IAP,
     stage remote score rows to a temp file, merge only new rows locally, and
     expose a bounded parallelism flag for larger artifact trees.
   - **Acceptance:** dry-run prints the exact gcloud scp commands; merge mode
     dedupes a fixture score file.
 
-- [ ] `docs/gcp_fallback.md`
+- [x] `docs/gcp_fallback.md`
   - **Task:** Document resume flags, batch launcher, A100 Spot behavior,
     `autoDelete=false`, same-zone restart, snapshot/cross-region recovery, and
     artifact pullback.
@@ -292,7 +292,7 @@ Expected proof:
   - **Acceptance:** validation evidence distinguishes Insomnia, L4, and A100
     captures by provider/hardware metadata.
 
-- [ ] `CHANGELOG.md`
+- [x] `CHANGELOG.md`
   - **Task:** Add one bullet for resumable GCP fallback execution and one bullet
     for idempotent GCP artifact/judge recovery.
   - **Acceptance:** changelog names behavior, not private tooling.

@@ -186,6 +186,44 @@ and writes the same `benchmarks/cell_<X>/raw/<run-id>/` layout.
 Because there's no queue on GCP, you can run cells back-to-back. The time
 budget becomes a cost question, not a scheduler one.
 
+Run provenance should be explicit when GCP artifacts enter the matrix. Current
+summaries stamp `host_name`, `gpu_type`, `slurm_job_id`, `git_sha`,
+`git_branch`, and `git_dirty`. Interpret GCP captures as `slurm_job_id=null`
+with a `smartgrid-*` host and `gpu_type` such as `NVIDIA A100-SXM4-40GB`
+or `NVIDIA L4`; Insomnia captures
+have numeric Slurm IDs and `ins###` hosts. Matrix rows should record the
+hardware/provider as separate row metadata or in an adjacent provenance column,
+not silently overwrite an Insomnia row with a GCP run.
+
+### Resumable GCP runs
+
+Use a stable run ID for any preemption-prone GCP capture:
+
+```bash
+SMARTGRID_RUN_ID=<stable-run-id> SMARTGRID_RESUME=1 \
+  bash scripts/run_experiment.sh configs/context_ablation/pe_m_8192.env
+```
+
+Resume mode inventories the existing run directory, skips terminal success and
+terminal failure JSONs that already have matching latency rows, reruns missing
+or incomplete trials, and appends trial decisions to
+`resume_manifest.jsonl`. Keep `SMARTGRID_RESUME_REQUIRE_LATENCY=1` for
+benchmark captures. Set `SMARTGRID_FORCE_RERUN=1` only when intentionally
+discarding prior evidence.
+
+For the May 2026 context closeout cohort, use the canonical batch wrapper:
+
+```bash
+SMARTGRID_COMPUTE_PROVIDER=gcp \
+SMARTGRID_COMPUTE_ZONE="$ZONE" \
+SMARTGRID_COMPUTE_INSTANCE="$INSTANCE" \
+  bash scripts/run_gcp_context_batch.sh --resume-batch <batch-id>
+```
+
+The wrapper reads `configs/gcp_context_closeout.tsv`, writes
+`logs/gcp_<batch-id>_state.tsv` plus TSV/JSONL manifests, reuses stable row run
+IDs, skips rows already marked complete, and judges rows idempotently.
+
 ### Profiling works unchanged
 
 ```bash
@@ -199,18 +237,61 @@ Insomnia.
 
 ## 8. Persisting artifacts off the instance
 
-Before shutting down, push benchmark + profiling outputs back to git or a
-shared bucket. **Spot instances get nuked on preemption** — anything left
-on local disk is gone.
+Before shutting down, copy benchmark outputs back to the local Mac or a shared
+bucket. The default should be: **pull from GCP over IAP, inspect locally, commit
+locally, then push to `team13` from the trusted local checkout.** Avoid putting
+GitHub credentials on a transient VM unless the deadline leaves no better
+option.
 
 ```bash
-# Commit benchmark artifacts
+# From the local Mac, after the run finishes:
+export PROJECT=fleet-garage-490218-c8
+export ZONE=us-central1-a
+export INSTANCE=smartgrid-a100-YYYYMMDD-HHMM
+export LOCAL_REPO=/Users/wax/coding/hpml-assetopsbench-smart-grid-mcp
+
+gcloud compute scp --project="$PROJECT" --zone="$ZONE" --tunnel-through-iap \
+    --recurse \
+    "$INSTANCE:~/hpml-assetopsbench-smart-grid-mcp/benchmarks/cell_<X>/raw/<run-id>" \
+    "$LOCAL_REPO/benchmarks/cell_<X>/raw/"
+
+# Then commit from the local repo/worktree after inspection.
+cd "$LOCAL_REPO"
+git status --porcelain --branch
+git add benchmarks/cell_<X>/raw/<run-id>/
+git commit -m "Add Cell <X> raw artifacts from GCP run <run-id>"
+git push team13 HEAD:<branch>
+```
+
+For a context-batch pullback, prefer the helper because it copies small manifests
+first, stages remote judge rows separately, dedupes local score rows, and bounds
+larger raw-directory copies:
+
+```bash
+bash scripts/gcp_pull_context_artifacts.sh \
+  --instance "$INSTANCE" \
+  --zone "$ZONE" \
+  --batch-id <batch-id> \
+  --parallel 2
+```
+
+Direct `git push` from the VM is possible, but it requires installing a GitHub
+token or SSH key on the VM. If you choose that path, push a feature branch only,
+remove the credential afterward, and check shell history before deleting or
+reusing the disk.
+
+```bash
+# On the VM only when direct push is intentionally chosen:
 cd hpml-assetopsbench-smart-grid-mcp
 git add benchmarks/cell_<X>/raw/<run-id>/
 git commit -m "Add Cell <X> raw artifacts from GCP run <run-id>"
 git push origin <branch>
+```
 
-# Profiling traces are larger and gitignored — upload to GCS
+Profiling traces are larger and gitignored; use GCS or `gcloud compute scp`
+instead of git:
+
+```bash
 gsutil -m cp -r profiling/traces/<run-id>/ \
     gs://<team-bucket>/profiling/traces/<run-id>/
 ```
@@ -249,18 +330,44 @@ Boot disks are normally deleted with the instance when
 
 When a spot instance is about to be reclaimed, GCP signals via the metadata
 server and gives you ~30 seconds before `SIGTERM`. A production-grade run
-would install a trap that pushes artifacts before the kill; for our purposes
-the more practical mitigation is:
+would add a metadata preemption watcher and shutdown hook. For our current
+deadline path, the practical mitigation is:
 
-1. **Don't run captures > 1 hour on spot.** Fall back to on-demand for long
-   runs, paying the 2× premium.
-2. **Checkpoint between trials.** The runner writes one JSON per scenario ×
-   trial incrementally, so a preemption mid-run loses only the in-flight
-   trial. Push artifacts after each cell, not after the whole run.
-3. **Watch the preemption API.** A 5-second polling loop against
-   `http://metadata.google.internal/computeMetadata/v1/instance/preempted`
-   (with `Metadata-Flavor: Google`) triggers a rapid push. Worth writing
-   later if GCP becomes our primary path, not worth writing for emergency use.
+1. **Prefer on-demand for canonical captures.** Spot is fine for setup and
+   shakedowns; on-demand avoids restarting vLLM and repeating a partially run
+   cell.
+2. **Let persistent disk bound the loss, then resume with a stable run ID.** The
+   runner writes one JSON per scenario × trial incrementally. Completed trial
+   files survive on disk, and `SMARTGRID_RESUME=1` skips terminal successes and
+   terminal failures when their latency rows are present.
+3. **Treat the in-flight trial as suspect.** Delete or rerun the trial whose
+   JSON/latency record was being written at preemption time; completed earlier
+   trial JSONs should be recoverable.
+4. **If capacity is unavailable on restart, keep the disk.** You can attach the
+   zonal persistent disk to another VM in the same zone, or snapshot it if you
+   need to move zones:
+   ```bash
+   gcloud compute disks snapshot "$DISK" \
+       --project="$PROJECT" --zone="$OLD_ZONE" \
+       --snapshot-names="$DISK-$(date +%Y%m%d-%H%M)"
+
+   gcloud compute disks create "$NEW_DISK" \
+       --project="$PROJECT" --zone="$NEW_ZONE" \
+       --source-snapshot="$SNAPSHOT" \
+       --type=pd-ssd
+   ```
+   Cross-region resume is artifact-first: copy completed run directories back to
+   the local Mac or GCS, recreate a VM in the stocked region, restore artifacts,
+   then resume with the same `SMARTGRID_RUN_ID`.
+
+Tracked hardening items live in GitHub Issue #91. The implemented safe path now
+covers resume/skip, same-zone restart, snapshot-to-new-zone recovery, and
+artifact return over IAP. Remaining production-hardening items:
+
+- A launcher/helper that tries zones first, then regions, and writes the chosen
+  project/zone/instance/run directory into a handoff file.
+- A cleanup/audit helper that lists instances, disks, snapshots, routers/NATs,
+  static IPs, and active quota preferences before the fallback lane is closed.
 
 ## 11. Budget tracking
 

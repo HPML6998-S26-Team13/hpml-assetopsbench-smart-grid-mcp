@@ -1,0 +1,8 @@
+label	config
+Y8	configs/context_ablation/pe_m_8192.env
+Y32	configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
+Y16	configs/context_ablation/pe_m_16384.env
+YS16	configs/context_ablation/pe_s_m_16384.env
+ZS16	configs/context_ablation/v_s_m_16384.env
+D16	configs/aat_mcp_model_optimized_16384.env
+ZSD16	configs/experiment2/exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized_16384.env
