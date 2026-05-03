@@ -10,6 +10,12 @@
   docs / report inventory to record the May 3 build status, layout QA result, and
   remaining scenario, mitigation, and dry-run gates. Refs #44; issue remains
   open.
+- Added `docs/mitigation_rerun_operator_plan.md` for #66, defining the
+  GCP-ready execution order, config-copy rules, validation checks, judge pass,
+  and handoff package for the detection and recovery mitigation reruns.
+- Clarified in `docs/experiment_matrix.md` that mitigation is a sparse overlay
+  dimension on selected PE-family lanes, while the core experiment matrix
+  remains focused on method cells and non-mitigation ablations.
 
 ## 2026-05-02
 

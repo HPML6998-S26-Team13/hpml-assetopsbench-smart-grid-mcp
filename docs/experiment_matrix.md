@@ -1,7 +1,7 @@
 # Experiment Matrix and Follow-On Conditions
 
-*Last updated: 2026-05-01*
-*Owner: Alex Xin*
+*Last updated: 2026-05-03*  
+*Owner: Alex Xin*  
 *Issues: core framing for `#25`, `#32`, `#35`, `#64`, `#5`*
 
 This note keeps the experiment matrix honest and small. It distinguishes:
@@ -153,6 +153,43 @@ This also means the right near-term Experiment 2 order is:
 3. promote and run a canonical `Z` Verified PE config
 4. promote and run a canonical `Z + Self-Ask` config
 5. only then decide whether the optimized-transport follow-ons are honest to run
+
+## How mitigation is tracked
+
+The core experiment matrix stays focused on method cells and non-mitigation
+ablations. Treat mitigation as a sparse overlay dimension, not as a full new
+Cartesian product across every cell.
+
+For the current missing-evidence ladder, the dense slice is:
+
+```text
+family lane: Y + Self-Ask, Z + Self-Ask
+mitigation rung: baseline, detection guard, repair/replan recovery
+scenario: data/scenarios/multi_*.json
+trial: 1..TRIALS
+```
+
+The baseline rung already exists through `8998341` and `8998343`. The #66
+runner plan therefore executes only the two new mitigation rungs for the two
+family lanes, then records the outcome in
+`results/metrics/mitigation_before_after.csv`.
+
+This is closer to a sparse tensor slice than a new all-cells matrix. If the
+scenario set later expands to 30 scenarios and the final trial target becomes
+5, the mitigation slice is:
+
+```text
+2 family lanes x 3 rungs x 30 scenarios x 5 trials
+```
+
+It is not:
+
+```text
+all cells x all mitigations x all scenarios x all trials
+```
+
+Operator details for the current #66 rerun pass live in
+`docs/mitigation_rerun_operator_plan.md`.
 
 ## Review of the two extra conditions
 
