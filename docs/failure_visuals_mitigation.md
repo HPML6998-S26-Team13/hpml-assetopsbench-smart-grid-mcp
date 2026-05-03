@@ -145,24 +145,28 @@ rung only when the prior rung has produced a measurable before/after row, or
 when the new rung answers a specific paper question that the prior rung cannot.
 This avoids a combinatorial grid while preserving attribution.
 
-## May 2 recovery / adjudication implementation status
+## May 3 recovery / adjudication implementation status
 
 `docs/mitigation_recovery_adjudication.md` now defines the two follow-on rungs.
-The recovery rung is implemented in the repo-local PE-family runners; the
-adjudication rung remains deferred until evidence repair is measured.
+Both the recovery rung and explicit fault/risk adjudication rung are implemented
+in the repo-local PE-family runners. Both remain pending matched reruns and
+judge rows before the paper can claim mitigation impact.
 
 | Rung | Status | Implementation point | First runnable lane |
 |---:|---|---|---|
 | 2 | implemented, pending rerun | public partial-history detector in `scripts/mitigation_guards.py`; bounded retry in `scripts/plan_execute_self_ask_runner.py`; retry plus detector-driven suffix replan in `scripts/verified_pe_runner.py` | `Y + Self-Ask`, then `Z + Self-Ask` |
-| 3 | spec-ready, deferred until evidence repair is measured | add a structured pre-finalization adjudication object that cites deciding tool evidence and rejected alternatives | `Z + Self-Ask` after rung 1 or rung 2 evidence exists |
+| 3 | implemented, pending rerun | structured pre-finalization adjudication in `scripts/mitigation_guards.py`; PE-family runners add `fault_risk_adjudication` metadata and block unsupported finalization | `Y + Self-Ask` and `Z + Self-Ask` after rung 1 / rung 2 evidence exists |
 
-Recovery configs are now available under `configs/mitigation/`. Do not add an
-adjudication config until the runner consumes the reserved adjudication flag.
+Recovery and adjudication configs are now available under `configs/mitigation/`.
+Do not interpret those configs as evidence of improvement until #66 produces
+matched artifacts and `mitigation_before_after.csv` has real rows.
 
 The key design decision: retry/replan is not a new experiment axis. It is a
 dependent recovery rung that must keep the detection guard on. Adjudication is
 downstream of evidence repair because it cannot make a trustworthy fault/risk
-choice when the deciding evidence is absent.
+choice when the deciding evidence is absent. The runnable adjudication flag
+therefore requires the detection guard and refuses to finalize when deciding
+evidence is missing.
 
 ## Visuals scaffold
 

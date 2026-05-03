@@ -347,8 +347,8 @@ Table:
 |---:|---|---|
 | 0 | Baseline PE-family runs | Captured |
 | 1 | Missing-evidence final-answer guard | Implemented, reruns pending |
-| 2 | Missing-evidence retry/replan guard | Candidate |
-| 3 | Explicit fault/risk adjudication step | Candidate |
+| 2 | Missing-evidence retry/replan guard | Implemented, reruns pending |
+| 3 | Explicit fault/risk adjudication step | Implemented, reruns pending |
 
 Source:
 
@@ -357,8 +357,8 @@ Source:
 
 Speaker note:
 
-"If reruns do not land, this remains a mitigation design slide. If reruns land,
-we can promote it to a before/after result slide."
+"If reruns do not land, this remains an implemented mitigation-ladder design
+slide. If reruns land, we can promote it to a before/after result slide."
 
 ### Slide 11 - Reproducibility and Deliverables
 

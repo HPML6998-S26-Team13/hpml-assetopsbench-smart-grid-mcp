@@ -8,6 +8,7 @@ from typing import Any
 
 MISSING_EVIDENCE_GUARD_NAME = "missing_evidence_final_answer_guard"
 MISSING_EVIDENCE_REPAIR_NAME = "missing_evidence_retry_replan_guard"
+EXPLICIT_FAULT_RISK_ADJUDICATION_NAME = "explicit_fault_risk_adjudication_step"
 
 EVIDENCE_TOOLS = {
     "get_asset_metadata",
@@ -28,6 +29,40 @@ WORK_ORDER_TOOLS = {
     "create_work_order",
     "create_inspection_order",
     "update_work_order",
+}
+
+FAULT_RISK_EVIDENCE_TOOLS = {
+    "analyze_dga",
+    "get_dga_record",
+    "get_sensor_correlation",
+    "detect_anomalies",
+    "trend_analysis",
+    "get_rul",
+    "forecast_rul",
+    "list_fault_records",
+    "get_fault_record",
+}
+
+FAULT_FIELD_KEYS = {
+    "diagnosis",
+    "diagnostic",
+    "fault",
+    "fault_id",
+    "fault_label",
+    "failure_mode",
+    "failure_mode_id",
+    "mode",
+}
+
+RISK_FIELD_KEYS = {
+    "risk",
+    "risk_level",
+    "severity",
+    "priority",
+    "urgency",
+    "rul",
+    "rul_days",
+    "remaining_useful_life",
 }
 
 MISSING_EVIDENCE_PATTERNS = [
@@ -161,6 +196,140 @@ def scan_missing_evidence(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def build_explicit_fault_risk_adjudication(
+    payload: dict[str, Any],
+    *,
+    enabled: bool,
+) -> dict[str, Any]:
+    """Build a structured fault/risk adjudication object without mutation."""
+    if not enabled:
+        return {
+            "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+            "enabled": False,
+            "decision": "disabled",
+        }
+
+    missing_scan = scan_missing_evidence(payload)
+    if missing_scan["triggered"]:
+        return {
+            "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+            "enabled": True,
+            "decision": "refuse_due_missing_evidence",
+            "selected_fault_id": None,
+            "selected_fault_label": None,
+            "selected_risk_level": None,
+            "deciding_evidence": [],
+            "alternatives_considered": [],
+            "missing_evidence": missing_scan["hits"],
+            "reason": (
+                "Fault/risk adjudication refused to finalize because deciding "
+                "evidence is missing, empty, or untrusted."
+            ),
+        }
+
+    deciding_evidence = _collect_fault_risk_evidence(payload)
+    if not deciding_evidence:
+        return {
+            "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+            "enabled": True,
+            "decision": "refuse_due_missing_evidence",
+            "selected_fault_id": None,
+            "selected_fault_label": None,
+            "selected_risk_level": None,
+            "deciding_evidence": [],
+            "alternatives_considered": [],
+            "missing_evidence": [
+                {
+                    "source": "history",
+                    "step": None,
+                    "tool": None,
+                    "reason": (
+                        "No concrete DGA, fault-record, trend, anomaly, RUL, "
+                        "or risk evidence was present to justify a fault/risk "
+                        "choice."
+                    ),
+                    "target": {},
+                    "excerpt": "",
+                }
+            ],
+            "reason": (
+                "Fault/risk adjudication refused to finalize because no "
+                "concrete deciding evidence was present in the trajectory."
+            ),
+        }
+
+    selected_fault_id = _first_evidence_value(
+        deciding_evidence,
+        {"fault_id", "failure_mode_id"},
+    )
+    selected_fault_label = _first_evidence_value(
+        deciding_evidence,
+        {"diagnosis", "diagnostic", "fault", "fault_label", "failure_mode", "mode"},
+    )
+    selected_risk_level = _first_evidence_value(deciding_evidence, RISK_FIELD_KEYS)
+    alternatives = _collect_alternatives(
+        payload, selected_fault_id, selected_fault_label
+    )
+
+    return {
+        "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+        "enabled": True,
+        "decision": "finalize",
+        "selected_fault_id": selected_fault_id,
+        "selected_fault_label": selected_fault_label,
+        "selected_risk_level": selected_risk_level,
+        "deciding_evidence": deciding_evidence,
+        "alternatives_considered": alternatives,
+        "missing_evidence": [],
+        "reason": (
+            "Fault/risk adjudication found concrete deciding evidence in the "
+            "trajectory; final answer should cite this evidence."
+        ),
+    }
+
+
+def apply_explicit_fault_risk_adjudication(
+    payload: dict[str, Any],
+    *,
+    enabled: bool,
+) -> dict[str, Any]:
+    """Attach adjudication metadata and block unsupported finalization."""
+    if not enabled:
+        return payload
+
+    adjudication = build_explicit_fault_risk_adjudication(payload, enabled=True)
+    payload["fault_risk_adjudication"] = adjudication
+    if adjudication.get("decision") != "refuse_due_missing_evidence":
+        return payload
+
+    payload["answer"] = _adjudication_refusal_answer(adjudication)
+    payload["success"] = False
+    failed_steps = payload.get("failed_steps")
+    if not isinstance(failed_steps, list):
+        failed_steps = []
+    failed_steps.append(adjudication_failed_step(adjudication))
+    payload["failed_steps"] = failed_steps
+    return payload
+
+
+def adjudication_failed_step(adjudication: dict[str, Any]) -> dict[str, Any]:
+    """Return a canonical failed-step entry for adjudication refusal."""
+    return {
+        "step": 0,
+        "task": "explicit fault/risk adjudication",
+        "server": "runner",
+        "tool": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+        "error": adjudication.get("reason")
+        or "Fault/risk adjudication refused to finalize.",
+        "verifier_decision": "fault_risk_adjudication_refusal",
+    }
+
+
+def adjudication_refusal_answer(adjudication: dict[str, Any]) -> str:
+    """Public wrapper for deterministic refusal text."""
+    return _adjudication_refusal_answer(adjudication)
+
+
 def _guard_reason(
     hits: list[dict[str, Any]],
     work_order_after_missing: bool,
@@ -189,6 +358,24 @@ def _blocked_answer(
         f"First blocking signal: {first.get('tool') or 'unknown tool'} at "
         f"{first['source']} ({first['reason']}). Rerun or repair the evidence "
         "retrieval step before making a maintenance recommendation."
+    )
+
+
+def _adjudication_refusal_answer(adjudication: dict[str, Any]) -> str:
+    missing = adjudication.get("missing_evidence") or []
+    if missing:
+        first = missing[0]
+        tool = first.get("tool") or "required evidence"
+        reason = first.get("reason") or "missing deciding evidence"
+        return (
+            "Fault/risk adjudication refused to finalize the maintenance "
+            f"recommendation: {tool} evidence is not sufficient ({reason}). "
+            "Acquire or repair the deciding evidence before selecting a fault, "
+            "risk level, or work-order action."
+        )
+    return (
+        "Fault/risk adjudication refused to finalize the maintenance "
+        "recommendation because no concrete deciding evidence was available."
     )
 
 
@@ -231,6 +418,154 @@ def _missing_evidence_scan(
     if work_order_hits:
         return _dedupe_hits(work_order_hits + final_hits), True
     return final_hits, False
+
+
+def _collect_fault_risk_evidence(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    evidence: list[dict[str, Any]] = []
+    for record in _iter_tool_records(payload):
+        tool = str(record.get("tool") or "").lower()
+        if tool not in FAULT_RISK_EVIDENCE_TOOLS:
+            continue
+        if _missing_evidence_reason(record):
+            continue
+        parsed = _parse_json_like(_effective_response(record.get("response")))
+        for field, value in _iter_named_values(parsed):
+            normalized = _leaf_field(field)
+            if normalized not in FAULT_FIELD_KEYS and normalized not in RISK_FIELD_KEYS:
+                continue
+            if value in (None, "", [], {}):
+                continue
+            evidence.append(
+                {
+                    "tool": record["tool"],
+                    "step": record.get("step"),
+                    "field": field,
+                    "value": _compact_value(value),
+                    "source": record["source"],
+                    "excerpt": _excerpt(record.get("response")),
+                }
+            )
+    return _dedupe_evidence(evidence)[:8]
+
+
+def _iter_named_values(value: Any, prefix: str = ""):
+    parsed = _parse_json_like(_effective_response(value))
+    if isinstance(parsed, dict):
+        for key, item in parsed.items():
+            field = f"{prefix}.{key}" if prefix else str(key)
+            if isinstance(item, dict):
+                yield from _iter_named_values(item, field)
+            elif isinstance(item, list):
+                if _simple_list(item):
+                    yield field, item
+                else:
+                    for index, child in enumerate(item):
+                        yield from _iter_named_values(child, f"{field}[{index}]")
+            else:
+                yield field, item
+    elif isinstance(parsed, list):
+        for index, item in enumerate(parsed):
+            yield from _iter_named_values(item, f"{prefix}[{index}]" if prefix else "")
+
+
+def _simple_list(value: list[Any]) -> bool:
+    return all(not isinstance(item, (dict, list)) for item in value)
+
+
+def _compact_value(value: Any) -> str:
+    if isinstance(value, str):
+        return _excerpt(value, limit=160)
+    return _excerpt(value, limit=160)
+
+
+def _first_evidence_value(
+    evidence: list[dict[str, Any]],
+    fields: set[str],
+) -> str | None:
+    for item in evidence:
+        normalized = _leaf_field(str(item.get("field") or ""))
+        if normalized in fields:
+            value = str(item.get("value") or "").strip()
+            if value:
+                return value
+    return None
+
+
+def _leaf_field(field: str) -> str:
+    return re.sub(r"\[\d+\]", "", field).split(".")[-1].lower()
+
+
+def _collect_alternatives(
+    payload: dict[str, Any],
+    selected_fault_id: str | None,
+    selected_fault_label: str | None,
+) -> list[dict[str, str]]:
+    alternatives: list[dict[str, str]] = []
+    selected = {item for item in (selected_fault_id, selected_fault_label) if item}
+    for record in _iter_tool_records(payload):
+        tool = str(record.get("tool") or "").lower()
+        if tool not in {"list_fault_records", "get_fault_record"}:
+            continue
+        parsed = _parse_json_like(_effective_response(record.get("response")))
+        for candidate in _iter_candidate_faults(parsed):
+            label = candidate.get("fault_id") or candidate.get("failure_mode_id")
+            label = (
+                label or candidate.get("fault_label") or candidate.get("failure_mode")
+            )
+            if not label or label in selected:
+                continue
+            alternatives.append(
+                {
+                    "fault_id": str(label),
+                    "reason_rejected": (
+                        "Not selected by the deterministic adjudication pass; "
+                        "the final answer must cite deciding evidence before "
+                        "preferring this alternative."
+                    ),
+                }
+            )
+    return _dedupe_alternatives(alternatives)[:5]
+
+
+def _iter_candidate_faults(value: Any):
+    parsed = _parse_json_like(_effective_response(value))
+    if isinstance(parsed, dict):
+        if any(key in parsed for key in FAULT_FIELD_KEYS):
+            yield {str(key): str(item) for key, item in parsed.items() if item}
+        for item in parsed.values():
+            yield from _iter_candidate_faults(item)
+    elif isinstance(parsed, list):
+        for item in parsed:
+            yield from _iter_candidate_faults(item)
+
+
+def _dedupe_evidence(evidence: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    deduped = []
+    seen = set()
+    for item in evidence:
+        key = (
+            item.get("tool"),
+            item.get("step"),
+            item.get("field"),
+            item.get("value"),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped
+
+
+def _dedupe_alternatives(alternatives: list[dict[str, str]]) -> list[dict[str, str]]:
+    deduped = []
+    seen = set()
+    for item in alternatives:
+        key = item.get("fault_id")
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped
 
 
 def _iter_tool_records(payload: dict[str, Any]) -> list[dict[str, Any]]:

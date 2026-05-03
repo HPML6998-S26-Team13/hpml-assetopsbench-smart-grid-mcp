@@ -36,6 +36,17 @@ Provide a concise, direct answer to the original question based on the results
 above. Do not repeat the individual steps - just give the final answer.
 """
 
+SUMMARIZE_ADJUDICATION_BLOCK = """\
+
+Explicit fault/risk adjudication:
+{adjudication}
+
+If the adjudication decision is "finalize", cite the deciding evidence in the
+final answer and do not introduce a different fault or risk choice. If the
+decision is "refuse_due_missing_evidence", refuse to finalize the maintenance
+recommendation and state what evidence is missing.
+"""
+
 SELF_ASK_PROMPT = """\
 You are deciding whether an industrial asset-operations question needs a brief
 internal clarification pass before tool planning.
@@ -120,6 +131,28 @@ class MissingEvidenceRepairConfig:
     enabled: bool
     max_attempts: int
     max_attempts_per_target: int
+
+
+@dataclass
+class FaultRiskAdjudicationConfig:
+    enabled: bool
+
+
+def load_fault_risk_adjudication_config() -> FaultRiskAdjudicationConfig:
+    """Read default-off explicit fault/risk adjudication config."""
+    from mitigation_guards import env_flag_enabled
+
+    enabled = env_flag_enabled(
+        os.environ.get("ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION")
+    )
+    guard_enabled = env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD"))
+    if enabled and not guard_enabled:
+        raise RuntimeError(
+            "ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION=1 requires "
+            "ENABLE_MISSING_EVIDENCE_GUARD=1 so adjudicated runs keep the "
+            "truthfulness/accounting gate active."
+        )
+    return FaultRiskAdjudicationConfig(enabled=enabled)
 
 
 def load_missing_evidence_repair_config() -> MissingEvidenceRepairConfig:
@@ -298,6 +331,29 @@ def finalize_missing_evidence_repair_state(
         state["final_decision"] = "continue"
     else:
         state["final_decision"] = "not_triggered"
+
+
+def build_fault_risk_adjudication_state(
+    question: str,
+    history: list[dict[str, Any]],
+    config: FaultRiskAdjudicationConfig,
+) -> dict[str, Any]:
+    from mitigation_guards import build_explicit_fault_risk_adjudication
+
+    return build_explicit_fault_risk_adjudication(
+        {"question": question, "history": history},
+        enabled=config.enabled,
+    )
+
+
+def fault_risk_adjudication_failed_step(
+    adjudication: dict[str, Any],
+) -> dict[str, Any] | None:
+    if adjudication.get("decision") != "refuse_due_missing_evidence":
+        return None
+    from mitigation_guards import adjudication_failed_step
+
+    return adjudication_failed_step(adjudication)
 
 
 def setup_logging(verbose: bool) -> None:
@@ -1093,7 +1149,21 @@ def summarize_terminal_failures(history: list[dict[str, Any]]) -> list[dict[str,
     return failures
 
 
-def summarize_answer(question: str, history: list[dict[str, Any]], llm) -> str:
+def summarize_answer(
+    question: str,
+    history: list[dict[str, Any]],
+    llm,
+    *,
+    fault_risk_adjudication: dict[str, Any] | None = None,
+) -> str:
+    if (
+        fault_risk_adjudication
+        and fault_risk_adjudication.get("decision") == "refuse_due_missing_evidence"
+    ):
+        from mitigation_guards import adjudication_refusal_answer
+
+        return adjudication_refusal_answer(fault_risk_adjudication)
+
     final_history = terminal_history(history)
     results_text = "\n\n".join(
         f"Step {entry['step']} - {entry['task']} (server: {entry['server']}):\n"
@@ -1104,6 +1174,10 @@ def summarize_answer(question: str, history: list[dict[str, Any]], llm) -> str:
         )
         for entry in final_history
     )
+    if fault_risk_adjudication and fault_risk_adjudication.get("enabled"):
+        results_text += SUMMARIZE_ADJUDICATION_BLOCK.format(
+            adjudication=json.dumps(fault_risk_adjudication, indent=2)
+        )
     try:
         return llm.generate(
             SUMMARIZE_PROMPT.format(question=question, results=results_text)

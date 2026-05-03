@@ -280,8 +280,10 @@ For mitigation planning, keep the repeated taxonomy pass separate from the
 mitigation ladder. New full reruns will likely add more classified failures, but
 the ladder should not become a full permutation grid. The first two family lanes
 are `Y + Self-Ask` and `Z + Self-Ask`; the first rung detects unsafe finalization
-after missing evidence, the second rung should try bounded evidence repair, and
-adjudication should follow only once deciding evidence exists.
+after missing evidence, the second rung tries bounded evidence repair, and the
+third rung requires explicit fault/risk adjudication once deciding evidence
+exists. All three rungs are implementation-ready, but only taxonomy counts are
+paper-backed before #66 reruns land.
 
 ## Artifact readiness ledger
 
@@ -321,5 +323,5 @@ The artifact gap that still bounds this lane:
    table
 4. refresh `failure_evidence_table.csv` only if new judged rows change the
    taxonomy or paper examples
-5. if the detection-only rerun shows useful signal, promote the next rung:
-   `missing_evidence_retry_replan_guard`
+5. after detection/recovery rows exist, decide whether to run the now-runnable
+   `explicit_fault_risk_adjudication_step` configs before paper freeze

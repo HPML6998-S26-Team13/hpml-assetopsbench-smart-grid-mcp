@@ -77,6 +77,10 @@ The active cell mapping is:
   attempts per trial; defaults to `2`.
 - `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` — maximum detector-driven
   retries per unresolved evidence target; defaults to `1`.
+- `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` — when `1`, enable the PE-family
+  `explicit_fault_risk_adjudication_step`. This requires
+  `ENABLE_MISSING_EVIDENCE_GUARD=1` so adjudicated runs keep the
+  truthfulness/accounting gate active.
 - `LAUNCH_VLLM` — when `1`, launch the local vLLM server first and point
   AssetOpsBench's LiteLLM client at `http://127.0.0.1:<port>/v1`
 - `VLLM_DTYPE` — vLLM `--dtype`; defaults to `float16`, but Cell D uses
@@ -111,7 +115,7 @@ These keys implement or reserve the recovery/adjudication follow-on spec in
 | `ENABLE_MISSING_EVIDENCE_REPAIR` | runnable for PE-family local runners | enables `missing_evidence_retry_replan_guard`; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
 | `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | runnable | caps detector-driven repair attempts per trial |
 | `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | runnable | caps retries per unresolved evidence target |
-| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | reserved | future structured pre-finalization fault/risk adjudication; do not set until runner code consumes it |
+| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | runnable for PE-family local runners | enables structured pre-finalization fault/risk adjudication; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
 
 ## Running
 
@@ -165,6 +169,7 @@ As of Apr 30, 2026:
   `9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` is the first
   successful ZSD proof run (`6 / 6`, W&B `48nqpclw`, judge mean `0.611`).
 - `configs/mitigation/` contains matched-rerun templates for the first
-  selected mitigation lane,
-  `missing_evidence_final_answer_guard`. They should be run only as
-  before/after follow-ons, not folded into the core Experiment 2 baseline.
+  selected mitigation ladder: detection-only guard, detector-driven
+  retry/replan repair, and explicit fault/risk adjudication. They should be run
+  only as before/after follow-ons, not folded into the core Experiment 2
+  baseline.

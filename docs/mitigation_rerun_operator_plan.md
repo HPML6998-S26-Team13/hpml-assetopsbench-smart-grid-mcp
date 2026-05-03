@@ -14,18 +14,22 @@ Produce the evidence needed to populate
 
 1. detection-only guarded reruns for `Y + Self-Ask` and `Z + Self-Ask`
 2. recovery reruns for the same two family lanes
-3. judge rows for every new run
-4. run IDs, artifact paths, and provenance sufficient for #35/#36/#64/#66
+3. optional adjudication reruns for the same two family lanes after recovery
+   rows exist or after Alex explicitly promotes adjudication
+4. judge rows for every new run
+5. run IDs, artifact paths, and provenance sufficient for #35/#36/#64/#66
 
 This is evidence work, not new mitigation implementation. The guard and
-recovery code are already on `team13/main`.
+recovery code are already on `team13/main`; the adjudication rung is now
+runnable on this branch and should be treated as pending rerun evidence until
+merged and measured.
 
 ## Current anchors
 
-| Family lane | Baseline run | Detection config | Recovery config |
-|---|---|---|---|
-| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_pe_self_ask.env` |
-| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_verified_pe_self_ask.env` |
+| Family lane | Baseline run | Detection config | Recovery config | Adjudication config |
+|---|---|---|---|---|
+| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_pe_self_ask.env` | `configs/mitigation/explicit_fault_risk_adjudication_pe_self_ask.env` |
+| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_verified_pe_self_ask.env` | `configs/mitigation/explicit_fault_risk_adjudication_verified_pe_self_ask.env` |
 
 The current configs use:
 
@@ -38,6 +42,7 @@ The current configs use:
 | transport | MCP baseline |
 | detection flag | `ENABLE_MISSING_EVIDENCE_GUARD=1` |
 | recovery flag | `ENABLE_MISSING_EVIDENCE_REPAIR=1` for recovery configs only |
+| adjudication flag | `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION=1` for adjudication configs only |
 
 With the current two-scenario glob and `TRIALS=3`, each config should produce
 six per-trial JSON files.
@@ -54,7 +59,7 @@ path, and dirty state in the run handoff.
 
 ## GCP config handling
 
-The four canonical mitigation configs are Insomnia-shaped templates. They set
+The canonical mitigation configs are Insomnia-shaped templates. They set
 runtime fields directly, including:
 
 ```bash
@@ -67,12 +72,12 @@ Because `scripts/run_experiment.sh` sources the config file, exporting
 different values before the command will not override assignments inside the
 file. For GCP, use one of these approaches:
 
-1. Preferred for publishable reruns: create GCP-specific copies of the four
+1. Preferred for publishable reruns: create GCP-specific copies of the
    configs, preserving all scientific fields and changing only runtime /
    provenance fields such as `SERVING_STACK`, `VLLM_MODEL_PATH`, and any
    GCP-local serving knobs.
 2. Acceptable for an emergency run: create temporary GCP config copies and
-   preserve those exact files with the artifact handoff. Do not edit the four
+   preserve those exact files with the artifact handoff. Do not edit the
    canonical Insomnia templates in place.
 
 Scientific fields that should stay fixed unless Alex explicitly changes the
@@ -92,6 +97,7 @@ plan:
 - `ENABLE_MISSING_EVIDENCE_REPAIR`
 - `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS`
 - `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET`
+- `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION`
 - `CONTRIBUTING_EXPERIMENTS`
 - `SCENARIO_DOMAIN_SCOPE`
 - `TEMPERATURE`
@@ -107,7 +113,9 @@ Alex explicitly approves a new comparison baseline.
 
 ## Execution order
 
-Run in this order. Do not run recovery before detection-only rows exist.
+Run in this order. Do not run recovery before detection-only rows exist, and do
+not run adjudication before recovery rows exist unless Alex explicitly promotes
+that comparison.
 
 | Order | Lane | Config | Purpose |
 |---:|---|---|---|
@@ -115,6 +123,8 @@ Run in this order. Do not run recovery before detection-only rows exist.
 | 2 | `Z + Self-Ask + guard` | `missing_evidence_guard_verified_pe_self_ask.env` | Count unsupported clean completions in the strongest PE-family lane. |
 | 3 | `Y + Self-Ask + repair` | `missing_evidence_repair_pe_self_ask.env` | Test whether bounded retry can repair Y+SA evidence gaps inside the same trial. |
 | 4 | `Z + Self-Ask + repair` | `missing_evidence_repair_verified_pe_self_ask.env` | Test whether detector-driven retry / suffix replan improves Z+SA outcomes. |
+| 5 | `Y + Self-Ask + adjudication` | `explicit_fault_risk_adjudication_pe_self_ask.env` | Test whether structured fault/risk adjudication changes Y+SA finalization after evidence repair. |
+| 6 | `Z + Self-Ask + adjudication` | `explicit_fault_risk_adjudication_verified_pe_self_ask.env` | Test whether structured fault/risk adjudication changes the strongest PE-family lane after evidence repair. |
 
 The recovery flags do not increase `TRIALS`. They allow at most two internal
 repair attempts per trial, with at most one retry per unresolved evidence
@@ -140,6 +150,8 @@ bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_guard_pe_
 bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_guard_verified_pe_self_ask.env
 bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_repair_pe_self_ask.env
 bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_repair_verified_pe_self_ask.env
+bash scripts/run_experiment.sh configs/mitigation/gcp_explicit_fault_risk_adjudication_pe_self_ask.env
+bash scripts/run_experiment.sh configs/mitigation/gcp_explicit_fault_risk_adjudication_verified_pe_self_ask.env
 ```
 
 If running on Insomnia instead, submit the same configs through the normal
@@ -164,7 +176,11 @@ After each run, verify:
 4. Detection-only runs have `mitigation_guard` metadata in per-trial JSONs.
 5. Recovery runs have both `mitigation_guard` and `mitigation_repair` metadata
    when repair is enabled.
-6. Failures are not just wrapper failures. If the run says success but every
+6. Adjudication runs have `fault_risk_adjudication` metadata in per-trial JSONs
+   when adjudication is enabled. `decision="finalize"` must cite
+   `deciding_evidence`; `decision="refuse_due_missing_evidence"` must include
+   `missing_evidence`.
+7. Failures are not just wrapper failures. If the run says success but every
    tool call failed, stop and inspect `harness.log` for tool-call traces and
    `latencies.jsonl` for zero-duration or missing tool calls before treating
    the row as valid.
@@ -251,9 +267,9 @@ Expected interpretation:
 baseline -> detection guard -> repair/replan recovery
 ```
 
-Adjudication is not part of this execution request. It remains a future rung
-unless detection/recovery results show enough under-constrained fault/risk
-cases to justify implementation.
+Adjudication is now an available rung, but it should still be interpreted
+against detection/recovery. The code path and configs exist; the claim waits
+for matched rows.
 
 ## Experiment matrix relationship
 
@@ -281,7 +297,7 @@ For #66, the dense part of the overlay is intentionally small:
 The baseline rung already exists, so the runner only needs to execute:
 
 ```text
-2 family lanes x 2 new rungs x 2 scenarios x 3 trials = 24 new trial JSONs
+2 family lanes x 3 new rungs x 2 scenarios x 3 trials = 36 new trial JSONs
 ```
 
 If the scenario set later expands to 30 scenarios and the final trial target

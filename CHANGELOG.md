@@ -4,6 +4,14 @@
 
 ### Changed
 
+- Implemented the explicit fault/risk adjudication mitigation rung for #35 /
+  #64 / #66. PE-family runners can now emit structured
+  `fault_risk_adjudication` metadata, cite concrete deciding evidence when
+  finalizing, and refuse unsupported fault/risk finalization when deciding
+  evidence is missing. Added matched adjudication configs and refreshed the
+  failure-taxonomy, mitigation-rerun, paper, and deck docs to state that the
+  ladder is implemented/planned while outcome measurement still waits on #66
+  reruns.
 - Added the first editable final-presentation PPTX draft at
   `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
