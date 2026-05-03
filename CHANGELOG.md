@@ -45,6 +45,10 @@
 - Added `docs/mitigation_rerun_operator_plan.md` for #66, defining the
   GCP-ready execution order, config-copy rules, validation checks, judge pass,
   and handoff package for the detection and recovery mitigation reruns.
+- Updated the #66 mitigation rerun operator plan for the final-six GCP A100
+  path: four tiers including matched baseline, five trials per scenario, 30
+  trajectory files per config, batch-wrapper resume/judge commands, and 240
+  expected judge rows for the full mitigation cohort.
 - Clarified in `docs/experiment_matrix.md` that mitigation is a sparse overlay
   dimension on selected PE-family lanes, while the core experiment matrix
   remains focused on method cells and non-mitigation ablations.
