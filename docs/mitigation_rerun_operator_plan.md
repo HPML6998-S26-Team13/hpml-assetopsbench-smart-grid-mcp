@@ -94,6 +94,16 @@ plan:
 - `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET`
 - `CONTRIBUTING_EXPERIMENTS`
 - `SCENARIO_DOMAIN_SCOPE`
+- `TEMPERATURE`
+- `MAX_TOKENS`
+- `MAX_MODEL_LEN`
+- `QUANTIZATION_MODE`
+- `ENABLE_SMARTGRID_SERVERS`
+- `JUDGE_MODEL`
+
+If any of these fields change, the run is no longer directly comparable to the
+baseline anchors above. Mark it `incomparable` in the handoff package unless
+Alex explicitly approves a new comparison baseline.
 
 ## Execution order
 
@@ -148,12 +158,16 @@ After each run, verify:
    - `harness.log`
    - `vllm.log`
    - six `*_runNN.json` files for the current two-scenario, three-trial setup
-3. `meta.json` records the real git SHA, config path, host, and GPU.
+3. `meta.json` records the real git SHA, config path, host, GPU, vLLM version,
+   CUDA version, and NVIDIA driver version. If any runtime version is missing
+   from `meta.json`, capture it in the handoff notes.
 4. Detection-only runs have `mitigation_guard` metadata in per-trial JSONs.
 5. Recovery runs have both `mitigation_guard` and `mitigation_repair` metadata
    when repair is enabled.
 6. Failures are not just wrapper failures. If the run says success but every
-   tool call failed, stop and inspect before treating the row as valid.
+   tool call failed, stop and inspect `harness.log` for tool-call traces and
+   `latencies.jsonl` for zero-duration or missing tool calls before treating
+   the row as valid.
 
 Useful quick count:
 
@@ -203,6 +217,7 @@ For each completed run, hand back:
 - judge log directory
 - W&B URL if present
 - host / GPU / GCP zone or Insomnia Slurm job ID
+- vLLM version, CUDA version, and NVIDIA driver version
 - notes on any retry, preemption, restart, or dirty checkout
 
 The taxonomy lane will then populate:
