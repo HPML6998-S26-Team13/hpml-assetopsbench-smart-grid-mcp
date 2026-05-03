@@ -11,6 +11,7 @@ from orchestration_utils import (
     available_sensor_ids,
     bootstrap_aob,
     build_executor,
+    build_fault_risk_adjudication_state,
     build_llm,
     build_parser,
     build_planner_descriptions,
@@ -25,8 +26,10 @@ from orchestration_utils import (
     compact_step_for_context,
     current_missing_evidence_hit,
     effective_server_paths,
+    fault_risk_adjudication_failed_step,
     finalize_missing_evidence_repair_state,
     generate_suffix_plan,
+    load_fault_risk_adjudication_config,
     load_missing_evidence_repair_config,
     mark_missing_evidence_attempt_result,
     mark_missing_evidence_unrepaired,
@@ -92,6 +95,7 @@ async def _run(args) -> None:
     planner = Planner(llm)
     executor = build_executor(llm, server_paths, mcp_mode=args.mcp_mode)
     repair_config = load_missing_evidence_repair_config()
+    adjudication_config = load_fault_risk_adjudication_config()
     repair_state = build_missing_evidence_repair_state(repair_config)
     repair_attempts_by_target = {}
 
@@ -416,10 +420,23 @@ async def _run(args) -> None:
     finally:
         await close_executor(executor)
 
-    answer = summarize_answer(args.question, history, llm)
     if repair_config.enabled:
         finalize_missing_evidence_repair_state(repair_state, history)
+    adjudication = build_fault_risk_adjudication_state(
+        args.question,
+        history,
+        adjudication_config,
+    )
+    answer = summarize_answer(
+        args.question,
+        history,
+        llm,
+        fault_risk_adjudication=adjudication,
+    )
     failed_steps = summarize_terminal_failures(history)
+    adjudication_failure = fault_risk_adjudication_failed_step(adjudication)
+    if adjudication_failure:
+        failed_steps.append(adjudication_failure)
     output = {
         "question": args.question,
         "effective_question": self_ask.augmented_question,
@@ -444,6 +461,8 @@ async def _run(args) -> None:
     }
     if repair_config.enabled:
         output["mitigation_repair"] = repair_state
+    if adjudication_config.enabled:
+        output["fault_risk_adjudication"] = adjudication
 
     if args.output_json:
         print(json.dumps(output, indent=2))

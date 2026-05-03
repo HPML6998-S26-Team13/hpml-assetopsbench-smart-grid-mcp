@@ -10,6 +10,7 @@ from orchestration_utils import (
     build_executor,
     build_llm,
     build_parser,
+    build_fault_risk_adjudication_state,
     build_planner_descriptions,
     build_planning_question,
     build_missing_evidence_repair_state,
@@ -22,7 +23,9 @@ from orchestration_utils import (
     can_retry_missing_evidence,
     current_missing_evidence_hit,
     effective_server_paths,
+    fault_risk_adjudication_failed_step,
     finalize_missing_evidence_repair_state,
+    load_fault_risk_adjudication_config,
     load_missing_evidence_repair_config,
     mark_missing_evidence_attempt_result,
     mark_missing_evidence_unrepaired,
@@ -63,6 +66,7 @@ async def _run(args) -> None:
     planner = Planner(llm)
     executor = build_executor(llm, server_paths, mcp_mode=args.mcp_mode)
     repair_config = load_missing_evidence_repair_config()
+    adjudication_config = load_fault_risk_adjudication_config()
     repair_state = build_missing_evidence_repair_state(repair_config)
     repair_attempts_by_target = {}
 
@@ -189,7 +193,20 @@ async def _run(args) -> None:
         if repair_config.enabled:
             finalize_missing_evidence_repair_state(repair_state, history_payload)
         failed_steps = summarize_terminal_failures(history_payload)
-        answer = summarize_answer(args.question, history_payload, llm)
+        adjudication = build_fault_risk_adjudication_state(
+            args.question,
+            history_payload,
+            adjudication_config,
+        )
+        adjudication_failure = fault_risk_adjudication_failed_step(adjudication)
+        if adjudication_failure:
+            failed_steps.append(adjudication_failure)
+        answer = summarize_answer(
+            args.question,
+            history_payload,
+            llm,
+            fault_risk_adjudication=adjudication,
+        )
 
         output = {
             "question": args.question,
@@ -209,6 +226,8 @@ async def _run(args) -> None:
         }
         if repair_config.enabled:
             output["mitigation_repair"] = repair_state
+        if adjudication_config.enabled:
+            output["fault_risk_adjudication"] = adjudication
     finally:
         await close_executor(executor)
 

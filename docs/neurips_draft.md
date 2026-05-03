@@ -59,7 +59,7 @@ remain open.
 | System design | yes | final Cell C wording depends on Aaron's last fact bullet |
 | Experimental design | yes | keep follow-ons separate from core axes |
 | Results tables | yes as first-capture evidence | do not call repeat-rerun distribution final |
-| Failure taxonomy | yes | mitigation outcome rows pending |
+| Failure taxonomy | yes | taxonomy counts are paper-backed; mitigation outcome rows pending |
 | Limitations/reproducibility | yes | update after final scenario/rerun decisions |
 
 Use `docs/neurips_overleaf_transfer_plan.md` as the copy queue. The most useful
@@ -382,10 +382,9 @@ These should be described as follow-ons, not core conditions:
 - `Z + Self-Ask`
 - `Y + Self-Ask + missing-evidence detection guard`
 - `Z + Self-Ask + missing-evidence detection guard`
-- if time allows after those rows exist, a bounded missing-evidence
-  retry/replan recovery rung on the same two family lanes
-- after evidence repair is measured, an explicit fault/risk adjudication rung
-  that requires named deciding evidence before finalization
+- bounded missing-evidence retry/replan recovery on the same two family lanes
+- explicit fault/risk adjudication that requires named deciding evidence before
+  finalization and refuses unsupported fault/risk choices
 
 Draft paragraph:
 
@@ -398,12 +397,12 @@ story, but a way to ask whether a more enterprise-aligned orchestration can
 recover some of the quality gap through bounded reasoning and systems fixes.
 The mitigation ladder should not be presented as a new full experiment grid.
 The clean paper framing is baseline PE-family behavior, then a truthfulness
-guard that detects unsupported finalization, then an optional recovery rung
-that gives the runner one bounded chance to repair missing evidence before
-final answer or work-order creation. If the recovery rung lands cleanly, the
-next paper-useful follow-on is not another transport cell; it is a structured
-fault/risk adjudication step that forces the runner to cite deciding tool
-evidence or refuse to finalize.
+guard that detects unsupported finalization, then a recovery rung that gives
+the runner one bounded chance to repair missing evidence before final answer or
+work-order creation, then a structured fault/risk adjudication step that forces
+the runner to cite deciding tool evidence or refuse to finalize. The guard,
+recovery, and adjudication code paths are implemented; outcome claims wait for
+matched #66 reruns and judge rows.
 
 ### 5. Evaluation and Analysis Plan
 
@@ -562,12 +561,13 @@ mitigation rather than a capability improvement by itself. It can reduce nominal
 success rate because unsupported confident completions become explicit failures.
 That is still valuable: production-oriented reporting should not count a
 maintenance recommendation as successful when the required evidence was absent.
-If time permits, the natural next rung is a recovery guard that reuses the same
-detector to retry the missing evidence step or replan the dependent suffix before
-finalization. We evaluate this as a ladder on `Y + Self-Ask` and `Z + Self-Ask`,
-not as every mitigation crossed with every cell. The adjudication rung is
-downstream of that evidence gate: it is only meaningful when the deciding
-sensor, DGA, trend, RUL, or fault-record evidence exists and can be cited.
+The recovery rung reuses the same detector to retry the missing evidence step
+or replan the dependent suffix before finalization. The adjudication rung is
+downstream of that evidence gate: it requires concrete cited sensor, DGA,
+trend, RUL, or fault-record evidence before selecting a fault/risk outcome, and
+it refuses to finalize when deciding evidence is absent. We evaluate this as a
+ladder on `Y + Self-Ask` and `Z + Self-Ask`, not as every mitigation crossed
+with every cell.
 
 ### 7. Reproducibility and Limitations
 

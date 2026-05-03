@@ -13,6 +13,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from orchestration_utils import (  # noqa: E402
     available_sensor_ids,
+    build_fault_risk_adjudication_state,
     build_parser,
     build_planner_descriptions,
     build_planning_question,
@@ -30,8 +31,10 @@ from orchestration_utils import (  # noqa: E402
     build_suffix_replan_question,
     current_missing_evidence_hit,
     effective_server_paths,
+    fault_risk_adjudication_failed_step,
     finalize_missing_evidence_repair_state,
     generate_suffix_plan,
+    load_fault_risk_adjudication_config,
     load_missing_evidence_repair_config,
     maybe_self_ask,
     normalize_plan_steps,
@@ -50,8 +53,11 @@ from orchestration_utils import (  # noqa: E402
     verify_step,
 )
 from mitigation_guards import (  # noqa: E402
+    EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
     MISSING_EVIDENCE_REPAIR_NAME,
+    apply_explicit_fault_risk_adjudication,
     apply_missing_evidence_final_answer_guard,
+    build_explicit_fault_risk_adjudication,
     env_flag_enabled,
     scan_missing_evidence,
 )
@@ -819,6 +825,113 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertFalse(config.enabled)
         self.assertEqual(config.max_attempts, 0)
         self.assertEqual(config.max_attempts_per_target, 0)
+
+    def test_adjudication_config_requires_missing_evidence_guard(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION": "1",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "0",
+            },
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "requires ENABLE_MISSING_EVIDENCE_GUARD",
+            ):
+                load_fault_risk_adjudication_config()
+
+    def test_fault_risk_adjudication_finalizes_with_deciding_evidence(self):
+        payload = {
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Analyze DGA for T-015",
+                    "server": "fmsr",
+                    "tool": "analyze_dga",
+                    "tool_args": {"transformer_id": "T-015"},
+                    "response": (
+                        '{"diagnosis": "thermal fault", "risk_level": "high", '
+                        '"failure_mode_id": "FM-006"}'
+                    ),
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        adjudication = build_explicit_fault_risk_adjudication(
+            payload,
+            enabled=True,
+        )
+
+        self.assertEqual(adjudication["name"], EXPLICIT_FAULT_RISK_ADJUDICATION_NAME)
+        self.assertEqual(adjudication["decision"], "finalize")
+        self.assertEqual(adjudication["selected_fault_id"], "FM-006")
+        self.assertEqual(adjudication["selected_fault_label"], "thermal fault")
+        self.assertEqual(adjudication["selected_risk_level"], "high")
+        self.assertEqual(adjudication["deciding_evidence"][0]["tool"], "analyze_dga")
+
+    def test_fault_risk_adjudication_refuses_missing_evidence(self):
+        payload = {
+            "answer": "Schedule high-priority thermal-fault maintenance.",
+            "success": True,
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Fetch DGA",
+                    "server": "fmsr",
+                    "tool": "get_dga_record",
+                    "tool_args": {"transformer_id": "T-015"},
+                    "response": '{"records": []}',
+                    "error": None,
+                    "success": True,
+                }
+            ],
+        }
+
+        guarded = apply_explicit_fault_risk_adjudication(payload, enabled=True)
+
+        self.assertFalse(guarded["success"])
+        self.assertEqual(
+            guarded["fault_risk_adjudication"]["decision"],
+            "refuse_due_missing_evidence",
+        )
+        self.assertIn("Fault/risk adjudication refused", guarded["answer"])
+        self.assertEqual(
+            guarded["failed_steps"][-1]["tool"],
+            EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+        )
+
+    def test_build_fault_risk_adjudication_state_uses_config(self):
+        with patch.dict(
+            os.environ,
+            {
+                "ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION": "1",
+                "ENABLE_MISSING_EVIDENCE_GUARD": "1",
+            },
+        ):
+            config = load_fault_risk_adjudication_config()
+        history = [
+            {
+                "step": 1,
+                "task": "Analyze DGA",
+                "server": "fmsr",
+                "tool": "analyze_dga",
+                "tool_args": {"transformer_id": "T-015"},
+                "response": '{"diagnosis": "normal", "risk_level": "low"}',
+                "error": None,
+                "success": True,
+            }
+        ]
+
+        adjudication = build_fault_risk_adjudication_state(
+            "Assess T-015 fault risk.",
+            history,
+            config,
+        )
+
+        self.assertEqual(adjudication["decision"], "finalize")
+        self.assertIsNone(fault_risk_adjudication_failed_step(adjudication))
 
     def test_current_missing_evidence_hit_prefers_current_retry_hit(self):
         first_miss = {

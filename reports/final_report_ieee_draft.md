@@ -119,10 +119,12 @@ The report should separate three types of tuning:
 | Model-side optimized serving | Cell D job `9073472` exists | Exploratory ablation, not the main fair transport comparison. |
 | PE-family mitigation | Self-Ask/Verified rows exist; missing-evidence guard reruns pending | Quality/reliability follow-on, not raw transport optimization. |
 
-The missing-evidence guard has been implemented and documented, but its
-before/after CSV currently has no outcome rows. In the final report, it should
-be described as an implemented mitigation pending guarded rerun evidence unless
-`results/metrics/mitigation_before_after.csv` is populated before report freeze.
+The missing-evidence guard, detector-driven repair rung, and explicit
+fault/risk adjudication rung have been implemented and documented, but the
+before/after CSV currently has no outcome rows. In the final report, they
+should be described as implemented mitigations pending guarded/recovery rerun
+evidence unless `results/metrics/mitigation_before_after.csv` is populated
+before report freeze.
 
 ## V. Experimental Results
 
@@ -174,8 +176,13 @@ The failure taxonomy export currently classifies 35 judge-failed rows:
 
 This is one of the strongest report contributions. The largest failure class is
 task verification: agents often produce final answers without sufficiently
-grounding required evidence. That directly motivates the missing-evidence guard
-and makes the final discussion stronger than a simple latency chart.
+grounding required evidence. That directly motivates the mitigation ladder: a
+missing-evidence guard to stop unsafe finalization, a bounded repair/replan rung
+to recover missing evidence inside the same trial, and an explicit
+fault/risk-adjudication rung that requires cited deciding evidence before
+selecting a fault, risk level, or work-order action. Until matched reruns and
+judge rows land, that ladder is an implemented reliability design rather than a
+measured improvement claim.
 
 ## VI. Conclusion
 

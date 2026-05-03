@@ -134,7 +134,8 @@ ENABLE_MISSING_EVIDENCE_GUARD="${ENABLE_MISSING_EVIDENCE_GUARD:-0}"
 ENABLE_MISSING_EVIDENCE_REPAIR="${ENABLE_MISSING_EVIDENCE_REPAIR:-0}"
 MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS="${MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS:-2}"
 MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET="${MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET:-1}"
-export ENABLE_MISSING_EVIDENCE_GUARD ENABLE_MISSING_EVIDENCE_REPAIR
+ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION="${ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION:-0}"
+export ENABLE_MISSING_EVIDENCE_GUARD ENABLE_MISSING_EVIDENCE_REPAIR ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION
 export MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET
 
 SERVER_IOT_PATH="${SERVER_IOT_PATH:-$REPO_ROOT/mcp_servers/iot_server/server.py}"
@@ -391,6 +392,10 @@ payload["missing_evidence_repair"] = (
     os.environ.get("ENABLE_MISSING_EVIDENCE_REPAIR", "0").strip().lower()
     in {"1", "true", "yes", "on"}
 )
+payload["explicit_fault_risk_adjudication"] = (
+    os.environ.get("ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION", "0").strip().lower()
+    in {"1", "true", "yes", "on"}
+)
 payload["missing_evidence_repair_max_attempts"] = int(
     os.environ.get("MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS", "2")
 )
@@ -429,6 +434,9 @@ pathlib.Path(meta_path).write_text(
             "experiment_family": payload["experiment_family"],
             "missing_evidence_guard": payload["missing_evidence_guard"],
             "missing_evidence_repair": payload["missing_evidence_repair"],
+            "explicit_fault_risk_adjudication": payload[
+                "explicit_fault_risk_adjudication"
+            ],
             "missing_evidence_repair_max_attempts": payload[
                 "missing_evidence_repair_max_attempts"
             ],
@@ -785,6 +793,7 @@ run_external_orchestration_trial() {
     ENABLE_SELF_ASK="$ENABLE_SELF_ASK" \
     ENABLE_MISSING_EVIDENCE_GUARD="$ENABLE_MISSING_EVIDENCE_GUARD" \
     ENABLE_MISSING_EVIDENCE_REPAIR="$ENABLE_MISSING_EVIDENCE_REPAIR" \
+    ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION="$ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION" \
     MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS="$MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS" \
     MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET="$MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET" \
     HARNESS_VERBOSE="$HARNESS_VERBOSE" \
@@ -1134,6 +1143,7 @@ import sys
 
 from scripts.mitigation_guards import (
     apply_missing_evidence_final_answer_guard,
+    apply_explicit_fault_risk_adjudication,
     env_flag_enabled,
 )
 
@@ -1186,6 +1196,13 @@ apply_missing_evidence_final_answer_guard(
     payload,
     enabled=env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD")),
 )
+if "fault_risk_adjudication" not in payload:
+    apply_explicit_fault_risk_adjudication(
+        payload,
+        enabled=env_flag_enabled(
+            os.environ.get("ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION")
+        ),
+    )
 derived = _derive_success(payload)
 if derived is not None and not isinstance(payload.get("success"), bool):
     payload["success"] = derived
@@ -1315,6 +1332,7 @@ summary = {
     },
     "missing_evidence_guard": bool(config.get("missing_evidence_guard", False)),
     "missing_evidence_repair": bool(config.get("missing_evidence_repair", False)),
+    "explicit_fault_risk_adjudication": bool(config.get("explicit_fault_risk_adjudication", False)),
     "missing_evidence_repair_max_attempts": config.get("missing_evidence_repair_max_attempts"),
     "missing_evidence_repair_max_attempts_per_target": config.get("missing_evidence_repair_max_attempts_per_target"),
     "run_status": "success" if int(failed) == 0 else ("partial" if int(passed) > 0 else "failed"),

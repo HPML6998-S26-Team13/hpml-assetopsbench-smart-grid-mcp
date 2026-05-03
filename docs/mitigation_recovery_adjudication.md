@@ -1,13 +1,14 @@
 # Recovery and Adjudication Mitigation Spec
 
-*Last updated: 2026-05-02*
+*Last updated: 2026-05-03*<br>
 *Issues: #64, #66, #36, #5*
 
 This doc specifies the two mitigation-ladder rungs that come after
 `missing_evidence_final_answer_guard`. The retry/replan recovery rung is now
-wired into the repo-local PE-family runners on this branch. The explicit
-fault/risk adjudication rung remains a design spec and should not be enabled in
-configs until runner code consumes it.
+wired into the repo-local PE-family runners. The explicit fault/risk
+adjudication rung is now also runnable as a default-off PE-family mitigation
+flag, but it remains **pending rerun evidence** until #66 produces matched
+artifacts and judge rows.
 
 ## Scope
 
@@ -31,7 +32,7 @@ question:
 
 ## Rung 2: missing-evidence retry/replan guard
 
-Status: implemented on this branch for `Y + Self-Ask` and `Z + Self-Ask`,
+Status: implemented for `Y + Self-Ask` and `Z + Self-Ask`,
 pending Insomnia reruns and judge rows.
 
 ### Intent
@@ -178,6 +179,9 @@ is not a mitigation win.
 
 ## Rung 3: explicit fault/risk adjudication step
 
+Status: implemented on this branch for `Y + Self-Ask` and `Z + Self-Ask`,
+pending matched reruns and judge rows.
+
 ### Intent
 
 Rung 3 addresses the smaller but paper-important pattern where the runner has
@@ -259,11 +263,28 @@ Secondary metrics:
 
 ### Implementation point
 
-Implement as one pre-finalization helper rather than a free-form prompt edit.
-The helper should consume terminal history, candidate fault/risk labels, and
-the original question, then produce the structured object above. The final
-answer summarizer can use the adjudication object, but the object itself must be
-machine-checkable before the natural-language answer is written.
+Implemented as one pre-finalization helper rather than a free-form prompt edit.
+The helper consumes terminal history and the original question, then produces
+the structured object above. The final-answer summarizer can use the
+adjudication object, but the object itself is machine-checkable before the
+natural-language answer is written.
+
+Runtime behavior:
+
+- `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION=1` requires
+  `ENABLE_MISSING_EVIDENCE_GUARD=1`.
+- If unresolved missing evidence remains, adjudication returns
+  `decision="refuse_due_missing_evidence"`, marks the trial unsuccessful, and
+  emits a deterministic refusal answer.
+- If concrete deciding evidence is present, adjudication returns
+  `decision="finalize"` with cited `deciding_evidence`; the final answer prompt
+  is instructed to cite that evidence and avoid inventing a different
+  fault/risk choice.
+
+Runnable configs:
+
+- `configs/mitigation/explicit_fault_risk_adjudication_pe_self_ask.env`
+- `configs/mitigation/explicit_fault_risk_adjudication_verified_pe_self_ask.env`
 
 ## Reserved config keys
 
@@ -274,7 +295,7 @@ These names are part of the mitigation ladder contract:
 | `ENABLE_MISSING_EVIDENCE_REPAIR` | runnable | enables rung 2 recovery; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
 | `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS` | runnable | max total detector-driven repair attempts per trial |
 | `MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET` | runnable | max detector-driven retries per unresolved evidence target |
-| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | reserved | future rung 3 structured adjudication |
+| `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION` | runnable | rung 3 structured adjudication; requires `ENABLE_MISSING_EVIDENCE_GUARD=1` |
 
 ## Verification plan
 

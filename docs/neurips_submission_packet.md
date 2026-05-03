@@ -63,7 +63,7 @@ systems study of protocol and orchestration choices in tool-using agents.
 | Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | jobs `8998340` through `8998343`; Notebook 03 exports | Main orchestration result, with small-sample caveat. |
 | Safe | Failure analysis is artifact-backed. | `failure_evidence_table.csv`, taxonomy SVGs, mitigation inventory | Main reliability/evaluation contribution. |
 | Pending | Scenario floor reaches 30 validated scenarios. | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-authored scenarios; Akshat generator acceptance remains needed for 30 floor | Mention as deadline blocker until merged/validated. |
-| Pending | Missing-evidence guard improves outcomes. | Guard implementation and policy landed; `mitigation_before_after.csv` has header only | Describe as implemented mitigation pending rerun evidence. |
+| Pending | Mitigation ladder improves outcomes. | Detection guard, repair/replan, and adjudication implementation landed; `mitigation_before_after.csv` has header only | Describe as implemented mitigation ladder pending rerun evidence. |
 | Optional | 70B and context-window appendix strengthens generality. | local branch evidence exists outside canonical main | Appendix only if published before final paper freeze. |
 
 ## Section Plan
@@ -138,7 +138,10 @@ evidence and final-answer grounding.
 
 Interpretation for draft prose: the largest failure class is not transport or
 execution plumbing; it is evidence verification and unsupported finalization.
-This justifies the mitigation ladder as benchmark reliability work.
+This justifies the implemented mitigation ladder as benchmark reliability work:
+detection first, repair/replan second, and explicit fault/risk adjudication
+third. Do not claim measured mitigation improvement until before/after rows
+exist.
 
 ## Figure and Table Transfer Checklist
 
