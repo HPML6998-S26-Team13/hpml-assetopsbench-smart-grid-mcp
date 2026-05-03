@@ -43,6 +43,18 @@ FAULT_RISK_EVIDENCE_TOOLS = {
     "get_fault_record",
 }
 
+ADJUDICATION_TRIGGER_TOOLS = {
+    # Generic anomaly/trend tools also support monitoring tasks, so they should
+    # not trigger maintenance adjudication without task text or domain support.
+    "analyze_dga",
+    "get_dga_record",
+    "get_sensor_correlation",
+    "get_rul",
+    "forecast_rul",
+    "list_fault_records",
+    "get_fault_record",
+}
+
 FAULT_FIELD_KEYS = {
     "diagnosis",
     "diagnostic",
@@ -207,6 +219,23 @@ def build_explicit_fault_risk_adjudication(
             "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
             "enabled": False,
             "decision": "disabled",
+        }
+
+    if not _fault_risk_adjudication_applies(payload):
+        return {
+            "name": EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
+            "enabled": True,
+            "decision": "not_applicable",
+            "selected_fault_id": None,
+            "selected_fault_label": None,
+            "selected_risk_level": None,
+            "deciding_evidence": [],
+            "alternatives_considered": [],
+            "missing_evidence": [],
+            "reason": (
+                "Fault/risk adjudication skipped because the task does not "
+                "ask for a fault, risk, maintenance, or work-order decision."
+            ),
         }
 
     missing_scan = scan_missing_evidence(payload)
@@ -446,6 +475,38 @@ def _collect_fault_risk_evidence(payload: dict[str, Any]) -> list[dict[str, Any]
                 }
             )
     return _dedupe_evidence(evidence)[:8]
+
+
+def _fault_risk_adjudication_applies(payload: dict[str, Any]) -> bool:
+    text_parts = [payload.get("question"), payload.get("effective_question")]
+    scenario = payload.get("scenario")
+    if isinstance(scenario, dict):
+        text_parts.extend(
+            [
+                scenario.get("text"),
+                scenario.get("category"),
+                scenario.get("characteristic_form"),
+            ]
+        )
+        tags = {str(tag).lower() for tag in scenario.get("domain_tags") or []}
+        if tags.intersection({"fmsr", "wo", "multi"}):
+            return True
+
+    text = " ".join(str(part or "").lower() for part in text_parts)
+    if re.search(
+        r"\b("
+        r"fault|failure|risk|rul|remaining useful life|maintenance|work[- ]?order|"
+        r"outage|defer|inspection|inspect|repair|diagnos(?:e|is|tic)"
+        r")\b",
+        text,
+    ):
+        return True
+
+    for record in _iter_tool_records(payload):
+        tool = str(record.get("tool") or "").lower()
+        if tool in ADJUDICATION_TRIGGER_TOOLS or tool in WORK_ORDER_TOOLS:
+            return True
+    return False
 
 
 def _iter_named_values(value: Any, prefix: str = ""):
@@ -776,6 +837,17 @@ def _clear_repaired_hit(
     exact_key = _evidence_key(record)
     unresolved_hits.pop(exact_key, None)
     unresolved_hits.pop((exact_key[0], UNKNOWN_TARGET), None)
+    record_tool = str(record.get("tool") or "").lower()
+    record_step = record.get("step")
+    if record_step is None:
+        return
+    for key, hit in list(unresolved_hits.items()):
+        # Corrected retries can change args; same step/tool identifies repair.
+        if (
+            str(hit.get("tool") or "").lower() == record_tool
+            and hit.get("step") == record_step
+        ):
+            unresolved_hits.pop(key, None)
 
 
 def _dedupe_hits(hits: list[dict[str, Any]]) -> list[dict[str, Any]]:

@@ -55,6 +55,7 @@ from orchestration_utils import (  # noqa: E402
 from mitigation_guards import (  # noqa: E402
     EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
     MISSING_EVIDENCE_REPAIR_NAME,
+    _fault_risk_adjudication_applies,
     apply_explicit_fault_risk_adjudication,
     apply_missing_evidence_final_answer_guard,
     build_explicit_fault_risk_adjudication,
@@ -902,6 +903,80 @@ class OrchestrationUtilsTests(unittest.TestCase):
             EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
         )
 
+    def test_fault_risk_adjudication_skips_iot_only_monitoring_task(self):
+        payload = {
+            "question": (
+                "Retrieve load current readings for T-005, compare them to the "
+                "recent baseline, and report the peak value."
+            ),
+            "answer": "Peak load current was 520 A at 2024-01-07T12:00:00.",
+            "success": True,
+            "scenario": {
+                "type": "IoT",
+                "domain_tags": ["IoT"],
+                "text": "T-005 has elevated load current readings.",
+            },
+            "history": [
+                {
+                    "step": 1,
+                    "task": "Read load current",
+                    "server": "iot",
+                    "tool": "get_sensor_readings",
+                    "tool_args": {
+                        "transformer_id": "T-005",
+                        "sensor_id": "load_current_a",
+                    },
+                    "response": '{"readings": [{"value": 520.0}]}',
+                    "error": None,
+                    "success": True,
+                },
+                {
+                    "step": 2,
+                    "task": "Check anomalous load-current readings",
+                    "server": "tsfm",
+                    "tool": "detect_anomalies",
+                    "tool_args": {
+                        "transformer_id": "T-005",
+                        "sensor_id": "load_current_a",
+                    },
+                    "response": '{"anomaly_count": 3, "anomaly_rate_pct": 2.5}',
+                    "error": None,
+                    "success": True,
+                },
+            ],
+        }
+
+        guarded = apply_explicit_fault_risk_adjudication(payload, enabled=True)
+
+        self.assertTrue(guarded["success"])
+        self.assertEqual(
+            guarded["fault_risk_adjudication"]["decision"],
+            "not_applicable",
+        )
+        self.assertEqual(
+            guarded["answer"],
+            "Peak load current was 520 A at 2024-01-07T12:00:00.",
+        )
+        self.assertNotIn("failed_steps", guarded)
+
+    def test_fault_risk_adjudication_domain_tags_are_exact(self):
+        monitoring_payload = {
+            "question": "Retrieve recent load current readings for T-005.",
+            "scenario": {
+                "domain_tags": ["wood", "multimedia"],
+                "text": "Retrieve current readings and report the peak value.",
+            },
+            "history": [],
+        }
+        work_order_payload = {
+            "question": "Summarize the current transformer status.",
+            "scenario": {"domain_tags": ["wo"]},
+            "history": [],
+        }
+
+        self.assertFalse(_fault_risk_adjudication_applies(monitoring_payload))
+        self.assertTrue(_fault_risk_adjudication_applies(work_order_payload))
+
     def test_build_fault_risk_adjudication_state_uses_config(self):
         with patch.dict(
             os.environ,
@@ -1103,6 +1178,47 @@ class OrchestrationUtilsTests(unittest.TestCase):
         self.assertTrue(guarded["success"])
         self.assertFalse(guarded["mitigation_guard"]["triggered"])
         self.assertEqual(guarded["failed_steps"], [])
+
+    def test_missing_evidence_guard_allows_same_step_retry_with_repaired_args(self):
+        payload = {
+            "answer": "Use FM-006 sensor correlations for ongoing monitoring.",
+            "success": True,
+            "failed_steps": [],
+            "history": [
+                {
+                    "step": 4,
+                    "task": "Fetch sensor correlations",
+                    "server": "fmsr",
+                    "tool": "get_sensor_correlation",
+                    "tool_args": {
+                        "failure_mode_id": "Low-temperature overheating",
+                    },
+                    "response": (
+                        '{"error": "Failure mode '
+                        "'Low-temperature overheating' not found.\"}"
+                    ),
+                    "error": "Failure mode 'Low-temperature overheating' not found.",
+                    "success": False,
+                },
+                {
+                    "step": 4,
+                    "task": "Retry sensor correlations",
+                    "server": "fmsr",
+                    "tool": "get_sensor_correlation",
+                    "tool_args": {"failure_mode_id": "FM-006"},
+                    "response": (
+                        '{"failure_mode_id": "FM-006", ' '"key_gases": ["C2H2", "H2"]}'
+                    ),
+                    "error": None,
+                    "success": True,
+                },
+            ],
+        }
+
+        guarded = apply_missing_evidence_final_answer_guard(payload, enabled=True)
+
+        self.assertTrue(guarded["success"])
+        self.assertFalse(guarded["mitigation_guard"]["triggered"])
 
     def test_missing_evidence_guard_blocks_work_order_before_retry(self):
         payload = {
