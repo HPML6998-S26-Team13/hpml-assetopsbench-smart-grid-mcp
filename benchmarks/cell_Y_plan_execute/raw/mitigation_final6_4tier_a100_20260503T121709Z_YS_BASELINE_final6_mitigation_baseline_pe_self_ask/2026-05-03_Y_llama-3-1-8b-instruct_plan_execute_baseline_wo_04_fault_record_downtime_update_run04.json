@@ -1,0 +1,255 @@
+{
+  "question": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "effective_question": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "self_ask": {
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "The fault details for T-006 could not be retrieved due to a validation error and a fault record not found error. The expected repair downtime could not be estimated due to an invalid severity error. A new corrective work order was successfully created for T-006 with the following details:\n\n- Work Order ID: WO-FB8A5D27\n- Transformer ID: T-006\n- Issue Description: Fault event logged on T-006\n- Priority: High\n- Fault Type: Fault\n- Status: Open\n- Estimated Downtime Hours: 0.0\n- Created At: 2026-05-03T12:36:40.539840Z\n- Assigned Technician: None\n- Notes: []\n\nHowever, the work order status could not be updated to in-progress due to a work order not found error.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 2,
+      "task": "Get the fault record for the most recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "error": "Fault record 'T-006' not found.",
+      "verifier_decision": null
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "error": "Invalid severity 'fault'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "verifier_decision": null
+    },
+    {
+      "step": 5,
+      "task": "Update the work order status to in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "error": "Work order 'WO-FB8A5D27' not found in this session.",
+      "verifier_decision": null
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of fault record dicts"
+    },
+    {
+      "step": 2,
+      "task": "Get the fault record for the most recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Fault record dict"
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "Dict with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source"
+    },
+    {
+      "step": 4,
+      "task": "Create a new corrective work order for T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Dict with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician"
+    },
+    {
+      "step": 5,
+      "task": "Update the work order status to in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "Updated work order dict"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of fault record dicts"
+    },
+    {
+      "step": 2,
+      "task": "Get the fault record for the most recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Fault record dict"
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "Dict with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source"
+    },
+    {
+      "step": 4,
+      "task": "Create a new corrective work order for T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Dict with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician"
+    },
+    {
+      "step": 5,
+      "task": "Update the work order status to in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "Updated work order dict"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "fault_type": null,
+        "maintenance_status": null,
+        "limit": null
+      },
+      "response": "Error executing tool list_fault_records: 1 validation error for list_fault_recordsArguments\nlimit\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_type",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Get the fault record for the most recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {
+        "fault_id": "T-006"
+      },
+      "response": "{\n  \"error\": \"Fault record 'T-006' not found.\"\n}",
+      "executor_success": true,
+      "error": "Fault record 'T-006' not found.",
+      "success": false
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "severity": "fault",
+        "fault_type": null
+      },
+      "response": "{\n  \"error\": \"Invalid severity 'fault'. Must be one of: ['critical', 'high', 'low', 'medium']\"\n}",
+      "executor_success": true,
+      "error": "Invalid severity 'fault'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "success": false
+    },
+    {
+      "step": 4,
+      "task": "Create a new corrective work order for T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "issue_description": "Fault event logged on T-006",
+        "priority": "high",
+        "fault_type": "fault",
+        "estimated_downtime_hours": 0
+      },
+      "response": "{\n  \"work_order_id\": \"WO-FB8A5D27\",\n  \"transformer_id\": \"T-006\",\n  \"issue_description\": \"Fault event logged on T-006\",\n  \"priority\": \"high\",\n  \"fault_type\": \"fault\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 0.0,\n  \"created_at\": \"2026-05-03T12:36:40.539840Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 5,
+      "task": "Update the work order status to in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {
+        "work_order_id": "WO-FB8A5D27",
+        "status": "in-progress",
+        "priority": "high",
+        "assigned_technician": null,
+        "note": "Fault event logged on T-006 with estimated downtime of 0 hours"
+      },
+      "response": "{\n  \"error\": \"Work order 'WO-FB8A5D27' not found in this session.\"\n}",
+      "executor_success": true,
+      "error": "Work order 'WO-FB8A5D27' not found in this session.",
+      "success": false
+    }
+  ],
+  "scenario": {
+    "id": "SGT-018",
+    "type": "WO",
+    "text": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+    "category": "Work Order Lifecycle",
+    "characteristic_form": "The answer should retrieve the fault record, estimate downtime, create a corrective work order, and update its status to in-progress with the downtime noted.",
+    "asset_id": "T-006",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.get_fault_record",
+      "wo.estimate_downtime",
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record details",
+        "downtime estimate",
+        "corrective work order created",
+        "work order updated to in-progress"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

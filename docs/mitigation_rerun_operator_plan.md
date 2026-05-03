@@ -21,9 +21,14 @@ Produce the evidence needed to populate
 
 This is evidence work, not new mitigation implementation. The baseline plus
 three post-baseline mitigation rungs are covered here: detection guard,
-retry/replan recovery, and explicit fault/risk adjudication. The guard,
-recovery, and adjudication code are already on `team13/main`; all three remain
-pending matched rerun evidence before any measured mitigation-impact claim.
+retry/replan recovery, and explicit fault/risk adjudication.
+
+Status as of 2026-05-03: the GCP A100 four-tier cohort
+`mitigation_final6_4tier_a100_20260503T121709Z` completed and was judged for all
+8 rows, 240 trial JSONs, and 240 judge rows. The measured row inventory is in
+`results/metrics/gcp_a100_mitigation_4tier_summary.csv`; the before/after
+interpretation table remains a deliberate follow-up, not an automatic copy of
+the raw cohort summary.
 
 ## Current anchors
 

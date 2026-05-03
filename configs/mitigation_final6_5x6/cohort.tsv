@@ -1,0 +1,7 @@
+label	config
+YS_GUARD	configs/mitigation_final6_5x6/YS_GUARD.env
+ZS_GUARD	configs/mitigation_final6_5x6/ZS_GUARD.env
+YS_REPAIR	configs/mitigation_final6_5x6/YS_REPAIR.env
+ZS_REPAIR	configs/mitigation_final6_5x6/ZS_REPAIR.env
+YS_ADJ	configs/mitigation_final6_5x6/YS_ADJ.env
+ZS_ADJ	configs/mitigation_final6_5x6/ZS_ADJ.env

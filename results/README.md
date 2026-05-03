@@ -1,6 +1,6 @@
 # results/
 
-*Last updated: 2026-05-02*
+*Last updated: 2026-05-03*
 
 Curated, reproducible metrics and figures emitted by notebooks. Most content
 here is expected to come from `benchmarks/` once the experiment lanes are
@@ -13,6 +13,8 @@ analysis pipeline can live here too.
 results/
 ├── metrics/               # cleaned CSVs/JSONL that figures and tables are computed from
 │   ├── experiment_matrix_summary.csv  # compact row-per-condition result table
+│   ├── gcp_a100_final_matrix_summary.csv # final-six GCP A100 matrix + follow-ons
+│   ├── gcp_a100_mitigation_4tier_summary.csv # measured four-tier mitigation cohort
 │   ├── optimized_serving_ablation.csv  # Cell D / ZSD focused follow-on deltas
 │   ├── baseline_latency.csv        # one row per (scenario, model, trial)
 │   ├── optimized_latency.csv
@@ -22,7 +24,7 @@ results/
 │   ├── failure_taxonomy_counts.csv # derived taxonomy-count source table
 │   ├── failure_stage_cell_counts.csv
 │   ├── mitigation_run_inventory.csv
-│   └── mitigation_before_after.csv # header-only until matched reruns land
+│   └── mitigation_before_after.csv # comparison export contract
 ├── figures/               # publication-ready PDFs/PNGs
 │   ├── fig1_pipeline_overview.pdf
 │   ├── fig2_latency_breakdown.pdf
@@ -46,8 +48,9 @@ results/
   summary CSVs, mitigation inventory, and SVG figures from
   `failure_evidence_table.csv`.
 - `mitigation_before_after.csv` is the #66 comparison export contract. It is
-  header-only until a guarded rerun lands; do not treat its presence as an
-  after-run result.
+  separate from the raw measured GCP A100 mitigation cohort summary. Treat
+  `gcp_a100_mitigation_4tier_summary.csv` as the current measured row inventory
+  until the before/after interpretation table is deliberately populated.
 - `mitigation_run_inventory.csv` now distinguishes implemented/pending-rerun
   detector and recovery work from spec-ready but not-yet-runnable adjudication.
   See
@@ -58,14 +61,36 @@ results/
   legacy cell names, display-code names, run names, latency, judge-score, and
   raw-directory links together. The human-facing copy lives in
   [../docs/experiment_matrix.md](../docs/experiment_matrix.md).
+- `gcp_a100_final_matrix_summary.csv` is the current final-six, five-trial
+  GCP A100 result view for A/B/C/D/Y/YS/Z/ZS/ZSD plus the YS_TP and ZS_TP
+  optimized-transport follow-ons. Use it when the analysis needs a single
+  hardware/provider cohort rather than the historical Insomnia first capture.
+- `gcp_a100_mitigation_4tier_summary.csv` is the measured #66 mitigation
+  cohort: matched baseline, detection guard, retry/replan recovery, and
+  explicit fault/risk adjudication for YS and ZS, all on the final-six GCP A100
+  environment.
 - `optimized_serving_ablation.csv` keeps the focused D/ZSD follow-on deltas
   separate from the core notebook tables, so exploratory serving-stack results
   do not blur the main Experiment 1 / Experiment 2 claims.
 - Filenames should be **stable** (so the paper can reference them by path) — avoid renames once a figure is committed to a report draft.
 
-## Status (Apr 30, 2026)
+## Status (May 3, 2026)
 
-First-capture populated:
+Final-six GCP A100 capture populated:
+
+- 11 non-mitigation rows are judged in
+  `results/metrics/gcp_a100_final_matrix_summary.csv`: A/B/C/D/Y/YS/Z/ZS/ZSD
+  plus YS_TP and ZS_TP follow-ons
+- 8 mitigation rows are judged in
+  `results/metrics/gcp_a100_mitigation_4tier_summary.csv`, covering the full
+  baseline -> detection guard -> retry/replan repair -> adjudication ladder for
+  YS and ZS
+- `results/metrics/scenario_scores.jsonl` includes the appended GCP A100 judge
+  rows; per-trial judge audit logs live under `results/judge_logs/<run_name>/`
+- raw run directories for the GCP A100 matrix, follow-ons, and mitigation rows
+  live under `benchmarks/cell_*/raw/<run-name>/`
+
+Historical first-capture populated:
 
 - Notebook 01 now writes a reproducible dataset-exploration figure and summary
   CSVs here
@@ -112,6 +137,7 @@ What changed since the original scaffold:
 
 What still needs to happen before this directory should be paper-final:
 
-- final paper-depth captures at the agreed 5-trial / broader-scenario grid
-- replacement of first-capture CSVs/figures with the frozen final run set
+- notebook regeneration against the frozen final GCP A100 run set
+- deliberate population of `mitigation_before_after.csv` from the measured
+  four-tier cohort once the before/after interpretation is locked
 - optional 70B spot-check rows once the hosted WatsonX configs are run and judged

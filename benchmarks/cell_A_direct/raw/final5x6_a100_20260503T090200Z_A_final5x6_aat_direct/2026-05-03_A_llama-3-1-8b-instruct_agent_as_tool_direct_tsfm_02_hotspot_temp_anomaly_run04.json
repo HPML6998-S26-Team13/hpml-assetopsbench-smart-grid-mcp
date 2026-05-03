@@ -1,0 +1,43 @@
+{
+  "question": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+  "answer": "",
+  "success": false,
+  "error": "MaxTurnsExceeded: Max turns (30) exceeded",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 23.313506364822388,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-006",
+    "type": "TSFM",
+    "text": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+    "category": "Anomaly Detection",
+    "characteristic_form": "The answer should identify abnormal intervals (if any), quantify severity or count of anomalies, and provide a concise interpretation of persistence.",
+    "asset_id": "T-019",
+    "expected_tools": [
+      "tsfm.detect_anomalies"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "anomaly window(s)",
+        "severity or count",
+        "summary interpretation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

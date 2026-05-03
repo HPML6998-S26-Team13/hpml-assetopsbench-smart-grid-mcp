@@ -1,0 +1,99 @@
+{
+  "question": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+  "answer": "Based on the DGA diagnostics, the transformer has an arc discharge fault. The thermal anomaly trend analysis is not possible due to the lack of readings for the winding temperature sensor.\n\nGiven this information, it is recommended to schedule immediate outage maintenance for the transformer T-020. The arc discharge fault is a critical issue that requires prompt attention to prevent further damage and potential safety risks.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-020"
+          },
+          "call_id": "chatcmpl-tool-a90814c1557bc38a",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-020\",\n  \"sample_date\": \"2024-01-08T00:00:00\",\n  \"dissolved_h2_ppm\": 167.45,\n  \"dissolved_ch4_ppm\": 86.4,\n  \"dissolved_c2h2_ppm\": 28.71,\n  \"dissolved_c2h4_ppm\": 83.15,\n  \"dissolved_c2h6_ppm\": 39.55,\n  \"dissolved_co_ppm\": 634.2,\n  \"dissolved_co2_ppm\": 3546.15,\n  \"fault_label\": \"Arc discharge\",\n  \"source_dataset\": \"synthetic\"\n}"
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "transformer_id": "T-020",
+            "sensor_id": "winding_temp_c"
+          },
+          "call_id": "chatcmpl-tool-a322d27588a80fc3",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings for transformer='T-020' sensor='winding_temp_c'.\"\n}"
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "transformer_id": "T-020",
+            "sensor_id": "winding_temp_c",
+            "start_time": "2024-01-01T00:00:00",
+            "end_time": "2024-01-31T23:59:59"
+          },
+          "call_id": "chatcmpl-tool-ac2ed71e83f331f4",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings for transformer='T-020' sensor='winding_temp_c'.\"\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Based on the DGA diagnostics, the transformer has an arc discharge fault. The thermal anomaly trend analysis is not possible due to the lack of readings for the winding temperature sensor.\n\nGiven this information, it is recommended to schedule immediate outage maintenance for the transformer T-020. The arc discharge fault is a critical issue that requires prompt attention to prevent further damage and potential safety risks.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.951303005218506,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-010",
+    "type": "Multi",
+    "text": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+    "category": "Cross-Domain Planning",
+    "characteristic_form": "The answer should integrate DGA-based diagnosis and trend/anomaly evidence, make a binary maintenance decision (immediate outage vs deferred monitoring), and provide an actionable work-order or monitoring plan.",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "tsfm.detect_anomalies",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "diagnostic evidence",
+        "trend evidence",
+        "final decision",
+        "action plan"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR",
+      "TSFM",
+      "WO"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+label	config
+A	configs/final_matrix_5x6/A_aat_direct.env
+B	configs/final_matrix_5x6/B_aat_mcp_baseline.env
+C	configs/final_matrix_5x6/C_aat_mcp_optimized.env
+Y	configs/final_matrix_5x6/Y_pe_mcp_baseline.env
+YS	configs/final_matrix_5x6/YS_pe_self_ask_mcp_baseline.env
+Z	configs/final_matrix_5x6/Z_verified_pe_mcp_baseline.env
+ZS	configs/final_matrix_5x6/ZS_verified_pe_self_ask_mcp_baseline.env

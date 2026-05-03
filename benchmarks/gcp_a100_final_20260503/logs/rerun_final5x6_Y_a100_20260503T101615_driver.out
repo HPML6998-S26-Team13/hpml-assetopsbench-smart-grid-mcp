@@ -1,0 +1,21 @@
+=== SmartGridBench Experiment ===
+Run ID:        final5x6_a100_20260503T090200Z_Y_final5x6_exp2_cell_Y_pe_mcp_baseline
+Config:        configs/final_matrix_5x6/Y_pe_mcp_baseline.env
+Cell:          Y
+Experiment:    final5x6_exp2_cell_Y_pe_mcp_baseline
+Family:        exp2_orchestration
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-a100-spot-20260503-0217
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Y_plan_execute
+Run dir:       benchmarks/cell_Y_plan_execute/raw/final5x6_a100_20260503T090200Z_Y_final5x6_exp2_cell_Y_pe_mcp_baseline
+Resume:        1
+Force rerun:   1
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1800s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+scripts/run_experiment.sh: line 1022: 17053 Hangup                  ( cd "$cwd" && "$@" ) > "$raw_path" 2>> "$HARNESS_LOG"
