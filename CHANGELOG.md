@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Added `docs/neurips_overleaf_transfer_plan.md` and linked it from the
+  NeurIPS draft, submission packet, and IEEE back-port scaffold so #5 / #39 /
+  #40 / #47 / #48 / #78 have a concrete Overleaf copy queue with caveats for
+  pending scenario-count, rerun, mitigation, and compile gates.
 - Added `docs/final_presentation_run_of_show.md` and expanded
   `docs/final_presentation_deck.md` with timing, speaker-note, source-proof,
   and production-checklist scaffolding for #44.
