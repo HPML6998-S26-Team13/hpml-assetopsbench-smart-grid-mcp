@@ -83,6 +83,13 @@ ENABLE_WANDB="${ENABLE_WANDB:-0}"
 WANDB_PROJECT="${WANDB_PROJECT:-assetopsbench-smartgrid}"
 WANDB_ENTITY="${WANDB_ENTITY:-assetopsbench-smartgrid}"
 WANDB_MODE="${WANDB_MODE:-online}"
+SMARTGRID_RUN_ID="${SMARTGRID_RUN_ID:-}"
+SMARTGRID_RESUME="${SMARTGRID_RESUME:-0}"
+SMARTGRID_FORCE_RERUN="${SMARTGRID_FORCE_RERUN:-0}"
+SMARTGRID_RESUME_REQUIRE_LATENCY="${SMARTGRID_RESUME_REQUIRE_LATENCY:-1}"
+SMARTGRID_BATCH_ID="${SMARTGRID_BATCH_ID:-}"
+export SMARTGRID_RUN_ID SMARTGRID_RESUME SMARTGRID_FORCE_RERUN
+export SMARTGRID_RESUME_REQUIRE_LATENCY SMARTGRID_BATCH_ID
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
 VLLM_PORT="${VLLM_PORT:-8000}"
 VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
@@ -194,7 +201,7 @@ PY
 DATE_TAG="$(date +%Y-%m-%d)"
 MODEL_SHORT="$(model_short_name "$MODEL_ID")"
 RUN_BASENAME="${DATE_TAG}_${EXPERIMENT_CELL}_${MODEL_SHORT}_${ORCHESTRATION}_${MCP_MODE}"
-RUN_ID="${SLURM_JOB_ID:-local-$(date +%Y%m%d-%H%M%S)}_${EXPERIMENT_NAME}"
+RUN_ID="${SMARTGRID_RUN_ID:-${SLURM_JOB_ID:-local-$(date +%Y%m%d-%H%M%S)}_${EXPERIMENT_NAME}}"
 CELL_DIR="benchmarks/$(cell_dir_name "$EXPERIMENT_CELL")"
 RAW_DIR="$CELL_DIR/raw"
 RUN_DIR="$RAW_DIR/$RUN_ID"
@@ -206,6 +213,7 @@ META_FILE="$RUN_DIR/meta.json"
 VLLM_LOG="$RUN_DIR/vllm.log"
 HARNESS_LOG="$RUN_DIR/harness.log"
 LATENCY_FILE="$RUN_DIR/latencies.jsonl"
+RESUME_MANIFEST_FILE="$RUN_DIR/resume_manifest.jsonl"
 : >"$HARNESS_LOG"
 VLLM_PGID=""
 
@@ -223,6 +231,8 @@ echo "Node:          $(hostname)"
 echo "Job ID:        ${SLURM_JOB_ID:-N/A}"
 echo "Cell dir:      $CELL_DIR"
 echo "Run dir:       $RUN_DIR"
+echo "Resume:        $SMARTGRID_RESUME"
+echo "Force rerun:   $SMARTGRID_FORCE_RERUN"
 echo ""
 
 PYTHON_BIN="python3"
@@ -299,9 +309,11 @@ if [ "$DRY_RUN" = "1" ]; then
 fi
 
 "$PYTHON_BIN" - "$CONFIG_FILE" "$SUMMARY_FILE" "$META_FILE" "$CONFIG_PATH" "$RUN_ID" "$WANDB_ENTITY" "$WANDB_PROJECT" "$EXPERIMENT_FAMILY" "$EXPERIMENT_CELL" "$ORCHESTRATION" "$MCP_MODE" "$TRIALS" "${#SCENARIO_FILES[@]}" "$SCENARIO_SET_NAME" "$SCENARIO_SET_HASH" "$SCENARIO_DOMAIN_SCOPE" "$MODEL_ID" "$MODEL_PROVIDER" "$SERVING_STACK" "$QUANTIZATION_MODE" "$MAX_MODEL_LEN" "$TEMPERATURE" "$MAX_TOKENS" "$JUDGE_MODEL" <<'PY'
+import importlib.metadata
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -339,6 +351,82 @@ def git_value(args, default="unknown"):
     except Exception:
         return default
 
+def git_dirty():
+    try:
+        subprocess.check_call(
+            ["git", "diff-index", "--quiet", "HEAD", "--"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        return True
+    except Exception:
+        return None
+    return False
+
+def package_version(name):
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
+
+def command_output(args):
+    try:
+        return subprocess.check_output(
+            args,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=10,
+        ).strip()
+    except Exception:
+        return None
+
+def runtime_versions():
+    cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    gpu_id = (cuda_visible or "0").split(",")[0].strip() or "0"
+    versions = {
+        "vllm_version": package_version("vllm"),
+        "torch_version": package_version("torch"),
+        "cuda_visible_devices": cuda_visible,
+        "nvidia_driver_version": None,
+        "cuda_version": None,
+        "nvidia_smi_query": None,
+    }
+    raw = command_output(
+        [
+            "nvidia-smi",
+            f"--id={gpu_id}",
+            "--query-gpu=driver_version,cuda_version",
+            "--format=csv,noheader",
+        ]
+    )
+    if raw:
+        versions["nvidia_smi_query"] = raw
+        first_row = raw.splitlines()[0]
+        parts = [part.strip() for part in first_row.split(",")]
+        if parts:
+            versions["nvidia_driver_version"] = parts[0] or None
+        if len(parts) > 1:
+            versions["cuda_version"] = parts[1] or None
+    if versions["nvidia_driver_version"] is None:
+        driver = command_output(
+            [
+                "nvidia-smi",
+                f"--id={gpu_id}",
+                "--query-gpu=driver_version",
+                "--format=csv,noheader",
+            ]
+        )
+        if driver:
+            versions["nvidia_driver_version"] = driver.splitlines()[0].strip() or None
+    if versions["cuda_version"] is None:
+        smi = command_output(["nvidia-smi"])
+        if smi:
+            match = re.search(r"CUDA Version:\s*([0-9.]+)", smi)
+            if match:
+                versions["cuda_version"] = match.group(1)
+    return versions
+
 payload = {
     "schema_version": "v1",
     "wandb_entity": wandb_entity,
@@ -346,6 +434,7 @@ payload = {
     "run_name": run_name,
     "git_sha": git_value(["git", "rev-parse", "HEAD"]),
     "git_branch": git_value(["git", "branch", "--show-current"]),
+    "git_dirty": git_dirty(),
     "run_timestamp": datetime.now(timezone.utc).isoformat(),
     "benchmark_config_path": pathlib.Path(benchmark_config_path).as_posix(),
     "benchmark_summary_path": pathlib.Path(summary_path).as_posix(),
@@ -375,6 +464,14 @@ payload = {
     "gpu_count": int(os.environ.get("SLURM_GPUS_ON_NODE", "1") or "1"),
     "runtime_owner": os.environ.get("USER"),
     "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+    "smartgrid_batch_id": os.environ.get("SMARTGRID_BATCH_ID"),
+    "smartgrid_resume": os.environ.get("SMARTGRID_RESUME", "0") == "1",
+    "smartgrid_force_rerun": os.environ.get("SMARTGRID_FORCE_RERUN", "0") == "1",
+    "smartgrid_resume_require_latency": os.environ.get(
+        "SMARTGRID_RESUME_REQUIRE_LATENCY",
+        "1",
+    )
+    == "1",
 }
 
 if os.environ.get("CONTRIBUTING_EXPERIMENTS"):
@@ -412,6 +509,7 @@ extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
 payload["vllm_dtype"] = os.environ.get("VLLM_DTYPE", "float16")
 payload["vllm_extra_args"] = extra_vllm_args
 payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
+payload["runtime_versions"] = runtime_versions()
 
 pathlib.Path(config_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 pathlib.Path(meta_path).write_text(
@@ -450,6 +548,16 @@ pathlib.Path(meta_path).write_text(
             "vllm_dtype": payload["vllm_dtype"],
             "vllm_extra_args": payload["vllm_extra_args"],
             "vllm_extra_args_list": payload["vllm_extra_args_list"],
+            "runtime_versions": payload["runtime_versions"],
+            "git_sha": payload["git_sha"],
+            "git_branch": payload["git_branch"],
+            "git_dirty": payload["git_dirty"],
+            "smartgrid_batch_id": payload["smartgrid_batch_id"],
+            "smartgrid_resume": payload["smartgrid_resume"],
+            "smartgrid_force_rerun": payload["smartgrid_force_rerun"],
+            "smartgrid_resume_require_latency": payload[
+                "smartgrid_resume_require_latency"
+            ],
         },
         indent=2,
     )
@@ -555,7 +663,7 @@ run_json_stdout_trial() {
   local cwd="$2"
   shift 2
 
-  local raw_path="${out_path}.stdout"
+  local raw_path="${out_path}.stdout.tmp"
   local rc=0
   (cd "$cwd" && "$@") >"$raw_path" 2>>"$HARNESS_LOG" || rc=$?
   if "$PYTHON_BIN" - "$raw_path" "$out_path" >>"$HARNESS_LOG" 2>&1 <<'PY'
@@ -1040,11 +1148,18 @@ fi
 PASS=0
 FAIL=0
 TOTAL=0
-: >"$LATENCY_FILE"
+RESUME_SKIPPED=0
+RESUME_RERUN=0
+if [ "$SMARTGRID_RESUME" = "1" ] && [ "$SMARTGRID_FORCE_RERUN" != "1" ]; then
+  touch "$LATENCY_FILE"
+else
+  : >"$LATENCY_FILE"
+  : >"$RESUME_MANIFEST_FILE"
+fi
 
 # Cell C optimized: run all scenarios in a single aat_runner.py call so MCP
 # subprocesses are reused across trials (reuse_mcp_connections).
-if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ]; then
+if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ] && [ "$SMARTGRID_RESUME" != "1" ]; then
   if [ -n "${AAT_RUNNER_TEMPLATE:-}" ]; then
     echo "ERROR: AAT_RUNNER_TEMPLATE is not supported with MCP_MODE=optimized batch mode." >&2
     exit 1
@@ -1089,25 +1204,81 @@ PY
     TOTAL=$((TOTAL + 1))
     TRIAL_ID="${SCENARIO_BASENAME}_run$(printf '%02d' "$TRIAL")"
     TRIAL_OUT="$RUN_DIR/${RUN_BASENAME}_${TRIAL_ID}.json"
+    TRIAL_TMP="${TRIAL_OUT}.tmp"
+    RESUME_REASON="fresh_run"
+
+    if [ "$SMARTGRID_RESUME" = "1" ] && [ "$SMARTGRID_FORCE_RERUN" != "1" ]; then
+      REQUIRE_LATENCY_ARGS=()
+      if [ "$SMARTGRID_RESUME_REQUIRE_LATENCY" = "1" ]; then
+        REQUIRE_LATENCY_ARGS+=(--require-latency)
+      fi
+      eval "$("$PYTHON_BIN" scripts/gcp_resume_state.py trial-status-shell \
+        --run-dir "$RUN_DIR" \
+        --scenario-file "$SCENARIO_FILE" \
+        --trial-index "$TRIAL" \
+        --output-path "$TRIAL_OUT" \
+        --latency-file "$LATENCY_FILE" \
+        "${REQUIRE_LATENCY_ARGS[@]}")"
+      TRIAL_OUT="$RESUME_OUTPUT_PATH"
+      TRIAL_TMP="${TRIAL_OUT}.tmp"
+      if [ "$RESUME_COMPLETE" = "1" ]; then
+        RESUME_SKIPPED=$((RESUME_SKIPPED + 1))
+        if [ "$RESUME_SUCCESS" = "1" ]; then
+          PASS=$((PASS + 1))
+        else
+          FAIL=$((FAIL + 1))
+        fi
+        "$PYTHON_BIN" scripts/gcp_resume_state.py manifest-event \
+          --manifest-file "$RESUME_MANIFEST_FILE" \
+          --state "$RESUME_STATE" \
+          --scenario-file "$SCENARIO_FILE" \
+          --trial-index "$TRIAL" \
+          --output-path "$TRIAL_OUT" \
+          --run-name "$RUN_ID" \
+          --reason "resume_skip:$RESUME_REASON" \
+          --batch-id "$SMARTGRID_BATCH_ID"
+        echo "Resume skip: $TRIAL_ID ($RESUME_STATE)"
+        continue
+      fi
+      RESUME_RERUN=$((RESUME_RERUN + 1))
+    fi
+
+    "$PYTHON_BIN" scripts/gcp_resume_state.py preserve-incomplete \
+      --output-path "$TRIAL_OUT" \
+      --manifest-file "$RESUME_MANIFEST_FILE" \
+      --scenario-file "$SCENARIO_FILE" \
+      --trial-index "$TRIAL" \
+      --run-name "$RUN_ID" \
+      --batch-id "$SMARTGRID_BATCH_ID" \
+      --reason "pre_rerun_incomplete:$RESUME_REASON" || true
+    "$PYTHON_BIN" scripts/gcp_resume_state.py preserve-incomplete \
+      --output-path "$TRIAL_TMP" \
+      --manifest-file "$RESUME_MANIFEST_FILE" \
+      --scenario-file "$SCENARIO_FILE" \
+      --trial-index "$TRIAL" \
+      --run-name "$RUN_ID" \
+      --batch-id "$SMARTGRID_BATCH_ID" \
+      --reason "pre_rerun_tmp" || true
 
     START_EPOCH="$("$PYTHON_BIN" - <<'PY'
 import time
 print(time.time())
 PY
 )"
+    TRIAL_RC=0
 
     case "$ORCHESTRATION" in
       plan_execute)
-        run_plan_execute_trial "$PROMPT" "$TRIAL_OUT" || true
+        run_plan_execute_trial "$PROMPT" "$TRIAL_TMP" || TRIAL_RC=$?
         ;;
       agent_as_tool)
-        run_agent_as_tool_trial "$PROMPT" "$TRIAL_OUT" || true
+        run_agent_as_tool_trial "$PROMPT" "$TRIAL_TMP" || TRIAL_RC=$?
         ;;
       hybrid)
-        run_external_orchestration_trial "$PROMPT" "$TRIAL_OUT" "HYBRID_RUNNER_TEMPLATE" || true
+        run_external_orchestration_trial "$PROMPT" "$TRIAL_TMP" "HYBRID_RUNNER_TEMPLATE" || TRIAL_RC=$?
         ;;
       verified_pe)
-        run_verified_pe_trial "$PROMPT" "$TRIAL_OUT" || true
+        run_verified_pe_trial "$PROMPT" "$TRIAL_TMP" || TRIAL_RC=$?
         ;;
       *)
         echo "ERROR: unknown ORCHESTRATION=$ORCHESTRATION" >&2
@@ -1121,131 +1292,48 @@ print(time.time())
 PY
 )"
 
-    # Inject canonical scenario field + derive top-level success into the
-    # trial output JSON BEFORE the pass/fail counter runs. Notebook 03 expects
-    # each per-trial JSON to carry data["scenario"] = <input scenario object>
-    # AND a bool data["success"], so it can match on scenario.id and aggregate
-    # over canonical records. trial_succeeded() reads payload["success"] and
-    # treats a missing field as a pass — running the post-process AFTER the
-    # counter would split summary.json (run-level pass count) from the per-
-    # trial JSON (canonical success), which Notebook 03 would then read in two
-    # different truths. Order: case ⇒ END_EPOCH ⇒ post-process ⇒ counter.
-    # This is uniform across every orchestration path (plan_execute,
-    # agent_as_tool, hybrid, verified_pe) and any upstream-only runner whose
-    # output we cannot directly modify (e.g. AOB plan-execute CLI for Cell Y
-    # baseline, which writes per-step success in history/trajectory but no
-    # top-level success field).
-    "$PYTHON_BIN" - "$SCENARIO_FILE" "$TRIAL_OUT" <<'PY'
-import json
-import os
-import pathlib
-import sys
+    eval "$("$PYTHON_BIN" scripts/gcp_resume_state.py finalize-trial-shell \
+      --scenario-file "$SCENARIO_FILE" \
+      --trial-index "$TRIAL" \
+      --temp-output "$TRIAL_TMP" \
+      --output-path "$TRIAL_OUT" \
+      --latency-file "$LATENCY_FILE" \
+      --manifest-file "$RESUME_MANIFEST_FILE" \
+      --run-name "$RUN_ID" \
+      --batch-id "$SMARTGRID_BATCH_ID" \
+      --start-epoch "$START_EPOCH" \
+      --end-epoch "$END_EPOCH" \
+      --return-code "$TRIAL_RC")"
 
-from scripts.mitigation_guards import (
-    apply_missing_evidence_final_answer_guard,
-    apply_explicit_fault_risk_adjudication,
-    env_flag_enabled,
-)
-
-
-def _step_failed(step: dict) -> bool:
-    if not isinstance(step, dict):
-        return False
-    if step.get("success") is False:
-        return True
-    if step.get("error"):
-        return True
-    resp = step.get("response")
-    if isinstance(resp, dict) and resp.get("error"):
-        return True
-    return False
-
-
-def _derive_success(data: dict) -> bool | None:
-    raw = data.get("success")
-    if isinstance(raw, bool):
-        return raw
-    # Match Notebook 03's history-first precedence so all three call sites
-    # (run_experiment.sh, backfill_canonical_scenario.py, notebook
-    # load_*_records) walk the same step array.
-    steps = data.get("history") or data.get("trajectory") or []
-    if not steps and not data.get("answer"):
-        return None
-    for step in steps:
-        if _step_failed(step):
-            return False
-    return bool(data.get("answer"))
-
-
-scenario_path, trial_path = sys.argv[1:]
-trial_file = pathlib.Path(trial_path)
-if not trial_file.exists() or trial_file.stat().st_size == 0:
-    sys.exit(0)
-try:
-    payload = json.loads(trial_file.read_text(encoding="utf-8"))
-except json.JSONDecodeError:
-    sys.exit(0)
-if not isinstance(payload, dict):
-    sys.exit(0)
-try:
-    scenario = json.loads(pathlib.Path(scenario_path).read_text(encoding="utf-8"))
-except (OSError, json.JSONDecodeError):
-    sys.exit(0)
-payload["scenario"] = scenario
-apply_missing_evidence_final_answer_guard(
-    payload,
-    enabled=env_flag_enabled(os.environ.get("ENABLE_MISSING_EVIDENCE_GUARD")),
-)
-if "fault_risk_adjudication" not in payload:
-    apply_explicit_fault_risk_adjudication(
-        payload,
-        enabled=env_flag_enabled(
-            os.environ.get("ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION")
-        ),
-    )
-derived = _derive_success(payload)
-if derived is not None and not isinstance(payload.get("success"), bool):
-    payload["success"] = derived
-trial_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
-PY
-
-    # Now count pass/fail using the canonical, post-processed success field.
-    # trial_succeeded reads payload["success"]; for upstream AOB plan-execute
-    # output it is now populated by the derive-success block above.
-    if trial_succeeded "$TRIAL_OUT"; then
+    if [ "$FINAL_SUCCESS" = "1" ]; then
       PASS=$((PASS + 1))
     else
       FAIL=$((FAIL + 1))
     fi
-
-    "$PYTHON_BIN" - "$LATENCY_FILE" "$SCENARIO_FILE" "$TRIAL" "$START_EPOCH" "$END_EPOCH" "$TRIAL_OUT" <<'PY'
-import json
-import pathlib
-import sys
-
-latency_file, scenario_file, trial_index, start_epoch, end_epoch, output_path = sys.argv[1:]
-record = {
-    "scenario_file": pathlib.Path(scenario_file).as_posix(),
-    "trial_index": int(trial_index),
-    "latency_seconds": float(end_epoch) - float(start_epoch),
-    "output_path": pathlib.Path(output_path).as_posix(),
-}
-with open(latency_file, "a", encoding="utf-8") as fh:
-    fh.write(json.dumps(record) + "\n")
-PY
   done
 done
 
 fi  # end of per-scenario/per-trial loop (skipped for MCP_MODE=optimized batch path)
 
-"$PYTHON_BIN" - "$SUMMARY_FILE" "$CONFIG_FILE" "$META_FILE" "$LATENCY_FILE" "$RUN_DIR" "$PASS" "$FAIL" "$TOTAL" <<'PY'
+"$PYTHON_BIN" - "$SUMMARY_FILE" "$CONFIG_FILE" "$META_FILE" "$LATENCY_FILE" "$RUN_DIR" "$PASS" "$FAIL" "$TOTAL" "$RESUME_SKIPPED" "$RESUME_RERUN" <<'PY'
 import json
 import pathlib
 import statistics
 import sys
 from datetime import datetime, timezone
 
-summary_path, config_path, meta_path, latency_path, run_dir, passed, failed, total = sys.argv[1:]
+(
+    summary_path,
+    config_path,
+    meta_path,
+    latency_path,
+    run_dir,
+    passed,
+    failed,
+    total,
+    resume_skipped,
+    resume_rerun,
+) = sys.argv[1:]
 config = json.loads(pathlib.Path(config_path).read_text(encoding="utf-8"))
 meta = json.loads(pathlib.Path(meta_path).read_text(encoding="utf-8"))
 latency_records = [
@@ -1338,6 +1426,8 @@ summary = {
     "run_status": "success" if int(failed) == 0 else ("partial" if int(passed) > 0 else "failed"),
     "scenarios_attempted": int(total),
     "scenarios_completed": int(passed),
+    "resume_skipped_count": int(resume_skipped),
+    "resume_rerun_count": int(resume_rerun),
     "success_rate": (int(passed) / int(total)) if int(total) else 0.0,
     "failure_count": int(failed),
     "wall_clock_seconds_total": wall_clock_seconds_total,
@@ -1368,6 +1458,8 @@ meta["fail"] = int(failed)
 meta["total_runs"] = int(total)
 meta["run_status"] = summary["run_status"]
 meta["mcp_setup_seconds"] = summary["mcp_setup_seconds"]
+meta["resume_skipped_count"] = summary["resume_skipped_count"]
+meta["resume_rerun_count"] = summary["resume_rerun_count"]
 pathlib.Path(meta_path).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 PY
 

@@ -140,6 +140,9 @@ _BOOLEAN_DIMS = [
 
 _DEFAULT_JUDGE_MODEL = "watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8"
 _PASS_THRESHOLD = 0.6  # 4 out of 6 dimensions
+# Bump whenever the judge rubric, prompt template, or scoring dimensions change.
+# Existing rows dedupe by this value unless callers pass --force.
+_JUDGE_PROMPT_VERSION = "assetopsbench-6d-v1"
 
 
 # ---------------------------------------------------------------------------
@@ -437,6 +440,7 @@ def score_trajectory(
         "mcp_mode": _classifier("mcp_mode", "baseline"),
         "model_id": _classifier("model_id", ""),
         "judge_model": judge_model,
+        "judge_prompt_version": _JUDGE_PROMPT_VERSION,
         # 6 rubric dimensions (from AssetOpsBench evaluation_agent)
         "dim_task_completion": dims["task_completion"],
         "dim_data_retrieval_accuracy": dims["data_retrieval_accuracy"],
@@ -484,6 +488,53 @@ def score_trajectory(
         print(f"  Judge log saved → {log_file}", file=sys.stderr)
 
     return record
+
+
+def _score_identity(
+    trajectory_path: Path,
+    scenario_path: Path,
+    meta_path: Path | None,
+    judge_model: str,
+) -> tuple[str, str, int, str, str]:
+    """Return the idempotency key for a would-be score row."""
+    meta_data = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path else {}
+    scenario_data = json.loads(scenario_path.read_text(encoding="utf-8"))
+    return (
+        meta_data.get("run_name", trajectory_path.parent.name),
+        scenario_data.get("id", ""),
+        _extract_trial_index(trajectory_path),
+        judge_model,
+        _JUDGE_PROMPT_VERSION,
+    )
+
+
+def _existing_score_keys(out_path: Path) -> set[tuple[str, str, int, str, str]]:
+    """Load existing judge-row identities, tolerating legacy rows."""
+    if not out_path.exists():
+        return set()
+    keys: set[tuple[str, str, int, str, str]] = set()
+    for line in out_path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(row, dict):
+            continue
+        try:
+            keys.add(
+                (
+                    str(row.get("run_name", "")),
+                    str(row.get("scenario_id", "")),
+                    int(row.get("trial_index", 0)),
+                    str(row.get("judge_model", "")),
+                    str(row.get("judge_prompt_version") or _JUDGE_PROMPT_VERSION),
+                )
+            )
+        except (TypeError, ValueError):
+            continue
+    return keys
 
 
 # ---------------------------------------------------------------------------
@@ -559,6 +610,11 @@ def _build_parser() -> argparse.ArgumentParser:
             "If set, save a full judge audit log (prompt + raw response + dims) to "
             "LOG_DIR/<run_name>/<scenario_id>_runNN_judge_log.json"
         ),
+    )
+    p.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-score rows even when the idempotency key already exists.",
     )
     return p
 
@@ -658,6 +714,24 @@ def main() -> None:
         # Single-file mode
         if not args.scenario:
             sys.exit("--scenario is required when using --trajectory")
+        identity = _score_identity(
+            args.trajectory,
+            args.scenario,
+            args.run_meta,
+            args.judge_model,
+        )
+        if not args.force and identity in _existing_score_keys(args.out):
+            print(
+                json.dumps(
+                    {
+                        "skipped": True,
+                        "reason": "existing_score",
+                        "identity": identity,
+                    },
+                    indent=2,
+                )
+            )
+            return
         record = score_trajectory(
             trajectory_path=args.trajectory,
             scenario_path=args.scenario,
@@ -676,6 +750,8 @@ def main() -> None:
             meta_path = None
 
         scored = 0
+        skipped = 0
+        existing_keys = _existing_score_keys(args.out)
         for traj_file in sorted(args.run_dir.glob("*.json")):
             if not _is_trajectory_file(traj_file):
                 continue
@@ -685,6 +761,16 @@ def main() -> None:
                     f"  [warn] could not find scenario for {traj_file.name}, skipping",
                     file=sys.stderr,
                 )
+                continue
+            identity = _score_identity(
+                traj_file,
+                scenario_path,
+                meta_path,
+                args.judge_model,
+            )
+            if not args.force and identity in existing_keys:
+                print(f"Skipping {traj_file.name}: existing score row")
+                skipped += 1
                 continue
             print(
                 f"Scoring {traj_file.name} against {scenario_path.name}...",
@@ -699,9 +785,12 @@ def main() -> None:
                 log_dir=args.log_dir,
             )
             print(f"  score_6d={record['score_6d']}  pass={record['pass']}")
+            existing_keys.add(identity)
             scored += 1
 
-        print(f"\nScored {scored} trajectory file(s). Output: {args.out}")
+        print(
+            f"\nScored {scored} trajectory file(s), skipped {skipped}. Output: {args.out}"
+        )
         return
 
     _build_parser().print_help()

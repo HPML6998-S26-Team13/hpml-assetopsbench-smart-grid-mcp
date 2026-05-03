@@ -29,6 +29,10 @@
   Self-Ask rows cite `results/metrics/notebook03_self_ask_ablation.csv` and
   `results/metrics/experiment_matrix_summary.csv`, not
   `notebook03_pe_family_follow_on.csv`.
+- Added resumable GCP fallback execution: stable SmartGrid run IDs, resume/force
+  knobs, trial-level resume manifests, atomic per-trial finalization,
+  context-closeout batch manifests, and IAP artifact pullback with idempotent
+  judge score merging.
 - Added the first editable final-presentation PPTX draft at
   `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
