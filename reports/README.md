@@ -1,8 +1,14 @@
 # reports/
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-05-03*
 
-Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or otherwise "shipped" and should not be edited after the fact. Living documentation (domain guides, architecture, setup) lives in [../docs/](../docs/); planning artifacts (roadmap, meeting agendas, working notes) live in [../planning/](../planning/). This directory is for the immutable outputs.
+Frozen deliverables and dated working exports — PDFs and PPTXs that have been
+submitted, emailed, or otherwise "shipped" should not be edited after the fact.
+Files marked `*_draft.*` are editable working cuts until they are replaced by a
+final shipped artifact. Living documentation (domain guides, architecture,
+setup) lives in [../docs/](../docs/); planning artifacts (roadmap, meeting
+agendas, working notes) live in [../planning/](../planning/). This directory is
+for durable rendered outputs, not source-of-truth prose.
 
 ## Current deliverables
 
@@ -20,10 +26,17 @@ Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or oth
 | `archive/2026-04-01_proposal_draft.pdf` | `2026-04-02_proposal.pdf` |
 | `archive/2026-04-02_midpoint_draft.pdf` | `2026-04-06_midpoint_submission.pdf` |
 | `archive/2026-04-02_midpoint_draft.pptx` | `2026-04-06_midpoint_submission.pdf` |
+| `archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | Pending final class-presentation export; first editable #44 PPTX build with scenario, mitigation, and dry-run gates still open. |
+
+## Build Notes
+
+| Artifact | Build note |
+|---|---|
+| `archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | [build_notes/2026-05-03_final_presentation_smartgridbench_build.md](build_notes/2026-05-03_final_presentation_smartgridbench_build.md) |
 
 ## Conventions
 
 - **Naming:** `YYYY-MM-DD_<what>.<ext>` — date-prefixed so `ls` orders them chronologically.
-- **No edits after the fact.** If a shipped deliverable needs a correction, create a new dated file — don't overwrite history.
+- **No edits after the fact.** If a shipped deliverable needs a correction, create a new dated file — don't overwrite history. Files ending `*_draft.*` may be edited until replaced by a final shipped artifact.
 - **Drafts and working versions go to `archive/`** at the time the final version is created, so the top-level only ever shows what's currently authoritative.
 - **Source files (LaTeX, Markdown, Keynote) live elsewhere** - [../docs/data_pipeline.tex](../docs/data_pipeline.tex) for paper-ready LaTeX sections, [../planning/archive/mid_report_slides.md](../planning/archive/mid_report_slides.md) for the archived midpoint slide source. `reports/` only holds the rendered outputs.

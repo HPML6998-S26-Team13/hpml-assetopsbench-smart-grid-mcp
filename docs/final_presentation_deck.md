@@ -3,13 +3,30 @@
 *Created: 2026-05-02*
 *Owner: Alex Xin*
 *Issue: #44*
-*Mode: slide-content scaffold for later PowerPoint conversion*
+*Mode: slide-content scaffold plus first editable PowerPoint draft*
 
 This is the first reviewable slide-by-slide deck draft for the HPML final
-presentation. It is intentionally Markdown so teammates and reviewers can
-comment on the story before we convert it into the class PowerPoint template.
+presentation. The Markdown remains the source-of-truth story scaffold so
+teammates and reviewers can comment on claims and wording, while the current
+editable PPTX build lives at
+`reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
 
 Production companion: `docs/final_presentation_run_of_show.md`.
+
+## May 3 PPTX Build
+
+The first editable PowerPoint draft has been generated from the current story
+spine. It is intentionally a draft, not the final submitted deck, because #44
+still depends on the 30-scenario floor, final mitigation/rerun decision, and a
+timed dry run.
+
+| Artifact | Status | Notes |
+|---|---|---|
+| `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | built | 12-slide editable PPTX; dark technical visual system; issue remains open. |
+| Layout QA | pass with warnings | Artifact-tool checker: 0 errors / 7 padding or tight-text warnings; visual contact sheet reviewed. |
+| Build provenance | documented | `reports/build_notes/2026-05-03_final_presentation_smartgridbench_build.md` records the one-off artifact-tool command, integrity checks, and warning inventory. |
+| Scenario slide | gated | PR #156 is still open; keep 30 scenarios as the required floor, not a completed claim. |
+| Mitigation slide | gated | Treat as mitigation design unless before/after rerun rows land. |
 
 ## May 2 Deck Readiness
 
