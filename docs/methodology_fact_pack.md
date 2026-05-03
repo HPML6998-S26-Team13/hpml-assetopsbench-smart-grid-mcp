@@ -25,7 +25,7 @@
 | `rul_labels.csv` | 620 records | rul_days, health_index, fdd_category |
 | `fault_records.csv` | 41 events | fault_type, maintenance_status, component_health, downtime_hrs |
 
-**No proprietary data shipped.** Class-origin Kaggle CSVs stay in team repo. Regenerable via `data/generate_synthetic.py`.
+**No proprietary data shipped.** Raw Kaggle downloads remain local-only/gitignored; tracked `data/processed/` CSVs are public-safe synthetic outputs regenerable via `data/generate_synthetic.py`.
 
 ---
 
@@ -54,7 +54,7 @@
 
 ---
 
-## Experiment Grid (9 cells, Llama-3.1-8B-Instruct, 3 trials/cell)
+## Experiment Grid (9 cells, Llama-3.1-8B-Instruct, 3 trials/scenario — 6 judged runs/cell)
 
 | Cell | Display | Orchestration | Transport | p50 lat (s) | Judge score | Judge pass |
 |---|---|---|---|---|---|---|
@@ -98,5 +98,5 @@
 ## Paper-safe caveats
 
 - DGA records use publicly-derived synthetic values; stored `fault_label` values reflect intended synthetic ground truth, but not all records round-trip through `analyze_dga` consistently — downstream users should verify any asset's DGA label against the analyzer before treating it as benchmark ground truth.
-- First-capture results use 3 trials/cell; final canonical run targets 5 trials for publication.
+- First-capture results use 3 trials per scenario (6 judged runs per cell); final canonical run targets 5 trials per scenario.
 - ZSD degradation vs ZS is a first-capture artifact; the optimized-serving benefit is cleaner in AaT cells (C, D) where orchestration overhead is lower.
