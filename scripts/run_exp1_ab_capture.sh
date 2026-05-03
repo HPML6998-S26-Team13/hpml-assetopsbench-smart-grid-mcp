@@ -3,7 +3,7 @@
 #SBATCH --account=edu
 #SBATCH --partition=short
 #SBATCH --qos=short
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=8
 #SBATCH --time=04:00:00

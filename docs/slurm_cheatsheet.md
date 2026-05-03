@@ -104,17 +104,20 @@ srun \
   --pty bash
 ```
 
-Minimal generic GPU request:
+Minimal default A6000 GPU request:
 
 ```bash
 srun \
   --account=edu \
   --partition=short \
   --qos=short \
-  --gres=gpu:1 \
+  --gres=gpu:A6000:1 \
   --time=00:05:00 \
   --pty bash
 ```
+
+Use generic `--gres=gpu:1` only when hardware does not matter; record the
+allocated GPU before treating the run as evidence.
 
 ## Attach to an already-running job
 
@@ -289,7 +292,7 @@ You are probably on the login node, not the compute node.
 Either:
 
 ```bash
-srun --account=edu --partition=short --qos=short --gres=gpu:1 --time=00:10:00 --pty bash
+srun --account=edu --partition=short --qos=short --gres=gpu:A6000:1 --time=00:10:00 --pty bash
 ```
 
 or attach to the running job:

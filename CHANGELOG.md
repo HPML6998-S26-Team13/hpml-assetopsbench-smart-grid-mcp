@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Hardened future Insomnia/GCP vLLM evidence runs: Insomnia batch defaults now
+  request A6000 GPUs explicitly instead of generic GPUs, and vLLM launchers pass
+  `--generation-config vllm` while preserving caller-side `TEMPERATURE=0.0`
+  decoding intent.
 - Implemented the explicit fault/risk adjudication mitigation rung for #35 /
   #64 / #66. PE-family runners can now emit structured
   `fault_risk_adjudication` metadata, cite concrete deciding evidence when

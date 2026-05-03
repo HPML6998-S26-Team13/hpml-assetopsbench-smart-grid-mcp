@@ -3,7 +3,7 @@
 #SBATCH --account=edu
 #SBATCH --partition=short
 #SBATCH --qos=short
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=8
 #SBATCH --time=01:00:00
@@ -15,9 +15,8 @@
 #   1. baseline                                             (no KV optimization)
 #   2. --enable-prefix-caching                              (chosen for Cell C)
 #   3. --enable-prefix-caching --kv-cache-dtype fp8         (originally planned;
-#                                                           known to fail under
-#                                                           FP16 weights in
-#                                                           vLLM 0.19.0 FA3 —
+#                                                           failed in prior
+#                                                           FP16/H100 smoke —
 #                                                           see status doc)
 # One run per variant; all variants use the same model, scenario, and prompt
 # template so latency deltas attribute to KV-cache. The fp8 variant is

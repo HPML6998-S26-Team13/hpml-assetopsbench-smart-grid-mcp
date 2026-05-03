@@ -42,6 +42,12 @@ at `results/metrics/experiment_matrix_summary.csv`; the focused
 optimized-serving follow-on deltas live at
 `results/metrics/optimized_serving_ablation.csv`.
 
+Caveat: the historical PE-family rows below are not a single-hardware cohort.
+Y/YS/Z used Insomnia A6000 nodes, while ZS used an H100 NVL allocation because
+the Slurm request then was generic `--gres=gpu:1`. See
+`docs/compute_environment_discrepancies.md` before comparing those rows against
+the GCP A100 final-six matrix.
+
 | Legacy | Display code | Meaning | Run | Status | N | Canonical | Success | p50 latency | p95 latency | Judge score | Judge pass |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
 | A | AT-I | Agent-as-Tool direct Python tools | `8979314_aat_direct` | success | 6 | 6/6 | 1.00 | 12.15 | 17.29 | 0.167 | 1/6 (16.7%) |

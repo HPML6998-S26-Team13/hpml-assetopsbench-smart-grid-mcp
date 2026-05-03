@@ -3,7 +3,7 @@
 #SBATCH --account=edu
 #SBATCH --partition=short
 #SBATCH --qos=short
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=4
 #SBATCH --time=02:00:00
@@ -96,7 +96,8 @@ VLLM_MODEL_PATH="${VLLM_MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "$VLLM_MODEL_PATH")}"
 VLLM_DTYPE="${VLLM_DTYPE:-float16}"
 EXTRA_VLLM_ARGS="${EXTRA_VLLM_ARGS:-}"
-export VLLM_DTYPE EXTRA_VLLM_ARGS
+VLLM_GENERATION_CONFIG="${VLLM_GENERATION_CONFIG:-vllm}"
+export VLLM_DTYPE EXTRA_VLLM_ARGS VLLM_GENERATION_CONFIG
 VLLM_ENABLE_AUTO_TOOL_CHOICE="${VLLM_ENABLE_AUTO_TOOL_CHOICE:-1}"
 # Default tool-call parser is model-family-aware. Llama-3.x → llama3_json
 # (the team's pinned `Llama-3.1-8B-Instruct`). Other families
@@ -507,6 +508,7 @@ payload["missing_evidence_repair_max_attempts_per_target"] = int(
 # distinction in Cell C.
 extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
 payload["vllm_dtype"] = os.environ.get("VLLM_DTYPE", "float16")
+payload["vllm_generation_config"] = os.environ.get("VLLM_GENERATION_CONFIG", "vllm")
 payload["vllm_extra_args"] = extra_vllm_args
 payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
 payload["runtime_versions"] = runtime_versions()
@@ -1060,6 +1062,7 @@ if [ "$LAUNCH_VLLM" = "1" ]; then
     --port "$VLLM_PORT"
     --max-model-len "$MAX_MODEL_LEN"
     --dtype "$VLLM_DTYPE"
+    --generation-config "$VLLM_GENERATION_CONFIG"
   )
   if [ "$VLLM_ENABLE_AUTO_TOOL_CHOICE" = "1" ]; then
     if [ -z "$VLLM_TOOL_CALL_PARSER" ]; then

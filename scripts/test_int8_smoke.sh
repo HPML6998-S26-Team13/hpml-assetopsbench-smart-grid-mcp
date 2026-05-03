@@ -3,7 +3,7 @@
 #SBATCH --account=edu
 #SBATCH --partition=short
 #SBATCH --qos=short
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=8
 #SBATCH --time=01:00:00
@@ -109,6 +109,7 @@ setsid python3 -u -m vllm.entrypoints.openai.api_server \
     --port "$PORT" \
     --max-model-len 8192 \
     --quantization compressed-tensors \
+    --generation-config vllm \
     >"$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 # `setsid` puts the leader and all its children in a new process group whose

@@ -432,7 +432,7 @@ PY
 If you want to verify a real `import vllm` or `import torch`, do that only from a
 compute node:
 ```bash
-srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+srun --account=edu --partition=short --qos=short --gres=gpu:A6000:1 \
      --mem=64G --time=01:00:00 --pty bash
 cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 source .venv-insomnia/bin/activate
@@ -459,7 +459,7 @@ running.
 Always grab a compute node first:
 
 ```bash
-srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+srun --account=edu --partition=short --qos=short --gres=gpu:A6000:1 \
      --mem=64G --time=01:00:00 --pty bash
 ```
 
@@ -474,7 +474,7 @@ Grab an interactive shell and run vLLM in the foreground so you see all output
 live:
 
 ```bash
-srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+srun --account=edu --partition=short --qos=short --gres=gpu:A6000:1 \
      --mem=64G --time=01:00:00 --pty bash
 
 # Once you're on the compute node:
@@ -491,7 +491,8 @@ python -c "import vllm; print(vllm.__version__)"
 python -u -m vllm.entrypoints.openai.api_server \
     --model models/Llama-3.1-8B-Instruct \
     --served-model-name Llama-3.1-8B-Instruct \
-    --port 8000 --max-model-len 8192 --dtype float16
+    --port 8000 --max-model-len 8192 --dtype float16 \
+    --generation-config vllm
 ```
 
 **Use the tool-call serve for any benchmark / AaT / PE reproduction.** As of
@@ -688,14 +689,16 @@ expect queue waits during weekday business hours. Some heuristics:
 - **Off-peak (evenings, weekends):** jobs typically start within minutes
 - **Peak (weekday afternoons):** can be 30 min to several hours
 - **`ReqNodeNotAvail`** in `squeue` reason column means the requested nodes
-  are reserved — try a different GPU type (`--gres=gpu:1` instead of
-  `--gres=gpu:A6000:1`) to give the scheduler more flexibility
+  are reserved. For evidence runs, wait for an A6000 slot or explicitly choose
+  a named comparison GPU such as H100. Use generic `--gres=gpu:1` only for
+  hardware-flexible exploratory work, and record the allocated GPU in the
+  artifact note.
 - **`Priority`** just means you're in line; check estimated start with
   `squeue -u <UNI> --start`
 
 Llama-3.1-8B at FP16 fits on every GPU type Insomnia exposes to the `edu`
-account today (A6000 48 GB, L40/L40S 48 GB, H100 80 GB), so `--gres=gpu:1` is
-the fastest path to a slot when the A6000 nodes are saturated. For the
+account today (A6000 48 GB, L40/L40S 48 GB, H100 80 GB), but benchmark
+evidence should default to typed A6000 requests for comparability. For the
 authoritative live menu of partitions and GPU types:
 
 ```bash
