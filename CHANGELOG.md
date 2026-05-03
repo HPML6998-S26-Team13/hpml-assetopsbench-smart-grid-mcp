@@ -21,6 +21,14 @@
   and `results/metrics/experiment_matrix_summary.csv`, while
   `notebook03_pe_family_follow_on.csv` should not be treated as their source
   unless regenerated.
+- Updated the `#40` / `#78` IEEE report back-port surfaces so the checklist is
+  marked as created, the Markdown draft is positioned as a working conversion
+  surface rather than a submitted report, and final IEEE export remains gated on
+  NeurIPS compile/checklist/source freeze.
+- Corrected the IEEE report's Experiment 2 source notes so `YS` / `ZS`
+  Self-Ask rows cite `results/metrics/notebook03_self_ask_ablation.csv` and
+  `results/metrics/experiment_matrix_summary.csv`, not
+  `notebook03_pe_family_follow_on.csv`.
 - Added the first editable final-presentation PPTX draft at
   `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
