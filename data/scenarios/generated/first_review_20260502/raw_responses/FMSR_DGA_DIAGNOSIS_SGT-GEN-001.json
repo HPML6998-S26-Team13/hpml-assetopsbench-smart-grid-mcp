@@ -1,0 +1,20 @@
+```
+{
+  "id": "SGT-GEN-001",
+  "type": "FMSR",
+  "text": "Transformer T-005 shows stable gas levels during routine monitoring. Determine the primary fault and recommend the next inspection step.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "A diagnosis with a recommended action.",
+  "asset_id": "T-005",
+  "expected_tools": ["fmsr.get_dga_record", "fmsr.analyze_dga"],
+  "domain_tags": ["FMSR"],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": ["fmsr.get_dga_record", "fmsr.analyze_dga"],
+    "decisive_intermediate_values": { "iec_code": "T3", "R1": "0.067" },
+    "final_value": { "primary_fault": "T3", "recommended_action": "Schedule a detailed inspection" },
+    "acceptance_criteria": ["agent identifies the primary fault", "agent recommends a reasonable next step", "agent uses DGA data to support the diagnosis"],
+    "must_include": ["primary fault", "recommended action", "dominant gas rationale"]
+  }
+}
+```

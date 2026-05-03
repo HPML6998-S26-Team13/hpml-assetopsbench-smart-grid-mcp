@@ -1,0 +1,77 @@
+{
+  "id": "SGT-GEN-005",
+  "type": "Multi",
+  "text": "Transformer T-005, critical to the grid, shows elevated hydrogen and rising methane levels in recent DGA samples. Determine the fault mode and recommend maintenance.",
+  "category": "End-to-End Incident Response",
+  "characteristic_form": "A diagnosis with a recommended maintenance action based on integrated analysis of DGA trends and asset criticality.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.get_sensor_readings",
+    "fmsr.analyze_dga",
+    "tsfm.forecast_rul",
+    "wo.create_work_order"
+  ],
+  "domain_tags": [
+    "IoT",
+    "FMSR",
+    "TSFM",
+    "WO"
+  ],
+  "difficulty": "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.get_sensor_readings",
+      "fmsr.analyze_dga",
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "decisive_intermediate_values": {
+      "fault_code": "D2",
+      "R1_ratio": "0.40",
+      "R2_ratio": "1.20",
+      "R3_ratio": "3.33",
+      "representative_gases_ppm": {
+        "H2": 500,
+        "CH4": 200,
+        "C2H2": 120,
+        "C2H4": 100,
+        "C2H6": 30
+      }
+    },
+    "final_value": {
+      "fault_label": "Arcing fault",
+      "rul_days": "14",
+      "work_order_type": "corrective"
+    },
+    "acceptance_criteria": [
+      "agent identifies the fault mode as arcing",
+      "agent forecasts the remaining useful life in days",
+      "agent creates a work order with the correct type and priority",
+      "agent includes safety isolation notes in the work order"
+    ],
+    "must_include": [
+      "iot_evidence_summary",
+      "fault_hypothesis_with_iec_code",
+      "rul_or_risk_forecast",
+      "work_order_recommendation"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-03T03:26:23.387665+00:00",
+    "batch_id": "first_review_20260502",
+    "manual_cleanup": true,
+    "cleanup_notes": "Corrected generated Rogers-ratio ground truth to the repo-standard D2 representative profile: R1=0.40, R2=1.20, R3=3.33."
+  },
+  "family": "MULTI_DOMAIN_INCIDENT",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-009",
+    "scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json",
+    "similarity_basis": "shares type='Multi' and 4 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

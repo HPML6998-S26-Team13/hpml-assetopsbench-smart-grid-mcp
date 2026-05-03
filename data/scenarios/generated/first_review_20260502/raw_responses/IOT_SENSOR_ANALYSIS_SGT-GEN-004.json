@@ -1,0 +1,18 @@
+{
+  "id": "SGT-GEN-001",
+  "type": "IoT",
+  "text": "Transformer T-005 is operating at 98% capacity with no spare available. Check if the oil temperature is within a safe range.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer will include a sensor value with unit and a threshold comparison.",
+  "asset_id": "T-005",
+  "expected_tools": ["iot.get_sensor_readings"],
+  "domain_tags": ["IoT"],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": ["iot.get_sensor_readings"],
+    "decisive_intermediate_values": { "oil_temp_c": "70" },
+    "final_value": { "sensor_value_with_unit": "70°C", "threshold_comparison": "within safe range", "status_summary": "normal operation" },
+    "acceptance_criteria": ["agent checks oil temperature", "agent compares temperature to a safe threshold", "agent reports the status of the transformer"],
+    "must_include": ["sensor_value_with_unit", "threshold_comparison", "status_summary"]
+  }
+}

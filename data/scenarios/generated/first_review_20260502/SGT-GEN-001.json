@@ -1,0 +1,68 @@
+{
+  "id": "SGT-GEN-001",
+  "type": "FMSR",
+  "text": "Transformer T-005 shows stable gas levels during routine monitoring. Confirm whether any fault is indicated and recommend the next monitoring step.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "A normal/no-fault confirmation with a routine-monitoring recommendation.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "domain_tags": [
+    "FMSR"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga"
+    ],
+    "decisive_intermediate_values": {
+      "iec_code": "N",
+      "R1": "0.056",
+      "R2": "0.020",
+      "R3": "1.25",
+      "final_sample_gases_ppm": {
+        "H2": 90,
+        "CH4": 5,
+        "C2H2": 1,
+        "C2H4": 50,
+        "C2H6": 40
+      },
+      "condition": "normal/background gas profile"
+    },
+    "final_value": {
+      "primary_fault": "Normal/no active fault",
+      "recommended_action": "Continue routine monitoring; no immediate inspection beyond the scheduled interval"
+    },
+    "acceptance_criteria": [
+      "agent identifies no active fault or an N/normal DGA profile",
+      "agent recommends continued routine monitoring or equivalent non-urgent follow-up",
+      "agent uses the background gas profile to justify the non-fault diagnosis"
+    ],
+    "must_include": [
+      "normal/no active fault",
+      "recommended monitoring action",
+      "background gas rationale"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-03T03:25:40.482330+00:00",
+    "batch_id": "first_review_20260502",
+    "manual_cleanup": true,
+    "cleanup_notes": "Corrected generated ground truth from contradictory T3 diagnosis to N/normal based on the committed stable_normal prompt template and final-sample R1=0.056."
+  },
+  "family": "FMSR_DGA_DIAGNOSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-003",
+    "scenario_file": "data/scenarios/fmsr_01_dga_fault_mode_diagnosis.json",
+    "similarity_basis": "shares type='FMSR' and 2 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

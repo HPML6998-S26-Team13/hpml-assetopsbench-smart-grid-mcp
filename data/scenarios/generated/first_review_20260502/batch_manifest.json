@@ -1,0 +1,43 @@
+{
+  "batch_id": "first_review_20260502",
+  "created_at": "2026-05-03T03:26:23.388590+00:00",
+  "last_updated_at": "2026-05-03T03:26:23.388590+00:00",
+  "prompt_version": "v0.1",
+  "knowledge_plugin_version": "0eacec24441e",
+  "generator_script": "scripts/generate_scenarios.py",
+  "support_data": "docs/knowledge/scenario_generation_support.json",
+  "handcrafted_corpus_size": 11,
+  "scenarios_emitted": [
+    "SGT-GEN-001",
+    "SGT-GEN-002",
+    "SGT-GEN-003",
+    "SGT-GEN-004",
+    "SGT-GEN-005"
+  ],
+  "invocations": [
+    {
+      "started_at": "2026-05-03T03:26:23.388590+00:00",
+      "model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+      "temperature": 0.7,
+      "seed": 42,
+      "families_requested": [
+        "FMSR_DGA_DIAGNOSIS",
+        "TSFM_RUL_FORECAST",
+        "WO_CREATION",
+        "IOT_SENSOR_ANALYSIS",
+        "MULTI_DOMAIN_INCIDENT"
+      ],
+      "n_per_family": 1,
+      "scenarios_emitted": [
+        "SGT-GEN-001",
+        "SGT-GEN-002",
+        "SGT-GEN-003",
+        "SGT-GEN-004",
+        "SGT-GEN-005"
+      ],
+      "starting_scenario_id": "SGT-GEN-001",
+      "dry_run": false,
+      "append": false
+    }
+  ]
+}

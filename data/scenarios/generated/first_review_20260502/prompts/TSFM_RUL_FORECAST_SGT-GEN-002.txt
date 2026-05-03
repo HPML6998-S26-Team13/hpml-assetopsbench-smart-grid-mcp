@@ -1,0 +1,134 @@
+You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
+
+FAMILY: TSFM_RUL_FORECAST
+FAMILY SPEC:
+{
+  "target_count": 4,
+  "primary_domain": "TSFM",
+  "domain_tags": [
+    "TSFM"
+  ],
+  "difficulty_range": [
+    "easy",
+    "medium",
+    "hard"
+  ],
+  "task_types": [
+    "rul_forecast",
+    "anomaly_detection",
+    "trend_analysis"
+  ],
+  "required_tools": [
+    "tsfm.forecast_rul"
+  ],
+  "optional_tools": [
+    "tsfm.detect_anomalies",
+    "tsfm.trend_analysis",
+    "tsfm.get_rul"
+  ],
+  "variation_axes": {
+    "horizon": "vary among 30-day, 60-day, 90-day forecast horizons",
+    "transformer_id": "vary across T-001 to T-020",
+    "task_framing": "rotate among: forecast RUL for a specific horizon, detect anomaly in sensor trend, explain a trend reversal, compare RUL against maintenance window"
+  },
+  "ground_truth_must_include": [
+    "rul_estimate_days",
+    "risk_level_rationale",
+    "recommended_action_horizon"
+  ],
+  "anti_patterns": [
+    "Do not ask for a trend analysis without specifying which sensor parameter.",
+    "Do not set expected_tools to forecast_rul only when the task description mentions anomaly detection."
+  ]
+}
+
+OPERATIONAL CONTEXT (`important_spare_in_stock`):
+{
+  "asset_criticality_tier": "important",
+  "spare_availability": "in_stock",
+  "current_loading_pct": 65,
+  "urgency_floor": "medium",
+  "narrative_context": "Distribution transformer with a local spare available. Planned replacement can be scheduled within the week.",
+  "suitable_fault_codes": [
+    "D1",
+    "T2",
+    "PD",
+    "T1"
+  ],
+  "scenario_families": [
+    "MULTI_DOMAIN_INCIDENT",
+    "WO_CREATION",
+    "FMSR_DGA_DIAGNOSIS"
+  ]
+}
+
+RUL/HEALTH CONTEXT TEMPLATE (`medium_horizon_stable`):
+{
+  "rul_range_days": [
+    180,
+    729
+  ],
+  "health_index_range": [
+    0.4,
+    0.74
+  ],
+  "condition_note": "Aging transformer with some degradation indicators. Stable trend but planning horizon is relevant.",
+  "typical_decision": "Plan for replacement or major overhaul within 1\u20132 years. Increase DGA sampling to quarterly.",
+  "suitable_fault_codes": [
+    "PD",
+    "T1",
+    "D1"
+  ],
+  "suitable_families": [
+    "TSFM_RUL_FORECAST",
+    "FMSR_DGA_DIAGNOSIS"
+  ]
+}
+
+
+NO-HINT RULES — banned in the user-facing `text` field:
+- Tool names (e.g. `fmsr.analyze_dga`, `wo.create_work_order`)
+- Method names or analytic technique names (e.g. "Duval triangle", "Rogers ratio")
+- IEC fault codes (PD, D1, D2, T1, T2, T3) in the prompt itself — they may appear in `decisive_intermediate_values` only
+- Specific gas concentrations or ratio thresholds
+- Pre-framed decisions ("you should create a work order")
+- Step-by-step instructions
+- Paraphrases of any of the 10 hand-crafted scenarios under data/scenarios/
+
+PREFERRED:
+- Describe an operational event or condition naturally
+- Ask for a decision (diagnosis / RUL / work order / sensor anomaly), not a tool call
+- Ground in one transformer ID and one or two context details (criticality, alarm, recent reading)
+- One task per scenario
+- Under 80 words
+
+
+OUTPUT FORMAT (return one JSON object, no markdown fence):
+{
+  "id": "SGT-GEN-XXX",                                  // caller fills XXX
+  "type": "FMSR" | "TSFM" | "WO" | "IoT" | "Multi",
+  "text": "<the user-facing prompt, follows NO-HINT RULES>",
+  "category": "<one of: Fault Diagnosis | Root Cause Analysis | Remaining Useful Life | Anomaly Detection | Trend Analysis | Maintenance Decision | Work Order Creation | Sensor Analysis | End-to-End Incident Response | Cross-Domain Planning>",
+  "characteristic_form": "<one-sentence description of the answer's structure>",
+  "asset_id": "T-NNN",                                  // T-001 .. T-020
+  "expected_tools": ["domain.tool", ...],               // every tool the ideal agent calls
+  "domain_tags": ["FMSR", ...],                         // matches the type for single-domain; >=2 for Multi
+  "difficulty": "easy" | "medium" | "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": ["domain.tool", ...],        // ordered, same entries as expected_tools
+    "decisive_intermediate_values": { "<key>": "<value>", ... },
+    "final_value": { "<key>": "<value>", ... },         // concrete output (e.g. fault_label, rul_days)
+    "acceptance_criteria": ["agent <does X>", ...],     // 2-5 checks, each starting with "agent "
+    "must_include": ["<element>", ...]                  // coarse high-level answer elements
+  }
+}
+
+DO NOT include `provenance` or `nearest_handcrafted_comparator` blocks in
+your output — the caller fills those after generation. DO NOT emit
+`source_type`, `generator_prompt_version`, `generation_model`, or any
+other generator-metadata field at the top level. The scenario JSON should
+contain ONLY the canonical scenario contract (id, type, text, category,
+characteristic_form, asset_id, expected_tools, domain_tags, difficulty,
+ground_truth).
+
+Return ONLY the JSON object. No commentary, no markdown fences, no explanation.

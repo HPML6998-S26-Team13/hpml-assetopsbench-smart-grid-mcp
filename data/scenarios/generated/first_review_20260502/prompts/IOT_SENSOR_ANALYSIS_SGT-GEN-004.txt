@@ -1,0 +1,122 @@
+You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
+
+FAMILY: IOT_SENSOR_ANALYSIS
+FAMILY SPEC:
+{
+  "target_count": 2,
+  "primary_domain": "IoT",
+  "domain_tags": [
+    "IoT"
+  ],
+  "difficulty_range": [
+    "easy",
+    "medium"
+  ],
+  "task_types": [
+    "sensor_threshold_check",
+    "asset_metadata_lookup",
+    "sensor_list_enumeration"
+  ],
+  "required_tools": [
+    "iot.get_sensor_readings"
+  ],
+  "optional_tools": [
+    "iot.get_asset_metadata",
+    "iot.list_sensors",
+    "iot.list_assets"
+  ],
+  "variation_axes": {
+    "sensor_parameter": "vary between thermal (oil_temp_c, winding_temp_top_c) and electrical (load_current_a, power_factor, voltage_hv_kv, voltage_lv_kv)",
+    "transformer_id": "vary across T-001 to T-020"
+  },
+  "ground_truth_must_include": [
+    "sensor_value_with_unit",
+    "threshold_comparison",
+    "status_summary"
+  ],
+  "anti_patterns": [
+    "IoT sensors do not include dissolved gas readings. Do not ask for gas values via IoT tools.",
+    "Do not ask for DGA-based fault classification from IoT tools alone."
+  ]
+}
+
+OPERATIONAL CONTEXT (`critical_peak_no_spare`):
+{
+  "asset_criticality_tier": "critical",
+  "spare_availability": "no_spare",
+  "current_loading_pct": 98,
+  "urgency_floor": "high",
+  "narrative_context": "Feeder transformer carrying peak load with no spare on site. Any forced outage requires load shedding.",
+  "suitable_fault_codes": [
+    "D2",
+    "T3"
+  ],
+  "scenario_families": [
+    "MULTI_DOMAIN_INCIDENT"
+  ]
+}
+
+EVENT/ALARM TEMPLATE (`routine_monitoring_elevated_h2`):
+{
+  "alarm_source": "scheduled_dga_sampling",
+  "iot_signal": null,
+  "associated_fault_codes": [
+    "PD",
+    "D1",
+    "N"
+  ],
+  "urgency": "medium",
+  "scenario_text_cue": "Routine DGA sampling for transformer {transformer_id} shows elevated hydrogen compared to the prior sample. Identify the fault mode and recommend a monitoring interval.",
+  "ground_truth_cue": "Agent must call get_dga_record and analyze_dga; ground truth includes fault code and a monitoring recommendation aligned with urgency tier.",
+  "suitable_families": [
+    "FMSR_DGA_DIAGNOSIS"
+  ]
+}
+
+
+NO-HINT RULES — banned in the user-facing `text` field:
+- Tool names (e.g. `fmsr.analyze_dga`, `wo.create_work_order`)
+- Method names or analytic technique names (e.g. "Duval triangle", "Rogers ratio")
+- IEC fault codes (PD, D1, D2, T1, T2, T3) in the prompt itself — they may appear in `decisive_intermediate_values` only
+- Specific gas concentrations or ratio thresholds
+- Pre-framed decisions ("you should create a work order")
+- Step-by-step instructions
+- Paraphrases of any of the 10 hand-crafted scenarios under data/scenarios/
+
+PREFERRED:
+- Describe an operational event or condition naturally
+- Ask for a decision (diagnosis / RUL / work order / sensor anomaly), not a tool call
+- Ground in one transformer ID and one or two context details (criticality, alarm, recent reading)
+- One task per scenario
+- Under 80 words
+
+
+OUTPUT FORMAT (return one JSON object, no markdown fence):
+{
+  "id": "SGT-GEN-XXX",                                  // caller fills XXX
+  "type": "FMSR" | "TSFM" | "WO" | "IoT" | "Multi",
+  "text": "<the user-facing prompt, follows NO-HINT RULES>",
+  "category": "<one of: Fault Diagnosis | Root Cause Analysis | Remaining Useful Life | Anomaly Detection | Trend Analysis | Maintenance Decision | Work Order Creation | Sensor Analysis | End-to-End Incident Response | Cross-Domain Planning>",
+  "characteristic_form": "<one-sentence description of the answer's structure>",
+  "asset_id": "T-NNN",                                  // T-001 .. T-020
+  "expected_tools": ["domain.tool", ...],               // every tool the ideal agent calls
+  "domain_tags": ["FMSR", ...],                         // matches the type for single-domain; >=2 for Multi
+  "difficulty": "easy" | "medium" | "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": ["domain.tool", ...],        // ordered, same entries as expected_tools
+    "decisive_intermediate_values": { "<key>": "<value>", ... },
+    "final_value": { "<key>": "<value>", ... },         // concrete output (e.g. fault_label, rul_days)
+    "acceptance_criteria": ["agent <does X>", ...],     // 2-5 checks, each starting with "agent "
+    "must_include": ["<element>", ...]                  // coarse high-level answer elements
+  }
+}
+
+DO NOT include `provenance` or `nearest_handcrafted_comparator` blocks in
+your output — the caller fills those after generation. DO NOT emit
+`source_type`, `generator_prompt_version`, `generation_model`, or any
+other generator-metadata field at the top level. The scenario JSON should
+contain ONLY the canonical scenario contract (id, type, text, category,
+characteristic_form, asset_id, expected_tools, domain_tags, difficulty,
+ground_truth).
+
+Return ONLY the JSON object. No commentary, no markdown fences, no explanation.
