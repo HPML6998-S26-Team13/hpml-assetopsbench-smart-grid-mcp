@@ -9,6 +9,27 @@ This is the first reviewable slide-by-slide deck draft for the HPML final
 presentation. It is intentionally Markdown so teammates and reviewers can
 comment on the story before we convert it into the class PowerPoint template.
 
+Production companion: `docs/final_presentation_run_of_show.md`.
+
+## May 2 Deck Readiness
+
+The deck is ready for a first PowerPoint build pass. The slide spine, current
+tables, source paths, and backup Q&A are in place. The remaining work is not
+"find the story"; it is final evidence freeze, visual conversion, and dry-run.
+
+| Component | Status | Open caveat |
+|---|---|---|
+| Core deck spine | ready | final timing pass still needed |
+| Scenario status slide | draft-ready | 30-scenario claim waits for PR #156 + generated acceptance |
+| Transport result slide | draft-ready | caption as first six-trial capture |
+| Orchestration result slide | draft-ready | keep Self-Ask as follow-on, not core baseline |
+| Failure taxonomy slide | ready | figure placement and caption polish needed |
+| Mitigation ladder slide | draft-ready | before/after outcome rows pending |
+| Backup Q&A | draft-ready | add Cell D / 70B only if promoted before freeze |
+
+Recommended target: 10-12 minutes plus Q&A. If time compresses, keep Slides
+1-9 and 12; shorten Slide 10 rather than cutting failure taxonomy.
+
 ## Deck Spine
 
 Core thesis:
@@ -24,6 +45,14 @@ Audience job:
 - see the strongest current quantitative evidence
 - see why failure taxonomy and mitigation matter
 - leave with a clear sense of what is complete and what remains caveated
+
+Run-of-show rule:
+
+- slides 1-3 establish the artifact
+- slides 4-6 establish why the experiment matrix is controlled rather than a
+  full grid
+- slides 7-9 deliver the evidence
+- slides 10-12 convert evidence into the benchmark-design conclusion
 
 ## Visual System Notes
 
@@ -53,6 +82,8 @@ Presenter notes:
 - One-sentence opener: "We extended AssetOpsBench into Smart Grid transformer
   maintenance and used it to measure how tool protocol and orchestration choices
   affect agent latency, quality, and evidence reliability."
+- Transition: "The important part is that we did not treat the benchmark
+  plumbing as invisible; we made it measurable."
 
 ### Slide 2 - Problem: Industrial Agents Need Evidence, Not Just Answers
 
@@ -73,6 +104,11 @@ Visual:
 
 Four-step maintenance workflow: telemetry -> diagnosis -> forecast -> work
 order.
+
+Speaker note:
+
+"This is why the domain works for HPML: it is small enough to benchmark, but it
+still forces multi-tool evidence gathering."
 
 ### Slide 3 - What We Built
 
@@ -95,6 +131,11 @@ Source:
 `mcp_servers/`, `data/scenarios/README.md`, `docs/data_pipeline.tex`,
 `data/scenarios/*.json`, `data/scenarios/negative_checks/*.json`, PR #156.
 
+Speaker note:
+
+"The shared transformer key is what turns these into one benchmark trajectory
+instead of four unrelated toy tools."
+
 ### Slide 4 - Scenario Corpus Status
 
 Claim:
@@ -112,6 +153,12 @@ Current status:
 Visual:
 
 Progress bar: 11 merged -> 21 after PR #156 -> 30 required.
+
+Speaker note:
+
+"This slide is intentionally honest. The proposal commitment is 30 validated
+scenarios, so the deck should distinguish what is merged from what is in
+review or acceptance."
 
 ### Slide 5 - Architecture: One Artifact Contract Across Cells
 
@@ -160,6 +207,13 @@ Speaker note:
 "B is the anchor cell: it is both the MCP transport baseline and the
 Agent-as-Tool orchestration baseline."
 
+Avoid:
+
+- implying that every orchestration strategy was crossed with every transport
+  condition
+- treating Cell D as the main optimized MCP result; it changes model-serving
+  variables too
+
 ### Slide 7 - Result 1: MCP Transport Has a Cost, but Optimization Changes the Shape
 
 Claim:
@@ -185,6 +239,12 @@ Source:
 
 `results/metrics/notebook02_latency_summary.csv`,
 `results/metrics/experiment_matrix_summary.csv`
+
+Speaker note:
+
+"This result is a systems story, not a leaderboard. The p50 improvement is real
+in the first capture, but the p95 tail and judge score tell us not to oversell
+transport optimization as quality improvement."
 
 ### Slide 8 - Result 2: Orchestration Quality Is Not Monotonic
 
@@ -213,6 +273,12 @@ Source:
 
 `results/metrics/notebook03_orchestration_comparison.csv`,
 `results/metrics/notebook03_self_ask_ablation.csv`
+
+Speaker note addendum:
+
+"The result I would emphasize is not 'PE wins.' Vanilla PE is weak. The result
+is that structured orchestration needs clarification and verification to become
+competitive."
 
 ### Slide 9 - Failure Taxonomy: Most Failures Are Evidence Failures
 
@@ -245,6 +311,11 @@ Speaker note:
 "The important thing here is that a run can complete and still be semantically
 unsafe. That is why we treat failure accounting as part of the benchmark."
 
+Transition:
+
+"Once we know the dominant failure mode, the mitigation space gets smaller and
+more disciplined."
+
 ### Slide 10 - Mitigation Ladder
 
 Claim:
@@ -266,6 +337,11 @@ Source:
 `docs/failure_visuals_mitigation.md`,
 `results/metrics/mitigation_run_inventory.csv`
 
+Speaker note:
+
+"If reruns do not land, this remains a mitigation design slide. If reruns land,
+we can promote it to a before/after result slide."
+
 ### Slide 11 - Reproducibility and Deliverables
 
 Claim:
@@ -286,6 +362,11 @@ Proof objects:
 Visual:
 
 Artifact map from run ID -> metrics CSV -> figure -> paper/deck claim.
+
+Speaker note:
+
+"This is the reproducibility promise: every claim on the results slides should
+point to a metric file, figure, or run ID."
 
 ### Slide 12 - Conclusion
 
