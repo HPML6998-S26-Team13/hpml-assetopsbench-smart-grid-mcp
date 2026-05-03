@@ -187,7 +187,8 @@ rewritten to name it explicitly.
 Word count: 182 words.
 
 This is the current exact abstract text to use for the NeurIPS abstract
-submission unless a final evidence gate changes before upload:
+submission unless a final evidence gate changes before upload. Earlier
+abstract candidates below are retained only for revision history.
 
 Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
 maintenance, even though these workflows require multi-tool reasoning across
