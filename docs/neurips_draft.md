@@ -1,6 +1,6 @@
 # NeurIPS Draft Scaffold
 
-*Last updated: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin (writing shepherd; section co-authoring under discussion for
 Apr 28 team sync)*
 *Issues: `#5`, `#39`, `#47`, `#48`; class-report back-port tracked in `#40`*
@@ -20,14 +20,15 @@ Companion conversion surface: `docs/final_report_backport_scaffold.md`.
 Submission control surface: `docs/neurips_submission_packet.md`.
 Overleaf copy plan: `docs/neurips_overleaf_transfer_plan.md`.
 
-## May 2 submission status
+## May 3 submission status
 
 The NeurIPS lane is now a live submission lane rather than only a paper
 scaffold. The Overleaf project at
 https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 has ingested the
 official NeurIPS 2026 template package from the NeurIPS CFP and is configured
 for anonymous Evaluations & Datasets submission mode
-(`\usepackage[eandd]{neurips_2026}`). The remaining LaTeX gate is visual
+(`\usepackage[eandd]{neurips_2026}`). A first real paper draft has also been
+populated in Overleaf commit `4a85633`. The remaining LaTeX gate is visual
 compile proof in Overleaf plus completion of the NeurIPS checklist.
 
 Deadline posture from the final-week plan:
@@ -675,7 +676,8 @@ Keep the paper-writing lane tied to concrete repo outputs:
 |---|---|
 | Experiment 1 latency figure | `results/metrics/notebook02_latency_summary.csv`, `results/metrics/notebook02_mcp_overhead.csv`, and `results/figures/notebook02_latency_comparison.png` from Notebook 02 |
 | Experiment 2 orchestration figure | `results/metrics/notebook03_orchestration_comparison.csv` and companion figure from Notebook 03 |
-| PE-family follow-on figure | `results/metrics/notebook03_pe_family_follow_on.csv` once Y/Z are both analysis-ready |
+| PE-family Self-Ask table | `results/metrics/notebook03_self_ask_ablation.csv` plus `results/metrics/experiment_matrix_summary.csv` for `YS` / `ZS` display-code rows |
+| PE-family follow-on figure | `results/figures/notebook03_pe_family_follow_on.png`; do not treat `results/metrics/notebook03_pe_family_follow_on.csv` as the source for `YS` / `ZS` Self-Ask rows unless it is regenerated |
 | Failure taxonomy table | `results/metrics/failure_evidence_table.csv` from the `docs/failure_analysis_scaffold.md` contract |
 | Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
 | Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |

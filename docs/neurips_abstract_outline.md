@@ -1,6 +1,6 @@
 # NeurIPS Abstract Outline and Title Candidates
 
-*Last updated: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin*
 *Issues: #47, with historical scaffold #77*
 
@@ -182,7 +182,35 @@ benchmark paper lane.
 If the final title does adopt **SmartGridBench**, the abstract opening can be
 rewritten to name it explicitly.
 
-## May 2 Abstract Candidate for Submission
+## May 3 Submission-Ready Abstract Candidate
+
+Word count: 182 words.
+
+This is the current exact abstract text to use for the NeurIPS abstract
+submission unless a final evidence gate changes before upload:
+
+Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
+maintenance, even though these workflows require multi-tool reasoning across
+telemetry inspection, fault diagnosis, degradation forecasting, and work-order
+planning. We present SmartGridBench, a Smart Grid transformer-maintenance
+extension of AssetOpsBench with transformer scenarios, public-data-backed asset
+records, and four tool domains exposed through the Model Context Protocol
+(MCP). The benchmark makes two usually conflated systems choices measurable:
+the transport cost of MCP relative to direct tool invocation, and the
+behavioral effect of Agent-as-Tool, Plan-Execute, and Verified Plan-Execute
+orchestration when the tool surface is held fixed. Current artifacts show a
+runnable end-to-end benchmark path with committed scenario outputs, profiling
+links, Weights & Biases runs, LLM-as-judge scores, and failure-taxonomy
+exports. Preliminary six-trial captures show measurable MCP overhead in direct
+comparisons, steady-state latency reductions from persistent optimized MCP
+sessions, and quality shifts from PE-family mitigations such as Self-Ask and
+verification. We also treat scenario realism, generated-scenario circularity,
+and failure accounting as first-class benchmark artifacts rather than post-hoc
+notes. SmartGridBench therefore contributes both a new industrial benchmark
+domain and an auditable systems study of protocol and orchestration choices in
+tool-using agents.
+
+## May 2 Longer Abstract Candidate
 
 Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
 maintenance, even though these workflows require exactly the kind of multi-tool

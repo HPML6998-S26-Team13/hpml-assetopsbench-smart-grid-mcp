@@ -1,6 +1,6 @@
 # NeurIPS Overleaf Transfer Plan
 
-*Created: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin*
 *Issues: #5, #39, #40, #47, #48, #78*
 
@@ -10,9 +10,10 @@ NeurIPS 2026 Overleaf project:
 https://www.overleaf.com/project/69f5a380e638a31066dc0bd1
 
 The Overleaf project already contains the official NeurIPS 2026 template and is
-configured for anonymous Evaluations & Datasets mode. This repo file records
-what can be copied into Overleaf now, what must stay caveated, and what remains
-blocked on final evidence.
+configured for anonymous Evaluations & Datasets mode. It also has a first real
+paper draft in Overleaf commit `4a85633`. This repo file records what was
+copied into Overleaf, what must stay caveated, and what remains blocked on
+final evidence.
 
 ## Transfer Principle
 
@@ -29,7 +30,24 @@ Source-of-truth order:
 4. `docs/neurips_submission_packet.md` for deadline and claim-state control.
 5. This transfer plan for Overleaf copy order and blocked/pending markers.
 
-## Copy Into Overleaf Now
+## Overleaf Population Status
+
+Completed in Overleaf commit `4a85633`:
+
+- current title and abstract candidate
+- main NeurIPS sections from the repo draft surface
+- first-capture transport and orchestration tables
+- initial figure assets for Notebook 02, Notebook 03, and PE-family follow-on
+
+Still pending before submission:
+
+- visual compile proof in Overleaf
+- NeurIPS checklist answers
+- final references and citation cleanup
+- final scenario-count wording
+- final mitigation before/after disposition
+
+## Copy Into Overleaf / Keep In Sync
 
 ### Title and abstract
 
@@ -133,7 +151,8 @@ Source:
 - `results/metrics/experiment_matrix_summary.csv`
 - `results/metrics/notebook02_latency_summary.csv`
 - `results/metrics/notebook03_orchestration_comparison.csv`
-- `results/metrics/notebook03_pe_family_follow_on.csv`
+- `results/metrics/notebook03_self_ask_ablation.csv`
+- `results/metrics/experiment_matrix_summary.csv`
 
 Transfer:
 
@@ -141,6 +160,10 @@ Transfer:
   "first six-trial capture".
 - Add the B/Y/Z and PE-family table with a caption that says "small-sample
   orchestration and follow-on evidence".
+- Use `notebook03_orchestration_comparison.csv` for `B/Y/Z`; use
+  `notebook03_self_ask_ablation.csv` and `experiment_matrix_summary.csv` for
+  `YS/ZS`. Do not imply that `notebook03_pe_family_follow_on.csv` contains the
+  Self-Ask rows.
 - Keep C and D separate: C is the clean optimized-MCP transport row; D is an
   optimized-serving ablation.
 
@@ -205,7 +228,7 @@ Minimum figure set:
 |---:|---|---|---|
 | 1 | Experiment 1 latency comparison | `results/figures/notebook02_latency_comparison.png` | ready as first-capture figure |
 | 2 | Experiment 2 orchestration comparison | `results/figures/notebook03_orchestration_comparison.png` | ready as first-capture figure |
-| 3 | PE-family follow-on | `results/figures/notebook03_pe_family_follow_on.png` | optional; include if space permits |
+| 3 | PE-family follow-on | `results/figures/notebook03_pe_family_follow_on.png`; source rows for `YS/ZS` come from `results/metrics/notebook03_self_ask_ablation.csv` / `experiment_matrix_summary.csv` | optional; include if space permits |
 | 4 | Failure taxonomy counts | `results/figures/failure_taxonomy_counts.svg` | ready |
 | 5 | Failure stage/cell heatmap | `results/figures/failure_stage_cell_heatmap.svg` | ready |
 
