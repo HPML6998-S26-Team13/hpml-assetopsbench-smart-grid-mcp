@@ -30,7 +30,7 @@ Target: 10-12 minutes plus Q&A.
 | Results | 7-9 | 3:30 | Show transport, orchestration, and failure-taxonomy evidence. |
 | Mitigation + reproducibility | 10-11 | 2:00 | Explain why failures become a mitigation ladder and how claims trace to artifacts. |
 | Close | 12 | 1:00 | Land the benchmark-design thesis. |
-| Buffer | backup | 1:30 | Use only if asked about grid size, quality caveats, or remaining work. |
+| Buffer | backup | 1:30 | In-envelope reserve; use only if asked about grid size, quality caveats, or remaining work. |
 
 If time is tight, cut Slide 10 down to one sentence and move mitigation details
 to backup. Do not cut Slide 9; the failure-taxonomy result is one of the
@@ -107,11 +107,11 @@ Say:
 | Slide | Proof object | Source |
 |---:|---|---|
 | 3 | Tool-domain table | `mcp_servers/`, `docs/data_pipeline.tex` |
-| 4 | Scenario-count status | `data/scenarios/`, PR #156, generator acceptance status |
+| 4 | Scenario-count status | `data/scenarios/`, `data/scenarios/validate_scenarios.py`, PR #156, generator acceptance status |
 | 5 | Artifact-contract diagram | `scripts/run_experiment.sh`, `benchmarks/cell_<X>/` |
 | 6 | Experiment matrix | `docs/experiment_matrix.md` |
 | 7 | Transport table | `results/metrics/notebook02_latency_summary.csv`, `results/metrics/experiment_matrix_summary.csv` |
-| 8 | Orchestration table | `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_pe_family_follow_on.csv` |
+| 8 | Orchestration table | `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, `results/metrics/experiment_matrix_summary.csv` |
 | 9 | Failure taxonomy | `results/metrics/failure_taxonomy_counts.csv`, `results/figures/failure_taxonomy_counts.svg` |
 | 10 | Mitigation ladder | `docs/mitigation_recovery_adjudication.md`, `results/metrics/mitigation_run_inventory.csv` |
 | 11 | Reproducibility map | `docs/validation_log.md`, `results/metrics/`, `results/figures/` |
@@ -136,7 +136,7 @@ Say:
 | Gate | Owner | Deck effect |
 |---|---|---|
 | PR #156 and generated scenarios | Tanisha/Akshat, Alex shepherd | Slide 4 can claim 30 validated scenarios only after this settles. |
-| Mitigation rerun rows | Alex | Slide 10 can become results-bearing only if `mitigation_before_after.csv` has real rows. |
+| Mitigation rerun rows | Alex | Slide 10 can become results-bearing only if header-only `results/metrics/mitigation_before_after.csv` gets real rows. |
 | Final paper figures | Alex + team inputs | Slides 7-9 should mirror the paper figures and captions. |
 | Overleaf/source paper freeze | Alex | Deck conclusion should match the final paper claim wording. |
 

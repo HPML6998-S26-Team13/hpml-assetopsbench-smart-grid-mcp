@@ -28,7 +28,8 @@ tables, source paths, and backup Q&A are in place. The remaining work is not
 | Backup Q&A | draft-ready | add Cell D / 70B only if promoted before freeze |
 
 Recommended target: 10-12 minutes plus Q&A. If time compresses, keep Slides
-1-9 and 12; shorten Slide 10 rather than cutting failure taxonomy.
+1-9 and 12; shorten Slide 10 (mitigation) rather than cutting Slide 9 (failure
+taxonomy).
 
 ## Deck Spine
 
