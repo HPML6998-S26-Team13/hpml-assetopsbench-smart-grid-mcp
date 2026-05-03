@@ -40,14 +40,14 @@ Two PR body drafts for IBM/AssetOpsBench (saved in `docs/upstream_pr_drafts/`):
 **Supporting points to articulate:**
 - **Why transformers specifically:** DGA dissolved gas analysis has a standardized fault classification method (IEC 60599:2022 Rogers Ratio) that produces machine-verifiable ground truth — exactly what a benchmark needs. Other industrial domains often lack this.
 - **Why now:** The IEC encoding (PR #149, merged) and scenario set (21 validated, targeting 30) are already exercised by 9 experimental cells across 2 orchestration families. Results are in. The domain port is ready, not speculative.
-- **Why MCP transport:** AOB's current ReAct/direct-function path doesn't expose the latency cost of the standardization layer. Our Cell A vs B comparison (1.44s mean MCP overhead, 9 cells of orchestration data) is the first published measurement of this tradeoff for industrial maintenance agents — directly relevant to any team considering MCP for enterprise deployment.
+- **Why MCP transport:** AOB's current ReAct/direct-function path doesn't expose the latency cost of the standardization layer. Our Cell A vs B comparison (1.44s p50 MCP overhead, 9 cells of orchestration data) is the first published measurement of this tradeoff for industrial maintenance agents — directly relevant to any team considering MCP for enterprise deployment.
 - **Why orchestration comparison matters for IBM:** Dhaval's own framing: Plan-Execute remains the preferred structured enterprise baseline (predictable resources, auditability). Verified PE + Self-Ask hitting 83.3% judge pass vs 33.3% for bare MCP baseline is the kind of number a practitioner can act on.
 
 **Key numbers to have ready (from the experiment matrix):**
 - 19 tools across 4 servers (IoT 4, FMSR 5, TSFM 4, WO 6)
 - 21 validated hand-crafted scenarios, 5 domain types, 3 difficulty levels
 - ZS (Verified PE + Self-Ask): 0.833 judge score, 83.3% pass rate — best condition
-- AT-I (direct) vs AT-M (MCP): 12.15s vs 13.09s mean — +7.8% overhead
+- AT-I (direct) vs AT-M (MCP): 12.15s vs 13.09s (p50) — +7.8% p50 overhead; mean overhead +1.20s (+9.8%)
 - Optimized serving (INT8/BF16 KV): 53% latency reduction in AaT cells
 
 **Deferred items to explicitly call out (not hide):**

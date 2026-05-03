@@ -7,23 +7,23 @@
 
 ## Data
 
-**Sources (all CC0 Kaggle):**
-- Power Transformers FDD & RUL → IoT sensor readings + RUL labels
-- DGA Fault Classification → dissolved gas records + fault labels
-- Smart Grid Fault Records → maintenance/fault event history
-- Transformer Health Index → supplemental FMSR features
-- Current & Voltage Monitoring → supplemental IoT time-series
+**Sources (5 Kaggle datasets; 3 are CC0, 2 have redistribution restrictions):**
+- Power Transformers FDD & RUL → IoT sensor readings + RUL labels *(CC0)*
+- DGA Fault Classification → dissolved gas records + fault labels *(CC0)*
+- Smart Grid Fault Records → maintenance/fault event history *(CC0)*
+- Transformer Health Index → supplemental FMSR features *(redistribution restrictions; local-only)*
+- Current & Voltage Monitoring → supplemental IoT time-series *(redistribution restrictions; local-only)*
 
 **Processed outputs (6 CSVs, all synthetic-safe):**
 
 | File | Rows | Key fields |
 |---|---|---|
 | `asset_metadata.csv` | 20 transformers (T-001–T-020) | name, manufacturer, voltage_class, rating_kva, health_status, rul_days |
-| `sensor_readings.csv` | ~14,400 readings (20 × ~720) | transformer_id, timestamp, sensor_id, value, unit |
+| `sensor_readings.csv` | 86,400 readings | transformer_id, timestamp, sensor_id, value, unit |
 | `dga_records.csv` | 20 records | H2, CH4, C2H2, C2H4, C2H6, CO, CO2 (ppm), fault_label |
-| `failure_modes.csv` | 7 modes | iec_code (N/PD/D1/D2/T1/T2/T3), severity, recommended_action |
-| `rul_labels.csv` | 20 records | rul_days, health_index, fdd_category |
-| `fault_records.csv` | 30 events | fault_type, maintenance_status, component_health, downtime_hrs |
+| `failure_modes.csv` | 6 modes | iec_code, severity, recommended_action |
+| `rul_labels.csv` | 620 records | rul_days, health_index, fdd_category |
+| `fault_records.csv` | 41 events | fault_type, maintenance_status, component_health, downtime_hrs |
 
 **No proprietary data shipped.** Class-origin Kaggle CSVs stay in team repo. Regenerable via `data/generate_synthetic.py`.
 
@@ -40,15 +40,15 @@
 
 **Transport modes:** MCP JSON-RPC stdio (Cells B/C/D/Y/Z) vs. direct Python callables (Cell A). Both surfaces backed by the same server logic.
 
-**IEC 60599:2022 encoding:** `analyze_dga` implements the Rogers Ratio fault table (4th ed., publication 66491) classifying dissolved gas profiles into 7 fault codes (N, PD, D1, D2, T1, T2, T3) with IEEE C57.104-2019 condition tiers (C1–C4).
+**IEC 60599:2022 encoding:** `analyze_dga` implements the Rogers Ratio fault table (4th ed., publication 66491) classifying dissolved gas profiles into IEC fault codes (N, PD, D1, D2, T1, T2, T3). It does not return IEEE C57.104-2019 condition tiers.
 
 ---
 
 ## Scenario Set
 
 - **21 hand-crafted scenarios** (SGT-001–SGT-020 + AOB-FMSR-001), validator-clean
-- **Coverage:** IoT (3), FMSR (4), TSFM (4), WO (4), Multi-domain (5), AOB-compat (1)
-- **Difficulty:** easy (5), medium (8), hard (8)
+- **Coverage:** IoT (4), FMSR (5), TSFM (3), WO (4), Multi-domain (5)
+- **Difficulty:** easy (6), medium (9), hard (6)
 - **Target:** 30+ by end of week (Akshat's generator-validation loop covers the remainder)
 - **Authoring contract:** no tool hints, no ratio/threshold leaks, no IEC code reveals in task text; all prompts under 80 words; ground truth uses `must_include` string criteria
 
@@ -69,7 +69,7 @@
 | ZSD | V-S-TPQ | Verified PE + Self-Ask | MCP + INT8/BF16 KV | 55.17 | 0.611 | 3/6 (50.0%) |
 
 **Key findings:**
-- MCP transport overhead (B − A): **+0.94s mean** per trial
+- MCP transport overhead (B − A): **+0.94s p50** per trial (+1.20s mean per notebook02_latency_summary.csv)
 - Best quality: ZS (Verified PE + Self-Ask) at 0.833 judge score, 83.3% pass rate
 - Optimized serving (C, D) cuts latency by 40–53% vs B but does not improve quality
 - Self-Ask consistently improves quality within each orchestration family (Y→YS, Z→ZS)
@@ -97,6 +97,6 @@
 
 ## Paper-safe caveats
 
-- DGA records use publicly-derived synthetic values; IEC fault labels are ground-truth from the Rogers Ratio method, not from physical measurement.
+- DGA records use publicly-derived synthetic values; stored `fault_label` values reflect intended synthetic ground truth, but not all records round-trip through `analyze_dga` consistently — downstream users should verify any asset's DGA label against the analyzer before treating it as benchmark ground truth.
 - First-capture results use 3 trials/cell; final canonical run targets 5 trials for publication.
 - ZSD degradation vs ZS is a first-capture artifact; the optimized-serving benefit is cleaner in AaT cells (C, D) where orchestration overhead is lower.
