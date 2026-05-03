@@ -1,0 +1,23 @@
+{
+  "id": "SGT-027",
+  "type": "WO",
+  "text": "An inspection on T-009 is reported as completed in the field with no abnormal condition observed. Locate the open work order tied to that asset and update its status to closed, recording that the inspection finished with a clean result.",
+  "category": "Work Order Lifecycle Closure",
+  "characteristic_form": "The answer should identify the open work order tied to T-009, perform the status update to a closed state, and confirm the closure note reflects an inspection completed with no abnormal findings.",
+  "asset_id": "T-009",
+  "expected_tools": [
+    "wo.list_work_orders",
+    "wo.update_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "open WO identified",
+      "status updated to closed",
+      "closure note recorded"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ]
+}

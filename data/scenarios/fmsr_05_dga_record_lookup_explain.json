@@ -1,0 +1,25 @@
+{
+  "id": "SGT-023",
+  "type": "FMSR",
+  "text": "Pull the dissolved gas analysis record on file for T-013 and explain what the gas profile suggests about the unit. Identify the dominant gases, then look up which failure mode in the catalogue best matches that gas signature.",
+  "category": "DGA Record Interpretation",
+  "characteristic_form": "The answer should report the stored DGA gas concentrations for T-013, identify which gases dominate the profile, and name the matching failure mode from the catalogue with its severity tier and recommended action.",
+  "asset_id": "T-013",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.search_failure_modes"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA gas values",
+      "dominant gases",
+      "matching failure mode",
+      "severity tier",
+      "recommended action"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

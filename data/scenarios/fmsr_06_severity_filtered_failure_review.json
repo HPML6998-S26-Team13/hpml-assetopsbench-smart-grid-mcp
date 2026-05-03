@@ -1,0 +1,21 @@
+{
+  "id": "SGT-024",
+  "type": "FMSR",
+  "text": "Operations is preparing a spare-parts and inspection plan focused on worst-case scenarios. From the failure mode catalogue, surface only the modes flagged at high or critical severity and pair each with its recommended maintenance action.",
+  "category": "Severity-Filtered Failure Mode Review",
+  "characteristic_form": "The answer should list every failure mode whose severity is either high or critical, give the descriptive label or IEC code for each, and pair it with the recommended maintenance action drawn from the catalogue.",
+  "expected_tools": [
+    "fmsr.list_failure_modes"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "high severity modes",
+      "critical severity modes",
+      "recommended action per mode"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

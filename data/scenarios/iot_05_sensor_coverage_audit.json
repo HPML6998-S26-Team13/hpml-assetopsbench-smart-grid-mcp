@@ -1,0 +1,25 @@
+{
+  "id": "SGT-021",
+  "type": "IoT",
+  "text": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+  "category": "Sensor Coverage Audit",
+  "characteristic_form": "The answer should report the transformer's voltage class and rating, list all installed sensor IDs, and summarize whether thermal channels (e.g. winding/oil temperature) and electrical channels (e.g. load current, voltage) are both represented.",
+  "asset_id": "T-007",
+  "expected_tools": [
+    "iot.get_asset_metadata",
+    "iot.list_sensors"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "voltage class",
+      "rating",
+      "sensor list",
+      "thermal sensor coverage",
+      "electrical sensor coverage"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "IoT"
+  ]
+}

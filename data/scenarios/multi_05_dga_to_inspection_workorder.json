@@ -1,0 +1,27 @@
+{
+  "id": "SGT-029",
+  "type": "Multi",
+  "text": "T-019 has just had a fresh oil sample analysed and the DGA record is now on file. Review that gas profile, identify the most likely failure mode it points to, and convert that finding into a corrective inspection work order whose priority reflects the implied severity.",
+  "category": "DGA Finding to Inspection Work Order",
+  "characteristic_form": "The answer should report the stored DGA values for T-019, name the matching failure mode and its severity tier, and create a work order whose priority and scope are explicitly justified by the DGA-derived severity.",
+  "asset_id": "T-019",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.search_failure_modes",
+    "wo.create_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA gas values",
+      "matching failure mode",
+      "severity tier",
+      "work order created",
+      "priority justification"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR",
+    "WO"
+  ]
+}
