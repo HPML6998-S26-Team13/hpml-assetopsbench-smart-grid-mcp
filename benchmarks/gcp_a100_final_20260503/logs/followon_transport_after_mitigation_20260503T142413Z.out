@@ -1,0 +1,2 @@
+END{print: -c: line 1: unexpected EOF while looking for matching `)'
+END{print: -c: line 2: syntax error: unexpected end of file

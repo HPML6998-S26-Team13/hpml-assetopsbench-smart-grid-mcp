@@ -1,0 +1,15 @@
+label	config	run_id	status	started_at	finished_at
+A	configs/final_matrix_5x6/A_aat_direct.env	final5x6_a100_20260503T090200Z_A_final5x6_aat_direct	started	2026-05-03T09:02:10Z	
+A	configs/final_matrix_5x6/A_aat_direct.env	final5x6_a100_20260503T090200Z_A_final5x6_aat_direct	complete	2026-05-03T09:02:10Z	2026-05-03T09:10:35Z
+B	configs/final_matrix_5x6/B_aat_mcp_baseline.env	final5x6_a100_20260503T090200Z_B_final5x6_aat_mcp_baseline	started	2026-05-03T09:10:35Z	
+B	configs/final_matrix_5x6/B_aat_mcp_baseline.env	final5x6_a100_20260503T090200Z_B_final5x6_aat_mcp_baseline	complete	2026-05-03T09:10:35Z	2026-05-03T09:18:31Z
+C	configs/final_matrix_5x6/C_aat_mcp_optimized.env	final5x6_a100_20260503T090200Z_C_final5x6_aat_mcp_optimized	started	2026-05-03T09:18:31Z	
+C	configs/final_matrix_5x6/C_aat_mcp_optimized.env	final5x6_a100_20260503T090200Z_C_final5x6_aat_mcp_optimized	complete	2026-05-03T09:18:31Z	2026-05-03T09:26:24Z
+Y	configs/final_matrix_5x6/Y_pe_mcp_baseline.env	final5x6_a100_20260503T090200Z_Y_final5x6_exp2_cell_Y_pe_mcp_baseline	started	2026-05-03T09:26:24Z	
+Y	configs/final_matrix_5x6/Y_pe_mcp_baseline.env	final5x6_a100_20260503T090200Z_Y_final5x6_exp2_cell_Y_pe_mcp_baseline	complete	2026-05-03T09:26:24Z	2026-05-03T09:28:30Z
+YS	configs/final_matrix_5x6/YS_pe_self_ask_mcp_baseline.env	final5x6_a100_20260503T090200Z_YS_final5x6_exp2_cell_Y_pe_self_ask_mcp_baseline	started	2026-05-03T09:28:30Z	
+YS	configs/final_matrix_5x6/YS_pe_self_ask_mcp_baseline.env	final5x6_a100_20260503T090200Z_YS_final5x6_exp2_cell_Y_pe_self_ask_mcp_baseline	complete	2026-05-03T09:28:30Z	2026-05-03T09:31:43Z
+Z	configs/final_matrix_5x6/Z_verified_pe_mcp_baseline.env	final5x6_a100_20260503T090200Z_Z_final5x6_exp2_cell_Z_verified_pe_mcp_baseline	started	2026-05-03T09:31:44Z	
+Z	configs/final_matrix_5x6/Z_verified_pe_mcp_baseline.env	final5x6_a100_20260503T090200Z_Z_final5x6_exp2_cell_Z_verified_pe_mcp_baseline	complete	2026-05-03T09:31:44Z	2026-05-03T09:34:54Z
+ZS	configs/final_matrix_5x6/ZS_verified_pe_self_ask_mcp_baseline.env	final5x6_a100_20260503T090200Z_ZS_final5x6_exp2_cell_Z_verified_pe_self_ask_mcp_baseline	started	2026-05-03T09:34:54Z	
+ZS	configs/final_matrix_5x6/ZS_verified_pe_self_ask_mcp_baseline.env	final5x6_a100_20260503T090200Z_ZS_final5x6_exp2_cell_Z_verified_pe_self_ask_mcp_baseline	complete	2026-05-03T09:34:54Z	2026-05-03T09:38:05Z

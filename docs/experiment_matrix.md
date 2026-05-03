@@ -13,9 +13,34 @@ This note keeps the experiment matrix honest and small. It distinguishes:
 
 ## Short answer
 
-Current first-capture results table. A machine-readable copy lives at
-`results/metrics/experiment_matrix_summary.csv`; the focused optimized-serving
-follow-on deltas live at `results/metrics/optimized_serving_ablation.csv`.
+The current final-six GCP A100 capture is the cleanest paper-depth evidence
+set: 6 selected scenarios x 5 trials per row, all judged, with provider/GPU
+provenance preserved in the raw run artifacts. A machine-readable copy lives at
+`results/metrics/gcp_a100_final_matrix_summary.csv`.
+
+| Legacy | Display code | Meaning | Run | Group | N | Judge score | Judge pass | p50 latency | p95 latency |
+|---|---|---|---|---|---:|---:|---:|---:|---:|
+| A | AT-I | Agent-as-Tool direct Python tools | `final5x6_a100_20260503T090200Z_A_final5x6_aat_direct` | matrix | 30 | 0.306 | 6/30 (20.0%) | 8.51 | 20.73 |
+| B | AT-M | Agent-as-Tool MCP baseline | `final5x6_a100_20260503T090200Z_B_final5x6_aat_mcp_baseline` | matrix | 30 | 0.361 | 3/30 (10.0%) | 12.22 | 13.99 |
+| C | AT-TP | Agent-as-Tool optimized MCP transport + prefix cache | `final5x6_a100_20260503T090200Z_C_final5x6_aat_mcp_optimized` | matrix | 30 | 0.339 | 6/30 (20.0%) | 12.01 | 14.58 |
+| D | AT-TPQ | Agent-as-Tool optimized MCP transport + INT8/BF16/fp8 KV | `final5x6_extra_a100_20260503T115304Z_D_final5x6_aat_mcp_model_optimized` | matrix | 30 | 0.328 | 3/30 (10.0%) | 11.38 | 12.87 |
+| Y | PE-M | Plan-Execute MCP baseline | `final5x6_a100_20260503T090200Z_Y_final5x6_exp2_cell_Y_pe_mcp_baseline` | matrix | 30 | 0.644 | 17/30 (56.7%) | 29.62 | 60.74 |
+| YS | PE-S-M | Plan-Execute + Self-Ask MCP baseline | `final5x6_a100_20260503T090200Z_YS_final5x6_exp2_cell_Y_pe_self_ask_mcp_baseline` | matrix | 30 | 0.611 | 17/30 (56.7%) | 30.32 | 61.58 |
+| Z | V-M | Verified PE MCP baseline | `final5x6_a100_20260503T090200Z_Z_final5x6_exp2_cell_Z_verified_pe_mcp_baseline` | matrix | 30 | 0.744 | 22/30 (73.3%) | 37.92 | 94.93 |
+| ZS | V-S-M | Verified PE + Self-Ask MCP baseline | `final5x6_a100_20260503T090200Z_ZS_final5x6_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | matrix | 30 | 0.611 | 15/30 (50.0%) | 38.38 | 95.18 |
+| ZSD | V-S-TPQ | Verified PE + Self-Ask + optimized MCP/model stack | `final5x6_extra_a100_20260503T115304Z_ZSD_final5x6_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized` | matrix | 30 | 0.583 | 13/30 (43.3%) | 26.76 | 44.64 |
+| YS_TP | PE-S-TP | Plan-Execute + Self-Ask + optimized MCP transport | `final5x6_followon_transport_a100_20260503T142516Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized` | follow-on | 30 | 0.611 | 17/30 (56.7%) | 20.26 | 41.70 |
+| ZS_TP | V-S-TP | Verified PE + Self-Ask + optimized MCP transport | `final5x6_followon_transport_a100_20260503T142516Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized` | follow-on | 30 | 0.628 | 16/30 (53.3%) | 27.30 | 75.22 |
+
+All rows use `openai/Llama-3.1-8B-Instruct` on the final-six scenario set:
+`SGT-006`, `SGT-009`, `SGT-010`, `SGT-012`, `SGT-014`, and `SGT-018`.
+Latency should be compared within this GCP A100 cohort, or against Insomnia
+only with explicit environment labels.
+
+Historical Insomnia first-capture results table. A machine-readable copy lives
+at `results/metrics/experiment_matrix_summary.csv`; the focused
+optimized-serving follow-on deltas live at
+`results/metrics/optimized_serving_ablation.csv`.
 
 | Legacy | Display code | Meaning | Run | Status | N | Canonical | Success | p50 latency | p95 latency | Judge score | Judge pass |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -143,8 +168,9 @@ Self-Ask is a **runner variant**, not a new official cell ID.
 | Verified PE without Self-Ask | `Z` with `ENABLE_SELF_ASK=0` |
 
 This matters for both notebooks and the paper. We should present Self-Ask as a
-mitigation / ablation toggle on top of PE-family methods, not as a whole new
-benchmark axis unless it becomes central enough to deserve that promotion.
+PE-family ablation/family-lane toggle: visible as `YS` and `ZS` in matrix
+tables, but not expanded into a full new benchmark axis across every transport
+and mitigation condition.
 
 This also means the right near-term Experiment 2 order is:
 
@@ -164,22 +190,22 @@ For the current missing-evidence ladder, the dense slice is:
 
 ```text
 family lane: Y + Self-Ask, Z + Self-Ask
-mitigation rung: baseline, detection guard, repair/replan recovery
+mitigation rung: baseline, detection guard, repair/replan recovery, adjudication
 scenario: data/scenarios/multi_*.json
 trial: 1..TRIALS
 ```
 
-The baseline rung already exists through `8998341` and `8998343`. The #66
-runner plan therefore executes only the two new mitigation rungs for the two
-family lanes, then records the outcome in
-`results/metrics/mitigation_before_after.csv`.
+Earlier plans reused the historical baseline rung from `8998341` and `8998343`.
+The current GCP A100 #66 run instead executes fresh matched baselines plus the
+three post-baseline mitigation rungs for the two family lanes, then records the
+outcome in `results/metrics/mitigation_before_after.csv`.
 
 This is closer to a sparse tensor slice than a new all-cells matrix. If the
 scenario set later expands to 30 scenarios and the final trial target becomes
 5, the mitigation slice is:
 
 ```text
-2 family lanes x 3 rungs x 30 scenarios x 5 trials
+2 family lanes x 4 rungs x 30 scenarios x 5 trials
 ```
 
 It is not:

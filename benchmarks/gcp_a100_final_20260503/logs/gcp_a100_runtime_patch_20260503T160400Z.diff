@@ -1,0 +1,119 @@
+diff --git a/scripts/orchestration_utils.py b/scripts/orchestration_utils.py
+index bcafc05..623b0e6 100644
+--- a/scripts/orchestration_utils.py
++++ b/scripts/orchestration_utils.py
+@@ -647,7 +647,7 @@ def effective_server_paths(entries: list[str], repo_root: Path) -> dict[str, Pat
+ def build_executor(llm, server_paths: dict[str, Path], *, mcp_mode: str = "baseline"):
+     """Build the PE-family step executor for the requested MCP mode."""
+     if mcp_mode == "baseline":
+-        from plan_execute.executor import Executor
++        from agent.plan_execute.executor import Executor
+ 
+         return Executor(llm, server_paths)
+     if mcp_mode == "optimized":
+@@ -838,8 +838,8 @@ class ReusedMCPExecutor:
+         question: str,
+         tool_schema: str = "",
+     ):
+-        from plan_execute.executor import _extract_content, _resolve_args_with_llm
+-        from plan_execute.models import StepResult
++        from agent.plan_execute.executor import _extract_content, _resolve_args_with_llm
++        from agent.plan_execute.models import StepResult
+ 
+         if step.server not in self._server_paths:
+             return StepResult(
+@@ -901,7 +901,7 @@ def build_planning_question(question: str) -> str:
+ async def build_tool_catalog(
+     server_paths: dict[str, Path],
+ ) -> dict[str, dict[str, dict[str, str]]]:
+-    from plan_execute.executor import _list_tools
++    from agent.plan_execute.executor import _list_tools
+ 
+     catalog: dict[str, dict[str, dict[str, str]]] = {}
+     for name, path in server_paths.items():
+@@ -1530,7 +1530,7 @@ def generate_suffix_plan(planner, replan_question: str, descriptions: dict[str,
+ 
+ 
+ def renumber_plan(plan, offset: int):
+-    from plan_execute.models import Plan, PlanStep
++    from agent.plan_execute.models import Plan, PlanStep
+ 
+     renumbered_steps = []
+     for step in plan.steps:
+diff --git a/scripts/plan_execute_self_ask_runner.py b/scripts/plan_execute_self_ask_runner.py
+index 2f4f32c..dd01ff0 100644
+--- a/scripts/plan_execute_self_ask_runner.py
++++ b/scripts/plan_execute_self_ask_runner.py
+@@ -3,6 +3,7 @@ from __future__ import annotations
+ import asyncio
+ import json
+ import logging
++import os
+ from types import SimpleNamespace
+ 
+ from orchestration_utils import (
+@@ -58,7 +59,7 @@ async def _run(args) -> None:
+     bootstrap_aob(aob_path)
+     preflight_aob_runtime_dependencies()
+ 
+-    from plan_execute.planner import Planner
++    from agent.plan_execute.planner import Planner
+ 
+     llm = build_llm(args.model_id)
+     server_paths = effective_server_paths(args.servers, repo_root)
+@@ -71,7 +72,15 @@ async def _run(args) -> None:
+     repair_attempts_by_target = {}
+ 
+     try:
+-        self_ask = maybe_self_ask(args.question, llm)
++        if os.environ.get("SMARTGRID_DISABLE_SELF_ASK") == "1":
++            self_ask = SimpleNamespace(
++                needs_self_ask=False,
++                clarifying_questions=[],
++                assumptions=[],
++                augmented_question=args.question,
++            )
++        else:
++            self_ask = maybe_self_ask(args.question, llm)
+         descriptions = await executor.get_server_descriptions()
+         tool_catalog = await build_tool_catalog_for_executor(executor, server_paths)
+         planner_descriptions = build_planner_descriptions(descriptions, tool_catalog)
+diff --git a/scripts/run_experiment.sh b/scripts/run_experiment.sh
+index 37fbc54..ee2f56c 100644
+--- a/scripts/run_experiment.sh
++++ b/scripts/run_experiment.sh
+@@ -632,7 +632,7 @@ PY
+ run_plan_execute_trial() {
+   local prompt="$1"
+   local out_path="$2"
+-  if [ "$ENABLE_SELF_ASK" = "1" ]; then
++  if [ "$ENABLE_SELF_ASK" = "1" ] || [ "${PLAN_EXECUTE_REPO_LOCAL:-0}" = "1" ]; then
+     local -a wrapper_cmd=(
+       "$AOB_PYTHON"
+       "$REPO_ROOT/scripts/plan_execute_self_ask_runner.py"
+@@ -646,7 +646,11 @@ run_plan_execute_trial() {
+     fi
+     wrapper_cmd+=("${SERVER_ARGS[@]}")
+     wrapper_cmd+=("$prompt")
+-    run_json_stdout_trial "$out_path" "$REPO_ROOT" "${wrapper_cmd[@]}"
++    if [ "$ENABLE_SELF_ASK" != "1" ]; then
++      SMARTGRID_DISABLE_SELF_ASK=1 run_json_stdout_trial "$out_path" "$REPO_ROOT" "${wrapper_cmd[@]}"
++    else
++      run_json_stdout_trial "$out_path" "$REPO_ROOT" "${wrapper_cmd[@]}"
++    fi
+     return
+   fi
+   local -a cmd=(uv run plan-execute --json --model-id "$MODEL_ID")
+diff --git a/scripts/verified_pe_runner.py b/scripts/verified_pe_runner.py
+index f8cdddc..523c32d 100644
+--- a/scripts/verified_pe_runner.py
++++ b/scripts/verified_pe_runner.py
+@@ -88,7 +88,7 @@ async def _run(args) -> None:
+     bootstrap_aob(aob_path)
+     preflight_aob_runtime_dependencies()
+ 
+-    from plan_execute.planner import Planner
++    from agent.plan_execute.planner import Planner
+ 
+     llm = build_llm(args.model_id)
+     server_paths = effective_server_paths(args.servers, repo_root)

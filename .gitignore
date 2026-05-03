@@ -20,6 +20,7 @@ build/
 
 # Data (large files -- track with git-lfs or download separately)
 data/raw/
+gcp_artifacts/
 *.csv
 *.parquet
 *.jsonl

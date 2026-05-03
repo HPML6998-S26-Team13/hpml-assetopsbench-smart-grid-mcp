@@ -12,50 +12,62 @@ the completed artifacts afterward.
 Produce the evidence needed to populate
 `results/metrics/mitigation_before_after.csv` for #66:
 
-1. detection-only guarded reruns for `Y + Self-Ask` and `Z + Self-Ask`
-2. recovery reruns for the same two family lanes
-3. optional adjudication reruns for the same two family lanes after recovery
-   rows exist or after Alex explicitly promotes adjudication
-4. judge rows for every new run
-5. run IDs, artifact paths, and provenance sufficient for #35/#36/#64/#66
+1. matched baseline reruns for `Y + Self-Ask` and `Z + Self-Ask`
+2. detection-only guarded reruns for the same two family lanes
+3. recovery reruns for the same two family lanes
+4. adjudication reruns for the same two family lanes
+5. judge rows for every run in all four tiers
+6. run IDs, artifact paths, and provenance sufficient for #35/#36/#64/#66
 
-This is evidence work, not new mitigation implementation. The guard and
-recovery code are already on `team13/main`; the adjudication rung is now
-runnable on this branch and should be treated as pending rerun evidence until
-merged and measured.
+This is evidence work, not new mitigation implementation. The baseline plus
+three post-baseline mitigation rungs are covered here: detection guard,
+retry/replan recovery, and explicit fault/risk adjudication.
+
+Status as of 2026-05-03: the GCP A100 four-tier cohort
+`mitigation_final6_4tier_a100_20260503T121709Z` completed and was judged for all
+8 rows, 240 trial JSONs, and 240 judge rows. The measured row inventory is in
+`results/metrics/gcp_a100_mitigation_4tier_summary.csv`; the before/after
+interpretation table remains a deliberate follow-up, not an automatic copy of
+the raw cohort summary.
 
 ## Current anchors
 
-| Family lane | Baseline run | Detection config | Recovery config | Adjudication config |
+| Family lane | Baseline config | Detection config | Recovery config | Adjudication config |
 |---|---|---|---|---|
-| `Y + Self-Ask` | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_pe_self_ask.env` | `configs/mitigation/explicit_fault_risk_adjudication_pe_self_ask.env` |
-| `Z + Self-Ask` | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` | `configs/mitigation/missing_evidence_repair_verified_pe_self_ask.env` | `configs/mitigation/explicit_fault_risk_adjudication_verified_pe_self_ask.env` |
+| `Y + Self-Ask` | `configs/mitigation_final6_5x6/YS_BASELINE.env` | `configs/mitigation_final6_5x6/YS_GUARD.env` | `configs/mitigation_final6_5x6/YS_REPAIR.env` | `configs/mitigation_final6_5x6/YS_ADJ.env` |
+| `Z + Self-Ask` | `configs/mitigation_final6_5x6/ZS_BASELINE.env` | `configs/mitigation_final6_5x6/ZS_GUARD.env` | `configs/mitigation_final6_5x6/ZS_REPAIR.env` | `configs/mitigation_final6_5x6/ZS_ADJ.env` |
 
-The current configs use:
+The source templates remain under `configs/mitigation/`. The current GCP A100
+operator copies live under `configs/mitigation_final6_5x6/` in the run checkout
+and must be preserved with the artifact package if they are not committed before
+the run.
+
+The current four-tier GCP cohort uses:
 
 | Field | Value |
 |---|---|
 | model | `openai/Llama-3.1-8B-Instruct` |
-| scenario glob | `data/scenarios/multi_*.json` |
-| current scenario files | `multi_01_end_to_end_fault_response.json`, `multi_02_dga_to_workorder_pipeline.json` |
-| trials | `3` |
+| scenario set | final-six selected scenarios |
+| scenario files | `multi_01_end_to_end_fault_response.json`, `multi_02_dga_to_workorder_pipeline.json`, `fmsr_04_dga_full_diagnostic_chain.json`, `iot_04_load_current_overload_check.json`, `tsfm_02_hotspot_temp_anomaly.json`, `wo_04_fault_record_downtime_update.json` |
+| trials | `5` |
 | transport | MCP baseline |
-| detection flag | `ENABLE_MISSING_EVIDENCE_GUARD=1` |
-| recovery flag | `ENABLE_MISSING_EVIDENCE_REPAIR=1` for recovery configs only |
+| baseline flag | no mitigation flags enabled |
+| detection flag | `ENABLE_MISSING_EVIDENCE_GUARD=1` for guard/recovery/adjudication configs |
+| recovery flag | `ENABLE_MISSING_EVIDENCE_REPAIR=1` for recovery/adjudication configs |
 | adjudication flag | `ENABLE_EXPLICIT_FAULT_RISK_ADJUDICATION=1` for adjudication configs only |
 
-With the current two-scenario glob and `TRIALS=3`, each config should produce
-six per-trial JSON files.
+With the final-six scenario set and `TRIALS=5`, each config should produce
+30 per-trial JSON files.
 
 ## Compute choice
 
-Use GCP if Insomnia remains drained or unreliable. This is acceptable for #66
-because the immediate target is mitigation behavior and artifact quality, not a
-clean Insomnia-vs-GCP latency claim.
+Use the GCP A100 path while Insomnia remains drained or unreliable. This is
+acceptable for #66 because the immediate target is mitigation behavior and
+artifact quality, not a clean Insomnia-vs-GCP latency claim.
 
-Do not silently compare GCP L4 latency against Insomnia A6000/A100 latency as
-if they were the same hardware class. Record the host, GPU, git SHA, config
-path, and dirty state in the run handoff.
+Do not silently compare GCP A100 latency against Insomnia A6000/A100 latency as
+if they were the same hardware and environment. Record the provider, zone,
+host, GPU, git SHA, config path, and dirty state in the run handoff.
 
 ## GCP config handling
 
@@ -111,20 +123,34 @@ If any of these fields change, the run is no longer directly comparable to the
 baseline anchors above. Mark it `incomparable` in the handoff package unless
 Alex explicitly approves a new comparison baseline.
 
+## Runtime patch dependency
+
+The May 3 GCP A100 evidence package was captured from a VM checkout with the
+runtime patch preserved at
+`benchmarks/gcp_a100_final_20260503/logs/gcp_a100_runtime_patch_20260503T160400Z.diff`.
+That patch updates PE-family imports from `plan_execute.*` to
+`agent.plan_execute.*` for the current AssetOpsBench package layout and routes
+vanilla `Y` through the repo-local PE wrapper. A fresh GCP checkout must either
+apply that patch or provide an equivalent `agent.plan_execute` import path
+before rerunning the GCP A100 PE/Verified-PE cohorts; otherwise the run can fail
+at import/CLI argument boundaries before producing trajectories.
+
 ## Execution order
 
-Run in this order. Do not run recovery before detection-only rows exist, and do
-not run adjudication before recovery rows exist unless Alex explicitly promotes
-that comparison.
+Run in this order. The current overnight plan executes all four tiers, including
+fresh matched baselines, so the mitigation comparison does not depend on older
+Insomnia or GCP L4 evidence.
 
 | Order | Lane | Config | Purpose |
 |---:|---|---|---|
-| 1 | `Y + Self-Ask + guard` | `missing_evidence_guard_pe_self_ask.env` | Count unsupported clean completions in the PE+Self-Ask lane. |
-| 2 | `Z + Self-Ask + guard` | `missing_evidence_guard_verified_pe_self_ask.env` | Count unsupported clean completions in the strongest PE-family lane. |
-| 3 | `Y + Self-Ask + repair` | `missing_evidence_repair_pe_self_ask.env` | Test whether bounded retry can repair Y+SA evidence gaps inside the same trial. |
-| 4 | `Z + Self-Ask + repair` | `missing_evidence_repair_verified_pe_self_ask.env` | Test whether detector-driven retry / suffix replan improves Z+SA outcomes. |
-| 5 | `Y + Self-Ask + adjudication` | `explicit_fault_risk_adjudication_pe_self_ask.env` | Test whether structured fault/risk adjudication changes Y+SA finalization after evidence repair. |
-| 6 | `Z + Self-Ask + adjudication` | `explicit_fault_risk_adjudication_verified_pe_self_ask.env` | Test whether structured fault/risk adjudication changes the strongest PE-family lane after evidence repair. |
+| 1 | `Y + Self-Ask + baseline` | `YS_BASELINE.env` | Establish the matched unmitigated PE+Self-Ask baseline on the final-six A100 environment. |
+| 2 | `Z + Self-Ask + baseline` | `ZS_BASELINE.env` | Establish the matched unmitigated Verified PE+Self-Ask baseline on the same environment. |
+| 3 | `Y + Self-Ask + guard` | `YS_GUARD.env` | Count unsupported clean completions in the PE+Self-Ask lane. |
+| 4 | `Z + Self-Ask + guard` | `ZS_GUARD.env` | Count unsupported clean completions in the strongest PE-family lane. |
+| 5 | `Y + Self-Ask + repair` | `YS_REPAIR.env` | Test whether bounded retry can repair Y+SA evidence gaps inside the same trial. |
+| 6 | `Z + Self-Ask + repair` | `ZS_REPAIR.env` | Test whether detector-driven retry / suffix replan improves Z+SA outcomes. |
+| 7 | `Y + Self-Ask + adjudication` | `YS_ADJ.env` | Test whether structured fault/risk adjudication changes Y+SA finalization after evidence repair. |
+| 8 | `Z + Self-Ask + adjudication` | `ZS_ADJ.env` | Test whether structured fault/risk adjudication changes the strongest PE-family lane after evidence repair. |
 
 The recovery flags do not increase `TRIALS`. They allow at most two internal
 repair attempts per trial, with at most one retry per unresolved evidence
@@ -137,21 +163,23 @@ MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS_PER_TARGET=1
 
 ## Run commands
 
-On GCP, run directly from the repo checkout, not through Slurm:
+On GCP, run the four-tier cohort through the batch wrapper so skip/resume,
+manifest capture, and per-row judging stay consistent:
 
 ```bash
-bash scripts/run_experiment.sh <gcp-adjusted-config>
+export COHORT_TSV=configs/mitigation_final6_5x6/cohort_4tier.tsv
+export SMARTGRID_BATCH_ID=mitigation_final6_4tier_a100_<UTC>
+export PLAN_EXECUTE_REPO_LOCAL=1
+export AOB_PYTHON=/home/wax/AssetOpsBench/.venv/bin/python
+
+bash scripts/run_gcp_context_batch.sh --resume-batch "$SMARTGRID_BATCH_ID"
 ```
 
-For example:
+If a row must be repaired manually, run the same config directly from the repo
+checkout and then judge that run directory:
 
 ```bash
-bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_guard_pe_self_ask.env
-bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_guard_verified_pe_self_ask.env
-bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_repair_pe_self_ask.env
-bash scripts/run_experiment.sh configs/mitigation/gcp_missing_evidence_repair_verified_pe_self_ask.env
-bash scripts/run_experiment.sh configs/mitigation/gcp_explicit_fault_risk_adjudication_pe_self_ask.env
-bash scripts/run_experiment.sh configs/mitigation/gcp_explicit_fault_risk_adjudication_verified_pe_self_ask.env
+bash scripts/run_experiment.sh configs/mitigation_final6_5x6/YS_REPAIR.env
 ```
 
 If running on Insomnia instead, submit the same configs through the normal
@@ -169,7 +197,7 @@ After each run, verify:
    - `latencies.jsonl`
    - `harness.log`
    - `vllm.log`
-   - six `*_runNN.json` files for the current two-scenario, three-trial setup
+   - 30 `*_runNN.json` files for the final-six, five-trial setup
 3. `meta.json` records the real git SHA, config path, host, GPU, vLLM version,
    CUDA version, and NVIDIA driver version. If any runtime version is missing
    from `meta.json`, capture it in the handoff notes.
@@ -194,7 +222,8 @@ find benchmarks/cell_Z_hybrid/raw/<run-id> -maxdepth 1 -name '*_run[0-9][0-9].js
 
 ## Judge pass
 
-After each run completes, score the run directory:
+The batch wrapper judges each row after capture. If judging must be repeated
+manually, score the run directory:
 
 ```bash
 python scripts/judge_trajectory.py \
@@ -218,7 +247,17 @@ The judge output must join back on:
 - `trial_index`
 
 Do not populate before/after rows until judge rows exist or the row is clearly
-marked as unjudged / partial.
+marked as unjudged / partial. Each tier should have 60 judge rows total:
+
+```text
+2 family lanes x 6 scenarios x 5 trials = 60
+```
+
+The full four-tier mitigation cohort should have 240 judge rows:
+
+```text
+2 family lanes x 4 tiers x 6 scenarios x 5 trials = 240
+```
 
 ## Handoff package
 
@@ -261,10 +300,12 @@ Expected interpretation:
   itself; it means unsafe confident completions are no longer counted as clean.
 - Recovery should be judged against detection-only, not directly against the
   unguarded baseline.
+- Adjudication should be judged against recovery and reported as a separate
+  finalization-policy rung, not folded into recovery.
 - The useful ladder is:
 
 ```text
-baseline -> detection guard -> repair/replan recovery
+baseline -> detection guard -> repair/replan recovery -> adjudication
 ```
 
 Adjudication is now an available rung, but it should still be interpreted
@@ -291,20 +332,23 @@ mitigation_rung = baseline | detection_guard | repair_replan | adjudication
 For #66, the dense part of the overlay is intentionally small:
 
 ```text
-2 family lanes x 3 measured rungs x 2 scenarios x 3 trials
+2 family lanes x 4 measured rungs x 6 scenarios x 5 trials
 ```
 
-The baseline rung already exists, so the runner only needs to execute:
+The current GCP A100 run executes the baseline rung too, which keeps the four
+tiers matched on provider, GPU, scenario set, trial count, and runtime patch
+state:
 
 ```text
-2 family lanes x 3 new rungs x 2 scenarios x 3 trials = 36 new trial JSONs
+2 family lanes x 4 rungs x 6 scenarios x 5 trials = 240 trial JSONs
 ```
 
-If the scenario set later expands to 30 scenarios and the final trial target
-becomes 5, that becomes:
+If the baseline rung is intentionally reused from an already judged, exactly
+matched core run, mark that reuse explicitly in the handoff and execute only
+the three post-baseline rungs:
 
 ```text
-2 family lanes x 3 rungs x 30 scenarios x 5 trials
+2 family lanes x 3 post-baseline rungs x 6 scenarios x 5 trials = 180 trial JSONs
 ```
 
 That is a sparse tensor slice, not a reason to run every mitigation against

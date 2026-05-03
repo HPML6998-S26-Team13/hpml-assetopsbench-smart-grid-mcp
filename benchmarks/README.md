@@ -18,8 +18,11 @@ benchmarks/
 ├── cell_B_mcp_baseline/   # shared AaT baseline cell for Experiment 1 and 2
 ├── cell_C_mcp_optimized/  # optimized MCP path for Experiment 1
 ├── cell_Y_plan_execute/   # Plan-Execute on MCP baseline (Experiment 2 core)
-└── cell_Z_hybrid/         # Cell Z / Verified PE follow-on (legacy dir name kept for compatibility)
+├── cell_Z_hybrid/         # Cell Z / Verified PE follow-on (legacy dir name kept for compatibility)
     # each cell dir keeps the same config.json / raw/ / summary.json shape
+└── gcp_a100_final_20260503/
+    ├── logs/              # cohort-level GCP driver logs, manifests, runtime patch, nvidia-smi
+    └── summary/           # compact pulled-back A100 matrix and mitigation views
 ```
 
 ## Conventions
@@ -31,6 +34,10 @@ benchmarks/
 - **Summary files** are regenerated from `raw/` via a notebook in `notebooks/` — never edit by hand
 - **Before committing a benchmark run**, make sure the corresponding config + summary are also committed so the run is reproducible
 - **What goes here vs. `results/`:** `benchmarks/` holds the *raw, untransformed* outputs of measurement runs. `results/` holds *curated, publication-ready* metrics derived from those benchmarks. The bridge is notebooks.
+- **Cohort-level provenance:** when a cloud batch spans multiple cell
+  directories, keep the run directories under their normal cells and preserve
+  cohort manifests, driver logs, runtime diffs, and hardware snapshots under a
+  cohort directory such as `benchmarks/gcp_a100_final_20260503/`.
 - **Raw logs are intentionally unsanitized.** Files such as `harness.log` and
   `vllm.log` preserve the runner's original stdout/stderr, including ANSI
   escape sequences, debug output, and trailing whitespace. Do not use
