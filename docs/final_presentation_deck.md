@@ -290,7 +290,8 @@ verification machinery to avoid unsupported final answers."
 Source:
 
 `results/metrics/notebook03_orchestration_comparison.csv`,
-`results/metrics/notebook03_self_ask_ablation.csv`
+`results/metrics/notebook03_self_ask_ablation.csv`,
+`results/metrics/experiment_matrix_summary.csv`
 
 Speaker note addendum:
 
