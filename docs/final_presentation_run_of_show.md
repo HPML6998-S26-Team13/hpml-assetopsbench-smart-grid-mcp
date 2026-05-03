@@ -8,6 +8,11 @@ This is the production companion for `docs/final_presentation_deck.md`. The deck
 already has slide-by-slide content; this file turns it into a presentation plan
 with timing, proof objects, and final build gates.
 
+Current editable PPTX draft:
+`reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
+It is a reviewable build, not the final submitted deck, until the open gates at
+the end of this file clear.
+
 ## Presentation Goal
 
 In one class presentation, make three ideas stick:
@@ -118,7 +123,10 @@ Say:
 
 ## PowerPoint Build Checklist
 
-- [ ] Convert `docs/final_presentation_deck.md` into the class deck template.
+- [x] Create a first editable PPTX build from
+      `docs/final_presentation_deck.md`.
+- [ ] Decide whether to keep the artifact-tool visual system or convert into
+      the class deck template before submission.
 - [ ] Use one claim per slide; move extra bullets into speaker notes.
 - [ ] Add source footer to every result slide.
 - [ ] Insert `results/figures/failure_taxonomy_counts.svg` and

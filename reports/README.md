@@ -1,6 +1,6 @@
 # reports/
 
-*Last updated: 2026-04-21*
+*Last updated: 2026-05-03*
 
 Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or otherwise "shipped" and should not be edited after the fact. Living documentation (domain guides, architecture, setup) lives in [../docs/](../docs/); planning artifacts (roadmap, meeting agendas, working notes) live in [../planning/](../planning/). This directory is for the immutable outputs.
 
@@ -20,6 +20,7 @@ Frozen deliverables — PDFs and PPTXs that have been submitted, emailed, or oth
 | `archive/2026-04-01_proposal_draft.pdf` | `2026-04-02_proposal.pdf` |
 | `archive/2026-04-02_midpoint_draft.pdf` | `2026-04-06_midpoint_submission.pdf` |
 | `archive/2026-04-02_midpoint_draft.pptx` | `2026-04-06_midpoint_submission.pdf` |
+| `archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | Pending final class-presentation export; first editable #44 PPTX build with scenario, mitigation, and dry-run gates still open. |
 
 ## Conventions
 
