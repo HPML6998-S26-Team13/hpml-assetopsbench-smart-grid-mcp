@@ -59,6 +59,11 @@
 - Clarified in `docs/experiment_matrix.md` that mitigation is a sparse overlay
   dimension on selected PE-family lanes, while the core experiment matrix
   remains focused on method cells and non-mitigation ablations.
+- Hardened the mitigation ladder after the first GCP A100 four-tier evidence
+  pass: repaired same-step same-tool retries now clear stale missing-evidence
+  hits, explicit fault/risk adjudication skips monitoring-only IoT/TSFM tasks,
+  and adjudicated summaries are constrained to preserve the original task
+  requirements. Refs #35, #64, #66.
 
 ## 2026-05-02
 

@@ -30,6 +30,27 @@ Status as of 2026-05-03: the GCP A100 four-tier cohort
 interpretation table remains a deliberate follow-up, not an automatic copy of
 the raw cohort summary.
 
+Post-cohort interpretation: the first four-tier A100 run does **not** show a
+blanket mitigation lift. Guard and repair reduce measured pass rate in aggregate,
+and adjudication is sharply worse before the runtime fixes below. Treat that
+cohort as diagnostic evidence for the ladder implementation, not as final
+mitigation-outcome evidence.
+
+## Post-cohort diagnosis
+
+The initial A100 cohort surfaced three concrete issues:
+
+| Issue | Symptom | Fix direction |
+|---|---|---|
+| Repair bookkeeping overblocked corrected retries | `SGT-014` / `SGT-018` repair rows could retry the same step with corrected evidence arguments, yet the final guard still blocked the stale failed target. | Clear unresolved hits when a later same-step same-tool retry succeeds, even if the corrected target differs from the original bad argument. |
+| Adjudication over-triggered on monitoring-only tasks | `SGT-012` IoT load-current monitoring failed under adjudication even though the scenario asks for baseline/peak/elevated-current assessment, not a fault/risk or maintenance decision. | Run explicit fault/risk adjudication only for fault/risk/maintenance/work-order tasks. Do not treat generic anomaly detection alone as a maintenance adjudication trigger. |
+| Adjudication summaries became too narrow | `SGT-010` baseline/repair answers passed, but adjudication summaries sometimes dropped outage/defer and thermal-trend context while focusing on the adjudication block. | Treat adjudication as a constraint on fault/risk claims, not a replacement for the original task; summaries must still answer every requested part. |
+
+After these fixes, rerun the same four-tier cohort before making any paper claim
+about mitigation lift. The current v1 evidence is still useful: it says the
+ladder needs precise applicability and repair bookkeeping, and that truthful
+guards can lower apparent success when they block unsupported answers.
+
 ## Current anchors
 
 | Family lane | Baseline config | Detection config | Recovery config | Adjudication config |

@@ -33,7 +33,9 @@ question:
 ## Rung 2: missing-evidence retry/replan guard
 
 Status: implemented for `Y + Self-Ask` and `Z + Self-Ask`,
-pending Insomnia reruns and judge rows.
+with first GCP A100 diagnostic evidence captured. The first cohort exposed a
+repair bookkeeping overblock, so claims about repair lift should wait for a
+patched matched rerun.
 
 ### Intent
 
@@ -179,8 +181,10 @@ is not a mitigation win.
 
 ## Rung 3: explicit fault/risk adjudication step
 
-Status: implemented on this branch for `Y + Self-Ask` and `Z + Self-Ask`,
-pending matched reruns and judge rows.
+Status: implemented for `Y + Self-Ask` and `Z + Self-Ask`, with first GCP A100
+diagnostic evidence captured. The first cohort exposed adjudication
+applicability and summarization overreach, so claims about adjudication lift
+should wait for a patched matched rerun.
 
 ### Intent
 
@@ -207,6 +211,11 @@ Run adjudication before final answer or work-order emission when any are true:
 If deciding evidence is missing, adjudication should not invent an answer. It
 should return `refuse_due_missing_evidence` and rely on rung 1 or rung 2 to
 record the missing-evidence failure.
+
+Do not run this rung for monitoring-only IoT/TSFM tasks that ask for readings,
+baselines, peaks, or anomaly counts without asking for a fault, risk,
+maintenance, or work-order decision. Generic anomaly evidence is not by itself a
+maintenance adjudication trigger.
 
 ### Output contract
 

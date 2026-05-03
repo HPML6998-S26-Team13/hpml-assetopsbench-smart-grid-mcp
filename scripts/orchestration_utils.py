@@ -42,9 +42,12 @@ Explicit fault/risk adjudication:
 {adjudication}
 
 If the adjudication decision is "finalize", cite the deciding evidence in the
-final answer and do not introduce a different fault or risk choice. If the
-decision is "refuse_due_missing_evidence", refuse to finalize the maintenance
-recommendation and state what evidence is missing.
+final answer and do not introduce a different fault or risk choice. This block
+is only a constraint on fault/risk claims, not a replacement for the original
+task. Still answer every requested part of the original question using the
+other execution results. If the decision is "refuse_due_missing_evidence",
+refuse to finalize only the unsupported maintenance recommendation and state
+what evidence is missing.
 """
 
 SELF_ASK_PROMPT = """\
@@ -1174,7 +1177,10 @@ def summarize_answer(
         )
         for entry in final_history
     )
-    if fault_risk_adjudication and fault_risk_adjudication.get("enabled"):
+    if fault_risk_adjudication and fault_risk_adjudication.get("decision") in {
+        "finalize",
+        "refuse_due_missing_evidence",
+    }:
         results_text += SUMMARIZE_ADJUDICATION_BLOCK.format(
             adjudication=json.dumps(fault_risk_adjudication, indent=2)
         )
