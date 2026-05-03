@@ -1,6 +1,6 @@
 # IEEE Class Final Report Draft
 
-*Created: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin*
 *Issues: #40, #78; source paper lane: #5, #39*
 
@@ -8,6 +8,23 @@ This is the first content-bearing IEEE report draft. It is intentionally a
 Markdown drafting surface, not the final LaTeX artifact. The final report should
 be transferred into the class IEEE Overleaf template after the NeurIPS source is
 stable, with this file used as the section-by-section content and claim ledger.
+
+## May 3 Report Readiness
+
+This draft is useful now as the IEEE back-port source, but it is not yet the
+submission artifact. The NeurIPS Overleaf source has been populated with a first
+real draft, so the next report work is a drift check against that source plus
+final LaTeX transfer once the NeurIPS compile/checklist gates clear.
+
+Open report gates:
+
+- Re-check the abstract and result paragraphs against the final NeurIPS source.
+- Insert final figures in the IEEE template with run IDs and CSV/source paths.
+- Verify every numeric claim against `results/metrics/` and
+  `docs/validation_log.md`.
+- Export/compile the IEEE report and record proof in `#40`.
+- Use the `#78` checklist during transfer; do not close `#40` from this
+  Markdown draft alone.
 
 ## Abstract
 
@@ -157,6 +174,13 @@ The current first-capture orchestration table is:
 | YS / PE-S-M | Plan-Execute + Self-Ask | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | 1.0 | 59.00s | 0.444 | 3/6 |
 | ZS / V-S-M | Verified PE + Self-Ask | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | 1.0 | 33.78s | 0.833 | 5/6 |
 
+Source note: `B/Y/Z` rows trace to
+`results/metrics/notebook03_orchestration_comparison.csv`; `YS/ZS` Self-Ask
+rows trace to `results/metrics/notebook03_self_ask_ablation.csv` and
+`results/metrics/experiment_matrix_summary.csv`. Do not cite
+`results/metrics/notebook03_pe_family_follow_on.csv` as the source for the
+Self-Ask rows unless that file is regenerated.
+
 Vanilla Plan-Execute is weak in this first capture, but the PE-family rows are
 scientifically useful because they show how clarification and verification
 change outcomes. The strongest current row is Verified PE + Self-Ask, with mean
@@ -204,7 +228,10 @@ paper-grade, and transfer the final content into the IEEE LaTeX template.
 
 - [ ] Experiment 1 latency chart: `results/figures/notebook02_latency_comparison.png`.
 - [ ] Experiment 2 orchestration chart: `results/figures/notebook03_orchestration_comparison.png`.
-- [ ] PE-family follow-on chart, if space permits: `results/figures/notebook03_pe_family_follow_on.png`.
+- [ ] PE-family follow-on chart, if space permits:
+      `results/figures/notebook03_pe_family_follow_on.png`; cite `YS/ZS`
+      table rows from `results/metrics/notebook03_self_ask_ablation.csv` and
+      `results/metrics/experiment_matrix_summary.csv`.
 - [ ] Failure taxonomy counts: `results/figures/failure_taxonomy_counts.svg`.
 - [ ] Failure stage heatmap: `results/figures/failure_stage_cell_heatmap.svg`.
 - [ ] Artifact ledger table from `docs/validation_log.md` and `results/metrics/experiment_matrix_summary.csv`.

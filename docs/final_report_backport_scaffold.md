@@ -1,8 +1,8 @@
 # Final Report Back-Port Scaffold
 
-*Last updated: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin*
-*Issues: `#40`, with source draft tracked by `#5` / `#39`*
+*Issues: `#40`, `#78`, with source draft tracked by `#5` / `#39`*
 
 This is the control surface for turning the NeurIPS Evaluations & Datasets draft
 (formerly Datasets & Benchmarks) into the class IEEE-format final report without
@@ -12,6 +12,25 @@ content-bearing class report drafting surface is now
 `reports/final_report_ieee_draft.md`.
 
 Overleaf transfer surface: `docs/neurips_overleaf_transfer_plan.md`.
+
+## May 3 readiness status
+
+The back-port checklist and the first content-bearing IEEE Markdown report
+draft now exist. `#78` is therefore no longer blocked on checklist creation;
+its remaining value is to make sure the checklist is used during the final
+IEEE LaTeX transfer. `#40` remains open until the class-report template is
+actually populated, compiled/exported, and checked against the final NeurIPS
+source.
+
+Current source posture:
+
+- NeurIPS Overleaf has a first real draft at commit `4a85633`.
+- The NeurIPS source is not yet frozen because compile proof, checklist
+  answers, final references, scenario-count wording, and mitigation-rerun
+  disposition remain open.
+- The IEEE Markdown draft can keep improving now, but final IEEE export should
+  wait until the NeurIPS source text is coherent enough to avoid a divergent
+  second paper.
 
 ## Source-of-truth order
 
@@ -46,6 +65,11 @@ Minimum report-ready set:
 
 - Experiment 1 latency comparison from Notebook 02.
 - Experiment 2 orchestration comparison from Notebook 03.
+- PE-family Self-Ask rows from
+  `results/metrics/notebook03_self_ask_ablation.csv` and
+  `results/metrics/experiment_matrix_summary.csv`; do not cite
+  `notebook03_pe_family_follow_on.csv` as the source for `YS` / `ZS` unless it
+  is regenerated.
 - Failure taxonomy count figure from `results/figures/failure_taxonomy_counts.svg`,
   backed by `results/metrics/failure_taxonomy_counts.csv`.
 - Failure stage-by-cell heatmap from
@@ -60,13 +84,15 @@ Optional if evidence lands in time:
 - PE-family optimized-serving ablation table.
 - Scenario-realism / generated-scenario validation figure.
 
-## May 2 draft status
+## May 3 draft status
 
 `reports/final_report_ieee_draft.md` now contains the first full IEEE-section
 draft with current evidence tables for:
 
 - Experiment 1 A/B/C transport latency.
-- Experiment 2 B/Y/Z and PE-family Self-Ask quality.
+- Experiment 2 B/Y/Z and PE-family Self-Ask quality, with source separation
+  between `notebook03_orchestration_comparison.csv` and
+  `notebook03_self_ask_ablation.csv`.
 - Failure taxonomy class counts.
 - Figure and artifact checklist.
 
@@ -75,9 +101,10 @@ pending deadline work. In particular, it does not claim the 30-scenario floor is
 complete until PR #156 plus generator-accepted scenarios are merged and
 validated.
 
-The next useful scaffolding step is to populate the NeurIPS Overleaf source
-first, then back-port from that source into the IEEE template. This keeps #40
-and #78 aligned with #5/#39 instead of creating a second independent paper.
+The next useful report step is to re-check this Markdown draft against the
+populated NeurIPS Overleaf source, then copy into the IEEE template only after
+the NeurIPS source compiles and its TODO markers are under control. This keeps
+#40 and #78 aligned with #5/#39 instead of creating a second independent paper.
 Until the NeurIPS source is compiled, the Markdown report draft should remain a
 working conversion surface rather than the class-submission artifact.
 
