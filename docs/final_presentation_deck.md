@@ -24,6 +24,7 @@ timed dry run.
 |---|---|---|
 | `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | built | 12-slide editable PPTX; dark technical visual system; issue remains open. |
 | Layout QA | pass with warnings | Artifact-tool checker: 0 errors / 7 padding or tight-text warnings; visual contact sheet reviewed. |
+| Build provenance | documented | `reports/build_notes/2026-05-03_final_presentation_smartgridbench_build.md` records the one-off artifact-tool command, integrity checks, and warning inventory. |
 | Scenario slide | gated | PR #156 is still open; keep 30 scenarios as the required floor, not a completed claim. |
 | Mitigation slide | gated | Treat as mitigation design unless before/after rerun rows land. |
 
