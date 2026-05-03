@@ -11,6 +11,8 @@ content drift. The source of truth for claims and prose remains
 content-bearing class report drafting surface is now
 `reports/final_report_ieee_draft.md`.
 
+Overleaf transfer surface: `docs/neurips_overleaf_transfer_plan.md`.
+
 ## Source-of-truth order
 
 Use this order when the report and paper disagree:
@@ -73,6 +75,12 @@ pending deadline work. In particular, it does not claim the 30-scenario floor is
 complete until PR #156 plus generator-accepted scenarios are merged and
 validated.
 
+The next useful scaffolding step is to populate the NeurIPS Overleaf source
+first, then back-port from that source into the IEEE template. This keeps #40
+and #78 aligned with #5/#39 instead of creating a second independent paper.
+Until the NeurIPS source is compiled, the Markdown report draft should remain a
+working conversion surface rather than the class-submission artifact.
+
 ## Back-port checklist
 
 - [ ] Freeze the result tables and figure files that the class report cites.
@@ -89,6 +97,8 @@ validated.
       `docs/validation_log.md`.
 - [ ] Compile the IEEE Overleaf report and record the compile/export status in
       the issue or PR thread.
+- [ ] After the NeurIPS Overleaf source is populated, re-check this Markdown
+      draft against `main.tex` before copying into the IEEE template.
 
 ## Current status
 

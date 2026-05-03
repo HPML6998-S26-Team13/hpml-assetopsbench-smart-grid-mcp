@@ -22,6 +22,7 @@ this submission lane.
 | Template source | https://media.neurips.cc/Conferences/NeurIPS2026/Formatting_Instructions_For_NeurIPS_2026.zip |
 | LaTeX mode | anonymous `eandd` via `\usepackage[eandd]{neurips_2026}` |
 | Checklist | `checklist.tex` added to Overleaf; content still needs final answers |
+| Overleaf transfer plan | `docs/neurips_overleaf_transfer_plan.md` |
 
 ## Working Title
 
@@ -76,6 +77,26 @@ systems study of protocol and orchestration choices in tool-using agents.
 | 5. Results | Notebook 02 latency summary, Notebook 03 orchestration/judge table, failure taxonomy counts, and mitigation status. |
 | 6. Limitations | Small six-trial first captures, scenario-count pending work, generated-scenario circularity, and guarded-rerun incompleteness. |
 | 7. Reproducibility | Artifact ledger, run IDs, repo paths, Overleaf source, and NeurIPS checklist. |
+
+## Immediate Overleaf Population Plan
+
+This is the next practical writing block. We can populate Overleaf now without
+waiting for final reruns:
+
+1. Paste the title, abstract candidate, and contribution paragraph.
+2. Paste Introduction, Benchmark Extension, System Design, Experimental Design,
+   Results Skeleton, Failure Analysis, Limitations, and Reproducibility from
+   `docs/neurips_draft.md`.
+3. Insert the current results tables from this packet with captions labeled as
+   first six-trial captures.
+4. Add TODO markers for final scenario count, repeated transport distribution,
+   mitigation before/after rows, references, checklist answers, and compile
+   proof.
+5. Insert figures only after captions include source CSV paths or run IDs.
+
+The detailed copy order and caveats live in
+`docs/neurips_overleaf_transfer_plan.md`. Issue #39 tracks the Overleaf content
+transfer; issue #40 / #78 track the later IEEE report back-port.
 
 ## Current Results Snapshot
 

@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Added `docs/neurips_overleaf_transfer_plan.md` and linked it from the
+  NeurIPS draft, submission packet, and IEEE back-port scaffold so #5 / #39 /
+  #40 / #47 / #48 / #78 have a concrete Overleaf copy queue with caveats for
+  pending scenario-count, rerun, mitigation, and compile gates.
 - Added `docs/mitigation_recovery_adjudication.md`, an implementation-ready
   spec for the follow-on mitigation ladder: bounded missing-evidence
   retry/replan recovery and explicit fault/risk adjudication. The spec keeps

@@ -18,6 +18,7 @@ final paper — it is the canonical writing surface for:
 
 Companion conversion surface: `docs/final_report_backport_scaffold.md`.
 Submission control surface: `docs/neurips_submission_packet.md`.
+Overleaf copy plan: `docs/neurips_overleaf_transfer_plan.md`.
 
 ## May 2 submission status
 
@@ -42,6 +43,28 @@ Writing stance: use the current six-trial captures and failure taxonomy as
 paper-backed evidence now; promote additional scenario counts, mitigation
 reruns, or 70B/context-window appendix evidence only after those artifacts are
 on canonical history or explicitly labeled as pending/appendix.
+
+## May 2 Overleaf readiness
+
+The draft is now ready for a first Overleaf population pass. This means the
+structure, conservative prose, current first-capture tables, and limitation
+language can move into the NeurIPS source even though final evidence gates
+remain open.
+
+| Paper block | Ready to paste? | Caveat to leave visible |
+|---|---:|---|
+| Title and abstract | yes | re-check word budget and final numerical language |
+| Introduction | yes | none beyond normal final polish |
+| Benchmark extension | yes | final scenario count is pending |
+| System design | yes | final Cell C wording depends on Aaron's last fact bullet |
+| Experimental design | yes | keep follow-ons separate from core axes |
+| Results tables | yes as first-capture evidence | do not call repeat-rerun distribution final |
+| Failure taxonomy | yes | mitigation outcome rows pending |
+| Limitations/reproducibility | yes | update after final scenario/rerun decisions |
+
+Use `docs/neurips_overleaf_transfer_plan.md` as the copy queue. The most useful
+next Overleaf action is not more outline work; it is pasting the section
+scaffold into `main.tex` with TODOs for the remaining empirical gates.
 
 ## Working title
 
