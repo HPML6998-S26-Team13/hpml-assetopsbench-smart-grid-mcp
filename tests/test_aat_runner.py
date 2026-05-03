@@ -142,6 +142,184 @@ def test_serialize_run_result_max_turns_exhausted():
     assert out["max_turns_exhausted"] is True
 
 
+# ---------------------------------------------------------------------------
+# #133 — token usage capture from the Agents SDK RunContextWrapper.usage
+# ---------------------------------------------------------------------------
+
+
+def _stub_run_result_with_usage(
+    *,
+    input_tokens: int | None = 1234,
+    output_tokens: int | None = 567,
+    total_tokens: int | None = 1801,
+    requests: int | None = 5,
+):
+    """Stub RunResult with a context_wrapper.usage that mirrors the SDK shape."""
+    return SimpleNamespace(
+        new_items=[_msg_item("answer")],
+        final_output="answer",
+        max_turns_reached=False,
+        raw_responses=[],
+        context_wrapper=SimpleNamespace(
+            usage=SimpleNamespace(
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                total_tokens=total_tokens,
+                requests=requests,
+            )
+        ),
+    )
+
+
+def test_serialize_usage_captured_when_present():
+    """Trial JSON should carry the usage block from RunContextWrapper.usage."""
+    from scripts.aat_runner import _serialize_run_result
+
+    out = _serialize_run_result(
+        _stub_args(), "p", _stub_run_result_with_usage(), duration_seconds=1.0
+    )
+
+    assert out["usage"] == {
+        "input_tokens": 1234,
+        "output_tokens": 567,
+        "total_tokens": 1801,
+        "requests": 5,
+    }
+
+
+def test_serialize_usage_missing_yields_null_block():
+    """Older SDK / stubbed result without context_wrapper -> all-null usage block.
+
+    summary.json's aggregator distinguishes None (no data) from 0 (zero
+    tokens), so we deliberately don't fall back to zeros here.
+    """
+    from scripts.aat_runner import _serialize_run_result
+
+    out = _serialize_run_result(
+        _stub_args(), "p", _stub_run_result(), duration_seconds=1.0
+    )
+
+    assert out["usage"] == {
+        "input_tokens": None,
+        "output_tokens": None,
+        "total_tokens": None,
+        "requests": None,
+    }
+
+
+def test_serialize_usage_negative_or_non_int_treated_as_missing():
+    """A malformed SDK Usage with strings / negatives shouldn't poison the block."""
+    from scripts.aat_runner import _serialize_run_result
+
+    out = _serialize_run_result(
+        _stub_args(),
+        "p",
+        _stub_run_result_with_usage(
+            input_tokens="not-an-int",
+            output_tokens=-1,
+            total_tokens=None,
+            requests=True,  # bool is technically int subclass; explicitly excluded.
+        ),
+        duration_seconds=1.0,
+    )
+
+    assert out["usage"] == {
+        "input_tokens": None,
+        "output_tokens": None,
+        "total_tokens": None,
+        "requests": None,
+    }
+
+
+# ---------------------------------------------------------------------------
+# #131 — type-specific JSON encoder (replaces default=str)
+# ---------------------------------------------------------------------------
+
+
+def test_json_default_serializes_datetime_and_date():
+    """stdlib datetime + date land as ISO-8601 strings, matching the prior behavior."""
+    import datetime as dt
+
+    from scripts.aat_runner import _json_default
+
+    assert _json_default(dt.datetime(2026, 4, 28, 17, 0, 0)) == "2026-04-28T17:00:00"
+    assert _json_default(dt.date(2026, 4, 28)) == "2026-04-28"
+
+
+def test_json_default_serializes_pandas_timestamp_when_available():
+    """pandas.Timestamp -> isoformat. Skip cleanly if pandas isn't installed."""
+    pd = pytest.importorskip("pandas")
+    from scripts.aat_runner import _json_default
+
+    ts = pd.Timestamp("2026-04-28T17:00:00")
+    assert _json_default(ts) == ts.isoformat()
+
+
+def test_json_default_serializes_numpy_datetime64_when_available():
+    """numpy.datetime64 -> ISO string via pandas if both installed."""
+    np = pytest.importorskip("numpy")
+    from scripts.aat_runner import _json_default
+
+    out = _json_default(np.datetime64("2026-04-28T17:00:00"))
+    # Accept either pandas-routed isoformat or the raw datetime64 str()
+    # (which is also roundtrippable for this type specifically).
+    assert "2026-04-28" in out
+
+
+def test_json_default_rejects_numpy_array():
+    """numpy.ndarray must raise TypeError, not silently stringify (Alex's M5)."""
+    np = pytest.importorskip("numpy")
+    from scripts.aat_runner import _json_default
+
+    with pytest.raises(TypeError, match="numpy"):
+        _json_default(np.array([1, 2, 3]))
+
+
+def test_json_default_rejects_pandas_dataframe():
+    """pandas.DataFrame must raise TypeError, not write the human-readable table."""
+    pd = pytest.importorskip("pandas")
+    from scripts.aat_runner import _json_default
+
+    with pytest.raises(TypeError, match="pandas"):
+        _json_default(pd.DataFrame({"a": [1, 2, 3]}))
+
+
+def test_json_default_rejects_arbitrary_object():
+    """Anything outside the allow-list must raise TypeError, not stringify."""
+    from scripts.aat_runner import _json_default
+
+    class Unhandled:
+        pass
+
+    with pytest.raises(TypeError, match="unserializable"):
+        _json_default(Unhandled())
+
+
+def test_write_output_uses_type_specific_encoder(tmp_path):
+    """End-to-end: _write_output rejects a payload containing a numpy array.
+
+    The prior code would silently write '[1 2 3]'; the new code fails closed.
+    """
+    np = pytest.importorskip("numpy")
+    from scripts.aat_runner import _write_output
+
+    bad_payload = {"answer": "ok", "rogue": np.array([1, 2, 3])}
+    with pytest.raises(TypeError, match="numpy"):
+        _write_output(tmp_path / "out.json", bad_payload)
+
+
+def test_write_output_serializes_timestamp_payload(tmp_path):
+    """The Timestamp case PR #130 originally fixed must still work."""
+    pd = pytest.importorskip("pandas")
+    from scripts.aat_runner import _write_output
+
+    payload = {"answer": "ok", "ts": pd.Timestamp("2026-04-28T17:00:00")}
+    out = tmp_path / "trial.json"
+    _write_output(out, payload)
+    loaded = json.loads(out.read_text())
+    assert loaded["ts"] == "2026-04-28T17:00:00"
+
+
 def test_cli_parses_required_args():
     from scripts.aat_runner import build_parser
 
