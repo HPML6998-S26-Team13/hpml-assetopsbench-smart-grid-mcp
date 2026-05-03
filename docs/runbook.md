@@ -111,7 +111,7 @@ If you want to verify `import vllm` itself, do that from a compute node rather
 than the login node:
 
 ```bash
-srun --account=edu --partition=short --qos=short --gres=gpu:1 \
+srun --account=edu --partition=short --qos=short --gres=gpu:A6000:1 \
      --mem=64G --time=01:00:00 --pty bash
 cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
 source .venv-insomnia/bin/activate
@@ -242,7 +242,8 @@ all three JSON files above. `docs/wandb_schema.md` documents the field names.
 
 | Goal | Override |
 |---|---|
-| Any GPU (not just A6000) | `--gres=gpu:1` |
+| Default Insomnia evidence GPU | `--gres=gpu:A6000:1` |
+| Hardware-flexible exploratory run | `--gres=gpu:1` *(record the allocated GPU; do not mix with typed evidence cohorts)* |
 | Specific GPU type | `--gres=gpu:A6000:1`, `--gres=gpu:h100:1`, `--gres=gpu:l40s:1` |
 | Longer walltime (up to 12h) | `--time=04:00:00` |
 | Different partition | `--partition=burst --qos=burst` |
@@ -337,7 +338,7 @@ diagnoses it.
 
 | Symptom | Next step |
 |---|---|
-| `sbatch` returns `ReqNodeNotAvail` or `Priority` forever | [insomnia_runbook.md §"Queue waits"](insomnia_runbook.md) — try `--gres=gpu:1` to widen the scheduler pool, or an off-peak window |
+| `sbatch` returns `ReqNodeNotAvail` or `Priority` forever | [insomnia_runbook.md §"Queue waits"](insomnia_runbook.md) — prefer an off-peak window for evidence runs; use `--gres=gpu:1` only for explicitly hardware-flexible exploratory work |
 | Slurm log shows only `Waiting for vLLM server to start...` and vLLM log is 0 bytes | [insomnia_runbook.md §"Debugging: foreground vLLM"](insomnia_runbook.md) — on the current 3.11 / vLLM 0.19 stack this usually means a broken model download, a port conflict, or missing CUDA/cuDNN paths; reproduce in the foreground via `srun --pty` to see the real error |
 | `module load cuda/12.3` fails | [insomnia_runbook.md §"CUDA"](insomnia_runbook.md) — module is broken; set `PATH` and `LD_LIBRARY_PATH` directly |
 | WandB run doesn't appear under `assetopsbench-smartgrid` | `wandb login` in `.venv-insomnia`, or export `WANDB_API_KEY`; `ENABLE_WANDB=0` suppresses WandB entirely |

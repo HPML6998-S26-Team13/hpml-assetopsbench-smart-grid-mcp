@@ -1,6 +1,6 @@
 # Experiment 2 Capture Plan
 
-*Last updated: 2026-04-27*
+*Last updated: 2026-05-03*
 *Owner: Wei Alexander Xin (wax1)*
 
 Plan for producing the raw benchmark + profiling artifacts for Experiment 2
@@ -75,6 +75,12 @@ the judge, or vice-versa.
 | Y + Self-Ask | Plan-Execute + Self-Ask | `8998341_exp2_cell_Y_pe_self_ask_mcp_baseline` | 6/6 | 3/6 | 0.444 |
 | Z | Verified PE | `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | 6/6 | 4/6 | 0.639 |
 | Z + Self-Ask | Verified PE + Self-Ask | `8998343_exp2_cell_Z_verified_pe_self_ask_mcp_baseline` | 6/6 | **5/6** | **0.833** |
+
+Hardware caveat: this first PE-family capture was not a single-hardware
+cohort. Y/YS/Z landed on Insomnia A6000 nodes, while Z + Self-Ask landed on an
+H100 NVL node because the Slurm wrapper then requested generic `--gres=gpu:1`.
+Keep that in mind when interpreting the standout ZS 5/6 result; see
+`docs/compute_environment_discrepancies.md`.
 
 Pre-canonical smokes still on disk (kept as historical reference, not
 analysis sources):

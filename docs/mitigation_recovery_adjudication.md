@@ -7,8 +7,8 @@ This doc specifies the two mitigation-ladder rungs that come after
 `missing_evidence_final_answer_guard`. The retry/replan recovery rung is now
 wired into the repo-local PE-family runners. The explicit fault/risk
 adjudication rung is now also runnable as a default-off PE-family mitigation
-flag, but it remains **pending rerun evidence** until #66 produces matched
-artifacts and judge rows.
+flag. First GCP A100 four-tier evidence is recorded, but the before/after
+interpretation remains pending a patched matched rerun.
 
 ## Scope
 

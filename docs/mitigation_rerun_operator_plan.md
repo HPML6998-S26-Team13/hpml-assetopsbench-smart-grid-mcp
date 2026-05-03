@@ -7,6 +7,10 @@ This is the runner-facing plan for the missing-evidence mitigation ladder.
 It is written for whoever owns the compute session. The taxonomy lane consumes
 the completed artifacts afterward.
 
+Use this doc as the operator entry point for #66. The issue tracks status and
+acceptance; this doc gives the runnable order, config names, validation checks,
+and handoff package.
+
 ## Goal
 
 Produce the evidence needed to populate

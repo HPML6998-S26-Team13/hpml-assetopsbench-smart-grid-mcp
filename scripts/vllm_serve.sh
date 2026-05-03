@@ -67,6 +67,7 @@ STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-900}"
 MODEL_PATH="${MODEL_PATH:-models/Llama-3.1-8B-Instruct}"
 PORT="${PORT:-8000}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
+VLLM_GENERATION_CONFIG="${VLLM_GENERATION_CONFIG:-vllm}"
 VLLM_SERVED_MODEL_NAME="${VLLM_SERVED_MODEL_NAME:-$(basename "${MODEL_PATH%/}")}"
 
 if [ ! -d "$MODEL_PATH" ]; then
@@ -126,6 +127,7 @@ python3 -m vllm.entrypoints.openai.api_server \
     --port "$PORT" \
     --max-model-len "$MAX_MODEL_LEN" \
     --dtype float16 \
+    --generation-config "$VLLM_GENERATION_CONFIG" \
     >"$VLLM_STARTUP_LOG" 2>&1 &
 
 VLLM_PID=$!
