@@ -1,0 +1,18 @@
+{
+  "id": "SGT-GEN-001",
+  "type": "TSFM",
+  "text": "Transformer T-005 shows signs of aging, with recent DGA indicating potential issues. Estimate its remaining useful life for the next 60 days.",
+  "category": "Remaining Useful Life",
+  "characteristic_form": "The answer will provide a forecasted RUL in days, along with a risk level rationale and recommended action horizon.",
+  "asset_id": "T-005",
+  "expected_tools": ["tsfm.forecast_rul", "tsfm.detect_anomalies"],
+  "domain_tags": ["TSFM"],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": ["tsfm.forecast_rul", "tsfm.detect_anomalies"],
+    "decisive_intermediate_values": { "health_index": "0.6", "rul_range_days": "180-729" },
+    "final_value": { "rul_estimate_days": "420", "risk_level_rationale": "Medium risk due to degradation indicators", "recommended_action_horizon": "Schedule replacement within 1-2 years" },
+    "acceptance_criteria": ["agent provides a RUL estimate in days", "agent includes a risk level rationale", "agent recommends an action horizon"],
+    "must_include": ["RUL estimate", "risk level rationale", "recommended action horizon"]
+  }
+}

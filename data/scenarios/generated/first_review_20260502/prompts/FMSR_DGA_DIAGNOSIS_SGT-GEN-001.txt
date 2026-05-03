@@ -1,0 +1,155 @@
+You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
+
+FAMILY: FMSR_DGA_DIAGNOSIS
+FAMILY SPEC:
+{
+  "target_count": 4,
+  "primary_domain": "FMSR",
+  "domain_tags": [
+    "FMSR"
+  ],
+  "difficulty_range": [
+    "easy",
+    "medium",
+    "hard"
+  ],
+  "task_types": [
+    "fault_diagnosis",
+    "root_cause_analysis"
+  ],
+  "required_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "optional_tools": [
+    "fmsr.search_failure_modes",
+    "fmsr.get_sensor_correlation"
+  ],
+  "variation_axes": {
+    "fault_code": "vary across PD, D1, D2, T1, T2, T3 \u2014 do not generate two scenarios with the same iec_code",
+    "transformer_id": "vary across T-001 to T-020",
+    "task_framing": "rotate among: identify primary fault, compare two candidate fault modes, explain dominant gas, recommend next inspection step"
+  },
+  "ground_truth_must_include": [
+    "iec_code",
+    "dominant_gas_rationale",
+    "recommended_action"
+  ],
+  "anti_patterns": [
+    "Do not frame the task as 'run analyze_dga with these exact numbers' \u2014 the agent must retrieve gas values from get_dga_record first.",
+    "Do not generate a scenario where the answer is trivially N (normal) with no diagnostic interest."
+  ]
+}
+
+OPERATIONAL CONTEXT (`critical_peak_no_spare`):
+{
+  "asset_criticality_tier": "critical",
+  "spare_availability": "no_spare",
+  "current_loading_pct": 98,
+  "urgency_floor": "high",
+  "narrative_context": "Feeder transformer carrying peak load with no spare on site. Any forced outage requires load shedding.",
+  "suitable_fault_codes": [
+    "D2",
+    "T3"
+  ],
+  "scenario_families": [
+    "MULTI_DOMAIN_INCIDENT"
+  ]
+}
+
+DGA TREND TEMPLATE (`stable_normal`):
+{
+  "iec_code_trajectory": [
+    "N",
+    "N",
+    "N"
+  ],
+  "description": "All key gases remain at background levels across consecutive samples. No discernible trend. All three steps verified as N via fmsr.analyze_dga \u2014 key constraint: R1=CH4/H2 must remain below ~0.1 at every step.",
+  "sample_progression": [
+    {
+      "step": "T-0 baseline",
+      "H2": 60,
+      "CH4": 4,
+      "C2H2": 1,
+      "C2H4": 48,
+      "C2H6": 38,
+      "trend_note": "N \u2014 R1=0.067, R2=0.021, R3=1.26",
+      "step_verified": true
+    },
+    {
+      "step": "T-30 days",
+      "H2": 75,
+      "CH4": 5,
+      "C2H2": 1,
+      "C2H4": 49,
+      "C2H6": 39,
+      "trend_note": "N \u2014 R1=0.067, R2=0.020, R3=1.26, no change",
+      "step_verified": true
+    },
+    {
+      "step": "T-60 days",
+      "H2": 90,
+      "CH4": 5,
+      "C2H2": 1,
+      "C2H4": 50,
+      "C2H6": 40,
+      "trend_note": "N \u2014 stable at verified N profile",
+      "endpoint_verified": true,
+      "source": "transformer_standards.json N profile"
+    }
+  ],
+  "scenario_text_cue": "Routine monitoring with no anomalies detected.",
+  "urgency": "low",
+  "suitable_families": [
+    "FMSR_DGA_DIAGNOSIS",
+    "IOT_SENSOR_ANALYSIS"
+  ]
+}
+
+
+NO-HINT RULES — banned in the user-facing `text` field:
+- Tool names (e.g. `fmsr.analyze_dga`, `wo.create_work_order`)
+- Method names or analytic technique names (e.g. "Duval triangle", "Rogers ratio")
+- IEC fault codes (PD, D1, D2, T1, T2, T3) in the prompt itself — they may appear in `decisive_intermediate_values` only
+- Specific gas concentrations or ratio thresholds
+- Pre-framed decisions ("you should create a work order")
+- Step-by-step instructions
+- Paraphrases of any of the 10 hand-crafted scenarios under data/scenarios/
+
+PREFERRED:
+- Describe an operational event or condition naturally
+- Ask for a decision (diagnosis / RUL / work order / sensor anomaly), not a tool call
+- Ground in one transformer ID and one or two context details (criticality, alarm, recent reading)
+- One task per scenario
+- Under 80 words
+
+
+OUTPUT FORMAT (return one JSON object, no markdown fence):
+{
+  "id": "SGT-GEN-XXX",                                  // caller fills XXX
+  "type": "FMSR" | "TSFM" | "WO" | "IoT" | "Multi",
+  "text": "<the user-facing prompt, follows NO-HINT RULES>",
+  "category": "<one of: Fault Diagnosis | Root Cause Analysis | Remaining Useful Life | Anomaly Detection | Trend Analysis | Maintenance Decision | Work Order Creation | Sensor Analysis | End-to-End Incident Response | Cross-Domain Planning>",
+  "characteristic_form": "<one-sentence description of the answer's structure>",
+  "asset_id": "T-NNN",                                  // T-001 .. T-020
+  "expected_tools": ["domain.tool", ...],               // every tool the ideal agent calls
+  "domain_tags": ["FMSR", ...],                         // matches the type for single-domain; >=2 for Multi
+  "difficulty": "easy" | "medium" | "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": ["domain.tool", ...],        // ordered, same entries as expected_tools
+    "decisive_intermediate_values": { "<key>": "<value>", ... },
+    "final_value": { "<key>": "<value>", ... },         // concrete output (e.g. fault_label, rul_days)
+    "acceptance_criteria": ["agent <does X>", ...],     // 2-5 checks, each starting with "agent "
+    "must_include": ["<element>", ...]                  // coarse high-level answer elements
+  }
+}
+
+DO NOT include `provenance` or `nearest_handcrafted_comparator` blocks in
+your output — the caller fills those after generation. DO NOT emit
+`source_type`, `generator_prompt_version`, `generation_model`, or any
+other generator-metadata field at the top level. The scenario JSON should
+contain ONLY the canonical scenario contract (id, type, text, category,
+characteristic_form, asset_id, expected_tools, domain_tags, difficulty,
+ground_truth).
+
+Return ONLY the JSON object. No commentary, no markdown fences, no explanation.

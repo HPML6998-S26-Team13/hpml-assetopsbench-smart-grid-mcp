@@ -1,0 +1,33 @@
+```json
+{
+  "id": "SGT-GEN-001",
+  "type": "Multi",
+  "text": "Transformer T-005, critical to the grid, shows elevated hydrogen and rising methane levels in recent DGA samples. Determine the fault mode and recommend maintenance.",
+  "category": "End-to-End Incident Response",
+  "characteristic_form": "A diagnosis with a recommended maintenance action based on integrated analysis of DGA trends and asset criticality.",
+  "asset_id": "T-005",
+  "expected_tools": ["iot.get_sensor_readings", "fmsr.analyze_dga", "tsfm.forecast_rul", "wo.create_work_order"],
+  "domain_tags": ["IoT", "FMSR", "TSFM", "WO"],
+  "difficulty": "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": ["iot.get_sensor_readings", "fmsr.analyze_dga", "tsfm.forecast_rul", "wo.create_work_order"],
+    "decisive_intermediate_values": {
+      "fault_code": "D2",
+      "R1_ratio": "6.0",
+      "R3_ratio": "6.25"
+    },
+    "final_value": {
+      "fault_label": "Arcing fault",
+      "rul_days": "14",
+      "work_order_type": "corrective"
+    },
+    "acceptance_criteria": [
+      "agent identifies the fault mode as arcing",
+      "agent forecasts the remaining useful life in days",
+      "agent creates a work order with the correct type and priority",
+      "agent includes safety isolation notes in the work order"
+    ],
+    "must_include": ["iot_evidence_summary", "fault_hypothesis_with_iec_code", "rul_or_risk_forecast", "work_order_recommendation"]
+  }
+}
+```

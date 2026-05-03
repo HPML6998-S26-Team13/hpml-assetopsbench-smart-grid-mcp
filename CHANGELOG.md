@@ -11,6 +11,11 @@
 - Added `docs/final_presentation_run_of_show.md` and expanded
   `docs/final_presentation_deck.md` with timing, speaker-note, source-proof,
   and production-checklist scaffolding for #44.
+- Added the first reviewable #2 generated-scenario batch under
+  `data/scenarios/generated/first_review_20260502/`: five WatsonX-generated
+  candidate scenarios, one per PS B family, with prompts, raw responses,
+  provenance, nearest-handcrafted comparators, and a batch-local validation
+  summary for the #53 review pass.
 - Added `docs/mitigation_recovery_adjudication.md`, an implementation-ready
   spec for the follow-on mitigation ladder: bounded missing-evidence
   retry/replan recovery and explicit fault/risk adjudication. The spec keeps
