@@ -1,0 +1,27 @@
+{
+  "id": "SGT-020",
+  "type": "Multi",
+  "text": "T-016 tripped on differential protection overnight. Review its DGA data and fault record history to determine what the available evidence supports, then issue a corrective work order with a priority level appropriate to the overall situation.",
+  "category": "Protection Trip Response",
+  "characteristic_form": "The answer should retrieve and analyze DGA data (noting whether the result is diagnostic or inconclusive), reference prior fault history, and produce a corrective work order with a priority level justified by the combined evidence from the protection trip event, fault history, and component health.",
+  "asset_id": "T-016",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "wo.list_fault_records",
+    "wo.create_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA retrieved and result noted",
+      "fault history cited",
+      "corrective work order issued",
+      "WO priority justified by protection trip and fault history"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR",
+    "WO"
+  ]
+}
