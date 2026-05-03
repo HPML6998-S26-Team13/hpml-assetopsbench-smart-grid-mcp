@@ -1,6 +1,6 @@
 # NeurIPS 2026 Submission Packet
 
-*Created: 2026-05-02*
+*Last updated: 2026-05-03*
 *Owner: Alex Xin*
 *Issues: #5, #39, #47, #48*
 
@@ -19,6 +19,7 @@ this submission lane.
 | Full-paper deadline | 2026-05-06 23:59 AOE |
 | Overleaf project | https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 |
 | Template status | Official NeurIPS 2026 template ingested in Overleaf Git commit `7e361de` |
+| Content status | First real paper draft populated in Overleaf commit `4a85633` |
 | Template source | https://media.neurips.cc/Conferences/NeurIPS2026/Formatting_Instructions_For_NeurIPS_2026.zip |
 | LaTeX mode | anonymous `eandd` via `\usepackage[eandd]{neurips_2026}` |
 | Checklist | `checklist.tex` added to Overleaf; content still needs final answers |
@@ -29,30 +30,31 @@ this submission lane.
 **SmartGridBench: MCP-Based Industrial Agent Benchmarking for Smart Grid
 Transformer Operations**
 
-## Abstract Candidate
+## Submission-Ready Abstract Candidate
+
+Word count: 182 words. Use this exact text for the NeurIPS abstract submission
+unless a final evidence gate changes before upload.
 
 Industrial-agent benchmarks under-cover Smart Grid transformer diagnostics and
-maintenance, even though these workflows require exactly the kind of multi-tool
-reasoning that industrial LLM agents are expected to perform: telemetry
-inspection, fault diagnosis, degradation forecasting, and work-order planning.
-We present SmartGridBench, a Smart Grid transformer-maintenance extension of
-AssetOpsBench that adds transformer scenarios, public-data-backed asset
+maintenance, even though these workflows require multi-tool reasoning across
+telemetry inspection, fault diagnosis, degradation forecasting, and work-order
+planning. We present SmartGridBench, a Smart Grid transformer-maintenance
+extension of AssetOpsBench with transformer scenarios, public-data-backed asset
 records, and four tool domains exposed through the Model Context Protocol
-(MCP). The benchmark is designed to make two usually conflated systems choices
-measurable: the transport cost of MCP relative to direct tool invocation, and
-the behavioral effect of orchestration strategies such as Agent-as-Tool,
-Plan-Execute, and Verified Plan-Execute when the tool surface is held fixed.
-Current artifacts show a runnable end-to-end benchmark path with committed
-scenario outputs, profiling links, Weights & Biases runs, LLM-as-judge scores,
-and failure-taxonomy exports. Preliminary six-trial captures show that MCP
-standardization introduces measurable overhead in direct comparisons, that
-persistent optimized MCP sessions can reduce steady-state latency but do not by
-themselves improve answer quality, and that PE-family mitigations such as
-Self-Ask and verification can materially change judged quality. We also treat
-scenario realism, generated-scenario circularity, and failure accounting as
-first-class benchmark artifacts rather than post-hoc notes. SmartGridBench
-therefore contributes both a new industrial benchmark domain and an auditable
-systems study of protocol and orchestration choices in tool-using agents.
+(MCP). The benchmark makes two usually conflated systems choices measurable:
+the transport cost of MCP relative to direct tool invocation, and the
+behavioral effect of Agent-as-Tool, Plan-Execute, and Verified Plan-Execute
+orchestration when the tool surface is held fixed. Current artifacts show a
+runnable end-to-end benchmark path with committed scenario outputs, profiling
+links, Weights & Biases runs, LLM-as-judge scores, and failure-taxonomy
+exports. Preliminary six-trial captures show measurable MCP overhead in direct
+comparisons, steady-state latency reductions from persistent optimized MCP
+sessions, and quality shifts from PE-family mitigations such as Self-Ask and
+verification. We also treat scenario realism, generated-scenario circularity,
+and failure accounting as first-class benchmark artifacts rather than post-hoc
+notes. SmartGridBench therefore contributes both a new industrial benchmark
+domain and an auditable systems study of protocol and orchestration choices in
+tool-using agents.
 
 ## Claim Tiers
 
@@ -60,7 +62,7 @@ systems study of protocol and orchestration choices in tool-using agents.
 |---|---|---|---|
 | Safe | SmartGridBench adds a Smart Grid transformer-maintenance lane over AssetOpsBench. | `data/`, `mcp_servers/`, `data/scenarios/`, `docs/data_pipeline.tex` | Main contribution. |
 | Safe | The repo has direct-tool, MCP-baseline, and optimized-MCP AaT paths with committed artifacts. | A/B job `8979314`; C job `9071639`; Notebook 02 exports | Report as preliminary six-trial evidence until final reruns freeze. |
-| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | jobs `8998340` through `8998343`; Notebook 03 exports | Main orchestration result, with small-sample caveat. |
+| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | jobs `8998340` through `8998343`; `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, and `results/metrics/experiment_matrix_summary.csv` | Main orchestration result, with small-sample caveat. |
 | Safe | Failure analysis is artifact-backed. | `failure_evidence_table.csv`, taxonomy SVGs, mitigation inventory | Main reliability/evaluation contribution. |
 | Pending | Scenario floor reaches 30 validated scenarios. | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-authored scenarios; Akshat generator acceptance remains needed for 30 floor | Mention as deadline blocker until merged/validated. |
 | Pending | Mitigation ladder improves outcomes. | Detection guard, repair/replan, and adjudication implementation landed; `mitigation_before_after.csv` has header only | Describe as implemented mitigation ladder pending rerun evidence. |
@@ -88,7 +90,9 @@ waiting for final reruns:
    Results Skeleton, Failure Analysis, Limitations, and Reproducibility from
    `docs/neurips_draft.md`.
 3. Insert the current results tables from this packet with captions labeled as
-   first six-trial captures.
+   first six-trial captures. Use `notebook03_orchestration_comparison.csv` for
+   `B/Y/Z`, then `notebook03_self_ask_ablation.csv` or
+   `experiment_matrix_summary.csv` for `YS/ZS`.
 4. Add TODO markers for final scenario count, repeated transport distribution,
    mitigation before/after rows, references, checklist answers, and compile
    proof.
@@ -127,6 +131,11 @@ structured PE-family variants become more competitive when clarification and
 verification are added. This supports a nuanced enterprise-readiness story:
 structure helps auditability, but only if the runner also handles missing
 evidence and final-answer grounding.
+
+Source note: the core `B/Y/Z` rows trace to
+`results/metrics/notebook03_orchestration_comparison.csv`; the `YS/ZS`
+Self-Ask rows trace to `results/metrics/notebook03_self_ask_ablation.csv` and
+`results/metrics/experiment_matrix_summary.csv`.
 
 ### Failure Taxonomy
 

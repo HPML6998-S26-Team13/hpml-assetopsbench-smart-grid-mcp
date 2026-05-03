@@ -12,6 +12,15 @@
   failure-taxonomy, mitigation-rerun, paper, and deck docs to state that the
   ladder is implemented/planned while outcome measurement still waits on #66
   reruns.
+- Locked a 182-word NeurIPS abstract candidate and refreshed the `#5` / `#39`
+  / `#47` / `#48` submission packet, draft scaffold, Overleaf transfer plan,
+  and docs index to reflect the populated Overleaf draft at commit `4a85633`
+  plus the remaining compile/checklist/evidence gates.
+- Corrected NeurIPS paper-source guidance for PE-family Self-Ask rows: `YS` /
+  `ZS` table values should cite `results/metrics/notebook03_self_ask_ablation.csv`
+  and `results/metrics/experiment_matrix_summary.csv`, while
+  `notebook03_pe_family_follow_on.csv` should not be treated as their source
+  unless regenerated.
 - Added the first editable final-presentation PPTX draft at
   `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
