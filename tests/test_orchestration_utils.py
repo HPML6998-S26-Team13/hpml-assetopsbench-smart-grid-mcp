@@ -55,6 +55,7 @@ from orchestration_utils import (  # noqa: E402
 from mitigation_guards import (  # noqa: E402
     EXPLICIT_FAULT_RISK_ADJUDICATION_NAME,
     MISSING_EVIDENCE_REPAIR_NAME,
+    _fault_risk_adjudication_applies,
     apply_explicit_fault_risk_adjudication,
     apply_missing_evidence_final_answer_guard,
     build_explicit_fault_risk_adjudication,
@@ -957,6 +958,24 @@ class OrchestrationUtilsTests(unittest.TestCase):
             "Peak load current was 520 A at 2024-01-07T12:00:00.",
         )
         self.assertNotIn("failed_steps", guarded)
+
+    def test_fault_risk_adjudication_domain_tags_are_exact(self):
+        monitoring_payload = {
+            "question": "Retrieve recent load current readings for T-005.",
+            "scenario": {
+                "domain_tags": ["wood", "multimedia"],
+                "text": "Retrieve current readings and report the peak value.",
+            },
+            "history": [],
+        }
+        work_order_payload = {
+            "question": "Summarize the current transformer status.",
+            "scenario": {"domain_tags": ["wo"]},
+            "history": [],
+        }
+
+        self.assertFalse(_fault_risk_adjudication_applies(monitoring_payload))
+        self.assertTrue(_fault_risk_adjudication_applies(work_order_payload))
 
     def test_build_fault_risk_adjudication_state_uses_config(self):
         with patch.dict(

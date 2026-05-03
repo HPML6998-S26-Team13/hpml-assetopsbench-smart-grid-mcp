@@ -44,6 +44,8 @@ FAULT_RISK_EVIDENCE_TOOLS = {
 }
 
 ADJUDICATION_TRIGGER_TOOLS = {
+    # Generic anomaly/trend tools also support monitoring tasks, so they should
+    # not trigger maintenance adjudication without task text or domain support.
     "analyze_dga",
     "get_dga_record",
     "get_sensor_correlation",
@@ -486,8 +488,8 @@ def _fault_risk_adjudication_applies(payload: dict[str, Any]) -> bool:
                 scenario.get("characteristic_form"),
             ]
         )
-        tags = " ".join(str(tag).lower() for tag in scenario.get("domain_tags") or [])
-        if any(tag in tags for tag in ("fmsr", "wo", "multi")):
+        tags = {str(tag).lower() for tag in scenario.get("domain_tags") or []}
+        if tags.intersection({"fmsr", "wo", "multi"}):
             return True
 
     text = " ".join(str(part or "").lower() for part in text_parts)
@@ -840,6 +842,7 @@ def _clear_repaired_hit(
     if record_step is None:
         return
     for key, hit in list(unresolved_hits.items()):
+        # Corrected retries can change args; same step/tool identifies repair.
         if (
             str(hit.get("tool") or "").lower() == record_tool
             and hit.get("step") == record_step

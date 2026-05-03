@@ -1177,10 +1177,10 @@ def summarize_answer(
         )
         for entry in final_history
     )
-    if fault_risk_adjudication and fault_risk_adjudication.get("decision") in {
-        "finalize",
-        "refuse_due_missing_evidence",
-    }:
+    if (
+        fault_risk_adjudication
+        and fault_risk_adjudication.get("decision") == "finalize"
+    ):
         results_text += SUMMARIZE_ADJUDICATION_BLOCK.format(
             adjudication=json.dumps(fault_risk_adjudication, indent=2)
         )
