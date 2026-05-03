@@ -69,7 +69,7 @@ Warnings accepted for this draft:
 | 2 | tight text | Card title wraps tightly but remains readable. |
 | 7 | tight text | Interpretation box is tight but readable in the rendered preview. |
 | 11 | tight text | Artifact-ledger card copy is tight but readable. |
-| 12 | bottom padding | Three small closing metric cards have tight label padding. |
+| 12 | bottom padding | Three small closing metric cards have tight label padding: 3 warnings, one per card. |
 
 ## Open Build Gates
 
