@@ -309,9 +309,11 @@ if [ "$DRY_RUN" = "1" ]; then
 fi
 
 "$PYTHON_BIN" - "$CONFIG_FILE" "$SUMMARY_FILE" "$META_FILE" "$CONFIG_PATH" "$RUN_ID" "$WANDB_ENTITY" "$WANDB_PROJECT" "$EXPERIMENT_FAMILY" "$EXPERIMENT_CELL" "$ORCHESTRATION" "$MCP_MODE" "$TRIALS" "${#SCENARIO_FILES[@]}" "$SCENARIO_SET_NAME" "$SCENARIO_SET_HASH" "$SCENARIO_DOMAIN_SCOPE" "$MODEL_ID" "$MODEL_PROVIDER" "$SERVING_STACK" "$QUANTIZATION_MODE" "$MAX_MODEL_LEN" "$TEMPERATURE" "$MAX_TOKENS" "$JUDGE_MODEL" <<'PY'
+import importlib.metadata
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -349,6 +351,82 @@ def git_value(args, default="unknown"):
     except Exception:
         return default
 
+def git_dirty():
+    try:
+        subprocess.check_call(
+            ["git", "diff-index", "--quiet", "HEAD", "--"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        return True
+    except Exception:
+        return None
+    return False
+
+def package_version(name):
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
+
+def command_output(args):
+    try:
+        return subprocess.check_output(
+            args,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=10,
+        ).strip()
+    except Exception:
+        return None
+
+def runtime_versions():
+    cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    gpu_id = (cuda_visible or "0").split(",")[0].strip() or "0"
+    versions = {
+        "vllm_version": package_version("vllm"),
+        "torch_version": package_version("torch"),
+        "cuda_visible_devices": cuda_visible,
+        "nvidia_driver_version": None,
+        "cuda_version": None,
+        "nvidia_smi_query": None,
+    }
+    raw = command_output(
+        [
+            "nvidia-smi",
+            f"--id={gpu_id}",
+            "--query-gpu=driver_version,cuda_version",
+            "--format=csv,noheader",
+        ]
+    )
+    if raw:
+        versions["nvidia_smi_query"] = raw
+        first_row = raw.splitlines()[0]
+        parts = [part.strip() for part in first_row.split(",")]
+        if parts:
+            versions["nvidia_driver_version"] = parts[0] or None
+        if len(parts) > 1:
+            versions["cuda_version"] = parts[1] or None
+    if versions["nvidia_driver_version"] is None:
+        driver = command_output(
+            [
+                "nvidia-smi",
+                f"--id={gpu_id}",
+                "--query-gpu=driver_version",
+                "--format=csv,noheader",
+            ]
+        )
+        if driver:
+            versions["nvidia_driver_version"] = driver.splitlines()[0].strip() or None
+    if versions["cuda_version"] is None:
+        smi = command_output(["nvidia-smi"])
+        if smi:
+            match = re.search(r"CUDA Version:\s*([0-9.]+)", smi)
+            if match:
+                versions["cuda_version"] = match.group(1)
+    return versions
+
 payload = {
     "schema_version": "v1",
     "wandb_entity": wandb_entity,
@@ -356,6 +434,7 @@ payload = {
     "run_name": run_name,
     "git_sha": git_value(["git", "rev-parse", "HEAD"]),
     "git_branch": git_value(["git", "branch", "--show-current"]),
+    "git_dirty": git_dirty(),
     "run_timestamp": datetime.now(timezone.utc).isoformat(),
     "benchmark_config_path": pathlib.Path(benchmark_config_path).as_posix(),
     "benchmark_summary_path": pathlib.Path(summary_path).as_posix(),
@@ -430,6 +509,7 @@ extra_vllm_args = os.environ.get("EXTRA_VLLM_ARGS", "").strip()
 payload["vllm_dtype"] = os.environ.get("VLLM_DTYPE", "float16")
 payload["vllm_extra_args"] = extra_vllm_args
 payload["vllm_extra_args_list"] = extra_vllm_args.split() if extra_vllm_args else []
+payload["runtime_versions"] = runtime_versions()
 
 pathlib.Path(config_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 pathlib.Path(meta_path).write_text(
@@ -468,6 +548,7 @@ pathlib.Path(meta_path).write_text(
             "vllm_dtype": payload["vllm_dtype"],
             "vllm_extra_args": payload["vllm_extra_args"],
             "vllm_extra_args_list": payload["vllm_extra_args_list"],
+            "runtime_versions": payload["runtime_versions"],
             "git_sha": payload["git_sha"],
             "git_branch": payload["git_branch"],
             "git_dirty": payload["git_dirty"],

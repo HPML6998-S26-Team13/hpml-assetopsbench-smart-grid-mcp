@@ -10,9 +10,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
+import re
 import shlex
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -42,6 +45,72 @@ def _shell_bool(value: bool) -> str:
 def _emit_shell(values: dict[str, Any]) -> None:
     for key, value in values.items():
         print(f"{key}={shlex.quote(str(value))}")
+
+
+def _package_version(name: str) -> str | None:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
+
+
+def _command_output(args: list[str]) -> str | None:
+    try:
+        return subprocess.check_output(
+            args,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=10,
+        ).strip()
+    except Exception:
+        return None
+
+
+def collect_runtime_versions() -> dict[str, Any]:
+    cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    gpu_id = (cuda_visible or "0").split(",")[0].strip() or "0"
+    versions: dict[str, Any] = {
+        "vllm_version": _package_version("vllm"),
+        "torch_version": _package_version("torch"),
+        "cuda_visible_devices": cuda_visible,
+        "nvidia_driver_version": None,
+        "cuda_version": None,
+        "nvidia_smi_query": None,
+    }
+    raw = _command_output(
+        [
+            "nvidia-smi",
+            f"--id={gpu_id}",
+            "--query-gpu=driver_version,cuda_version",
+            "--format=csv,noheader",
+        ]
+    )
+    if raw:
+        versions["nvidia_smi_query"] = raw
+        first_row = raw.splitlines()[0]
+        parts = [part.strip() for part in first_row.split(",")]
+        if parts:
+            versions["nvidia_driver_version"] = parts[0] or None
+        if len(parts) > 1:
+            versions["cuda_version"] = parts[1] or None
+    if versions["nvidia_driver_version"] is None:
+        driver = _command_output(
+            [
+                "nvidia-smi",
+                f"--id={gpu_id}",
+                "--query-gpu=driver_version",
+                "--format=csv,noheader",
+            ]
+        )
+        if driver:
+            versions["nvidia_driver_version"] = driver.splitlines()[0].strip() or None
+    if versions["cuda_version"] is None:
+        smi = _command_output(["nvidia-smi"])
+        if smi:
+            match = re.search(r"CUDA Version:\s*([0-9.]+)", smi)
+            if match:
+                versions["cuda_version"] = match.group(1)
+    return versions
 
 
 def _load_json_object(path: Path) -> tuple[dict[str, Any] | None, str | None]:
@@ -293,6 +362,7 @@ def write_manifest_event(
         "compute_zone": os.environ.get("SMARTGRID_COMPUTE_ZONE"),
         "compute_instance": os.environ.get("SMARTGRID_COMPUTE_INSTANCE"),
         "gpu_type": os.environ.get("GPU_TYPE"),
+        "runtime_versions": collect_runtime_versions(),
     }
     if extra:
         payload.update(extra)

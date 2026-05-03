@@ -189,3 +189,49 @@ def test_finalize_trial_writes_atomic_output_latency_and_manifest(
     ]
     assert manifest_rows[-1]["state"] == "complete_success"
     assert manifest_rows[-1]["batch_id"] == "batch-1"
+    assert "runtime_versions" in manifest_rows[-1]
+
+
+def test_finalize_trial_marks_divergent_rerun(tmp_path: Path) -> None:
+    scenario_file = _scenario(tmp_path / "multi_01.json")
+    output = tmp_path / "run" / "trial.json"
+    latency_file = tmp_path / "run" / "latencies.jsonl"
+    manifest_file = tmp_path / "run" / "resume_manifest.jsonl"
+    first_temp = _trial(tmp_path / "run" / "trial-first.json.tmp", answer="first")
+    second_temp = _trial(tmp_path / "run" / "trial-second.json.tmp", answer="second")
+
+    gcp_resume_state.finalize_trial(
+        scenario_file=scenario_file,
+        trial_index=1,
+        temp_output=first_temp,
+        output_path=output,
+        latency_file=latency_file,
+        manifest_file=manifest_file,
+        run_name="resume-smoke",
+        batch_id="batch-1",
+        start_epoch=10.0,
+        end_epoch=12.5,
+        return_code=0,
+    )
+
+    gcp_resume_state.finalize_trial(
+        scenario_file=scenario_file,
+        trial_index=1,
+        temp_output=second_temp,
+        output_path=output,
+        latency_file=latency_file,
+        manifest_file=manifest_file,
+        run_name="resume-smoke",
+        batch_id="batch-1",
+        start_epoch=20.0,
+        end_epoch=23.0,
+        return_code=0,
+    )
+
+    manifest_rows = [
+        json.loads(line)
+        for line in manifest_file.read_text(encoding="utf-8").splitlines()
+    ]
+    rerun = manifest_rows[-1]
+    assert rerun["divergent"] is True
+    assert rerun["original_output_sha256"] != rerun["final_output_sha256"]

@@ -140,6 +140,8 @@ _BOOLEAN_DIMS = [
 
 _DEFAULT_JUDGE_MODEL = "watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8"
 _PASS_THRESHOLD = 0.6  # 4 out of 6 dimensions
+# Bump whenever the judge rubric, prompt template, or scoring dimensions change.
+# Existing rows dedupe by this value unless callers pass --force.
 _JUDGE_PROMPT_VERSION = "assetopsbench-6d-v1"
 
 
