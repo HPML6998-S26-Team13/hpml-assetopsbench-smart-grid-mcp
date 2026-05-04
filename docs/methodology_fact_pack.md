@@ -47,8 +47,8 @@
 ## Scenario Set
 
 - **31 hand-crafted scenarios** (SGT-001–SGT-030 + AOB-FMSR-001), validator-clean
-- **Coverage:** IoT (6), FMSR (7), TSFM (5), WO (6), Multi-domain (7)
-- **Difficulty:** easy (8), medium (14), hard (9)
+- **Coverage:** IoT (6), FMSR (7), TSFM (4), WO (6), Multi-domain (8)
+- **Difficulty:** easy (8), medium (15), hard (8)
 - **Target:** 50+ as stretch (issue #55); generator-assisted batch tracked separately under PR #163 / issue #2
 - **Authoring contract:** no tool hints, no ratio/threshold leaks, no IEC code reveals in task text; all prompts under 80 words; ground truth uses `must_include` string criteria
 

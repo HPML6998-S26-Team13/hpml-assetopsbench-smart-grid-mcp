@@ -1,28 +1,24 @@
 {
   "id": "SGT-030",
   "type": "Multi",
-  "text": "Recent telemetry on T-020 has shown anomalous behaviour. First identify the available sensor channels, run an anomaly check on the relevant channel(s), pull the RUL forecast over a 90-day horizon, and create a work order whose scope and priority reflect the combined anomaly and forecast evidence.",
-  "category": "Anomaly Detection and RUL Forecast to Work Order",
-  "characteristic_form": "The answer should report the available sensor channels for T-020, the anomaly findings on the channel(s) examined, the RUL forecast at the 90-day horizon, and create a work order whose priority and scope are explicitly justified by both the anomaly and the forecast (e.g. emergency vs short-term corrective).",
+  "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "category": "RUL Forecast-Driven Work Order",
+  "characteristic_form": "The answer should report the RUL forecast for T-020 — including the current RUL and the projected RUL at the 90-day horizon — and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
   "asset_id": "T-020",
   "expected_tools": [
-    "iot.list_sensors",
-    "tsfm.detect_anomalies",
     "tsfm.forecast_rul",
     "wo.create_work_order"
   ],
   "ground_truth": {
     "must_include": [
-      "sensor channels available",
-      "anomaly findings",
-      "RUL forecast 90-day",
+      "current RUL value",
+      "projected RUL at 90-day horizon",
       "work order created",
       "priority justification"
     ]
   },
-  "difficulty": "hard",
+  "difficulty": "medium",
   "domain_tags": [
-    "IoT",
     "TSFM",
     "WO"
   ]

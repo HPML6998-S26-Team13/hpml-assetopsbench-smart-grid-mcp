@@ -1,9 +1,9 @@
 {
   "id": "SGT-022",
   "type": "IoT",
-  "text": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and their latest readings so a comparative read of operational state can be made.",
+  "text": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
   "category": "Fleet Status Snapshot",
-  "characteristic_form": "The answer should list the in-service transformer IDs, then for each of T-005 and T-013 surface the available sensor channels and their most recent readings, and call out any qualitative difference between the two units.",
+  "characteristic_form": "The answer should list the in-service transformer IDs, then for each of T-005 and T-013 surface the available sensor channels and a recent telemetry sample for each channel, and call out any qualitative difference between the two units.",
   "expected_tools": [
     "iot.list_assets",
     "iot.list_sensors",
@@ -13,9 +13,9 @@
     "must_include": [
       "in-service transformer list",
       "T-005 sensor channels",
-      "T-005 latest readings",
+      "T-005 sample readings",
       "T-013 sensor channels",
-      "T-013 latest readings",
+      "T-013 sample readings",
       "comparative observation"
     ]
   },
