@@ -1,0 +1,53 @@
+{
+  "id": "SGT-GEN-002",
+  "type": "TSFM",
+  "text": "Forecast remaining life for transformer T-005, which has shown stable degradation trends and is currently at 65% load.",
+  "category": "Remaining Useful Life",
+  "characteristic_form": "The answer will be a numerical estimate of days until end-of-life.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "tsfm.forecast_rul"
+  ],
+  "domain_tags": [
+    "TSFM"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "tsfm.forecast_rul"
+    ],
+    "decisive_intermediate_values": {
+      "health_index": "0.6",
+      "rul_range_days": "360"
+    },
+    "final_value": {
+      "rul_estimate_days": "540"
+    },
+    "acceptance_criteria": [
+      "agent provides a numerical RUL estimate",
+      "agent bases estimate on current health index"
+    ],
+    "must_include": [
+      "rul_estimate_days",
+      "risk_level_rationale",
+      "recommended_action_horizon"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:26.682955+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false
+  },
+  "family": "TSFM_RUL_FORECAST",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-005",
+    "scenario_file": "data/scenarios/tsfm_01_rul_forecast_maintenance_window.json",
+    "similarity_basis": "shares type='TSFM' and 1 expected_tools entry",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

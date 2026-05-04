@@ -1,0 +1,56 @@
+{
+  "id": "SGT-GEN-001",
+  "type": "FMSR",
+  "text": "Transformer T-005 is operating at 98% capacity with no spare available. Recent DGA readings show stable gas levels. Determine the primary fault and recommend the next inspection step.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "A diagnosis with a recommended action",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "domain_tags": [
+    "FMSR"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga"
+    ],
+    "decisive_intermediate_values": {
+      "R1": "0.067",
+      "R2": "0.021",
+      "R3": "1.26"
+    },
+    "final_value": {
+      "primary_fault": "D2",
+      "recommended_action": "Schedule a detailed inspection"
+    },
+    "acceptance_criteria": [
+      "agent identifies the primary fault as D2",
+      "agent recommends a detailed inspection"
+    ],
+    "must_include": [
+      "primary fault",
+      "recommended action"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:16.921184+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false
+  },
+  "family": "FMSR_DGA_DIAGNOSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-003",
+    "scenario_file": "data/scenarios/fmsr_01_dga_fault_mode_diagnosis.json",
+    "similarity_basis": "shares type='FMSR' and 2 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

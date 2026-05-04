@@ -1,0 +1,66 @@
+{
+  "id": "SGT-GEN-005",
+  "type": "Multi",
+  "text": "Transformer T-005 is operating at 98% capacity with no spare available. Recent DGA samples show rising methane and ethylene levels. Determine the fault mode and recommend maintenance.",
+  "category": "End-to-End Incident Response",
+  "characteristic_form": "A fault diagnosis with a recommended maintenance decision.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.get_sensor_readings",
+    "fmsr.analyze_dga",
+    "tsfm.forecast_rul",
+    "wo.create_work_order"
+  ],
+  "domain_tags": [
+    "IoT",
+    "FMSR",
+    "TSFM",
+    "WO"
+  ],
+  "difficulty": "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.get_sensor_readings",
+      "fmsr.analyze_dga",
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "decisive_intermediate_values": {
+      "fault_code": "D2",
+      "rul_days": 14
+    },
+    "final_value": {
+      "fault_label": "D2",
+      "maintenance_decision": "corrective maintenance"
+    },
+    "acceptance_criteria": [
+      "agent identifies the fault mode as D2",
+      "agent forecasts the remaining useful life",
+      "agent recommends corrective maintenance",
+      "agent creates a work order"
+    ],
+    "must_include": [
+      "iot_evidence_summary",
+      "fault_hypothesis_with_iec_code",
+      "rul_or_risk_forecast",
+      "work_order_recommendation"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:59.292457+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false
+  },
+  "family": "MULTI_DOMAIN_INCIDENT",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-009",
+    "scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json",
+    "similarity_basis": "shares type='Multi' and 4 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}
