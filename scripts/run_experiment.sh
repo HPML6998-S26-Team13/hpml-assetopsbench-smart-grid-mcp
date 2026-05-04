@@ -293,6 +293,22 @@ fi
 if [ -n "${WATSONX_APIKEY:-}" ] && [ -z "${WATSONX_API_KEY:-}" ]; then
   export WATSONX_API_KEY="$WATSONX_APIKEY"
 fi
+# Bridge documented WATSONX_* env vars to the WX_* names litellm's newer
+# WatsonX provider expects (litellm 1.81.x rejects with
+# "Watsonx project_id and space_id not set" otherwise). Subprocess Python
+# entry points (generator, AaT runner, judge_trajectory.py) call the same
+# alias via scripts/watsonx_env.py; doing it here too keeps inherited
+# env consistent for any sub-shell or PE/Verified PE runner that bypasses
+# the Python helper. (#177)
+if [ -n "${WATSONX_API_KEY:-}" ] && [ -z "${WX_API_KEY:-}" ]; then
+  export WX_API_KEY="$WATSONX_API_KEY"
+fi
+if [ -n "${WATSONX_PROJECT_ID:-}" ] && [ -z "${WX_PROJECT_ID:-}" ]; then
+  export WX_PROJECT_ID="$WATSONX_PROJECT_ID"
+fi
+if [ -n "${WATSONX_URL:-}" ] && [ -z "${WX_URL:-}" ]; then
+  export WX_URL="$WATSONX_URL"
+fi
 
 if [ ! -f "$AOB_PATH/pyproject.toml" ]; then
   echo "ERROR: AssetOpsBench not found at $AOB_PATH" >&2

@@ -223,6 +223,14 @@ def _configure_litellm_provider_compat(model_id: str) -> None:
     """Apply provider-specific LiteLLM compatibility knobs."""
     if not _is_watsonx_model(model_id):
         return
+    # Bridge documented WATSONX_* env vars to the WX_* names litellm's newer
+    # WatsonX provider expects (litellm 1.81.x rejects with
+    # "Watsonx project_id and space_id not set" otherwise). Shared helper
+    # at scripts/watsonx_env.py covers every Python call site that drives
+    # a watsonx/* model. (#177)
+    from scripts.watsonx_env import propagate_watsonx_env
+
+    propagate_watsonx_env()
     try:
         import litellm  # type: ignore
     except ImportError:
