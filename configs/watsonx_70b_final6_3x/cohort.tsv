@@ -1,0 +1,8 @@
+label	config
+A70B	configs/watsonx_70b_final6_3x/A70B_aat_direct.env
+B70B	configs/watsonx_70b_final6_3x/B70B_aat_mcp_baseline.env
+C70B	configs/watsonx_70b_final6_3x/C70B_aat_mcp_optimized.env
+Y70B	configs/watsonx_70b_final6_3x/Y70B_pe_mcp_baseline.env
+YS70B	configs/watsonx_70b_final6_3x/YS70B_pe_self_ask_mcp_baseline.env
+Z70B	configs/watsonx_70b_final6_3x/Z70B_verified_pe_mcp_baseline.env
+ZS70B	configs/watsonx_70b_final6_3x/ZS70B_verified_pe_self_ask_mcp_baseline.env

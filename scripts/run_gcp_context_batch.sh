@@ -21,6 +21,9 @@ Usage: scripts/run_gcp_context_batch.sh [--batch-id ID|--resume-batch ID] [--row
 
 Runs the canonical seven-row GCP context closeout cohort with stable run IDs,
 SMARTGRID_RESUME=1, per-row manifest/state files, and idempotent judge scoring.
+
+Set SMARTGRID_SKIP_LOCAL_MODEL_PREFLIGHT=1 only for hosted-model cohorts
+where every row has LAUNCH_VLLM=0.
 EOF
 }
 
@@ -149,6 +152,15 @@ validate_run_artifacts() {
 preflight_runtime() {
   [ "$DRY_RUN" = "1" ] && return 0
   command -v "$PYTHON_BIN" >/dev/null
+  "$PYTHON_BIN" - <<'PY'
+import sys
+
+if sys.version_info < (3, 11):
+    raise SystemExit("Python >=3.11 required")
+PY
+  if [ "${SMARTGRID_SKIP_LOCAL_MODEL_PREFLIGHT:-0}" = "1" ]; then
+    return 0
+  fi
   command -v g++ >/dev/null
   command -v cc1plus >/dev/null
   if command -v nvidia-smi >/dev/null 2>&1; then
@@ -156,10 +168,6 @@ preflight_runtime() {
   fi
   "$PYTHON_BIN" - <<'PY'
 import importlib.util
-import sys
-
-if sys.version_info < (3, 11):
-    raise SystemExit("Python >=3.11 required")
 for module in ("torch", "vllm"):
     if importlib.util.find_spec(module) is None:
         raise SystemExit(f"{module} is not importable")

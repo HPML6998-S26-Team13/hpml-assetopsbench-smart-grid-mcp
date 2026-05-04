@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -13,7 +14,9 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from orchestration_utils import (  # noqa: E402
     available_sensor_ids,
+    bootstrap_aob,
     build_fault_risk_adjudication_state,
+    build_executor,
     build_parser,
     build_planner_descriptions,
     build_planning_question,
@@ -36,6 +39,7 @@ from orchestration_utils import (  # noqa: E402
     generate_suffix_plan,
     load_fault_risk_adjudication_config,
     load_missing_evidence_repair_config,
+    load_plan_execute_planner,
     maybe_self_ask,
     normalize_plan_steps,
     normalize_response_text,
@@ -150,6 +154,97 @@ class OrchestrationUtilsTests(unittest.TestCase):
         )
         self.assertTrue(executor.called)
         self.assertIn("list_assets", result["iot"])
+
+    def test_build_executor_skips_aob_agent_package_side_effects(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            aob_path = Path(tmp)
+            agent_path = aob_path / "src" / "agent"
+            plan_execute_path = agent_path / "plan_execute"
+            plan_execute_path.mkdir(parents=True)
+            (agent_path / "__init__.py").write_text(
+                'raise RuntimeError("agent package init should not run")\n',
+                encoding="utf-8",
+            )
+            (agent_path / "runner.py").write_text(
+                "DEFAULT_SERVER_PATHS = {'iot': 'iot.py'}\n",
+                encoding="utf-8",
+            )
+            (plan_execute_path / "__init__.py").write_text("", encoding="utf-8")
+            (plan_execute_path / "executor.py").write_text(
+                "from ..runner import DEFAULT_SERVER_PATHS\n\n"
+                "class Executor:\n"
+                "    def __init__(self, llm, server_paths):\n"
+                "        self.llm = llm\n"
+                "        self.server_paths = server_paths\n"
+                "        self.default_server_paths = DEFAULT_SERVER_PATHS\n",
+                encoding="utf-8",
+            )
+
+            old_agent_modules = {
+                name: module
+                for name, module in sys.modules.items()
+                if name == "agent" or name.startswith("agent.")
+            }
+            old_sys_path = list(sys.path)
+            for name in old_agent_modules:
+                sys.modules.pop(name, None)
+            try:
+                bootstrap_aob(aob_path)
+                executor = build_executor(
+                    object(),
+                    {"iot": Path("iot.py")},
+                    mcp_mode="baseline",
+                )
+            finally:
+                for name in list(sys.modules):
+                    if name == "agent" or name.startswith("agent."):
+                        sys.modules.pop(name, None)
+                sys.modules.update(old_agent_modules)
+                sys.path[:] = old_sys_path
+
+        self.assertEqual(executor.server_paths, {"iot": Path("iot.py")})
+        self.assertEqual(executor.default_server_paths, {"iot": "iot.py"})
+
+    def test_load_plan_execute_planner_accepts_task_dependencies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            aob_path = Path(tmp)
+            agent_path = aob_path / "src" / "agent"
+            plan_execute_path = agent_path / "plan_execute"
+            plan_execute_path.mkdir(parents=True)
+            (agent_path / "__init__.py").write_text(
+                'raise RuntimeError("agent package init should not run")\n',
+                encoding="utf-8",
+            )
+            (plan_execute_path / "__init__.py").write_text("", encoding="utf-8")
+            (plan_execute_path / "planner.py").write_text(
+                "import re\n"
+                "_DEP_NUM_RE = re.compile(r'#S(\\d+)')\n\n"
+                "class Planner:\n"
+                "    pass\n",
+                encoding="utf-8",
+            )
+
+            old_agent_modules = {
+                name: module
+                for name, module in sys.modules.items()
+                if name == "agent" or name.startswith("agent.")
+            }
+            old_sys_path = list(sys.path)
+            for name in old_agent_modules:
+                sys.modules.pop(name, None)
+            try:
+                bootstrap_aob(aob_path)
+                Planner = load_plan_execute_planner()
+                from agent.plan_execute import planner as planner_module
+            finally:
+                for name in list(sys.modules):
+                    if name == "agent" or name.startswith("agent."):
+                        sys.modules.pop(name, None)
+                sys.modules.update(old_agent_modules)
+                sys.path[:] = old_sys_path
+
+        self.assertEqual(Planner.__name__, "Planner")
+        self.assertEqual(planner_module._DEP_NUM_RE.findall("#Task1 #S2"), ["1", "2"])
 
     def test_close_executor_awaits_optional_aclose(self):
         class Executor:

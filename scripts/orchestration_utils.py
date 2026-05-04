@@ -11,7 +11,7 @@ from contextlib import AsyncExitStack
 from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 from typing import Any
 
 LOG_FORMAT = "%(asctime)s  %(levelname)-8s  %(name)s  %(message)s"
@@ -450,6 +450,11 @@ def bootstrap_aob(aob_path: Path) -> None:
         path_text = str(path)
         if path_text not in sys.path:
             sys.path.insert(0, path_text)
+    if "agent" not in sys.modules:
+        agent_package = ModuleType("agent")
+        agent_package.__path__ = [str(agent_src_path)]  # type: ignore[attr-defined]
+        agent_package.__package__ = "agent"
+        sys.modules["agent"] = agent_package
 
 
 def preflight_aob_runtime_dependencies() -> None:
@@ -650,12 +655,20 @@ def effective_server_paths(entries: list[str], repo_root: Path) -> dict[str, Pat
 def build_executor(llm, server_paths: dict[str, Path], *, mcp_mode: str = "baseline"):
     """Build the PE-family step executor for the requested MCP mode."""
     if mcp_mode == "baseline":
-        from plan_execute.executor import Executor
+        from agent.plan_execute.executor import Executor
 
         return Executor(llm, server_paths)
     if mcp_mode == "optimized":
         return ReusedMCPExecutor(llm, server_paths, resolve_repo_root())
     raise ValueError(f"Unsupported MCP mode for PE-family runner: {mcp_mode!r}")
+
+
+def load_plan_execute_planner():
+    """Load AOB's PE planner with compatibility for common dependency labels."""
+    from agent.plan_execute import planner as planner_module
+
+    planner_module._DEP_NUM_RE = re.compile(r"#(?:S|Task)(\d+)")
+    return planner_module.Planner
 
 
 async def close_executor(executor: Any) -> None:
@@ -841,8 +854,8 @@ class ReusedMCPExecutor:
         question: str,
         tool_schema: str = "",
     ):
-        from plan_execute.executor import _extract_content, _resolve_args_with_llm
-        from plan_execute.models import StepResult
+        from agent.plan_execute.executor import _extract_content, _resolve_args_with_llm
+        from agent.plan_execute.models import StepResult
 
         if step.server not in self._server_paths:
             return StepResult(
@@ -904,7 +917,7 @@ def build_planning_question(question: str) -> str:
 async def build_tool_catalog(
     server_paths: dict[str, Path],
 ) -> dict[str, dict[str, dict[str, str]]]:
-    from plan_execute.executor import _list_tools
+    from agent.plan_execute.executor import _list_tools
 
     catalog: dict[str, dict[str, dict[str, str]]] = {}
     for name, path in server_paths.items():
@@ -1536,7 +1549,7 @@ def generate_suffix_plan(planner, replan_question: str, descriptions: dict[str, 
 
 
 def renumber_plan(plan, offset: int):
-    from plan_execute.models import Plan, PlanStep
+    from agent.plan_execute.models import Plan, PlanStep
 
     renumbered_steps = []
     for step in plan.steps:

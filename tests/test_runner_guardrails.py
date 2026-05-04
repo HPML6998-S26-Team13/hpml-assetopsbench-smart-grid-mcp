@@ -35,6 +35,7 @@ def test_gcp_batch_driver_hard_fails_incomplete_artifacts() -> None:
     assert "incomplete trajectory artifacts" in script
     assert 'status="artifact_failed"' in script
     assert 'existing_status" = "complete"' in script
+    assert "SMARTGRID_SKIP_LOCAL_MODEL_PREFLIGHT" in script
 
 
 def test_plan_execute_repo_local_keeps_smartgrid_server_overrides() -> None:

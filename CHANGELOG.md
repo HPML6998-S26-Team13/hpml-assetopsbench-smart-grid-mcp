@@ -4,6 +4,9 @@
 
 ### Changed
 
+- Added a post-PR179 WatsonX Llama-3.3-70B final-six x3 cohort and made the
+  GCP batch launcher skip local model/vLLM preflight when explicitly running
+  hosted-model-only CPU lanes.
 - Hardened hosted WatsonX 70B runner compatibility: AaT runners now omit/drop
   unsupported `parallel_tool_calls` settings for WatsonX, vanilla PE can opt
   into the repo-local Smart Grid server-aware runner with self-ask disabled,
