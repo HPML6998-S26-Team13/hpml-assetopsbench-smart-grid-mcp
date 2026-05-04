@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-05-04
+
+### Changed
+
+- Hardened hosted WatsonX 70B runner compatibility: AaT runners now omit/drop
+  unsupported `parallel_tool_calls` settings for WatsonX, vanilla PE can opt
+  into the repo-local Smart Grid server-aware runner with self-ask disabled,
+  Smart Grid vanilla PE defaults to that repo-local runner, and single-trial
+  AaT runs export MCP server launch env to child processes. Docs now state that
+  hosted WatsonX 70B rows can run from CPU-only client machines because IBM
+  hosts the model compute.
+- Hardened GCP fallback resume validation for final-six runs: the batch driver
+  now revalidates completed rows before skipping, marks incomplete artifacts as
+  `artifact_failed`, accepts shell-style space-separated scenario lists, and the
+  ZSD16 context config now sources an existing base config.
+
 ## 2026-05-03
 
 ### Changed

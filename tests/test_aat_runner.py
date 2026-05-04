@@ -448,6 +448,91 @@ def test_runner_threads_litellm_env(monkeypatch):
     assert settings.kwargs["parallel_tool_calls"] is False
 
 
+def test_watsonx_runner_omits_openai_only_model_settings(monkeypatch):
+    from scripts.aat_runner import AaTRunner
+
+    captured: dict[str, object] = {}
+
+    class FakeLitellmModel:
+        def __init__(self, model, base_url=None, api_key=None):
+            captured["model"] = model
+
+    class FakeModelSettings:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class FakeAgent:
+        def __init__(self, **kwargs):
+            captured["agent_kwargs"] = kwargs
+
+    class FakeRunner:
+        @staticmethod
+        async def run(agent, prompt, max_turns):
+            return _stub_run_result()
+
+    fake_litellm = SimpleNamespace(drop_params=False)
+    monkeypatch.setitem(sys.modules, "litellm", fake_litellm)
+    monkeypatch.setitem(
+        sys.modules,
+        "agents",
+        SimpleNamespace(
+            Agent=FakeAgent,
+            ModelSettings=FakeModelSettings,
+            Runner=FakeRunner,
+            __version__="test",
+        ),
+    )
+    monkeypatch.setitem(sys.modules, "agents.extensions", SimpleNamespace())
+    monkeypatch.setitem(sys.modules, "agents.extensions.models", SimpleNamespace())
+    monkeypatch.setitem(
+        sys.modules,
+        "agents.extensions.models.litellm_model",
+        SimpleNamespace(LitellmModel=FakeLitellmModel),
+    )
+
+    runner = AaTRunner(
+        model_id="watsonx/meta-llama/llama-3-3-70b-instruct",
+        mcp_mode="direct",
+        parallel_tool_calls=False,
+    )
+    asyncio.run(runner.run("hello"))
+
+    assert captured["model"] == "watsonx/meta-llama/llama-3-3-70b-instruct"
+    assert "model_settings" not in captured["agent_kwargs"]
+    assert fake_litellm.drop_params is True
+
+
+def test_watsonx_runner_rejects_parallel_tool_calls_true(monkeypatch):
+    from scripts.aat_runner import AaTRunner
+
+    monkeypatch.setitem(
+        sys.modules,
+        "agents",
+        SimpleNamespace(
+            Agent=lambda **_kwargs: None,
+            ModelSettings=lambda **_kwargs: None,
+            Runner=SimpleNamespace(run=lambda *_args, **_kwargs: None),
+            __version__="test",
+        ),
+    )
+    monkeypatch.setitem(sys.modules, "agents.extensions", SimpleNamespace())
+    monkeypatch.setitem(sys.modules, "agents.extensions.models", SimpleNamespace())
+    monkeypatch.setitem(
+        sys.modules,
+        "agents.extensions.models.litellm_model",
+        SimpleNamespace(LitellmModel=lambda **_kwargs: None),
+    )
+
+    runner = AaTRunner(
+        model_id="watsonx/meta-llama/llama-3-3-70b-instruct",
+        mcp_mode="direct",
+        parallel_tool_calls=True,
+    )
+
+    with pytest.raises(ValueError, match="WatsonX does not support"):
+        asyncio.run(runner.run("hello"))
+
+
 def test_batch_mode_requires_output_dir():
     from scripts.aat_runner import _main
 

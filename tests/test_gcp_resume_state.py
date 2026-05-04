@@ -26,18 +26,19 @@ def _trial(path: Path, *, success: bool | None = True, answer: str = "done") -> 
 def _latency(
     path: Path, scenario_file: Path, trial_index: int, output_path: Path
 ) -> None:
-    path.write_text(
-        json.dumps(
-            {
-                "scenario_file": scenario_file.as_posix(),
-                "trial_index": trial_index,
-                "latency_seconds": 1.25,
-                "output_path": output_path.as_posix(),
-            }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write(
+            json.dumps(
+                {
+                    "scenario_file": scenario_file.as_posix(),
+                    "trial_index": trial_index,
+                    "latency_seconds": 1.25,
+                    "output_path": output_path.as_posix(),
+                }
+            )
+            + "\n"
         )
-        + "\n",
-        encoding="utf-8",
-    )
 
 
 def _classify(
@@ -235,3 +236,91 @@ def test_finalize_trial_marks_divergent_rerun(tmp_path: Path) -> None:
     rerun = manifest_rows[-1]
     assert rerun["divergent"] is True
     assert rerun["original_output_sha256"] != rerun["final_output_sha256"]
+
+
+def test_validate_run_artifacts_flags_missing_outputs(tmp_path: Path) -> None:
+    scenario_file = _scenario(tmp_path / "multi_01.json")
+
+    result = gcp_resume_state.validate_run_artifacts(
+        run_dir=tmp_path / "run",
+        scenario_glob=scenario_file.as_posix(),
+        trials=1,
+        run_name="batch_Y",
+        require_latency=True,
+    )
+
+    assert result["valid"] is False
+    assert result["expected"] == 1
+    assert result["complete"] == 0
+    assert result["reason"] == "incomplete_trajectory_artifacts"
+    assert result["missing"][0]["reason"] == "missing_json"
+
+
+def test_validate_run_artifacts_counts_terminal_failures_as_complete(
+    tmp_path: Path,
+) -> None:
+    scenarios_dir = tmp_path / "scenarios"
+    scenarios_dir.mkdir()
+    scenario_file = _scenario(scenarios_dir / "multi_01.json")
+    run_dir = tmp_path / "run"
+    run_name = "batch_Y"
+    success_output = _trial(
+        run_dir / f"{run_name}_multi_01_run01.json",
+        success=True,
+    )
+    failure_output = _trial(
+        run_dir / f"{run_name}_multi_01_run02.json",
+        success=False,
+    )
+    _latency(run_dir / "latencies.jsonl", scenario_file, 1, success_output)
+    _latency(run_dir / "latencies.jsonl", scenario_file, 2, failure_output)
+
+    result = gcp_resume_state.validate_run_artifacts(
+        run_dir=run_dir,
+        scenario_glob=scenario_file.as_posix(),
+        trials=2,
+        run_name=run_name,
+        require_latency=True,
+    )
+
+    assert result["valid"] is True
+    assert result["expected"] == 2
+    assert result["complete"] == 2
+    assert result["success"] == 1
+    assert result["failure"] == 1
+    assert result["missing"] == []
+
+
+def test_validate_run_artifacts_accepts_space_separated_scenario_list(
+    tmp_path: Path,
+) -> None:
+    scenarios_dir = tmp_path / "scenarios"
+    scenarios_dir.mkdir()
+    first_scenario = _scenario(scenarios_dir / "multi_01.json", "SGT-001")
+    second_scenario = _scenario(scenarios_dir / "wo_04.json", "SGT-018")
+    run_dir = tmp_path / "run"
+    run_name = "batch_Y"
+
+    first_output = _trial(
+        run_dir / f"{run_name}_multi_01_run01.json",
+        success=True,
+    )
+    second_output = _trial(
+        run_dir / f"{run_name}_wo_04_run01.json",
+        success=True,
+    )
+    _latency(run_dir / "latencies.jsonl", first_scenario, 1, first_output)
+    _latency(run_dir / "latencies.jsonl", second_scenario, 1, second_output)
+
+    result = gcp_resume_state.validate_run_artifacts(
+        run_dir=run_dir,
+        scenario_glob=f"{first_scenario.as_posix()} {second_scenario.as_posix()}",
+        trials=1,
+        run_name=run_name,
+        require_latency=True,
+    )
+
+    assert result["valid"] is True
+    assert result["expected"] == 2
+    assert result["complete"] == 2
+    assert result["missing"] == []

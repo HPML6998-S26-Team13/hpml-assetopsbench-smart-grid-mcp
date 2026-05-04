@@ -162,6 +162,10 @@ for evaluation is large; prefer WatsonX API if available, otherwise run on GCP A
 | **Large model (70B, optional)** | WatsonX API (preferred) |
 | **Insomnia queues full** | GCP A100-40GB spot as overflow |
 
+WatsonX API rows can run from CPU-only clients. Use GPU VMs only when the same
+job also self-hosts local vLLM, collects GPU/profiler traces, or needs
+hardware-matched local-serving evidence.
+
 ### Why Insomnia over GCP
 
 - **Cost:** Insomnia is free. GCP burns through credits at $1.81-5.07/hr per GPU.

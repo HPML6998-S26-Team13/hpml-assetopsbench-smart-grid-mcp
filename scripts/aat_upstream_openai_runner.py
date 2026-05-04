@@ -133,12 +133,27 @@ def _parse_parallel_tool_calls() -> bool | None:
     )
 
 
-def _patch_aob_openai_runner(aob_openai_runner: Any, repo_root: Path) -> list[str]:
+def _is_watsonx_model(model_id: str) -> bool:
+    return model_id.strip().lower().startswith("watsonx/")
+
+
+def _configure_litellm_provider_compat(model_id: str) -> None:
+    if not _is_watsonx_model(model_id):
+        return
+    try:
+        import litellm  # type: ignore
+    except ImportError:
+        return
+    litellm.drop_params = True
+
+
+def _patch_aob_openai_runner(
+    aob_openai_runner: Any,
+    repo_root: Path,
+    model_id: str = "",
+) -> list[str]:
     """Patch AOB runner dependencies while leaving OpenAIAgentRunner.run intact."""
-    from agents import Agent as SDKAgent, ModelSettings
-    from agents.mcp import MCPServerStdio
     from scripts.aat_system_prompt import AOB_SOURCE_SHA
-    from scripts.aat_tools_mcp import _client_timeout_seconds, _server_params
 
     patches: list[str] = []
 
@@ -157,6 +172,10 @@ def _patch_aob_openai_runner(aob_openai_runner: Any, repo_root: Path) -> list[st
             f"expected AOB source SHA {AOB_SOURCE_SHA}. Refusing to run parity "
             "smoke without the local-vLLM parallel_tool_calls setting."
         )
+
+    from agents import Agent as SDKAgent, ModelSettings
+    from agents.mcp import MCPServerStdio
+    from scripts.aat_tools_mcp import _client_timeout_seconds, _server_params
 
     def _build_smartgrid_mcp_servers(
         server_paths: dict[str, Path | str],
@@ -188,12 +207,22 @@ def _patch_aob_openai_runner(aob_openai_runner: Any, repo_root: Path) -> list[st
         return servers
 
     parallel_tool_calls = _parse_parallel_tool_calls()
+    if _is_watsonx_model(model_id) and parallel_tool_calls is True:
+        raise ValueError(
+            "WatsonX does not support parallel_tool_calls; set "
+            "AAT_PARALLEL_TOOL_CALLS=false or auto for hosted WatsonX runs."
+        )
+    _configure_litellm_provider_compat(model_id)
+    effective_parallel_tool_calls = parallel_tool_calls
+    if _is_watsonx_model(model_id) and effective_parallel_tool_calls is False:
+        effective_parallel_tool_calls = None
 
     def _agent_with_model_settings(*args: Any, **kwargs: Any) -> Any:
-        kwargs.setdefault(
-            "model_settings",
-            ModelSettings(parallel_tool_calls=parallel_tool_calls),
-        )
+        if effective_parallel_tool_calls is not None:
+            kwargs.setdefault(
+                "model_settings",
+                ModelSettings(parallel_tool_calls=parallel_tool_calls),
+            )
         return SDKAgent(*args, **kwargs)
 
     aob_openai_runner._build_mcp_servers = _build_smartgrid_mcp_servers
@@ -201,6 +230,8 @@ def _patch_aob_openai_runner(aob_openai_runner: Any, repo_root: Path) -> list[st
 
     aob_openai_runner.Agent = _agent_with_model_settings
     patches.append(f"parallel_tool_calls={parallel_tool_calls}")
+    if _is_watsonx_model(model_id):
+        patches.append("watsonx_drop_unsupported_params")
 
     return patches
 
@@ -286,7 +317,7 @@ async def _main(args: argparse.Namespace) -> int:
 
     from agent.openai_agent import runner as aob_openai_runner
 
-    patches = _patch_aob_openai_runner(aob_openai_runner, repo_root)
+    patches = _patch_aob_openai_runner(aob_openai_runner, repo_root, args.model_id)
     OpenAIAgentRunner = aob_openai_runner.OpenAIAgentRunner
     runner = OpenAIAgentRunner(
         server_paths=server_paths,

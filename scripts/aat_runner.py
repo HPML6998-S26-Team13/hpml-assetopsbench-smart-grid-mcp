@@ -215,6 +215,24 @@ def _parse_parallel_tool_calls(value: str | None) -> bool | None:
     )
 
 
+def _is_watsonx_model(model_id: str) -> bool:
+    return model_id.strip().lower().startswith("watsonx/")
+
+
+def _configure_litellm_provider_compat(model_id: str) -> None:
+    """Apply provider-specific LiteLLM compatibility knobs."""
+    if not _is_watsonx_model(model_id):
+        return
+    try:
+        import litellm  # type: ignore
+    except ImportError:
+        return
+    # WatsonX rejects OpenAI-only request fields such as parallel_tool_calls
+    # even when their value is false. Ask LiteLLM to drop unsupported params
+    # instead of turning hosted 70B AaT spot checks into artifact failures.
+    litellm.drop_params = True
+
+
 def _serialize_run_result(
     args: argparse.Namespace,
     prompt: str,
@@ -414,22 +432,34 @@ class AaTRunner:
         from agents.extensions.models.litellm_model import LitellmModel
         from scripts.aat_system_prompt import AOB_SYSTEM_PROMPT
 
+        if _is_watsonx_model(self.model_id) and self.parallel_tool_calls is True:
+            raise ValueError(
+                "WatsonX does not support parallel_tool_calls; set "
+                "AAT_PARALLEL_TOOL_CALLS=false or auto for hosted WatsonX runs."
+            )
+        _configure_litellm_provider_compat(self.model_id)
+
         base_url = self.litellm_base_url or os.environ.get("LITELLM_BASE_URL")
         api_key = self.litellm_api_key or os.environ.get("LITELLM_API_KEY")
-        agent = Agent(
-            name="smartgrid_aat",
-            instructions=AOB_SYSTEM_PROMPT,
-            tools=self.tools,
-            mcp_servers=self.mcp_servers,
-            model=LitellmModel(
+        effective_parallel_tool_calls = self.parallel_tool_calls
+        if _is_watsonx_model(self.model_id) and effective_parallel_tool_calls is False:
+            effective_parallel_tool_calls = None
+        agent_kwargs: dict[str, Any] = {
+            "name": "smartgrid_aat",
+            "instructions": AOB_SYSTEM_PROMPT,
+            "tools": self.tools,
+            "mcp_servers": self.mcp_servers,
+            "model": LitellmModel(
                 model=self.model_id,
                 base_url=base_url,
                 api_key=api_key,
             ),
-            model_settings=ModelSettings(
+        }
+        if effective_parallel_tool_calls is not None:
+            agent_kwargs["model_settings"] = ModelSettings(
                 parallel_tool_calls=self.parallel_tool_calls,
-            ),
-        )
+            )
+        agent = Agent(**agent_kwargs)
         return await Runner.run(agent, prompt, max_turns=self.max_turns)
 
 

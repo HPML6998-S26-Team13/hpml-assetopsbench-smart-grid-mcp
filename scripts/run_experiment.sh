@@ -138,6 +138,14 @@ TORCH_PROFILE_DIR="${TORCH_PROFILE_DIR:-}"
 HYBRID_RUNNER_TEMPLATE="${HYBRID_RUNNER_TEMPLATE:-}"
 VERIFIED_PE_RUNNER_TEMPLATE="${VERIFIED_PE_RUNNER_TEMPLATE:-}"
 ENABLE_SELF_ASK="${ENABLE_SELF_ASK:-0}"
+PLAN_EXECUTE_REPO_LOCAL="${PLAN_EXECUTE_REPO_LOCAL:-}"
+if [ -z "$PLAN_EXECUTE_REPO_LOCAL" ]; then
+  if [ "$ORCHESTRATION" = "plan_execute" ] && [ "$ENABLE_SMARTGRID_SERVERS" = "1" ]; then
+    PLAN_EXECUTE_REPO_LOCAL=1
+  else
+    PLAN_EXECUTE_REPO_LOCAL=0
+  fi
+fi
 ENABLE_MISSING_EVIDENCE_GUARD="${ENABLE_MISSING_EVIDENCE_GUARD:-0}"
 ENABLE_MISSING_EVIDENCE_REPAIR="${ENABLE_MISSING_EVIDENCE_REPAIR:-0}"
 MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS="${MISSING_EVIDENCE_REPAIR_MAX_ATTEMPTS:-2}"
@@ -634,7 +642,7 @@ PY
 run_plan_execute_trial() {
   local prompt="$1"
   local out_path="$2"
-  if [ "$ENABLE_SELF_ASK" = "1" ]; then
+  if [ "$ENABLE_SELF_ASK" = "1" ] || [ "${PLAN_EXECUTE_REPO_LOCAL:-0}" = "1" ]; then
     local -a wrapper_cmd=(
       "$AOB_PYTHON"
       "$REPO_ROOT/scripts/plan_execute_self_ask_runner.py"
@@ -643,6 +651,9 @@ run_plan_execute_trial() {
       --aob-path "$AOB_PATH"
       --mcp-mode "$MCP_MODE"
     )
+    if [ "$ENABLE_SELF_ASK" != "1" ]; then
+      wrapper_cmd+=(--disable-self-ask)
+    fi
     if [ "$HARNESS_VERBOSE" = "1" ]; then
       wrapper_cmd+=(--verbose --show-plan --show-trajectory)
     fi
@@ -655,7 +666,6 @@ run_plan_execute_trial() {
   if [ "$HARNESS_VERBOSE" = "1" ]; then
     cmd+=(--verbose --show-plan --show-trajectory)
   fi
-  cmd+=("${SERVER_ARGS[@]}")
   cmd+=("$prompt")
   (cd "$AOB_PATH" && "${cmd[@]}") >"$out_path" 2>>"$HARNESS_LOG"
 }
@@ -917,6 +927,8 @@ run_external_orchestration_trial() {
 run_agent_as_tool_trial() {
   local prompt="$1"
   local out_path="$2"
+
+  export AAT_MCP_SERVER_PYTHON AAT_MCP_SERVER_LAUNCH_MODE AAT_MCP_CLIENT_TIMEOUT_SECONDS
 
   if [ -n "$AAT_RUNNER_TEMPLATE" ]; then
     run_external_orchestration_trial "$prompt" "$out_path" "AAT_RUNNER_TEMPLATE"
