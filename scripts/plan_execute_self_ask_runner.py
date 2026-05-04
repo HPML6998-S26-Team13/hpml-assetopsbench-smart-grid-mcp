@@ -27,6 +27,7 @@ from orchestration_utils import (
     finalize_missing_evidence_repair_state,
     load_fault_risk_adjudication_config,
     load_missing_evidence_repair_config,
+    load_plan_execute_planner,
     mark_missing_evidence_attempt_result,
     mark_missing_evidence_unrepaired,
     maybe_self_ask,
@@ -58,11 +59,10 @@ async def _run(args) -> None:
     bootstrap_aob(aob_path)
     preflight_aob_runtime_dependencies()
 
-    from plan_execute.planner import Planner
-
     llm = build_llm(args.model_id)
     server_paths = effective_server_paths(args.servers, repo_root)
 
+    Planner = load_plan_execute_planner()
     planner = Planner(llm)
     executor = build_executor(llm, server_paths, mcp_mode=args.mcp_mode)
     repair_config = load_missing_evidence_repair_config()
