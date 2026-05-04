@@ -1,7 +1,7 @@
 # Slurm Cheatsheet
 
 *Created: 2026-04-12*  
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-04*
 
 Quick command-first reference for common Slurm operations on Insomnia.
 Use this when you just want to submit a job, get an interactive GPU shell,
@@ -32,32 +32,46 @@ Two important realities on Insomnia:
   bursty login-node controller traffic; do not use sub-minute `squeue` /
   `sacct` polling or tight `watch` loops. Scope every query to a job ID or
   your user; never fall back to global `squeue` / `sacct`.
-- **Slurm log paths are resolved relative to the submit directory**
-  (`$SLURM_SUBMIT_DIR`), so submit from the repo root or use `--chdir=...`.
+- **Submit benchmark scripts from the intended repo root/worktree after loading
+  the Insomnia environment.** `scripts/run_experiment.sh` uses
+  `$SLURM_SUBMIT_DIR` as `REPO_ROOT`; on Insomnia, `sbatch --chdir=...` changes
+  the job working directory but does not make `$SLURM_SUBMIT_DIR` point there.
+  Use `cd <repo-root-or-worktree> && source .venv-insomnia/bin/activate &&
+  sbatch ...` for evidence runs.
 
 ## Submit a batch script
 
 Use this when you do not want to sit and wait for the allocation.
 
-From the repo root:
+From the canonical Insomnia checkout:
 
 ```bash
-cd <repo-root-or-worktree>
-sbatch scripts/vllm_serve.sh
+cd /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+export PATH="$HOME/.local/bin:$PATH"
+source .venv-insomnia/bin/activate
+command -v uv
+sbatch scripts/run_experiment.sh configs/<cell>.env
 ```
 
-Or from anywhere, explicitly:
+From a sibling worktree, use the shared Insomnia venv and submit from inside the
+worktree so `$SLURM_SUBMIT_DIR` is correct:
 
 ```bash
-sbatch \
-  --chdir=<repo-root-or-worktree> \
-  scripts/vllm_serve.sh
+cd /insomnia001/depts/edu/users/team13/worktrees/<slug>
+export PATH="$HOME/.local/bin:$PATH"
+source ../../hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/bin/activate
+command -v uv
+sbatch scripts/run_experiment.sh configs/<cell>.env
 ```
+
+Do not rely on `sbatch --chdir=<repo-root-or-worktree>` for
+`scripts/run_experiment.sh`; use it only for ad hoc scripts that do not derive
+repo paths from `$SLURM_SUBMIT_DIR`.
 
 Capture the job ID:
 
 ```bash
-JOBID=$(sbatch scripts/vllm_serve.sh | awk '{print $4}')
+JOBID=$(sbatch scripts/run_experiment.sh configs/<cell>.env | awk '{print $4}')
 echo "$JOBID"
 ```
 
@@ -67,7 +81,7 @@ With email notifications:
 sbatch \
   --mail-type=BEGIN,END,FAIL \
   --mail-user=<UNI>@columbia.edu \
-  scripts/vllm_serve.sh
+  scripts/run_experiment.sh configs/<cell>.env
 ```
 
 ## Run an ad hoc command when allocation starts

@@ -15,9 +15,10 @@
 # follow-on runners for Self-Ask PE and Verified PE. Runner templates remain
 # available as explicit escape hatches for parity or variant smoke checks.
 #
-# MUST be submitted from the repo root — `#SBATCH --output=logs/...` resolves
-# relative to $SLURM_SUBMIT_DIR. If you need to submit from elsewhere, add
-# `--chdir=/path/to/repo` to the sbatch invocation.
+# MUST be submitted from the intended repo root or worktree. This script uses
+# $SLURM_SUBMIT_DIR as REPO_ROOT; `sbatch --chdir=/path/to/repo` changes the
+# job's cwd but does not change $SLURM_SUBMIT_DIR on Insomnia, so it is not a
+# safe substitute for `cd /path/to/repo && sbatch ...`.
 #
 # Usage:
 #   sbatch scripts/run_experiment.sh configs/example_baseline.env
