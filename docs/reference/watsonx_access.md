@@ -127,6 +127,13 @@ response = model.generate_text(
 
 ### Where to use WatsonX
 
+WatsonX-hosted rows do not need a local GPU. The client machine only runs the
+benchmark harness, MCP/direct tool code, artifact writing, and API requests;
+the 70B / judge inference happens on IBM-hosted infrastructure. A laptop,
+Insomnia CPU/login context, or non-GPU GCP VM can run these jobs when it has
+the repo checkout, Python environment, credentials, network, and enough
+wall-clock time.
+
 | Workload | Use WatsonX? | Why |
 |----------|--------------|-----|
 | Llama-3.1-8B-Instruct profiling (Phase 2) | No | Need GPU-level traces from self-hosted vLLM on Insomnia |

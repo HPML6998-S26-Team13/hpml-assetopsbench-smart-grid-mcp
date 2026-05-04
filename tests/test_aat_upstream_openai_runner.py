@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pathlib
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -36,7 +37,7 @@ def test_upstream_patch_requires_agent_symbol() -> None:
     assert AOB_SOURCE_SHA in message
 
 
-def test_upstream_patch_replaces_expected_symbols() -> None:
+def test_upstream_patch_replaces_expected_symbols(monkeypatch) -> None:
     from scripts.aat_upstream_openai_runner import _patch_aob_openai_runner
 
     def original_build() -> list[object]:
@@ -50,12 +51,69 @@ def test_upstream_patch_replaces_expected_symbols() -> None:
         Agent=original_agent,
     )
 
+    monkeypatch.setitem(
+        sys.modules,
+        "agents",
+        SimpleNamespace(Agent=original_agent, ModelSettings=lambda **_kwargs: None),
+    )
+    monkeypatch.setitem(
+        sys.modules,
+        "agents.mcp",
+        SimpleNamespace(MCPServerStdio=lambda **_kwargs: None),
+    )
+
     patches = _patch_aob_openai_runner(module, pathlib.Path.cwd())
 
     assert module._build_mcp_servers is not original_build
     assert module.Agent is not original_agent
     assert "mcp_server_launch" in patches
     assert any(patch.startswith("parallel_tool_calls=") for patch in patches)
+
+
+def test_upstream_patch_omits_watsonx_parallel_setting(monkeypatch) -> None:
+    from scripts.aat_upstream_openai_runner import _patch_aob_openai_runner
+
+    captured: dict[str, object] = {}
+
+    def original_build() -> list[object]:
+        return []
+
+    def sdk_agent(*_args: object, **kwargs: object) -> None:
+        captured["kwargs"] = kwargs
+        return None
+
+    class FakeModelSettings:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    fake_litellm = SimpleNamespace(drop_params=False)
+    monkeypatch.setitem(sys.modules, "litellm", fake_litellm)
+    monkeypatch.setitem(
+        sys.modules,
+        "agents",
+        SimpleNamespace(Agent=sdk_agent, ModelSettings=FakeModelSettings),
+    )
+    monkeypatch.setitem(
+        sys.modules,
+        "agents.mcp",
+        SimpleNamespace(MCPServerStdio=lambda **_kwargs: None),
+    )
+
+    module = SimpleNamespace(
+        _build_mcp_servers=original_build,
+        Agent=sdk_agent,
+    )
+
+    patches = _patch_aob_openai_runner(
+        module,
+        pathlib.Path.cwd(),
+        model_id="watsonx/meta-llama/llama-3-3-70b-instruct",
+    )
+    module.Agent(name="x")
+
+    assert "model_settings" not in captured["kwargs"]
+    assert "watsonx_drop_unsupported_params" in patches
+    assert fake_litellm.drop_params is True
 
 
 def test_upstream_serialize_marks_max_turns_unsuccessful(tmp_path) -> None:

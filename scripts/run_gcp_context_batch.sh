@@ -121,6 +121,31 @@ with pathlib.Path(path).open("a", encoding="utf-8") as fh:
 PY
 }
 
+validate_run_artifacts() {
+  local run_dir="$1" scenario_glob="$2" trials="$3" run_name="$4"
+  local validation_rc=0
+  local -a require_latency_args=()
+  if [ "${SMARTGRID_RESUME_REQUIRE_LATENCY:-1}" = "1" ]; then
+    require_latency_args+=(--require-latency)
+  fi
+  local validation_output
+  validation_output="$(
+    "$PYTHON_BIN" scripts/gcp_resume_state.py validate-run-shell \
+      --run-dir "$run_dir" \
+      --scenario-glob "$scenario_glob" \
+      --trials "$trials" \
+      --run-name "$run_name" \
+      "${require_latency_args[@]}"
+  )" || validation_rc=$?
+  eval "$validation_output"
+  echo "Artifact validation for $run_name: ${VALIDATION_COMPLETE:-0}/${VALIDATION_EXPECTED:-0} complete, ${VALIDATION_MISSING:-0} missing"
+  if [ "$validation_rc" -ne 0 ]; then
+    echo "ERROR: incomplete trajectory artifacts for $run_name: ${VALIDATION_REASON:-unknown}" >&2
+    echo "Missing sample: ${VALIDATION_MISSING_SAMPLE:-[]}" >&2
+  fi
+  return "$validation_rc"
+}
+
 preflight_runtime() {
   [ "$DRY_RUN" = "1" ] && return 0
   command -v "$PYTHON_BIN" >/dev/null
@@ -179,9 +204,12 @@ tail -n +2 "$COHORT_TSV" | while IFS=$'\t' read -r label config; do
   started="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
   if [ "$existing_status" = "complete" ]; then
-    echo "Skipping $label: already complete in $STATE_FILE"
-    append_manifest "$label" "$config" "$run_id" "$run_dir" "" "" "skipped_complete" "$started" "$started"
-    continue
+    if validate_run_artifacts "$run_dir" "$SCENARIOS_GLOB" "$TRIALS" "$run_id"; then
+      echo "Skipping $label: already complete in $STATE_FILE"
+      append_manifest "$label" "$config" "$run_id" "$run_dir" "" "" "skipped_complete" "$started" "$started"
+      continue
+    fi
+    echo "WARNING: $label was marked complete but artifact validation failed; rerunning with SMARTGRID_RESUME=1" >&2
   fi
 
   append_state "$label" "$config" "$run_id" "started" "$started" ""
@@ -201,6 +229,9 @@ tail -n +2 "$COHORT_TSV" | while IFS=$'\t' read -r label config; do
   SMARTGRID_COMPUTE_INSTANCE="${SMARTGRID_COMPUTE_INSTANCE:-$(hostname)}" \
     bash scripts/run_experiment.sh "$config" || run_rc=$?
 
+  artifact_rc=0
+  validate_run_artifacts "$run_dir" "$SCENARIOS_GLOB" "$TRIALS" "$run_id" || artifact_rc=$?
+
   judge_rc=0
   if [ "$RUN_JUDGE" = "1" ]; then
     "$PYTHON_BIN" scripts/judge_trajectory.py \
@@ -212,6 +243,7 @@ tail -n +2 "$COHORT_TSV" | while IFS=$'\t' read -r label config; do
   finished="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   status="complete"
   [ "$run_rc" -ne 0 ] && status="run_failed"
+  [ "$run_rc" -eq 0 ] && [ "$artifact_rc" -ne 0 ] && status="artifact_failed"
   [ "$judge_rc" -ne 0 ] && status="judge_failed"
   append_state "$label" "$config" "$run_id" "$status" "$started" "$finished"
   append_manifest "$label" "$config" "$run_id" "$run_dir" "$run_rc" "$judge_rc" "$status" "$started" "$finished"

@@ -71,7 +71,16 @@ async def _run(args) -> None:
     repair_attempts_by_target = {}
 
     try:
-        self_ask = maybe_self_ask(args.question, llm)
+        self_ask = (
+            SimpleNamespace(
+                needs_self_ask=False,
+                clarifying_questions=[],
+                assumptions=[],
+                augmented_question=args.question,
+            )
+            if args.disable_self_ask
+            else maybe_self_ask(args.question, llm)
+        )
         descriptions = await executor.get_server_descriptions()
         tool_catalog = await build_tool_catalog_for_executor(executor, server_paths)
         planner_descriptions = build_planner_descriptions(descriptions, tool_catalog)
@@ -212,6 +221,7 @@ async def _run(args) -> None:
             "question": args.question,
             "effective_question": self_ask.augmented_question,
             "self_ask": {
+                "enabled": not args.disable_self_ask,
                 "needs_self_ask": self_ask.needs_self_ask,
                 "clarifying_questions": self_ask.clarifying_questions,
                 "assumptions": self_ask.assumptions,
@@ -253,6 +263,11 @@ def main() -> None:
     parser = build_parser(
         "plan-execute-self-ask",
         "Run the PE workflow with a lightweight Self-Ask clarification pass.",
+    )
+    parser.add_argument(
+        "--disable-self-ask",
+        action="store_true",
+        help="Skip the pre-plan Self-Ask clarification pass for this run.",
     )
     args = parser.parse_args()
     setup_logging(args.verbose)

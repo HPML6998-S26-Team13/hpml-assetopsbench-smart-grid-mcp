@@ -9,6 +9,7 @@ finalization, and manifest events.
 from __future__ import annotations
 
 import argparse
+import glob
 import hashlib
 import importlib.metadata
 import json
@@ -138,6 +139,23 @@ def _scenario_payload(path: Path) -> dict[str, Any]:
 
 def _scenario_basename(path: Path) -> str:
     return path.stem
+
+
+def _expand_scenario_glob(scenario_glob: str) -> list[Path]:
+    """Expand either one glob pattern or a shell-style list of scenario paths."""
+    tokens = shlex.split(scenario_glob)
+    if not tokens:
+        tokens = [scenario_glob]
+    paths: list[Path] = []
+    seen: set[str] = set()
+    for token in tokens:
+        for match in sorted(glob.glob(token)):
+            key = _norm(match)
+            if key in seen:
+                continue
+            paths.append(Path(match))
+            seen.add(key)
+    return paths
 
 
 def _step_failed(step: dict[str, Any]) -> bool:
@@ -313,6 +331,75 @@ def classify_trial(
         "output_path": _posix(output_path),
         "reason": ",".join(sorted(set(incomplete_reasons))) or "missing_json",
         "latency_rows": 0,
+    }
+
+
+def validate_run_artifacts(
+    *,
+    run_dir: Path,
+    scenario_glob: str,
+    trials: int,
+    run_name: str = "",
+    require_latency: bool = True,
+) -> dict[str, Any]:
+    scenario_files = _expand_scenario_glob(scenario_glob)
+    expected = len(scenario_files) * int(trials)
+    complete = 0
+    success = 0
+    failure = 0
+    missing: list[dict[str, Any]] = []
+    latency_file = run_dir / "latencies.jsonl"
+
+    if expected == 0:
+        return {
+            "valid": False,
+            "expected": 0,
+            "complete": 0,
+            "success": 0,
+            "failure": 0,
+            "missing": [],
+            "reason": "no_expected_trials",
+        }
+
+    for scenario_file in scenario_files:
+        basename = _scenario_basename(scenario_file)
+        for trial_index in range(1, int(trials) + 1):
+            output_name = f"{basename}_run{trial_index:02d}.json"
+            if run_name:
+                output_name = f"{run_name}_{output_name}"
+            result = classify_trial(
+                run_dir=run_dir,
+                scenario_file=scenario_file,
+                trial_index=trial_index,
+                output_path=run_dir / output_name,
+                latency_file=latency_file,
+                require_latency=require_latency,
+            )
+            if result["complete"]:
+                complete += 1
+                if result["success"]:
+                    success += 1
+                else:
+                    failure += 1
+                continue
+            missing.append(
+                {
+                    "scenario_file": _posix(scenario_file),
+                    "trial_index": trial_index,
+                    "reason": result["reason"],
+                    "output_path": result["output_path"],
+                }
+            )
+
+    valid = complete == expected
+    return {
+        "valid": valid,
+        "expected": expected,
+        "complete": complete,
+        "success": success,
+        "failure": failure,
+        "missing": missing,
+        "reason": "ok" if valid else "incomplete_trajectory_artifacts",
     }
 
 
@@ -571,6 +658,13 @@ def _build_parser() -> argparse.ArgumentParser:
     event.add_argument("--run-name", required=True)
     event.add_argument("--reason", default="")
     event.add_argument("--batch-id", default="")
+
+    validate = sub.add_parser("validate-run-shell")
+    validate.add_argument("--run-dir", required=True, type=Path)
+    validate.add_argument("--scenario-glob", required=True)
+    validate.add_argument("--trials", required=True, type=int)
+    validate.add_argument("--run-name", default="")
+    validate.add_argument("--require-latency", action="store_true")
     return parser
 
 
@@ -642,6 +736,32 @@ def main() -> None:
             reason=args.reason,
             batch_id=args.batch_id,
         )
+        return
+    if args.command == "validate-run-shell":
+        result = validate_run_artifacts(
+            run_dir=args.run_dir,
+            scenario_glob=args.scenario_glob,
+            trials=args.trials,
+            run_name=args.run_name,
+            require_latency=args.require_latency,
+        )
+        missing_sample = result["missing"][:5]
+        _emit_shell(
+            {
+                "VALIDATION_PASSED": _shell_bool(bool(result["valid"])),
+                "VALIDATION_EXPECTED": result["expected"],
+                "VALIDATION_COMPLETE": result["complete"],
+                "VALIDATION_SUCCESS": result["success"],
+                "VALIDATION_FAILURE": result["failure"],
+                "VALIDATION_MISSING": len(result["missing"]),
+                "VALIDATION_REASON": result["reason"],
+                "VALIDATION_MISSING_SAMPLE": json.dumps(
+                    missing_sample, sort_keys=True, separators=(",", ":")
+                ),
+            }
+        )
+        if not result["valid"]:
+            raise SystemExit(1)
         return
     raise AssertionError(args.command)
 
