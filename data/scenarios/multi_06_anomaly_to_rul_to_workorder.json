@@ -1,17 +1,19 @@
 {
   "id": "SGT-030",
   "type": "Multi",
-  "text": "Recent telemetry on T-020 has shown anomalous behaviour. Run an anomaly check, then re-forecast remaining useful life conditioned on those findings, and create a work order whose scope and priority match the forecasted condition over the next 90 days.",
-  "category": "Anomaly-Conditioned RUL to Work Order",
-  "characteristic_form": "The answer should report the anomaly findings for T-020, the RUL forecast at the 90-day horizon, and create a work order whose priority and scope explicitly reflect the forecasted condition (e.g. emergency vs short-term corrective).",
+  "text": "Recent telemetry on T-020 has shown anomalous behaviour. First identify the available sensor channels, run an anomaly check on the relevant channel(s), pull the RUL forecast over a 90-day horizon, and create a work order whose scope and priority reflect the combined anomaly and forecast evidence.",
+  "category": "Anomaly Detection and RUL Forecast to Work Order",
+  "characteristic_form": "The answer should report the available sensor channels for T-020, the anomaly findings on the channel(s) examined, the RUL forecast at the 90-day horizon, and create a work order whose priority and scope are explicitly justified by both the anomaly and the forecast (e.g. emergency vs short-term corrective).",
   "asset_id": "T-020",
   "expected_tools": [
+    "iot.list_sensors",
     "tsfm.detect_anomalies",
     "tsfm.forecast_rul",
     "wo.create_work_order"
   ],
   "ground_truth": {
     "must_include": [
+      "sensor channels available",
       "anomaly findings",
       "RUL forecast 90-day",
       "work order created",
@@ -20,6 +22,7 @@
   },
   "difficulty": "hard",
   "domain_tags": [
+    "IoT",
     "TSFM",
     "WO"
   ]

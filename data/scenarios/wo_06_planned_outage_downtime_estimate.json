@@ -1,9 +1,9 @@
 {
   "id": "SGT-028",
   "type": "WO",
-  "text": "Planning needs a downtime estimate for T-018 ahead of a scheduled corrective outage. Review the recent fault history to characterize the typical event class for this unit and produce a downtime estimate consistent with that history.",
+  "text": "Planning needs a downtime estimate for T-018 ahead of an upcoming high-severity corrective outage. Review the recent fault history to characterize the typical event class for this unit, then produce a downtime estimate at the high severity tier with assumptions justified by that history.",
   "category": "Downtime Estimation for Planned Outage",
-  "characteristic_form": "The answer should summarize the recent fault record entries for T-018, identify the dominant fault class or repair pattern, and report a downtime estimate in hours along with the assumptions that justify it.",
+  "characteristic_form": "The answer should summarize the recent fault record entries for T-018, identify the dominant fault class or repair pattern, and report a downtime estimate in hours at the high severity tier along with the assumptions that justify it.",
   "asset_id": "T-018",
   "expected_tools": [
     "wo.list_fault_records",
@@ -14,6 +14,7 @@
       "fault history summary",
       "dominant fault class",
       "downtime estimate hours",
+      "high severity tier",
       "estimation assumptions"
     ]
   },
