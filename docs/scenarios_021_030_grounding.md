@@ -48,7 +48,7 @@ To set expectations for the upstream PR review:
 
 The first-cut versions of SGT-022, SGT-025, SGT-027, SGT-028, and SGT-030 passed the schema validator but failed at **tool-signature precondition** time: the validator confirms each tool name is canonical, but does not check whether the prompt + chain provides every required argument the actual MCP server functions need (e.g. `iot.get_sensor_readings` and `tsfm.detect_anomalies` require a `sensor_id` the prompt did not name; `wo.update_work_order` requires a session-resident WO ID the corpus did not preload; `wo.estimate_downtime` requires a `severity` string `list_fault_records` does not return).
 
-The five scenarios above were reworked after a direct read of `mcp_servers/{iot,fmsr,tsfm,wo}_server/server.py` and a Python REPL dry-run of each chain's first call. SGT-025 was reclassified TSFM → Multi (IoT+TSFM) and the file renamed to `multi_07_iot_tsfm_anomaly_burst.json`. SGT-030 was widened to Multi (IoT+TSFM+WO).
+The five scenarios above were reworked after a direct read of `mcp_servers/{iot,fmsr,tsfm,wo}_server/server.py` and a Python REPL dry-run of each chain's first call. SGT-025 was reclassified TSFM → Multi (IoT+TSFM) and the file renamed to `multi_07_iot_tsfm_anomaly_burst.json`. SGT-030 was revised to a Multi (TSFM+WO) RUL-driven work-order scenario after the v2 review removed the false anomaly premise (see line 37).
 
 A follow-up issue should extend `validate_scenarios.py` to do tool-signature precondition checks (e.g. introspect `inspect.signature()` on each canonical tool and assert that `expected_tools` covers any required arg without a default).
 
