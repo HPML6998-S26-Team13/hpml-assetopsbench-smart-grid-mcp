@@ -22,15 +22,23 @@ node etiquette) live in [insomnia_runbook.md](insomnia_runbook.md). This
 file is the higher-level reproducibility story; read the Insomnia runbook
 alongside it.
 
-> **Where new captures land (2026-05-03 onward):** Insomnia went into a
-> CVE-fix maintenance window late on 2026-05-03 with uncertain return.
-> **GCP A100 spot is the canonical path for new captures from then on**
-> (per `#49` co-ownership note + `#66` post-A100 evidence in PR #172 / #173).
-> The Insomnia path remains the canonical record for the Apr 26-28 captures
-> (Cells A/B/Y/Z, runs `8979314` / `8998340..8998343`) and stays the
-> default in §2-§4 below; switch to the GCP path in §3.7 when Insomnia is
-> unavailable. Resumable runs via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME`
-> work identically across both paths (PR #170).
+> **Where new captures land (status as of 2026-05-05):** Insomnia is the
+> primary path again — it returned on 2026-05-05 after the 2026-05-03 → 05
+> CVE-fix maintenance window. During that downtime the team validated the
+> GCP A100 spot path end-to-end (PR #170 hardening + the
+> `gcp_a100_context_20260503T063343Z` closeout, seven rows / `run_rc=0`),
+> so GCP is now a proven fallback rather than just a documented one. Use
+> the Insomnia path in §2-§4 by default; switch to the GCP path in §3.7
+> when Insomnia is unavailable, queue-saturated, or you need preemption-
+> tolerant batching. Resumable runs via `SMARTGRID_RUN_ID` /
+> `SMARTGRID_RESUME` work identically across both paths (PR #170), so the
+> same `--batch-id` survives a path swap mid-batch if needed.
+>
+> Apr 26-28 canonical captures (Cells A/B/Y/Z, runs `8979314` /
+> `8998340..8998343`) ran on Insomnia A6000. The May 3 closeout ran on
+> GCP A100. The `gpu_type` field in `summary.json` (PR #145) records
+> which path each run actually used so cross-run comparisons can filter
+> accordingly.
 >
 > See [`infra_profiling_serving_brief.md`](infra_profiling_serving_brief.md) for the one-page fact pack
 > (model IDs + version pins + canonical run IDs) that backs the paper's

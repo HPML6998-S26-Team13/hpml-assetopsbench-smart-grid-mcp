@@ -26,10 +26,10 @@ One-page fact pack. Concrete numbers and repo paths only — verbatim-quotable, 
 
 ## Compute environments
 
-| Path | When | GPU | Cost | Status post-2026-05-03 |
+| Path | When | GPU | Cost | Status as of 2026-05-05 |
 |---|---|---|---|---|
-| **Insomnia** (Columbia HPC) | Default | NVIDIA RTX A6000 (48 GB) or NVIDIA L40S | $0 (account `edu`, partition `short`, qos `short`, time ≤ 2h) | Canonical for the Apr captures (Cells A/B/Y/Z). Down for CVE-fix maintenance late 2026-05-03 → uncertain return; team partially shifted to GCP. |
-| **GCP A100** | Fallback / preemption-tolerant batches | NVIDIA A100-40GB (`a2-highgpu-1g`, ~$1.81/hr spot) or A100-80GB (`a2-ultragpu-1g`, ~$2.50/hr spot) | $500/person credit (~276 GPU-hr A100-40GB spot per member) | **Canonical post-2026-05-03** for new captures. Resumable runs via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME` env vars (PR #170). Manifest of canonical GCP captures: `logs/gcp_a100_context_20260503T063343Z_manifest.tsv`. |
+| **Insomnia** (Columbia HPC) | Primary | NVIDIA RTX A6000 (48 GB) or NVIDIA L40S | $0 (account `edu`, partition `short`, qos `short`, time ≤ 2h) | Primary path. Carried the Apr 26-28 canonical captures (Cells A/B/Y/Z, runs `8979314` / `8998340..43`). Was down 2026-05-03 → 2026-05-05 for a CVE-fix window; back online and primary again. |
+| **GCP A100** | Validated fallback / preemption-tolerant batches | NVIDIA A100-40GB (`a2-highgpu-1g`, ~$1.81/hr spot) or A100-80GB (`a2-ultragpu-1g`, ~$2.50/hr spot) | $500/person credit (~276 GPU-hr A100-40GB spot per member) | Proven fallback after the May 3 closeout (seven rows, `run_rc=0` + `judge_rc=0`, manifest at `logs/gcp_a100_context_20260503T063343Z_manifest.tsv`). Use when Insomnia is unavailable or saturated, or for preemption-tolerant batching. Resumable via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME` (PR #170). |
 | **WatsonX hosted** | Judge + 70B comparison | n/a (hosted) | Free per IBM credit allocation | Always-on; no Insomnia dependency. |
 
 ## Slurm run shape (Insomnia)
@@ -96,7 +96,7 @@ Three streams, all attached per-run:
 3. **GPU type non-deterministic** on Insomnia (A6000 vs L40S vs H100 NVL depending on Slurm assignment) — `#132` makes `gpu_type` stamp into `summary.json` per run, so cross-run comparisons can filter accordingly.
 4. **Token throughput is end-to-end agent throughput, NOT pure model decode tok/s** — denominator includes tool-call round-trips + MCP serialization + orchestration time. Inline note in `scripts/run_experiment.sh` summary builder; PR #174.
 5. **vLLM 0.19.0 FA3 kernel constraint:** `--kv-cache-dtype fp8` requires BF16 model weights. Cell C ships FP16 + prefix-caching only. INT8 path is BF16 (CompressedTensors default), so a future Cell D that swaps the model precision could combine INT8 + fp8 KV.
-6. **Insomnia CVE-fix downtime late 2026-05-03 onward** — uncertain return. GCP A100 path became canonical for new captures from 2026-05-03; documented in `docs/gcp_fallback.md`.
+6. **Insomnia was down 2026-05-03 → 2026-05-05** for a CVE-fix maintenance window; the GCP A100 path was validated end-to-end during that window (May 3 closeout). Insomnia is back as the primary path; GCP is now a proven fallback rather than just a documented one. Documented in `docs/gcp_fallback.md` + this brief.
 7. **Replay context-window edge** on Cell A scenarios: one of two replay scenarios hit the (then) 8192 limit on `8979314` (multi_01, 8193 input tokens). PR #145 bumped canonical configs to 32768; smoke configs stay at 8192.
 
 ## Refs (for Alex's verification)
