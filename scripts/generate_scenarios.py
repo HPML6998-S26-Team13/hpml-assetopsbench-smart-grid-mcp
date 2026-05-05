@@ -95,12 +95,14 @@ PROMPT_VERSION = "v0.2"  # bump on any prompt-template change
 #   narrowed the fault class (CH4+C2H4 → thermal pattern) and contradicted
 #   the labeled D2 fault. Addresses PR #178 inspection issue "gas-fault
 #   mismatch in SGT-GEN-005" + "borderline no-hint" finding.
-# - CONSISTENCY_CONSTRAINTS (new section): two explicit checks the model
+# - CONSISTENCY_CONSTRAINTS (new section): three explicit checks the model
 #   must satisfy before emitting JSON:
 #     1. text-evidence ↔ ground_truth.final_value consistency
 #     2. expected_tools callability from prompt context (every tool's
 #        required arguments must be derivable from the text, OR a discovery
 #        tool must precede it in ideal_tool_sequence)
+#     3. asset_id pinning: the rotated asset_id must appear in both the
+#        user-facing text and ground_truth, and not be replaced by the model.
 #   Addresses PR #178 inspection issues SGT-GEN-001 / 003 / 005 / Medium 4.
 # - SCHEMA_REMINDER: tightened ground_truth.final_value example to discourage
 #   the v0.1 SGT-GEN-002 case (decisive_intermediate_values.rul_range_days

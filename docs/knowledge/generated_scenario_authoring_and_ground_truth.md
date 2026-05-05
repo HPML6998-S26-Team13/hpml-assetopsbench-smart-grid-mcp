@@ -36,6 +36,7 @@ scenarios with any of them.
 | **Ratio or threshold hint** | Pre-computes the key analytic step | "The R2 ratio exceeds 3.0, indicating arcing…" |
 | **IEC/IEEE code leak** | Gives away the answer | "The transformer shows D2 fault symptoms…" |
 | **Gas value in prompt** | Removes the data retrieval step | "H2 = 482 ppm, C2H2 = 60 ppm — diagnose…" |
+| **Gas name or formula in prompt** | Hints which fault class is in play | "hydrogen elevated above baseline", "rising methane and ethylene", "C2H2 trending up" |
 | **Decision pre-framed** | Collapses the reasoning task | "Given arcing is confirmed, create a corrective WO…" |
 | **Paraphrase of hand-crafted text** | Circularity risk | Near-copy of any scenario in `data/scenarios/` |
 | **Step-by-step instruction** | Scripted sequence, not open-ended | "First check sensor readings, then run DGA, then issue a WO…" |
@@ -53,7 +54,7 @@ Do not mention the tools or the analytic method.
 | Pattern | Example |
 |---|---|
 | Alarm or relay operation | "Transformer T-007 triggered a Buchholz relay alarm this morning. Determine whether it is safe to re-energize and what immediate action is required." |
-| Scheduled oil sampling result | "Routine DGA sampling on T-003 shows hydrogen elevated above the previous baseline. Identify the probable cause and recommend a monitoring or action plan." |
+| Scheduled oil sampling result | "Routine DGA sampling on T-003 returned readings outside the previous baseline. Identify the probable cause and recommend a monitoring or action plan." (do not name specific gases — see §2 banned table) |
 | Sensor threshold exceedance | "T-011 has been running above rated temperature for the past 48 hours. Investigate the probable cause and recommend corrective action." |
 | Protection trip | "T-019 tripped on differential protection at 02:14 this morning. Identify the most likely fault cause before the team decides on re-energization." |
 | Fleet planning question | "We need to decide whether T-002 can remain in service through the peak-demand season without major maintenance. Assess its condition and make a recommendation." |
