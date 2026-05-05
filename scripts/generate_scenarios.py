@@ -334,6 +334,14 @@ def call_llm(
             "or run with --dry-run."
         ) from exc
 
+    if model.startswith("watsonx/"):
+        # Bridge documented WATSONX_* env vars to the WX_* names litellm's
+        # newer WatsonX provider expects. Shared helper covers every Python
+        # call site (generator + aat_runner + judge_trajectory).
+        from scripts.watsonx_env import propagate_watsonx_env
+
+        propagate_watsonx_env()
+
     log.info(
         "calling %s (temperature=%.2f, max_tokens=%d, prompt_chars=%d)",
         model,
