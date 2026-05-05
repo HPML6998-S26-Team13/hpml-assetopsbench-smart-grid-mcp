@@ -61,13 +61,13 @@ tool-using agents.
 | Tier | Claim | Evidence now | Paper stance |
 |---|---|---|---|
 | Safe | SmartGridBench adds a Smart Grid transformer-maintenance lane over AssetOpsBench. | `data/`, `mcp_servers/`, `data/scenarios/`, `docs/data_pipeline.tex` | Main contribution. |
-| Safe | The repo has direct-tool, MCP-baseline, and optimized-MCP AaT paths with committed artifacts. | A/B job `8979314`; C job `9071639`; Notebook 02 exports | Report as preliminary six-trial evidence until final reruns freeze. |
-| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | jobs `8998340` through `8998343`; `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, and `results/metrics/experiment_matrix_summary.csv` | Main orchestration result, with small-sample caveat. |
+| Safe | The repo has direct-tool, MCP-baseline, and optimized-MCP AaT paths with committed artifacts. | Post-PR175 paper-grade rows in `results/metrics/evidence_registry.csv`, `results/metrics/gcp_post175_core31_summary.csv`, and `results/metrics/gcp_post175_final_summary.csv` | Main 31-scenario core evidence for A/B/C. |
+| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | Post-PR175 paper-grade rows in `results/metrics/evidence_registry.csv`, `results/metrics/gcp_post175_core31_summary.csv`, and `results/metrics/gcp_post175_final_summary.csv` | Main 31-scenario orchestration result for Y/YS/Z/ZS, plus 15-scenario follow-on/extra rows. |
 | Safe | Failure analysis is artifact-backed. | `failure_evidence_table.csv`, taxonomy SVGs, mitigation inventory | Main reliability/evaluation contribution. |
 | Safe | The LLM judge has a small manual sanity audit. | `results/metrics/manual_judge_audit.csv` has 12 stratified post-PR180 mitigation trajectories with 12/12 judge/manual pass-label agreement | Use as a sanity check, not a fully powered human-eval study. |
-| Pending | Scenario floor reaches 30 validated scenarios. | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-authored scenarios; Akshat generator acceptance remains needed for 30 floor | Mention as deadline blocker until merged/validated. |
-| Safe with caveat | Mitigation ladder has post-PR180 before/after evidence. | `results/metrics/mitigation_before_after.csv` has 8 post-PR180 rows from `mitigation_final6_5x6_4tier_post180_a100_ixqt_west3_20260504T2015Z` | Report mixed effects; only `ZS_REPAIR` is clearly positive versus baseline. Do not claim universal mitigation lift. |
-| Optional | 70B and context-window appendix strengthens generality. | local branch evidence exists outside canonical main | Appendix only if published before final paper freeze. |
+| Safe | Scenario floor reaches 31 validated scenarios. | PR #175 merged over PR #180 at `team13/main@1913c6e4703425f735d8cb8297cb890ba66bbeff`; core rows cover 31 scenarios x 5 trials | Use "all validated scenarios" for core 8B claims. |
+| Safe with caveat | Mitigation ladder has post-PR175 before/after evidence. | `results/metrics/evidence_registry.csv` marks `mitigation15_4tier` rows as paper-grade; `results/metrics/gcp_post175_mitigation_4tier_summary.csv` has the matched 15-scenario x 5-trial ladder | Report mixed effects. The ladder is evidence-backed but does not support a universal mitigation-lift claim. |
+| Safe with caveat | Hosted WatsonX 70B rows strengthen generality. | `results/metrics/evidence_registry.csv` marks the post-PR175 70B rows as paper-grade; `results/metrics/gcp_post175_70b_summary.csv` summarizes 15-scenario main/top-up rows | Core scaling evidence exists for 15 scenarios; all-31 70B remains future extension work. |
 
 ## Section Plan
 
