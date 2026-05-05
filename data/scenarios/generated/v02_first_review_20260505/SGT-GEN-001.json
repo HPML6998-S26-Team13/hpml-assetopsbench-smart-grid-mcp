@@ -1,0 +1,58 @@
+{
+  "id": "SGT-GEN-001",
+  "type": "FMSR",
+  "text": "Transformer T-001, carrying peak load, shows recent dissolved-gas analysis with elevated activity. Diagnose the primary fault.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "A specific fault label with rationale",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "domain_tags": [
+    "FMSR"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga"
+    ],
+    "decisive_intermediate_values": {
+      "iec_code": "D2",
+      "R1_ratio": 0.15
+    },
+    "final_value": {
+      "fault_label": "D2",
+      "dominant_gas_rationale": "Elevated methane and ethane levels",
+      "recommended_action": "Schedule maintenance"
+    },
+    "acceptance_criteria": [
+      "agent identifies the primary fault as D2",
+      "agent provides a rationale for the dominant gas",
+      "agent recommends a maintenance action"
+    ],
+    "must_include": [
+      "fault_label",
+      "dominant_gas_rationale",
+      "recommended_action"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:44:40.783460+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false
+  },
+  "family": "FMSR_DGA_DIAGNOSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-003",
+    "scenario_file": "data/scenarios/fmsr_01_dga_fault_mode_diagnosis.json",
+    "similarity_basis": "shares type='FMSR' and 2 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

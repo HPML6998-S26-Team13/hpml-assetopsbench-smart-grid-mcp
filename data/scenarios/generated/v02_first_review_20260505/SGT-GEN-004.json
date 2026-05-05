@@ -1,0 +1,54 @@
+{
+  "id": "SGT-GEN-004",
+  "type": "IoT",
+  "text": "Transformer T-004 is operating near peak capacity. Check if its oil temperature is within normal range.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer will be a sensor value with a unit and a threshold comparison.",
+  "asset_id": "T-004",
+  "expected_tools": [
+    "iot.get_sensor_readings"
+  ],
+  "domain_tags": [
+    "IoT"
+  ],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.get_sensor_readings"
+    ],
+    "decisive_intermediate_values": {
+      "sensor_id": "oil_temp_c"
+    },
+    "final_value": {
+      "sensor_value_with_unit": "70°C",
+      "threshold_comparison": "within normal range",
+      "status_summary": "normal operation"
+    },
+    "acceptance_criteria": [
+      "agent checks the oil temperature sensor reading",
+      "agent compares the reading to the normal range"
+    ],
+    "must_include": [
+      "sensor_value_with_unit",
+      "threshold_comparison",
+      "status_summary"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:45:06.796101+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false
+  },
+  "family": "IOT_SENSOR_ANALYSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-001",
+    "scenario_file": "data/scenarios/iot_01_list_transformer_sensors.json",
+    "similarity_basis": "shares type='IoT' and 1 expected_tools entry",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}
