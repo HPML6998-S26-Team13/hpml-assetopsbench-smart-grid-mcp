@@ -1,0 +1,57 @@
+=== SmartGridBench Experiment ===
+Run ID:        extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized
+Config:        /tmp/extra15x5_post175_a100_ixqt_west3_20260505T0815Z_configs/D.env
+Cell:          D
+Experiment:    post175_15x5_aat_mcp_model_optimized
+Family:        exp1_model_optimization
+Orchestration: agent_as_tool
+MCP mode:      optimized
+Model:         openai/Llama-3.1-8B-Instruct-int8
+Scenarios:     15 file(s)
+Node:          smartgrid-a100-ixqt-uswest3-20260503-2116
+Job ID:        N/A
+Cell dir:      benchmarks/cell_D
+Run dir:       benchmarks/cell_D/raw/extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1200s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+vLLM extra args: --quantization compressed-tensors --kv-cache-dtype fp8 --enable-prefix-caching
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /home/wax/hpml-post175-extra-west3-20260505T0815Z/wandb/run-20260505_083006-bvvkvgxv
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized
+wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/bvvkvgxv
+wandb: updating run metadata; uploading summary
+wandb: uploading summary
+wandb: 
+wandb: Run summary:
+wandb:            benchmark_config_path /tmp/extra15x5_post1...
+wandb:           benchmark_summary_path benchmarks/cell_D/su...
+wandb:                  experiment_cell D
+wandb:                experiment_family exp1_model_optimizat...
+wandb: explicit_fault_risk_adjudication False
+wandb:                    failure_count 7
+wandb:                      finished_at 2026-05-05T08:30:05....
+wandb:                          git_sha 1913c6e4703425f735d8...
+wandb:                         gpu_type NVIDIA A100-SXM4-40G...
+wandb:                        host_name smartgrid-a100-ixqt-...
+wandb:                              +32 ...
+wandb: 
+wandb: 🚀 View run extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/bvvkvgxv
+wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260505_083006-bvvkvgxv/logs
+
+=== Experiment summary ===
+Completed: 68 / 75
+Failed:    7
+Config:    benchmarks/cell_D/config.json
+Summary:   benchmarks/cell_D/summary.json
+Raw dir:   benchmarks/cell_D/raw/extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized
+Artifact validation for extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized: 75/75 complete, 0 missing

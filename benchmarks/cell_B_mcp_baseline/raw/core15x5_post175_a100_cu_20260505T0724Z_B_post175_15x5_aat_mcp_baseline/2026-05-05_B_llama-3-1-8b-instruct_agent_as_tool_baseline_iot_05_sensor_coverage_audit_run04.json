@@ -1,0 +1,58 @@
+{
+  "question": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+  "answer": "```json\n{\n    \"name\": \"get_asset_metadata\",\n    \"parameters\": {\n        \"transformer_id\": \"T-007\"\n    }\n}\n{\n    \"name\": \"list_sensors\",\n    \"parameters\": {\n        \"transformer_id\": \"T-007\"\n    }\n}\n{\n    \"name\": \"analyze_sensor_instrumentation\",\n    \"parameters\": {\n        \"sensor_ids\": []  # will be populated by list_sensors\n    }\n}\n```\n\nThis will first list the asset metadata for T-007, then list all sensors currently installed on it, and finally analyze the instrumentation available to flag whether it covers both electrical and thermal monitoring needs.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 1,
+  "tool_call_count": 0,
+  "usage": {
+    "input_tokens": 5985,
+    "output_tokens": 139,
+    "total_tokens": 6124,
+    "requests": 1
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "```json\n{\n    \"name\": \"get_asset_metadata\",\n    \"parameters\": {\n        \"transformer_id\": \"T-007\"\n    }\n}\n{\n    \"name\": \"list_sensors\",\n    \"parameters\": {\n        \"transformer_id\": \"T-007\"\n    }\n}\n{\n    \"name\": \"analyze_sensor_instrumentation\",\n    \"parameters\": {\n        \"sensor_ids\": []  # will be populated by list_sensors\n    }\n}\n```\n\nThis will first list the asset metadata for T-007, then list all sensors currently installed on it, and finally analyze the instrumentation available to flag whether it covers both electrical and thermal monitoring needs.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.9873101711273193,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-021",
+    "type": "IoT",
+    "text": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+    "category": "Sensor Coverage Audit",
+    "characteristic_form": "The answer should report the transformer's voltage class and rating, list all installed sensor IDs, and summarize whether thermal channels (e.g. winding/oil temperature) and electrical channels (e.g. load current, voltage) are both represented.",
+    "asset_id": "T-007",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "voltage class",
+        "rating",
+        "sensor list",
+        "thermal sensor coverage",
+        "electrical sensor coverage"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

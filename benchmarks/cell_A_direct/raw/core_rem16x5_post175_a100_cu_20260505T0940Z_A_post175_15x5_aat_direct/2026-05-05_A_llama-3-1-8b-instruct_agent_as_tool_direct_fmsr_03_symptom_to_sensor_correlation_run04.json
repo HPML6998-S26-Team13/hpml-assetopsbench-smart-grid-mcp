@@ -1,0 +1,139 @@
+{
+  "question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "answer": "These sensor readings can be used to confirm and track the progression of partial discharge in T-003.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 19413,
+    "output_tokens": 108,
+    "total_tokens": 19521,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "partial discharge"
+          },
+          "call_id": "chatcmpl-tool-b7b90531d2037301",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-001"
+          },
+          "call_id": "chatcmpl-tool-afa5d3eca6b605f5",
+          "output": {
+            "failure_mode_id": "FM-001",
+            "name": "Partial Discharge",
+            "dga_label": "Partial discharge",
+            "description": "Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.",
+            "severity": "low",
+            "iec_code": "PD",
+            "key_gases": [
+              "H2",
+              "CH4"
+            ],
+            "recommended_action": "Monitor closely; schedule inspection within 90 days"
+          }
+        },
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-003"
+          },
+          "call_id": "chatcmpl-tool-afae941c25512bcc",
+          "output": [
+            {
+              "sensor_id": "load_current_a",
+              "unit": "A",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "oil_temp_c",
+              "unit": "\u00b0C",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "power_factor",
+              "unit": "",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "voltage_hv_kv",
+              "unit": "kV",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "voltage_lv_kv",
+              "unit": "kV",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "winding_temp_top_c",
+              "unit": "\u00b0C",
+              "num_readings": 720
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "These sensor readings can be used to confirm and track the progression of partial discharge in T-003.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.8159453868865967,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-013",
+    "type": "FMSR",
+    "text": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+    "category": "Symptom-Driven Failure Mode Lookup",
+    "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+    "asset_id": "T-003",
+    "expected_tools": [
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "matched failure mode",
+        "rationale",
+        "correlated sensors"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

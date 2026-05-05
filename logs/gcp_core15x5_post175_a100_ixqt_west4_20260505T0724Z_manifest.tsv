@@ -1,0 +1,2 @@
+label	config	run_id	run_dir	run_rc	judge_rc	status	started_at	finished_at	provider	zone	instance	gpu_type
+ZS	/tmp/core15x5_post175_a100_ixqt_west4_20260505T0724Z_configs/ZS.env	core15x5_post175_a100_ixqt_west4_20260505T0724Z_ZS_post175_15x5_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline	benchmarks/cell_Z_hybrid/raw/core15x5_post175_a100_ixqt_west4_20260505T0724Z_ZS_post175_15x5_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline	0	0	complete	2026-05-05T07:20:00Z	2026-05-05T08:12:54Z	gcp	us-west4-b	smartgrid-a100-ixqt-uswest4-20260503-2124	NVIDIA A100-SXM4-40GB

@@ -1,0 +1,121 @@
+{
+  "question": "For transformer T-014, inspect the last 24 hours of available voltage telemetry and report whether either voltage signal deviated more than 3% from its recent mean.",
+  "answer": "Because there are no readings for the specified time period, there are no readings to analyze.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 24425,
+    "output_tokens": 302,
+    "total_tokens": 24727,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_sensor_readings",
+          "arguments": {
+            "sensor_id": "voltage_avg_v",
+            "start_time": "2022-07-25T00:00:00",
+            "end_time": "2022-07-26T00:00:00",
+            "transformer_id": "T-014",
+            "limit": "1000"
+          },
+          "call_id": "chatcmpl-tool-a5d99e6a564d20f5",
+          "output": [
+            {
+              "error": "No readings found for transformer='T-014' sensor='voltage_avg_v'."
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_readings",
+          "arguments": {
+            "sensor_id": "st PassingTempDataLimit()",
+            "start_time": "2022-07-28T00:00:00",
+            "end_time": "2022-07-28T00:00:00",
+            "transformer_id": "T-014",
+            "limit": "1000"
+          },
+          "call_id": "chatcmpl-tool-b1a101f8e4680dfc",
+          "output": [
+            {
+              "error": "No readings found for transformer='T-014' sensor='st PassingTempDataLimit()'."
+            }
+          ]
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "voltage_avg_v",
+            "start_time": "2022-07-25T00:00:00",
+            "end_time": "2022-07-26T00:00:00",
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-85814b9c15881684",
+          "output": {
+            "error": "No readings for transformer='T-014' sensor='voltage_avg_v'."
+          }
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "sensor_id": "voltage_avg_v",
+            "z_threshold": "3.0",
+            "transformer_id": "T-014",
+            "window_size": "24"
+          },
+          "call_id": "chatcmpl-tool-b00047038095ae5b",
+          "output": {
+            "error": "No readings for transformer='T-014' sensor='voltage_avg_v'."
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Because there are no readings for the specified time period, there are no readings to analyze.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.573206663131714,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-002",
+    "type": "IoT",
+    "text": "For transformer T-014, inspect the last 24 hours of available voltage telemetry and report whether either voltage signal deviated more than 3% from its recent mean.",
+    "category": "Condition Monitoring",
+    "characteristic_form": "The answer should compute or reference phase-voltage imbalance over the requested window, state whether any event exceeded 3%, and include when the peak imbalance occurred.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "threshold_percent": 3,
+      "must_include": [
+        "max deviation",
+        "time of exceedance or no exceedance",
+        "clear yes/no decision"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

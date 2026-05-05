@@ -1,0 +1,139 @@
+{
+  "question": "Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.",
+  "answer": "Based on the DGA record, the most likely fault mode is 'Low-temperature overheating'. The top two candidate failure mechanisms are:\n\n1. 'Partial Discharge' (FM-001): This failure mechanism is associated with the presence of H2 and CH4, which are key gases for this fault mode. The recommended action is to monitor closely and schedule an inspection within 90 days.\n2. 'Low-Temperature Overheating (< 300\u00b0C)' (FM-002): This failure mechanism is associated with the presence of CH4 and C2H4, which are key gases for this fault mode. The recommended action is to reduce load and inspect within 30 days.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14780,
+    "output_tokens": 178,
+    "total_tokens": 14958,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-012"
+          },
+          "call_id": "chatcmpl-tool-9334771f4e2d5755",
+          "output": {
+            "transformer_id": "T-012",
+            "sample_date": "2024-01-09T00:00:00",
+            "dissolved_h2_ppm": 41.98,
+            "dissolved_ch4_ppm": 48.59,
+            "dissolved_c2h2_ppm": 3.36,
+            "dissolved_c2h4_ppm": 19.78,
+            "dissolved_c2h6_ppm": 9.53,
+            "dissolved_co_ppm": 369.42,
+            "dissolved_co2_ppm": 2201.98,
+            "fault_label": "Low-temperature overheating",
+            "source_dataset": "synthetic"
+          }
+        },
+        {
+          "name": "list_failure_modes",
+          "arguments": {},
+          "call_id": "chatcmpl-tool-98aa96cd73690755",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Based on the DGA record, the most likely fault mode is 'Low-temperature overheating'. The top two candidate failure mechanisms are:\n\n1. 'Partial Discharge' (FM-001): This failure mechanism is associated with the presence of H2 and CH4, which are key gases for this fault mode. The recommended action is to monitor closely and schedule an inspection within 90 days.\n2. 'Low-Temperature Overheating (< 300\u00b0C)' (FM-002): This failure mechanism is associated with the presence of CH4 and C2H4, which are key gases for this fault mode. The recommended action is to reduce load and inspect within 30 days.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.646075963973999,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-003",
+    "type": "FMSR",
+    "text": "Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.",
+    "category": "Fault Diagnosis",
+    "characteristic_form": "The answer should map DGA evidence to a primary fault mode and provide at least one alternative candidate with rationale grounded in gas patterns or known fault mapping.",
+    "asset_id": "T-012",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "primary fault mode",
+        "secondary candidate",
+        "evidence-based justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

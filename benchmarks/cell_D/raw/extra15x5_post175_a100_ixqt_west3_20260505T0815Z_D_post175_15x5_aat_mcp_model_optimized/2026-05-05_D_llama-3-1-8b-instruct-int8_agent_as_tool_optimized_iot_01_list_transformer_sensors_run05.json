@@ -1,0 +1,46 @@
+{
+  "question": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+  "answer": "",
+  "success": false,
+  "error": "ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 8192 tokens. However, you requested 0 output tokens and your prompt contains at least 8193 input tokens, for a total of at least 8193 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=8193)",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 4.7690513134002686,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-001",
+    "type": "IoT",
+    "text": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+    "category": "Asset Discovery",
+    "characteristic_form": "The answer should identify asset T-011, enumerate available sensor names, and provide latest value plus timestamp for each sensor using IoT retrieval tools.",
+    "asset_id": "T-011",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "T-011",
+        "sensor list",
+        "latest value",
+        "timestamp"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

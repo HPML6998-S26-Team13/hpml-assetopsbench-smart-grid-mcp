@@ -1,0 +1,104 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "answer": "The work order has been created and closed successfully.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 24899,
+    "output_tokens": 191,
+    "total_tokens": 25090,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "transformer_id": "T-009",
+            "issue_description": "Inspection completed with no abnormal conditions observed",
+            "priority": "low",
+            "fault_type": "Cleaning inspection"
+          },
+          "call_id": "chatcmpl-tool-a4b255a0713db295",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-CF94D6B5\",\n  \"transformer_id\": \"T-009\",\n  \"issue_description\": \"Inspection completed with no abnormal conditions observed\",\n  \"priority\": \"low\",\n  \"fault_type\": \"Cleaning inspection\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 4,\n  \"created_at\": \"2026-05-05T08:28:46.577200Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "work_order_id": "WO-CF94D6B5",
+            "status": "completed",
+            "note": "Inspection was clean"
+          },
+          "call_id": "chatcmpl-tool-a21be44ce4cb713a",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"Invalid status 'completed'. Must be one of: ['closed', 'in_progress', 'open', 'resolved']\"\n}"
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "work_order_id": "WO-CF94D6B5",
+            "status": "closed",
+            "note": "Inspection was clean"
+          },
+          "call_id": "chatcmpl-tool-a87773811f5d66d1",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-CF94D6B5\",\n  \"transformer_id\": \"T-009\",\n  \"issue_description\": \"Inspection completed with no abnormal conditions observed\",\n  \"priority\": \"low\",\n  \"fault_type\": \"Cleaning inspection\",\n  \"status\": \"closed\",\n  \"estimated_downtime_hours\": 4,\n  \"created_at\": \"2026-05-05T08:28:46.577200Z\",\n  \"assigned_technician\": null,\n  \"notes\": [\n    {\n      \"timestamp\": \"2026-05-05T08:28:47.497736Z\",\n      \"text\": \"Inspection was clean\"\n    }\n  ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The work order has been created and closed successfully.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.217734336853027,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

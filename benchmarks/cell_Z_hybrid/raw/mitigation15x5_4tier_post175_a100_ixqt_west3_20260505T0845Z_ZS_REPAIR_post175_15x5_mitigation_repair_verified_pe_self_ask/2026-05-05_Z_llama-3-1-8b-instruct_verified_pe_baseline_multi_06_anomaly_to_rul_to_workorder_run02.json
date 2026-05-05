@@ -1,0 +1,207 @@
+{
+  "question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "effective_question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon. Assuming the current RUL of T-020 is X and the maintenance tasks involved are Y, and that the RUL forecast is available and the work order system can justify scope and priority based on RUL.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What is the current RUL of T-020?",
+      "What are the specific maintenance tasks involved in accelerated maintenance for T-020?"
+    ],
+    "assumptions": [
+      "Accelerated maintenance is a critical-tier maintenance task.",
+      "The RUL forecast is available for T-020.",
+      "The work order system can justify scope and priority based on RUL."
+    ]
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "The current RUL of T-020 is 26 days, and the forecasted RUL over a 90-day horizon is 0 days by 2024-04-30. A work order (WO-12889581) has been created with a critical priority, justified by the critical condition and projected RUL of 0 days, indicating that accelerated maintenance is required.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with the current RUL of T-020"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the forecasted RUL of T-020"
+    },
+    {
+      "step": 3,
+      "task": "Create a work order for T-020 with scope and priority justified by the current and forecasted RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with the created work order details"
+    },
+    {
+      "step": 4,
+      "task": "Synthesize the final answer",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A natural-language answer justifying the scope and priority of the work order based on the current and forecasted RUL of T-020"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with the current RUL of T-020"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the forecasted RUL of T-020"
+    },
+    {
+      "step": 3,
+      "task": "Create a work order for T-020 with scope and priority justified by the current and forecasted RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with the created work order details"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 4; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-020"
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 26,\n  \"health_index\": 0.0238,\n  \"fdd_category\": 4,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Critical \\u2014 immediate inspection required.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL obtained successfully",
+      "verifier_updated_focus": "Forecast the RUL of T-020 over a 90-day horizon",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "horizon_days": 90
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"current_rul_days\": 26,\n  \"forecast_date\": \"2024-04-30\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.708,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL forecast suggests no change in remaining plan",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Create a work order for T-020 with scope and priority justified by the current and forecasted RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "issue_description": "Accelerated maintenance required due to critical condition and projected RUL of 0 days by 2024-04-30.",
+        "priority": "critical",
+        "fault_type": "critical",
+        "estimated_downtime_hours": 0
+      },
+      "response": "{\n  \"work_order_id\": \"WO-12889581\",\n  \"transformer_id\": \"T-020\",\n  \"issue_description\": \"Accelerated maintenance required due to critical condition and projected RUL of 0 days by 2024-04-30.\",\n  \"priority\": \"critical\",\n  \"fault_type\": \"critical\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 0.0,\n  \"created_at\": \"2026-05-05T13:22:46.636503Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "mitigation_repair": {
+    "name": "missing_evidence_retry_replan_guard",
+    "enabled": true,
+    "detector": "missing_evidence_final_answer_guard",
+    "triggered": false,
+    "attempts": [],
+    "repaired": false,
+    "final_decision": "not_triggered"
+  },
+  "scenario": {
+    "id": "SGT-030",
+    "type": "Multi",
+    "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+    "category": "RUL Forecast-Driven Work Order",
+    "characteristic_form": "The answer should report the RUL forecast for T-020 \u2014 including the current RUL and the projected RUL at the 90-day horizon \u2014 and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "projected RUL at 90-day horizon",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM",
+      "WO"
+    ]
+  },
+  "mitigation_guard": {
+    "name": "missing_evidence_final_answer_guard",
+    "enabled": true,
+    "triggered": false,
+    "blocked_final_answer": false,
+    "blocked_work_order": false,
+    "evidence_limited_answer": false,
+    "hits": [],
+    "reason": "No missing or untrusted evidence signal detected."
+  }
+}

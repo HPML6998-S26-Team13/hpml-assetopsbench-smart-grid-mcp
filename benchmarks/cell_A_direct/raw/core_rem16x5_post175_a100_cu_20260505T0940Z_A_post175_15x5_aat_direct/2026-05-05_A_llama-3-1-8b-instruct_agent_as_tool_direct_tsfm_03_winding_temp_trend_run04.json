@@ -1,0 +1,114 @@
+{
+  "question": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+  "answer": "This function call should return a trend analysis of T-002's winding temperature sensor readings from 2023-09-26 to 2023-10-26.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 24300,
+    "output_tokens": 263,
+    "total_tokens": 24563,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "end_time": "2023-07-26",
+            "transformer_id": "T-002",
+            "start_time": "2023-06-26"
+          },
+          "call_id": "chatcmpl-tool-adacfa9f7585da30",
+          "output": {
+            "error": "Not enough readings in the specified window for trend analysis."
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "end_time": "2023-08-26",
+            "transformer_id": "T-002",
+            "start_time": "2023-07-26"
+          },
+          "call_id": "chatcmpl-tool-8f66f7385ee673cb",
+          "output": {
+            "error": "Not enough readings in the specified window for trend analysis."
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "end_time": "2023-09-26",
+            "transformer_id": "T-002",
+            "start_time": "2023-08-26"
+          },
+          "call_id": "chatcmpl-tool-b7b358ff36235eb7",
+          "output": {
+            "error": "Not enough readings in the specified window for trend analysis."
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "end_time": "2023-10-26",
+            "transformer_id": "T-002",
+            "start_time": "2023-09-26"
+          },
+          "call_id": "chatcmpl-tool-be89e5f5c43b0469",
+          "output": {
+            "error": "Not enough readings in the specified window for trend analysis."
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "This function call should return a trend analysis of T-002's winding temperature sensor readings from 2023-09-26 to 2023-10-26.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.00243067741394,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-015",
+    "type": "TSFM",
+    "text": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+    "category": "Sensor Trend Analysis",
+    "characteristic_form": "The answer should report the trend direction (increasing, decreasing, or stable), the slope rate per day, and the R-squared fit quality for T-002's winding_temp_top_c sensor.",
+    "asset_id": "T-002",
+    "expected_tools": [
+      "tsfm.trend_analysis"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "trend direction",
+        "slope rate",
+        "R-squared or fit quality"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

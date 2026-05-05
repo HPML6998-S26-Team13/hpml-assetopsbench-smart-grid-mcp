@@ -1,0 +1,127 @@
+{
+  "question": "Operators flagged a short window of unusual top-of-winding temperature readings on T-014 over the last few days. First identify the sensor channels installed on this asset, then run an anomaly check and trend analysis on the winding temperature channel (winding_temp_top_c) to determine whether the deviations form a single burst or a sustained shift.",
+  "answer": "The results indicate that there is a single burst of anomalous readings.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 25443,
+    "output_tokens": 241,
+    "total_tokens": 25684,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-80c41c018273e40a",
+          "output": [
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            }
+          ]
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "transformer_id": "T-014",
+            "sensor_id": "winding_temp_top_c",
+            "window_size": "24",
+            "z_threshold": "3.0"
+          },
+          "call_id": "chatcmpl-tool-9ade4f00ede2041b",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-014\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 24,\n  \"z_threshold\": 3.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 2,\n  \"anomaly_rate_pct\": 0.28,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-16 05:00:00\",\n      \"value\": 131.905,\n      \"z_score\": 3.253\n    },\n    {\n      \"timestamp\": \"2024-01-28 06:00:00\",\n      \"value\": 116.774,\n      \"z_score\": 3.055\n    }\n  ]\n}"
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "transformer_id": "T-014",
+            "sensor_id": "winding_temp_top_c",
+            "start_time": "2024-01-01T00:00:00",
+            "end_time": "2024-02-01T00:00:00"
+          },
+          "call_id": "chatcmpl-tool-b017d2a0a4c59510",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-014\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 720,\n  \"start_time\": \"2024-01-01 00:00:00\",\n  \"end_time\": \"2024-01-30 23:00:00\",\n  \"mean_value\": 79.6196,\n  \"min_value\": 40.231,\n  \"max_value\": 136.394,\n  \"slope_per_day\": 0.046413,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0007\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The results indicate that there is a single burst of anomalous readings.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.967235803604126,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-025",
+    "type": "Multi",
+    "text": "Operators flagged a short window of unusual top-of-winding temperature readings on T-014 over the last few days. First identify the sensor channels installed on this asset, then run an anomaly check and trend analysis on the winding temperature channel (winding_temp_top_c) to determine whether the deviations form a single burst or a sustained shift.",
+    "category": "Anomaly Burst vs Trend Disambiguation",
+    "characteristic_form": "The answer should first surface the available sensor channels for T-014, then for the winding_temp_top_c channel report the anomaly findings and recent trend direction, and conclude whether the disturbance is an isolated burst or a sustained drift in the underlying signal.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "iot.list_sensors",
+      "tsfm.detect_anomalies",
+      "tsfm.trend_analysis"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "sensor channels available",
+        "winding_temp_top_c anomaly findings",
+        "winding_temp_top_c trend direction",
+        "burst vs sustained classification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT",
+      "TSFM"
+    ]
+  }
+}

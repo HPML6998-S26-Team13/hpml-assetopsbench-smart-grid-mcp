@@ -1,0 +1,93 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "answer": "The work order has been created and closed with a note documenting the clean inspection result.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 18561,
+    "output_tokens": 174,
+    "total_tokens": 18735,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "issue_description": "Completed inspection with no abnormalities found",
+            "fault_type": "clean inspection",
+            "transformer_id": "T-009",
+            "priority": "low"
+          },
+          "call_id": "chatcmpl-tool-b74ba1195b6ceb89",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-158459F2\",\n  \"transformer_id\": \"T-009\",\n  \"issue_description\": \"Completed inspection with no abnormalities found\",\n  \"priority\": \"low\",\n  \"fault_type\": \"clean inspection\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 4,\n  \"created_at\": \"2026-05-05T07:49:19.050999Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "status": "closed",
+            "transformer_id": "T-009",
+            "issue_description": "No abnormalities found",
+            "work_order_id": "WO-158459F2",
+            "note": "Clean inspection result, no maintenance required"
+          },
+          "call_id": "chatcmpl-tool-ba52e357443ac5e6",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-158459F2\",\n  \"transformer_id\": \"T-009\",\n  \"issue_description\": \"Completed inspection with no abnormalities found\",\n  \"priority\": \"low\",\n  \"fault_type\": \"clean inspection\",\n  \"status\": \"closed\",\n  \"estimated_downtime_hours\": 4,\n  \"created_at\": \"2026-05-05T07:49:19.050999Z\",\n  \"assigned_technician\": null,\n  \"notes\": [\n    {\n      \"timestamp\": \"2026-05-05T07:49:19.949720Z\",\n      \"text\": \"Clean inspection result, no maintenance required\"\n    }\n  ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The work order has been created and closed with a note documenting the clean inspection result.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.6001503467559814,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

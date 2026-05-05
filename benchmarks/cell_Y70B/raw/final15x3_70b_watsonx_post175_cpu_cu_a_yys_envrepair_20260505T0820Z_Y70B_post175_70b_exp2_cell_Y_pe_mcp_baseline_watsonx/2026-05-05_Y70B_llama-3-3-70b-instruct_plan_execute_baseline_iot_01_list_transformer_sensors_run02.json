@@ -1,0 +1,115 @@
+{
+  "question": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+  "effective_question": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "Question: List all available sensors for transformer T-011 and include each sensor's latest timestamped value.\nExecution completed, but the LLM summary step exceeded the prompt budget. Compact terminal results:\n- Step 1 (list_sensors): {\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\"\n...[truncated 282 chars]\n- Step 2 (get_sensor_readings): {\n  \"timestamp\": \"2024-01-01T00:00:00\",\n  \"value\": 265.476,\n  \"unit\": \"A\"\n}",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "List all available sensors for transformer T-011",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings"
+    },
+    {
+      "step": 2,
+      "task": "Get the latest timestamped value for sensor {sensor_id} of transformer T-011",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts with keys: timestamp, value, unit for sensor {sensor_id}"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "List all available sensors for transformer T-011",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings"
+    },
+    {
+      "step": 2,
+      "task": "Get the latest timestamped value for sensor {sensor_id} of transformer T-011",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts with keys: timestamp, value, unit for sensor {sensor_id}"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "List all available sensors for transformer T-011",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-011"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Get the latest timestamped value for sensor {sensor_id} of transformer T-011",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {
+        "transformer_id": "T-011",
+        "sensor_id": "load_current_a",
+        "start_time": null,
+        "end_time": null,
+        "limit": 1
+      },
+      "response": "{\n  \"timestamp\": \"2024-01-01T00:00:00\",\n  \"value\": 265.476,\n  \"unit\": \"A\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-001",
+    "type": "IoT",
+    "text": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+    "category": "Asset Discovery",
+    "characteristic_form": "The answer should identify asset T-011, enumerate available sensor names, and provide latest value plus timestamp for each sensor using IoT retrieval tools.",
+    "asset_id": "T-011",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "T-011",
+        "sensor list",
+        "latest value",
+        "timestamp"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

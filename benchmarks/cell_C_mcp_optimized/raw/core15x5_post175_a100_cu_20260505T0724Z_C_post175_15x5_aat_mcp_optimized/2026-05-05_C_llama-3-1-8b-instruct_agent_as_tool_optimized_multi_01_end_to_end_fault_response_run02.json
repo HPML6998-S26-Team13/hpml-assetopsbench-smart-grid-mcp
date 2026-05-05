@@ -1,0 +1,95 @@
+{
+  "question": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
+  "answer": "It appears there are no temperature readings for the specified transformer and sensor. Let's investigate another sensor.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 18299,
+    "output_tokens": 237,
+    "total_tokens": 18536,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "horizon_days": 30,
+            "transformer_id": "T-015"
+          },
+          "call_id": "chatcmpl-tool-9ca963372024a615",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-015\",\n  \"current_rul_days\": 547,\n  \"forecast_date\": \"2024-03-01\",\n  \"projected_rul_days\": 517,\n  \"projected_health_index\": 0.473,\n  \"confidence\": 0.775,\n  \"method\": \"linear_degradation_baseline\"\n}"
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "start_time": "2024-01-01",
+            "transformer_id": "T-015",
+            "sensor_id": "winding_temp_c",
+            "end_time": "2024-03-01"
+          },
+          "call_id": "chatcmpl-tool-a7794e20732e315e",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings for transformer='T-015' sensor='winding_temp_c'.\"\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "It appears there are no temperature readings for the specified transformer and sensor. Let's investigate another sensor.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 5.524153232574463,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-009",
+    "type": "Multi",
+    "text": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
+    "category": "End-to-End Incident Response",
+    "characteristic_form": "The answer should show a multi-step workflow: summarize relevant IoT evidence, map to likely fault mode, provide a 30-day risk or forecast statement, and conclude with a concrete work-order recommendation.",
+    "asset_id": "T-015",
+    "expected_tools": [
+      "iot.get_sensor_readings",
+      "fmsr.analyze_dga",
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "sensor evidence",
+        "fault hypothesis",
+        "30-day risk outlook",
+        "work-order recommendation"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "IoT",
+      "FMSR",
+      "TSFM",
+      "WO"
+    ]
+  }
+}

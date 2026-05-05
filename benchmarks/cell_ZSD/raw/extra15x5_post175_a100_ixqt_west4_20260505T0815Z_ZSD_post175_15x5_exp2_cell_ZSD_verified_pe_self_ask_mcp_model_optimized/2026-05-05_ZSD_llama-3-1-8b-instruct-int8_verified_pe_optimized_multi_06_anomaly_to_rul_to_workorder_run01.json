@@ -1,0 +1,289 @@
+{
+  "question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "effective_question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon. Assuming the accelerated maintenance process is already defined and agreed upon, and the 90-day horizon is sufficient for the RUL forecast and work order creation, what are the specific criteria for accelerated maintenance in the critical-tier and what is the current RUL of T-020?",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What is the current RUL of T-020?",
+      "What are the specific criteria for accelerated maintenance in the critical-tier?"
+    ],
+    "assumptions": [
+      "The accelerated maintenance process is already defined and agreed upon.",
+      "The 90-day horizon is sufficient for the RUL forecast and work order creation."
+    ]
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "Based on the results, the current RUL of T-020 is 26 days, and the projected RUL over a 90-day horizon is 0 days. This indicates that the asset is expected to fail within the next 90 days. Therefore, a work order has been created with the following details:\n\n- Work Order ID: WO-A7964840\n- Issue Description: Accelerated maintenance required due to critical health status and low RUL.\n- Priority: High\n- Fault Type: Critical\n- Status: Open\n\nThis work order is justified by both the current RUL (26 days) and the projected RUL at the end of the 90-day horizon (0 days), which indicates that immediate maintenance is required to prevent asset failure.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dicts containing the current RUL of T-020"
+    },
+    {
+      "step": 2,
+      "task": "Get the current RUL of T-020 from the list of assets",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dict containing the current RUL of T-020"
+    },
+    {
+      "step": 3,
+      "task": "Get the projected RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict containing the projected RUL of T-020"
+    },
+    {
+      "step": 4,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict containing the current RUL of T-020"
+    },
+    {
+      "step": 5,
+      "task": "Create a work order for T-020 based on the current and projected RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3,
+        4
+      ],
+      "expected_output": "A dict containing the created work order for T-020"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dicts containing the current RUL of T-020"
+    },
+    {
+      "step": 2,
+      "task": "Get the current RUL of T-020 from the list of assets",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dict containing the current RUL of T-020"
+    },
+    {
+      "step": 3,
+      "task": "Get the projected RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict containing the projected RUL of T-020"
+    },
+    {
+      "step": 4,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict containing the current RUL of T-020"
+    },
+    {
+      "step": 5,
+      "task": "Create a work order for T-020 based on the current and projected RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3,
+        4
+      ],
+      "expected_output": "A dict containing the created work order for T-020"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {
+        "health_status": "any"
+      },
+      "response": "Error executing tool list_assets: 1 validation error for list_assetsArguments\nhealth_status\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='any', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_parsing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "retry",
+      "verifier_reason": "Invalid input for health_status in list_assets tool",
+      "retries_used": 1
+    },
+    {
+      "step": 1,
+      "task": "Get the current RUL of T-020",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {
+        "health_status": "any",
+        "asset_id": "T-020"
+      },
+      "response": "Error executing tool list_assets: 1 validation error for list_assetsArguments\nhealth_status\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='any', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_parsing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Invalid input value 'any' for health_status Retry budget exhausted; continuing with the current result.",
+      "verifier_updated_focus": "health_status",
+      "retries_used": 1
+    },
+    {
+      "step": 2,
+      "task": "Get the current RUL of T-020 from the list of assets",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "health_status": 1
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"name\": \"Power Transformer T-020\",\n  \"manufacturer\": \"GE\",\n  \"location\": \"Distribution Center 1\",\n  \"voltage_class\": \"132kV/33kV\",\n  \"rating_kva\": 1500,\n  \"install_date\": \"2010-03-19\",\n  \"age_years\": 14,\n  \"health_status\": 2,\n  \"fdd_category\": 4,\n  \"rul_days\": 26,\n  \"in_service\": true\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step succeeded and no indication that the remaining plan should change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Get the projected RUL of T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "horizon_days": 90
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"current_rul_days\": 26,\n  \"forecast_date\": \"2024-04-30\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.708,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result indicates a successful forecast, proceed with creating a work order.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 4,
+      "task": "Get the current RUL of T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "health_status": 2,
+        "name": "Power Transformer T-020",
+        "manufacturer": "GE",
+        "location": "Distribution Center 1",
+        "voltage_class": "132kV/33kV",
+        "rating_kva": 1500,
+        "install_date": "2010-03-19",
+        "age_years": 14,
+        "fdd_category": 4,
+        "rul_days": 26,
+        "in_service": true,
+        "forecast_date": "2024-04-30",
+        "projected_rul_days": 0,
+        "projected_health_index": 0.0,
+        "confidence": 0.708,
+        "method": "linear_degradation_baseline",
+        "forecast_horizon": 90
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 26,\n  \"health_index\": 0.0238,\n  \"fdd_category\": 4,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Critical \\u2014 immediate inspection required.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL is 26 days, which is not critical. Proceed with creating a work order.",
+      "verifier_updated_focus": "Create a work order for T-020",
+      "retries_used": 0
+    },
+    {
+      "step": 5,
+      "task": "Create a work order for T-020 based on the current and projected RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "issue_description": "Accelerated maintenance required due to critical health status and low RUL.",
+        "priority": "High",
+        "fault_type": "Critical",
+        "estimated_downtime_hours": 0
+      },
+      "response": "{\n  \"work_order_id\": \"WO-A7964840\",\n  \"transformer_id\": \"T-020\",\n  \"issue_description\": \"Accelerated maintenance required due to critical health status and low RUL.\",\n  \"priority\": \"high\",\n  \"fault_type\": \"Critical\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 0.0,\n  \"created_at\": \"2026-05-05T08:49:37.823368Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL and projected RUL are available, and the accelerated maintenance process is already defined and agreed upon.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-030",
+    "type": "Multi",
+    "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+    "category": "RUL Forecast-Driven Work Order",
+    "characteristic_form": "The answer should report the RUL forecast for T-020 \u2014 including the current RUL and the projected RUL at the 90-day horizon \u2014 and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "projected RUL at 90-day horizon",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM",
+      "WO"
+    ]
+  }
+}

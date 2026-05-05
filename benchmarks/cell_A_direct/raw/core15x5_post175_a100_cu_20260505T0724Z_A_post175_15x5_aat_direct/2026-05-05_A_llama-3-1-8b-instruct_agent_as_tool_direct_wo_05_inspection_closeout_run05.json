@@ -1,0 +1,118 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "answer": "The work order has been created and closed successfully.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14541,
+    "output_tokens": 108,
+    "total_tokens": 14649,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "issue_description": "Routine inspection completed without issues.",
+            "priority": "low",
+            "transformer_id": "T-009",
+            "fault_type": "none"
+          },
+          "call_id": "chatcmpl-tool-9213395fd75af1e6",
+          "output": {
+            "work_order_id": "WO-C37931A8",
+            "transformer_id": "T-009",
+            "issue_description": "Routine inspection completed without issues.",
+            "priority": "low",
+            "fault_type": "none",
+            "status": "resolved",
+            "estimated_downtime_hours": 4,
+            "created_at": "2026-05-05T07:32:49.792304Z",
+            "assigned_technician": null,
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:32:50.517945Z",
+                "text": "No abnormalities observed during inspection."
+              }
+            ]
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "status": "resolved",
+            "transformer_id": "T-009",
+            "note": "No abnormalities observed during inspection.",
+            "work_order_id": "WO-C37931A8"
+          },
+          "call_id": "chatcmpl-tool-81eef8126418d9a0",
+          "output": {
+            "work_order_id": "WO-C37931A8",
+            "transformer_id": "T-009",
+            "issue_description": "Routine inspection completed without issues.",
+            "priority": "low",
+            "fault_type": "none",
+            "status": "resolved",
+            "estimated_downtime_hours": 4,
+            "created_at": "2026-05-05T07:32:49.792304Z",
+            "assigned_technician": null,
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:32:50.517945Z",
+                "text": "No abnormalities observed during inspection."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The work order has been created and closed successfully.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.671001434326172,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "answer": "To justify the explicit priority assignment, the forecasted RUL was 0 days remaining at the end of the horizon. This is a critical situation, justifying the high priority.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 24854,
+    "output_tokens": 297,
+    "total_tokens": 25151,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "transformer_id": "T-020",
+            "horizon_days": "90"
+          },
+          "call_id": "chatcmpl-tool-93789cf431f53a69",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-020\",\n  \"current_rul_days\": 26,\n  \"forecast_date\": \"2024-04-30\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.708,\n  \"method\": \"linear_degradation_baseline\"\n}"
+          }
+        },
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "transformer_id": "T-020",
+            "horizon_days": "90"
+          },
+          "call_id": "chatcmpl-tool-b6295ea63bd7ef51",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-020\",\n  \"current_rul_days\": 26,\n  \"forecast_date\": \"2024-04-30\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.708,\n  \"method\": \"linear_degradation_baseline\"\n}"
+          }
+        },
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "fault_type": "Accelerated Maintenance",
+            "estimated_downtime_hours": "24",
+            "issue_description": "Critical-tier transformer with low RUL",
+            "transformer_id": "T-020",
+            "priority": "high"
+          },
+          "call_id": "chatcmpl-tool-adfedfb83c87ffca",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-EF78F16A\",\n  \"transformer_id\": \"T-020\",\n  \"issue_description\": \"Critical-tier transformer with low RUL\",\n  \"priority\": \"high\",\n  \"fault_type\": \"Accelerated Maintenance\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 24.0,\n  \"created_at\": \"2026-05-05T08:07:11.823620Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "To justify the explicit priority assignment, the forecasted RUL was 0 days remaining at the end of the horizon. This is a critical situation, justifying the high priority.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.307145118713379,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-030",
+    "type": "Multi",
+    "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+    "category": "RUL Forecast-Driven Work Order",
+    "characteristic_form": "The answer should report the RUL forecast for T-020 \u2014 including the current RUL and the projected RUL at the 90-day horizon \u2014 and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "projected RUL at 90-day horizon",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM",
+      "WO"
+    ]
+  }
+}

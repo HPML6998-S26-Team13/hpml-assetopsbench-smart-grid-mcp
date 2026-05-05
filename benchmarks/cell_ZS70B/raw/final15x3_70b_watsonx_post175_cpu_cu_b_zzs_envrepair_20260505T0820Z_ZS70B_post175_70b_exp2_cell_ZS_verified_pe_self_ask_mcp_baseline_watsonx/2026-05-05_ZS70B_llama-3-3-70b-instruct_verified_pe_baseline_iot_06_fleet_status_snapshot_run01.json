@@ -1,0 +1,175 @@
+{
+  "question": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+  "effective_question": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 1
+  },
+  "answer": "Unfortunately, the request for a fleet-status snapshot cannot be fulfilled due to an error in the initial step of enumerating transformers in service. The error occurred because the input for health status was expected to be an integer but received a string ('any') instead. As a result, no information on transformers currently in service, including representative healthy and degraded units with their sensor channels and recent telemetry samples, can be provided.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Enumerate the transformers currently in service",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts containing transformer metadata"
+    },
+    {
+      "step": 2,
+      "task": "Get the available sensor channels for a representative healthy unit (T-005)",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts containing sensor metadata for T-005"
+    },
+    {
+      "step": 3,
+      "task": "Get the available sensor channels for a representative degraded unit (T-013)",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts containing sensor metadata for T-013"
+    },
+    {
+      "step": 4,
+      "task": "Get recent telemetry samples for each sensor channel of the healthy unit (T-005)",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "List of dicts containing recent telemetry samples for each sensor channel of T-005"
+    },
+    {
+      "step": 5,
+      "task": "Get recent telemetry samples for each sensor channel of the degraded unit (T-013)",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "List of dicts containing recent telemetry samples for each sensor channel of T-013"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Enumerate the transformers currently in service",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts containing transformer metadata"
+    },
+    {
+      "step": 2,
+      "task": "Get the available sensor channels for a representative healthy unit (T-005)",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts containing sensor metadata for T-005"
+    },
+    {
+      "step": 3,
+      "task": "Get the available sensor channels for a representative degraded unit (T-013)",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts containing sensor metadata for T-013"
+    },
+    {
+      "step": 4,
+      "task": "Get recent telemetry samples for each sensor channel of the healthy unit (T-005)",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "List of dicts containing recent telemetry samples for each sensor channel of T-005"
+    },
+    {
+      "step": 5,
+      "task": "Get recent telemetry samples for each sensor channel of the degraded unit (T-013)",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "List of dicts containing recent telemetry samples for each sensor channel of T-013"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Enumerate the transformers currently in service",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {
+        "health_status": "any"
+      },
+      "response": "Error executing tool list_assets: 1 validation error for list_assetsArguments\nhealth_status\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='any', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_parsing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "replan_suffix",
+      "verifier_reason": "Invalid input type for health_status",
+      "verifier_updated_focus": "validate tool_args",
+      "retries_used": 0,
+      "verifier_replan_raw_plan": []
+    }
+  ],
+  "scenario": {
+    "id": "SGT-022",
+    "type": "IoT",
+    "text": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+    "category": "Fleet Status Snapshot",
+    "characteristic_form": "The answer should list the in-service transformer IDs, then for each of T-005 and T-013 surface the available sensor channels and a recent telemetry sample for each channel, and call out any qualitative difference between the two units.",
+    "expected_tools": [
+      "iot.list_assets",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "in-service transformer list",
+        "T-005 sensor channels",
+        "T-005 sample readings",
+        "T-013 sensor channels",
+        "T-013 sample readings",
+        "comparative observation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

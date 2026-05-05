@@ -1,0 +1,120 @@
+{
+  "question": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "answer": "The above functions are used to retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 31607,
+    "output_tokens": 315,
+    "total_tokens": 31922,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_fault_record",
+          "arguments": {
+            "fault_id": "F001"
+          },
+          "call_id": "chatcmpl-tool-84dc39dfa67bfa62",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-001\",\n  \"fault_id\": \"F001\",\n  \"fault_type\": \"Line Breakage\",\n  \"location\": \"Substation Gamma\",\n  \"voltage_v\": 33000,\n  \"current_a\": 235,\n  \"power_load_mw\": 32.97,\n  \"temperature_c\": 25.7,\n  \"wind_speed_kmh\": 7.1,\n  \"weather_condition\": \"Windy\",\n  \"maintenance_status\": \"Scheduled\",\n  \"component_health\": \"Normal\",\n  \"duration_hrs\": 3.1,\n  \"downtime_hrs\": 7\n}"
+          }
+        },
+        {
+          "name": "estimate_downtime",
+          "arguments": {
+            "severity": "critical",
+            "transformer_id": "T-006",
+            "fault_type": "line breakage"
+          },
+          "call_id": "chatcmpl-tool-b830df7729726a61",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-006\",\n  \"severity\": \"critical\",\n  \"fault_type\": \"line breakage\",\n  \"estimated_min_hours\": 48,\n  \"estimated_max_hours\": 120,\n  \"estimated_typical_hours\": 72,\n  \"source\": \"dataset_statistics_baseline\"\n}"
+          }
+        },
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "estimated_downtime_hours": 72,
+            "issue_description": "Line breakage repair",
+            "fault_type": "line breakage",
+            "priority": "high",
+            "transformer_id": "T-006"
+          },
+          "call_id": "chatcmpl-tool-a87da926da1f14bf",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-1A4F8C55\",\n  \"transformer_id\": \"T-006\",\n  \"issue_description\": \"Line breakage repair\",\n  \"priority\": \"high\",\n  \"fault_type\": \"line breakage\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 72.0,\n  \"created_at\": \"2026-05-05T07:40:54.297304Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "status": "in_progress",
+            "estimated_downtime_hours": 72,
+            "work_order_id": "WO-1A4F8C55",
+            "priority": "high"
+          },
+          "call_id": "chatcmpl-tool-a254375e5206b82a",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-1A4F8C55\",\n  \"transformer_id\": \"T-006\",\n  \"issue_description\": \"Line breakage repair\",\n  \"priority\": \"high\",\n  \"fault_type\": \"line breakage\",\n  \"status\": \"in_progress\",\n  \"estimated_downtime_hours\": 72.0,\n  \"created_at\": \"2026-05-05T07:40:54.297304Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The above functions are used to retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.619250297546387,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-018",
+    "type": "WO",
+    "text": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+    "category": "Work Order Lifecycle",
+    "characteristic_form": "The answer should retrieve the fault record, estimate downtime, create a corrective work order, and update its status to in-progress with the downtime noted.",
+    "asset_id": "T-006",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.get_fault_record",
+      "wo.estimate_downtime",
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record details",
+        "downtime estimate",
+        "corrective work order created",
+        "work order updated to in-progress"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

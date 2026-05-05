@@ -1,0 +1,170 @@
+=== SmartGridBench Experiment ===
+Run ID:        core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct
+Config:        /tmp/core15x5_post175_a100_cu_20260505T0724Z_configs/A.env
+Cell:          A
+Experiment:    post175_15x5_aat_direct
+Family:        exp1_mcp_overhead
+Orchestration: agent_as_tool
+MCP mode:      direct
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     15 file(s)
+Node:          smartgrid-a100-spot-20260503-0217
+Job ID:        N/A
+Cell dir:      benchmarks/cell_A_direct
+Run dir:       benchmarks/cell_A_direct/raw/core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1800s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run zkxtrs32
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /home/wax/hpml-post175-core-cu-20260505T0724Z/wandb/run-20260505_073340-zkxtrs32
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct
+wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/zkxtrs32
+wandb: updating run metadata; uploading summary
+wandb: uploading wandb-metadata.json; uploading requirements.txt; uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run summary:
+wandb:            benchmark_config_path /tmp/core15x5_post17...
+wandb:           benchmark_summary_path benchmarks/cell_A_di...
+wandb:                  experiment_cell A
+wandb:                experiment_family exp1_mcp_overhead
+wandb: explicit_fault_risk_adjudication False
+wandb:                    failure_count 1
+wandb:                      finished_at 2026-05-05T07:33:38....
+wandb:                          git_sha 1913c6e4703425f735d8...
+wandb:                         gpu_type NVIDIA A100-SXM4-40G...
+wandb:                        host_name smartgrid-a100-spot-...
+wandb:                              +32 ...
+wandb: 
+wandb: 🚀 View run core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/zkxtrs32
+wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260505_073340-zkxtrs32/logs
+
+=== Experiment summary ===
+Completed: 74 / 75
+Failed:    1
+Config:    benchmarks/cell_A_direct/config.json
+Summary:   benchmarks/cell_A_direct/summary.json
+Raw dir:   benchmarks/cell_A_direct/raw/core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct
+Artifact validation for core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct: 75/75 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline
+Config:        /tmp/core15x5_post175_a100_cu_20260505T0724Z_configs/B.env
+Cell:          B
+Experiment:    post175_15x5_aat_mcp_baseline
+Family:        exp1_mcp_overhead
+Orchestration: agent_as_tool
+MCP mode:      baseline
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     15 file(s)
+Node:          smartgrid-a100-spot-20260503-0217
+Job ID:        N/A
+Cell dir:      benchmarks/cell_B_mcp_baseline
+Run dir:       benchmarks/cell_B_mcp_baseline/raw/core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1800s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /home/wax/hpml-post175-core-cu-20260505T0724Z/wandb/run-20260505_075025-es6tv6f1
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline
+wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/es6tv6f1
+wandb: updating run metadata; uploading summary
+wandb: 
+wandb: Run summary:
+wandb:            benchmark_config_path /tmp/core15x5_post17...
+wandb:           benchmark_summary_path benchmarks/cell_B_mc...
+wandb:                  experiment_cell B
+wandb:                experiment_family exp1_mcp_overhead
+wandb: explicit_fault_risk_adjudication False
+wandb:                    failure_count 1
+wandb:                      finished_at 2026-05-05T07:50:24....
+wandb:                          git_sha 1913c6e4703425f735d8...
+wandb:                         gpu_type NVIDIA A100-SXM4-40G...
+wandb:                        host_name smartgrid-a100-spot-...
+wandb:                              +32 ...
+wandb: 
+wandb: 🚀 View run core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/es6tv6f1
+wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260505_075025-es6tv6f1/logs
+
+=== Experiment summary ===
+Completed: 74 / 75
+Failed:    1
+Config:    benchmarks/cell_B_mcp_baseline/config.json
+Summary:   benchmarks/cell_B_mcp_baseline/summary.json
+Raw dir:   benchmarks/cell_B_mcp_baseline/raw/core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline
+Artifact validation for core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline: 75/75 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized
+Config:        /tmp/core15x5_post175_a100_cu_20260505T0724Z_configs/C.env
+Cell:          C
+Experiment:    post175_15x5_aat_mcp_optimized
+Family:        exp1_mcp_overhead
+Orchestration: agent_as_tool
+MCP mode:      optimized
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     15 file(s)
+Node:          smartgrid-a100-spot-20260503-0217
+Job ID:        N/A
+Cell dir:      benchmarks/cell_C_mcp_optimized
+Run dir:       benchmarks/cell_C_mcp_optimized/raw/core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1800s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+vLLM extra args: --enable-prefix-caching
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run z7b8men2
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /home/wax/hpml-post175-core-cu-20260505T0724Z/wandb/run-20260505_080714-z7b8men2
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized
+wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/z7b8men2
+wandb: updating run metadata; uploading summary
+wandb: uploading summary
+wandb: 
+wandb: Run summary:
+wandb:            benchmark_config_path /tmp/core15x5_post17...
+wandb:           benchmark_summary_path benchmarks/cell_C_mc...
+wandb:                  experiment_cell C
+wandb:                experiment_family exp1_mcp_overhead
+wandb: explicit_fault_risk_adjudication False
+wandb:                    failure_count 0
+wandb:                      finished_at 2026-05-05T08:07:13....
+wandb:                          git_sha 1913c6e4703425f735d8...
+wandb:                         gpu_type NVIDIA A100-SXM4-40G...
+wandb:                        host_name smartgrid-a100-spot-...
+wandb:                              +32 ...
+wandb: 
+wandb: 🚀 View run core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/z7b8men2
+wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260505_080714-z7b8men2/logs
+
+=== Experiment summary ===
+Completed: 75 / 75
+Failed:    0
+Config:    benchmarks/cell_C_mcp_optimized/config.json
+Summary:   benchmarks/cell_C_mcp_optimized/summary.json
+Raw dir:   benchmarks/cell_C_mcp_optimized/raw/core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized
+Artifact validation for core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized: 75/75 complete, 0 missing

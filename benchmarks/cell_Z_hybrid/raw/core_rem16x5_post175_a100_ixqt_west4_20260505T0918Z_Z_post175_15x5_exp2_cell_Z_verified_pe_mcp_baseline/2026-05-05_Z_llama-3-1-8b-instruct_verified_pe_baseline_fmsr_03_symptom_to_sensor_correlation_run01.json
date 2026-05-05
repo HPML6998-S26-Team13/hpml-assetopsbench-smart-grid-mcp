@@ -1,0 +1,253 @@
+{
+  "question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "effective_question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "The failure mode that best matches the symptom of intermittent partial discharge on T-003 is \"Partial Discharge\" (FM-001). \n\nThe sensor readings most useful for confirming and tracking the progression of this failure mode are:\n\n1. Load current (load_current_a) - to monitor changes in electrical load that may contribute to partial discharge.\n2. Oil temperature (oil_temp_c) - to monitor the thermal conditions within the insulation system.\n3. Power factor - to monitor changes in electrical system efficiency that may indicate partial discharge.\n4. Winding temperature (winding_temp_top_c) - to monitor thermal conditions within the winding insulation.\n\nThese sensor readings will help confirm and track the progression of partial discharge on T-003.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Identify the failure mode that best matches the symptom of intermittent partial discharge on T-003.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of matching failure mode dicts."
+    },
+    {
+      "step": 2,
+      "task": "Extract the failure mode ID from the result of Task1.",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A list of dicts with keys: failure_mode_id, name, severity, iec_code, key_gases, recommended_action."
+    },
+    {
+      "step": 3,
+      "task": "Get the failure mode ID from the result of Task2.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict with keys: failure_mode_id, name, key_gases (list), description, iec_code, recommended_action."
+    },
+    {
+      "step": 4,
+      "task": "List the sensor readings most useful for confirming and tracking the progression of the identified failure mode.",
+      "server": "tsfm",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 5,
+      "task": "Get the sensor readings for the identified failure mode.",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A list of dicts with keys: timestamp, value, unit."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Identify the failure mode that best matches the symptom of intermittent partial discharge on T-003.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of matching failure mode dicts."
+    },
+    {
+      "step": 2,
+      "task": "Extract the failure mode ID from the result of Task1.",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A list of dicts with keys: failure_mode_id, name, severity, iec_code, key_gases, recommended_action."
+    },
+    {
+      "step": 3,
+      "task": "Get the failure mode ID from the result of Task2.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict with keys: failure_mode_id, name, key_gases (list), description, iec_code, recommended_action."
+    },
+    {
+      "step": 4,
+      "task": "List the sensor readings most useful for confirming and tracking the progression of the identified failure mode.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 5,
+      "task": "Get the sensor readings for the identified failure mode.",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A list of dicts with keys: timestamp, value, unit."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Rerouted step 4 tool list_sensors from tsfm to iot."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Identify the failure mode that best matches the symptom of intermittent partial discharge on T-003.",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {
+        "query": "intermittent partial discharge on T-003"
+      },
+      "response": "",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result indicates a successful search for failure modes.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Extract the failure mode ID from the result of Task1.",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {
+        "tool": "list_failure_modes",
+        "params": {
+          "symptoms": "intermittent partial discharge",
+          "equipment_id": "T-003"
+        },
+        "task": "Extract the failure mode ID from the result of Task1"
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": \"H2,CH4\",\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}\n{\n  \"failure_mode_id\": \"FM-002\",\n  \"name\": \"Low-Temperature Overheating (< 300\u00b0C)\",\n  \"severity\": \"medium\",\n  \"iec_code\": \"T1\",\n  \"key_gases\": \"CH4,C2H4\",\n  \"recommended_action\": \"Reduce load; inspect within 30 days\"\n}\n{\n  \"failure_mode_id\": \"FM-003\",\n  \"name\": \"Thermal Fault 300-700\u00b0C\",\n  \"severity\": \"high\",\n  \"iec_code\": \"T2\",\n  \"key_gases\": \"C2H4,C2H6\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-004\",\n  \"name\": \"High-Temperature Overheating (> 700\u00b0C)\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"T3\",\n  \"key_gases\": \"C2H4,C2H6,H2\",\n  \"recommended_action\": \"Immediate de-energization required\"\n}\n{\n  \"failure_mode_id\": \"FM-005\",\n  \"name\": \"Spark Discharge\",\n  \"severity\": \"high\",\n  \"iec_code\": \"D1\",\n  \"key_gases\": \"C2H2,H2\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-006\",\n  \"name\": \"Arc Discharge\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"D2\",\n  \"key_gases\": \"C2H2,H2,C2H4\",\n  \"\n...[truncated 75 chars]",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Extracted failure mode ID successfully",
+      "verifier_updated_focus": "Get the failure mode ID from the result of Task2",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Get the failure mode ID from the result of Task2.",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {
+        "failure_mode_id": "FM-001",
+        "tool": "get_sensor_correlation"
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"dga_label\": \"Partial discharge\",\n  \"description\": \"Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": [\n    \"H2\",\n    \"CH4\"\n  ],\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step successfully retrieved failure mode ID",
+      "verifier_updated_focus": "List sensor readings for confirming and tracking the progression of the identified failure mode",
+      "retries_used": 0
+    },
+    {
+      "step": 4,
+      "task": "List the sensor readings most useful for confirming and tracking the progression of the identified failure mode.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "transformer_id": "T-003",
+        "failure_mode_id": "FM-001"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step successfully listed sensor readings for the identified failure mode.",
+      "verifier_updated_focus": "Get the sensor readings for the identified failure mode.",
+      "retries_used": 0
+    },
+    {
+      "step": 5,
+      "task": "Get the sensor readings for the identified failure mode.",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {
+        "transformer_id": "T-003",
+        "sensor_id": "load_current_a",
+        "start_time": null,
+        "end_time": null,
+        "limit": 720
+      },
+      "response": "{\n  \"timestamp\": \"2024-01-01T00:00:00\",\n  \"value\": 249.322,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T01:00:00\",\n  \"value\": 255.222,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T02:00:00\",\n  \"value\": 221.192,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T03:00:00\",\n  \"value\": 196.684,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T04:00:00\",\n  \"value\": 231.785,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T05:00:00\",\n  \"value\": 154.22,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T06:00:00\",\n  \"value\": 126.214,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T07:00:00\",\n  \"value\": 217.466,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T08:00:00\",\n  \"value\": 159.773,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T09:00:00\",\n  \"value\": 197.388,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T10:00:00\",\n  \"value\": 204.785,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T11:00:00\",\n  \"value\": 209.925,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T12:00:00\",\n  \"value\": 237.512,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T13:00:00\",\n  \"value\": 233.283,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T14:00:00\",\n  \"value\": 207.8,\n  \"unit\": \"A\"\n}\n{\n  \"timestamp\": \"2024-01-01T15:00:00\",\n  \"value\": 182.319,\n  \"\n...[truncated 53422 chars]",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "All planned steps have been completed.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-013",
+    "type": "FMSR",
+    "text": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+    "category": "Symptom-Driven Failure Mode Lookup",
+    "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+    "asset_id": "T-003",
+    "expected_tools": [
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "matched failure mode",
+        "rationale",
+        "correlated sensors"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "success": false,
+  "failed_steps": [],
+  "history": [],
+  "answer": "",
+  "error": "Runner produced no complete JSON object on stdout; see harness.log for stderr and traceback details.",
+  "raw_stdout_excerpt": "\u001b[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new\u001b[0m\nLiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.",
+  "scenario": {
+    "id": "SGT-018",
+    "type": "WO",
+    "text": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+    "category": "Work Order Lifecycle",
+    "characteristic_form": "The answer should retrieve the fault record, estimate downtime, create a corrective work order, and update its status to in-progress with the downtime noted.",
+    "asset_id": "T-006",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.get_fault_record",
+      "wo.estimate_downtime",
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record details",
+        "downtime estimate",
+        "corrective work order created",
+        "work order updated to in-progress"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

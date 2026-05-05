@@ -1,0 +1,58 @@
+{
+  "question": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+  "answer": "{\"name\": \"get_sensor_readings\", \"parameters\": {\"transformer_id\": \"T-011\", \"limit\": 1, \"start_time\": null, \"sensor_id\": None, \"end_time\": null}}",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 1,
+  "tool_call_count": 0,
+  "usage": {
+    "input_tokens": 5961,
+    "output_tokens": 47,
+    "total_tokens": 6008,
+    "requests": 1
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "{\"name\": \"get_sensor_readings\", \"parameters\": {\"transformer_id\": \"T-011\", \"limit\": 1, \"start_time\": null, \"sensor_id\": None, \"end_time\": null}}",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 2.773207902908325,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-001",
+    "type": "IoT",
+    "text": "List all available sensors for transformer T-011 and include each sensor's latest timestamped value.",
+    "category": "Asset Discovery",
+    "characteristic_form": "The answer should identify asset T-011, enumerate available sensor names, and provide latest value plus timestamp for each sensor using IoT retrieval tools.",
+    "asset_id": "T-011",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "T-011",
+        "sensor list",
+        "latest value",
+        "timestamp"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}
