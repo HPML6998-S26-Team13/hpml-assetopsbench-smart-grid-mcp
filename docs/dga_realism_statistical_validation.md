@@ -326,9 +326,10 @@ Acquisition target list, ranked by usefulness × accessibility.
 
 | Rank | Dataset | Access | Fields | Labels | Notes |
 |------|---------|--------|--------|--------|-------|
-| 1 | **IEEE DataPort DGA Dataset** (Dissanayake 2026) — DOI [10.21227/27vy-h479](https://ieee-dataport.org/documents/dga-dataset) | Columbia IEEE subscription | H2, CH4, C2H6, C2H4, C2H2 + integer fault label | yes | **Three Excel files**: balanced training, **unseen real-world test set**, **canonical IEC TC 10 benchmark**. Best primary target. |
+| 0 | **Kaggle: [bantipatel20/dissolved-gas-analysis-of-transformer](https://www.kaggle.com/datasets/bantipatel20/dissolved-gas-analysis-of-transformer)** (`DGA-dataset-1.csv`, n=201) | Kaggle account, no IEEE auth | H2, CH4, C2H6, C2H4, C2H2 + descriptive `Type` column | yes (PD/T1/T2/T3/D1/D2; **no Normal samples**) | **Acquired 2026-05-04 — used for L3 v1.** Same Kaggle dataset that backs `data/raw/dissolved-gas-analysis-of-transformer/DGA-dataset-1.csv` in `data/build_processed.py`. Label translation under `REAL_LABEL_MAPS["bantipatel20_dga"]`. |
+| 1 | **IEEE DataPort DGA Dataset** (Dissanayake 2026) — DOI [10.21227/27vy-h479](https://ieee-dataport.org/documents/dga-dataset) | Columbia IEEE subscription | H2, CH4, C2H6, C2H4, C2H2 + integer fault label | yes | **Three Excel files**: balanced training, **unseen real-world test set**, **canonical IEC TC 10 benchmark**. Originally planned as primary; deferred for v1 in favour of #0 (no IEEE-PES auth friction). |
 | 2 | **IEC TC 10 raw set** (~117 cases) | Reproduced in [Duval & dePablo 2001](https://ieeexplore.ieee.org/iel5/57/19819/00917529.pdf) (IEEE Xplore, Columbia access) | 5 fault gases + fault-class labels | yes | Historical reference; cited by IEC 60599 itself. Smaller n but authoritative. |
-| 3 | **Kaggle: [Failure Analysis in Power Transformers](https://www.kaggle.com/datasets/shashwatwork/failure-analysis-in-power-transformers-dataset)** (shashwatwork) | direct download, no auth | DGA + failure metadata | yes | Frictionless backstop if IEEE DataPort is gated. |
+| 3 | **Kaggle: [shashwatwork/failure-analysis-in-power-transformers-dataset](https://www.kaggle.com/datasets/shashwatwork/failure-analysis-in-power-transformers-dataset)** = **Mendeley DOI [10.17632/rz75w3fkxy.1](https://data.mendeley.com/datasets/rz75w3fkxy/1)** (Arias-Mejía Lara 2020) | Kaggle account / Mendeley public | Hydrogen, Methane, Ethylene, Ethane, Acethylene, CO, CO2, DBDS, Power factor, Interfacial V, Dielectric rigidity, Water content, Health index, Life expectation (n=471) | **no** — health-index regression dataset, no fault-class column | Acquired 2026-05-04 alongside #0. **Md5-confirmed identical** to the Mendeley source. Useful as a marginal-distribution supplement (larger n than #0 for KS / EMD on the 5 fault gases) but cannot drive chi² fault prevalence or conditional-KS per fault. Cite as Arias & Mejía Lara (2020), [Engineering Failure Analysis](https://www.sciencedirect.com/science/article/abs/pii/S135063071931091X). |
 | 4 | **IEEE DataPort: [DGA + Membership Degree](https://ieee-dataport.org/documents/dissolved-gas-data-transformer-oil-fault-diagnosis-power-transformers-membership-degree)** | IEEE subscription | gas concentrations + fault labels | yes | Different fault-encoding scheme; useful as secondary check on label-mapping robustness. |
 | 5 | **GitHub: [ahmedtariq71/Dataset1](https://github.com/ahmedtariq71/Dataset1)** | public | DGA samples | yes | Companion to a published paper. |
 | 6 | **GitHub: NanaudKmer/Springer_EETE_…_Ranking_Sequence** | public | DGA + MATLAB methods | yes | Useful for cross-checking Rogers/Doernenburg implementations more than for distribution comparison. |
@@ -554,6 +555,8 @@ Questions to follow up on, ordered by leverage:
 - IEEE C57.104-2019 — IEEE Guide for the Interpretation of Gases Generated in Mineral Oil-Immersed Transformers.
 - Duval, M. & dePablo, A. (2001). *Interpretation of gas-in-oil analysis using new IEC publication 60599 and IEC TC 10 databases.* IEEE Electrical Insulation Magazine 17(2), 31–41. [IEEE Xplore link](https://ieeexplore.ieee.org/iel5/57/19819/00917529.pdf).
 - Dissanayake, T. (2026). *DGA dataset.* IEEE DataPort. DOI [10.21227/27vy-h479](https://ieee-dataport.org/documents/dga-dataset).
+- Arias, R. & Mejía Lara, J. (2020). *Health index and power transformers results.* Mendeley Data, V1. DOI [10.17632/rz75w3fkxy.1](https://data.mendeley.com/datasets/rz75w3fkxy/1). Companion paper in *Engineering Failure Analysis* (2020): [sciencedirect.com/science/article/abs/pii/S135063071931091X](https://www.sciencedirect.com/science/article/abs/pii/S135063071931091X). License: CC-BY-4.0. Used in L3 v1 as marginal-distribution supplement (n=471, no fault labels).
+- bantipatel20 (n.d.). *Dissolved gas analysis of transformer.* Kaggle dataset. URL [kaggle.com/datasets/bantipatel20/dissolved-gas-analysis-of-transformer](https://www.kaggle.com/datasets/bantipatel20/dissolved-gas-analysis-of-transformer). Used in L3 v1 as primary labeled DGA reference (n=201, fault `Type` column).
 - Bashir et al. (2024). *Optimized Synthetic Data Integration with Transformer's DGA Data for Improved ML-Based Fault Identification.* ResearchGate publication 381933991.
 - IBM AssetOpsBench upstream: [github.com/IBM/AssetOpsBench](https://github.com/IBM/AssetOpsBench).
 - Apr 28 mentor pre-call Q&A pass — § "Knowledge artifacts" and § "What is realism" capture how the L3 vs L2 split was reached. Owner Alex; ask if you need it.
@@ -568,17 +571,17 @@ Questions to follow up on, ordered by leverage:
 - [ ] `data/scenarios/validate_realism_statistical.py` — skeleton landed. **Acceptance:** `python3 data/scenarios/validate_realism_statistical.py --synthetic data/processed/dga_records.csv --report /tmp/test.md` runs without error, emits a stub report indicating real dataset is missing.
 - [ ] `docs/dga_realism_statistical_validation.md` — this file. **Acceptance:** PR review LGTM.
 - [ ] `data/knowledge/transformer_standards.json` — pin `meta.source` edition. **Acceptance:** `meta.source` field includes "IEC 60599:2022" or "IEC 60599:2015" with deliberate decision recorded in CHANGELOG.
-- [ ] `data/external/` — create dir; gitignore licensed datasets. **Acceptance:** `.gitignore` updated; placeholder README listing expected dataset filenames.
-- [ ] `data/external/README.md` — dataset acquisition log. **Acceptance:** documents which of § 4's datasets have been acquired, when, by whom.
+- [x] `data/external/` — created; `*.csv` already gitignored globally so licensed CSVs stay local. **Acceptance:** dir present; `data/external/README.md` documents both datasets and their acquisition commands.
+- [x] `data/external/README.md` — dataset acquisition log; lists `DGA-dataset-1.csv` (bantipatel20, n=201, labeled) and `transformer_dga_arias.csv` (Mendeley/shashwatwork, n=471, unlabeled supplement).
 - [ ] `data/generate_synthetic.py` — extend `make_dga_records()` to emit ≥ 30 samples per transformer. **Acceptance:** `data/processed/dga_records.csv` has ≥ 600 rows; existing scenarios still validate against the expanded data.
-- [ ] First L3 run (depends on real-data acquisition). **Acceptance:** `reports/realism_statistical_v1.md` exists, ≥ 70% of tests pass at v1, failing tests have follow-up tickets.
+- [x] First L3 run — `reports/realism_statistical_v1.{md,json}` produced from `bantipatel20_dga` (n_real=201) vs synthetic n=20. **Result: 5/27 tests passed.** Below the 70% gate but expected pre-tuning; gap is real signal for the v2 cycle (correlation Δ = 0.92, marginal KS uniformly fails). Documented inline in the report. Tuning loop tracked under #53 Row 5.
 - [ ] Wire into PR #147 promotion path. **Acceptance:** when PR #147 merges, the scenario-batch promotion script also runs L3 and stores the report under `reports/`.
 - [ ] Final report figure. **Acceptance:** `reports/2026-05-04_final.pdf` § Methodology contains an L3 report-card summary table.
 
 ### Acceptance Gates
 
 - **Gate A (this PR):** skeleton + doc land; existing tests still pass; CHANGELOG entry added.
-- **Gate B (Apr 30):** real dataset acquired; first L3 run produces a non-stub report.
+- **Gate B (Apr 30):** real dataset acquired; first L3 run produces a non-stub report. **Met 2026-05-04** — `bantipatel20/dissolved-gas-analysis-of-transformer` acquired (n=201 labeled), `reports/realism_statistical_v1.{md,json}` non-stub.
 - **Gate C (May 2):** at minimum the chi-squared on fault prevalence and KS on H2 + C2H2 pass; remaining failing tests documented as limitations.
 - **Gate D (May 4):** L3 report-card cited in final paper as evidence of statistical realism.
 

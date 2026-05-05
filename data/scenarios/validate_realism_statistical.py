@@ -92,7 +92,27 @@ REAL_LABEL_MAPS: dict[str, dict] = {
         6: "D2",
     },
     "kaggle_failure_analysis": {
-        # populate when the Kaggle CSV is acquired and field-encoded labels are confirmed
+        # Kaggle shashwatwork/failure-analysis-in-power-transformers-dataset is
+        # a re-upload of Mendeley rz75w3fkxy (Arias-Mejia Lara 2020) — health
+        # index regression, no fault-class column. Marginal-distribution tests
+        # only; fault-class tests fall back to TC10 reference.
+    },
+    "bantipatel20_dga": {
+        # Kaggle bantipatel20/dissolved-gas-analysis-of-transformer
+        # (DGA-dataset-1.csv, n=201). Descriptive Type-column labels mapped
+        # to IEC codes consistent with build_processed.py:286-345 and
+        # PROJECT_LABEL_TO_IEC. No Normal samples in this dataset.
+        "Partial discharge": "PD",
+        "Low-temperature overheating": "T1",
+        "Middle-temperature overheating": "T2",
+        # Composite label collapsed to T2 per build_processed.py:430-431.
+        "Low/Middle-temperature overheating": "T2",
+        "High-temperature overheating": "T3",
+        # build_processed.py:330 maps Spark discharge to IEC D1
+        # (low-energy electrical sparking) and Arc discharge to D2
+        # (high-energy arcing).
+        "Spark discharge": "D1",
+        "Arc discharge": "D2",
     },
     "duval_2001_tc10": {
         # Duval & dePablo 2001 IEC TC 10 reproduction uses IEC codes natively
@@ -289,6 +309,8 @@ def _normalize_real_columns(df: pd.DataFrame) -> pd.DataFrame:
     Recognized shapes:
       - IEEE DataPort DGA Dataset (Dissanayake 2026, DOI 10.21227/27vy-h479)
       - Kaggle: shashwatwork/failure-analysis-in-power-transformers-dataset
+      - Kaggle: bantipatel20/dissolved-gas-analysis-of-transformer
+        (DGA-dataset-1.csv: H2/CH4/C2H6/C2H4/C2H2 + Type column)
       - GitHub: ahmedtariq71/Dataset1
       - IEC TC 10 derived (Duval & dePablo 2001 reproduction)
 
@@ -301,7 +323,7 @@ def _normalize_real_columns(df: pd.DataFrame) -> pd.DataFrame:
             if candidate.lower() in cols:
                 rename[cols[candidate.lower()]] = f"{gas}_ppm"
                 break
-    for label_col in ("fault_label", "fault", "label", "class", "actual_fault"):
+    for label_col in ("fault_label", "fault", "label", "class", "actual_fault", "type"):
         if label_col in cols:
             rename[cols[label_col]] = "fault_label"
             break
@@ -885,12 +907,16 @@ def main(argv: list[str] | None = None) -> int:
     rc.real_path = str(args.real) if args.real else None
 
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(render_markdown(rc))
+    # Pin UTF-8 so Windows (cp1252 default) can write the ✅/❌ glyphs in the
+    # rendered markdown.
+    args.report.write_text(render_markdown(rc), encoding="utf-8")
     if args.json:
         # allow_nan=False makes any future non-finite metric a hard error at
         # report-write time rather than silently emitting bare NaN (which
         # is not strict JSON and fails downstream consumers). v3 H1.
-        args.json.write_text(json.dumps(rc.to_dict(), indent=2, allow_nan=False))
+        args.json.write_text(
+            json.dumps(rc.to_dict(), indent=2, allow_nan=False), encoding="utf-8"
+        )
 
     print(f"Wrote {args.report}: {rc.n_passed}/{rc.n_total} tests passed")
     return 0 if rc.n_passed == rc.n_total else 1
