@@ -29,7 +29,7 @@ One-page fact pack. Concrete numbers and repo paths only — verbatim-quotable, 
 | Path | When | GPU | Cost | Status as of 2026-05-05 |
 |---|---|---|---|---|
 | **Insomnia** (Columbia HPC) | Primary | NVIDIA RTX A6000 (48 GB) or NVIDIA L40S | $0 (account `edu`, partition `short`, qos `short`, time ≤ 2h) | Primary path. Carried the Apr 26-28 canonical captures (Cells A/B/Y/Z, runs `8979314` / `8998340..43`). Was down 2026-05-03 → 2026-05-05 for a CVE-fix window; back online and primary again. |
-| **GCP A100** | Validated fallback / preemption-tolerant batches | NVIDIA A100-40GB (`a2-highgpu-1g`, ~$1.81/hr spot) or A100-80GB (`a2-ultragpu-1g`, ~$2.50/hr spot) | $500/person credit (~276 GPU-hr A100-40GB spot per member) | Proven fallback after the May 3 closeout (seven rows, `run_rc=0` + `judge_rc=0`, manifest at `logs/gcp_a100_context_20260503T063343Z_manifest.tsv`). Use when Insomnia is unavailable or saturated, or for preemption-tolerant batching. Resumable via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME` (PR #170). |
+| **GCP A100** | Validated fallback / preemption-tolerant batches | NVIDIA A100-40GB (`a2-highgpu-1g`, ~$1.81/hr spot) or A100-80GB (`a2-ultragpu-1g`, ~$2.50/hr spot) | $500/person credit (~276 GPU-hr A100-40GB spot per member) | Proven fallback after the May 3 closeout (19 rows × 30 trials = 570 trajectories + 570 judge logs, summary at `benchmarks/gcp_a100_final_20260503/summary/README.md`, per-batch manifests under `benchmarks/gcp_a100_final_20260503/logs/*_manifest.tsv`). Use when Insomnia is unavailable or saturated, or for preemption-tolerant batching. Resumable via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME` (PR #170). |
 | **WatsonX hosted** | Judge + 70B comparison | n/a (hosted) | Free per IBM credit allocation | Always-on; no Insomnia dependency. |
 
 ## Slurm run shape (Insomnia)
@@ -39,7 +39,7 @@ One-page fact pack. Concrete numbers and repo paths only — verbatim-quotable, 
 - **GPU:** `--gres=gpu:1` (A6000 or L40S; assignment is non-deterministic — `#132` adds `gpu_type` to `summary.json` so each run records its actual hardware)
 - **Memory:** `64G` standard; `32G` for verification jobs
 - **Time:** `02:00:00` standard cap (replay + capture); `01:30:00` for verification (e.g. AOB smoke checks)
-- **Email:** `--mail-type=BEGIN,END,FAIL --mail-user=$MAIL_USER` per CLAUDE.md
+- **Email:** `--mail-type=BEGIN,END,FAIL --mail-user=$MAIL_USER` per the team Slurm submission convention (also exported by `scripts/run_experiment.sh`)
 - **Submit pattern:** `sbatch scripts/run_experiment.sh configs/aat_*.env` from the repo root
 - **Run dir:** `benchmarks/cell_<X>/raw/<SLURM_JOB_ID>_<EXPERIMENT_NAME>/`
 - **Per-run artifacts:** `meta.json`, `summary.json` (cell-level, overwritten per run), `latencies.jsonl`, `harness.log`, `vllm.log`, `2026-MM-DD_<cell>_<model>_<orch>_<mcp>_<scenario>_runNN.json` (one per trial), `replay/` (torch profiler replay results)
@@ -77,15 +77,16 @@ Three streams, all attached per-run:
 - **Cell B (AaT MCP baseline):** Slurm `8979314` (same job) on Insomnia A6000, 6/6 success, mean 13.38s. (B−A) MCP transport overhead = +1.20s mean / paired median ~23ms. WandB: `qejvnoug`. PR #130.
 - **Cell Y (Plan-Execute) + Y+Self-Ask:** PR #144 first canonical capture on Insomnia.
 - **Cell Z (Verified PE) + Z+Self-Ask:** PR #144 first canonical capture; **Z+SA leads at 0.833 mean / 5/6 judge-pass** on the 6-trial slice. Convergent with AOB §5.6 Maverick AaT 59→66% Self-Ask delta.
-- **GCP A100 context-window closeout:** seven rows, all `run_rc=0` and `judge_rc=0`, manifest at `logs/gcp_a100_context_20260503T063343Z_manifest.tsv` (PR #172).
+- **GCP A100 closeout:** 19 rows × 30 trials = 570 trajectories + 570 judge logs (9 final matrix rows, 2 optimized-transport follow-ons, 8 mitigation rows across the 4-tier ladder). Summary at `benchmarks/gcp_a100_final_20260503/summary/README.md`; per-batch manifests in `benchmarks/gcp_a100_final_20260503/logs/*_manifest.tsv` (PR #172).
 - **KV-cache smoke:** Slurm `8979532` on Insomnia H100 NVL — `--enable-prefix-caching` measured at -27% wall-clock vs baseline; fp8 KV failed at vLLM startup (kernel constraint).
 - **INT8 smoke:** Slurm `8979660` on Insomnia A6000 — `--quantization compressed-tensors` reachable + responds, CUTLASS Int8 W8A8 marlin kernel selected.
 - **AOB#15 verification:** Slurm `9130342` on Insomnia ins092 — all three pytest suites green at AOB SHA `6872cea`.
 
 ## Reproducibility entry points
 
-- **Single command:** `sbatch scripts/run_experiment.sh configs/<cell>.env` from repo root, with `MAIL_USER` exported. Identical entry point for every cell.
-- **Resumable GCP runs:** `SMARTGRID_RUN_ID=<id> SMARTGRID_RESUME=1 sbatch scripts/run_experiment.sh ...` (PR #170)
+- **Single command (Insomnia):** `sbatch scripts/run_experiment.sh configs/<cell>.env` from repo root, with `MAIL_USER` exported. Identical entry point for every cell.
+- **Single command (GCP):** `bash scripts/run_experiment.sh configs/<cell>.env` from repo root — `run_experiment.sh` is Slurm-aware but not Slurm-dependent (see `docs/gcp_fallback.md` §6).
+- **Resumable runs:** `SMARTGRID_RUN_ID=<id> SMARTGRID_RESUME=1 <sbatch|bash> scripts/run_experiment.sh ...` (PR #170; same flag pair on both paths, swap launcher per env)
 - **Replay (Cell C connection-reuse + torch profiler):** automatic when `TORCH_PROFILE=1` and `LAUNCH_VLLM=1` in the cell config
 - **Stable run pin:** every `summary.json` records `git_sha` of the actual code that ran (PR #130 closed the dirty-tree gap)
 

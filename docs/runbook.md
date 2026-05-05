@@ -26,7 +26,8 @@ alongside it.
 > primary path again — it returned on 2026-05-05 after the 2026-05-03 → 05
 > CVE-fix maintenance window. During that downtime the team validated the
 > GCP A100 spot path end-to-end (PR #170 hardening + the
-> `gcp_a100_context_20260503T063343Z` closeout, seven rows / `run_rc=0`),
+> `gcp_a100_final_20260503` closeout, 19 rows × 30 trials, summary at
+> `benchmarks/gcp_a100_final_20260503/summary/README.md`),
 > so GCP is now a proven fallback rather than just a documented one. Use
 > the Insomnia path in §2-§4 by default; switch to the GCP path in §3.7
 > when Insomnia is unavailable, queue-saturated, or you need preemption-
@@ -315,21 +316,24 @@ bash scripts/setup_insomnia.sh
 # 3. Source credentials (see §2.4 / §2.5 — same env vars as Insomnia):
 set -a; source ./.env; set +a
 
-# 4. Run the same way as Insomnia. Use SMARTGRID_RUN_ID + SMARTGRID_RESUME
-#    so a spot preemption mid-run just resumes from the last completed trial:
+# 4. Run the same way as Insomnia, but use `bash` (no Slurm on GCP):
+#    SMARTGRID_RUN_ID + SMARTGRID_RESUME so a spot preemption mid-run just
+#    resumes from the last completed trial. `run_experiment.sh` is
+#    Slurm-aware but not Slurm-dependent (see gcp_fallback.md §6).
 SMARTGRID_RUN_ID=ctx_$(date +%Y%m%dT%H%M%SZ) \
 SMARTGRID_RESUME=1 \
-sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
-    scripts/run_experiment.sh configs/<cell>.env
+bash scripts/run_experiment.sh configs/<cell>.env
 
 # 5. Pull artifacts back to a local checkout once the run completes
 #    (canonical pattern in scripts/gcp_pull_context_artifacts.sh; PR #170):
 bash scripts/gcp_pull_context_artifacts.sh <run_id>
 ```
 
-The recent canonical GCP capture (seven scenario rows, all `run_rc=0` /
-`judge_rc=0`) is in `logs/gcp_a100_context_20260503T063343Z_manifest.tsv`.
-That's the reference for "what a clean GCP capture looks like."
+The canonical GCP capture (19 rows, 570 trajectories + 570 judge logs)
+is summarised at
+`benchmarks/gcp_a100_final_20260503/summary/README.md` with per-batch
+manifests in `benchmarks/gcp_a100_final_20260503/logs/*_manifest.tsv`
+(PR #172). That's the reference for "what a clean GCP capture looks like."
 
 ---
 
