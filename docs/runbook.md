@@ -1,7 +1,7 @@
 # Runbook
 
-*Last updated: 2026-04-28*
-*Infra owner: Aaron Fan (af3623) — eval-harness owner: Akshat Bhandari (ab6174)*
+*Last updated: 2026-05-05*
+*Infra owner: Aaron Fan (af3623) — eval-harness owner: Akshat Bhandari (ab6174) — coordinator: Alex Xin (wax1)*
 
 Canonical reproducibility runbook. A teammate following this from scratch
 should be able to stand up the serving environment, submit benchmark cells
@@ -21,6 +21,20 @@ Cluster-specific gotchas (broken CUDA module, Python version issues, login-
 node etiquette) live in [insomnia_runbook.md](insomnia_runbook.md). This
 file is the higher-level reproducibility story; read the Insomnia runbook
 alongside it.
+
+> **Where new captures land (2026-05-03 onward):** Insomnia went into a
+> CVE-fix maintenance window late on 2026-05-03 with uncertain return.
+> **GCP A100 spot is the canonical path for new captures from then on**
+> (per `#49` co-ownership note + `#66` post-A100 evidence in PR #172 / #173).
+> The Insomnia path remains the canonical record for the Apr 26-28 captures
+> (Cells A/B/Y/Z, runs `8979314` / `8998340..8998343`) and stays the
+> default in §2-§4 below; switch to the GCP path in §3.7 when Insomnia is
+> unavailable. Resumable runs via `SMARTGRID_RUN_ID` / `SMARTGRID_RESUME`
+> work identically across both paths (PR #170).
+>
+> See [`infra_profiling_serving_brief.md`](infra_profiling_serving_brief.md) for the one-page fact pack
+> (model IDs + version pins + canonical run IDs) that backs the paper's
+> infra paragraphs.
 
 ---
 
@@ -249,6 +263,66 @@ all three JSON files above. `docs/wandb_schema.md` documents the field names.
 | Different partition | `--partition=burst --qos=burst` |
 | Local dev (no Slurm) | `bash scripts/run_experiment.sh <config>` from an `srun --pty` shell |
 
+### 3.6 Resumable runs (preemption-tolerant)
+
+Set `SMARTGRID_RUN_ID` and `SMARTGRID_RESUME=1` to make the runner skip
+already-completed trials and pick up where the prior attempt died. Useful
+on GCP spot (where preemption can hit mid-run) and harmless on Insomnia
+(it just turns into a no-op when no resume state exists). Implementation
+in `scripts/gcp_resume_state.py` + `scripts/run_gcp_context_batch.sh`,
+landed in PR #170.
+
+```bash
+SMARTGRID_RUN_ID=ctx_20260503T063343Z \
+SMARTGRID_RESUME=1 \
+sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
+    scripts/run_experiment.sh configs/<cell>.env
+```
+
+`SMARTGRID_RESUME_REQUIRE_LATENCY=1` (default) requires the prior trial
+to have written a `latencies.jsonl` row before counting it as resumable.
+`SMARTGRID_FORCE_RERUN=1` overrides the skip and retries every trial.
+
+### 3.7 GCP A100 variant (canonical for new captures from 2026-05-03)
+
+When Insomnia is unavailable or you need preemption-tolerant batching,
+spin up an A100 spot instance and run the *same* `scripts/run_experiment.sh`
+entry point. The serving stack, configs, and artifact layout are
+identical — `gpu_type` in `summary.json` records whether each run landed
+on Insomnia A6000 vs GCP A100 vs etc. (PR #145 / `#132`).
+
+Full spin-up walkthrough is in [`gcp_fallback.md`](gcp_fallback.md). Day-to-day shape:
+
+```bash
+# 1. Spin up an A100-40GB spot instance (~$1.81/hr)
+#    Full args + region selection in gcp_fallback.md §4. Tagged with the
+#    canonical `smartgrid-*` host prefix so `compute_env=gcp` flips
+#    automatically in summary.json.
+
+# 2. SSH in, clone repo, run setup_insomnia.sh (works on GCP too — §6a):
+git clone git@github.com:HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
+cd hpml-assetopsbench-smart-grid-mcp
+bash scripts/setup_insomnia.sh
+
+# 3. Source credentials (see §2.4 / §2.5 — same env vars as Insomnia):
+set -a; source ./.env; set +a
+
+# 4. Run the same way as Insomnia. Use SMARTGRID_RUN_ID + SMARTGRID_RESUME
+#    so a spot preemption mid-run just resumes from the last completed trial:
+SMARTGRID_RUN_ID=ctx_$(date +%Y%m%dT%H%M%SZ) \
+SMARTGRID_RESUME=1 \
+sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
+    scripts/run_experiment.sh configs/<cell>.env
+
+# 5. Pull artifacts back to a local checkout once the run completes
+#    (canonical pattern in scripts/gcp_pull_context_artifacts.sh; PR #170):
+bash scripts/gcp_pull_context_artifacts.sh <run_id>
+```
+
+The recent canonical GCP capture (seven scenario rows, all `run_rc=0` /
+`judge_rc=0`) is in `logs/gcp_a100_context_20260503T063343Z_manifest.tsv`.
+That's the reference for "what a clean GCP capture looks like."
+
 ---
 
 ## 4. Profiling workflow
@@ -351,17 +425,39 @@ diagnoses it.
 
 ## 6. Related runbooks and pointers
 
-**Eval harness side** (Akshat's half of the runbook, covers scenario
-execution + judge + grading): [eval_harness_readme.md](eval_harness_readme.md).
+### Infra / profiling / serving (Aaron's lane — `#49`)
 
-**Compute strategy** (which GPU for which phase, Insomnia vs GCP fallback):
-[compute_plan.md](compute_plan.md).
+**Paper-bound 1-page fact pack** (model IDs + version pins + canonical run
+IDs + known limitations, sized for §3 System Design and the §infra
+paragraphs): [infra_profiling_serving_brief.md](infra_profiling_serving_brief.md).
+
+**GCP A100 path** — canonical for new captures from 2026-05-03 onward:
+[gcp_fallback.md](gcp_fallback.md). Day-to-day shape lives in §3.7
+above; this doc has spin-up + instance selection + preemption + artifact
+persistence + budget tracking.
 
 **Insomnia cluster ops** (Slurm details, Python/CUDA gotchas, foreground-debug
-recipe): [insomnia_runbook.md](insomnia_runbook.md).
+recipe): [insomnia_runbook.md](insomnia_runbook.md). Still relevant for
+the Apr 26-28 captures and for Insomnia returns post-CVE-fix.
+
+**Compute strategy** (which GPU for which phase, Insomnia vs GCP, budget
+math): [compute_plan.md](compute_plan.md).
 
 **WandB schema** (canonical field names used in `benchmarks/cell_<X>/config.json`
-and `summary.json`): [wandb_schema.md](wandb_schema.md).
+and `summary.json`, including the new `vllm_extra_args` from PR #129 and
+`gpu_type` from PR #145): [wandb_schema.md](wandb_schema.md).
+
+**Lane 2 INT8 + KV-cache decision evidence** (smoke jobs `8979532` /
+`8979660`, why `--enable-prefix-caching` ships and `--kv-cache-dtype fp8`
++ INT8 are deferred): [lane2_int8_kv_status.md](lane2_int8_kv_status.md).
+
+**Validation log** (per-canonical-capture run IDs, WandB URLs, artifact
+paths, what each run actually proves): [validation_log.md](validation_log.md).
+
+### Eval / scenarios / judge (Akshat / Tanisha lanes)
+
+**Eval harness side** (Akshat's half of the runbook, covers scenario
+execution + judge + grading): [eval_harness_readme.md](eval_harness_readme.md).
 
 **Orchestration wiring** (what Plan-Execute / AaT / Hybrid look like today,
 and what's still upstream): [orchestration_wiring.md](orchestration_wiring.md).
@@ -369,9 +465,16 @@ and what's still upstream): [orchestration_wiring.md](orchestration_wiring.md).
 **Experiment 1 capture plan** (the Direct / MCP-baseline / MCP-optimized
 story, dependencies, run sequence): [experiment1_capture_plan.md](experiment1_capture_plan.md).
 
-**GCP fallback instructions** (how to spin up an A100 spot instance if
-Insomnia is down): [gcp_fallback.md](gcp_fallback.md).
+**Experiment 2 capture plan** (orchestration comparison Y/Z + Self-Ask
+ablations): [experiment2_capture_plan.md](experiment2_capture_plan.md).
 
-**Historical**: the earlier combined `Insomnia or GCP Environment.md` draft
-lived in an earlier branch but was superseded by `insomnia_runbook.md` +
-this runbook.
+**PS B (auto-scenario generation) runbook**:
+[auto_scenario_generation_runbook.md](auto_scenario_generation_runbook.md).
+First inspection-only batch lands at
+`data/scenarios/generated/first_review_20260503/`; `#53` validation
+rubric application owns the official quality call.
+
+### Historical
+
+The earlier combined `Insomnia or GCP Environment.md` draft lived in an
+earlier branch but was superseded by `insomnia_runbook.md` + this runbook.
