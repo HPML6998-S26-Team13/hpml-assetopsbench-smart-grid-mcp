@@ -1,0 +1,45 @@
+{
+  "question": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred.",
+  "answer": "",
+  "success": false,
+  "error": "BadRequestError: litellm.BadRequestError: WatsonxException - {\"errors\":[{\"code\":\"json_type_error\",\"message\":\"Json field type error: messages.content must be of type string\",\"more_info\":\"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat\"}],\"trace\":\"9afdc3f5f35c619957d04a5fcfb66133\",\"status_code\":400}",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 17.40232253074646,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-012",
+    "type": "IoT",
+    "text": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred.",
+    "category": "Load Current Monitoring",
+    "characteristic_form": "The answer should retrieve load current readings for T-005, compute or reference a recent baseline, state whether readings are elevated above that baseline, and report the peak value and timestamp.",
+    "asset_id": "T-005",
+    "expected_tools": [
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "load current readings",
+        "baseline or mean reference",
+        "peak value and timestamp",
+        "elevated vs normal assessment"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

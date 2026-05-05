@@ -1,0 +1,7 @@
+label	config	run_id	status	started_at	finished_at
+Y8	configs/context_ablation/pe_m_8192.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192	started	2026-05-05T00:12:10Z	
+Y8	configs/context_ablation/pe_m_8192.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192	run_failed	2026-05-05T00:12:10Z	2026-05-05T00:20:37Z
+Y32	configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline	started	2026-05-05T00:20:37Z	
+Y32	configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline	run_failed	2026-05-05T00:20:37Z	2026-05-05T00:29:00Z
+Y16	configs/context_ablation/pe_m_16384.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384	started	2026-05-05T00:29:00Z	
+Y16	configs/context_ablation/pe_m_16384.env	context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384	run_failed	2026-05-05T00:29:00Z	2026-05-05T00:37:26Z

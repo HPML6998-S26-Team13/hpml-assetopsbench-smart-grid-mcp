@@ -1,0 +1,36 @@
+{
+  "success": false,
+  "failed_steps": [],
+  "history": [],
+  "answer": "",
+  "error": "Runner produced no complete JSON object on stdout; see harness.log for stderr and traceback details.",
+  "raw_stdout_excerpt": "\u001b[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new\u001b[0m\nLiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.",
+  "scenario": {
+    "id": "SGT-010",
+    "type": "Multi",
+    "text": "For transformer T-020, combine DGA diagnostics with thermal anomaly trends to decide whether to schedule immediate outage maintenance or defer with heightened monitoring.",
+    "category": "Cross-Domain Planning",
+    "characteristic_form": "The answer should integrate DGA-based diagnosis and trend/anomaly evidence, make a binary maintenance decision (immediate outage vs deferred monitoring), and provide an actionable work-order or monitoring plan.",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "tsfm.detect_anomalies",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "diagnostic evidence",
+        "trend evidence",
+        "final decision",
+        "action plan"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR",
+      "TSFM",
+      "WO"
+    ]
+  }
+}

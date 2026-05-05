@@ -1,0 +1,138 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "answer": "The probable fault mode for T-014 is Low-Temperature Overheating (< 300\u00b0C). The closest matching failure mechanism in the catalogue is FM-002, which is characterized by elevated levels of CH4 and C2H4. The sensors that should be prioritized for ongoing monitoring are those that measure dissolved CH4 and C2H4.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 19473,
+    "output_tokens": 151,
+    "total_tokens": 19624,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-1b96b5befb59433cb10e62b49b5d9634",
+          "output": {
+            "transformer_id": "T-014",
+            "sample_date": "2024-01-30T00:00:00",
+            "dissolved_h2_ppm": 16.17,
+            "dissolved_ch4_ppm": 33.46,
+            "dissolved_c2h2_ppm": 2.34,
+            "dissolved_c2h4_ppm": 13.51,
+            "dissolved_c2h6_ppm": 16.8,
+            "dissolved_co_ppm": 330.08,
+            "dissolved_co2_ppm": 2180.87,
+            "fault_label": "Low-temperature overheating",
+            "source_dataset": "synthetic"
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "overheating"
+          },
+          "call_id": "chatcmpl-tool-abe7fdca804948f280b22fdc364325f1",
+          "output": [
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-002"
+          },
+          "call_id": "chatcmpl-tool-3399ef43ef65466aa81b7c431bb4cce9",
+          "output": {
+            "failure_mode_id": "FM-002",
+            "name": "Low-Temperature Overheating (< 300\u00b0C)",
+            "dga_label": "Low-temperature overheating",
+            "description": "Low-temperature thermal fault, typically in core laminations or due to overload. Elevated CH4 and C2H4.",
+            "severity": "medium",
+            "iec_code": "T1",
+            "key_gases": [
+              "CH4",
+              "C2H4"
+            ],
+            "recommended_action": "Reduce load; inspect within 30 days"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The probable fault mode for T-014 is Low-Temperature Overheating (< 300\u00b0C). The closest matching failure mechanism in the catalogue is FM-002, which is characterized by elevated levels of CH4 and C2H4. The sensors that should be prioritized for ongoing monitoring are those that measure dissolved CH4 and C2H4.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 10.582123517990112,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

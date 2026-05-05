@@ -1,0 +1,1290 @@
+=== vLLM GPU preflight ===
+Node: smartgrid-a100-ixqt-uswest3-20260503-2116
+SLURM_JOB_ID=N/A
+SLURM_JOB_GPUS=<unset>
+SLURM_GPUS_ON_NODE=<unset>
+CUDA_VISIBLE_DEVICES=<unset>
+GPU 0: NVIDIA A100-SXM4-40GB (UUID: GPU-8bb314e1-8b3e-4b4d-0a3f-0910763986ec)
+torch=2.10.0+cu128
+cuda_available=True
+cuda_device_count=1
+cuda_device_0=NVIDIA A100-SXM4-40GB
+Torch profiler enabled: --profiler-config torch torch_profiler_dir=/home/wax/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192_torch
+[05/05/26 00:13:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:09] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:10] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:13:11] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:13:11 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:11  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:13:25  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:13:25 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:25  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:13:26  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:13:26 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:26  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:27 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:27  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:28] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:13:28  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:13:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:29] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:29  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:13:29 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:29  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:31] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:31  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:13:31 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:31  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:38] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:38  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:13:38 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:38  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:40 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:40  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:41] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:41  INFO      agent.plan_execute.executor  Step 7: calling LLM to resolve args.
+[92m00:13:41 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:41  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:42] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:43  INFO      agent.plan_execute.executor  Step 8: calling LLM to resolve args.
+[92m00:13:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:44  INFO      agent.plan_execute.executor  Step 9: calling LLM to resolve args.
+[92m00:13:44 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:44  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:47  INFO      agent.plan_execute.executor  Step 10: calling LLM to resolve args.
+[92m00:13:47 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:47  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:13:48  INFO      agent.plan_execute.executor  Step 11: calling LLM to resolve args.
+[92m00:13:48 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:48  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:50  INFO      agent.plan_execute.executor  Step 12: calling LLM to resolve args.
+[92m00:13:50 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:50  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:52 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:52  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:53  INFO      agent.plan_execute.executor  Step 13: calling LLM to resolve args.
+[92m00:13:53 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:53  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:54 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:54  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:55] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:13:55  INFO      agent.plan_execute.executor  Step 14: calling LLM to resolve args.
+[92m00:13:55 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:55  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:13:56 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:13:56  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:13:57] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:13:57 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:13:57  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:00 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:00  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:09] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:10] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:11] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:14:12] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:14:12 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:12  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:14:25  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:14:25 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:25  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:26 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:26  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:27] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:14:27  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:14:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:27  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:27 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:27  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:28] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:14:28  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:14:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:29 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:29  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:30] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:30  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:14:30 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:30  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:31 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:31  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:32] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:32  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:14:32 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:32  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:38 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:38  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:39  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:14:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:39  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:40 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:40  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:41] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:41  INFO      agent.plan_execute.executor  Step 7: calling LLM to resolve args.
+[92m00:14:41 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:41  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:43] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:43  INFO      agent.plan_execute.executor  Step 8: calling LLM to resolve args.
+[92m00:14:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:45  INFO      agent.plan_execute.executor  Step 9: calling LLM to resolve args.
+[92m00:14:45 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:45  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:47  INFO      agent.plan_execute.executor  Step 10: calling LLM to resolve args.
+[92m00:14:47 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:47  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:14:48  INFO      agent.plan_execute.executor  Step 11: calling LLM to resolve args.
+[92m00:14:48 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:48  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:50  INFO      agent.plan_execute.executor  Step 12: calling LLM to resolve args.
+[92m00:14:50 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:50  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:52] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:53  INFO      agent.plan_execute.executor  Step 13: calling LLM to resolve args.
+[92m00:14:53 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:53  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:54] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:14:54  INFO      agent.plan_execute.executor  Step 14: calling LLM to resolve args.
+[92m00:14:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:54  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:55 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:55  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:14:56] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:14:56 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:14:56  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:14:58 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:14:58  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:15:09] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:15:10 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:10  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:23 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:23  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:15:23  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:15:23 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:23  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:24 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:24  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:24] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:15:25  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:15:25 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:25  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:15:26  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:15:26 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:26  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:26 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:26  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:27] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:28  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:15:28 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:28  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:29] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:30  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:15:30 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:30  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:35 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:35  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:36] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:36  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:15:36 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:36  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:38 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:38  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:39  INFO      agent.plan_execute.executor  Step 7: calling LLM to resolve args.
+[92m00:15:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:39  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:40] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:40  INFO      agent.plan_execute.executor  Step 8: calling LLM to resolve args.
+[92m00:15:40 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:40  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:42] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:42  INFO      agent.plan_execute.executor  Step 9: calling LLM to resolve args.
+[92m00:15:42 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:42  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:44  INFO      agent.plan_execute.executor  Step 10: calling LLM to resolve args.
+[92m00:15:44 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:44  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:15:46  INFO      agent.plan_execute.executor  Step 11: calling LLM to resolve args.
+[92m00:15:46 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:46  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:48  INFO      agent.plan_execute.executor  Step 12: calling LLM to resolve args.
+[92m00:15:48 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:48  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:50  INFO      agent.plan_execute.executor  Step 13: calling LLM to resolve args.
+[92m00:15:50 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:50  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:52] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:15:52  INFO      agent.plan_execute.executor  Step 14: calling LLM to resolve args.
+[92m00:15:52 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:52  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:15:54] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:15:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:15:54  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:15:55 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:15:55  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:16:07 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:07  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:16:13  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+00:16:13  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:16:13 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:13  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:14] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:15  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:16:15 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:15  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:17  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:16:17 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:17  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:18] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:16:18  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:16:18 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:18  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:19 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:19  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:20] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:20  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:16:20 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:20  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:21 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:21  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:22] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:16:22 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:22  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:24 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:24  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:28] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:29] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:36] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:16:36 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:36  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:16:42  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+00:16:42  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:16:42 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:42  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:43] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:43  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:16:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:45] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:45  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:16:45 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:45  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:16:46  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:16:46 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:46  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:16:48  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:16:48 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:48  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:16:50 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:16:50  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:16:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:16:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:16:56] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:58] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:16:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:17:03 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:03  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:17:09  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+00:17:09  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:17:09 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:09  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:10] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:10  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:17:10 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:10  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:12] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:12  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:17:12 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:12  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:14] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+00:17:14  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:17:14 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:14  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:16  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:17:16 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:16  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:18] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:17:18 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:18  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:19 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:19  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:23] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:24] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:25] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:26] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:28] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:29] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:17:31 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:31  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:17:37  INFO      __main__  Dropped terminal synthesis-only step 7; final answer is summarized outside the plan.
+00:17:37  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:17:37 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:37  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:38] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:38  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:17:38 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:38  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:40] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:40  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:17:40 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:40  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:42] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:42  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:17:42 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:42  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:44  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:17:44 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:44  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:47] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:17:47  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:17:47 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:47  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:48 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:48  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:49] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:17:50 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:17:50  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:17:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:17:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:17:56] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:58] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:17:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:18:03 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:03  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:18:09  INFO      __main__  Dropped terminal synthesis-only step 7; final answer is summarized outside the plan.
+00:18:09  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:18:09 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:09  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:10] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:11  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:18:11 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:11  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:12] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:12  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:18:12 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:12  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:14] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:14  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:18:14 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:14  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:16  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:18:16 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:16  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:19 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:19  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:20  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:18:20 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:20  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:21 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:21  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:21] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:18:22 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:22  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:23 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:23  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:27] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:29] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:34] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:18:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:18:35 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:35  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:18:41  INFO      __main__  Dropped terminal synthesis-only step 7; final answer is summarized outside the plan.
+00:18:41  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:18:41 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:41  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:42] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:43  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:18:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:43 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:43  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:44  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:18:44 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:44  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:46  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
+[92m00:18:46 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:46  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:48  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:18:48 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:48  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:50 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:50  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:51] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:18:52  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
+[92m00:18:52 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:52  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:52 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:52  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:18:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:18:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:18:54  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:18:55 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:18:55  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:19:07 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:07  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:19:11  INFO      __main__  Normalized server for no-tool step 4 to iot.
+00:19:11  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:19:11 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:11  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:12] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:12  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:19:12 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:12  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:14] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:14  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:19:14 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:14  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:16  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:19:16 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:16  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:18] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:19:18 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:18  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:20 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:20  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:24] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:25] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:26] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:27] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:28] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:19:32 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:32  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:19:36  INFO      __main__  Normalized server for no-tool step 4 to iot.
+00:19:36  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:19:36 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:36  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:37] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:37  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:19:37 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:37  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:38 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:38  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:39  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:19:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:39  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:40] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:19:40  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:19:40 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:40  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:43] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:19:43 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:43  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:19:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:19:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:19:49] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:50] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:52] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:53] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:54] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:55] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:56] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/05/26 00:19:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:19:57 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:19:57  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+00:20:01  INFO      __main__  Normalized server for no-tool step 4 to iot.
+00:20:01  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
+[92m00:20:01 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:20:01  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:20:02] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:20:02  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
+[92m00:20:02 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:20:02  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:03 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:03  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:20:04] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:20:04  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
+[92m00:20:04 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:20:04  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:05 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:05  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:20:05] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/05/26 00:20:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+00:20:06  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
+[92m00:20:06 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:20:06  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[05/05/26 00:20:08] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[92m00:20:08 - LiteLLM:INFO[0m: utils.py:3889 - 
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+00:20:08  INFO      LiteLLM  
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m00:20:10 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+00:20:10  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler

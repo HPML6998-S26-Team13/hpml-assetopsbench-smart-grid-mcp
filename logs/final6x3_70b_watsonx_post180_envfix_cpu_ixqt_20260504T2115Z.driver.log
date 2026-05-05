@@ -1,0 +1,182 @@
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx
+Config:        configs/watsonx_70b_final6_3x/A70B_aat_direct.env
+Cell:          A70B
+Experiment:    final6x3_70b_aat_direct_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: agent_as_tool
+MCP mode:      direct
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_A70B
+Run dir:       benchmarks/cell_A70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 17 / 18
+Failed:    1
+Config:    benchmarks/cell_A70B/config.json
+Summary:   benchmarks/cell_A70B/summary.json
+Raw dir:   benchmarks/cell_A70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx
+Config:        configs/watsonx_70b_final6_3x/B70B_aat_mcp_baseline.env
+Cell:          B70B
+Experiment:    final6x3_70b_aat_mcp_baseline_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: agent_as_tool
+MCP mode:      baseline
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_B70B
+Run dir:       benchmarks/cell_B70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 15 / 18
+Failed:    3
+Config:    benchmarks/cell_B70B/config.json
+Summary:   benchmarks/cell_B70B/summary.json
+Raw dir:   benchmarks/cell_B70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx
+Config:        configs/watsonx_70b_final6_3x/C70B_aat_mcp_optimized.env
+Cell:          C70B
+Experiment:    final6x3_70b_aat_mcp_optimized_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: agent_as_tool
+MCP mode:      optimized
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_C70B
+Run dir:       benchmarks/cell_C70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 13 / 18
+Failed:    5
+Config:    benchmarks/cell_C70B/config.json
+Summary:   benchmarks/cell_C70B/summary.json
+Raw dir:   benchmarks/cell_C70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Y70B_final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx
+Config:        configs/watsonx_70b_final6_3x/Y70B_pe_mcp_baseline.env
+Cell:          Y70B
+Experiment:    final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Y70B
+Run dir:       benchmarks/cell_Y70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Y70B_final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 14 / 18
+Failed:    4
+Config:    benchmarks/cell_Y70B/config.json
+Summary:   benchmarks/cell_Y70B/summary.json
+Raw dir:   benchmarks/cell_Y70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Y70B_final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Y70B_final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx
+Config:        configs/watsonx_70b_final6_3x/YS70B_pe_self_ask_mcp_baseline.env
+Cell:          YS70B
+Experiment:    final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_YS70B
+Run dir:       benchmarks/cell_YS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 12 / 18
+Failed:    6
+Config:    benchmarks/cell_YS70B/config.json
+Summary:   benchmarks/cell_YS70B/summary.json
+Raw dir:   benchmarks/cell_YS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx
+Config:        configs/watsonx_70b_final6_3x/Z70B_verified_pe_mcp_baseline.env
+Cell:          Z70B
+Experiment:    final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: verified_pe
+MCP mode:      baseline
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Z70B
+Run dir:       benchmarks/cell_Z70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 13 / 18
+Failed:    5
+Config:    benchmarks/cell_Z70B/config.json
+Summary:   benchmarks/cell_Z70B/summary.json
+Raw dir:   benchmarks/cell_Z70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx: 18/18 complete, 0 missing
+=== SmartGridBench Experiment ===
+Run ID:        final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx
+Config:        configs/watsonx_70b_final6_3x/ZS70B_verified_pe_self_ask_mcp_baseline.env
+Cell:          ZS70B
+Experiment:    final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx
+Family:        watsonx_70b_scaling
+Orchestration: verified_pe
+MCP mode:      baseline
+Model:         watsonx/meta-llama/llama-3-3-70b-instruct
+Scenarios:     6 file(s)
+Node:          smartgrid-70b-cpu-ixqt-20260504-1019
+Job ID:        N/A
+Cell dir:      benchmarks/cell_ZS70B
+Run dir:       benchmarks/cell_ZS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx
+Resume:        1
+Force rerun:   0
+
+GPU type: hosted-watsonx
+
+=== Experiment summary ===
+Completed: 12 / 18
+Failed:    6
+Config:    benchmarks/cell_ZS70B/config.json
+Summary:   benchmarks/cell_ZS70B/summary.json
+Raw dir:   benchmarks/cell_ZS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx
+Artifact validation for final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx: 18/18 complete, 0 missing

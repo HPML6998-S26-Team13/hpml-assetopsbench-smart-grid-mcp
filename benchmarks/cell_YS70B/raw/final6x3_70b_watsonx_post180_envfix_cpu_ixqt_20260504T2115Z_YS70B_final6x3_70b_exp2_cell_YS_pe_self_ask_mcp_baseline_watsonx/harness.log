@@ -1,0 +1,1557 @@
+Repo-local orchestration runtime preflight passed.
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:52:47] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:48] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:49] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:49] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:50] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:51] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:52] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:52:53] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:10] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:49] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:55] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 3...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:58] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:53:59] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:54:02] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Transfor...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:54:11] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:12] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:13] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:14] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:14] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:15] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:16] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:17] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:54:33] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:54:37] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:54:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:54:42] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:55:37] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 3...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:55:40] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:55:41] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:55:44] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Transfor...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:55:53] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:54] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:55] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:56] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:56] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:58] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:55:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:18] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 21:56:20] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:22] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:24] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 3...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:28] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:31] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Transfor...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:56:48] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:48] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:49] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:50] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:51] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:51] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:52] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:56:53] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:09] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 1...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:12] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:14] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:27] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:37] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:38] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:39] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:40] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:40] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:41] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:42] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:57:43] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:57:59] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 1...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:02] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:43] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 21:58:44] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:46] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```\n{\n...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:51] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:58:55] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 21:59:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:09] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:10] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:11] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 21:59:11] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+Traceback (most recent call last):
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 372, in completion
+    response = client.post(
+               ^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 1043, in post
+    raise e
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 1025, in post
+    response.raise_for_status()
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '520 ' for url 'https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-03-13'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/520
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 3751, in completion
+    response = watsonx_chat_completion.completion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/watsonx/chat/handler.py", line 72, in completion
+    return super().completion(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 378, in completion
+    raise OpenAILikeError(
+litellm.llms.openai_like.common_utils.OpenAILikeError: <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+
+
+<title>us-south.ml.cloud.ibm.com | 520: Web server is returning an unknown error</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/main.css" />
+
+
+</head>
+<body>
+<div id="cf-wrapper">
+    <div id="cf-error-details" class="p-0">
+        <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8">
+            <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2">
+              <span class="inline-block">Web server is returning an unknown error</span>
+              <span class="code-label">Error code 520</span>
+            </h1>
+            <div>
+               Visit <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">cloudflare.com</a> for more information.
+            </div>
+            <div class="mt-3">2026-05-04 21:59:52 UTC</div>
+        </header>
+        <div class="my-8 bg-gradient-gray">
+            <div class="w-240 lg:w-full mx-auto">
+                <div class="clearfix md:px-8">
+                  
+<div id="cf-browser-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    
+    <span class="cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    
+  </div>
+  <span class="md:block w-full truncate">You</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    
+    Browser
+    
+  </h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-cloudflare-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">
+    <span class="cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    </a>
+  </div>
+  <span class="md:block w-full truncate">Chicago</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">
+    Cloudflare
+    </a>
+  </h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-host-status" class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    
+    <span class="cf-icon-server block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    
+  </div>
+  <span class="md:block w-full truncate">us-south.ml.cloud.ibm.com</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    
+    Host
+    
+  </h3>
+  <span class="leading-1.3 text-2xl text-red-error">Error</span>
+</div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-240 lg:w-full mx-auto mb-8 lg:px-8">
+            <div class="clearfix">
+                <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2>
+                    <p>There is an unknown connection issue between Cloudflare and the origin web server. As a result, the web page can not be displayed.</p>
+                </div>
+                <div class="w-1/2 md:w-full float-left leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2>
+                          <h3 class="text-15 font-semibold mb-2">If you are a visitor of this website:</h3>
+      <p class="mb-6">Please try again in a few minutes.</p>
+
+      <h3 class="text-15 font-semibold mb-2">If you are the owner of this website:</h3>
+      <p><span>There is an issue between Cloudflare's cache and your origin web server. Cloudflare monitors for these errors and automatically investigates the cause. To help support the investigation, you can pull the corresponding error log from your web server and submit it our support team.  Please include the Ray ID (which is at the bottom of this error page).</span> <a rel="noopener noreferrer" href="https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-520/">Additional troubleshooting resources</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300">
+  <p class="text-13">
+    <span class="cf-footer-item sm:block sm:mb-1">Cloudflare Ray ID: <strong class="font-semibold">9f6ac56ba9a9e257</strong></span>
+    <span class="cf-footer-separator sm:hidden">&bull;</span>
+    <span id="cf-footer-item-ip" class="cf-footer-item hidden sm:block sm:mb-1">
+      Your IP:
+      <button type="button" id="cf-footer-ip-reveal" class="cf-footer-ip-reveal-btn">Click to reveal</button>
+      <span class="hidden" id="cf-footer-ip">34.121.58.97</span>
+      <span class="cf-footer-separator sm:hidden">&bull;</span>
+    </span>
+    <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" id="brand_link" target="_blank">Cloudflare</a></span>
+    
+  </p>
+  <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script>
+</div><!-- /.error-footer -->
+
+
+    </div>
+</div>
+</body>
+</html>
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/wax/hpml-70b-post180-ixqt/scripts/plan_execute_self_ask_runner.py", line 278, in <module>
+    main()
+  File "/home/wax/hpml-70b-post180-ixqt/scripts/plan_execute_self_ask_runner.py", line 274, in main
+    asyncio.run(_run(args))
+  File "/usr/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/scripts/plan_execute_self_ask_runner.py", line 88, in _run
+    plan = planner.generate_plan(planning_question, planner_descriptions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/AssetOpsBench/src/agent/plan_execute/planner.py", line 130, in generate_plan
+    raw = self._llm.generate(prompt)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/AssetOpsBench/src/llm/litellm.py", line 37, in generate
+    return self.generate_with_usage(prompt, temperature).text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/AssetOpsBench/src/llm/litellm.py", line 60, in generate_with_usage
+    response = litellm.completion(**kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1748, in wrapper
+    raise e
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1569, in wrapper
+    result = original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 4305, in completion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
+    raise e
+  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2367, in exception_type
+    raise APIConnectionError(
+litellm.exceptions.APIConnectionError: litellm.APIConnectionError: WatsonxException - <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+
+
+<title>us-south.ml.cloud.ibm.com | 520: Web server is returning an unknown error</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/main.css" />
+
+
+</head>
+<body>
+<div id="cf-wrapper">
+    <div id="cf-error-details" class="p-0">
+        <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8">
+            <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2">
+              <span class="inline-block">Web server is returning an unknown error</span>
+              <span class="code-label">Error code 520</span>
+            </h1>
+            <div>
+               Visit <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">cloudflare.com</a> for more information.
+            </div>
+            <div class="mt-3">2026-05-04 21:59:52 UTC</div>
+        </header>
+        <div class="my-8 bg-gradient-gray">
+            <div class="w-240 lg:w-full mx-auto">
+                <div class="clearfix md:px-8">
+                  
+<div id="cf-browser-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    
+    <span class="cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    
+  </div>
+  <span class="md:block w-full truncate">You</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    
+    Browser
+    
+  </h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-cloudflare-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">
+    <span class="cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    </a>
+  </div>
+  <span class="md:block w-full truncate">Chicago</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" target="_blank" rel="noopener noreferrer">
+    Cloudflare
+    </a>
+  </h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-host-status" class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    
+    <span class="cf-icon-server block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+    
+  </div>
+  <span class="md:block w-full truncate">us-south.ml.cloud.ibm.com</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">
+    
+    Host
+    
+  </h3>
+  <span class="leading-1.3 text-2xl text-red-error">Error</span>
+</div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-240 lg:w-full mx-auto mb-8 lg:px-8">
+            <div class="clearfix">
+                <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2>
+                    <p>There is an unknown connection issue between Cloudflare and the origin web server. As a result, the web page can not be displayed.</p>
+                </div>
+                <div class="w-1/2 md:w-full float-left leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2>
+                          <h3 class="text-15 font-semibold mb-2">If you are a visitor of this website:</h3>
+      <p class="mb-6">Please try again in a few minutes.</p>
+
+      <h3 class="text-15 font-semibold mb-2">If you are the owner of this website:</h3>
+      <p><span>There is an issue between Cloudflare's cache and your origin web server. Cloudflare monitors for these errors and automatically investigates the cause. To help support the investigation, you can pull the corresponding error log from your web server and submit it our support team.  Please include the Ray ID (which is at the bottom of this error page).</span> <a rel="noopener noreferrer" href="https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-520/">Additional troubleshooting resources</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300">
+  <p class="text-13">
+    <span class="cf-footer-item sm:block sm:mb-1">Cloudflare Ray ID: <strong class="font-semibold">9f6ac56ba9a9e257</strong></span>
+    <span class="cf-footer-separator sm:hidden">&bull;</span>
+    <span id="cf-footer-item-ip" class="cf-footer-item hidden sm:block sm:mb-1">
+      Your IP:
+      <button type="button" id="cf-footer-ip-reveal" class="cf-footer-ip-reveal-btn">Click to reveal</button>
+      <span class="hidden" id="cf-footer-ip">34.121.58.97</span>
+      <span class="cf-footer-separator sm:hidden">&bull;</span>
+    </span>
+    <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_520&utm_campaign=us-south.ml.cloud.ibm.com" id="brand_link" target="_blank">Cloudflare</a></span>
+    
+  </p>
+  <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script>
+</div><!-- /.error-footer -->
+
+
+    </div>
+</div>
+</body>
+</html>
+
+ERROR: could not extract a complete JSON object from runner stdout benchmarks/cell_YS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx/2026-05-04_YS70B_llama-3-3-70b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run03.json.tmp.stdout.tmp
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:07] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:08] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:20] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 1...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:23] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"query"...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"failur...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:27] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:28] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 22:01:29] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:40] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:41] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:41] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:42] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:43] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:44] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:44] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:01:45] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:01:57] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 1...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:00] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"query"...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:05] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"failur...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:06] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:07] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:18] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:19] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:19] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:20] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:21] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:22] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:22] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:02:23] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:02:58] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"h2": 1...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:03:01] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"query"...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"query"...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:03:05] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"failur...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:03:06] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:03:07] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:03:49] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:50] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:51] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:52] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:52] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:53] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:54] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:03:54] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:13] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:15] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:17] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The curr...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:34] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:04:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:04:59] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:05:04] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The curr...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:05:14] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:15] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:16] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:16] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:17] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:18] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:18] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:05:19] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:05:35] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 22:05:36] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:05:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:06:25] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 22:06:27] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The curr...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:06:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:36] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:37] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:38] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:38] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:39] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:06:40] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:06:49] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:06:51] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+[05/04/26 22:06:53] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='No persi...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:03] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:04] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:05] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:06] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:15] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:17] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='No persi...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:34] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:36] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:45] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:48] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:49] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='No persi...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:07:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:57] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:58] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:07:59] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:00] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:01] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:02] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:13] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"fault_...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:15] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:16] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:19] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:21] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:08:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:30] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:31] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:32] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:33] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:34] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:08:35] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"fault_...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:02] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:03] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:05] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:08] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The task...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:16] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:17] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:18] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:18] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:19] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:20] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:20] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+[05/04/26 22:09:21] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='#Task1: ...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:33] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"fault_...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:09:34] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:10:47] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"transf...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:10:49] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"work_o...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+[05/04/26 22:10:52] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
