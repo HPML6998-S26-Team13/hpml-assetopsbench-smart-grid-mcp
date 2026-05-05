@@ -335,16 +335,25 @@ Acquisition target list, ranked by usefulness × accessibility.
 | 6 | **GitHub: NanaudKmer/Springer_EETE_…_Ranking_Sequence** | public | DGA + MATLAB methods | yes | Useful for cross-checking Rogers/Doernenburg implementations more than for distribution comparison. |
 | 7 | **Kaggle: [Distributed Transformer Monitoring](https://www.kaggle.com/datasets/sreshta140/ai-transformer-monitoring)** | direct | sensor traces | partial | More relevant for IoT scenario realism (sensor-side) than for DGA-side L3. |
 
-**Acquisition path:**
+**Acquisition path (current state — v1 uses #0; v2 may layer #1+):**
 
-1. Pull dataset #1 via Columbia IEEE access. If IEEE DataPort requires a
-   separate subscription on top of the IEEE digital library, Columbia ILL
-   should still work.
-2. Backstop with #3 (Kaggle) — no auth, immediate.
-3. For #2, extract IEC TC 10 case data from the Duval & dePablo 2001
-   tables/figures, type into a CSV under `data/external/iec_tc10_duval2001.csv`.
-4. Place all real datasets under `data/external/` (gitignored if licensed,
-   committed if open).
+1. **#0 — bantipatel20 (`DGA-dataset-1.csv`, n=201, labeled).** Acquired
+   2026-05-04 via Kaggle; what the committed v1 report uses. No IEEE-PES
+   auth friction. Re-acquire via the commands in `data/external/README.md`.
+2. **#3 — Arias/Mendeley (`transformer_dga_arias.csv`, n=471, unlabeled).**
+   Acquired alongside #0. Optional marginal-distribution supplement (KS /
+   EMD / AD on gases at larger n) — cannot drive chi² fault prevalence or
+   conditional-KS per fault because it has no fault-class column.
+3. **#1 — IEEE DataPort DGA Dataset (deferred).** Originally planned as
+   primary; deferred for v1 in favour of #0. Adds the canonical IEC TC 10
+   benchmark and an unseen real-world test set; consider for v2 if Columbia
+   IEEE access is required for the final paper figure.
+4. **#2 — IEC TC 10 raw set (manual transcription).** Extract from Duval
+   & dePablo 2001 tables/figures into `data/external/iec_tc10_duval2001.csv`
+   if the cited prevalence vector itself becomes load-bearing.
+5. Place real datasets under `data/external/` — gitignored per the global
+   `*.csv` rule; re-acquirable from the URLs above (logged in
+   `data/external/README.md`).
 
 ---
 
@@ -418,10 +427,11 @@ Skeleton landed in this PR at `data/scenarios/validate_realism_statistical.py`.
 
 ```bash
 python3 data/scenarios/validate_realism_statistical.py \
-    --synthetic data/processed/dga_records.csv \
-    --real      data/external/ieee_dataport_dga.csv \
-    --report    reports/realism_statistical_v1.md \
-    --json      reports/realism_statistical_v1.json
+    --synthetic   data/processed/dga_records.csv \
+    --real        data/external/DGA-dataset-1.csv \
+    --real-source bantipatel20_dga \
+    --report      reports/realism_statistical_v1.md \
+    --json        reports/realism_statistical_v1.json
 ```
 
 Exit code = 0 if all tests pass, 1 otherwise. Suitable for CI gating.
@@ -610,14 +620,18 @@ git checkout team13/dat/realism-statistical-validation
     --report /tmp/r.md
 # Expect: "0/2 tests passed" (chi² fails vs TC 10 reference, real dataset missing)
 
-# 3. Pull the IEEE DataPort dataset (Columbia IEEE access required; Kaggle
-#    backstop if blocked) and re-run with --real + --real-source
+# 3. Acquire the bantipatel20 Kaggle dataset (the labeled real reference
+#    used by v1) and re-run with --real + --real-source. Kaggle account
+#    required; see data/external/README.md for browser + CLI paths. The
+#    IEEE DataPort dataset (Columbia IEEE auth) remains deferred to v2 if
+#    the canonical TC 10 benchmark becomes load-bearing for the paper.
 mkdir -p data/external
-# … download IEEE DataPort dga.xlsx to data/external/ieee_dataport_dga.xlsx …
+# … download bantipatel20/dissolved-gas-analysis-of-transformer to
+#   data/external/DGA-dataset-1.csv …
 .venv/bin/python data/scenarios/validate_realism_statistical.py \
     --synthetic   data/processed/dga_records.csv \
-    --real        data/external/ieee_dataport_dga.xlsx \
-    --real-source ieee_dataport \
+    --real        data/external/DGA-dataset-1.csv \
+    --real-source bantipatel20_dga \
     --report      reports/realism_statistical_v1.md \
     --json        reports/realism_statistical_v1.json
 ```

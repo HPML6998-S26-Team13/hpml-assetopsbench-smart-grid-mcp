@@ -19,8 +19,9 @@ ignore — re-acquire from the sources below to reproduce L3 runs.
 #   2. Download the dataset
 #   3. Drop the CSV into data/external/
 #
-# CLI path (one-time setup):
-pip install kaggle
+# CLI path (one-time global setup — the Kaggle CLI is intentionally outside
+# the project venv so it can be reused across repos):
+pip install --user kaggle   # or: uv tool install kaggle
 # kaggle.com → Account → Create New API Token → save kaggle.json to ~/.kaggle/
 
 kaggle datasets download -d bantipatel20/dissolved-gas-analysis-of-transformer \

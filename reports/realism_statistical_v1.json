@@ -1,8 +1,47 @@
 {
-  "synthetic_path": "data\\processed\\dga_records.csv",
-  "real_path": "data\\external\\DGA-dataset-1.csv",
+  "synthetic_path": "data/processed/dga_records.csv",
+  "real_path": "data/external/DGA-dataset-1.csv",
   "n_synthetic": 20,
   "n_real": 201,
+  "provenance": {
+    "real_source": "bantipatel20_dga",
+    "real_path": "data/external/DGA-dataset-1.csv",
+    "real_sha256": "42a845b029f86877d3e633aee2bc1eead993c545640e85cb45eed41a0a567665",
+    "real_md5": "6443538fff0eeefc5dc0740e97f49ee1",
+    "real_rows": 201,
+    "real_columns": [
+      "NM",
+      "H2",
+      "CH4",
+      "C2H6",
+      "C2H4",
+      "C2H2",
+      "Type"
+    ],
+    "real_label_column": "Type",
+    "real_label_counts_raw": {
+      "Arc discharge": 54,
+      "Spark discharge": 49,
+      "High-temperature overheating": 38,
+      "Low-temperature overheating": 19,
+      "Partial discharge": 16,
+      "Low/Middle-temperature overheating": 16,
+      "Middle-temperature overheating": 9
+    },
+    "real_label_counts_mapped": {
+      "D2": 54,
+      "D1": 49,
+      "T3": 38,
+      "T1": 19,
+      "PD": 16,
+      "T2": 25
+    },
+    "synthetic_path": "data/processed/dga_records.csv",
+    "retrieved_date": "2026-05-05",
+    "script_sha": "b2bb2837df6198708fef478242aa303d5a2d3746",
+    "script_dirty": true,
+    "command": "python data/scenarios/validate_realism_statistical.py --synthetic data/processed/dga_records.csv --real data/external/DGA-dataset-1.csv --real-source bantipatel20_dga --report reports/realism_statistical_v1.md --json reports/realism_statistical_v1.json"
+  },
   "tests": [
     {
       "name": "chi2_fault_prevalence",

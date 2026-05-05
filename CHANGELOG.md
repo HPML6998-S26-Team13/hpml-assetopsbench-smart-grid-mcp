@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-05-05
+
+### Added
+
+- L3 statistical-fidelity validator wired against a real labeled DGA
+  reference. `data/scenarios/validate_realism_statistical.py` now ships a
+  `bantipatel20_dga` source with a 7-label translation into IEC fault
+  codes, and emits a provenance manifest (source slug, retrieved date,
+  SHA256/MD5 of the real CSV, row count, column list, raw + IEC-mapped
+  label value-counts, script HEAD SHA, exact command) into both the
+  Markdown and JSON outputs. First non-stub report card landed at
+  `reports/realism_statistical_v1.{md,json}` (5/27 tests passed,
+  pre-tuning baseline; v2 tuning levers tracked under #53 Row 5). Refs
+  #84 Rows 3 + 4.
+
 ## 2026-05-04
 
 ### Changed
