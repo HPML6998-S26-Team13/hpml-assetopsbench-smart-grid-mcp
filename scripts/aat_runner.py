@@ -120,9 +120,12 @@ def _expand_scenario_glob(scenario_glob: str, repo_root: Path) -> list[Path]:
     passes that value through to this batch runner, so mirror the shell-level
     behavior here instead of treating the whole string as one literal glob.
     """
+    if not scenario_glob.strip():
+        return []
+
     tokens = shlex.split(scenario_glob)
     if not tokens:
-        tokens = [scenario_glob]
+        return []
 
     paths: list[Path] = []
     seen: set[Path] = set()
@@ -131,11 +134,12 @@ def _expand_scenario_glob(scenario_glob: str, repo_root: Path) -> list[Path]:
         if not pattern.is_absolute():
             pattern = repo_root / pattern
         for raw_match in sorted(glob.glob(str(pattern))):
-            match = Path(raw_match).resolve()
-            if match in seen:
+            match = Path(raw_match)
+            key = match.resolve()
+            if key in seen:
                 continue
             paths.append(match)
-            seen.add(match)
+            seen.add(key)
     return paths
 
 

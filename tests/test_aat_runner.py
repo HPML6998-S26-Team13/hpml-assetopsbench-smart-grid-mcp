@@ -102,6 +102,25 @@ def test_expand_scenario_glob_accepts_single_bracket_glob(tmp_path: Path):
     assert [path.name for path in scenario_files] == [first.name, second.name]
 
 
+def test_expand_scenario_glob_empty_string_returns_no_paths(tmp_path: Path):
+    from scripts.aat_runner import _expand_scenario_glob
+
+    assert _expand_scenario_glob("", tmp_path) == []
+
+
+def test_expand_scenario_glob_deduplicates_overlapping_patterns(tmp_path: Path):
+    from scripts.aat_runner import _expand_scenario_glob
+
+    first = tmp_path / "multi_01_end_to_end_fault_response.json"
+    second = tmp_path / "multi_02_dga_to_workorder_pipeline.json"
+    first.write_text("{}", encoding="utf-8")
+    second.write_text("{}", encoding="utf-8")
+
+    scenario_files = _expand_scenario_glob(f"{first.name} multi_0[12]_*.json", tmp_path)
+
+    assert [path.name for path in scenario_files] == [first.name, second.name]
+
+
 def test_serialize_run_result_happy_path():
     from scripts.aat_runner import _serialize_run_result
 
