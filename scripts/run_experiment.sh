@@ -1166,6 +1166,7 @@ FAIL=0
 TOTAL=0
 RESUME_SKIPPED=0
 RESUME_RERUN=0
+INFRA_FAIL=0
 if [ "$SMARTGRID_RESUME" = "1" ] && [ "$SMARTGRID_FORCE_RERUN" != "1" ]; then
   touch "$LATENCY_FILE"
 else
@@ -1181,7 +1182,12 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ] && [ 
     exit 1
   fi
   EXPECTED_TOTAL=$(( ${#SCENARIO_FILES[@]} * TRIALS ))
-  run_agent_as_tool_batch "$RUN_DIR" || true
+  BATCH_RC=0
+  run_agent_as_tool_batch "$RUN_DIR" || BATCH_RC=$?
+  if [ "$BATCH_RC" -gt 1 ]; then
+    echo "ERROR: agent-as-tool batch runner failed with exit code $BATCH_RC" >&2
+    INFRA_FAIL=1
+  fi
   # Merge per-trial latency records into the canonical latencies.jsonl.
   if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
     cat "$RUN_DIR/_batch_latencies.jsonl" >>"$LATENCY_FILE"
@@ -1202,6 +1208,7 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ] && [ 
     echo "WARNING: $MISSING trial(s) missing from batch output — counting as failures" >&2
     FAIL=$(( FAIL + MISSING ))
     TOTAL=$(( TOTAL + MISSING ))
+    INFRA_FAIL=1
   fi
 else
 
@@ -1623,3 +1630,7 @@ echo "Failed:    $FAIL"
 echo "Config:    $CONFIG_FILE"
 echo "Summary:   $SUMMARY_FILE"
 echo "Raw dir:   $RUN_DIR"
+if [ "$INFRA_FAIL" -ne 0 ]; then
+  echo "Infrastructure failure detected; exiting nonzero."
+  exit "$INFRA_FAIL"
+fi
