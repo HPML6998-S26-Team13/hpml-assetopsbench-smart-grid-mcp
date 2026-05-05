@@ -38,7 +38,7 @@
     },
     "synthetic_path": "data/processed/dga_records.csv",
     "retrieved_date": "2026-05-05",
-    "script_sha": "b2bb2837df6198708fef478242aa303d5a2d3746",
+    "script_sha": "97f112ead72023d4464b127413f146d923df0af4",
     "script_dirty": true,
     "command": "python data/scenarios/validate_realism_statistical.py --synthetic data/processed/dga_records.csv --real data/external/DGA-dataset-1.csv --real-source bantipatel20_dga --report reports/realism_statistical_v1.md --json reports/realism_statistical_v1.json"
   },

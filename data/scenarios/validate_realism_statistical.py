@@ -939,7 +939,12 @@ def render_markdown(rc: ReportCard) -> str:
 
 
 def _git_head() -> tuple[str | None, bool]:
-    """Return (HEAD SHA, dirty?) or (None, False) if not in a git repo."""
+    """Return (HEAD SHA, dirty?) or (None, False) if not in a git repo.
+
+    "Dirty" counts only modifications to tracked files; untracked files
+    (e.g. local stackdumps, scratch artifacts) don't affect reproducibility
+    of the report and are ignored.
+    """
     try:
         sha = subprocess.check_output(
             ["git", "rev-parse", "HEAD"],
@@ -947,7 +952,7 @@ def _git_head() -> tuple[str | None, bool]:
             text=True,
         ).strip()
         status = subprocess.check_output(
-            ["git", "status", "--porcelain"],
+            ["git", "status", "--porcelain", "--untracked-files=no"],
             stderr=subprocess.DEVNULL,
             text=True,
         )
