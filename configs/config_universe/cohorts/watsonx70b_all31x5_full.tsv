@@ -1,0 +1,12 @@
+label	config
+AT_I70B	configs/config_universe/generated/watsonx70b_all31x5_full/at_i70b.env
+AT_M70B	configs/config_universe/generated/watsonx70b_all31x5_full/at_m70b.env
+AT_T70B	configs/config_universe/generated/watsonx70b_all31x5_full/at_t70b.env
+PE_M70B	configs/config_universe/generated/watsonx70b_all31x5_full/pe_m70b.env
+PE_S_M70B	configs/config_universe/generated/watsonx70b_all31x5_full/pe_s_m70b.env
+PE_S_T70B	configs/config_universe/generated/watsonx70b_all31x5_full/pe_s_t70b.env
+PE_T70B	configs/config_universe/generated/watsonx70b_all31x5_full/pe_t70b.env
+V_M70B	configs/config_universe/generated/watsonx70b_all31x5_full/v_m70b.env
+V_S_M70B	configs/config_universe/generated/watsonx70b_all31x5_full/v_s_m70b.env
+V_S_T70B	configs/config_universe/generated/watsonx70b_all31x5_full/v_s_t70b.env
+V_T70B	configs/config_universe/generated/watsonx70b_all31x5_full/v_t70b.env

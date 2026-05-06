@@ -1,0 +1,671 @@
+{
+  "question": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+  "effective_question": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 1
+  },
+  "answer": "Mitigation guard blocked the final answer or work order: required evidence was missing, empty, or untrusted. First blocking signal: trend_analysis at history[8] (tool step was marked unsuccessful). Rerun or repair the evidence retrieval step before making a maintenance recommendation.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 10,
+      "task": "Compute the trend (slope) of a sensor's readings over a time window for each valid sensor ID from #S2.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "error": "No readings for transformer='T-013' sensor='#S2'.",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 0,
+      "task": "explicit fault/risk adjudication",
+      "server": "runner",
+      "tool": "explicit_fault_risk_adjudication_step",
+      "error": "Fault/risk adjudication refused to finalize because deciding evidence is missing, empty, or untrusted.",
+      "verifier_decision": "fault_risk_adjudication_refusal"
+    },
+    {
+      "step": 0,
+      "task": "missing-evidence final-answer guard",
+      "server": "runner",
+      "tool": "missing_evidence_final_answer_guard",
+      "error": "missing_evidence_final_answer_guard saw missing or untrusted evidence at history[8] (trend_analysis): tool step was marked unsuccessful. A work-order tool was emitted after that evidence gap.",
+      "verifier_decision": "mitigation_guard_block"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent dissolved gas analysis (DGA) record for transformer T-013.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of dictionaries with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 4,
+      "task": "List all Smart Grid transformer assets with health status 0 (healthy).",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dictionaries, each with keys: transformer_id, name, location, health_status, rul_days, in_service."
+    },
+    {
+      "step": 5,
+      "task": "Create a new maintenance work order for transformer T-013.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3,
+        4
+      ],
+      "expected_output": "A dictionary with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician."
+    },
+    {
+      "step": 6,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent dissolved gas analysis (DGA) record for transformer T-013.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of dictionaries with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 4,
+      "task": "List all Smart Grid transformer assets with health status 0 (healthy).",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dictionaries, each with keys: transformer_id, name, location, health_status, rul_days, in_service."
+    },
+    {
+      "step": 5,
+      "task": "Create a new maintenance work order for transformer T-013.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3,
+        4
+      ],
+      "expected_output": "A dictionary with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician."
+    },
+    {
+      "step": 6,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+    },
+    {
+      "step": 7,
+      "task": "Correct the transformer ID in the list_sensors tool arguments.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of valid sensor IDs for transformer T-013."
+    },
+    {
+      "step": 8,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        7
+      ],
+      "expected_output": "A list of valid sensor IDs for transformer T-013."
+    },
+    {
+      "step": 9,
+      "task": "Detect anomalous sensor readings using a rolling z-score method for the valid sensor IDs from #S2.",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        8
+      ],
+      "expected_output": "A list of flagged readings with timestamp, value, z_score for each valid sensor ID."
+    },
+    {
+      "step": 10,
+      "task": "Compute the trend (slope) of a sensor's readings over a time window for each valid sensor ID from #S2.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        8
+      ],
+      "expected_output": "A list of trend analysis results for each valid sensor ID."
+    },
+    {
+      "step": 11,
+      "task": "Create a new maintenance work order for transformer T-013.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A new work order dict with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician."
+    },
+    {
+      "step": 12,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        11
+      ],
+      "expected_output": "A dict with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent dissolved gas analysis (DGA) record for transformer T-013.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-013"
+      },
+      "response": "{\n  \"transformer_id\": \"T-013\",\n  \"sample_date\": \"2024-01-06T00:00:00\",\n  \"dissolved_h2_ppm\": 52.1,\n  \"dissolved_ch4_ppm\": 20.31,\n  \"dissolved_c2h2_ppm\": 1.13,\n  \"dissolved_c2h4_ppm\": 25.84,\n  \"dissolved_c2h6_ppm\": 15.11,\n  \"dissolved_co_ppm\": 371.91,\n  \"dissolved_co2_ppm\": 2198.51,\n  \"fault_label\": \"Low-temperature overheating\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current result does not suggest a change in the remaining plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 52.1,
+        "ch4": 20.31,
+        "c2h2": 1.13,
+        "c2h4": 25.84,
+        "c2h6": 15.11,
+        "transformer_id": "T-013",
+        "priority": "high",
+        "required_skills": "electrician",
+        "estimated_downtime": "8 hours",
+        "maintenance_cycle": "next"
+      },
+      "response": "{\n  \"iec_code\": \"N\",\n  \"diagnosis\": \"Normal / Inconclusive\",\n  \"r1_ch4_h2\": 0.3898,\n  \"r2_c2h2_c2h4\": 0.0437,\n  \"r3_c2h4_c2h6\": 1.7101,\n  \"input_gases\": {\n    \"h2_ppm\": 52.1,\n    \"ch4_ppm\": 20.31,\n    \"c2h2_ppm\": 1.13,\n    \"c2h4_ppm\": 25.84,\n    \"c2h6_ppm\": 15.11\n  },\n  \"transformer_id\": \"T-013\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Normal / Inconclusive diagnosis, no indication to change the remaining plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "params": {
+          "transformer_id": "T-013"
+        }
+      },
+      "response": "Error executing tool list_sensors: 1 validation error for list_sensorsArguments\ntransformer_id\n  Field required [type=missing, input_value={'tool': 'list_sensors', ...ansformer_id': 'T-013'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "missing_evidence_retry",
+      "verifier_reason": "tool response matched '\\\\bmissing\\\\b'",
+      "retries_used": 1
+    },
+    {
+      "step": 3,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "create_work_order",
+        "transformer_id": "T-013",
+        "work_order_type": "preventive_inspection",
+        "priority": "high",
+        "required_skills": [
+          "electrician",
+          "mechanic"
+        ],
+        "estimated_downtime": 2,
+        "next_maintenance_cycle": true,
+        "sensor_ids": [
+          "sensor_1",
+          "sensor_2"
+        ]
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "replan_suffix",
+      "verifier_reason": "Validation error in step 3 indicates a change in the remaining plan is required.",
+      "verifier_updated_focus": "Review and correct the transformer ID in the list_sensors tool arguments.",
+      "retries_used": 1,
+      "verifier_replan_raw_plan": [
+        {
+          "step": 1,
+          "task": "Correct the transformer ID in the list_sensors tool arguments.",
+          "server": "iot",
+          "tool": "list_sensors",
+          "tool_args": {},
+          "dependencies": [],
+          "expected_output": "A list of valid sensor IDs for transformer T-013."
+        },
+        {
+          "step": 2,
+          "task": "List all sensor IDs available for transformer T-013.",
+          "server": "iot",
+          "tool": "list_sensors",
+          "tool_args": {},
+          "dependencies": [
+            1
+          ],
+          "expected_output": "A list of valid sensor IDs for transformer T-013."
+        },
+        {
+          "step": 3,
+          "task": "Detect anomalous sensor readings using a rolling z-score method for the valid sensor IDs from #S2.",
+          "server": "tsfm",
+          "tool": "detect_anomalies",
+          "tool_args": {},
+          "dependencies": [
+            2
+          ],
+          "expected_output": "A list of flagged readings with timestamp, value, z_score for each valid sensor ID."
+        },
+        {
+          "step": 4,
+          "task": "Compute the trend (slope) of a sensor's readings over a time window for each valid sensor ID from #S2.",
+          "server": "tsfm",
+          "tool": "trend_analysis",
+          "tool_args": {},
+          "dependencies": [
+            2
+          ],
+          "expected_output": "A list of trend analysis results for each valid sensor ID."
+        },
+        {
+          "step": 5,
+          "task": "Create a new maintenance work order for transformer T-013.",
+          "server": "wo",
+          "tool": "create_work_order",
+          "tool_args": {},
+          "dependencies": [],
+          "expected_output": "A new work order dict with keys: work_order_id, transformer_id, issue_description, priority, fault_type, status, estimated_downtime_hours, created_at, assigned_technician."
+        },
+        {
+          "step": 6,
+          "task": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+          "server": "wo",
+          "tool": "estimate_downtime",
+          "tool_args": {},
+          "dependencies": [
+            5
+          ],
+          "expected_output": "A dict with keys: transformer_id, severity, fault_type, estimated_min_hours, estimated_max_hours, estimated_typical_hours, source."
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "task": "Correct the transformer ID in the list_sensors tool arguments.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "transformer_id": "T-013",
+        "priority": "high",
+        "required_skills": "electrician",
+        "estimated_downtime": "8 hours"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Correct transformer ID in list_sensors tool arguments was successful",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 8,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "params": {
+          "transformer_id": "T-013"
+        }
+      },
+      "response": "Error executing tool list_sensors: 1 validation error for list_sensorsArguments\ntransformer_id\n  Field required [type=missing, input_value={'tool': 'list_sensors', ...ansformer_id': 'T-013'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "retry",
+      "verifier_reason": "Error executing tool list_sensors: 1 validation error for list_sensorsArguments",
+      "retries_used": 1
+    },
+    {
+      "step": 8,
+      "task": "List all sensor IDs available for transformer T-013.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "tool": "list_sensors",
+        "transformer_id": "T-013"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 1
+    },
+    {
+      "step": 9,
+      "task": "Detect anomalous sensor readings using a rolling z-score method for the valid sensor IDs from #S2.",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "sensor_id": "load_current_a",
+        "window_size": 720,
+        "z_threshold": 2
+      },
+      "response": "{\n  \"transformer_id\": \"T-013\",\n  \"sensor_id\": \"load_current_a\",\n  \"window_size\": 720,\n  \"z_threshold\": 2.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 27,\n  \"anomaly_rate_pct\": 3.75,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-01 12:00:00\",\n      \"value\": 65.478,\n      \"z_score\": 2.335\n    },\n    {\n      \"timestamp\": \"2024-01-03 17:00:00\",\n      \"value\": 336.535,\n      \"z_score\": 2.856\n    },\n    {\n      \"timestamp\": \"2024-01-03 18:00:00\",\n      \"value\": 116.888,\n      \"z_score\": 2.033\n    },\n    {\n      \"timestamp\": \"2024-01-05 00:00:00\",\n      \"value\": 110.866,\n      \"z_score\": 2.088\n    },\n    {\n      \"timestamp\": \"2024-01-06 16:00:00\",\n      \"value\": 349.588,\n      \"z_score\": 2.987\n    },\n    {\n      \"timestamp\": \"2024-01-07 22:00:00\",\n      \"value\": 308.896,\n      \"z_score\": 2.111\n    },\n    {\n      \"timestamp\": \"2024-01-09 19:00:00\",\n      \"value\": 306.05,\n      \"z_score\": 2.092\n    },\n    {\n      \"timestamp\": \"2024-01-10 18:00:00\",\n      \"value\": 91.44,\n      \"z_score\": 2.724\n    },\n    {\n      \"timestamp\": \"2024-01-10 21:00:00\",\n      \"value\": 306.724,\n      \"z_score\": 2.063\n    },\n    {\n      \"timestamp\": \"2024-01-11 08:00:00\",\n      \"value\": 332.639,\n      \"z_scor\n...[truncated 1752 chars]",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 10,
+      "task": "Compute the trend (slope) of a sensor's readings over a time window for each valid sensor ID from #S2.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "sensor_id": "#S2",
+        "start_time": null,
+        "end_time": null
+      },
+      "response": "{\n  \"error\": \"No readings for transformer='T-013' sensor='#S2'.\"\n}",
+      "executor_success": true,
+      "error": "No readings for transformer='T-013' sensor='#S2'.",
+      "success": false,
+      "verifier_decision": "missing_evidence_retry",
+      "verifier_reason": "tool step was marked unsuccessful",
+      "retries_used": 1
+    },
+    {
+      "step": 10,
+      "task": "Compute the trend (slope) of a sensor's readings over a time window for each valid sensor ID from #S2.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "sensor_id": "#S2",
+        "start_time": "2024-01-01T00:00:00",
+        "end_time": "2024-01-06T00:00:00"
+      },
+      "response": "{\n  \"error\": \"No readings for transformer='T-013' sensor='#S2'.\"\n}",
+      "executor_success": true,
+      "error": "No readings for transformer='T-013' sensor='#S2'.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "No readings for transformer='T-013' sensor='#S2'."
+    },
+    {
+      "step": 11,
+      "task": "Create a new maintenance work order for transformer T-013.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "issue_description": "Transformer T-013 is experiencing low-temperature overheating.",
+        "priority": "high",
+        "fault_type": "Low-temperature overheating",
+        "estimated_downtime_hours": 8
+      },
+      "response": "{\n  \"work_order_id\": \"WO-C12E7DF5\",\n  \"transformer_id\": \"T-013\",\n  \"issue_description\": \"Transformer T-013 is experiencing low-temperature overheating.\",\n  \"priority\": \"high\",\n  \"fault_type\": \"Low-temperature overheating\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 8.0,\n  \"created_at\": \"2026-05-05T14:40:28.875785Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change.",
+      "verifier_updated_focus": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+      "retries_used": 0
+    },
+    {
+      "step": 12,
+      "task": "Estimate the expected downtime (hours) for maintenance on transformer T-013.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "severity": "high",
+        "fault_type": "Low-temperature overheating",
+        "priority": "high",
+        "required_skills": [
+          "Transformer maintenance"
+        ],
+        "estimated_downtime": 8.0
+      },
+      "response": "{\n  \"transformer_id\": \"T-013\",\n  \"severity\": \"high\",\n  \"fault_type\": \"Low-temperature overheating\",\n  \"estimated_min_hours\": 16,\n  \"estimated_max_hours\": 48,\n  \"estimated_typical_hours\": 24,\n  \"source\": \"dataset_statistics_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "All steps completed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "mitigation_repair": {
+    "name": "missing_evidence_retry_replan_guard",
+    "enabled": true,
+    "detector": "missing_evidence_final_answer_guard",
+    "triggered": true,
+    "attempts": [
+      {
+        "attempt_index": 1,
+        "source_step": 3,
+        "tool": "list_sensors",
+        "target": {
+          "transformer_id": "T-013"
+        },
+        "reason": "tool response matched '\\\\bmissing\\\\b'",
+        "action": "retry_step",
+        "result": "repaired",
+        "new_step": 3
+      },
+      {
+        "attempt_index": 2,
+        "source_step": 10,
+        "tool": "trend_analysis",
+        "target": {
+          "sensor_id": "#S2",
+          "transformer_id": "T-013"
+        },
+        "reason": "tool step was marked unsuccessful",
+        "action": "retry_step",
+        "result": "scheduled"
+      }
+    ],
+    "repaired": true,
+    "final_decision": "block_finalization",
+    "unresolved_hits": [
+      {
+        "source": "history[8]",
+        "step": 10,
+        "tool": "trend_analysis",
+        "reason": "tool step was marked unsuccessful",
+        "target": {
+          "sensor_id": "#S2",
+          "transformer_id": "T-013"
+        },
+        "excerpt": "{   \"error\": \"No readings for transformer='T-013' sensor='#S2'.\" }"
+      }
+    ]
+  },
+  "fault_risk_adjudication": {
+    "name": "explicit_fault_risk_adjudication_step",
+    "enabled": true,
+    "decision": "refuse_due_missing_evidence",
+    "selected_fault_id": null,
+    "selected_fault_label": null,
+    "selected_risk_level": null,
+    "deciding_evidence": [],
+    "alternatives_considered": [],
+    "missing_evidence": [
+      {
+        "source": "history[8]",
+        "step": 10,
+        "tool": "trend_analysis",
+        "reason": "tool step was marked unsuccessful",
+        "target": {
+          "sensor_id": "#S2",
+          "transformer_id": "T-013"
+        },
+        "excerpt": "{   \"error\": \"No readings for transformer='T-013' sensor='#S2'.\" }"
+      }
+    ],
+    "reason": "Fault/risk adjudication refused to finalize because deciding evidence is missing, empty, or untrusted."
+  },
+  "scenario": {
+    "id": "SGT-007",
+    "type": "WO",
+    "text": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+    "category": "Work Order Generation",
+    "characteristic_form": "The answer should produce a structured work order containing asset ID, task summary, priority, required technician skill set, and estimated downtime.",
+    "asset_id": "T-013",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.estimate_downtime"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order payload",
+        "priority",
+        "required skills",
+        "downtime estimate"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "WO"
+    ]
+  },
+  "mitigation_guard": {
+    "name": "missing_evidence_final_answer_guard",
+    "enabled": true,
+    "triggered": true,
+    "blocked_final_answer": true,
+    "blocked_work_order": true,
+    "evidence_limited_answer": false,
+    "hits": [
+      {
+        "source": "history[8]",
+        "step": 10,
+        "tool": "trend_analysis",
+        "reason": "tool step was marked unsuccessful",
+        "target": {
+          "sensor_id": "#S2",
+          "transformer_id": "T-013"
+        },
+        "excerpt": "{   \"error\": \"No readings for transformer='T-013' sensor='#S2'.\" }"
+      }
+    ],
+    "reason": "missing_evidence_final_answer_guard saw missing or untrusted evidence at history[8] (trend_analysis): tool step was marked unsuccessful. A work-order tool was emitted after that evidence gap."
+  }
+}

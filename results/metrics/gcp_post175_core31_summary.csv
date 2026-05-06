@@ -1,0 +1,8 @@
+cohort,batch_prefix,row_group,run_name,run_dir,raw_json_count,latency_count,judge_count,judge_pass_count,judge_pass_rate,judge_score_mean,judge_score_p50,scenario_count,git_sha,git_dirty,model_id
+aggregate,,A,,,155,,155,67,0.432258,0.474192,0.5,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,B,,,155,,155,57,0.367742,0.441934,0.3333,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,C,,,155,,155,61,0.393548,0.473114,0.5,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,Y,,,155,,155,76,0.490323,0.581719,0.5,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,YS,,,155,,155,78,0.503226,0.606452,0.6667,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,Z,,,155,,155,86,0.554839,0.598927,0.6667,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,
+aggregate,,ZS,,,155,,155,80,0.516129,0.620434,0.6667,31,1913c6e4703425f735d8cb8297cb890ba66bbeff,False,

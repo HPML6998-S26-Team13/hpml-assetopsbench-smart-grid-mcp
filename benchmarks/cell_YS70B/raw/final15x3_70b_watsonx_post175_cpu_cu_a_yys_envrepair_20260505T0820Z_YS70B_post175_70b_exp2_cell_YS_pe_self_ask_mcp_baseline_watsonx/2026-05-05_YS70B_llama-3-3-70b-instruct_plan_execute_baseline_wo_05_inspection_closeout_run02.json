@@ -1,0 +1,119 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "effective_question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "The work order (WO-D9A11B1F) for transformer T-009 was successfully opened to document the completed inspection, but an error occurred when attempting to close the work order with a note recording the clean inspection result.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 2,
+      "task": "Close the work order with a note recording the clean inspection result",
+      "server": "wo",
+      "tool": "update_work_order",
+      "error": "{\n  \"errors\": [\n    {\n      \"code\": \"downstream_request_failed\",\n      \"message\": \"Downstream vllm request failed: \",\n      \"more_info\": \"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat\"\n    }\n  ],\n  \"trace\": \"493ba58c9cdaab73245be7ffc014dab4\",\n  \"status_code\": 500\n}",
+      "verifier_decision": null
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Open a new work order for transformer T-009 to document the completed inspection",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A new work order ID for the created work order"
+    },
+    {
+      "step": 2,
+      "task": "Close the work order with a note recording the clean inspection result",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "The updated work order with a status of \"closed\" and a note recording the clean inspection result"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Open a new work order for transformer T-009 to document the completed inspection",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A new work order ID for the created work order"
+    },
+    {
+      "step": 2,
+      "task": "Close the work order with a note recording the clean inspection result",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "The updated work order with a status of \"closed\" and a note recording the clean inspection result"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Open a new work order for transformer T-009 to document the completed inspection",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-009",
+        "issue_description": "Completed inspection with no abnormal conditions observed",
+        "priority": "low"
+      },
+      "response": "{\n  \"work_order_id\": \"WO-D9A11B1F\",\n  \"transformer_id\": \"T-009\",\n  \"issue_description\": \"Completed inspection with no abnormal conditions observed\",\n  \"priority\": \"low\",\n  \"fault_type\": null,\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 4,\n  \"created_at\": \"2026-05-05T09:53:36.236209Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Close the work order with a note recording the clean inspection result",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "response": "",
+      "executor_success": false,
+      "error": "{\n  \"errors\": [\n    {\n      \"code\": \"downstream_request_failed\",\n      \"message\": \"Downstream vllm request failed: \",\n      \"more_info\": \"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat\"\n    }\n  ],\n  \"trace\": \"493ba58c9cdaab73245be7ffc014dab4\",\n  \"status_code\": 500\n}",
+      "success": false
+    }
+  ],
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "answer": "The failure mode that best matches the symptom of intermittent partial discharge is FM-001, Partial Discharge. The key sensors for confirming and tracking its progression are DGA (dissolved gas analysis) sensors for H2 (hydrogen) and CH4 (methane), as well as C2H2 (acetylene) for tracking.\n\nTo confirm and track the progression of this failure mode, technicians should monitor the readings from these sensors closely and schedule an inspection within 90 days.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 24082,
+    "output_tokens": 278,
+    "total_tokens": 24360,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "search_failure_modes",
+            "query": "partial discharge"
+          },
+          "call_id": "chatcmpl-tool-b0fababcbd94bb9a",
+          "output": {
+            "error": "Failure mode 'search_failure_modes' not found."
+          }
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "search_failure_modes",
+            "query": "partial discharge"
+          },
+          "call_id": "chatcmpl-tool-a0df4d79e1f7a0fd",
+          "output": {
+            "error": "Failure mode 'search_failure_modes' not found."
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "partial discharge"
+          },
+          "call_id": "chatcmpl-tool-a84f25847c6cff1f",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-001"
+          },
+          "call_id": "chatcmpl-tool-bdb8dfe09fad8fcd",
+          "output": {
+            "failure_mode_id": "FM-001",
+            "name": "Partial Discharge",
+            "dga_label": "Partial discharge",
+            "description": "Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.",
+            "severity": "low",
+            "iec_code": "PD",
+            "key_gases": [
+              "H2",
+              "CH4"
+            ],
+            "recommended_action": "Monitor closely; schedule inspection within 90 days"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The failure mode that best matches the symptom of intermittent partial discharge is FM-001, Partial Discharge. The key sensors for confirming and tracking its progression are DGA (dissolved gas analysis) sensors for H2 (hydrogen) and CH4 (methane), as well as C2H2 (acetylene) for tracking.\n\nTo confirm and track the progression of this failure mode, technicians should monitor the readings from these sensors closely and schedule an inspection within 90 days.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.003278970718384,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-013",
+    "type": "FMSR",
+    "text": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+    "category": "Symptom-Driven Failure Mode Lookup",
+    "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+    "asset_id": "T-003",
+    "expected_tools": [
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "matched failure mode",
+        "rationale",
+        "correlated sensors"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

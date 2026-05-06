@@ -1,0 +1,324 @@
+{
+  "question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "effective_question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 1
+  },
+  "answer": "A work order (WO-E7D5130B) has been created for transformer T-020 with a high priority and issue description \"Critical issue requiring immediate inspection\" due to its current RUL of 26 days and projected RUL of 0 days at the end of the 90-day horizon, indicating a critical need for immediate maintenance. However, the estimated downtime hours were not successfully updated due to errors in steps 6 and 7. The work order currently estimates 24 hours of downtime.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 6,
+      "task": "Estimate the downtime for the maintenance of transformer T-020 based on its severity and fault type to update the work order with accurate estimated downtime hours.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "error": "Invalid severity 'Critical'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 7,
+      "task": "Update the work order for transformer T-020 with the estimated downtime hours to ensure accurate planning and scheduling of the maintenance.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "error": "Work order 'WO-E7D5130B' not found in this session.",
+      "verifier_decision": "error"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL for transformer T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Current RUL estimate for T-020"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Projected RUL for T-020 at the end of the 90-day horizon"
+    },
+    {
+      "step": 3,
+      "task": "Create a work order for transformer T-020 with scope and priority justified by the current and projected RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "Work order ID and details for the created work order"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL for transformer T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Current RUL estimate for T-020"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Projected RUL for T-020 at the end of the 90-day horizon"
+    },
+    {
+      "step": 3,
+      "task": "Create a work order for transformer T-020 with scope and priority justified by the current and projected RUL",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "Work order ID and details for the created work order"
+    },
+    {
+      "step": 4,
+      "task": "Determine the issue description and priority for the work order based on the current and projected RUL of transformer T-020, considering the critical need for immediate action.",
+      "server": "wo",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A clear issue description and priority level for the work order."
+    },
+    {
+      "step": 5,
+      "task": "Create a work order for transformer T-020 with the determined issue description and priority, and estimated downtime based on the severity and fault type.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A created work order with the specified details."
+    },
+    {
+      "step": 6,
+      "task": "Estimate the downtime for the maintenance of transformer T-020 based on its severity and fault type to update the work order with accurate estimated downtime hours.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "Estimated downtime hours for the maintenance."
+    },
+    {
+      "step": 7,
+      "task": "Update the work order for transformer T-020 with the estimated downtime hours to ensure accurate planning and scheduling of the maintenance.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "Updated work order with the estimated downtime hours."
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the current RUL for transformer T-020",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-020"
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 26,\n  \"health_index\": 0.0238,\n  \"fdd_category\": 4,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Critical \\u2014 immediate inspection required.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL obtained successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-020 over a 90-day horizon",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "horizon_days": 90
+      },
+      "response": "{\n  \"transformer_id\": \"T-020\",\n  \"current_rul_days\": 26,\n  \"forecast_date\": \"2024-04-30\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.708,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "replan_suffix",
+      "verifier_reason": "Projected RUL is 0, indicating critical need for immediate action",
+      "verifier_updated_focus": "Emergency maintenance for T-020",
+      "retries_used": 0,
+      "verifier_replan_raw_plan": [
+        {
+          "step": 1,
+          "task": "Determine the issue description and priority for the work order based on the current and projected RUL of transformer T-020, considering the critical need for immediate action.",
+          "server": "wo",
+          "tool": "none",
+          "tool_args": {},
+          "dependencies": [],
+          "expected_output": "A clear issue description and priority level for the work order."
+        },
+        {
+          "step": 2,
+          "task": "Create a work order for transformer T-020 with the determined issue description and priority, and estimated downtime based on the severity and fault type.",
+          "server": "wo",
+          "tool": "create_work_order",
+          "tool_args": {},
+          "dependencies": [
+            1
+          ],
+          "expected_output": "A created work order with the specified details."
+        },
+        {
+          "step": 3,
+          "task": "Estimate the downtime for the maintenance of transformer T-020 based on its severity and fault type to update the work order with accurate estimated downtime hours.",
+          "server": "wo",
+          "tool": "estimate_downtime",
+          "tool_args": {},
+          "dependencies": [
+            2
+          ],
+          "expected_output": "Estimated downtime hours for the maintenance."
+        },
+        {
+          "step": 4,
+          "task": "Update the work order for transformer T-020 with the estimated downtime hours to ensure accurate planning and scheduling of the maintenance.",
+          "server": "wo",
+          "tool": "update_work_order",
+          "tool_args": {},
+          "dependencies": [
+            3
+          ],
+          "expected_output": "Updated work order with the estimated downtime hours."
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "task": "Determine the issue description and priority for the work order based on the current and projected RUL of transformer T-020, considering the critical need for immediate action.",
+      "server": "wo",
+      "tool": "none",
+      "tool_args": {},
+      "response": "A clear issue description and priority level for the work order.",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step completed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 5,
+      "task": "Create a work order for transformer T-020 with the determined issue description and priority, and estimated downtime based on the severity and fault type.",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "issue_description": "Critical issue requiring immediate inspection",
+        "priority": "High",
+        "fault_type": "Linear Degradation",
+        "estimated_downtime_hours": 24
+      },
+      "response": "{\n  \"work_order_id\": \"WO-E7D5130B\",\n  \"transformer_id\": \"T-020\",\n  \"issue_description\": \"Critical issue requiring immediate inspection\",\n  \"priority\": \"high\",\n  \"fault_type\": \"Linear Degradation\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 24.0,\n  \"created_at\": \"2026-05-05T09:03:22.750843Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Work order created successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 6,
+      "task": "Estimate the downtime for the maintenance of transformer T-020 based on its severity and fault type to update the work order with accurate estimated downtime hours.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-020",
+        "severity": "Critical",
+        "fault_type": "Linear Degradation"
+      },
+      "response": "{\n  \"error\": \"Invalid severity 'Critical'. Must be one of: ['critical', 'high', 'low', 'medium']\"\n}",
+      "executor_success": true,
+      "error": "Invalid severity 'Critical'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Invalid severity 'Critical'. Must be one of: ['critical', 'high', 'low', 'medium']"
+    },
+    {
+      "step": 7,
+      "task": "Update the work order for transformer T-020 with the estimated downtime hours to ensure accurate planning and scheduling of the maintenance.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {
+        "work_order_id": "WO-E7D5130B",
+        "status": "open",
+        "priority": "high",
+        "assigned_technician": null,
+        "note": "Updated estimated downtime hours to 24.0 for accurate planning and scheduling of maintenance for transformer T-020"
+      },
+      "response": "{\n  \"error\": \"Work order 'WO-E7D5130B' not found in this session.\"\n}",
+      "executor_success": true,
+      "error": "Work order 'WO-E7D5130B' not found in this session.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Work order 'WO-E7D5130B' not found in this session."
+    }
+  ],
+  "scenario": {
+    "id": "SGT-030",
+    "type": "Multi",
+    "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+    "category": "RUL Forecast-Driven Work Order",
+    "characteristic_form": "The answer should report the RUL forecast for T-020 \u2014 including the current RUL and the projected RUL at the 90-day horizon \u2014 and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "projected RUL at 90-day horizon",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM",
+      "WO"
+    ]
+  }
+}

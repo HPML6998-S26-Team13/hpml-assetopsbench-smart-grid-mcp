@@ -1,0 +1,135 @@
+{
+  "question": "Transformer T-018 has a sudden hydrogen increase relative to baseline. Determine the likely root cause class and recommend one confirmatory measurement.",
+  "answer": "Based on the search results, the likely root cause class is Arc Discharge (FM-006). A confirmatory measurement to support this diagnosis would be to inspect the winding for signs of arcing and to measure the levels of C2H2, H2, and C2H4 in the oil.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 19502,
+    "output_tokens": 129,
+    "total_tokens": 19631,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-009"
+          },
+          "call_id": "chatcmpl-tool-aef408932b7640ec",
+          "output": {
+            "error": "Failure mode 'FM-009' not found."
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "H2"
+          },
+          "call_id": "chatcmpl-tool-b31d69b90082257c",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-006"
+          },
+          "call_id": "chatcmpl-tool-91b3d0478f0b07c1",
+          "output": {
+            "failure_mode_id": "FM-006",
+            "name": "Arc Discharge",
+            "dga_label": "Arc discharge",
+            "description": "High-energy arcing causing severe oil decomposition. Very high C2H2 and H2.",
+            "severity": "critical",
+            "iec_code": "D2",
+            "key_gases": [
+              "C2H2",
+              "H2",
+              "C2H4"
+            ],
+            "recommended_action": "Immediate de-energization and emergency inspection"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Based on the search results, the likely root cause class is Arc Discharge (FM-006). A confirmatory measurement to support this diagnosis would be to inspect the winding for signs of arcing and to measure the levels of C2H2, H2, and C2H4 in the oil.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.025859594345093,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-004",
+    "type": "FMSR",
+    "text": "Transformer T-018 has a sudden hydrogen increase relative to baseline. Determine the likely root cause class and recommend one confirmatory measurement.",
+    "category": "Root Cause Analysis",
+    "characteristic_form": "The answer should classify the likely failure/root-cause class from gas behavior and propose one concrete confirmatory measurement or inspection step.",
+    "asset_id": "T-018",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "root cause class",
+        "one confirmatory test"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

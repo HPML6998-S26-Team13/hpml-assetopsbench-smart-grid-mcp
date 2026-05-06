@@ -1,0 +1,122 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "answer": "The probable fault mode is low-temperature overheating. The closest matching failure mechanism in the catalogue is FM-002, which is a medium-severity fault. The sensors that should be prioritized for ongoing monitoring are CH4 and C2H4.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 19201,
+    "output_tokens": 133,
+    "total_tokens": 19334,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-7b68a5ebbb33406184e983c8939572d4",
+          "output": {
+            "transformer_id": "T-014",
+            "sample_date": "2024-01-30T00:00:00",
+            "dissolved_h2_ppm": 16.17,
+            "dissolved_ch4_ppm": 33.46,
+            "dissolved_c2h2_ppm": 2.34,
+            "dissolved_c2h4_ppm": 13.51,
+            "dissolved_c2h6_ppm": 16.8,
+            "dissolved_co_ppm": 330.08,
+            "dissolved_co2_ppm": 2180.87,
+            "fault_label": "Low-temperature overheating",
+            "source_dataset": "synthetic"
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "Low-temperature overheating"
+          },
+          "call_id": "chatcmpl-tool-b5e745819a634d4b901f46ae137f460e",
+          "output": [
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            }
+          ]
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-002"
+          },
+          "call_id": "chatcmpl-tool-62f3309dd3bb43feb4d6190a58c8d17e",
+          "output": {
+            "failure_mode_id": "FM-002",
+            "name": "Low-Temperature Overheating (< 300\u00b0C)",
+            "dga_label": "Low-temperature overheating",
+            "description": "Low-temperature thermal fault, typically in core laminations or due to overload. Elevated CH4 and C2H4.",
+            "severity": "medium",
+            "iec_code": "T1",
+            "key_gases": [
+              "CH4",
+              "C2H4"
+            ],
+            "recommended_action": "Reduce load; inspect within 30 days"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The probable fault mode is low-temperature overheating. The closest matching failure mechanism in the catalogue is FM-002, which is a medium-severity fault. The sensors that should be prioritized for ongoing monitoring are CH4 and C2H4.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 9.41819167137146,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

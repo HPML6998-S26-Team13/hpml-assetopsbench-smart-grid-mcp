@@ -1,0 +1,90 @@
+{
+  "question": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+  "answer": "The trend analysis indicates that the winding temperature sensor readings for T-002 are stable, with a slight negative slope of -0.038495 per day. This indicates that the readings are not increasing or decreasing. The rate of change is very small, and the trend does not fit the data well (R-squared value is 0.0011).",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 18374,
+    "output_tokens": 179,
+    "total_tokens": 18553,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "transformer_id": "T-002",
+            "start_time": "2 months ago",
+            "end_time": "now"
+          },
+          "call_id": "chatcmpl-tool-a89b06d6087bf016",
+          "output": {
+            "type": "text",
+            "text": "Error executing tool trend_analysis: Unknown datetime string format, unable to parse: 2 months ago, at position 0"
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "arguments": {
+            "sensor_id": "winding_temp_top_c",
+            "transformer_id": "T-002",
+            "start_time": "2022-07-26T00:00:00",
+            "end_time": "now"
+          },
+          "call_id": "chatcmpl-tool-8fffbdc95227b013",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-002\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 720,\n  \"start_time\": \"2024-01-01 00:00:00\",\n  \"end_time\": \"2024-01-30 23:00:00\",\n  \"mean_value\": 49.3268,\n  \"min_value\": 18.563,\n  \"max_value\": 78.575,\n  \"slope_per_day\": -0.038495,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0011\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The trend analysis indicates that the winding temperature sensor readings for T-002 are stable, with a slight negative slope of -0.038495 per day. This indicates that the readings are not increasing or decreasing. The rate of change is very small, and the trend does not fit the data well (R-squared value is 0.0011).",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.788221120834351,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-015",
+    "type": "TSFM",
+    "text": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+    "category": "Sensor Trend Analysis",
+    "characteristic_form": "The answer should report the trend direction (increasing, decreasing, or stable), the slope rate per day, and the R-squared fit quality for T-002's winding_temp_top_c sensor.",
+    "asset_id": "T-002",
+    "expected_tools": [
+      "tsfm.trend_analysis"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "trend direction",
+        "slope rate",
+        "R-squared or fit quality"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

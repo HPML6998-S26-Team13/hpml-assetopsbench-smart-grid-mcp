@@ -1,0 +1,24 @@
+{
+  "id": "SGT-026",
+  "type": "TSFM",
+  "text": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+  "category": "RUL Current vs Forecast Comparison",
+  "characteristic_form": "The answer should report the current RUL estimate for T-011, the forecasted RUL at the 180-day horizon, and a recommendation on whether the comparison supports deferring or advancing replacement, citing the magnitude of any change.",
+  "asset_id": "T-011",
+  "expected_tools": [
+    "tsfm.get_rul",
+    "tsfm.forecast_rul"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "current RUL value",
+      "forecast RUL value",
+      "comparison",
+      "deferral or advance recommendation"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "TSFM"
+  ]
+}

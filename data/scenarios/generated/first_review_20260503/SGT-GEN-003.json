@@ -1,0 +1,56 @@
+{
+  "id": "SGT-GEN-003",
+  "type": "WO",
+  "text": "T-005 main transformer temperature exceeds threshold, what's the next step?",
+  "category": "Work Order Creation",
+  "characteristic_form": "A decision to create a work order with specified fields.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "wo.create_work_order",
+    "wo.estimate_downtime"
+  ],
+  "domain_tags": [
+    "WO"
+  ],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "wo.create_work_order",
+      "wo.estimate_downtime"
+    ],
+    "decisive_intermediate_values": {
+      "fault_code": "T3",
+      "condition_tier": "C4"
+    },
+    "final_value": {
+      "work_order_type": "corrective",
+      "priority": "high"
+    },
+    "acceptance_criteria": [
+      "agent creates a work order",
+      "agent estimates downtime"
+    ],
+    "must_include": [
+      "work_order_type",
+      "priority",
+      "minimum_fields_from_playbook"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:36.377901+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false
+  },
+  "family": "WO_CREATION",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-007",
+    "scenario_file": "data/scenarios/wo_01_create_inspection_order.json",
+    "similarity_basis": "shares type='WO' and 2 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

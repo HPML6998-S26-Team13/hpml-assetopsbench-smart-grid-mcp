@@ -1,0 +1,495 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "effective_question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring. What is the specific type of oil used in T-014? Are there any recent maintenance or repair activities that could be related to the elevated gas readings?",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What is the specific type of oil used in T-014?",
+      "Are there any recent maintenance or repair activities that could be related to the elevated gas readings?"
+    ],
+    "assumptions": [
+      "The laboratory review is accurate and reliable.",
+      "The oil sample is representative of the current condition of T-014.",
+      "The catalogue of failure mechanisms is up-to-date and comprehensive."
+    ]
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "Mitigation guard blocked the final answer/work-order recommendation: required evidence was missing, empty, or untrusted. First blocking signal: get_sensor_correlation at history[3] (tool step was marked unsuccessful). Rerun or repair the evidence retrieval step before making a maintenance recommendation.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 4,
+      "task": "Get the sensors and gases most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "error": "Failure mode 'Low-temperature overheating' not found.",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 0,
+      "task": "missing-evidence final-answer guard",
+      "server": "runner",
+      "tool": "missing_evidence_final_answer_guard",
+      "error": "missing_evidence_final_answer_guard saw missing or untrusted evidence at history[3] (get_sensor_correlation): tool step was marked unsuccessful.",
+      "verifier_decision": "mitigation_guard_block"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent oil sample DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label for T-014."
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios."
+    },
+    {
+      "step": 3,
+      "task": "Identify the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dicts."
+    },
+    {
+      "step": 4,
+      "task": "Get the sensors and gases most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with the failure mode ID, name, key gases, description, IEC code, and recommended action."
+    },
+    {
+      "step": 5,
+      "task": "Retrieve T-014's asset metadata",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with keys: transformer_id, name, manufacturer, location, voltage_class, rating_kva, install_date, age_years, health_status, fdd_category, rul_days, in_service."
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 7,
+      "task": "Determine the specific type of oil used in T-014",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, name, manufacturer, location, voltage_class, rating_kva, install_date, age_years, health_status, fdd_category, rul_days, in_service."
+    },
+    {
+      "step": 8,
+      "task": "List recent maintenance or repair activities related to T-014",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dicts."
+    },
+    {
+      "step": 9,
+      "task": "Prioritize sensors for ongoing monitoring based on the failure mode",
+      "server": "None",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A list of sensor IDs to prioritize for ongoing monitoring."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent oil sample DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label for T-014."
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios."
+    },
+    {
+      "step": 3,
+      "task": "Identify the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dicts."
+    },
+    {
+      "step": 4,
+      "task": "Get the sensors and gases most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with the failure mode ID, name, key gases, description, IEC code, and recommended action."
+    },
+    {
+      "step": 5,
+      "task": "Retrieve T-014's asset metadata",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with keys: transformer_id, name, manufacturer, location, voltage_class, rating_kva, install_date, age_years, health_status, fdd_category, rul_days, in_service."
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 7,
+      "task": "Determine the specific type of oil used in T-014",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [
+        5
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, name, manufacturer, location, voltage_class, rating_kva, install_date, age_years, health_status, fdd_category, rul_days, in_service."
+    },
+    {
+      "step": 8,
+      "task": "List recent maintenance or repair activities related to T-014",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dicts."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 9; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent oil sample DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-014"
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"sample_date\": \"2024-01-30T00:00:00\",\n  \"dissolved_h2_ppm\": 16.17,\n  \"dissolved_ch4_ppm\": 33.46,\n  \"dissolved_c2h2_ppm\": 2.34,\n  \"dissolved_c2h4_ppm\": 13.51,\n  \"dissolved_c2h6_ppm\": 16.8,\n  \"dissolved_co_ppm\": 330.08,\n  \"dissolved_co2_ppm\": 2180.87,\n  \"fault_label\": \"Low-temperature overheating\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current result does not suggest a change in the remaining plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 16.17,
+        "ch4": 33.46,
+        "c2h2": 2.34,
+        "c2h4": 13.51,
+        "c2h6": 16.8,
+        "transformer_id": "T-014"
+      },
+      "response": "{\n  \"iec_code\": \"T1\",\n  \"diagnosis\": \"Thermal fault, t < 300 \\u00b0C\",\n  \"r1_ch4_h2\": 2.0693,\n  \"r2_c2h2_c2h4\": 0.1732,\n  \"r3_c2h4_c2h6\": 0.8042,\n  \"input_gases\": {\n    \"h2_ppm\": 16.17,\n    \"ch4_ppm\": 33.46,\n    \"c2h2_ppm\": 2.34,\n    \"c2h4_ppm\": 13.51,\n    \"c2h6_ppm\": 16.8\n  },\n  \"transformer_id\": \"T-014\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current result suggests a thermal fault, which is consistent with the remaining planned steps.",
+      "verifier_updated_focus": "Identify the closest matching failure mechanism in the catalogue",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Identify the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {
+        "query": "elevated gas readings in oil sample of T-014",
+        "task": "Identify the closest matching failure mechanism in the catalogue"
+      },
+      "response": "",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result indicates successful execution, no indication that remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 4,
+      "task": "Get the sensors and gases most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {
+        "failure_mode_id": "Low-temperature overheating",
+        "failure_mode_catalogue_id": "Thermal fault, t < 300 \u00b0C",
+        "sensor_ids": [
+          "h2_ppm",
+          "ch4_ppm",
+          "c2h2_ppm",
+          "c2h4_ppm",
+          "c2h6_ppm"
+        ],
+        "oil_type": "synthetic",
+        "maintenance_activities": []
+      },
+      "response": "{\n  \"error\": \"Failure mode 'Low-temperature overheating' not found.\"\n}",
+      "executor_success": true,
+      "error": "Failure mode 'Low-temperature overheating' not found.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Failure mode 'Low-temperature overheating' not found."
+    },
+    {
+      "step": 5,
+      "task": "Retrieve T-014's asset metadata",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sample_date": "2024-01-30T00:00:00"
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"name\": \"Power Transformer T-014\",\n  \"manufacturer\": \"Eaton\",\n  \"location\": \"Distribution Center 2\",\n  \"voltage_class\": \"11kV/0.4kV\",\n  \"rating_kva\": 2000,\n  \"install_date\": \"2019-11-11\",\n  \"age_years\": 5,\n  \"health_status\": 1,\n  \"fdd_category\": 2,\n  \"rul_days\": 767,\n  \"in_service\": true\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step result indicates successful retrieval of asset metadata, which is a prerequisite for the next steps.",
+      "verifier_updated_focus": "Determine the specific type of oil used in T-014",
+      "retries_used": 0
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sample_date": "2024-01-30T00:00:00",
+        "dissolved_h2_ppm": 16.17,
+        "dissolved_ch4_ppm": 33.46,
+        "dissolved_c2h2_ppm": 2.34,
+        "dissolved_c2h4_ppm": 13.51,
+        "dissolved_c2h6_ppm": 16.8,
+        "dissolved_co_ppm": 330.08,
+        "dissolved_co2_ppm": 2180.87,
+        "fault_label": "Low-temperature overheating",
+        "source_dataset": "synthetic",
+        "iec_code": "T1",
+        "diagnosis": "Thermal fault, t < 300 \u00b0C",
+        "r1_ch4_h2": 2.0693,
+        "r2_c2h2_c2h4": 0.1732,
+        "r3_c2h4_c2h6": 0.8042,
+        "input_gases": {
+          "h2_ppm": 16.17,
+          "ch4_ppm": 33.46,
+          "c2h2_ppm": 2.34,
+          "c2h4_ppm": 13.51,
+          "c2h6_ppm": 16.8
+        },
+        "name": "Power Transformer T-014",
+        "manufacturer": "Eaton",
+        "location": "Distribution Center 2",
+        "voltage_class": "11kV/0.4kV",
+        "rating_kva": 2000,
+        "install_date": "2019-11-11",
+        "age_years": 5,
+        "health_status": 1,
+        "fdd_category": 2,
+        "rul_days": 767,
+        "in_service": true
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step successfully listed sensor IDs for T-014",
+      "verifier_updated_focus": "Determine the specific type of oil used in T-014",
+      "retries_used": 0
+    },
+    {
+      "step": 7,
+      "task": "Determine the specific type of oil used in T-014",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sample_date": "2024-01-30T00:00:00",
+        "dissolved_h2_ppm": 16.17,
+        "dissolved_ch4_ppm": 33.46,
+        "dissolved_c2h2_ppm": 2.34,
+        "dissolved_c2h4_ppm": 13.51,
+        "dissolved_c2h6_ppm": 16.8,
+        "dissolved_co_ppm": 330.08,
+        "dissolved_co2_ppm": 2180.87,
+        "fault_label": "Low-temperature overheating",
+        "source_dataset": "synthetic",
+        "iec_code": "T1",
+        "diagnosis": "Thermal fault, t < 300 \u00b0C",
+        "r1_ch4_h2": 2.0693,
+        "r2_c2h2_c2h4": 0.1732,
+        "r3_c2h4_c2h6": 0.8042,
+        "input_gases": {
+          "h2_ppm": 16.17,
+          "ch4_ppm": 33.46,
+          "c2h2_ppm": 2.34,
+          "c2h4_ppm": 13.51,
+          "c2h6_ppm": 16.8
+        },
+        "name": "Power Transformer T-014",
+        "manufacturer": "Eaton",
+        "location": "Distribution Center 2",
+        "voltage_class": "11kV/0.4kV",
+        "rating_kva": 2000,
+        "install_date": "2019-11-11",
+        "age_years": 5,
+        "health_status": 1,
+        "fdd_category": 2,
+        "rul_days": 767,
+        "in_service": true,
+        "sensor_id": "winding_temp_top_c",
+        "unit": "\u00b0C",
+        "num_readings": 720
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"name\": \"Power Transformer T-014\",\n  \"manufacturer\": \"Eaton\",\n  \"location\": \"Distribution Center 2\",\n  \"voltage_class\": \"11kV/0.4kV\",\n  \"rating_kva\": 2000,\n  \"install_date\": \"2019-11-11\",\n  \"age_years\": 5,\n  \"health_status\": 1,\n  \"fdd_category\": 2,\n  \"rul_days\": 767,\n  \"in_service\": true\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current result does not suggest a change in the remaining plan.",
+      "verifier_updated_focus": "List recent maintenance or repair activities related to T-014",
+      "retries_used": 0
+    },
+    {
+      "step": 8,
+      "task": "List recent maintenance or repair activities related to T-014",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "fault_type": null,
+        "maintenance_status": null,
+        "limit": 1
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"fault_id\": \"F017\",\n  \"fault_type\": \"Transformer Failure\",\n  \"location\": \"Substation Alpha\",\n  \"voltage_v\": 132000,\n  \"current_a\": 229,\n  \"power_load_mw\": 43.89,\n  \"temperature_c\": 29.5,\n  \"wind_speed_kmh\": 22.4,\n  \"weather_condition\": \"Windy\",\n  \"maintenance_status\": \"Completed\",\n  \"component_health\": \"Warning\",\n  \"duration_hrs\": 6.3,\n  \"downtime_hrs\": 12\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining plan should change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  },
+  "mitigation_guard": {
+    "name": "missing_evidence_final_answer_guard",
+    "enabled": true,
+    "triggered": true,
+    "blocked_final_answer": true,
+    "blocked_work_order": false,
+    "evidence_limited_answer": false,
+    "hits": [
+      {
+        "source": "history[3]",
+        "step": 4,
+        "tool": "get_sensor_correlation",
+        "reason": "tool step was marked unsuccessful",
+        "target": {
+          "failure_mode_id": "Low-temperature overheating"
+        },
+        "excerpt": "{   \"error\": \"Failure mode 'Low-temperature overheating' not found.\" }"
+      }
+    ],
+    "reason": "missing_evidence_final_answer_guard saw missing or untrusted evidence at history[3] (get_sensor_correlation): tool step was marked unsuccessful."
+  }
+}

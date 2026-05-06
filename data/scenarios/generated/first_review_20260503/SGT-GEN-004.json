@@ -1,0 +1,52 @@
+{
+  "id": "SGT-GEN-004",
+  "type": "IoT",
+  "text": "Transformer T-005 is operating near peak load. Check the winding temperature and determine if it's within safe limits.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "A comparison of the current sensor reading to a threshold value.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.get_sensor_readings"
+  ],
+  "domain_tags": [
+    "IoT"
+  ],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.get_sensor_readings"
+    ],
+    "decisive_intermediate_values": {
+      "winding_temp_top_c": "80"
+    },
+    "final_value": {
+      "status_summary": "within safe limits"
+    },
+    "acceptance_criteria": [
+      "agent retrieves the current winding temperature",
+      "agent compares the temperature to a safe threshold"
+    ],
+    "must_include": [
+      "sensor_value_with_unit",
+      "threshold_comparison",
+      "status_summary"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:47.760089+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false
+  },
+  "family": "IOT_SENSOR_ANALYSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-001",
+    "scenario_file": "data/scenarios/iot_01_list_transformer_sensors.json",
+    "similarity_basis": "shares type='IoT' and 1 expected_tools entry",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

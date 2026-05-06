@@ -1,0 +1,76 @@
+{
+  "question": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+  "answer": "The anomaly detection failed because there are no readings for the specified transformer and sensor.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 1,
+  "usage": {
+    "input_tokens": 12016,
+    "output_tokens": 67,
+    "total_tokens": 12083,
+    "requests": 2
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "z_threshold": "3.0",
+            "transformer_id": "T-019",
+            "window_size": "7",
+            "sensor_id": "winding_temp_c"
+          },
+          "call_id": "chatcmpl-tool-ab37cc07e091fc7d",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings for transformer='T-019' sensor='winding_temp_c'.\"\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The anomaly detection failed because there are no readings for the specified transformer and sensor.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.210068941116333,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-006",
+    "type": "TSFM",
+    "text": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+    "category": "Anomaly Detection",
+    "characteristic_form": "The answer should identify abnormal intervals (if any), quantify severity or count of anomalies, and provide a concise interpretation of persistence.",
+    "asset_id": "T-019",
+    "expected_tools": [
+      "tsfm.detect_anomalies"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "anomaly window(s)",
+        "severity or count",
+        "summary interpretation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

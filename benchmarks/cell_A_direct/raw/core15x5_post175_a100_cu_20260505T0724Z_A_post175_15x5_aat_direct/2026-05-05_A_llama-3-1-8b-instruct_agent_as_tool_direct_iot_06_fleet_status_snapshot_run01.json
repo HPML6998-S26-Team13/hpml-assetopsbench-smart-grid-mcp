@@ -1,0 +1,237 @@
+{
+  "question": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+  "answer": "{\"name\": \"list_sensors\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-005\"}}}; {\"name\": \"get_sensor_readings\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-005\", \"sensor_id\": \"dga_h2_ppm\", \"start_time\": \"2022-01-01T00:00:00Z\", \"end_time\": \"2022-01-01T23:59:59Z\"}}; {\"name\": \"list_sensors\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-013\"}}}; {\"name\": \"get_sensor_readings\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-013\", \"sensor_id\": \"dga_h2_ppm\", \"start_time\": \"2022-01-01T00:00:00Z\", \"end_time\": \"2022-01-01T23:59:59Z\"}}",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 1,
+  "usage": {
+    "input_tokens": 10425,
+    "output_tokens": 417,
+    "total_tokens": 10842,
+    "requests": 2
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "list_assets",
+          "arguments": {
+            "properties": {
+              "health_status": "0"
+            }
+          },
+          "call_id": "chatcmpl-tool-93e391b7734111ca",
+          "output": [
+            {
+              "transformer_id": "T-001",
+              "name": "Power Transformer T-001",
+              "location": "Substation Alpha",
+              "health_status": 0,
+              "rul_days": 2526,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-002",
+              "name": "Power Transformer T-002",
+              "location": "Substation Beta",
+              "health_status": 0,
+              "rul_days": 3317,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-003",
+              "name": "Power Transformer T-003",
+              "location": "Industrial Park A",
+              "health_status": 0,
+              "rul_days": 3783,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-004",
+              "name": "Power Transformer T-004",
+              "location": "Distribution Center 2",
+              "health_status": 0,
+              "rul_days": 4316,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-005",
+              "name": "Power Transformer T-005",
+              "location": "Substation Alpha",
+              "health_status": 0,
+              "rul_days": 3364,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-006",
+              "name": "Power Transformer T-006",
+              "location": "Distribution Center 2",
+              "health_status": 0,
+              "rul_days": 3608,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-007",
+              "name": "Power Transformer T-007",
+              "location": "Industrial Park A",
+              "health_status": 0,
+              "rul_days": 3860,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-008",
+              "name": "Power Transformer T-008",
+              "location": "Distribution Center 1",
+              "health_status": 0,
+              "rul_days": 3210,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-009",
+              "name": "Power Transformer T-009",
+              "location": "Substation Gamma",
+              "health_status": 0,
+              "rul_days": 3039,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-010",
+              "name": "Power Transformer T-010",
+              "location": "Substation Gamma",
+              "health_status": 0,
+              "rul_days": 3625,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-011",
+              "name": "Power Transformer T-011",
+              "location": "Industrial Park B",
+              "health_status": 1,
+              "rul_days": 1100,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-012",
+              "name": "Power Transformer T-012",
+              "location": "Distribution Center 1",
+              "health_status": 1,
+              "rul_days": 918,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-013",
+              "name": "Power Transformer T-013",
+              "location": "Distribution Center 2",
+              "health_status": 1,
+              "rul_days": 922,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-014",
+              "name": "Power Transformer T-014",
+              "location": "Distribution Center 2",
+              "health_status": 1,
+              "rul_days": 767,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-015",
+              "name": "Power Transformer T-015",
+              "location": "Distribution Center 2",
+              "health_status": 1,
+              "rul_days": 547,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-016",
+              "name": "Power Transformer T-016",
+              "location": "Industrial Park B",
+              "health_status": 2,
+              "rul_days": 57,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-017",
+              "name": "Power Transformer T-017",
+              "location": "Industrial Park A",
+              "health_status": 2,
+              "rul_days": 72,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-018",
+              "name": "Power Transformer T-018",
+              "location": "Industrial Park B",
+              "health_status": 2,
+              "rul_days": 53,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-019",
+              "name": "Power Transformer T-019",
+              "location": "Industrial Park B",
+              "health_status": 2,
+              "rul_days": 8,
+              "in_service": true
+            },
+            {
+              "transformer_id": "T-020",
+              "name": "Power Transformer T-020",
+              "location": "Distribution Center 1",
+              "health_status": 2,
+              "rul_days": 26,
+              "in_service": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "{\"name\": \"list_sensors\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-005\"}}}; {\"name\": \"get_sensor_readings\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-005\", \"sensor_id\": \"dga_h2_ppm\", \"start_time\": \"2022-01-01T00:00:00Z\", \"end_time\": \"2022-01-01T23:59:59Z\"}}; {\"name\": \"list_sensors\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-013\"}}}; {\"name\": \"get_sensor_readings\", \"parameters\": {\"properties\": {\"transformer_id\": \"T-013\", \"sensor_id\": \"dga_h2_ppm\", \"start_time\": \"2022-01-01T00:00:00Z\", \"end_time\": \"2022-01-01T23:59:59Z\"}}",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 7.782325983047485,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-022",
+    "type": "IoT",
+    "text": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+    "category": "Fleet Status Snapshot",
+    "characteristic_form": "The answer should list the in-service transformer IDs, then for each of T-005 and T-013 surface the available sensor channels and a recent telemetry sample for each channel, and call out any qualitative difference between the two units.",
+    "expected_tools": [
+      "iot.list_assets",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "in-service transformer list",
+        "T-005 sensor channels",
+        "T-005 sample readings",
+        "T-013 sensor channels",
+        "T-013 sample readings",
+        "comparative observation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

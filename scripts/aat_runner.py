@@ -33,9 +33,11 @@ from __future__ import annotations
 import argparse
 import asyncio
 import datetime as _dt
+import glob
 import json
 import logging
 import os
+import shlex
 import sys
 import time
 from dataclasses import dataclass, field
@@ -108,6 +110,37 @@ def _json_default(obj: Any) -> Any:
 
 # Importable without the SDK installed, so unit tests can patch before import.
 # Real imports happen lazily inside _main().
+
+
+def _expand_scenario_glob(scenario_glob: str, repo_root: Path) -> list[Path]:
+    """Expand one glob pattern or a shell-style list of scenario paths.
+
+    `run_experiment.sh` has long accepted `SCENARIOS_GLOB` values containing
+    either one glob or a whitespace-separated list of explicit paths. Cell C
+    passes that value through to this batch runner, so mirror the shell-level
+    behavior here instead of treating the whole string as one literal glob.
+    """
+    if not scenario_glob.strip():
+        return []
+
+    tokens = shlex.split(scenario_glob)
+    if not tokens:
+        return []
+
+    paths: list[Path] = []
+    seen: set[Path] = set()
+    for token in tokens:
+        pattern = Path(token)
+        if not pattern.is_absolute():
+            pattern = repo_root / pattern
+        for raw_match in sorted(glob.glob(str(pattern))):
+            match = Path(raw_match)
+            key = match.resolve()
+            if key in seen:
+                continue
+            paths.append(match)
+            seen.add(key)
+    return paths
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -223,6 +256,14 @@ def _configure_litellm_provider_compat(model_id: str) -> None:
     """Apply provider-specific LiteLLM compatibility knobs."""
     if not _is_watsonx_model(model_id):
         return
+    # Bridge documented WATSONX_* env vars to the WX_* names litellm's newer
+    # WatsonX provider expects (litellm 1.81.x rejects with
+    # "Watsonx project_id and space_id not set" otherwise). Shared helper
+    # at scripts/watsonx_env.py covers every Python call site that drives
+    # a watsonx/* model. (#177)
+    from scripts.watsonx_env import propagate_watsonx_env
+
+    propagate_watsonx_env()
     try:
         import litellm  # type: ignore
     except ImportError:
@@ -488,7 +529,7 @@ async def _main_multi(args: argparse.Namespace, repo_root: Path) -> int:
         output_dir = repo_root / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    scenario_files = sorted(repo_root.glob(args.scenarios_glob))
+    scenario_files = _expand_scenario_glob(args.scenarios_glob, repo_root)
     if not scenario_files:
         _LOG.error("no scenario files matched --scenarios-glob %r", args.scenarios_glob)
         return 2

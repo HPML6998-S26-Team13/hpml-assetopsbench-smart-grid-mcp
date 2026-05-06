@@ -1,0 +1,323 @@
+{
+  "question": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+  "effective_question": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "The winding temperature sensor (winding_temp_top_c) readings for T-002 over the past month are stable, with a rate of change of -0.038495\u00b0C per day. The trend fits the data poorly, with an R-squared value of 0.0011.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 2,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 3,
+      "task": "Filter the list of sensor IDs to find the winding temperature sensor (winding_temp_top_c).",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "List of dicts, each with keys: transformer_id, name, location, health_status, rul_days, in_service."
+    },
+    {
+      "step": 4,
+      "task": "Get the most recent remaining useful life (RUL) estimate for T-002.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Dict with keys: transformer_id, as_of_date, rul_days, health_index, fdd_category, interpretation."
+    },
+    {
+      "step": 5,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for T-002.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Dict with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 6,
+      "task": "Compute the trend (slope) of the winding temperature sensor's readings over the past month.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    },
+    {
+      "step": 7,
+      "task": "Determine the rate of change and how well the trend fits the data.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    },
+    {
+      "step": 8,
+      "task": "Report whether readings are increasing, decreasing, or stable.",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        7
+      ],
+      "expected_output": "Natural-language answer."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 2,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of dicts with keys: sensor_id, unit, num_readings."
+    },
+    {
+      "step": 3,
+      "task": "Filter the list of sensor IDs to find the winding temperature sensor (winding_temp_top_c).",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "List of dicts, each with keys: transformer_id, name, location, health_status, rul_days, in_service."
+    },
+    {
+      "step": 4,
+      "task": "Get the most recent remaining useful life (RUL) estimate for T-002.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Dict with keys: transformer_id, as_of_date, rul_days, health_index, fdd_category, interpretation."
+    },
+    {
+      "step": 5,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for T-002.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Dict with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 6,
+      "task": "Compute the trend (slope) of the winding temperature sensor's readings over the past month.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    },
+    {
+      "step": 7,
+      "task": "Determine the rate of change and how well the trend fits the data.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 8; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "task": "List all sensor IDs available for T-002"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "List all sensor IDs available for T-002.",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "sensor_id": "winding_temp_top_c"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "Filter the list of sensor IDs to find the winding temperature sensor (winding_temp_top_c).",
+      "server": "iot",
+      "tool": "list_assets",
+      "tool_args": {
+        "health_status": "any",
+        "list_assets": {
+          "filter": {
+            "sensor_id": "winding_temp_top_c"
+          }
+        }
+      },
+      "response": "Error executing tool list_assets: 1 validation error for list_assetsArguments\nhealth_status\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='any', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_parsing",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 4,
+      "task": "Get the most recent remaining useful life (RUL) estimate for T-002.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "sensor_id": "winding_temp_top_c",
+        "num_readings": 720,
+        "unit": "\u00b0C",
+        "health_status": "any"
+      },
+      "response": "{\n  \"transformer_id\": \"T-002\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 3317,\n  \"health_index\": 1.0,\n  \"fdd_category\": 1,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Healthy \\u2014 no immediate action required.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 5,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for T-002.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "as_of_date": "2024-01-31",
+        "rul_days": 3317,
+        "health_index": 1.0,
+        "fdd_category": 1,
+        "confidence": 0.808,
+        "interpretation": "Healthy \u2014 no immediate action required.",
+        "get_dga_recordArguments": {
+          "transformer_id": "T-002",
+          "as_of_date": "2024-01-31",
+          "rul_days": 3317,
+          "health_index": 1.0,
+          "fdd_category": 1,
+          "confidence": 0.808,
+          "interpretation": "Healthy \u2014 no immediate action required.",
+          "sensor_id": "winding_temp_top_c",
+          "unit": "\u00b0C",
+          "num_readings": 720
+        }
+      },
+      "response": "{\n  \"transformer_id\": \"T-002\",\n  \"sample_date\": \"2024-01-09T00:00:00\",\n  \"dissolved_h2_ppm\": 5.49,\n  \"dissolved_ch4_ppm\": 6.53,\n  \"dissolved_c2h2_ppm\": 0.04,\n  \"dissolved_c2h4_ppm\": 2.0,\n  \"dissolved_c2h6_ppm\": 3.2,\n  \"dissolved_co_ppm\": 102.52,\n  \"dissolved_co2_ppm\": 1442.47,\n  \"fault_label\": \"Normal\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 6,
+      "task": "Compute the trend (slope) of the winding temperature sensor's readings over the past month.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "sensor_id": "winding_temp_top_c",
+        "start_time": "2024-01-01",
+        "end_time": "2024-01-31"
+      },
+      "response": "{\n  \"transformer_id\": \"T-002\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 720,\n  \"start_time\": \"2024-01-01 00:00:00\",\n  \"end_time\": \"2024-01-30 23:00:00\",\n  \"mean_value\": 49.3268,\n  \"min_value\": 18.563,\n  \"max_value\": 78.575,\n  \"slope_per_day\": -0.038495,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0011\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 7,
+      "task": "Determine the rate of change and how well the trend fits the data.",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-002",
+        "sensor_id": "winding_temp_top_c",
+        "start_time": "2024-01-01 00:00:00",
+        "end_time": "2024-01-30 23:00:00"
+      },
+      "response": "{\n  \"transformer_id\": \"T-002\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 720,\n  \"start_time\": \"2024-01-01 00:00:00\",\n  \"end_time\": \"2024-01-30 23:00:00\",\n  \"mean_value\": 49.3268,\n  \"min_value\": 18.563,\n  \"max_value\": 78.575,\n  \"slope_per_day\": -0.038495,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0011\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-015",
+    "type": "TSFM",
+    "text": "T-002's winding temperature sensor (winding_temp_top_c) has shown irregular readings over the past month. Analyze the recent trend and report whether readings are increasing, decreasing, or stable, along with the rate of change and how well the trend fits the data.",
+    "category": "Sensor Trend Analysis",
+    "characteristic_form": "The answer should report the trend direction (increasing, decreasing, or stable), the slope rate per day, and the R-squared fit quality for T-002's winding_temp_top_c sensor.",
+    "asset_id": "T-002",
+    "expected_tools": [
+      "tsfm.trend_analysis"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "trend direction",
+        "slope rate",
+        "R-squared or fit quality"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

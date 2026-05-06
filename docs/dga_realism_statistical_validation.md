@@ -7,7 +7,7 @@
 This note is the working specification for **statistical-fidelity** validation
 of the synthetic transformer DGA data that backs Problem-Statement B (PS B)
 scenarios. It complements, but does not replace, the existing
-narrative-realism rubric in `docs/scenario_realism_validation.md` and the
+narrative-realism rubric in `docs/archive/scenario_realism_validation.md` and the
 schema validator in `data/scenarios/validate_scenarios.py`.
 
 It captures everything we know as of 2026-04-28: the IEC 60599 (publication
@@ -26,7 +26,7 @@ artifacts already validate scenarios at increasing depth:
 | Layer | What it checks | Owner / Artifact |
 |-------|----------------|------------------|
 | **L1** Schema / structural | required fields, canonical tool names, asset-id integrity | `data/scenarios/validate_scenarios.py` |
-| **L2** Narrative realism | "would a transformer engineer recognize this as plausible work?" | `docs/scenario_realism_validation.md`, `docs/ps_b_evaluation_methodology.md`, mentor review (Dhaval), Akshat in `#53` |
+| **L2** Narrative realism | "would a transformer engineer recognize this as plausible work?" | `docs/archive/scenario_realism_validation.md`, `docs/ps_b_evaluation_methodology.md`, mentor review (Dhaval), Akshat in `#53` |
 | **L3** Statistical fidelity | do the gas-concentration distributions and fault-class proportions in our synthetic dataset resemble published real-world DGA data? | **this doc + `data/scenarios/validate_realism_statistical.py`** |
 
 L3 was previously implicit. The Apr 28 review of
@@ -49,7 +49,7 @@ real-world scenarios?*
 **Reference docs:**
 - `docs/ps_b_evaluation_methodology.md` (6-criteria rubric; L3 plugs into the
   "Realism" criterion as a quantitative substrate)
-- `docs/scenario_realism_validation.md` (Apr 10/11 narrative-realism note)
+- `docs/archive/scenario_realism_validation.md` (Apr 10/11 narrative-realism note)
 - `data/knowledge/transformer_standards.json` (encoded standards facts)
 - `mcp_servers/fmsr_server/server.py` (Rogers Ratio classifier)
 
@@ -85,7 +85,7 @@ real-world scenarios?*
 | Per-scenario-type generation hints | same JSON § `scenario_generator_hints` | LLM prompt support |
 | Rogers Ratio classifier impl | `mcp_servers/fmsr_server/server.py:53-296` (`_rogers_ratio()` + `analyze_dga`) | FMSR MCP tool, agent-callable |
 | Test coverage | `tests/test_fmsr_server.py` | confirms IEC code "N" / "Normal / Inconclusive" is a valid output |
-| Doc references | `README.md`, `CHANGELOG.md`, `docs/scenario_realism_validation.md`, `docs/project_synopsis.md`, `planning/archive/task_tracker.md`, `planning/archive/task_specs.md`, `planning/archive/mid_report_slides.md`, `planning/archive/2026-04-07_call_agenda.md` | establishes that PS B is grounded in IEC 60599 + IEEE C57.104, not arbitrary heuristics |
+| Doc references | `README.md`, `CHANGELOG.md`, `docs/archive/scenario_realism_validation.md`, `docs/project_synopsis.md`, `planning/archive/task_tracker.md`, `planning/archive/task_specs.md`, `planning/archive/mid_report_slides.md`, `planning/archive/2026-04-07_call_agenda.md` | establishes that PS B is grounded in IEC 60599 + IEEE C57.104, not arbitrary heuristics |
 
 ### 2.3 What we do NOT have
 
@@ -306,7 +306,7 @@ in CI / pre-promotion. The L3 report card belongs in
 
 ### 3.4 Realism review surfaces
 
-- `docs/scenario_realism_validation.md` — narrative-realism note, owner Alex,
+- `docs/archive/scenario_realism_validation.md` — narrative-realism note, owner Alex,
   Apr 10/11. Pre-Dhaval review.
 - `docs/ps_b_evaluation_methodology.md` — 6-criteria rubric (schema, no-hint,
   novelty, **realism**, tool-path, usefulness) + 5-disposition decision
@@ -578,7 +578,7 @@ Questions to follow up on, ordered by leverage:
 - IBM AssetOpsBench upstream: [github.com/IBM/AssetOpsBench](https://github.com/IBM/AssetOpsBench).
 - Apr 28 mentor pre-call Q&A pass — § "Knowledge artifacts" and § "What is realism" capture how the L3 vs L2 split was reached. Owner Alex; ask if you need it.
 - Team-repo PS B methodology: `docs/ps_b_evaluation_methodology.md` (Issue `#51`).
-- Team-repo narrative realism: `docs/scenario_realism_validation.md`.
+- Team-repo narrative realism: `docs/archive/scenario_realism_validation.md`.
 - PR #147: [PS B scenario generator scaffold (#2 prototype)](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/pull/147), branch `aaron/issue2-scenario-generator`, author afan2g, opened 2026-04-28.
 
 ---

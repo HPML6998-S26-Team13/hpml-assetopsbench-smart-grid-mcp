@@ -28,6 +28,21 @@ def test_per_trial_aat_exports_mcp_server_environment() -> None:
     assert body.index(export_line) < body.index(invocation)
 
 
+def test_aat_batch_infrastructure_failures_are_not_masked() -> None:
+    script = Path("scripts/run_experiment.sh").read_text(encoding="utf-8")
+    body = _function_body(
+        script,
+        'if [ "$ORCHESTRATION" = "agent_as_tool" ]',
+        "else\n\nfor SCENARIO_FILE",
+    )
+
+    assert 'run_agent_as_tool_batch "$RUN_DIR" || true' not in body
+    assert "BATCH_RC=0" in body
+    assert "BATCH_RC=$?" in body
+    assert "INFRA_FAIL=1" in body
+    assert "Infrastructure failure detected; exiting nonzero." in script
+
+
 def test_gcp_batch_driver_hard_fails_incomplete_artifacts() -> None:
     script = Path("scripts/run_gcp_context_batch.sh").read_text(encoding="utf-8")
 

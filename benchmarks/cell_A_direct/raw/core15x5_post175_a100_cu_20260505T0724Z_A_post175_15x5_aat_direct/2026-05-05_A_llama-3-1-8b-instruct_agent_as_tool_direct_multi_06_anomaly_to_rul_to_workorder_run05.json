@@ -1,0 +1,172 @@
+{
+  "question": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+  "answer": "The functions used were:\n\n1. forecast_rul\n2. create_work_order\n3. forecast_rul\n4. forecast_rul\n5. update_work_order\n\nThe key numbers were:\n\n1. 90 (horizon_days)\n2. 26 (current_rul_days)\n3. 0 (projected_rul_days)\n4. 'T-020' (transformer_id)\n5. 'WO-CF2BB489' (work_order_id)\n6. 'TEC-00' (assigned_technician)",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 5,
+  "usage": {
+    "input_tokens": 30331,
+    "output_tokens": 469,
+    "total_tokens": 30800,
+    "requests": 6
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "horizon_days": 90,
+            "transformer_id": "T-020"
+          },
+          "call_id": "chatcmpl-tool-83c0a746cc494451",
+          "output": {
+            "transformer_id": "T-020",
+            "current_rul_days": 26,
+            "forecast_date": "2024-04-30",
+            "projected_rul_days": 0,
+            "projected_health_index": 0.0,
+            "confidence": 0.708,
+            "method": "linear_degradation_baseline"
+          }
+        },
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "fault_type": "Accelerated Maintenance",
+            "transformer_id": "T-020",
+            "issue_description": "Candidate for accelerated maintenance based on current RUL and projected RUL at end of horizon.",
+            "priority": "critical",
+            "estimated_downtime_hours": 0
+          },
+          "call_id": "chatcmpl-tool-bc8a7bc5166523b3",
+          "output": {
+            "work_order_id": "WO-CF2BB489",
+            "transformer_id": "T-020",
+            "issue_description": "Candidate for accelerated maintenance based on current RUL and projected RUL at end of horizon.",
+            "priority": "critical",
+            "fault_type": "Accelerated Maintenance",
+            "status": "open",
+            "estimated_downtime_hours": 0.0,
+            "created_at": "2026-05-05T07:33:33.433859Z",
+            "assigned_technician": "TEC-00",
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:33:35.606233Z",
+                "text": "As of creation, projected RUL by end of maintenance horizon is 0 days."
+              }
+            ]
+          }
+        },
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "horizon_days": 90,
+            "transformer_id": "T-020"
+          },
+          "call_id": "chatcmpl-tool-b355e33fc6ecf9fc",
+          "output": {
+            "transformer_id": "T-020",
+            "current_rul_days": 26,
+            "forecast_date": "2024-04-30",
+            "projected_rul_days": 0,
+            "projected_health_index": 0.0,
+            "confidence": 0.708,
+            "method": "linear_degradation_baseline"
+          }
+        },
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "horizon_days": 90,
+            "transformer_id": "T-020"
+          },
+          "call_id": "chatcmpl-tool-8eeec6a3306d6d5e",
+          "output": {
+            "transformer_id": "T-020",
+            "current_rul_days": 26,
+            "forecast_date": "2024-04-30",
+            "projected_rul_days": 0,
+            "projected_health_index": 0.0,
+            "confidence": 0.708,
+            "method": "linear_degradation_baseline"
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "assigned_technician": "TEC-00",
+            "note": "As of creation, projected RUL by end of maintenance horizon is 0 days.",
+            "status": "open",
+            "priority": "critical",
+            "work_order_id": "WO-CF2BB489"
+          },
+          "call_id": "chatcmpl-tool-9e27bb83e866a95b",
+          "output": {
+            "work_order_id": "WO-CF2BB489",
+            "transformer_id": "T-020",
+            "issue_description": "Candidate for accelerated maintenance based on current RUL and projected RUL at end of horizon.",
+            "priority": "critical",
+            "fault_type": "Accelerated Maintenance",
+            "status": "open",
+            "estimated_downtime_hours": 0.0,
+            "created_at": "2026-05-05T07:33:33.433859Z",
+            "assigned_technician": "TEC-00",
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:33:35.606233Z",
+                "text": "As of creation, projected RUL by end of maintenance horizon is 0 days."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The functions used were:\n\n1. forecast_rul\n2. create_work_order\n3. forecast_rul\n4. forecast_rul\n5. update_work_order\n\nThe key numbers were:\n\n1. 90 (horizon_days)\n2. 26 (current_rul_days)\n3. 0 (projected_rul_days)\n4. 'T-020' (transformer_id)\n5. 'WO-CF2BB489' (work_order_id)\n6. 'TEC-00' (assigned_technician)",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 8.625978946685791,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-030",
+    "type": "Multi",
+    "text": "End-of-quarter fleet review has identified T-020 (critical-tier) as a candidate for accelerated maintenance. Pull the RUL forecast over a 90-day horizon, then create a work order whose scope and priority are explicitly justified by both the current RUL and the projected RUL at the end of that horizon.",
+    "category": "RUL Forecast-Driven Work Order",
+    "characteristic_form": "The answer should report the RUL forecast for T-020 \u2014 including the current RUL and the projected RUL at the 90-day horizon \u2014 and create a work order whose priority and scope are explicitly justified by the magnitude of that change (e.g. emergency vs short-term corrective).",
+    "asset_id": "T-020",
+    "expected_tools": [
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "projected RUL at 90-day horizon",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM",
+      "WO"
+    ]
+  }
+}

@@ -80,7 +80,10 @@ Minimum report-ready set:
 
 Optional if evidence lands in time:
 
-- Mitigation before/after figure from `mitigation_before_after.csv`.
+- Mitigation before/after figure from
+  `results/metrics/gcp_post175_mitigation_4tier_summary.csv`; the older
+  `results/metrics/mitigation_before_after.csv` table is superseded diagnostic
+  provenance.
 - PE-family optimized-serving ablation table.
 - Scenario-realism / generated-scenario validation figure.
 

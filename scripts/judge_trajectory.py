@@ -61,6 +61,13 @@ _REPO_ROOT = Path(
     os.environ.get("REPO_ROOT", Path(__file__).resolve().parent.parent)
 ).resolve()
 
+# Ensure repo root is on sys.path so `from scripts.X import Y` resolves when
+# this file is invoked as `python scripts/judge_trajectory.py` (which puts
+# scripts/, not the repo root, on sys.path by default). Mirrors the same
+# guard in scripts/aat_runner.py.
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
 
 def _rel(p: Path) -> str:
     """Return a repo-root-relative POSIX path, falling back to absolute."""
@@ -170,6 +177,15 @@ def _call_judge(
             "litellm is required. Run from the AssetOpsBench venv: "
             "source AssetOpsBench/.venv/bin/activate"
         )
+
+    # Bridge documented WATSONX_* env vars to the WX_* names litellm's
+    # newer WatsonX provider expects. The default judge model (and most
+    # team judge configurations) is a watsonx/* model. Shared helper
+    # covers the same case in the generator + AaT runner. (#177)
+    if judge_model.strip().lower().startswith("watsonx/"):
+        from scripts.watsonx_env import propagate_watsonx_env
+
+        propagate_watsonx_env()
 
     messages = [
         {"role": "system", "content": _SYSTEM_PROMPT},

@@ -26,10 +26,10 @@
 (EngineCore pid=504651)
 (EngineCore pid=504651) INFO 04-30 00:31:13 [default_loader.py:384] Loading weights took 69.37 seconds
 (EngineCore pid=504651) INFO 04-30 00:31:14 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 90.684654 seconds
-(EngineCore pid=504651) INFO 04-30 00:32:52 [backends.py:1051] Using cache directory: /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/1f7508b07d/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=504651) INFO 04-30 00:32:52 [backends.py:1051] Using cache directory: <insomnia-cache>/vllm/torch_compile_cache/1f7508b07d/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=504651) INFO 04-30 00:32:52 [backends.py:1111] Dynamo bytecode transform time: 97.11 s
 (EngineCore pid=504651) INFO 04-30 00:32:56 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 4.227 s
-(EngineCore pid=504651) INFO 04-30 00:32:56 [decorators.py:303] Directly load AOT compilation from path /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/torch_aot_compile/7180eb22b60d660f2729ad4f19646bbe23d5d65ab834988caed4860469cb1ee5/rank_0_0/model
+(EngineCore pid=504651) INFO 04-30 00:32:56 [decorators.py:303] Directly load AOT compilation from path <insomnia-cache>/vllm/torch_compile_cache/torch_aot_compile/7180eb22b60d660f2729ad4f19646bbe23d5d65ab834988caed4860469cb1ee5/rank_0_0/model
 (EngineCore pid=504651) INFO 04-30 00:32:56 [monitor.py:48] torch.compile took 101.63 s in total
 (EngineCore pid=504651) INFO 04-30 00:33:02 [monitor.py:76] Initial profiling/warmup run took 5.68 s
 (EngineCore pid=504651) INFO 04-30 00:33:09 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512

@@ -1,0 +1,195 @@
+{
+  "question": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+  "effective_question": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "Based on the results, there are no critical issues that require priority escalation before the maintenance window begins for T-009. The recent DGA record indicates normal dissolved gas concentrations, and the IEC 60599 Rogers Ratio method confirms a normal/inconclusive diagnosis. Additionally, the historical fault record for F007 indicates that the issue was resolved and maintenance was completed. There are also no open work orders listed for T-009.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for T-009.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify the dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "List all historical fault records for T-009.",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dictionaries."
+    },
+    {
+      "step": 4,
+      "task": "List all open work orders for T-009.",
+      "server": "wo",
+      "tool": "list_work_orders",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of work order dictionaries."
+    },
+    {
+      "step": 5,
+      "task": "Determine whether anything requires priority escalation based on the recent fault history and open work orders.",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        3,
+        4
+      ],
+      "expected_output": "A natural-language answer."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for T-009.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify the dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "List all historical fault records for T-009.",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dictionaries."
+    },
+    {
+      "step": 4,
+      "task": "List all open work orders for T-009.",
+      "server": "wo",
+      "tool": "list_work_orders",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of work order dictionaries."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 5; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the most recent DGA record for T-009.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-009"
+      },
+      "response": "{\n  \"transformer_id\": \"T-009\",\n  \"sample_date\": \"2024-01-15T00:00:00\",\n  \"dissolved_h2_ppm\": 12.49,\n  \"dissolved_ch4_ppm\": 7.31,\n  \"dissolved_c2h2_ppm\": 0.09,\n  \"dissolved_c2h4_ppm\": 1.76,\n  \"dissolved_c2h6_ppm\": 2.5,\n  \"dissolved_co_ppm\": 251.77,\n  \"dissolved_co2_ppm\": 1495.11,\n  \"fault_label\": \"Normal\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Classify the dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 12.49,
+        "ch4": 7.31,
+        "c2h2": 0.09,
+        "c2h4": 1.76,
+        "c2h6": 2.5,
+        "transformer_id": "T-009"
+      },
+      "response": "{\n  \"iec_code\": \"N\",\n  \"diagnosis\": \"Normal / Inconclusive\",\n  \"r1_ch4_h2\": 0.5853,\n  \"r2_c2h2_c2h4\": 0.0511,\n  \"r3_c2h4_c2h6\": 0.704,\n  \"input_gases\": {\n    \"h2_ppm\": 12.49,\n    \"ch4_ppm\": 7.31,\n    \"c2h2_ppm\": 0.09,\n    \"c2h4_ppm\": 1.76,\n    \"c2h6_ppm\": 2.5\n  },\n  \"transformer_id\": \"T-009\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "List all historical fault records for T-009.",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {
+        "transformer_id": "T-009",
+        "fault_type": null,
+        "maintenance_status": null,
+        "limit": 1000
+      },
+      "response": "{\n  \"transformer_id\": \"T-009\",\n  \"fault_id\": \"F007\",\n  \"fault_type\": \"Overload Trip\",\n  \"location\": \"Substation Alpha\",\n  \"voltage_v\": 11000,\n  \"current_a\": 184,\n  \"power_load_mw\": 34.24,\n  \"temperature_c\": 29.0,\n  \"wind_speed_kmh\": 10.8,\n  \"weather_condition\": \"Rainy\",\n  \"maintenance_status\": \"Completed\",\n  \"component_health\": \"Normal\",\n  \"duration_hrs\": 0.8,\n  \"downtime_hrs\": 5\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 4,
+      "task": "List all open work orders for T-009.",
+      "server": "wo",
+      "tool": "list_work_orders",
+      "tool_args": {
+        "transformer_id": "T-009",
+        "status": "open",
+        "priority": "any"
+      },
+      "response": "",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-017",
+    "type": "WO",
+    "text": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+    "category": "Pre-Maintenance Review",
+    "characteristic_form": "The answer should list recent fault records for T-009, summarize open work orders, and state whether any item requires escalation with a brief justification.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.list_work_orders"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record summary",
+        "open work order summary",
+        "escalation decision with justification"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

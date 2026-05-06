@@ -1,0 +1,321 @@
+=== SmartGridBench Experiment ===
+Run ID:        context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192
+Config:        configs/context_ablation/pe_m_8192.env
+Cell:          Y8
+Experiment:    exp2_cell_Y_pe_mcp_baseline_8192
+Family:        context_window_ablation
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     4 file(s)
+Node:          smartgrid-a100-ixqt-uswest3-20260503-2116
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Y8
+Run dir:       benchmarks/cell_Y8/raw/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1200s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+Torch profiler enabled: --profiler-config torch torch_profiler_dir=<runner-home>/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192_torch
+
+=== Torch profiler replay pass — SKIPPED ===
+Skipping replay for ORCHESTRATION=plan_execute (replay only fires for agent_as_tool).
+Main-loop profiling covered the cell's actual workload; see docs/replay_phase_analysis.md.
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
+    get_sentry().reraise(e)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+    raise exc.with_traceback(tb)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
+    wi.maybe_login(init_settings)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
+    wandb_login._login(
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+    auth = _find_or_prompt_for_key(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+    auth = wbauth.authenticate_session(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+    raise UsageError(
+wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
+Artifact validation for context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192: 12/12 complete, 0 missing
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-009_run01_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run02.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-009_run02_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run03.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-009_run03_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run01.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-010_run01_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run02.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-010_run02_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run03.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-010_run03_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run01.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-019_run01_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run02.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-019_run02_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run03.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-019_run03_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run01.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-020_run01_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run02.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-020_run02_judge_log.json
+Scoring 2026-05-05_Y8_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run03.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y8_exp2_cell_Y_pe_mcp_baseline_8192/SGT-020_run03_judge_log.json
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.6667  pass=True
+  score_6d=0.3333  pass=False
+  score_6d=0.5  pass=False
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=0.6667  pass=True
+  score_6d=0.8333  pass=True
+
+Scored 12 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores.jsonl
+=== SmartGridBench Experiment ===
+Run ID:        context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline
+Config:        configs/experiment2/exp2_cell_Y_pe_mcp_baseline.env
+Cell:          Y
+Experiment:    exp2_cell_Y_pe_mcp_baseline
+Family:        exp2_orchestration
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     4 file(s)
+Node:          smartgrid-a100-ixqt-uswest3-20260503-2116
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Y_plan_execute
+Run dir:       benchmarks/cell_Y_plan_execute/raw/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1800s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+Torch profiler enabled: --profiler-config torch torch_profiler_dir=<runner-home>/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline_torch
+
+=== Torch profiler replay pass — SKIPPED ===
+Skipping replay for ORCHESTRATION=plan_execute (replay only fires for agent_as_tool).
+Main-loop profiling covered the cell's actual workload; see docs/replay_phase_analysis.md.
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
+    get_sentry().reraise(e)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+    raise exc.with_traceback(tb)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
+    wi.maybe_login(init_settings)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
+    wandb_login._login(
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+    auth = _find_or_prompt_for_key(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+    auth = wbauth.authenticate_session(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+    raise UsageError(
+wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
+Artifact validation for context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline: 12/12 complete, 0 missing
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-009_run01_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run02.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-009_run02_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run03.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-009_run03_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run01.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-010_run01_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run02.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-010_run02_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run03.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-010_run03_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run01.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-019_run01_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run02.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-019_run02_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run03.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-019_run03_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run01.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-020_run01_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run02.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-020_run02_judge_log.json
+Scoring 2026-05-05_Y_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run03.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y32_exp2_cell_Y_pe_mcp_baseline/SGT-020_run03_judge_log.json
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.6667  pass=True
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=0.5  pass=False
+  score_6d=0.6667  pass=True
+  score_6d=0.5  pass=False
+
+Scored 12 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores.jsonl
+=== SmartGridBench Experiment ===
+Run ID:        context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384
+Config:        configs/context_ablation/pe_m_16384.env
+Cell:          Y16
+Experiment:    exp2_cell_Y_pe_mcp_baseline_16384
+Family:        context_window_ablation
+Orchestration: plan_execute
+MCP mode:      baseline
+Model:         openai/Llama-3.1-8B-Instruct
+Scenarios:     4 file(s)
+Node:          smartgrid-a100-ixqt-uswest3-20260503-2116
+Job ID:        N/A
+Cell dir:      benchmarks/cell_Y16
+Run dir:       benchmarks/cell_Y16/raw/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384
+Resume:        1
+Force rerun:   0
+
+GPU type: NVIDIA A100-SXM4-40GB
+vLLM startup timeout: 1500s
+vLLM auto tool choice: enabled with parser 'llama3_json'
+Torch profiler enabled: --profiler-config torch torch_profiler_dir=<runner-home>/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384_torch
+
+=== Torch profiler replay pass — SKIPPED ===
+Skipping replay for ORCHESTRATION=plan_execute (replay only fires for agent_as_tool).
+Main-loop profiling covered the cell's actual workload; see docs/replay_phase_analysis.md.
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
+    get_sentry().reraise(e)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+    raise exc.with_traceback(tb)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
+    wi.maybe_login(init_settings)
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
+    wandb_login._login(
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+    auth = _find_or_prompt_for_key(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+    auth = wbauth.authenticate_session(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+    raise UsageError(
+wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
+Artifact validation for context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384: 12/12 complete, 0 missing
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run01.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-009_run01_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run02.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-009_run02_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_01_end_to_end_fault_response_run03.json against multi_01_end_to_end_fault_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-009_run03_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run01.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-010_run01_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run02.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-010_run02_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run03.json against multi_02_dga_to_workorder_pipeline.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-010_run03_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run01.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-019_run01_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run02.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-019_run02_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_03_iot_tsfm_thermal_risk_run03.json against multi_03_iot_tsfm_thermal_risk.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-019_run03_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run01.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-020_run01_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run02.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
+  PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
+  return self.__pydantic_serializer__.to_python(
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-020_run02_judge_log.json
+Scoring 2026-05-05_Y16_llama-3-1-8b-instruct_plan_execute_baseline_multi_04_protection_trip_dga_response_run03.json against multi_04_protection_trip_dga_response.json...
+  Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
+  Judge log saved → results/judge_logs/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384/SGT-020_run03_judge_log.json
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.3333  pass=False
+  score_6d=0.6667  pass=True
+  score_6d=0.5  pass=False
+  score_6d=0.5  pass=False
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=1.0  pass=True
+  score_6d=0.8333  pass=True
+  score_6d=0.6667  pass=True
+
+Scored 12 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores.jsonl

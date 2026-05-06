@@ -15,9 +15,10 @@
 # follow-on runners for Self-Ask PE and Verified PE. Runner templates remain
 # available as explicit escape hatches for parity or variant smoke checks.
 #
-# MUST be submitted from the repo root — `#SBATCH --output=logs/...` resolves
-# relative to $SLURM_SUBMIT_DIR. If you need to submit from elsewhere, add
-# `--chdir=/path/to/repo` to the sbatch invocation.
+# MUST be submitted from the intended repo root or worktree. This script uses
+# $SLURM_SUBMIT_DIR as REPO_ROOT; `sbatch --chdir=/path/to/repo` changes the
+# job's cwd but does not change $SLURM_SUBMIT_DIR on Insomnia, so it is not a
+# safe substitute for `cd /path/to/repo && sbatch ...`.
 #
 # Usage:
 #   sbatch scripts/run_experiment.sh configs/example_baseline.env
@@ -292,6 +293,22 @@ if [ -n "${WATSONX_API_KEY:-}" ] && [ -z "${WATSONX_APIKEY:-}" ]; then
 fi
 if [ -n "${WATSONX_APIKEY:-}" ] && [ -z "${WATSONX_API_KEY:-}" ]; then
   export WATSONX_API_KEY="$WATSONX_APIKEY"
+fi
+# Bridge documented WATSONX_* env vars to the WX_* names litellm's newer
+# WatsonX provider expects (litellm 1.81.x rejects with
+# "Watsonx project_id and space_id not set" otherwise). Subprocess Python
+# entry points (generator, AaT runner, judge_trajectory.py) call the same
+# alias via scripts/watsonx_env.py; doing it here too keeps inherited
+# env consistent for any sub-shell or PE/Verified PE runner that bypasses
+# the Python helper. (#177)
+if [ -n "${WATSONX_API_KEY:-}" ] && [ -z "${WX_API_KEY:-}" ]; then
+  export WX_API_KEY="$WATSONX_API_KEY"
+fi
+if [ -n "${WATSONX_PROJECT_ID:-}" ] && [ -z "${WX_PROJECT_ID:-}" ]; then
+  export WX_PROJECT_ID="$WATSONX_PROJECT_ID"
+fi
+if [ -n "${WATSONX_URL:-}" ] && [ -z "${WX_URL:-}" ]; then
+  export WX_URL="$WATSONX_URL"
 fi
 
 if [ ! -f "$AOB_PATH/pyproject.toml" ]; then
@@ -1165,6 +1182,7 @@ FAIL=0
 TOTAL=0
 RESUME_SKIPPED=0
 RESUME_RERUN=0
+INFRA_FAIL=0
 if [ "$SMARTGRID_RESUME" = "1" ] && [ "$SMARTGRID_FORCE_RERUN" != "1" ]; then
   touch "$LATENCY_FILE"
 else
@@ -1180,7 +1198,12 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ] && [ 
     exit 1
   fi
   EXPECTED_TOTAL=$(( ${#SCENARIO_FILES[@]} * TRIALS ))
-  run_agent_as_tool_batch "$RUN_DIR" || true
+  BATCH_RC=0
+  run_agent_as_tool_batch "$RUN_DIR" || BATCH_RC=$?
+  if [ "$BATCH_RC" -gt 1 ]; then
+    echo "ERROR: agent-as-tool batch runner failed with exit code $BATCH_RC" >&2
+    INFRA_FAIL=1
+  fi
   # Merge per-trial latency records into the canonical latencies.jsonl.
   if [ -f "$RUN_DIR/_batch_latencies.jsonl" ]; then
     cat "$RUN_DIR/_batch_latencies.jsonl" >>"$LATENCY_FILE"
@@ -1201,6 +1224,7 @@ if [ "$ORCHESTRATION" = "agent_as_tool" ] && [ "$MCP_MODE" = "optimized" ] && [ 
     echo "WARNING: $MISSING trial(s) missing from batch output — counting as failures" >&2
     FAIL=$(( FAIL + MISSING ))
     TOTAL=$(( TOTAL + MISSING ))
+    INFRA_FAIL=1
   fi
 else
 
@@ -1622,3 +1646,7 @@ echo "Failed:    $FAIL"
 echo "Config:    $CONFIG_FILE"
 echo "Summary:   $SUMMARY_FILE"
 echo "Raw dir:   $RUN_DIR"
+if [ "$INFRA_FAIL" -ne 0 ]; then
+  echo "Infrastructure failure detected; exiting nonzero."
+  exit "$INFRA_FAIL"
+fi

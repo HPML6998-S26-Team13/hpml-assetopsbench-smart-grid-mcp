@@ -8,7 +8,7 @@
     "cross_references": {
       "standards_artifact": "data/knowledge/transformer_standards.json",
       "evaluation_methodology": "docs/ps_b_evaluation_methodology.md",
-      "realism_validation": "docs/scenario_realism_validation.md",
+      "realism_validation": "docs/archive/scenario_realism_validation.md",
       "schema_reference": "data/scenarios/README.md"
     },
     "usage_note": "This file answers HOW to assemble scenarios from the IEC/IEEE facts in transformer_standards.json. It does not replicate standards content. Gas values, fault codes, and condition thresholds must be sourced from transformer_standards.json."

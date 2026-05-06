@@ -65,7 +65,7 @@ If Phase 1 triage finds a mismatch between this table and the actual live server
      - `benchmarks/README.md`
      - `data/README.md`
      - `mcp_servers/README.md`
-     - `docs/compute_plan.md`
+     - `docs/archive/compute_plan.md`
      - `docs/reference/watsonx_access.md`
    - Counts: 3 Critical / 6 High / 10 Medium / 10 Low
 
@@ -178,7 +178,7 @@ Field conventions:
 | F-06 | C | High | `scripts/setup_insomnia.sh` | `#6`, `#8` | `#6 Open; #8 Open` | N/A | B | Pin Python dependency versions used by the Insomnia setup path. |
 | F-07 | C | High | `scripts/setup_insomnia.sh` | `#6`, `#8` | `#6 Open; #8 Open` | N/A | B | Pin the model revision/checkpoint used for server bring-up so later runs are reproducible. |
 | F-08 | C | High | `scripts/test_inference.sh` | `#6`, `#57` | `#6 Open; #57 Closed` | `#57 keep closed + PR note` | B | Align model selection with the serve path and only report success on validated non-error responses. |
-| F-09 | C | High | `docs/compute_plan.md` | `#6`, `#8`, `#37` | `#6 Open; #8 Open; #37 Open` | N/A | C | Remove stale scheduler assumptions, dead references, and teammate-specific examples from compute guidance. |
+| F-09 | C | High | `docs/archive/compute_plan.md` | `#6`, `#8`, `#37` | `#6 Open; #8 Open; #37 Open` | N/A | C | Remove stale scheduler assumptions, dead references, and teammate-specific examples from compute guidance. |
 | F-10 | E | High | `scripts/verify_watsonx.py`, `docs/reference/watsonx_access.md` | `#19`, `#21` | `#19 Open; #21 Open` | N/A | B/C | Document a concrete shared-project / key-rotation workflow and make the verification tool safe to run/share. |
 | F-11 | C | High | `scripts/vllm_serve.sh` | `#6`, `#8`, `#37` | `#6 Open; #8 Open; #37 Open` | N/A | B | Add explicit precondition checks for venv, model path, and related serve-time assumptions; implement together with F-05 in one serve-time precondition block. |
 | F-12 | C | High | `docs/eval_harness_readme.md` | `#57`, `#37` | `#57 Closed; #37 Open` | `#57 keep closed + PR note` | C | Replace Akshat-local paths with teammate-portable instructions and canonical proof expectations. |
@@ -267,7 +267,7 @@ Primary affected files:
 - `scripts/setup_insomnia.sh`
 - `scripts/vllm_serve.sh`
 - `scripts/test_inference.sh`
-- `docs/compute_plan.md`
+- `docs/archive/compute_plan.md`
 - `docs/eval_harness_readme.md`
 
 Primary affected issues:

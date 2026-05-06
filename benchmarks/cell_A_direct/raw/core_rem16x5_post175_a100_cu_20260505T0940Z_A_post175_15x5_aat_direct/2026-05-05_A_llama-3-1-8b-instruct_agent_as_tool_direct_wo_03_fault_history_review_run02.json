@@ -1,0 +1,98 @@
+{
+  "question": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+  "answer": "Since there are no open work orders for T-009, there's no need to prioritize escalation for any outstanding issues before the scheduled maintenance cycle. However, considering the recent fault history, it might be a good idea to inspect the transformer during the scheduled maintenance to identify any potential issues before they become major problems.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14380,
+    "output_tokens": 119,
+    "total_tokens": 14499,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "list_fault_records",
+          "arguments": {
+            "limit": "100",
+            "transformer_id": "T-009"
+          },
+          "call_id": "chatcmpl-tool-bb6913d831b62c51",
+          "output": [
+            {
+              "transformer_id": "T-009",
+              "fault_id": "F007",
+              "fault_type": "Overload Trip",
+              "location": "Substation Alpha",
+              "voltage_v": 11000,
+              "current_a": 184,
+              "power_load_mw": 34.24,
+              "temperature_c": 29.0,
+              "wind_speed_kmh": 10.8,
+              "weather_condition": "Rainy",
+              "maintenance_status": "Completed",
+              "component_health": "Normal",
+              "duration_hrs": 0.8,
+              "downtime_hrs": 5
+            }
+          ]
+        },
+        {
+          "name": "list_work_orders",
+          "arguments": {
+            "status": "open",
+            "transformer_id": "T-009"
+          },
+          "call_id": "chatcmpl-tool-86bb8d5ba23d81ff",
+          "output": []
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Since there are no open work orders for T-009, there's no need to prioritize escalation for any outstanding issues before the scheduled maintenance cycle. However, considering the recent fault history, it might be a good idea to inspect the transformer during the scheduled maintenance to identify any potential issues before they become major problems.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.8100969791412354,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-017",
+    "type": "WO",
+    "text": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+    "category": "Pre-Maintenance Review",
+    "characteristic_form": "The answer should list recent fault records for T-009, summarize open work orders, and state whether any item requires escalation with a brief justification.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.list_work_orders"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record summary",
+        "open work order summary",
+        "escalation decision with justification"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

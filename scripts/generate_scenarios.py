@@ -81,7 +81,41 @@ HANDCRAFTED_DIR = _REPO_ROOT / "data" / "scenarios"
 GENERATED_ROOT = _REPO_ROOT / "data" / "scenarios" / "generated"
 ASSET_CSV = _REPO_ROOT / "data" / "processed" / "asset_metadata.csv"
 
-PROMPT_VERSION = "v0.1"  # bump on any prompt-template change
+PROMPT_VERSION = "v0.2"  # bump on any prompt-template change
+# v0.1 (2026-05-03) → v0.2 (2026-05-05) changelog:
+# - Asset rotation: build_prompt() now takes an explicit asset_id and pins it
+#   in the prompt instead of letting the model pick. Caller passes a
+#   deterministic rotation across T-001..T-020 so a single seed doesn't
+#   collapse every scenario in the batch onto the same transformer (the
+#   v0.1 first batch landed all 5 scenarios on T-005 because temperature=0.7
+#   has a strong bias toward common IDs). Addresses PR #178 inspection issue
+#   "all five use T-005".
+# - NO_HINT_RULES: ban naming gases by chemical formula or common name in the
+#   user-facing text. v0.1 SGT-GEN-005 named "methane and ethylene" which
+#   narrowed the fault class (CH4+C2H4 → thermal pattern) and contradicted
+#   the labeled D2 fault. Addresses PR #178 inspection issue "gas-fault
+#   mismatch in SGT-GEN-005" + "borderline no-hint" finding.
+# - CONSISTENCY_CONSTRAINTS (new section): three explicit checks the model
+#   must satisfy before emitting JSON:
+#     1. text-evidence ↔ ground_truth.final_value consistency
+#     2. expected_tools callability from prompt context (every tool's
+#        required arguments must be derivable from the text, OR a discovery
+#        tool must precede it in ideal_tool_sequence)
+#     3. asset_id pinning: the rotated asset_id must appear in both the
+#        user-facing text and ground_truth, and not be replaced by the model.
+#   Addresses PR #178 inspection issues SGT-GEN-001 / 003 / 005 / Medium 4.
+# - SCHEMA_REMINDER: tightened ground_truth.final_value example to discourage
+#   the v0.1 SGT-GEN-002 case (decisive_intermediate_values.rul_range_days
+#   said 360 but final_value.rul_estimate_days said 540 — out of range).
+#
+# Out of scope for v0.2 (deferred to a real data-grounding pass): inlining
+# actual MCP tool outputs into the prompt at generation time. The model
+# still has no way to know what get_dga_record('T-NNN') actually returns,
+# so ground_truth.decisive_intermediate_values + final_value remain
+# model-asserted. The right structural fix is either prompt-time MCP tool
+# calls or a post-generation grounding pass that overwrites those fields
+# with what the live tools return; tracked under the PS B scale-up backlog
+# in #68. v0.2 is the prompt-side improvements that don't need MCP runtime.
 
 
 def _load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -176,16 +210,63 @@ NO-HINT RULES — banned in the user-facing `text` field:
 - Method names or analytic technique names (e.g. "Duval triangle", "Rogers ratio")
 - IEC fault codes (PD, D1, D2, T1, T2, T3) in the prompt itself — they may appear in `decisive_intermediate_values` only
 - Specific gas concentrations or ratio thresholds
+- Names of dissolved gases by chemical formula OR common name (H2 / hydrogen,
+  CH4 / methane, C2H2 / acetylene, C2H4 / ethylene, C2H6 / ethane, CO,
+  CO2). Naming WHICH gases are rising effectively narrows the fault class
+  to the model and is a closet-form hint. Use a generic phrasing like
+  "recent dissolved-gas analysis shows elevated activity" or "DGA values
+  are within normal range" — neither names the gases nor reveals the
+  fault. (Added v0.2 after SGT-GEN-005 violated this in the v0.1 batch.)
 - Pre-framed decisions ("you should create a work order")
 - Step-by-step instructions
-- Paraphrases of any of the 10 hand-crafted scenarios under data/scenarios/
+- Paraphrases of any canonical hand-crafted scenario under data/scenarios/
 
 PREFERRED:
 - Describe an operational event or condition naturally
 - Ask for a decision (diagnosis / RUL / work order / sensor anomaly), not a tool call
-- Ground in one transformer ID and one or two context details (criticality, alarm, recent reading)
+- Ground in the supplied transformer ID and one or two context details (criticality, alarm, recent reading)
 - One task per scenario
 - Under 80 words
+"""
+
+
+CONSISTENCY_CONSTRAINTS = """
+CONSISTENCY CONSTRAINTS — the model MUST satisfy these before emitting JSON.
+Most v0.1 batch failures were here:
+
+1. TEXT EVIDENCE ↔ GROUND TRUTH consistency
+   Whatever evidence appears in `text` (alarm type, sensor reading, gas
+   trend description, load condition) MUST be consistent with the labeled
+   answer in `ground_truth.final_value`. If `ground_truth.final_value`
+   says fault label D2 (low-energy discharge → C2H2-driven), then the
+   `text` cannot describe a thermal pattern. If `ground_truth.final_value`
+   says rul_estimate_days=540, then any range/window the text or
+   `decisive_intermediate_values` mentions MUST contain 540. Do NOT
+   describe stable conditions and then label a fault, or describe rising
+   thermal indicators and then label an arc fault. Pick the answer
+   first; then write text consistent with that answer.
+
+2. EXPECTED_TOOLS CALLABILITY from prompt context
+   For every tool in `expected_tools`, ALL its required arguments must be
+   derivable from the text — OR a prerequisite tool that returns those
+   arguments must precede it in `ideal_tool_sequence`. Rules of thumb:
+     - `iot.get_sensor_readings(transformer_id, sensor_id)` requires a
+       specific sensor_id. Either name the sensor in the text, OR
+       precede this tool with `iot.list_sensors` in ideal_tool_sequence.
+     - `fmsr.analyze_dga(...)` requires all five gas values
+       (H2/CH4/C2H2/C2H4/C2H6). It MUST be preceded by
+       `fmsr.get_dga_record` in ideal_tool_sequence.
+     - `wo.estimate_downtime(transformer_id, severity, ...)` requires a
+       severity. Either describe an unambiguous severity-suggesting
+       event in the text (e.g. "complete loss of function"), OR precede
+       with a fault-classification tool that produces severity.
+     - `wo.create_work_order(...)` requires fault context. It MUST be
+       preceded by something that classifies or identifies the fault
+       (e.g. `fmsr.analyze_dga` or a sensor-threshold check).
+
+3. ASSET ID is supplied to you (see ASSIGNED ASSET below). Use exactly
+   that asset_id. Do not pick a different one, do not vary it across
+   the scenario.
 """
 
 
@@ -289,18 +370,32 @@ def build_prompt(
     operational_contexts: dict[str, Any],
     support: dict[str, Any],
     rng: random.Random,
+    asset_id: str | None = None,
 ) -> str:
     """Assemble the per-scenario LLM prompt from the support data.
 
     Picks one operational context and the family-specific template
     block(s) per `FAMILY_TEMPLATE_ROUTES`. The model is given the family
-    spec, operational context, routed templates, no-hint rules, and the
-    schema reminder.
+    spec, operational context, routed templates, no-hint rules,
+    consistency constraints, and the schema reminder.
+
+    If `asset_id` is None, the model picks (v0.1 behavior — kept for
+    backward-compat with any caller that wants the old shape). The
+    canonical generator path in `main()` always passes an explicit
+    asset_id from a deterministic per-batch rotation; that's the v0.2
+    behavior fix for the "all five scenarios on T-005" failure.
     """
     ctx_name = rng.choice(list(operational_contexts.keys()))
     ctx = operational_contexts[ctx_name]
     template_block = _select_family_templates(family_name, support, rng)
     template_section = f"\n\n{template_block}" if template_block else ""
+    asset_section = (
+        f"\n\nASSIGNED ASSET: {asset_id}\n"
+        f"You MUST use exactly this asset_id (do not pick a different "
+        f"transformer ID, do not vary it across the scenario)."
+        if asset_id
+        else ""
+    )
 
     return f"""You are generating a single Smart Grid maintenance scenario for the SmartGridBench benchmark suite. The scenario will be evaluated against an LLM agent with access to four MCP servers (IoT, FMSR, TSFM, WO).
 
@@ -309,9 +404,11 @@ FAMILY SPEC:
 {json.dumps(family_spec, indent=2)}
 
 OPERATIONAL CONTEXT (`{ctx_name}`):
-{json.dumps(ctx, indent=2)}{template_section}
+{json.dumps(ctx, indent=2)}{template_section}{asset_section}
 
 {NO_HINT_RULES}
+
+{CONSISTENCY_CONSTRAINTS}
 
 {SCHEMA_REMINDER}
 """.strip()
@@ -333,6 +430,14 @@ def call_llm(
             "litellm not installed; install via `uv pip install -r requirements-insomnia.txt` "
             "or run with --dry-run."
         ) from exc
+
+    if model.startswith("watsonx/"):
+        # Bridge documented WATSONX_* env vars to the WX_* names litellm's
+        # newer WatsonX provider expects. Shared helper covers every Python
+        # call site (generator + aat_runner + judge_trajectory).
+        from scripts.watsonx_env import propagate_watsonx_env
+
+        propagate_watsonx_env()
 
     log.info(
         "calling %s (temperature=%.2f, max_tokens=%d, prompt_chars=%d)",
@@ -678,12 +783,33 @@ def main() -> int:
     scenarios_emitted: list[dict[str, Any]] = []
     invocation_starting_id = next_id
 
+    # Asset rotation: deterministically walk through T-001..T-020 across the
+    # batch (ordered by next_id) so a single seed doesn't collapse every
+    # scenario onto the same transformer. The v0.1 first batch landed all 5
+    # scenarios on T-005 because the model has a strong asset bias at
+    # temperature=0.7. PROMPT_VERSION v0.2 fix.
+    asset_pool: list[str] = sorted(valid_asset_ids)
+    if not asset_pool:
+        log.error("no valid asset IDs available; cannot pin asset_id in prompts")
+        return 1
+
     for family in families:
         family_spec = family_matrix[family]
         for i in range(args.n):
             scenario_id = f"SGT-GEN-{next_id:03d}"
             prompt_label = f"{family}_{scenario_id}"
-            prompt = build_prompt(family, family_spec, op_contexts, support, rng)
+            # Walk asset_pool by scenario index (next_id-1) modulo pool size.
+            # Across an N-scenario batch this gives N different assets when
+            # N <= 20; wraps cleanly for larger batches.
+            assigned_asset = asset_pool[(next_id - 1) % len(asset_pool)]
+            prompt = build_prompt(
+                family,
+                family_spec,
+                op_contexts,
+                support,
+                rng,
+                asset_id=assigned_asset,
+            )
             (out_dir / "prompts" / f"{prompt_label}.txt").write_text(
                 prompt, encoding="utf-8"
             )

@@ -1,0 +1,50 @@
+{
+  "question": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
+  "answer": "",
+  "success": false,
+  "error": "ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 8192 tokens. However, you requested 0 output tokens and your prompt contains at least 8193 input tokens, for a total of at least 8193 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=8193)",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 3.3932807445526123,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-009",
+    "type": "Multi",
+    "text": "Transformer T-015 shows rising load and intermittent over-temperature alerts. Investigate recent sensor behavior, infer probable fault mode, estimate short-term risk over 30 days, and issue a maintenance work order recommendation.",
+    "category": "End-to-End Incident Response",
+    "characteristic_form": "The answer should show a multi-step workflow: summarize relevant IoT evidence, map to likely fault mode, provide a 30-day risk or forecast statement, and conclude with a concrete work-order recommendation.",
+    "asset_id": "T-015",
+    "expected_tools": [
+      "iot.get_sensor_readings",
+      "fmsr.analyze_dga",
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "sensor evidence",
+        "fault hypothesis",
+        "30-day risk outlook",
+        "work-order recommendation"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "IoT",
+      "FMSR",
+      "TSFM",
+      "WO"
+    ]
+  }
+}

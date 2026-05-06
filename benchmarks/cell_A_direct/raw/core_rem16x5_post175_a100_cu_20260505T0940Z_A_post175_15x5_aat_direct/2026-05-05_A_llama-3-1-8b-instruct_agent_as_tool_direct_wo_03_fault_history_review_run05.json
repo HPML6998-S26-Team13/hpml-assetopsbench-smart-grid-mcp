@@ -1,0 +1,44 @@
+{
+  "question": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+  "answer": "",
+  "success": false,
+  "error": "ModelBehaviorError: Tool get_work_order not found in agent smartgrid_aat",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 3.76464581489563,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-017",
+    "type": "WO",
+    "text": "T-009 is approaching its next scheduled maintenance cycle. Review its recent fault history and any open work orders to determine whether anything requires priority escalation before the maintenance window begins.",
+    "category": "Pre-Maintenance Review",
+    "characteristic_form": "The answer should list recent fault records for T-009, summarize open work orders, and state whether any item requires escalation with a brief justification.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.list_work_orders"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record summary",
+        "open work order summary",
+        "escalation decision with justification"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

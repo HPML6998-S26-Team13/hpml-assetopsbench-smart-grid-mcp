@@ -1,0 +1,116 @@
+{
+  "question": "List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action.",
+  "answer": "The function \"list_failure_modes\" returns a list of all known failure modes in the transformer dataset, along with their severity levels and recommended maintenance actions. Each failure mode is represented as a dictionary with the following keys:\n\n*   failure_mode_id: A unique identifier for the failure mode.\n*   name: The descriptive name of the failure mode.\n*   severity: The level of severity associated with the failure mode (low, medium, high, or critical).\n*   iec_code: The corresponding IEC code for the failure mode.\n*   key_gases: The dissolved gases most strongly associated with the failure mode.\n*   recommended_action: The recommended maintenance action for each failure mode.\n\nThe output is a list of these dictionaries, one for each known failure mode in the transformer dataset.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 1,
+  "usage": {
+    "input_tokens": 9732,
+    "output_tokens": 174,
+    "total_tokens": 9906,
+    "requests": 2
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "list_failure_modes",
+          "arguments": {},
+          "call_id": "chatcmpl-tool-90bddd4a3cb980ae",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The function \"list_failure_modes\" returns a list of all known failure modes in the transformer dataset, along with their severity levels and recommended maintenance actions. Each failure mode is represented as a dictionary with the following keys:\n\n*   failure_mode_id: A unique identifier for the failure mode.\n*   name: The descriptive name of the failure mode.\n*   severity: The level of severity associated with the failure mode (low, medium, high, or critical).\n*   iec_code: The corresponding IEC code for the failure mode.\n*   key_gases: The dissolved gases most strongly associated with the failure mode.\n*   recommended_action: The recommended maintenance action for each failure mode.\n\nThe output is a list of these dictionaries, one for each known failure mode in the transformer dataset.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.485105752944946,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "AOB-FMSR-001",
+    "type": "FMSR",
+    "text": "List all known failure modes in the transformer dataset. For each, provide the severity level and recommended maintenance action.",
+    "category": "Failure Mode Catalog",
+    "characteristic_form": "The answer should enumerate all failure modes from the catalogue with each entry including at minimum: a name or identifier, a severity level (low/medium/high/critical), and a recommended maintenance action.",
+    "expected_tools": [
+      "fmsr.list_failure_modes"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "failure mode",
+        "severity",
+        "recommended"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

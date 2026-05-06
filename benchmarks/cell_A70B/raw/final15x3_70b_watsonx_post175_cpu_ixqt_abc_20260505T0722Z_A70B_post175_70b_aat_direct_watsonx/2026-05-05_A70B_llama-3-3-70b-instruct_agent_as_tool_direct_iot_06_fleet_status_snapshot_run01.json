@@ -1,0 +1,47 @@
+{
+  "question": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+  "answer": "",
+  "success": false,
+  "error": "APIConnectionError: litellm.APIConnectionError: WatsonxException - <html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>cloudflare</center>\r\n</body>\r\n</html>\r\n",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 5.9797961711883545,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-022",
+    "type": "IoT",
+    "text": "Provide a quick fleet-status snapshot. Enumerate the transformers currently in service, then for one representative healthy unit (T-005) and one degraded unit (T-013) surface the available sensor channels and a recent telemetry sample for each channel so a comparative read of operational state can be made.",
+    "category": "Fleet Status Snapshot",
+    "characteristic_form": "The answer should list the in-service transformer IDs, then for each of T-005 and T-013 surface the available sensor channels and a recent telemetry sample for each channel, and call out any qualitative difference between the two units.",
+    "expected_tools": [
+      "iot.list_assets",
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "in-service transformer list",
+        "T-005 sensor channels",
+        "T-005 sample readings",
+        "T-013 sensor channels",
+        "T-013 sample readings",
+        "comparative observation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

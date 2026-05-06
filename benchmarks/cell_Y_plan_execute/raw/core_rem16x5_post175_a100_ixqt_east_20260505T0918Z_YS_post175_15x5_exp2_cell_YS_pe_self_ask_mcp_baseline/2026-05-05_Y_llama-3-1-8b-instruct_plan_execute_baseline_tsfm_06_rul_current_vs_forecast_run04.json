@@ -1,0 +1,125 @@
+{
+  "question": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+  "effective_question": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "Based on the results, the current RUL estimate for T-011 is 1100 days, and the 180-day forecast projects the RUL to be 920 days. This comparison supports deferring replacement, as the forecasted RUL is still within a reasonable range, and the current RUL estimate is significantly higher than the forecasted value.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for T-011",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with the current RUL estimate for T-011"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for T-011 180 days ahead",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the forecasted RUL for T-011 180 days ahead"
+    },
+    {
+      "step": 3,
+      "task": "Compare the current RUL estimate and the forecasted RUL",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "A natural-language statement comparing the two RUL estimates and supporting or arguing for deferring or advancing replacement."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for T-011",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with the current RUL estimate for T-011"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for T-011 180 days ahead",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the forecasted RUL for T-011 180 days ahead"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 3; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for T-011",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-011"
+      },
+      "response": "{\n  \"transformer_id\": \"T-011\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 1100,\n  \"health_index\": 1.0,\n  \"fdd_category\": 2,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Healthy \\u2014 no immediate action required.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for T-011 180 days ahead",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-011",
+        "horizon_days": 180
+      },
+      "response": "{\n  \"transformer_id\": \"T-011\",\n  \"current_rul_days\": 1100,\n  \"forecast_date\": \"2024-07-29\",\n  \"projected_rul_days\": 920,\n  \"projected_health_index\": 0.8417,\n  \"confidence\": 0.608,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-026",
+    "type": "TSFM",
+    "text": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+    "category": "RUL Current vs Forecast Comparison",
+    "characteristic_form": "The answer should report the current RUL estimate for T-011, the forecasted RUL at the 180-day horizon, and a recommendation on whether the comparison supports deferring or advancing replacement, citing the magnitude of any change.",
+    "asset_id": "T-011",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "forecast RUL value",
+        "comparison",
+        "deferral or advance recommendation"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

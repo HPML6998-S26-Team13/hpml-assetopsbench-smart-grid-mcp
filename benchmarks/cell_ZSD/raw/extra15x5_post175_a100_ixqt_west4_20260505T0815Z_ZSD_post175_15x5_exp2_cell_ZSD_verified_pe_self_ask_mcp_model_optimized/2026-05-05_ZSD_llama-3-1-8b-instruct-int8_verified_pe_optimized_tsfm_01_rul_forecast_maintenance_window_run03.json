@@ -1,0 +1,244 @@
+{
+  "question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "effective_question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "Based on the results, the remaining useful life (RUL) of transformer T-016 is projected to be 0 days by the forecast date of 2024-07-29, indicating that it is unlikely to safely operate for the next 180 days without major maintenance.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for transformer T-016.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "Get the most recent remaining useful life (RUL) estimate for transformer T-016.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, as_of_date, rul_days, health_index, fdd_category, interpretation."
+    },
+    {
+      "step": 4,
+      "task": "Project the RUL forward by 180 days using a linear degradation model.",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, current_rul_days, forecast_date, projected_rul_days, projected_health_index, confidence, method."
+    },
+    {
+      "step": 5,
+      "task": "Determine whether the transformer can safely operate for the next 180 days without major maintenance.",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A natural-language answer."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for transformer T-016.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label."
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, iec_code, diagnosis, r1_ch4_h2, r2_c2h2_c2h4, r3_c2h4_c2h6, input_gases."
+    },
+    {
+      "step": 3,
+      "task": "Get the most recent remaining useful life (RUL) estimate for transformer T-016.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, as_of_date, rul_days, health_index, fdd_category, interpretation."
+    },
+    {
+      "step": 4,
+      "task": "Project the RUL forward by 180 days using a linear degradation model.",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A dictionary with keys: transformer_id, current_rul_days, forecast_date, projected_rul_days, projected_health_index, confidence, method."
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 5; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the most recent dissolved gas analysis (DGA) record for transformer T-016.",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-016"
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"sample_date\": \"2024-01-23T00:00:00\",\n  \"dissolved_h2_ppm\": 73.15,\n  \"dissolved_ch4_ppm\": 74.0,\n  \"dissolved_c2h2_ppm\": 24.4,\n  \"dissolved_c2h4_ppm\": 102.79,\n  \"dissolved_c2h6_ppm\": 46.79,\n  \"dissolved_co_ppm\": 674.11,\n  \"dissolved_co2_ppm\": 3133.28,\n  \"fault_label\": \"Arc discharge\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current step was successful and no indication that the remaining plan should change.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Classify a set of dissolved gas concentrations into a fault type using the IEC 60599 Rogers Ratio method.",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 73.15,
+        "ch4": 74.0,
+        "c2h2": 24.4,
+        "c2h4": 102.79,
+        "c2h6": 46.79,
+        "transformer_id": "T-016",
+        "forecast_days": 180
+      },
+      "response": "{\n  \"iec_code\": \"N\",\n  \"diagnosis\": \"Normal / Inconclusive\",\n  \"r1_ch4_h2\": 1.0116,\n  \"r2_c2h2_c2h4\": 0.2374,\n  \"r3_c2h4_c2h6\": 2.1968,\n  \"input_gases\": {\n    \"h2_ppm\": 73.15,\n    \"ch4_ppm\": 74.0,\n    \"c2h2_ppm\": 24.4,\n    \"c2h4_ppm\": 102.79,\n    \"c2h6_ppm\": 46.79\n  },\n  \"transformer_id\": \"T-016\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Normal / Inconclusive diagnosis, no indication for plan change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Get the most recent remaining useful life (RUL) estimate for transformer T-016.",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-016",
+        "sample_date": "2024-01-23T00:00:00",
+        "output_days": 180
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 57,\n  \"health_index\": 0.0522,\n  \"fdd_category\": 4,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Degraded \\u2014 maintenance recommended within 30 days.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Current RUL estimate is 57 days, which is less than the 180-day threshold, but the remaining steps do not suggest a change in plan.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 4,
+      "task": "Project the RUL forward by 180 days using a linear degradation model.",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-016",
+        "horizon_days": 180
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"current_rul_days\": 57,\n  \"forecast_date\": \"2024-07-29\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.608,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "retry",
+      "verifier_reason": "Projected RUL is 0, indicating a potential issue with the linear degradation model.",
+      "retries_used": 1
+    },
+    {
+      "step": 4,
+      "task": "Project the RUL forward by 180 days using a linear degradation model.",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-016",
+        "horizon_days": 180,
+        "method": "linear_degradation_baseline",
+        "model_params": {
+          "slope": 0.0522,
+          "intercept": 57
+        }
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"current_rul_days\": 57,\n  \"forecast_date\": \"2024-07-29\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.608,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "replan_suffix",
+      "verifier_reason": "Projected RUL is 0, indicating the transformer is likely to fail soon.",
+      "verifier_updated_focus": "Reassess the transformer's condition and plan for maintenance or replacement.",
+      "retries_used": 1
+    }
+  ],
+  "scenario": {
+    "id": "SGT-005",
+    "type": "TSFM",
+    "text": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+    "category": "Remaining Useful Life",
+    "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
+    "asset_id": "T-016",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "decision_window_days": 180,
+      "must_include": [
+        "rul_days_estimate",
+        "go/no-go recommendation"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

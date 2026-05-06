@@ -1,0 +1,143 @@
+{
+  "question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "effective_question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "Based on the forecasted results, transformer T-016 is not expected to safely operate for the next 180 days without major maintenance, as its projected remaining useful life (RUL) on the forecast date (2024-07-29) is 0 days, indicating a high likelihood of failure within that timeframe.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for transformer T-016",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary containing the current RUL estimate for transformer T-016"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-016 180 days into the future",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary containing the forecasted RUL for transformer T-016 180 days into the future"
+    },
+    {
+      "step": 3,
+      "task": "Determine if the transformer can safely operate for the next 180 days without major maintenance",
+      "server": "tsfm",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A natural-language answer stating whether the transformer can safely operate for the next 180 days without major maintenance, based on the forecasted RUL."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for transformer T-016",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary containing the current RUL estimate for transformer T-016"
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-016 180 days into the future",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary containing the forecasted RUL for transformer T-016 180 days into the future"
+    },
+    {
+      "step": 3,
+      "task": "Determine if the transformer can safely operate for the next 180 days without major maintenance",
+      "server": "tsfm",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A natural-language answer stating whether the transformer can safely operate for the next 180 days without major maintenance, based on the forecasted RUL."
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Get the current RUL estimate for transformer T-016",
+      "server": "tsfm",
+      "tool": "get_rul",
+      "tool_args": {
+        "transformer_id": "T-016"
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"as_of_date\": \"2024-01-31\",\n  \"rul_days\": 57,\n  \"health_index\": 0.0522,\n  \"fdd_category\": 4,\n  \"confidence\": 0.808,\n  \"interpretation\": \"Degraded \\u2014 maintenance recommended within 30 days.\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Forecast the RUL for transformer T-016 180 days into the future",
+      "server": "tsfm",
+      "tool": "forecast_rul",
+      "tool_args": {
+        "transformer_id": "T-016",
+        "horizon_days": 180
+      },
+      "response": "{\n  \"transformer_id\": \"T-016\",\n  \"current_rul_days\": 57,\n  \"forecast_date\": \"2024-07-29\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.608,\n  \"method\": \"linear_degradation_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "Determine if the transformer can safely operate for the next 180 days without major maintenance",
+      "server": "tsfm",
+      "tool": "none",
+      "tool_args": {},
+      "response": "A natural-language answer stating whether the transformer can safely operate for the next 180 days without major maintenance, based on the forecasted RUL.",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-005",
+    "type": "TSFM",
+    "text": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+    "category": "Remaining Useful Life",
+    "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
+    "asset_id": "T-016",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "decision_window_days": 180,
+      "must_include": [
+        "rul_days_estimate",
+        "go/no-go recommendation"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

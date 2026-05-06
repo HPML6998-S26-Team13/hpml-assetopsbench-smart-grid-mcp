@@ -1,0 +1,1576 @@
+Repo-local orchestration runtime preflight passed.
+=== vLLM GPU preflight ===
+Node: ins048
+SLURM_JOB_ID=9125462
+SLURM_JOB_GPUS=0
+SLURM_GPUS_ON_NODE=1
+CUDA_VISIBLE_DEVICES=0
+GPU 0: NVIDIA H100 PCIe (UUID: GPU-9664374a-8a16-f4f4-d697-955177cb0ed3)
+torch=2.10.0+cu128
+cuda_available=True
+cuda_device_count=1
+cuda_device_0=NVIDIA H100 PCIe
+vLLM extra args: --generation-config vllm
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:08] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:09] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:10] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:11] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:12] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:13] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:13] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:14] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:14 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:14  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:27 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:27  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:28 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:28  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:29] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:29 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:29  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:30 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:30  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:31] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:31 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:31  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:32 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:32  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:32 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:32  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:32 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:32  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:33] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:33 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:33  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:34 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:34  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:34 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:34  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:34 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:34  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:35] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:35 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:35  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:36 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:36  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:45] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:45 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:45  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:46 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:46  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:47] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:47 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:47  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:49 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:49  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:48:50] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:48:50 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:50  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:48:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:48:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:48:51 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:48:51  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:07] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:07 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:07  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:09 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:09  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:10 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:10  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:10] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:10 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:10  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:12 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:12  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:12 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:12  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:13] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:13 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:13  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:15 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:15  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:15 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:15  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:16] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:16 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:16  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:17 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:17  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:18] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:18 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:18  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:20 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:20  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:20 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:20  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:20 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:20  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:21] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:21 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:21  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:22 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:22  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:22 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:22  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:23 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:23  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:24] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:24 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:24  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:24 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:24  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:24 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:24  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:28] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:29] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:30] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:31] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:31] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:32] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:33] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:34] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:34 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:34  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:44 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:44  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:45] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:45 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:45  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:46 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:46  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:47] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:47 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:47  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:48 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:48  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:48 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:48  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:48 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:48  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:49] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:49 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:49  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:50 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:50  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:50 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:50  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:50 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:50  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:49:51] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:49:51 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:51  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:49:52 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:49:52  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:49:52 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:49:52  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:00 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:00  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:01] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:01 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:01  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:02 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:02  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:02 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:02  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:02 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:02  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:03] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:03 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:03  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:04 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:04  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:04 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:04  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:05 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:05  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:06] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:06 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:06  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:07 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:07  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:22 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:22  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:23] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:23 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:23  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:24 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:24  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:24 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:24  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:25 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:25  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:26] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:26 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:26  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:28 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:28  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:28 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:28  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:28] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:29 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:29  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:30 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:30  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:30 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:30  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:31] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:31 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:31  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:32 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:32  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:32 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:32  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:32 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:32  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:33] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:33 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:33  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:34 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:34  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:34 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:34  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:35 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:35  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:36] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:36 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:36  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:36 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:36  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:36 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:36  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:38] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:38 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:38  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:39 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:39  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:40 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:40  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:43] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:43] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:44] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:45] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:46] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:47] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:47] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:50:48] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:50:48 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:48  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:58 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:58  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:50:58 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:50:58  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:50:59 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:50:59  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:00] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:00 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:00  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:01 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:01  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:01 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:01  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:01] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:02 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:02  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:02 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:02  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:02 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:02  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:03 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:03  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:03] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:03 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:03  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:04 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:04  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:04 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:04  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:05 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:05  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:05] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+[05/03/26 22:51:06] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:06 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:06  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:06 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:06  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:14 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:14  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:15] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:15 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:15  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:17 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:17  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:17 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:17  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:17] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+[05/03/26 22:51:18] INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Warning: UserWarning: This pattern is server.py:710
+                             interpreted as a regular expression,
+                             and has match groups. To actually get
+                             the groups, use str.extract.
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:18 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:18  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:19 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:19  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:19 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:19  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:19 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:19  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:20] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:20 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:20  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:22 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:22  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:22 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:22  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:37] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:37 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:37  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:39 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:39  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:40] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:40 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:40  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:42 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:42  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:43] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:43 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:43  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:44 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:44  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:45] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:45 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:45  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:46 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:46  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:46 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:46  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:47 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:47  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:48] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:48 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:48  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:49 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:49  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:49 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:49  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:50] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:50 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:50  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:51 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:51  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:51 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:51  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:52 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:52  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:53] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:51:53 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:53  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:51:53 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:51:53  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:51:54 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:51:54  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:57] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:58] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:51:59] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:00] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:00] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:01] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:02] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:03] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:03 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:03  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+22:52:07  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+[92m22:52:07 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:07  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:08] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:08 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:08  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:09 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:09  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:10] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:10 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:10  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:11 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:11  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:11 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:11  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:12] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:12 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:12  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:13 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:13  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:13 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:13  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:14 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:14  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:14] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:15 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:15  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:16 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:16  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:16 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:16  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:16 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:16  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:17] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:17 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:17  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:18 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:18  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:18 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:18  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:20 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:20  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:23] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:24] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:25] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:26] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:27] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:27] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:28] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:28 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:28  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:33 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:33  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+22:52:33  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+[92m22:52:33 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:33  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:33 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:33  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:33] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:33 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:33  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:34 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:34  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:34 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:34  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:35 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:35  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:36] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:36 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:36  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:37 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:37  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:37 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:37  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:37] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+[05/03/26 22:52:38] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:38 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:38  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:39 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:39  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:39 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:39  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:40] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:40 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:40  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:41 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:41  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:41 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:41  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:42 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:42  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:42] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+[05/03/26 22:52:43] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:43 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:43  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:44 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:44  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:52:44 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:44  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:45 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:45  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:48] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:49] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:50] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:50] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:51] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:52] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:53] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:53] INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:54 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:54  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:58 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:58  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+22:52:58  INFO      __main__  Dropped terminal synthesis-only step 6; final answer is summarized outside the plan.
+[92m22:52:58 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:58  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:52:58 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:52:58  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:52:59] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:52:59 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:52:59  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:00 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:00  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:53:00 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:00  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:00 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:00  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:53:01] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:53:01 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:01  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:02 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:02  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:53:02 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:02  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:02 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:02  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:53:03] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:53:03 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:03  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:04 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:04  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:53:04 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:04  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:04 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:04  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:53:05] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:53:05 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:05  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:06  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:53:06 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:06  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:07 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:07  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[aat-mcp-server-bootstrap] python=/insomnia001/depts/edu/users/team13/AssetOpsBench/.venv/bin/python
+[aat-mcp-server-bootstrap] cwd=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp
+[aat-mcp-server-bootstrap] target=/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] server module imported; starting stdio loop
+[05/03/26 22:53:08] INFO     Processing request of type            server.py:720
+                             CallToolRequest
+                    INFO     Processing request of type            server.py:720
+                             ListToolsRequest
+[92m22:53:08 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:08  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:09  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
+[92m22:53:09 - LiteLLM:INFO[0m: utils.py:3889 -
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+22:53:09  INFO      LiteLLM
+LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
+[92m22:53:10 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
+22:53:10  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler

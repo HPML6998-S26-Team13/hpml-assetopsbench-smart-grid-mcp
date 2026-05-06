@@ -1,0 +1,125 @@
+{
+  "question": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+  "answer": "The transformer T-007 has the following metadata: \n- Transformer ID: T-007\n- Name: Power Transformer T-007\n- Manufacturer: Siemens\n- Location: Industrial Park A\n- Voltage Class: 132kV/33kV\n- Rating (kVA): 5000\n- Install Date: 2011-03-03\n- Age (Years): 13\n- Health Status: 0\n- FDD Category: 1\n- RUL (Days): 3860\n- In Service: True\n\nThe available sensors on T-007 are:\n- load_current_a (A)\n- oil_temp_c (\u00b0C)\n- power_factor\n- voltage_hv_kv (kV)\n- voltage_lv_kv (kV)\n- winding_temp_top_c (\u00b0C)\n\nThe available instrumentation covers both electrical (load current, power factor, voltage) and thermal monitoring needs (oil temperature, winding temperature).",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14161,
+    "output_tokens": 246,
+    "total_tokens": 14407,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_asset_metadata",
+          "arguments": {
+            "transformer_id": "T-007"
+          },
+          "call_id": "chatcmpl-tool-fd48ca10c7ad49cf87c4992116e44b14",
+          "output": {
+            "transformer_id": "T-007",
+            "name": "Power Transformer T-007",
+            "manufacturer": "Siemens",
+            "location": "Industrial Park A",
+            "voltage_class": "132kV/33kV",
+            "rating_kva": 5000,
+            "install_date": "2011-03-03",
+            "age_years": 13,
+            "health_status": 0,
+            "fdd_category": 1,
+            "rul_days": 3860,
+            "in_service": true
+          }
+        },
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-007"
+          },
+          "call_id": "chatcmpl-tool-9d9fe459a6014cff87370b4d611bea6c",
+          "output": [
+            {
+              "sensor_id": "load_current_a",
+              "unit": "A",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "oil_temp_c",
+              "unit": "\u00b0C",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "power_factor",
+              "unit": "",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "voltage_hv_kv",
+              "unit": "kV",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "voltage_lv_kv",
+              "unit": "kV",
+              "num_readings": 720
+            },
+            {
+              "sensor_id": "winding_temp_top_c",
+              "unit": "\u00b0C",
+              "num_readings": 720
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The transformer T-007 has the following metadata: \n- Transformer ID: T-007\n- Name: Power Transformer T-007\n- Manufacturer: Siemens\n- Location: Industrial Park A\n- Voltage Class: 132kV/33kV\n- Rating (kVA): 5000\n- Install Date: 2011-03-03\n- Age (Years): 13\n- Health Status: 0\n- FDD Category: 1\n- RUL (Days): 3860\n- In Service: True\n\nThe available sensors on T-007 are:\n- load_current_a (A)\n- oil_temp_c (\u00b0C)\n- power_factor\n- voltage_hv_kv (kV)\n- voltage_lv_kv (kV)\n- winding_temp_top_c (\u00b0C)\n\nThe available instrumentation covers both electrical (load current, power factor, voltage) and thermal monitoring needs (oil temperature, winding temperature).",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 12.09142017364502,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-021",
+    "type": "IoT",
+    "text": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+    "category": "Sensor Coverage Audit",
+    "characteristic_form": "The answer should report the transformer's voltage class and rating, list all installed sensor IDs, and summarize whether thermal channels (e.g. winding/oil temperature) and electrical channels (e.g. load current, voltage) are both represented.",
+    "asset_id": "T-007",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "voltage class",
+        "rating",
+        "sensor list",
+        "thermal sensor coverage",
+        "electrical sensor coverage"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}
