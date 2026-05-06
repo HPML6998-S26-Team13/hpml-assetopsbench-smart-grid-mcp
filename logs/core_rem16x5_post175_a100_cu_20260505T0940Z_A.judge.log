@@ -1,6 +1,6 @@
 Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_aob_fmsr_01_list_failure_modes_run01.json against aob_fmsr_01_list_failure_modes.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -10,7 +10,7 @@ Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_aob_fmsr_01_list
   Judge log saved → results/judge_logs/core_rem16x5_post175_a100_cu_20260505T0940Z_A_post175_15x5_aat_direct/AOB-FMSR-001_run02_judge_log.json
 Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_aob_fmsr_01_list_failure_modes_run03.json against aob_fmsr_01_list_failure_modes.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

@@ -1,9 +1,9 @@
-(APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299] 
+(APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]
 (APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299] 
+(APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:299]
 (APIServer pid=3417) INFO 05-05 07:20:14 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm'}
 (APIServer pid=3417) WARNING 05-05 07:20:14 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_GENERATION_CONFIG
 (APIServer pid=3417) WARNING 05-05 07:20:14 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
@@ -25,13 +25,13 @@
 (EngineCore pid=3490) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:42<00:14, 14.15s/it]
 (EngineCore pid=3490) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:46<00:00,  9.99s/it]
 (EngineCore pid=3490) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:46<00:00, 11.54s/it]
-(EngineCore pid=3490) 
+(EngineCore pid=3490)
 (EngineCore pid=3490) INFO 05-05 07:21:14 [default_loader.py:384] Loading weights took 46.18 seconds
 (EngineCore pid=3490) INFO 05-05 07:21:15 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 47.673566 seconds
-(EngineCore pid=3490) INFO 05-05 07:21:21 [backends.py:1051] Using cache directory: /home/wax/.cache/vllm/torch_compile_cache/030fc83892/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=3490) INFO 05-05 07:21:21 [backends.py:1051] Using cache directory: <runner-cache>/vllm/torch_compile_cache/030fc83892/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=3490) INFO 05-05 07:21:21 [backends.py:1111] Dynamo bytecode transform time: 5.56 s
 (EngineCore pid=3490) INFO 05-05 07:21:23 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.821 s
-(EngineCore pid=3490) INFO 05-05 07:21:23 [decorators.py:303] Directly load AOT compilation from path /home/wax/.cache/vllm/torch_compile_cache/torch_aot_compile/4e1d81d9b43eee674382656bd9e92efaf028a0bfeb7f5bff149ad94cf799568f/rank_0_0/model
+(EngineCore pid=3490) INFO 05-05 07:21:23 [decorators.py:303] Directly load AOT compilation from path <runner-cache>/vllm/torch_compile_cache/torch_aot_compile/4e1d81d9b43eee674382656bd9e92efaf028a0bfeb7f5bff149ad94cf799568f/rank_0_0/model
 (EngineCore pid=3490) INFO 05-05 07:21:23 [monitor.py:48] torch.compile took 7.71 s in total
 (EngineCore pid=3490) INFO 05-05 07:21:23 [monitor.py:76] Initial profiling/warmup run took 0.32 s
 (EngineCore pid=3490) INFO 05-05 07:21:24 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512

@@ -1,14 +1,14 @@
 JUDGE:benchmarks/cell_A70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx
 Scoring 2026-05-04_A70B_llama-3-3-70b-instruct_agent_as_tool_direct_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_A70B_final6x3_70b_aat_direct_watsonx/SGT-014_run01_judge_log.json
 Scoring 2026-05-04_A70B_llama-3-3-70b-instruct_agent_as_tool_direct_fmsr_04_dga_full_diagnostic_chain_run02.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -84,7 +84,7 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_B70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx
 Scoring 2026-05-04_B70B_llama-3-3-70b-instruct_agent_as_tool_baseline_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -97,7 +97,7 @@ Scoring 2026-05-04_B70B_llama-3-3-70b-instruct_agent_as_tool_baseline_fmsr_04_dg
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_B70B_final6x3_70b_aat_mcp_baseline_watsonx/SGT-014_run03_judge_log.json
 Scoring 2026-05-04_B70B_llama-3-3-70b-instruct_agent_as_tool_baseline_iot_04_load_current_overload_check_run01.json against iot_04_load_current_overload_check.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -167,7 +167,7 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_C70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx
 Scoring 2026-05-04_C70B_llama-3-3-70b-instruct_agent_as_tool_optimized_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -177,7 +177,7 @@ Scoring 2026-05-04_C70B_llama-3-3-70b-instruct_agent_as_tool_optimized_fmsr_04_d
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_C70B_final6x3_70b_aat_mcp_optimized_watsonx/SGT-014_run02_judge_log.json
 Scoring 2026-05-04_C70B_llama-3-3-70b-instruct_agent_as_tool_optimized_fmsr_04_dga_full_diagnostic_chain_run03.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -250,7 +250,7 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_Y70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Y70B_final6x3_70b_exp2_cell_Y_pe_mcp_baseline_watsonx
 Scoring 2026-05-04_Y70B_llama-3-3-70b-instruct_plan_execute_baseline_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -329,7 +329,7 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_YS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx
 Scoring 2026-05-04_YS70B_llama-3-3-70b-instruct_plan_execute_baseline_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -363,7 +363,7 @@ Scoring 2026-05-04_YS70B_llama-3-3-70b-instruct_plan_execute_baseline_multi_02_d
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_YS70B_final6x3_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx/SGT-010_run01_judge_log.json
 Scoring 2026-05-04_YS70B_llama-3-3-70b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run02.json against multi_02_dga_to_workorder_pipeline.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -412,14 +412,14 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_Z70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx
 Scoring 2026-05-04_Z70B_llama-3-3-70b-instruct_verified_pe_baseline_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_Z70B_final6x3_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx/SGT-014_run01_judge_log.json
 Scoring 2026-05-04_Z70B_llama-3-3-70b-instruct_verified_pe_baseline_fmsr_04_dga_full_diagnostic_chain_run02.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -495,7 +495,7 @@ Scored 18 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores
 JUDGE:benchmarks/cell_ZS70B/raw/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx
 Scoring 2026-05-04_ZS70B_llama-3-3-70b-instruct_verified_pe_baseline_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -520,7 +520,7 @@ Scoring 2026-05-04_ZS70B_llama-3-3-70b-instruct_verified_pe_baseline_multi_01_en
   Judge log saved → results/judge_logs/final6x3_70b_watsonx_post180_envfix_cpu_ixqt_20260504T2115Z_ZS70B_final6x3_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx/SGT-009_run01_judge_log.json
 Scoring 2026-05-04_ZS70B_llama-3-3-70b-instruct_verified_pe_baseline_multi_01_end_to_end_fault_response_run02.json against multi_01_end_to_end_fault_response.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

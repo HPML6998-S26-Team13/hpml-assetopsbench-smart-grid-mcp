@@ -1,13 +1,13 @@
 Scoring 2026-05-05_D_llama-3-1-8b-instruct-int8_agent_as_tool_optimized_fmsr_01_dga_fault_mode_diagnosis_run01.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
   Judge log saved → results/judge_logs/extra15x5_post175_a100_ixqt_west3_20260505T0815Z_D_post175_15x5_aat_mcp_model_optimized/SGT-003_run01_judge_log.json
 Scoring 2026-05-05_D_llama-3-1-8b-instruct-int8_agent_as_tool_optimized_fmsr_01_dga_fault_mode_diagnosis_run02.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

@@ -1,9 +1,9 @@
-(APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299] 
+(APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]
 (APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299] 
+(APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:299]
 (APIServer pid=34237) INFO 05-03 11:00:53 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct']}
 (APIServer pid=34237) WARNING 05-03 11:00:53 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
 (APIServer pid=34237) INFO 05-03 11:00:53 [model.py:549] Resolved architecture: LlamaForCausalLM
@@ -24,13 +24,13 @@
 (EngineCore pid=34305) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:07<00:02,  2.39s/it]
 (EngineCore pid=34305) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.69s/it]
 (EngineCore pid=34305) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.95s/it]
-(EngineCore pid=34305) 
+(EngineCore pid=34305)
 (EngineCore pid=34305) INFO 05-03 11:01:14 [default_loader.py:384] Loading weights took 7.84 seconds
 (EngineCore pid=34305) INFO 05-03 11:01:14 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 8.606237 seconds
-(EngineCore pid=34305) INFO 05-03 11:01:18 [backends.py:1051] Using cache directory: /home/wax/.cache/vllm/torch_compile_cache/2908e40b64/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=34305) INFO 05-03 11:01:18 [backends.py:1051] Using cache directory: <runner-cache>/vllm/torch_compile_cache/2908e40b64/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=34305) INFO 05-03 11:01:18 [backends.py:1111] Dynamo bytecode transform time: 3.92 s
 (EngineCore pid=34305) INFO 05-03 11:01:20 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.790 s
-(EngineCore pid=34305) INFO 05-03 11:01:20 [decorators.py:303] Directly load AOT compilation from path /home/wax/.cache/vllm/torch_compile_cache/torch_aot_compile/8436840f563f7a16c39a34251317fe0e298c24c971af9e18b1605e90117c879d/rank_0_0/model
+(EngineCore pid=34305) INFO 05-03 11:01:20 [decorators.py:303] Directly load AOT compilation from path <runner-cache>/vllm/torch_compile_cache/torch_aot_compile/8436840f563f7a16c39a34251317fe0e298c24c971af9e18b1605e90117c879d/rank_0_0/model
 (EngineCore pid=34305) INFO 05-03 11:01:20 [monitor.py:48] torch.compile took 6.04 s in total
 (EngineCore pid=34305) INFO 05-03 11:01:21 [monitor.py:76] Initial profiling/warmup run took 0.24 s
 (EngineCore pid=34305) INFO 05-03 11:01:21 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
@@ -711,7 +711,7 @@
 (APIServer pid=34237) INFO:     Waiting for application shutdown.
 (APIServer pid=34237) INFO:     Application shutdown complete.
 (APIServer pid=34237) INFO:     Finished server process [34237]
-/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
-/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-ym3nqkev': [Errno 2] No such file or directory
+<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-ym3nqkev': [Errno 2] No such file or directory
   warnings.warn('resource_tracker: %r: %s' % (name, e))

@@ -21,13 +21,13 @@ vLLM auto tool choice: enabled with parser 'llama3_json'
 wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
 wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
 wandb: Tracking run with wandb version 0.26.1
-wandb: Run data is saved locally in /home/wax/hpml-post175-followon-cu-20260505T0810Z/wandb/run-20260505_083855-z3c3wy9l
+wandb: Run data is saved locally in <runner-home>/hpml-post175-followon-cu-20260505T0810Z/wandb/run-20260505_083855-z3c3wy9l
 wandb: Run `wandb offline` to turn off syncing.
 wandb: Syncing run followon15x5_post175_a100_cu_20260505T0810Z_YS_TP_post175_15x5_exp2_cell_YS_pe_self_ask_mcp_optimized
 wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/z3c3wy9l
 wandb: updating run metadata; uploading summary
-wandb: 
+wandb:
 wandb: Run summary:
 wandb:            benchmark_config_path /tmp/followon15x5_po...
 wandb:           benchmark_summary_path benchmarks/cell_Y_pl...
@@ -40,7 +40,7 @@ wandb:                          git_sha 1913c6e4703425f735d8...
 wandb:                         gpu_type NVIDIA A100-SXM4-40G...
 wandb:                        host_name smartgrid-a100-spot-...
 wandb:                              +28 ...
-wandb: 
+wandb:
 wandb: 🚀 View run followon15x5_post175_a100_cu_20260505T0810Z_YS_TP_post175_15x5_exp2_cell_YS_pe_self_ask_mcp_optimized at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/z3c3wy9l
 wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
@@ -76,13 +76,13 @@ vLLM auto tool choice: enabled with parser 'llama3_json'
 wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
 wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
 wandb: Tracking run with wandb version 0.26.1
-wandb: Run data is saved locally in /home/wax/hpml-post175-followon-cu-20260505T0810Z/wandb/run-20260505_091847-vrz3a3l4
+wandb: Run data is saved locally in <runner-home>/hpml-post175-followon-cu-20260505T0810Z/wandb/run-20260505_091847-vrz3a3l4
 wandb: Run `wandb offline` to turn off syncing.
 wandb: Syncing run followon15x5_post175_a100_cu_20260505T0810Z_ZS_TP_post175_15x5_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized
 wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/vrz3a3l4
 wandb: updating run metadata; uploading summary
-wandb: 
+wandb:
 wandb: Run summary:
 wandb:            benchmark_config_path /tmp/followon15x5_po...
 wandb:           benchmark_summary_path benchmarks/cell_Z_hy...
@@ -95,7 +95,7 @@ wandb:                          git_sha 1913c6e4703425f735d8...
 wandb:                         gpu_type NVIDIA A100-SXM4-40G...
 wandb:                        host_name smartgrid-a100-spot-...
 wandb:                              +28 ...
-wandb: 
+wandb:
 wandb: 🚀 View run followon15x5_post175_a100_cu_20260505T0810Z_ZS_TP_post175_15x5_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/vrz3a3l4
 wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)

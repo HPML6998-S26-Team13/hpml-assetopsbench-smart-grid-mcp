@@ -20,27 +20,27 @@ vLLM startup timeout: 1800s
 vLLM auto tool choice: enabled with parser 'llama3_json'
 Traceback (most recent call last):
   File "<stdin>", line 24, in <module>
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
     get_sentry().reraise(e)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
     raise exc.with_traceback(tb)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
     wi.maybe_login(init_settings)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
     wandb_login._login(
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
     auth = _find_or_prompt_for_key(
            ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
     auth = wbauth.authenticate_session(
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
     raise UsageError(
 wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
 Artifact validation for final5x6_followon_transport_post180_a100_ixqt_west4_20260504T2205Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized: 30/30 complete, 0 missing
 Scoring 2026-05-04_Y_llama-3-1-8b-instruct_plan_execute_optimized_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -53,7 +53,7 @@ Scoring 2026-05-04_Y_llama-3-1-8b-instruct_plan_execute_optimized_fmsr_04_dga_fu
   Judge log saved → results/judge_logs/final5x6_followon_transport_post180_a100_ixqt_west4_20260504T2205Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized/SGT-014_run03_judge_log.json
 Scoring 2026-05-04_Y_llama-3-1-8b-instruct_plan_execute_optimized_fmsr_04_dga_full_diagnostic_chain_run04.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -190,34 +190,34 @@ vLLM startup timeout: 1800s
 vLLM auto tool choice: enabled with parser 'llama3_json'
 Traceback (most recent call last):
   File "<stdin>", line 24, in <module>
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1603, in init
     get_sentry().reraise(e)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/analytics/sentry.py", line 190, in reraise
     raise exc.with_traceback(tb)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1524, in init
     wi.maybe_login(init_settings)
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 200, in maybe_login
     wandb_login._login(
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
     auth = _find_or_prompt_for_key(
            ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
     auth = wbauth.authenticate_session(
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+  File "<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
     raise UsageError(
 wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
 Artifact validation for final5x6_followon_transport_post180_a100_ixqt_west4_20260504T2205Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized: 30/30 complete, 0 missing
 Scoring 2026-05-04_Z_llama-3-1-8b-instruct_verified_pe_optimized_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
   Judge log saved → results/judge_logs/final5x6_followon_transport_post180_a100_ixqt_west4_20260504T2205Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized/SGT-014_run01_judge_log.json
 Scoring 2026-05-04_Z_llama-3-1-8b-instruct_verified_pe_optimized_fmsr_04_dga_full_diagnostic_chain_run02.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-final-grid-ixqt/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

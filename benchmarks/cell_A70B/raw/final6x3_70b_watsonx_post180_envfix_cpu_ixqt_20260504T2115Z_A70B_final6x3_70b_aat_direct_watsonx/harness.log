@@ -3,405 +3,405 @@ openai-agents==0.14.5
 mcp==1.27.0
 litellm==1.81.13
 AaT parallel tool calls: false
-2026-05-04 21:01:04,336 INFO LiteLLM: 
+2026-05-04 21:01:04,336 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:07,709 INFO LiteLLM: 
+2026-05-04 21:01:07,709 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:01:09,328 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:09,634 INFO LiteLLM: 
+2026-05-04 21:01:09,634 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:11,733 INFO LiteLLM: 
+2026-05-04 21:01:11,733 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:14,132 INFO LiteLLM: 
+2026-05-04 21:01:14,132 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:01:14,335 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:17,631 INFO LiteLLM: 
+2026-05-04 21:01:17,631 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:01:19,339 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:01:32,350 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:01:35,711 INFO LiteLLM: 
+2026-05-04 21:01:35,711 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:39,087 INFO LiteLLM: 
+2026-05-04 21:01:39,087 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:01:40,704 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:01:40,769 INFO LiteLLM: 
+2026-05-04 21:01:40,769 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:01:45,708 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:02:40,013 INFO LiteLLM: 
+2026-05-04 21:02:40,013 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:02:40,810 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:02:42,041 INFO LiteLLM: 
+2026-05-04 21:02:42,041 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:02:44,039 INFO LiteLLM: 
+2026-05-04 21:02:44,039 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:02:45,814 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:02:46,689 INFO LiteLLM: 
+2026-05-04 21:02:46,689 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:02:49,152 INFO LiteLLM: 
+2026-05-04 21:02:49,152 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:02:50,818 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:02:58,024 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:03:01,234 INFO LiteLLM: 
+2026-05-04 21:03:01,234 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:04,589 INFO LiteLLM: 
+2026-05-04 21:03:04,589 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:03:06,228 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:06,349 INFO LiteLLM: 
+2026-05-04 21:03:06,349 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:08,392 INFO LiteLLM: 
+2026-05-04 21:03:08,392 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:10,420 INFO LiteLLM: 
+2026-05-04 21:03:10,420 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:03:11,232 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:39,208 INFO LiteLLM: 
+2026-05-04 21:03:39,208 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:03:41,256 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:41,796 INFO LiteLLM: 
+2026-05-04 21:03:41,796 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:03:46,260 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:03:49,263 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:03:52,720 INFO LiteLLM: 
+2026-05-04 21:03:52,720 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:54,616 INFO LiteLLM: 
+2026-05-04 21:03:54,616 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:56,719 INFO LiteLLM: 
+2026-05-04 21:03:56,719 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:03:57,717 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:03:58,283 INFO LiteLLM: 
+2026-05-04 21:03:58,283 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:00,748 INFO LiteLLM: 
+2026-05-04 21:04:00,748 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:02,781 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:04:04,383 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:04:07,906 INFO LiteLLM: 
+2026-05-04 21:04:07,906 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:09,989 INFO LiteLLM: 
+2026-05-04 21:04:09,989 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:12,130 INFO LiteLLM: 
+2026-05-04 21:04:12,130 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:12,903 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:14,653 INFO LiteLLM: 
+2026-05-04 21:04:14,653 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:17,907 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:04:21,336 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:04:24,449 INFO LiteLLM: 
+2026-05-04 21:04:24,449 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:27,373 INFO LiteLLM: 
+2026-05-04 21:04:27,373 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:29,182 INFO LiteLLM: 
+2026-05-04 21:04:29,182 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:29,443 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:32,094 INFO LiteLLM: 
+2026-05-04 21:04:32,094 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:34,447 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:04:34,782 INFO LiteLLM: 
+2026-05-04 21:04:34,782 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-2026-05-04 21:04:37,808 INFO LiteLLM: 
+2026-05-04 21:04:37,808 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:39,518 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:39,772 INFO LiteLLM: 
+2026-05-04 21:04:39,772 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:42,455 INFO LiteLLM: 
+2026-05-04 21:04:42,455 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:44,522 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content="Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:04:46,523 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:04:49,681 INFO LiteLLM: 
+2026-05-04 21:04:49,681 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:51,891 INFO LiteLLM: 
+2026-05-04 21:04:51,891 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:53,557 INFO LiteLLM: 
+2026-05-04 21:04:53,557 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:54,674 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:04:55,221 INFO LiteLLM: 
+2026-05-04 21:04:55,221 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:04:59,749 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:05:01,351 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:05:04,774 INFO LiteLLM: 
+2026-05-04 21:05:04,774 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:07,009 INFO LiteLLM: 
+2026-05-04 21:05:07,009 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:09,767 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:09,799 INFO LiteLLM: 
+2026-05-04 21:05:09,799 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-2026-05-04 21:05:11,993 INFO LiteLLM: 
+2026-05-04 21:05:11,993 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:14,795 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:14,996 INFO LiteLLM: 
+2026-05-04 21:05:14,996 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:19,800 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:05:24,404 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:05:27,634 INFO LiteLLM: 
+2026-05-04 21:05:27,634 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:29,865 INFO LiteLLM: 
+2026-05-04 21:05:29,865 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:31,500 INFO LiteLLM: 
+2026-05-04 21:05:31,500 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:32,627 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:33,407 INFO LiteLLM: 
+2026-05-04 21:05:33,407 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:05:37,121 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:05:40,309 INFO LiteLLM: 
+2026-05-04 21:05:40,309 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:43,105 INFO LiteLLM: 
+2026-05-04 21:05:43,105 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:45,304 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:46,300 INFO LiteLLM: 
+2026-05-04 21:05:46,300 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:48,016 INFO LiteLLM: 
+2026-05-04 21:05:48,016 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:05:50,308 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:05:50,975 INFO LiteLLM: 
+2026-05-04 21:05:50,975 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The load...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:05:54,775 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:05:57,829 INFO LiteLLM: 
+2026-05-04 21:05:57,829 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:00,337 INFO LiteLLM: 
+2026-05-04 21:06:00,337 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:02,822 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:03,463 INFO LiteLLM: 
+2026-05-04 21:06:03,463 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:05,221 INFO LiteLLM: 
+2026-05-04 21:06:05,221 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:07,826 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:09,091 INFO LiteLLM: 
+2026-05-04 21:06:09,091 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:09,333 ERROR aat_runner: runner failed: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"5876cd51fb61ce66a0578da05a859acd","status_code":400}
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
     response = await client.post(
                ^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
     result = await func(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
     response.raise_for_status()
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
     raise HTTPStatusError(message, request=request, response=self)
 httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-03-13'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
@@ -409,54 +409,54 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
     response = await init_response
                ^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
     raise OpenAILikeError(
 litellm.llms.openai_like.common_utils.OpenAILikeError: {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"5876cd51fb61ce66a0578da05a859acd","status_code":400}
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
     result = await runner.run(args.prompt)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
     return await Runner.run(agent, prompt, max_turns=self.max_turns)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
     return await runner.run(
            ^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
     turn_result = await run_single_turn(
                   ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
     new_response = await get_new_response(
                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
     new_response = await get_response_with_retry(
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
     response = await get_response()
                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
     response = await self._fetch_response(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
     ret = await litellm.acompletion(
           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
     result = await original_function(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
     raise exception_type(
           ^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
     raise BadRequestError(
 litellm.exceptions.BadRequestError: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"5876cd51fb61ce66a0578da05a859acd","status_code":400}
 
@@ -464,164 +464,164 @@ litellm.exceptions.BadRequestError: litellm.BadRequestError: WatsonxException - 
 LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
 
 2026-05-04 21:06:09,486 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:06:12,545 INFO LiteLLM: 
+2026-05-04 21:06:12,545 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:15,113 INFO LiteLLM: 
+2026-05-04 21:06:15,113 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:17,538 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:17,755 INFO LiteLLM: 
+2026-05-04 21:06:17,755 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:19,457 INFO LiteLLM: 
+2026-05-04 21:06:19,457 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:22,429 INFO LiteLLM: 
+2026-05-04 21:06:22,429 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:22,626 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The dete...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:06:26,429 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:06:29,491 INFO LiteLLM: 
+2026-05-04 21:06:29,491 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:32,382 INFO LiteLLM: 
+2026-05-04 21:06:32,382 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:34,484 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The func...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:06:42,290 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:06:45,365 INFO LiteLLM: 
+2026-05-04 21:06:45,365 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:06:48,407 INFO LiteLLM: 
+2026-05-04 21:06:48,407 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:06:50,359 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='This fun...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:06:55,362 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:06:58,446 INFO LiteLLM: 
+2026-05-04 21:06:58,446 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:01,136 INFO LiteLLM: 
+2026-05-04 21:07:01,136 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:03,440 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='This fun...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:07:08,844 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:11,949 INFO LiteLLM: 
+2026-05-04 21:07:11,949 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:13,822 INFO LiteLLM: 
+2026-05-04 21:07:13,822 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:15,790 INFO LiteLLM: 
+2026-05-04 21:07:15,790 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:16,942 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:17,864 INFO LiteLLM: 
+2026-05-04 21:07:17,864 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:20,200 INFO LiteLLM: 
+2026-05-04 21:07:20,200 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:22,063 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:07:27,468 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:30,522 INFO LiteLLM: 
+2026-05-04 21:07:30,522 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:32,662 INFO LiteLLM: 
+2026-05-04 21:07:32,662 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:34,543 INFO LiteLLM: 
+2026-05-04 21:07:34,543 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:35,516 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:36,854 INFO LiteLLM: 
+2026-05-04 21:07:36,854 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:39,242 INFO LiteLLM: 
+2026-05-04 21:07:39,242 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:40,568 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 2026-05-04 21:07:46,573 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:49,615 INFO LiteLLM: 
+2026-05-04 21:07:49,615 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:51,421 INFO LiteLLM: 
+2026-05-04 21:07:51,421 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:53,525 INFO LiteLLM: 
+2026-05-04 21:07:53,525 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:54,616 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:07:55,933 INFO LiteLLM: 
+2026-05-04 21:07:55,933 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:07:58,381 INFO LiteLLM: 
+2026-05-04 21:07:58,381 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:07:59,620 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

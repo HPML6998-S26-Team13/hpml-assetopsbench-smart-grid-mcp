@@ -1,6 +1,6 @@
 Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_fmsr_01_dga_fault_mode_diagnosis_run01.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -22,7 +22,7 @@ Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_fmsr_04_dga_full
   Judge log saved → results/judge_logs/core15x5_post175_a100_cu_20260505T0724Z_A_post175_15x5_aat_direct/SGT-014_run01_judge_log.json
 Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_fmsr_04_dga_full_diagnostic_chain_run02.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -310,7 +310,7 @@ Scoring 2026-05-05_A_llama-3-1-8b-instruct_agent_as_tool_direct_wo_05_inspection
 Scored 75 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores.jsonl
 Scoring 2026-05-05_B_llama-3-1-8b-instruct_agent_as_tool_baseline_fmsr_01_dga_fault_mode_diagnosis_run01.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -320,7 +320,7 @@ Scoring 2026-05-05_B_llama-3-1-8b-instruct_agent_as_tool_baseline_fmsr_01_dga_fa
   Judge log saved → results/judge_logs/core15x5_post175_a100_cu_20260505T0724Z_B_post175_15x5_aat_mcp_baseline/SGT-003_run02_judge_log.json
 Scoring 2026-05-05_B_llama-3-1-8b-instruct_agent_as_tool_baseline_fmsr_01_dga_fault_mode_diagnosis_run03.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -620,7 +620,7 @@ Scoring 2026-05-05_B_llama-3-1-8b-instruct_agent_as_tool_baseline_wo_05_inspecti
 Scored 75 trajectory file(s), skipped 0. Output: results/metrics/scenario_scores.jsonl
 Scoring 2026-05-05_C_llama-3-1-8b-instruct_agent_as_tool_optimized_fmsr_01_dga_fault_mode_diagnosis_run01.json against fmsr_01_dga_fault_mode_diagnosis.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -645,7 +645,7 @@ Scoring 2026-05-05_C_llama-3-1-8b-instruct_agent_as_tool_optimized_fmsr_04_dga_f
   Judge log saved → results/judge_logs/core15x5_post175_a100_cu_20260505T0724Z_C_post175_15x5_aat_mcp_optimized/SGT-014_run02_judge_log.json
 Scoring 2026-05-05_C_llama-3-1-8b-instruct_agent_as_tool_optimized_fmsr_04_dga_full_diagnostic_chain_run03.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

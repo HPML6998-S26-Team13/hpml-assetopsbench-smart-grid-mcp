@@ -1,10 +1,10 @@
-(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299] 
+(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]
 (APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299] 
-(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 16384, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm', 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='/home/wax/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
+(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:299]
+(APIServer pid=477030) INFO 05-05 00:29:11 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 16384, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm', 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='<runner-home>/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
 (APIServer pid=477030) WARNING 05-05 00:29:11 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_GENERATION_CONFIG
 (APIServer pid=477030) WARNING 05-05 00:29:11 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
 (APIServer pid=477030) INFO 05-05 00:29:11 [model.py:549] Resolved architecture: LlamaForCausalLM
@@ -25,13 +25,13 @@
 (EngineCore pid=477096) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:07<00:02,  2.38s/it]
 (EngineCore pid=477096) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.69s/it]
 (EngineCore pid=477096) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.95s/it]
-(EngineCore pid=477096) 
+(EngineCore pid=477096)
 (EngineCore pid=477096) INFO 05-05 00:29:32 [default_loader.py:384] Loading weights took 7.81 seconds
 (EngineCore pid=477096) INFO 05-05 00:29:32 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 8.566944 seconds
-(EngineCore pid=477096) INFO 05-05 00:29:37 [backends.py:1051] Using cache directory: /home/wax/.cache/vllm/torch_compile_cache/59232b58c1/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=477096) INFO 05-05 00:29:37 [backends.py:1051] Using cache directory: <runner-cache>/vllm/torch_compile_cache/59232b58c1/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=477096) INFO 05-05 00:29:37 [backends.py:1111] Dynamo bytecode transform time: 3.89 s
 (EngineCore pid=477096) INFO 05-05 00:29:39 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.759 s
-(EngineCore pid=477096) INFO 05-05 00:29:39 [decorators.py:303] Directly load AOT compilation from path /home/wax/.cache/vllm/torch_compile_cache/torch_aot_compile/9c5cf5810e53c85ecccdaea77486c568405d0fc6d22831ac28b22ad94619fc96/rank_0_0/model
+(EngineCore pid=477096) INFO 05-05 00:29:39 [decorators.py:303] Directly load AOT compilation from path <runner-cache>/vllm/torch_compile_cache/torch_aot_compile/9c5cf5810e53c85ecccdaea77486c568405d0fc6d22831ac28b22ad94619fc96/rank_0_0/model
 (EngineCore pid=477096) INFO 05-05 00:29:39 [monitor.py:48] torch.compile took 5.97 s in total
 (EngineCore pid=477096) INFO 05-05 00:29:39 [monitor.py:76] Initial profiling/warmup run took 0.24 s
 (EngineCore pid=477096) INFO 05-05 00:29:39 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
@@ -47,7 +47,7 @@
 (EngineCore pid=477096) INFO 05-05 00:29:47 [gpu_worker.py:597] CUDA graph pool memory: 0.48 GiB (actual), 0.53 GiB (estimated), difference: 0.05 GiB (10.2%).
 (EngineCore pid=477096) INFO 05-05 00:29:47 [core.py:283] init engine (profile, create kv cache, warmup model) took 14.31 seconds
 (EngineCore pid=477096) INFO 05-05 00:29:48 [vllm.py:790] Asynchronous scheduling is enabled.
-(APIServer pid=477030) INFO 05-05 00:29:48 [async_llm.py:191] Torch profiler enabled. AsyncLLM CPU traces will be collected under /home/wax/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384_torch
+(APIServer pid=477030) INFO 05-05 00:29:48 [async_llm.py:191] Torch profiler enabled. AsyncLLM CPU traces will be collected under <runner-home>/hpml-final-grid-post180-west3a/profiling/traces/context_y_pe_post180_a100_ixqt_west3_20260505T0012Z_Y16_exp2_cell_Y_pe_mcp_baseline_16384_torch
 (APIServer pid=477030) INFO 05-05 00:29:48 [api_server.py:590] Supported tasks: ['generate']
 (APIServer pid=477030) WARNING 05-05 00:29:48 [api_router.py:41] Profiler with mode 'torch' is enabled in the API server. This should ONLY be used for local development!
 (APIServer pid=477030) INFO 05-05 00:29:48 [parser_manager.py:202] "auto" tool choice has been enabled.

@@ -1,9 +1,9 @@
-(APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299] 
+(APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]
 (APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299] 
+(APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:299]
 (APIServer pid=2629) INFO 05-05 07:20:14 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm'}
 (APIServer pid=2629) WARNING 05-05 07:20:14 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_GENERATION_CONFIG
 (APIServer pid=2629) WARNING 05-05 07:20:14 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
@@ -25,13 +25,13 @@
 (EngineCore pid=2699) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:42<00:14, 14.18s/it]
 (EngineCore pid=2699) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:46<00:00, 10.01s/it]
 (EngineCore pid=2699) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:46<00:00, 11.57s/it]
-(EngineCore pid=2699) 
+(EngineCore pid=2699)
 (EngineCore pid=2699) INFO 05-05 07:21:18 [default_loader.py:384] Loading weights took 46.31 seconds
 (EngineCore pid=2699) INFO 05-05 07:21:18 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 49.252328 seconds
-(EngineCore pid=2699) INFO 05-05 07:21:27 [backends.py:1051] Using cache directory: /home/wax/.cache/vllm/torch_compile_cache/228364517c/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=2699) INFO 05-05 07:21:27 [backends.py:1051] Using cache directory: <runner-cache>/vllm/torch_compile_cache/228364517c/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=2699) INFO 05-05 07:21:27 [backends.py:1111] Dynamo bytecode transform time: 8.05 s
 (EngineCore pid=2699) INFO 05-05 07:21:29 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.889 s
-(EngineCore pid=2699) INFO 05-05 07:21:29 [decorators.py:303] Directly load AOT compilation from path /home/wax/.cache/vllm/torch_compile_cache/torch_aot_compile/4e1d81d9b43eee674382656bd9e92efaf028a0bfeb7f5bff149ad94cf799568f/rank_0_0/model
+(EngineCore pid=2699) INFO 05-05 07:21:29 [decorators.py:303] Directly load AOT compilation from path <runner-cache>/vllm/torch_compile_cache/torch_aot_compile/4e1d81d9b43eee674382656bd9e92efaf028a0bfeb7f5bff149ad94cf799568f/rank_0_0/model
 (EngineCore pid=2699) INFO 05-05 07:21:29 [monitor.py:48] torch.compile took 10.27 s in total
 (EngineCore pid=2699) INFO 05-05 07:21:29 [monitor.py:76] Initial profiling/warmup run took 0.43 s
 (EngineCore pid=2699) INFO 05-05 07:21:30 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
@@ -353,10 +353,10 @@
 (APIServer pid=2629) INFO:     127.0.0.1:44154 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138] Error in extracting tool call from response. Returning output in content with empty tool calls
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138] Traceback (most recent call last):
-(APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]   File "/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
+(APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]   File "<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]     obj, json_end_index = self.json_decoder.raw_decode(
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]   File "/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
+(APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]   File "<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138]     raise JSONDecodeError("Expecting value", s, err.value) from None
 (APIServer pid=2629) ERROR 05-05 07:29:15 [llama_tool_parser.py:138] json.decoder.JSONDecodeError: Expecting value: line 1 column 239 (char 238)
 (APIServer pid=2629) INFO:     127.0.0.1:44154 - "POST /v1/chat/completions HTTP/1.1" 200 OK
@@ -393,10 +393,10 @@
 (APIServer pid=2629) INFO:     127.0.0.1:37960 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138] Error in extracting tool call from response. Returning output in content with empty tool calls
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138] Traceback (most recent call last):
-(APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]   File "/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
+(APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]   File "<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]     obj, json_end_index = self.json_decoder.raw_decode(
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]   File "/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 353, in raw_decode
+(APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]   File "<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 353, in raw_decode
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]     obj, end = self.scan_once(s, idx)
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138]                ^^^^^^^^^^^^^^^^^^^^^^
 (APIServer pid=2629) ERROR 05-05 07:30:28 [llama_tool_parser.py:138] json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 191 (char 190)
@@ -470,10 +470,10 @@
 (APIServer pid=2629) INFO:     127.0.0.1:53502 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138] Error in extracting tool call from response. Returning output in content with empty tool calls
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138] Traceback (most recent call last):
-(APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]   File "/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
+(APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]   File "<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]     obj, json_end_index = self.json_decoder.raw_decode(
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]   File "/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
+(APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]   File "<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138]     raise JSONDecodeError("Expecting value", s, err.value) from None
 (APIServer pid=2629) ERROR 05-05 07:32:29 [llama_tool_parser.py:138] json.decoder.JSONDecodeError: Expecting value: line 1 column 176 (char 175)
 (APIServer pid=2629) INFO:     127.0.0.1:53504 - "POST /v1/chat/completions HTTP/1.1" 200 OK
@@ -501,10 +501,10 @@
 (APIServer pid=2629) INFO:     127.0.0.1:38418 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138] Error in extracting tool call from response. Returning output in content with empty tool calls
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138] Traceback (most recent call last):
-(APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]   File "/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
+(APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]   File "<runner-home>/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/vllm/tool_parsers/llama_tool_parser.py", line 101, in extract_tool_calls
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]     obj, json_end_index = self.json_decoder.raw_decode(
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]   File "/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
+(APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]   File "<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/json/decoder.py", line 355, in raw_decode
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138]     raise JSONDecodeError("Expecting value", s, err.value) from None
 (APIServer pid=2629) ERROR 05-05 07:33:16 [llama_tool_parser.py:138] json.decoder.JSONDecodeError: Expecting value: line 1 column 94 (char 93)
 (APIServer pid=2629) INFO:     127.0.0.1:38418 - "POST /v1/chat/completions HTTP/1.1" 200 OK

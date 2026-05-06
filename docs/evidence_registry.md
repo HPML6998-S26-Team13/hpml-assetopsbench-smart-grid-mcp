@@ -18,6 +18,10 @@ claims should include only rows where `include_in_paper=true`.
 | `invalid_tooling` | Tooling or environment contamination means the row is not model evidence. | Exclude. |
 | `obsolete` | Retained only because older docs or logs may reference it. | Exclude. |
 
+`paper_grade_candidate` is intentionally excluded by default. Promote it to
+`paper_grade` only after raw trajectory counts, latency rows, judge rows, and
+provenance have all been validated.
+
 ## Current Paper-Grade Set
 
 The current paper-grade floor is PR #175 merged over PR #180:
@@ -68,3 +72,14 @@ paper_runs = set(registry.loc[include, "run_name"])
 
 Then join `results/metrics/scenario_scores.jsonl` by the full `run_name` plus
 the full `trajectory_file` path. Do not join by basename; some cells collide.
+Use a CSV-aware parser such as pandas, Python `csv`, or `csvkit`; `awk -F','`
+will misparse quoted fields in this registry.
+
+Hosted WatsonX 70B summary rows in `gcp_post175_70b_summary.csv` aggregate
+CPU-client captures and top-ups. They do not carry harness-side vLLM latency
+counts, so `latency_count` is intentionally blank for that summary.
+
+Before any Croissant or dataset-package upload, run a PII/path grep over the
+allow-listed export bundle. The committed logs in this PR scrub GCP operator
+home/cache prefixes to placeholders, and package scripts should preserve that
+scrubbed form rather than rebuilding from VM-local logs.

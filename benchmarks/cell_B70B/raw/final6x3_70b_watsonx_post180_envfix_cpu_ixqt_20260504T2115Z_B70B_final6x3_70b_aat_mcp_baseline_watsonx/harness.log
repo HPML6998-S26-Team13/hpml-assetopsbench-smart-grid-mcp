@@ -11,657 +11,657 @@ numpy==2.4.4
 pandas==2.3.3
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:08:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:08:16,897 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:08:16,897 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:08:20] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:20,585 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:20,585 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:21,872 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:08:23] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:23,138 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:23,138 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:08:25] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:25,460 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:25,460 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:26,941 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:08:28] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:28,148 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:28,148 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:31,944 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The rece...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:08:32,641 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f42cd3b04d0>: Cancelled via cancel scope 7f42cd3b1cd0 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:08:32,641 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f42cd3b04d0>: Cancelled via cancel scope 7f42cd3b1cd0 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:08:32,745 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:08:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:08:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:08:37,932 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:08:37,932 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:08:41] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:41,826 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:41,826 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:42,907 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:08:44] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:44,207 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:44,207 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:08:46] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:46,531 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:46,531 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:47,911 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:08:48] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:48,859 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:48,859 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:08:50] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:50,980 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:50,980 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:08:52,915 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:08:53] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:08:53,584 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:08:53,584 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:08:57,327 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f4ab99c8950>: Cancelled via cancel scope 7f4ab99ca150 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:08:57,327 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f4ab99c8950>: Cancelled via cancel scope 7f4ab99ca150 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:08:57,519 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:09:02] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:02] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:02] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:02] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:09:02,687 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:09:02,687 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:09:06] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:06,966 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:06,966 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:07,663 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:09:12] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
 2026-05-04 21:09:12,667 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:09:12,837 INFO LiteLLM: 
+2026-05-04 21:09:12,837 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:17,671 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:09:18] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:18,244 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:18,244 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:22,674 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:09:23] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:23,324 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:23,324 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:09:26] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:26,077 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:26,077 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:27,679 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:09:33,973 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f414e1a0510>: Cancelled via cancel scope 7f414e1a1d90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:09:33,973 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f414e1a0510>: Cancelled via cancel scope 7f414e1a1d90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:09:34,084 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:09:39] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:39] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:39] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:39] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:09:39,290 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:09:39,290 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:09:43] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:43,017 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:43,017 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:44,265 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:09:45] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:09:45,676 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:09:45,676 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:09:49,278 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The outp...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:09:49,805 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f7f3261c690>: Cancelled via cancel scope 7f7f3261de90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:09:49,805 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f7f3261c690>: Cancelled via cancel scope 7f7f3261de90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:09:49,879 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:09:55] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:55] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:55] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:09:55] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:09:55,108 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:09:55,108 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:00,083 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:10:02] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:02,410 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:02,410 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:10:05] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
 2026-05-04 21:10:05,087 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-2026-05-04 21:10:05,200 INFO LiteLLM: 
+2026-05-04 21:10:05,200 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='Based on...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:10:15,083 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fcc5a42c110>: Cancelled via cancel scope 7fcc5a42dc90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:10:15,083 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fcc5a42c110>: Cancelled via cancel scope 7fcc5a42dc90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:10:15,094 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:10:20] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:20] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:20] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:20] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:10:20,296 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:10:20,296 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:10:23] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:23,748 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:23,748 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:25,272 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:10:26] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:26,316 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:26,316 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prov...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:10:28,347 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f6f28024190>: Cancelled via cancel scope 7f6f28025d90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:10:28,347 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f6f28024190>: Cancelled via cancel scope 7f6f28025d90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:10:28,517 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:10:33] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:33] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:33] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:33] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:10:33,744 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:10:33,744 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:10:36] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:36,384 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:36,384 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:38,719 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:10:39] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:39,818 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:39,818 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:10:41] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:41,765 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:41,765 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:43,723 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:10:43] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:10:43,735 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:10:43,735 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:48,727 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:10:49,450 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f0c34ecc450>: Cancelled via cancel scope 7f0c34ecdc50 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:10:49,450 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f0c34ecc450>: Cancelled via cancel scope 7f0c34ecdc50 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:10:49,528 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:10:54] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:54] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:54] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:10:54] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:10:54,730 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:10:54,730 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:10:59,706 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:11:19] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:11:19,635 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:11:19,635 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:11:19,721 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:11:28] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:11:28,253 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:11:28,253 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:11:29,728 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:11:30] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:11:30,451 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:11:30,451 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:11:32] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:11:32,464 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:11:32,464 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:11:34,734 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:11:36,169 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7efecee1c2d0>: Cancelled via cancel scope 7efecee1d9d0 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:11:36,169 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7efecee1c2d0>: Cancelled via cancel scope 7efecee1d9d0 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:11:36,336 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:11:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:11:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:11:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:11:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:11:41,534 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:11:41,534 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:11:46,510 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:12:59] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:12:59,647 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:12:59,647 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:13:01,566 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:13:03] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:03,152 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:03,152 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:13:05] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:05,104 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:05,104 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:13:06,569 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:13:07] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:07,256 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:07,256 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:13:11,573 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prob...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:13:44,415 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f9fb1c28310>: Cancelled via cancel scope 7f9fb1c29a10 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:13:44,415 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f9fb1c28310>: Cancelled via cancel scope 7f9fb1c29a10 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:13:44,598 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:13:49] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:13:49] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:13:49] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:13:49] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:13:49,857 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:13:49,857 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:13:53] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:53,119 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:53,119 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:13:54,831 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:13:55] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:56,008 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:56,008 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:13:59] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:13:59,428 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:13:59,428 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:13:59,835 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:01] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:01,542 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:01,542 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:04,839 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:04] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:04,974 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:04,974 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:14:09] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:09,038 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:09,038 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:09,321 ERROR aat_runner: runner failed: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"71d460c33c333f7fb441e14de39836c5","status_code":400}
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
     response = await client.post(
                ^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
     result = await func(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
     response.raise_for_status()
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
     raise HTTPStatusError(message, request=request, response=self)
 httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-03-13'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
@@ -669,57 +669,57 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
     response = await init_response
                ^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
     raise OpenAILikeError(
 litellm.llms.openai_like.common_utils.OpenAILikeError: {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"71d460c33c333f7fb441e14de39836c5","status_code":400}
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
     result = await runner.run(args.prompt)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
     return await Runner.run(agent, prompt, max_turns=self.max_turns)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
     return await runner.run(
            ^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
     turn_result = await run_single_turn(
                   ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
     new_response = await get_new_response(
                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
     new_response = await get_response_with_retry(
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
     response = await get_response()
                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
     response = await self._fetch_response(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
     ret = await litellm.acompletion(
           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
     result = await original_function(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
     raise exception_type(
           ^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
     raise BadRequestError(
 litellm.exceptions.BadRequestError: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"71d460c33c333f7fb441e14de39836c5","status_code":400}
-2026-05-04 21:14:09,788 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fe51ac20110>: Cancelled via cancel scope 7fe51ac21c50 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:14:09,788 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fe51ac20110>: Cancelled via cancel scope 7fe51ac21c50 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 
 [1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
 LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
@@ -727,80 +727,80 @@ LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
 2026-05-04 21:14:09,843 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:14:15] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:15] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:15] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:15] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:14:15,054 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:14:15,054 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:14:17] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:18,015 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:18,015 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:20,029 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:21] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:21,191 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:21,191 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:14:23] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:23,450 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:23,450 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:25,033 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:26] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:26,438 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:26,438 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:30,037 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:31] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:31,103 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:31,103 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:31,345 ERROR aat_runner: runner failed: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"9afdc3f5f35c619957d04a5fcfb66133","status_code":400}
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
     response = await client.post(
                ^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
     result = await func(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
     response.raise_for_status()
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
     raise HTTPStatusError(message, request=request, response=self)
 httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-03-13'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
@@ -808,57 +808,57 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
     response = await init_response
                ^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
     raise OpenAILikeError(
 litellm.llms.openai_like.common_utils.OpenAILikeError: {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"9afdc3f5f35c619957d04a5fcfb66133","status_code":400}
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
     result = await runner.run(args.prompt)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
     return await Runner.run(agent, prompt, max_turns=self.max_turns)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
     return await runner.run(
            ^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
     turn_result = await run_single_turn(
                   ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
     new_response = await get_new_response(
                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
     new_response = await get_response_with_retry(
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
     response = await get_response()
                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
     response = await self._fetch_response(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
     ret = await litellm.acompletion(
           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
     result = await original_function(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
     raise exception_type(
           ^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
     raise BadRequestError(
 litellm.exceptions.BadRequestError: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"9afdc3f5f35c619957d04a5fcfb66133","status_code":400}
-2026-05-04 21:14:31,859 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f4af7824850>: Cancelled via cancel scope 7f4af7826050 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:14:31,859 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f4af7824850>: Cancelled via cancel scope 7f4af7826050 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 
 [1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
 LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
@@ -866,84 +866,84 @@ LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
 2026-05-04 21:14:32,038 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:14:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:14:37] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:14:37,365 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:14:37,365 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:14:40] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:40,510 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:40,510 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:42,340 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:43] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:43,570 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:43,570 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:14:46] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:46,646 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:46,646 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:47,374 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:48] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:48,936 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:48,936 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:14:51] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:51,948 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:51,948 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:52,378 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:14:55] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:14:55,761 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:14:55,761 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:14:56,046 ERROR aat_runner: runner failed: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"ed8e93c6ed38876856220bebbcea70ec","status_code":400}
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 187, in acompletion_function
     response = await client.post(
                ^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 190, in async_wrapper
     result = await func(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 510, in post
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 466, in post
     response.raise_for_status()
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
     raise HTTPStatusError(message, request=request, response=self)
 httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-03-13'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
@@ -951,57 +951,57 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 611, in acompletion
     response = await init_response
                ^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/llms/openai_like/chat/handler.py", line 192, in acompletion_function
     raise OpenAILikeError(
 litellm.llms.openai_like.common_utils.OpenAILikeError: {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"ed8e93c6ed38876856220bebbcea70ec","status_code":400}
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 688, in _main
     result = await runner.run(args.prompt)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py", line 463, in run
     return await Runner.run(agent, prompt, max_turns=self.max_turns)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 260, in run
     return await runner.run(
            ^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run.py", line 1235, in run
     turn_result = await run_single_turn(
                   ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1749, in run_single_turn
     new_response = await get_new_response(
                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/run_loop.py", line 1867, in get_new_response
     new_response = await get_response_with_retry(
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/run_internal/model_retry.py", line 544, in get_response_with_retry
     response = await get_response()
                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 220, in get_response
     response = await self._fetch_response(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/agents/extensions/models/litellm_model.py", line 531, in _fetch_response
     ret = await litellm.acompletion(
           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 2040, in wrapper_async
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/utils.py", line 1861, in wrapper_async
     result = await original_function(*args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/main.py", line 630, in acompletion
     raise exception_type(
           ^^^^^^^^^^^^^^^
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2398, in exception_type
     raise e
-  File "/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
+  File "<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 910, in exception_type
     raise BadRequestError(
 litellm.exceptions.BadRequestError: litellm.BadRequestError: WatsonxException - {"errors":[{"code":"json_type_error","message":"Json field type error: messages.content must be of type string","more_info":"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat"}],"trace":"ed8e93c6ed38876856220bebbcea70ec","status_code":400}
-2026-05-04 21:14:56,528 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f378d92c490>: Cancelled via cancel scope 7f378d92dc90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:14:56,528 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f378d92c490>: Cancelled via cancel scope 7f378d92dc90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 
 [1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
 LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
@@ -1009,347 +1009,347 @@ LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
 2026-05-04 21:14:56,581 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:15:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:15:01,880 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:15:01,880 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:15:05] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:15:05,073 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:15:05,073 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:15:06,855 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prov...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:15:11,185 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f1ea5930310>: Cancelled via cancel scope 7f1ea5931b90 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:15:11,185 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7f1ea5930310>: Cancelled via cancel scope 7f1ea5931b90 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:15:11,259 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:15:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:16] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:15:16,478 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:15:16,478 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:15:21,453 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:15:30] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:15:30,437 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:15:30,437 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:15:31,461 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The func...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:15:35,697 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fb1b6c241d0>: Cancelled via cancel scope 7fb1b6c25bd0 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:15:35,697 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fb1b6c241d0>: Cancelled via cancel scope 7fb1b6c25bd0 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:15:35,864 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:15:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:15:41] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:15:41,131 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:15:41,131 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:15:44] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:15:44,174 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:15:44,174 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:15:46,106 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The prov...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:15:55,738 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fef2bce0450>: Cancelled via cancel scope 7fef2bce2090 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:15:55,738 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7fef2bce0450>: Cancelled via cancel scope 7fef2bce2090 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:15:55,913 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:16:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:16:01,093 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:16:01,093 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:16:03] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:03,344 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:03,344 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:16:05] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:05,817 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:05,817 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:06,069 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:08] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:08,876 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:08,876 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:11,072 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:11] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:11,426 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:11,426 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='1. The `...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:16:15,742 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7feb5f71c250>: Cancelled via cancel scope 7feb5f71dc50 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:16:15,742 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7feb5f71c250>: Cancelled via cancel scope 7feb5f71dc50 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:16:15,876 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:16:21] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:21] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:21] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:21] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:16:21,064 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:16:21,064 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:16:23] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:23,637 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:23,637 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:16:25] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:25,994 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:25,994 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:26,040 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:29] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:29,023 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:29,023 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:31,044 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:31] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:31,350 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:31,350 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:16:35,526 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7ff8212242d0>: Cancelled via cancel scope 7ff821225b50 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:16:35,526 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7ff8212242d0>: Cancelled via cancel scope 7ff821225b50 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:16:35,647 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 AaT MCP client initialize timeout: 180s
 AaT MCP server launch mode: uv
-Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+Connecting MCP server iot: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/iot_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server iot
-Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+Connecting MCP server fmsr: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/fmsr_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server fmsr
-Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+Connecting MCP server tsfm: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/tsfm_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server tsfm
-Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u /home/wax/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py /home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
-[aat-mcp-server-bootstrap] python=/home/wax/hpml-70b-post180-ixqt/.venv/bin/python3
-[aat-mcp-server-bootstrap] cwd=/home/wax/hpml-70b-post180-ixqt
-[aat-mcp-server-bootstrap] target=/home/wax/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+Connecting MCP server wo: uv run --with 'mcp[cli]==1.27.0' --with pandas --with numpy python -u <runner-home>/hpml-70b-post180-ixqt/scripts/aat_mcp_server_bootstrap.py <runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
+[aat-mcp-server-bootstrap] python=<runner-home>/hpml-70b-post180-ixqt/.venv/bin/python3
+[aat-mcp-server-bootstrap] cwd=<runner-home>/hpml-70b-post180-ixqt
+[aat-mcp-server-bootstrap] target=<runner-home>/hpml-70b-post180-ixqt/mcp_servers/wo_server/server.py
 [aat-mcp-server-bootstrap] server module imported; starting stdio loop
 Connected MCP server wo
 [05/04/26 21:16:40] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:40] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:40] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [05/04/26 21:16:40] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
-2026-05-04 21:16:40,842 INFO LiteLLM: 
+                             ListToolsRequest
+2026-05-04 21:16:40,842 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content=None, rol...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='to...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [05/04/26 21:16:43] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:43,284 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:43,284 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 [05/04/26 21:16:45] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:45,613 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:45,613 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:45,817 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:48] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:48,582 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:48,582 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
 2026-05-04 21:16:50,821 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export
 [05/04/26 21:16:50] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
-2026-05-04 21:16:50,868 INFO LiteLLM: 
+                             CallToolRequest
+2026-05-04 21:16:50,868 INFO LiteLLM:
 LiteLLM completion() model= meta-llama/llama-3-3-70b-instruct; provider = watsonx
-/home/wax/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<runner-home>/hpml-70b-post180-ixqt/.venv/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='The faul...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
-2026-05-04 21:16:55,172 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7feb089287d0>: Cancelled via cancel scope 7feb08929fd0 by <Task cancelling name='Task-1' coro=<_main() running at /home/wax/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
+2026-05-04 21:16:55,172 WARNING aat_runner: cleanup failed for <agents.mcp.server.MCPServerStdio object at 0x7feb089287d0>: Cancelled via cancel scope 7feb08929fd0 by <Task cancelling name='Task-1' coro=<_main() running at <runner-home>/hpml-70b-post180-ixqt/scripts/aat_runner.py:717> cb=[_run_until_complete_cb() at /usr/lib/python3.11/asyncio/base_events.py:180]>
 2026-05-04 21:16:55,224 WARNING openai.agents: OPENAI_API_KEY is not set, skipping trace export

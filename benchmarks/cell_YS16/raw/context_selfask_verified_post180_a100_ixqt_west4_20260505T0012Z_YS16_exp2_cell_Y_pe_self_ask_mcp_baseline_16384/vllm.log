@@ -1,10 +1,10 @@
-(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299] 
+(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]
 (APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299] 
-(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 16384, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm', 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='/home/wax/hpml-final-grid-post180-west4a/profiling/traces/context_selfask_verified_post180_a100_ixqt_west4_20260505T0012Z_YS16_exp2_cell_Y_pe_self_ask_mcp_baseline_16384_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
+(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:299]
+(APIServer pid=244546) INFO 05-05 00:12:24 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 16384, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'generation_config': 'vllm', 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='<runner-home>/hpml-final-grid-post180-west4a/profiling/traces/context_selfask_verified_post180_a100_ixqt_west4_20260505T0012Z_YS16_exp2_cell_Y_pe_self_ask_mcp_baseline_16384_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
 (APIServer pid=244546) WARNING 05-05 00:12:24 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_GENERATION_CONFIG
 (APIServer pid=244546) WARNING 05-05 00:12:24 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
 (APIServer pid=244546) INFO 05-05 00:12:24 [model.py:549] Resolved architecture: LlamaForCausalLM
@@ -25,13 +25,13 @@
 (EngineCore pid=244614) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:07<00:02,  2.41s/it]
 (EngineCore pid=244614) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.71s/it]
 (EngineCore pid=244614) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.97s/it]
-(EngineCore pid=244614) 
+(EngineCore pid=244614)
 (EngineCore pid=244614) INFO 05-05 00:12:45 [default_loader.py:384] Loading weights took 7.92 seconds
 (EngineCore pid=244614) INFO 05-05 00:12:46 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 8.669458 seconds
-(EngineCore pid=244614) INFO 05-05 00:12:50 [backends.py:1051] Using cache directory: /home/wax/.cache/vllm/torch_compile_cache/59232b58c1/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=244614) INFO 05-05 00:12:50 [backends.py:1051] Using cache directory: <runner-cache>/vllm/torch_compile_cache/59232b58c1/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=244614) INFO 05-05 00:12:50 [backends.py:1111] Dynamo bytecode transform time: 3.87 s
 (EngineCore pid=244614) INFO 05-05 00:12:52 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.797 s
-(EngineCore pid=244614) INFO 05-05 00:12:52 [decorators.py:303] Directly load AOT compilation from path /home/wax/.cache/vllm/torch_compile_cache/torch_aot_compile/9c5cf5810e53c85ecccdaea77486c568405d0fc6d22831ac28b22ad94619fc96/rank_0_0/model
+(EngineCore pid=244614) INFO 05-05 00:12:52 [decorators.py:303] Directly load AOT compilation from path <runner-cache>/vllm/torch_compile_cache/torch_aot_compile/9c5cf5810e53c85ecccdaea77486c568405d0fc6d22831ac28b22ad94619fc96/rank_0_0/model
 (EngineCore pid=244614) INFO 05-05 00:12:52 [monitor.py:48] torch.compile took 5.99 s in total
 (EngineCore pid=244614) INFO 05-05 00:12:52 [monitor.py:76] Initial profiling/warmup run took 0.24 s
 (EngineCore pid=244614) INFO 05-05 00:12:53 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
@@ -47,7 +47,7 @@
 (EngineCore pid=244614) INFO 05-05 00:13:00 [gpu_worker.py:597] CUDA graph pool memory: 0.48 GiB (actual), 0.53 GiB (estimated), difference: 0.05 GiB (10.2%).
 (EngineCore pid=244614) INFO 05-05 00:13:00 [core.py:283] init engine (profile, create kv cache, warmup model) took 14.33 seconds
 (EngineCore pid=244614) INFO 05-05 00:13:01 [vllm.py:790] Asynchronous scheduling is enabled.
-(APIServer pid=244546) INFO 05-05 00:13:01 [async_llm.py:191] Torch profiler enabled. AsyncLLM CPU traces will be collected under /home/wax/hpml-final-grid-post180-west4a/profiling/traces/context_selfask_verified_post180_a100_ixqt_west4_20260505T0012Z_YS16_exp2_cell_Y_pe_self_ask_mcp_baseline_16384_torch
+(APIServer pid=244546) INFO 05-05 00:13:01 [async_llm.py:191] Torch profiler enabled. AsyncLLM CPU traces will be collected under <runner-home>/hpml-final-grid-post180-west4a/profiling/traces/context_selfask_verified_post180_a100_ixqt_west4_20260505T0012Z_YS16_exp2_cell_Y_pe_self_ask_mcp_baseline_16384_torch
 (APIServer pid=244546) INFO 05-05 00:13:01 [api_server.py:590] Supported tasks: ['generate']
 (APIServer pid=244546) WARNING 05-05 00:13:01 [api_router.py:41] Profiler with mode 'torch' is enabled in the API server. This should ONLY be used for local development!
 (APIServer pid=244546) INFO 05-05 00:13:01 [parser_manager.py:202] "auto" tool choice has been enabled.
@@ -263,7 +263,7 @@
 (APIServer pid=244546) INFO:     Waiting for application shutdown.
 (APIServer pid=244546) INFO:     Application shutdown complete.
 (APIServer pid=244546) INFO:     Finished server process [244546]
-/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
-/home/wax/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-0gtuwfqg': [Errno 2] No such file or directory
+<runner-home>/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-0gtuwfqg': [Errno 2] No such file or directory
   warnings.warn('resource_tracker: %r: %s' % (name, e))

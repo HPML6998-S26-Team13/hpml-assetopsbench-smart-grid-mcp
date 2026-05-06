@@ -21,14 +21,14 @@ vLLM auto tool choice: enabled with parser 'llama3_json'
 wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
 wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
 wandb: Tracking run with wandb version 0.26.1
-wandb: Run data is saved locally in /home/wax/hpml-post175-core-west3-20260505T0724Z/wandb/run-20260505_081145-69cqsa7u
+wandb: Run data is saved locally in <runner-home>/hpml-post175-core-west3-20260505T0724Z/wandb/run-20260505_081145-69cqsa7u
 wandb: Run `wandb offline` to turn off syncing.
 wandb: Syncing run core15x5_post175_a100_ixqt_west3_20260505T0724Z_Z_post175_15x5_exp2_cell_Z_verified_pe_mcp_baseline
 wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: 🚀 View run at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/69cqsa7u
 wandb: updating run metadata; uploading summary
 wandb: updating run metadata
-wandb: 
+wandb:
 wandb: Run summary:
 wandb:            benchmark_config_path /tmp/core15x5_post17...
 wandb:           benchmark_summary_path benchmarks/cell_Z_hy...
@@ -41,7 +41,7 @@ wandb:                          git_sha 1913c6e4703425f735d8...
 wandb:                         gpu_type NVIDIA A100-SXM4-40G...
 wandb:                        host_name smartgrid-a100-ixqt-...
 wandb:                              +28 ...
-wandb: 
+wandb:
 wandb: 🚀 View run core15x5_post175_a100_ixqt_west3_20260505T0724Z_Z_post175_15x5_exp2_cell_Z_verified_pe_mcp_baseline at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/69cqsa7u
 wandb: ⭐️ View project at: https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
 wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
