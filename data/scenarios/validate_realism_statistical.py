@@ -18,11 +18,17 @@ acceptance thresholds, and the ranked dataset list.
 
 Usage:
     python3 data/scenarios/validate_realism_statistical.py \\
-        --synthetic   data/processed/dga_records.csv \\
-        --real        data/external/DGA-dataset-1.csv \\
-        --real-source bantipatel20_dga \\
-        --report      reports/realism_statistical_v1.md \\
-        --json        reports/realism_statistical_v1.json
+        --synthetic      data/processed/dga_records.csv \\
+        --real           data/external/DGA-dataset-1.csv \\
+        --real-source    bantipatel20_dga \\
+        --retrieved-date 2026-05-04 \\
+        --report         reports/realism_statistical_v1.md \\
+        --json           reports/realism_statistical_v1.json
+
+`--retrieved-date YYYY-MM-DD` is required whenever `--real` is set; it is
+the dataset acquisition date stamped into the report's provenance block
+(distinct from the report-generation date). See
+`data/external/README.md` for the acquisition log.
 
 If --real is absent, the script emits a stub report listing which
 dataset(s) need to be acquired and from where.

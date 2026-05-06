@@ -427,12 +427,19 @@ Skeleton landed in this PR at `data/scenarios/validate_realism_statistical.py`.
 
 ```bash
 python3 data/scenarios/validate_realism_statistical.py \
-    --synthetic   data/processed/dga_records.csv \
-    --real        data/external/DGA-dataset-1.csv \
-    --real-source bantipatel20_dga \
-    --report      reports/realism_statistical_v1.md \
-    --json        reports/realism_statistical_v1.json
+    --synthetic      data/processed/dga_records.csv \
+    --real           data/external/DGA-dataset-1.csv \
+    --real-source    bantipatel20_dga \
+    --retrieved-date 2026-05-04 \
+    --report         reports/realism_statistical_v1.md \
+    --json           reports/realism_statistical_v1.json
 ```
+
+`--retrieved-date YYYY-MM-DD` is required whenever `--real` is set —
+argparse hard-fails otherwise. It records the source-acquisition date in
+the report's provenance block separately from the report-generation date,
+so regenerating the same report later does not silently rewrite when the
+CSV was acquired. See `data/external/README.md` for the acquisition log.
 
 Exit code = 0 if all tests pass, 1 otherwise. Suitable for CI gating.
 
@@ -629,11 +636,14 @@ mkdir -p data/external
 # … download bantipatel20/dissolved-gas-analysis-of-transformer to
 #   data/external/DGA-dataset-1.csv …
 .venv/bin/python data/scenarios/validate_realism_statistical.py \
-    --synthetic   data/processed/dga_records.csv \
-    --real        data/external/DGA-dataset-1.csv \
-    --real-source bantipatel20_dga \
-    --report      reports/realism_statistical_v1.md \
-    --json        reports/realism_statistical_v1.json
+    --synthetic      data/processed/dga_records.csv \
+    --real           data/external/DGA-dataset-1.csv \
+    --real-source    bantipatel20_dga \
+    --retrieved-date 2026-05-04 \
+    --report         reports/realism_statistical_v1.md \
+    --json           reports/realism_statistical_v1.json
+# --retrieved-date YYYY-MM-DD is required when --real is set; pass the
+# date you acquired the CSV (the committed v1 report uses 2026-05-04).
 ```
 
 ### 12.2 What you have

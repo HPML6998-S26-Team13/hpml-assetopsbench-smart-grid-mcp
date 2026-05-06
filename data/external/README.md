@@ -36,12 +36,18 @@ curl -L -o data/external/transformer_dga_arias.csv \
 
 ```bash
 python data/scenarios/validate_realism_statistical.py \
-  --synthetic   data/processed/dga_records.csv \
-  --real        data/external/DGA-dataset-1.csv \
-  --real-source bantipatel20_dga \
-  --report      reports/realism_statistical_v1.md \
-  --json        reports/realism_statistical_v1.json
+  --synthetic      data/processed/dga_records.csv \
+  --real           data/external/DGA-dataset-1.csv \
+  --real-source    bantipatel20_dga \
+  --retrieved-date 2026-05-04 \
+  --report         reports/realism_statistical_v1.md \
+  --json           reports/realism_statistical_v1.json
 ```
+
+`--retrieved-date YYYY-MM-DD` is required whenever `--real` is set; pass
+the date you (re-)acquired the CSV from Kaggle so the provenance block in
+the report records the source acquisition date, not the report-generation
+date. The committed v1 report uses `2026-05-04`.
 
 See `docs/dga_realism_statistical_validation.md` for methodology, thresholds,
 and the v0 → v1 → v2 tuning narrative.
