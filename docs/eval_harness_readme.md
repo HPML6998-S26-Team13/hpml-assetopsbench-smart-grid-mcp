@@ -1,6 +1,6 @@
 # Evaluation Harness Runbook (Local Windows + WatsonX)
 
-*Last updated: 2026-04-07*
+*Last updated: 2026-05-06. Owns the eval-harness half of issue #67 (runbook); see `docs/runbook.md` for the Insomnia/Slurm + GCP A100 production paths and `docs/content_brief_scenarios_eval.md` for current scenario/eval/judge facts.*
 
 This README is the practical runbook for getting the **AssetOpsBench evaluation harness** running end-to-end on a local Windows machine, then exercising our **Smart Grid scenarios** from `data/scenarios/`.
 
@@ -395,7 +395,7 @@ cd /d "%SMARTGRID_REPO%"
 python data/scenarios/validate_scenarios.py
 ```
 
-Expected: `Validation passed for 11 scenario files and 5 negative fixtures.`
+Expected: `Validation passed for 31 scenario files and 5 negative fixtures.` (or 36+5 once PR #195 merges; see `data/scenarios/README.md` for the corpus status). The exact number is whatever the current corpus is — match the validator's output rather than hardcoding it in your issue comment.
 
 ### Step 2 — Run through the evaluation harness (Windows)
 

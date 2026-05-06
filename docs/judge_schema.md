@@ -54,7 +54,7 @@ Range: [0.0, 1.0]. Default pass threshold: 0.6 (4 out of 6 dimensions good).
 | `scenario_id` | string | `id` field from scenario JSON (e.g. `AOB-FMSR-001`) |
 | `scenario_file` | string | Repo-relative path to scenario JSON |
 | `trial_index` | integer | 1-indexed trial number within the run |
-| `experiment_cell` | string | `A`, `B`, `C`, `Y`, `Z` |
+| `experiment_cell` | string | The experiment cell. Initial 5-cell vocabulary was `A`, `B`, `C`, `Y`, `Z`; post-PR175 evidence adds `D`, `YS`, `ZS`, `ZSD`, `Y/YS/Z/ZS-TP`, and the `*70B` hosted-WatsonX variants. See `results/metrics/evidence_registry.csv` for the authoritative list of paper-eligible cells. |
 | `orchestration_mode` | string | `plan_execute`, `agent_as_tool`, `hybrid` |
 | `mcp_mode` | string | `baseline`, `optimized`, `direct` |
 | `model_id` | string | Model that produced the trajectory |
