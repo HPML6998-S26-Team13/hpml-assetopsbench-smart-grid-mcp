@@ -19,7 +19,7 @@ Verified by Alex's PR #178 review against the actual MCP tool outputs and `data/
 
 ## Reproducibility caveat (#178 review M2)
 
-The `seed=42` recorded in `batch_manifest.json:invocations[0].seed` controls **only the generator's RNG for context / template selection**. It is **not** passed to `litellm.completion()`, and the model runs at `temperature=0.7`, so re-running with the same seed will give different scenario text. The committed `SGT-GEN-001..005.json` files plus the prompts in the manifest fully capture *what produced this batch*; they do not let a re-runner re-derive the exact text from seed alone. Raw prompts and responses live on the Insomnia clone at `/insomnia001/depts/edu/users/af3623/exp1-clone/data/scenarios/generated/first_review_20260503/{prompts,raw_responses}/` but are not committed here (debugging artifacts, not contract).
+The `seed=42` recorded in `batch_manifest.json:invocations[0].seed` controls **only the generator's RNG for context / template selection**. It is **not** passed to `litellm.completion()`, and the model runs at `temperature=0.7`, so re-running with the same seed will give different scenario text. The committed `SGT-GEN-001..005.json` files plus manifest provenance capture the reviewed artifact; they do not let a re-runner re-derive the exact text from seed alone. Raw prompts and responses were kept as uncommitted debug artifacts, not as part of the public scenario contract.
 
 ## How this is segregated from the benchmark corpus
 
