@@ -36,6 +36,10 @@ results/metrics/*.preflight.csv
 # Slurm logs
 logs/*.out
 
+# Locally materialized config-universe env files. Commit the generator,
+# catalog, and cohort manifests; runners regenerate these per checkout/VM.
+configs/config_universe/generated/
+
 # Models (large, downloaded on cluster)
 models/
 
