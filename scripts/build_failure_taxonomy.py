@@ -282,7 +282,12 @@ def main(argv: list[str] | None = None) -> int:
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=OUTPUT_COLUMNS)
+        # `lineterminator="\n"` keeps the artifact LF-only on every platform.
+        # csv.DictWriter's default Excel dialect emits CRLF, which made
+        # default reruns dirty the working tree on non-Windows checkouts and
+        # broke the documented "rerun + git diff = clean" reproducibility
+        # gate (PR #193 v1 review).
+        w = csv.DictWriter(f, fieldnames=OUTPUT_COLUMNS, lineterminator="\n")
         w.writeheader()
         for r in rows:
             w.writerow(r)
