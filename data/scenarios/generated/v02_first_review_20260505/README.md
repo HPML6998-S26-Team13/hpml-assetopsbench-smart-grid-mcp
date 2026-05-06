@@ -45,19 +45,21 @@ Option 2 is more robust and probably the right v0.3 direction — adds the rule 
 
 ## Reproduction
 
-Same shape as v0.1 — only the branch / prompt version changes:
+For byte-level provenance, use `generator_commit_sha`,
+`generator_source_sha256`, and `authoring_contract_sha256` in
+`batch_manifest.json`. To exercise the current v0.2 generator path, use current
+`main` or this PR head; PR #177 and PR #185 are already merged, so the WatsonX
+environment aliases and prompt v0.2 source are part of the normal mainline
+setup.
 
 ```bash
-git checkout aaron/issue68-prompt-v02   # or wait for PR #185 to merge then use main
+git checkout main  # or this PR head
 export WATSONX_API_KEY=... WATSONX_PROJECT_ID=... WATSONX_URL=...
-export WX_API_KEY="$WATSONX_API_KEY" WX_PROJECT_ID="$WATSONX_PROJECT_ID" WX_URL="$WATSONX_URL"
 .venv-insomnia/bin/python scripts/generate_scenarios.py \
     --family FMSR_DGA_DIAGNOSIS --family TSFM_RUL_FORECAST \
     --family WO_CREATION --family IOT_SENSOR_ANALYSIS --family MULTI_DOMAIN_INCIDENT \
     --n 1 --batch-id v02_first_review_20260505 --seed 42
 ```
-
-(WatsonX env aliases to WX_* will become automatic once PR #177 merges.)
 
 The same caveat applies as v0.1: `temperature=0.7` means re-runs aren't text-deterministic from seed alone. The committed JSON files capture *what produced this batch*; the seed reproduces context/template selection, not model output.
 
