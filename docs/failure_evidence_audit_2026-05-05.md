@@ -10,7 +10,7 @@ For each row, the audit applied the strict criteria locked at issue #35 review t
 - `relabel_suggested` — taxonomy label or symptom is wrong; row should be reclassified.
 - `evidence_thin` — judge log exists but the suggested failure pattern is ambiguous or the trajectory does not strongly demonstrate it.
 
-Per Q16=A (locked), this audit flags only — it does not modify the existing `taxonomy_label` / `symptom` / `candidate_mitigation` columns. Relabel suggestions are recorded for a follow-up PR or for #64/#66 to consume.
+**Flag-only policy.** This audit records `audit_status` and `audit_note` but does not modify the original `taxonomy_label` / `symptom` / `candidate_mitigation` columns landed in PR #151. Relabel suggestions are surfaced for #64 (visuals + mitigation plan) and #66 (mitigation before/after) to consume; applying them is out of scope for issue #35, which owns the evidence-table audit, not the taxonomy revision.
 
 ## Summary
 

@@ -106,7 +106,14 @@ def _resolve_trajectory_path(score: dict | None) -> Path | None:
 
 
 def _extract_aat_calls(traj: dict) -> list[tuple[str, dict, str]]:
-    """Cell A/B/C/D agent_as_tool schema: top-level `history` of role/tool_calls turns."""
+    """Cell A/B/C/D agent_as_tool schema: top-level `history` of role/tool_calls turns.
+
+    Tool outputs are stored two ways: (a) inline on each tool_call dict via
+    `tc["output"]` (current AAT trajectory format — Cells A/B/C/D), or (b) in
+    a subsequent `role: "tool"` history entry whose `content` is the result
+    (older fallback). Capture both so briefs are reproducible regardless of
+    which schema variant the trajectory uses (PR #189 v2 H1).
+    """
     history = traj.get("history") or []
     out: list[tuple[str, dict, str]] = []
     if not isinstance(history, list):
@@ -124,10 +131,16 @@ def _extract_aat_calls(traj: dict) -> list[tuple[str, dict, str]]:
                         args = json.loads(args)
                     except json.JSONDecodeError:
                         args = {"_raw": args}
-                out.append((name, args or {}, ""))
+                # Inline output, if present (current AAT schema).
+                output = tc.get("output", "")
+                if isinstance(output, (dict, list)):
+                    output = json.dumps(output)
+                out.append((name, args or {}, str(output)))
+        # Older fallback: role:"tool" message attached to the most recent call.
         if entry.get("role") == "tool" and out:
-            name, args, _ = out[-1]
-            out[-1] = (name, args, entry.get("content") or "")
+            name, args, existing = out[-1]
+            if not existing:
+                out[-1] = (name, args, entry.get("content") or "")
     return out
 
 
@@ -352,9 +365,12 @@ def cmd_render(args: argparse.Namespace) -> int:
     )
     out.append("")
     out.append(
-        "Per Q16=A (locked), this audit flags only — it does not modify the existing "
-        "`taxonomy_label` / `symptom` / `candidate_mitigation` columns. Relabel suggestions "
-        "are recorded for a follow-up PR or for #64/#66 to consume."
+        "**Flag-only policy.** This audit records `audit_status` and `audit_note` "
+        "but does not modify the original `taxonomy_label` / `symptom` / "
+        "`candidate_mitigation` columns landed in PR #151. Relabel suggestions "
+        "are surfaced for #64 (visuals + mitigation plan) and #66 (mitigation "
+        "before/after) to consume; applying them is out of scope for issue #35, "
+        "which owns the evidence-table audit, not the taxonomy revision."
     )
     out.append("")
     out.append("## Summary")
