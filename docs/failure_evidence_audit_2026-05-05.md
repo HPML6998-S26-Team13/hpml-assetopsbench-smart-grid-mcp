@@ -1,0 +1,50 @@
+# Failure-evidence audit — 2026-05-05
+
+Audit of `results/metrics/failure_evidence_table.csv` (35 rows from PR #151) against per-trial judge data in `results/metrics/scenario_scores.jsonl` and the mirrored trajectory files under `benchmarks/cell_*/raw/<run_name>/`.
+
+## Method
+
+For each row, the audit applied the strict criteria locked at issue #35 review time:
+
+- `confirmed` — judge log shows the cited failed dimensions, the symptom matches what the trajectory exhibits, AND the candidate mitigation would plausibly catch it.
+- `relabel_suggested` — taxonomy label or symptom is wrong; row should be reclassified.
+- `evidence_thin` — judge log exists but the suggested failure pattern is ambiguous or the trajectory does not strongly demonstrate it.
+
+**Flag-only policy.** This audit records `audit_status` and `audit_note` but does not modify the original `taxonomy_label` / `symptom` / `candidate_mitigation` columns landed in PR #151. Relabel suggestions are surfaced for #64 (visuals + mitigation plan) and #66 (mitigation before/after) to consume; applying them is out of scope for issue #35, which owns the evidence-table audit, not the taxonomy revision.
+
+## Summary
+
+| Status | Count | Share |
+|--------|------:|------:|
+| confirmed | 29 | 83% |
+| relabel_suggested | 4 | 11% |
+| evidence_thin | 2 | 6% |
+| **total** | **35** | 100% |
+
+## Per-taxonomy confirmation rate
+
+| Taxonomy label | Total | Confirmed | Relabel | Evidence thin |
+|---|---:|---:|---:|---:|
+| inter-agent / orchestration failure | 13 | 11 | 1 | 1 |
+| specification failure | 4 | 1 | 3 | 0 |
+| task verification failure | 18 | 17 | 0 | 1 |
+
+## Relabel suggestions
+
+| Run | Scenario | Trial | Current label | Suggested fix |
+|---|---|---:|---|---|
+| `8998340_exp2_cell_Y_pe_mcp_baseline` | SGT-009 | 1 | specification failure / under-constrained fault/risk adjudication | Surface symptom 'under-constrained adjudication' is downstream of an upstream tool routing error: get_sensor_correlation called with failure_mode_id='T-015' (a transformer ID, not a failure mode). Better symptom: tool routing or argument-contract failure (inter-agent / orchestration). |
+| `8998340_exp2_cell_Y_pe_mcp_baseline` | SGT-009 | 2 | specification failure / under-constrained fault/risk adjudication | Same upstream routing error as trial 1 (failure_mode_id='T-015'); under-constrained adjudication is a downstream effect not a root cause. |
+| `8998340_exp2_cell_Y_pe_mcp_baseline` | SGT-009 | 3 | specification failure / under-constrained fault/risk adjudication | Same upstream routing error as trial 1; under-constrained adjudication is a downstream effect. |
+| `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | SGT-009 | 1 | inter-agent / orchestration failure / tool-call sequencing failure | Sequencing was actually correct (15 tool calls, evidence acquired in order); the real issue is the agent's final answer claims FM-002 Low-Temperature Overheating despite analyze_dga returning iec_code='N' (Normal/Inconclusive). Better symptom: missing-evidence final answer or under-constrained adjudication (agent's conclusion contradicts decisive DGA evidence). |
+
+## Evidence-thin rows
+
+| Run | Scenario | Trial | Note |
+|---|---|---:|---|
+| `8998342_exp2_cell_Z_verified_pe_mcp_baseline` | SGT-010 | 2 | 9 tool calls with one early list_sensors routing error (recovered); analyze_dga returned D2 Arc Discharge and final answer correctly cites it. Trajectory does not strongly demonstrate a sequencing failure — judge_pass_rate=0.5 with data_retrieval_accuracy flag is ambiguous. |
+| `9073472_aat_mcp_model_optimized` | SGT-010 | 1 | Agent correctly acknowledges 'cannot determine trend... no readings available' and defers — judge still scored 0.3333 with hallucinations flag. Symptom 'missing-evidence final answer' weakly fits because the WO recommendation was deferred, not emitted; the failure pattern doesn't strongly match the candidate mitigation. |
+
+## Reproducibility
+
+Regenerate briefs locally with `python scripts/audit_failure_evidence.py briefs --out <path>` (the briefs file is a transient review aid and is not committed); audit decisions are written into `results/metrics/failure_evidence_table.csv` and this Markdown is regenerated via `python scripts/audit_failure_evidence.py render`.
