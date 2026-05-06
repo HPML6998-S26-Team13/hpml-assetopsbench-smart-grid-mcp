@@ -14,3 +14,5 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --diff"
+      - name: Check config universe manifests
+        run: python3 scripts/generate_config_universe.py --check

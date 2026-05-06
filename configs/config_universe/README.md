@@ -21,6 +21,9 @@ Check that the tracked manifests are fresh with:
 python3 scripts/generate_config_universe.py --check
 ```
 
+`--check` regenerates in place before comparing tracked manifests. If it
+fails, run the generator normally and inspect the resulting diff.
+
 ## Cohorts
 
 | Cohort | Rows | Expected trajectories | Notes |

@@ -830,6 +830,9 @@ def write_readme(items: list[ConfigItem]) -> None:
         "python3 scripts/generate_config_universe.py --check",
         "```",
         "",
+        "`--check` regenerates in place before comparing tracked manifests. If it",
+        "fails, run the generator normally and inspect the resulting diff.",
+        "",
         "## Cohorts",
         "",
         "| Cohort | Rows | Expected trajectories | Notes |",
@@ -882,7 +885,7 @@ def main() -> int:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="fail if tracked catalog/cohort docs are stale",
+        help="regenerate in place and fail if tracked catalog/cohort docs are stale",
     )
     args = parser.parse_args()
 
