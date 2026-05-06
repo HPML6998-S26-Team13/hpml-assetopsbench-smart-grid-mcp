@@ -48,6 +48,23 @@ The active cell mapping is:
 | Z + Self-Ask | Verified PE follow-on | baseline | `experiment2/exp2_cell_Z_verified_pe_self_ask_mcp_baseline.env` |
 | Z + Self-Ask + D | Verified PE + Self-Ask | optimized + model-side | `experiment2/exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized.env` |
 
+## Opportunistic config universe
+
+`configs/config_universe/` is the broad generated inventory for deadline-period
+compute waves. It covers all currently runnable method rows, all 31 canonical
+scenarios, domain-slice reruns, reviewed generated-scenario stress rows,
+mitigation ladders, context/repair/decoding ablations, and hosted WatsonX 70B
+variants. Use the cohort TSV files in
+`configs/config_universe/cohorts/` as runner manifests, and use
+`configs/config_universe/catalog.tsv` to sort by expected trajectory count.
+Per-row env files are generated locally on each VM by running
+`python3 scripts/generate_config_universe.py`; `configs/config_universe/generated/`
+is intentionally ignored rather than tracked.
+
+The generator is deliberately wider than the paper tables. Completed runs still
+need raw-dir pullback, count validation, judge rows, and evidence-registry
+promotion before they become claim-grade evidence.
+
 ## Required keys
 
 - `EXPERIMENT_NAME` — short label; becomes part of the run ID

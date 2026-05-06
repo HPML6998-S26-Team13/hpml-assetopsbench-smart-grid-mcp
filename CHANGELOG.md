@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-05-05
+
+### Added
+
+- Added a generated config-universe inventory for deadline-period compute
+  waves: 483 runnable configs spanning local 8B all-31 core rows, per-domain
+  slices, reviewed generated-scenario stress rows, mitigation ladders,
+  context/repair/decoding ablations, and hosted WatsonX 70B variants, with
+  cohort TSV manifests and a catalog for runner scheduling.
+
 ## 2026-05-04
 
 ### Changed
