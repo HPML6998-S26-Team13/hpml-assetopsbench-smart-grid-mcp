@@ -331,8 +331,9 @@ bash scripts/run_experiment.sh configs/<cell>.env
 bash scripts/gcp_pull_context_artifacts.sh <run_id>
 ```
 
-The canonical GCP capture (19 rows, 570 trajectories + 570 judge logs)
-is summarised at
+The canonical GCP capture (19 rows, 570 trajectory entries across the
+per-batch manifests, with 570 matching judge-score rows in
+`results/metrics/scenario_scores.jsonl`) is summarised at
 `benchmarks/gcp_a100_final_20260503/summary/README.md` with per-batch
 manifests in `benchmarks/gcp_a100_final_20260503/logs/*_manifest.tsv`
 (PR #172). That's the reference for "what a clean GCP capture looks like."
