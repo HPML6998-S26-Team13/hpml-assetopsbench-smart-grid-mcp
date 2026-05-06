@@ -2,6 +2,8 @@
 
 *Companion spec to [aob-extraction.md](aob-extraction.md). Captures design rationale, edge cases, decision rationale, and later-phase concerns. Plan stays lean; this carries the why.*
 
+*Archived: 2026-05-05 — companion to archived plan. Phase 0/1/2/3a/3b/3c spec content preserved as historical record of the AOB extraction design decisions. AOB PR #34 merged 2026-05-03; IBM-upstream PR (#27) is the active continuation.*
+
 ## Phase 0 sign-off (2026-04-28)
 
 | Question | Locked answer | Confidence | Awaiting external? |
@@ -282,5 +284,5 @@ Items that don't block May 6 deadline but should be tracked:
 - AOB feat/evaluation-module branch tip: `fcff318`
 - Live state context: personal-repo `docs/coordination/live_repo_summary.md`
 - Dhaval coordination: `Final_Project/planning/Dhaval_Email_Thread.md` (personal repo)
-- Replay-phase analysis (separate but related): `docs/replay_phase_analysis.md`
+- Replay-phase analysis (separate but related): `docs/archive/replay_phase_analysis.md`
 - Y baseline 3.12 disclosure (separate but related): `docs/methods_python_version_disclosure.md`

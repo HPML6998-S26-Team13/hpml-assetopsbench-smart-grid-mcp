@@ -21,7 +21,7 @@ One-page fact pack. Concrete numbers and repo paths only — verbatim-quotable, 
 - **Inference precision:** FP16 (default for canonical Cell A/B/Y/Z). FP8 used only by ZS70B / hosted-WatsonX paths.
 - **Context window:** `MAX_MODEL_LEN=32768` for canonical AaT cells (`configs/aat_*.env`); 8192 retained on smoke configs only. Bump landed in PR #145 (#135) after Cell A run `8979314` hit the 8192 ceiling on a replay.
 - **Tool-call parser:** `llama3_json` for Llama-3.x (model-family-aware default in `scripts/run_experiment.sh:108-114`).
-- **KV-cache optimization** (Cell C): `--enable-prefix-caching` only. `--kv-cache-dtype fp8` was tested in Lane 2 smoke `8979532` and dropped due to a vLLM 0.19.0 FA3 kernel constraint under FP16 weights. Documented in `docs/lane2_int8_kv_status.md`.
+- **KV-cache optimization** (Cell C): `--enable-prefix-caching` only. `--kv-cache-dtype fp8` was tested in Lane 2 smoke `8979532` and dropped due to a vLLM 0.19.0 FA3 kernel constraint under FP16 weights. Documented in `docs/archive/lane2_int8_kv_status.md`.
 - **INT8 quantization** (deferred): runnable on A6000 via `--quantization compressed-tensors` against `RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8`, validated in smoke `8979660`. Not in any canonical Cell C config — kept out for `(B−C)` signal purity.
 
 ## Compute environments
@@ -105,7 +105,7 @@ Three streams, all attached per-run:
 - `docs/runbook.md` — reproduction entry point + day-to-day Slurm flow
 - `docs/insomnia_runbook.md` — Insomnia-specific quirks (account, scratch, SSH agent, CUDA workaround)
 - `docs/gcp_fallback.md` — GCP A100 spin-up, instance selection, preemption handling, artifact persistence
-- `docs/lane2_int8_kv_status.md` — INT8 + KV-cache decision evidence
+- `docs/archive/lane2_int8_kv_status.md` — INT8 + KV-cache decision evidence
 - `docs/wandb_schema.md` — required WandB config + summary fields
 - `docs/governance/model_registry.yaml` — canonical model IDs + revisions + runtime pins
 - `docs/validation_log.md` — per-canonical-capture run IDs + WandB URLs + artifact paths

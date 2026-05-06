@@ -4,6 +4,8 @@
 *Tanisha's role: "paper-framing voice" — fill in Why sections; Alex drives technical specifics.*
 *Owner: Tanisha Rathod | Created: 2026-05-01*
 
+*Archived: 2026-05-05 — pair session occurred 2026-05-03; AOB org-fork PR #34 merged at `286dab00`. IBM-upstream PR body work continues under AOB #27 but no longer needs this pre-read.*
+
 ---
 
 ## What we're writing
@@ -74,7 +76,7 @@ Two PR body drafts for IBM/AssetOpsBench (saved in `docs/upstream_pr_drafts/`):
 
 ## Session agenda (suggested)
 
-1. **(Tanisha pre-session, tonight):** Read `docs/plans/aob-extraction.md`, `aob-extraction_spec.md`, `aob-extraction_deferred.md`. These notes cover what you need.
+1. **(Tanisha pre-session, tonight):** Read `docs/archive/aob-extraction.md`, `aob-extraction_spec.md`, `aob-extraction_deferred.md`. These notes cover what you need.
 2. **(Pair session start):** Alex walks through Phase 1/2/3 branch state and what's actually in each PR body template.
 3. **(Tanisha's turns):** Fill TODO blocks in "Why" paragraphs for both bodies using the framing points above.
 4. **(Together):** Edit the Deferred follow-up sections using the D1–D12 registry in `aob-extraction_deferred.md`.
@@ -84,8 +86,8 @@ Two PR body drafts for IBM/AssetOpsBench (saved in `docs/upstream_pr_drafts/`):
 
 ## Files to skim before the session (priority order)
 
-1. `docs/plans/aob-extraction.md` — phase summary + what's done
-2. `docs/plans/aob-extraction_spec.md` — design decisions locked in Phase 0
-3. `docs/plans/aob-extraction_deferred.md` — D1–D12 deferred items (cite in PR bodies)
+1. `docs/archive/aob-extraction.md` — phase summary + what's done
+2. `docs/archive/aob-extraction_spec.md` — design decisions locked in Phase 0
+3. `docs/archive/aob-extraction_deferred.md` — D1–D12 deferred items (cite in PR bodies)
 4. `docs/methodology_fact_pack.md` — numbers and facts for the Why sections *(this repo)*
 5. AOB issue #27 template — the two PR body templates are already written; you're filling TODOs

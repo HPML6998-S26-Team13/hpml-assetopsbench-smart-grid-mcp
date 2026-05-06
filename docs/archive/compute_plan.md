@@ -3,6 +3,8 @@
 *Last updated: April 5, 2026*
 *Owner: Aaron Fan (af3623)*
 
+*Archived: 2026-05-05 — superseded by `docs/execution_plan.md` (canonical task dependency map), `docs/insomnia_runbook.md` (cluster runbook), `docs/gcp_fallback.md` (GCP fallback infra), and `docs/runbook.md` (top-level reproducibility runbook). Doc never updated past initial Apr 5 draft; all planning content now lives in those four files.*
+
 ## Overview
 
 This document describes the GPU compute resources available to the team, maps each

@@ -2,6 +2,8 @@
 
 *Plan for Alex Xin (eggrollofchaos). Companion spec at [aob-extraction_spec.md](aob-extraction_spec.md).*
 
+*Archived: 2026-05-05 — Phase 0/1/2/3a/3b/3c extraction work complete. AOB org-fork PR #34 (Tanisha SG_DATA_DIR data provenance) MERGED 2026-05-03 at `286dab00`. Alex's 4 phase branches (`sg-evaluation-adapter`, `sg-domain-port`, `sg-orchestration-runners`, `sg-aat-batch-mode`) pushed to org fork. IBM-upstream PR work (AOB #27) is the active continuation; deferred Phase 4 items captured in `aob-extraction_deferred.md`.*
+
 ## Origin
 
 This plan formalizes the multi-phase extraction of Smart Grid Bench artifacts
@@ -15,7 +17,7 @@ upstream PRs to `IBM/AssetOpsBench`.
   from per-trial JSON shape to AOB's `PersistedTrajectory`; retire
   `scripts/judge_trajectory.py` after parity is proven.
 - `pm/backlog.md` 2026-04-27 pin (c) — vLLM replay-phase aat_runner design
-  question; resolved separately in `docs/replay_phase_analysis.md` (Option 1
+  question; resolved separately in `docs/archive/replay_phase_analysis.md` (Option 1
   recommended); the cell-aware-replay mechanics are referenced here only as a
   potential future AOB-side feature.
 - Personal-repo `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot
@@ -112,7 +114,7 @@ questions, signed off (informally) with Dhaval where applicable.
 
 #### Files
 
-- [ ] `docs/plans/aob-extraction_spec.md` — fill out § Design Decisions
+- [ ] `docs/archive/aob-extraction_spec.md` — fill out § Design Decisions
 - [ ] (Optional) draft Dhaval reply or new Slack message capturing the
   upstream-coordination questions
 
@@ -327,7 +329,7 @@ PRs per the cadence decided in Q-UPSTREAM-PR-CADENCE.
 
 ### Phase 0 — Design decisions
 
-- [x] `docs/plans/aob-extraction_spec.md` § Phase 0 sign-off — Q-NAMING /
+- [x] `docs/archive/aob-extraction_spec.md` § Phase 0 sign-off — Q-NAMING /
   Q-SCENARIOS / Q-EVAL-PARITY / Q-UPSTREAM-PR-CADENCE /
   Q-DHAVAL-COORDINATION all answered. Dhaval ack on Q-DHAVAL-COORDINATION
   remains a Phase 4 prerequisite (not a Phase 0 blocker since Phases 1-3
@@ -375,7 +377,7 @@ PRs per the cadence decided in Q-UPSTREAM-PR-CADENCE.
 
 - Companion spec: [aob-extraction_spec.md](aob-extraction_spec.md)
 - Backlog pin (b): `pm/backlog.md` 2026-04-27 — `feat/evaluation-module` migration
-- Backlog pin (c): resolved in `docs/replay_phase_analysis.md` (separate plan track)
+- Backlog pin (c): resolved in `docs/archive/replay_phase_analysis.md` (separate plan track)
 - Live state: personal-repo `docs/coordination/live_repo_summary.md` § 1 Executive Snapshot
 - AOB code dive notes: `docs/orchestration_wiring.md`
 - Dhaval coordination: `Final_Project/planning/Dhaval_Email_Thread.md` (personal repo)

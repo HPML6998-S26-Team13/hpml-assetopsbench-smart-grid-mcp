@@ -4,7 +4,7 @@
 *Owner: Aaron Fan (af3623)*
 
 Verified setup notes, gotchas, and debugging recipes for the Columbia Insomnia
-HPC cluster. Read [compute_plan.md](compute_plan.md) first for the higher-level
+HPC cluster. Read [compute_plan.md](archive/compute_plan.md) first for the higher-level
 hardware strategy (which GPU for which phase, Insomnia vs GCP), and
 [runbook.md](runbook.md) for the end-to-end reproducibility story. This doc
 covers the cluster-specific operational details that aren't obvious from the
@@ -554,7 +554,7 @@ For PE / Verified PE cells (Y, Z) the harness skips the replay phase
 automatically because `replay_scenarios.sh` always drives `aat_runner.py`,
 which would produce a misleading AaT-shaped trace under the cell's
 directory. Profile coverage for non-AaT cells happens during the main
-benchmark loop. See `docs/replay_phase_analysis.md` for the full design
+benchmark loop. See `docs/archive/replay_phase_analysis.md` for the full design
 rationale.
 
 **Torch profiler flag changed.** vLLM 0.19.0 dropped the
@@ -729,7 +729,7 @@ feature — it has nothing to do with login-node policy or job execution.
   WandB setup section (`wandb login` once per node, `WANDB_API_KEY` /
   `ENABLE_WANDB=1` / `WANDB_PROJECT` / `WANDB_ENTITY` / `WANDB_MODE` env vars
   honored by `run_experiment.sh`)
-- [compute_plan.md](compute_plan.md) — phase-by-phase GPU allocation strategy
+- [compute_plan.md](archive/compute_plan.md) — phase-by-phase GPU allocation strategy
 - [slurm_cheatsheet.md](slurm_cheatsheet.md) — quick command reference for submit/status/logging/cancel flows
 - [governance/model_registry.yaml](governance/model_registry.yaml) — canonical model IDs, runtime pins, judge contract
 - [scripts/setup_insomnia.sh](../scripts/setup_insomnia.sh) — one-shot env setup with pinned versions
