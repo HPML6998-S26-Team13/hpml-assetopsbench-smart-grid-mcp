@@ -1002,19 +1002,26 @@ def _compute_provenance(
                 break
         if label_col:
             break
+    typed_counts = df[label_col].value_counts() if label_col else None
     raw_counts = (
-        {str(k): int(v) for k, v in df[label_col].value_counts().items()}
-        if label_col
+        {str(k): int(v) for k, v in typed_counts.items()}
+        if typed_counts is not None
         else None
     )
     mapped_counts = None
-    if raw_counts and real_source and real_source in REAL_LABEL_MAPS:
+    if typed_counts is not None and real_source and real_source in REAL_LABEL_MAPS:
         smap = REAL_LABEL_MAPS[real_source]
         mapped: dict[str, int] = {}
-        for label, n in raw_counts.items():
-            project = smap.get(label, label)
-            iec = PROJECT_LABEL_TO_IEC.get(project, project)
-            mapped[iec] = mapped.get(iec, 0) + n
+        for raw_label, n in typed_counts.items():
+            # Mirror load_real() lookup chain so integer-keyed source maps
+            # (e.g. ieee_dataport: 0..6) resolve from typed value_counts
+            # keys, with stringified fallback for mixed-type sources, then
+            # REAL_LABEL_ALIASES for "N" -> "Normal" etc., then the identity
+            # PROJECT_LABEL_TO_IEC pass-through.
+            project = smap.get(raw_label, smap.get(str(raw_label), raw_label))
+            canonical = REAL_LABEL_ALIASES.get(project, project)
+            iec = PROJECT_LABEL_TO_IEC.get(canonical, canonical)
+            mapped[str(iec)] = mapped.get(str(iec), 0) + int(n)
         mapped_counts = mapped
     sha, dirty = _git_head()
     return {
