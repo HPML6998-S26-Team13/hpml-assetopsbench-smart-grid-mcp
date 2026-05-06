@@ -26,6 +26,9 @@ gcp_artifacts/
 *.jsonl
 !data/processed/*.csv
 !results/metrics/**/*.csv
+# Per-scenario disposition tables for #53 are paper-facing artifacts
+# (machine-readable companion to data/scenarios/generated/README.md).
+!data/scenarios/generated/disposition_*.csv
 results/metrics/*.preflight.csv
 !results/metrics/*.jsonl
 # Per-trial latency records are part of the canonical Notebook 02 input
