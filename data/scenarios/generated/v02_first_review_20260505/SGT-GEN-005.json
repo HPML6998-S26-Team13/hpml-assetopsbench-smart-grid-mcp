@@ -1,0 +1,68 @@
+{
+  "id": "SGT-GEN-005",
+  "type": "Multi",
+  "text": "Transformer T-005, critical to the grid, shows unusual activity in recent dissolved-gas analysis. What's the likely fault and recommended course of action?",
+  "category": "End-to-End Incident Response",
+  "characteristic_form": "A fault hypothesis with a recommended work order and RUL forecast.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.get_sensor_readings",
+    "fmsr.analyze_dga",
+    "tsfm.forecast_rul",
+    "wo.create_work_order"
+  ],
+  "domain_tags": [
+    "IoT",
+    "FMSR",
+    "TSFM",
+    "WO"
+  ],
+  "difficulty": "hard",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.get_sensor_readings",
+      "fmsr.analyze_dga",
+      "tsfm.forecast_rul",
+      "wo.create_work_order"
+    ],
+    "decisive_intermediate_values": {
+      "dga_values": "elevated",
+      "rul_days": 30,
+      "fault_code": "D2"
+    },
+    "final_value": {
+      "fault_label": "D2",
+      "rul_estimate_days": 30,
+      "work_order_recommendation": "corrective maintenance"
+    },
+    "acceptance_criteria": [
+      "agent identifies the fault as D2",
+      "agent forecasts RUL within 30 days",
+      "agent recommends corrective maintenance",
+      "agent creates a work order with the recommended actions"
+    ],
+    "must_include": [
+      "iot_evidence_summary",
+      "fault_hypothesis_with_iec_code",
+      "rul_or_risk_forecast",
+      "work_order_recommendation"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:45:18.070135+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false
+  },
+  "family": "MULTI_DOMAIN_INCIDENT",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-009",
+    "scenario_file": "data/scenarios/multi_01_end_to_end_fault_response.json",
+    "similarity_basis": "shares type='Multi' and 4 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}

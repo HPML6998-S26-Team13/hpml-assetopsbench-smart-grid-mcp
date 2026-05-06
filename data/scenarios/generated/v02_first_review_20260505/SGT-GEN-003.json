@@ -1,0 +1,60 @@
+{
+  "id": "SGT-GEN-003",
+  "type": "WO",
+  "text": "T-003 substation main transformer temperature exceeds threshold, spare procurement pending. Decide on maintenance.",
+  "category": "Work Order Creation",
+  "characteristic_form": "A decision on work order creation with priority and minimum fields.",
+  "asset_id": "T-003",
+  "expected_tools": [
+    "wo.create_work_order",
+    "wo.estimate_downtime",
+    "wo.list_fault_records"
+  ],
+  "domain_tags": [
+    "WO"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "wo.list_fault_records",
+      "wo.estimate_downtime",
+      "wo.create_work_order"
+    ],
+    "decisive_intermediate_values": {
+      "fault_type": "thermal",
+      "spare_status": "on_order"
+    },
+    "final_value": {
+      "work_order_type": "corrective",
+      "priority": "high",
+      "minimum_fields_from_playbook": true
+    },
+    "acceptance_criteria": [
+      "agent creates a work order",
+      "agent prioritizes the work order as high",
+      "agent includes minimum fields from playbook"
+    ],
+    "must_include": [
+      "work_order_type",
+      "priority",
+      "minimum_fields_from_playbook"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:44:58.104378+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false
+  },
+  "family": "WO_CREATION",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-018",
+    "scenario_file": "data/scenarios/wo_04_fault_record_downtime_update.json",
+    "similarity_basis": "shares type='WO' and 3 expected_tools entries",
+    "novelty_note": "different generated context / templates; manual review should confirm the generated scenario is materially distinct from the comparator",
+    "nearest_match_weak": false
+  }
+}
