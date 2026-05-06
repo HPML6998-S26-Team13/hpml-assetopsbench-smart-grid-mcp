@@ -1,9 +1,9 @@
-(APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299] 
+(APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]
 (APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct-int8
 (APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299] 
+(APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:299]
 (APIServer pid=1858139) INFO 04-30 04:01:36 [utils.py:233] non-default args: {'enable_auto_tool_choice': True, 'tool_call_parser': 'llama3_json', 'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct-int8', 'dtype': 'bfloat16', 'max_model_len': 8192, 'quantization': 'compressed-tensors', 'served_model_name': ['Llama-3.1-8B-Instruct-int8'], 'kv_cache_dtype': 'fp8', 'enable_prefix_caching': True, 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/profiling/traces/9074775_exp2_cell_ZSD_verified_pe_self_ask_mcp_model_optimized_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
 (APIServer pid=1858139) WARNING 04-30 04:01:36 [envs.py:1744] Unknown vLLM environment variable detected: VLLM_DTYPE
 (APIServer pid=1858139) INFO 04-30 04:01:36 [model.py:549] Resolved architecture: LlamaForCausalLM
@@ -22,13 +22,13 @@
 (EngineCore pid=1861432) Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:08<00:08,  8.44s/it]
 (EngineCore pid=1861432) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:16<00:00,  7.96s/it]
 (EngineCore pid=1861432) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:16<00:00,  8.03s/it]
-(EngineCore pid=1861432) 
+(EngineCore pid=1861432)
 (EngineCore pid=1861432) INFO 04-30 04:03:47 [default_loader.py:384] Loading weights took 16.22 seconds
 (EngineCore pid=1861432) INFO 04-30 04:03:48 [gpu_model_runner.py:4820] Model loading took 8.49 GiB memory and 26.776123 seconds
-(EngineCore pid=1861432) INFO 04-30 04:04:42 [backends.py:1051] Using cache directory: /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/acfa98d339/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=1861432) INFO 04-30 04:04:42 [backends.py:1051] Using cache directory: <insomnia-cache>/vllm/torch_compile_cache/acfa98d339/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=1861432) INFO 04-30 04:04:42 [backends.py:1111] Dynamo bytecode transform time: 54.13 s
 (EngineCore pid=1861432) INFO 04-30 04:04:45 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 2.805 s
-(EngineCore pid=1861432) INFO 04-30 04:04:45 [decorators.py:303] Directly load AOT compilation from path /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/torch_aot_compile/3b2a50c4eee6d58dbf3eea5d7e8f3cd2fe27f38bb97d07ff7526a004292ed223/rank_0_0/model
+(EngineCore pid=1861432) INFO 04-30 04:04:45 [decorators.py:303] Directly load AOT compilation from path <insomnia-cache>/vllm/torch_compile_cache/torch_aot_compile/3b2a50c4eee6d58dbf3eea5d7e8f3cd2fe27f38bb97d07ff7526a004292ed223/rank_0_0/model
 (EngineCore pid=1861432) INFO 04-30 04:04:46 [monitor.py:48] torch.compile took 57.33 s in total
 (EngineCore pid=1861432) INFO 04-30 04:04:46 [monitor.py:76] Initial profiling/warmup run took 0.02 s
 (EngineCore pid=1861432) INFO 04-30 04:04:48 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512

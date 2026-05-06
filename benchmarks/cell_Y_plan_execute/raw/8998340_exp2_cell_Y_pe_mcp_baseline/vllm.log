@@ -1,9 +1,9 @@
-(APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299] 
+(APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]
 (APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]   █▄█▀ █     █     █     █  model   models/Llama-3.1-8B-Instruct
 (APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299] 
+(APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:299]
 (APIServer pid=1901170) INFO 04-27 20:13:51 [utils.py:233] non-default args: {'host': '127.0.0.1', 'model': 'models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct'], 'profiler_config': ProfilerConfig(profiler='torch', torch_profiler_dir='/insomnia001/depts/edu/users/team13/worktrees/exp2-recovery/profiling/traces/8998340_exp2_cell_Y_pe_mcp_baseline_torch', torch_profiler_with_stack=True, torch_profiler_with_flops=False, torch_profiler_use_gzip=True, torch_profiler_dump_cuda_time_total=True, torch_profiler_record_shapes=False, torch_profiler_with_memory=False, ignore_frontend=False, delay_iterations=0, max_iterations=0, warmup_iterations=0, active_iterations=5, wait_iterations=0)}
 (APIServer pid=1901170) INFO 04-27 20:13:51 [model.py:549] Resolved architecture: LlamaForCausalLM
 (APIServer pid=1901170) WARNING 04-27 20:13:51 [model.py:2016] Casting torch.bfloat16 to torch.float16.
@@ -23,13 +23,13 @@
 (EngineCore pid=1902694) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:27<00:09,  9.19s/it]
 (EngineCore pid=1902694) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:29<00:00,  6.62s/it]
 (EngineCore pid=1902694) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:29<00:00,  7.48s/it]
-(EngineCore pid=1902694) 
+(EngineCore pid=1902694)
 (EngineCore pid=1902694) INFO 04-27 20:15:02 [default_loader.py:384] Loading weights took 29.92 seconds
 (EngineCore pid=1902694) INFO 04-27 20:15:03 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 36.632310 seconds
-(EngineCore pid=1902694) INFO 04-27 20:15:39 [backends.py:1051] Using cache directory: /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/1f7508b07d/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=1902694) INFO 04-27 20:15:39 [backends.py:1051] Using cache directory: <insomnia-cache>/vllm/torch_compile_cache/1f7508b07d/rank_0_0/backbone for vLLM's torch.compile
 (EngineCore pid=1902694) INFO 04-27 20:15:39 [backends.py:1111] Dynamo bytecode transform time: 35.95 s
 (EngineCore pid=1902694) INFO 04-27 20:15:42 [backends.py:285] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 2.376 s
-(EngineCore pid=1902694) INFO 04-27 20:15:42 [decorators.py:303] Directly load AOT compilation from path /insomnia001/home/wax1/.cache/vllm/torch_compile_cache/torch_aot_compile/7180eb22b60d660f2729ad4f19646bbe23d5d65ab834988caed4860469cb1ee5/rank_0_0/model
+(EngineCore pid=1902694) INFO 04-27 20:15:42 [decorators.py:303] Directly load AOT compilation from path <insomnia-cache>/vllm/torch_compile_cache/torch_aot_compile/7180eb22b60d660f2729ad4f19646bbe23d5d65ab834988caed4860469cb1ee5/rank_0_0/model
 (EngineCore pid=1902694) INFO 04-27 20:15:42 [monitor.py:48] torch.compile took 38.57 s in total
 (EngineCore pid=1902694) INFO 04-27 20:15:43 [monitor.py:76] Initial profiling/warmup run took 1.00 s
 (EngineCore pid=1902694) INFO 04-27 20:15:45 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
@@ -185,14 +185,14 @@ ERROR: External init callback must run in same thread as registerClient (-169557
 (APIServer pid=1901170) INFO:     127.0.0.1:57648 - "POST /v1/chat/completions HTTP/1.1" 400 Bad Request
 (APIServer pid=1901170) INFO:     127.0.0.1:52740 - "POST /v1/chat/completions HTTP/1.1" 400 Bad Request
 (APIServer pid=1901170) INFO 04-27 20:23:03 [api_router.py:31] Stopping profiler...
-(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
-(EngineCore pid=1902694)                        Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg    # of Calls  
-(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
-(EngineCore pid=1902694)       cudaDeviceSynchronize        71.90%       1.066ms        71.90%       1.066ms       1.066ms             1  
-(EngineCore pid=1902694)     Activity Buffer Request        28.10%     416.517us        28.10%     416.517us     416.517us             1  
-(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
+(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+(EngineCore pid=1902694)                        Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg    # of Calls
+(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+(EngineCore pid=1902694)       cudaDeviceSynchronize        71.90%       1.066ms        71.90%       1.066ms       1.066ms             1
+(EngineCore pid=1902694)     Activity Buffer Request        28.10%     416.517us        28.10%     416.517us     416.517us             1
+(EngineCore pid=1902694) ---------------------------  ------------  ------------  ------------  ------------  ------------  ------------
 (EngineCore pid=1902694) Self CPU time total: 1.482ms
-(EngineCore pid=1902694) 
+(EngineCore pid=1902694)
 (EngineCore pid=1902694) INFO 04-27 20:23:04 [wrapper.py:66] Profiler stopped successfully.
 (APIServer pid=1901170) INFO 04-27 20:23:04 [api_router.py:33] Profiler stopped.
 (APIServer pid=1901170) INFO:     127.0.0.1:52744 - "POST /stop_profile HTTP/1.1" 200 OK

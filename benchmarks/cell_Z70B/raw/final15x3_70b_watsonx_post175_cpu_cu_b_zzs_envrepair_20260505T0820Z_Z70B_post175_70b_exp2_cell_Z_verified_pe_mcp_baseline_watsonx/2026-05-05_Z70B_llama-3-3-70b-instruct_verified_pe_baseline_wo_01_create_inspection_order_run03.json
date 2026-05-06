@@ -1,0 +1,220 @@
+{
+  "question": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+  "effective_question": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "A preventive inspection work order (WO-4B72B335) was created for transformer T-013 with a priority of \"low\" and an estimated downtime of 4 hours. However, the work order could not be updated with required skills due to a session error.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 4,
+      "task": "Update the work order with required skills and other details",
+      "server": "wo",
+      "tool": "update_work_order",
+      "error": "Work order 'WO-4B72B335' not found in this session.",
+      "verifier_decision": "error"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Identify the transformer and its current status",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Transformer metadata, including name, location, and health status"
+    },
+    {
+      "step": 2,
+      "task": "Determine the required maintenance and estimated downtime",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Estimated downtime for the maintenance"
+    },
+    {
+      "step": 3,
+      "task": "Create a preventive inspection work order",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "Work order ID and details, including priority, status, and estimated downtime"
+    },
+    {
+      "step": 4,
+      "task": "Update the work order with required skills and other details",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Updated work order details, including required skills and other information"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Identify the transformer and its current status",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Transformer metadata, including name, location, and health status"
+    },
+    {
+      "step": 2,
+      "task": "Determine the required maintenance and estimated downtime",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Estimated downtime for the maintenance"
+    },
+    {
+      "step": 3,
+      "task": "Create a preventive inspection work order",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "Work order ID and details, including priority, status, and estimated downtime"
+    },
+    {
+      "step": 4,
+      "task": "Update the work order with required skills and other details",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Updated work order details, including required skills and other information"
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Identify the transformer and its current status",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {
+        "transformer_id": "T-013"
+      },
+      "response": "{\n  \"transformer_id\": \"T-013\",\n  \"name\": \"Power Transformer T-013\",\n  \"manufacturer\": \"GE\",\n  \"location\": \"Distribution Center 2\",\n  \"voltage_class\": \"33kV/11kV\",\n  \"rating_kva\": 500,\n  \"install_date\": \"2018-09-10\",\n  \"age_years\": 6,\n  \"health_status\": 1,\n  \"fdd_category\": 2,\n  \"rul_days\": 922,\n  \"in_service\": true\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step 1 completed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Determine the required maintenance and estimated downtime",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "severity": "low",
+        "fault_type": null
+      },
+      "response": "{\n  \"transformer_id\": \"T-013\",\n  \"severity\": \"low\",\n  \"fault_type\": null,\n  \"estimated_min_hours\": 2,\n  \"estimated_max_hours\": 6,\n  \"estimated_typical_hours\": 4,\n  \"source\": \"dataset_statistics_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step 2 completed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Create a preventive inspection work order",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-013",
+        "issue_description": "Preventive inspection for transformer T-013",
+        "priority": "low",
+        "fault_type": null,
+        "estimated_downtime_hours": 4
+      },
+      "response": "{\n  \"work_order_id\": \"WO-4B72B335\",\n  \"transformer_id\": \"T-013\",\n  \"issue_description\": \"Preventive inspection for transformer T-013\",\n  \"priority\": \"low\",\n  \"fault_type\": null,\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 4.0,\n  \"created_at\": \"2026-05-05T08:50:47.728121Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Work order created successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 4,
+      "task": "Update the work order with required skills and other details",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {
+        "work_order_id": "WO-4B72B335",
+        "status": "in_progress",
+        "priority": "low",
+        "assigned_technician": null,
+        "note": "Preventive inspection for transformer T-013, required skills: electrical engineering, estimated downtime: 4 hours"
+      },
+      "response": "{\n  \"error\": \"Work order 'WO-4B72B335' not found in this session.\"\n}",
+      "executor_success": true,
+      "error": "Work order 'WO-4B72B335' not found in this session.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Work order 'WO-4B72B335' not found in this session."
+    }
+  ],
+  "scenario": {
+    "id": "SGT-007",
+    "type": "WO",
+    "text": "Create a preventive inspection work order for transformer T-013 for the next maintenance cycle, including priority, required skills, and estimated downtime.",
+    "category": "Work Order Generation",
+    "characteristic_form": "The answer should produce a structured work order containing asset ID, task summary, priority, required technician skill set, and estimated downtime.",
+    "asset_id": "T-013",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.estimate_downtime"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order payload",
+        "priority",
+        "required skills",
+        "downtime estimate"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

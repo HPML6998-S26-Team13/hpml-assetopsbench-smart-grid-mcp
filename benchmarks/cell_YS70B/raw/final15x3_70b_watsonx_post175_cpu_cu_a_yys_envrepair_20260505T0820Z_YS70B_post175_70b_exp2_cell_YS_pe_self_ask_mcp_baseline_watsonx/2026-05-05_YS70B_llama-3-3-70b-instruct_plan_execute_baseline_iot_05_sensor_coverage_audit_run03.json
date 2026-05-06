@@ -1,0 +1,169 @@
+{
+  "question": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+  "effective_question": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical (e.g., voltage, current, power factor) and thermal (e.g., temperature, heat rate) monitoring needs, considering industry standards for high-voltage transmission units.",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What are the specific electrical monitoring needs for T-007?",
+      "What thermal parameters need to be monitored for T-007?"
+    ],
+    "assumptions": [
+      "T-007 has standardized asset metadata",
+      "Sensor installation records are up-to-date",
+      "Electrical and thermal monitoring needs are based on industry standards"
+    ]
+  },
+  "answer": "The asset metadata for T-007 is: \n- transformer_id: T-007\n- name: Power Transformer T-007\n- manufacturer: Siemens\n- location: Industrial Park A\n- voltage_class: 132kV/33kV\n- rating_kva: 5000\n- install_date: 2011-03-03\n- age_years: 13\n- health_status: 0\n- fdd_category: 1\n- rul_days: 3860\n- in_service: true\n\nThe full set of sensors currently installed on T-007 includes:\n- load_current_a (unit: A)\n- oil_temp_c (unit: \u00b0C)\n- power_factor (unit: )\n- voltage_hv_kv (unit: kV)\n- voltage_lv_kv (unit: kV)\n- winding_temp_top_c (unit: \u00b0C)\n\nThe available instrumentation covers both electrical (voltage, current, power factor) and thermal (temperature) monitoring needs for T-007.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the asset metadata for transformer T-007",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Asset metadata for T-007, including name, manufacturer, location, voltage class, rating kVA, install date, age years, health status, FDD category, RUL days, and in-service status"
+    },
+    {
+      "step": 2,
+      "task": "List all sensors available for transformer T-007",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of sensor IDs and their corresponding units and number of readings for T-007"
+    },
+    {
+      "step": 3,
+      "task": "Determine if the available sensors cover both electrical and thermal monitoring needs",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "A flag indicating whether the available instrumentation covers both electrical (e.g., voltage, current, power factor) and thermal (e.g., temperature, heat rate) monitoring needs for T-007, based on industry standards for high-voltage transmission units"
+    },
+    {
+      "step": 4,
+      "task": "List the asset metadata and sensors for T-007, along with the monitoring needs assessment",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "expected_output": "A natural-language description of the asset metadata, available sensors, and monitoring needs assessment for T-007, including whether the available instrumentation meets industry standards for high-voltage transmission units."
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the asset metadata for transformer T-007",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Asset metadata for T-007, including name, manufacturer, location, voltage class, rating kVA, install date, age years, health status, FDD category, RUL days, and in-service status"
+    },
+    {
+      "step": 2,
+      "task": "List all sensors available for transformer T-007",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "List of sensor IDs and their corresponding units and number of readings for T-007"
+    },
+    {
+      "step": 3,
+      "task": "Determine if the available sensors cover both electrical and thermal monitoring needs",
+      "server": "iot",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        1,
+        2
+      ],
+      "expected_output": "A flag indicating whether the available instrumentation covers both electrical (e.g., voltage, current, power factor) and thermal (e.g., temperature, heat rate) monitoring needs for T-007, based on industry standards for high-voltage transmission units"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Normalized server for no-tool step 3 to iot.",
+    "Dropped terminal synthesis-only step 4; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the asset metadata for transformer T-007",
+      "server": "iot",
+      "tool": "get_asset_metadata",
+      "tool_args": {
+        "transformer_id": "T-007"
+      },
+      "response": "{\n  \"transformer_id\": \"T-007\",\n  \"name\": \"Power Transformer T-007\",\n  \"manufacturer\": \"Siemens\",\n  \"location\": \"Industrial Park A\",\n  \"voltage_class\": \"132kV/33kV\",\n  \"rating_kva\": 5000,\n  \"install_date\": \"2011-03-03\",\n  \"age_years\": 13,\n  \"health_status\": 0,\n  \"fdd_category\": 1,\n  \"rul_days\": 3860,\n  \"in_service\": true\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "List all sensors available for transformer T-007",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-007"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "Determine if the available sensors cover both electrical and thermal monitoring needs",
+      "server": "iot",
+      "tool": "none",
+      "tool_args": {},
+      "response": "A flag indicating whether the available instrumentation covers both electrical (e.g., voltage, current, power factor) and thermal (e.g., temperature, heat rate) monitoring needs for T-007, based on industry standards for high-voltage transmission units",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-021",
+    "type": "IoT",
+    "text": "T-007 is one of the high-voltage transmission units in the fleet. List its asset metadata and the full set of sensors currently installed, and flag whether the available instrumentation covers both electrical and thermal monitoring needs.",
+    "category": "Sensor Coverage Audit",
+    "characteristic_form": "The answer should report the transformer's voltage class and rating, list all installed sensor IDs, and summarize whether thermal channels (e.g. winding/oil temperature) and electrical channels (e.g. load current, voltage) are both represented.",
+    "asset_id": "T-007",
+    "expected_tools": [
+      "iot.get_asset_metadata",
+      "iot.list_sensors"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "voltage class",
+        "rating",
+        "sensor list",
+        "thermal sensor coverage",
+        "electrical sensor coverage"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

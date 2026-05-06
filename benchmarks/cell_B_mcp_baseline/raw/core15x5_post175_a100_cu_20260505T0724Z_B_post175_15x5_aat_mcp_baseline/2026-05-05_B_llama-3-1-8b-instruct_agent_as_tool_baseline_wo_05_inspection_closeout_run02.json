@@ -1,0 +1,57 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "answer": "{\"name\": \"create_work_order\", \"parameters\": {\"fault_type\": \"None\", \"estimated_downtime_hours\": None, \"priority\": \"low\", \"issue_description\": \"Field inspection of T-009 completed with no abnormal conditions observed.\", \"transformer_id\": \"T-009\"}}; {\"name\": \"update_work_order\", \"parameters\": {\"status\": \"closed\", \"note\": \"Inspection result: no abnormal conditions observed.\", \"work_order_id\": \"WO-XXXXX\", \"priority\": None, \"assigned_technician\": None}}",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 1,
+  "tool_call_count": 0,
+  "usage": {
+    "input_tokens": 5985,
+    "output_tokens": 117,
+    "total_tokens": 6102,
+    "requests": 1
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "{\"name\": \"create_work_order\", \"parameters\": {\"fault_type\": \"None\", \"estimated_downtime_hours\": None, \"priority\": \"low\", \"issue_description\": \"Field inspection of T-009 completed with no abnormal conditions observed.\", \"transformer_id\": \"T-009\"}}; {\"name\": \"update_work_order\", \"parameters\": {\"status\": \"closed\", \"note\": \"Inspection result: no abnormal conditions observed.\", \"work_order_id\": \"WO-XXXXX\", \"priority\": None, \"assigned_technician\": None}}",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.702025890350342,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

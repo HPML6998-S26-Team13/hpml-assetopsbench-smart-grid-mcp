@@ -1,0 +1,118 @@
+{
+  "question": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+  "answer": "The work order WO-475EA2B7 for transformer T-009 has been created and then immediately closed with a note indicating that the inspection was completed with no abnormal conditions observed.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14245,
+    "output_tokens": 155,
+    "total_tokens": 14400,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "transformer_id": "T-009",
+            "issue_description": "Inspection completed with no abnormal condition observed",
+            "priority": "low",
+            "estimated_downtime_hours": "0",
+            "fault_type": "null"
+          },
+          "call_id": "chatcmpl-tool-8cf668de56f14ebca2714c0fce5a7c3f",
+          "output": {
+            "work_order_id": "WO-475EA2B7",
+            "transformer_id": "T-009",
+            "issue_description": "Inspection completed with no abnormal condition observed",
+            "priority": "low",
+            "fault_type": "null",
+            "status": "closed",
+            "estimated_downtime_hours": 0.0,
+            "created_at": "2026-05-05T07:33:17.558908Z",
+            "assigned_technician": null,
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:33:20.052582Z",
+                "text": "Inspection completed with no abnormal conditions observed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "update_work_order",
+          "arguments": {
+            "work_order_id": "WO-475EA2B7",
+            "status": "closed",
+            "note": "Inspection completed with no abnormal conditions observed"
+          },
+          "call_id": "chatcmpl-tool-ebfaa9ef40be40f0895a3de0bf45f85b",
+          "output": {
+            "work_order_id": "WO-475EA2B7",
+            "transformer_id": "T-009",
+            "issue_description": "Inspection completed with no abnormal condition observed",
+            "priority": "low",
+            "fault_type": "null",
+            "status": "closed",
+            "estimated_downtime_hours": 0.0,
+            "created_at": "2026-05-05T07:33:17.558908Z",
+            "assigned_technician": null,
+            "notes": [
+              {
+                "timestamp": "2026-05-05T07:33:20.052582Z",
+                "text": "Inspection completed with no abnormal conditions observed"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The work order WO-475EA2B7 for transformer T-009 has been created and then immediately closed with a note indicating that the inspection was completed with no abnormal conditions observed.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 9.12038254737854,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-027",
+    "type": "WO",
+    "text": "An inspection on T-009 has just been completed in the field with no abnormal condition observed. Open a work order documenting that the inspection took place, then close it out with a note recording the clean inspection result.",
+    "category": "Work Order Lifecycle (Open and Close)",
+    "characteristic_form": "The answer should report the newly created work order identifier and its initial status, then confirm a follow-up update that transitions the work order to a closed state with a closure note referencing the clean inspection finding.",
+    "asset_id": "T-009",
+    "expected_tools": [
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "work order identifier",
+        "initial open status",
+        "status updated to closed",
+        "closure note recorded"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

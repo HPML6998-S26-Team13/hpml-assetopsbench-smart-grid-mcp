@@ -1,0 +1,75 @@
+{
+  "question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "answer": "The transformer T-016 is forecasted to have 0 days of remaining useful life in 180 days, indicating that it may not safely operate for the next 180 days without major maintenance.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 1,
+  "usage": {
+    "input_tokens": 11835,
+    "output_tokens": 76,
+    "total_tokens": 11911,
+    "requests": 2
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "transformer_id": "T-016",
+            "horizon_days": 180
+          },
+          "call_id": "chatcmpl-tool-90f5fe936b6b4cc08f20c2bce958da39",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-016\",\n  \"current_rul_days\": 57,\n  \"forecast_date\": \"2024-07-29\",\n  \"projected_rul_days\": 0,\n  \"projected_health_index\": 0.0,\n  \"confidence\": 0.608,\n  \"method\": \"linear_degradation_baseline\"\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The transformer T-016 is forecasted to have 0 days of remaining useful life in 180 days, indicating that it may not safely operate for the next 180 days without major maintenance.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.857505798339844,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-005",
+    "type": "TSFM",
+    "text": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+    "category": "Remaining Useful Life",
+    "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
+    "asset_id": "T-016",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "decision_window_days": 180,
+      "must_include": [
+        "rul_days_estimate",
+        "go/no-go recommendation"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

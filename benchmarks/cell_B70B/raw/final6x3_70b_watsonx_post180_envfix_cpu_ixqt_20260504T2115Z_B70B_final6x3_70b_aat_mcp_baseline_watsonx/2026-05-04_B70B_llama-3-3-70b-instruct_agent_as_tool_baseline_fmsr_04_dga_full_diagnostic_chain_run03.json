@@ -1,0 +1,136 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "answer": "The probable fault mode for T-014 is thermal fault, t < 300 \u00b0C. The closest matching failure mechanism in the catalogue is Partial Discharge (FM-001). The sensors that should be prioritized for ongoing monitoring are load_current_a, oil_temp_c, power_factor, voltage_hv_kv, voltage_lv_kv, and winding_temp_top_c.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 31588,
+    "output_tokens": 224,
+    "total_tokens": 31812,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-b2e7b1272c504c10aa7e44617fa66616",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-014\",\n  \"sample_date\": \"2024-01-30T00:00:00\",\n  \"dissolved_h2_ppm\": 16.17,\n  \"dissolved_ch4_ppm\": 33.46,\n  \"dissolved_c2h2_ppm\": 2.34,\n  \"dissolved_c2h4_ppm\": 13.51,\n  \"dissolved_c2h6_ppm\": 16.8,\n  \"dissolved_co_ppm\": 330.08,\n  \"dissolved_co2_ppm\": 2180.87,\n  \"fault_label\": \"Low-temperature overheating\",\n  \"source_dataset\": \"synthetic\"\n}"
+          }
+        },
+        {
+          "name": "analyze_dga",
+          "arguments": {
+            "h2": "16",
+            "ch4": "33",
+            "c2h2": "2",
+            "c2h4": "13",
+            "c2h6": "16",
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-75269b96f53e47fa9f9fbaff797730ab",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"iec_code\": \"T1\",\n  \"diagnosis\": \"Thermal fault, t < 300 \u00b0C\",\n  \"r1_ch4_h2\": 2.0625,\n  \"r2_c2h2_c2h4\": 0.1538,\n  \"r3_c2h4_c2h6\": 0.8125,\n  \"input_gases\": {\n    \"h2_ppm\": 16.0,\n    \"ch4_ppm\": 33.0,\n    \"c2h2_ppm\": 2.0,\n    \"c2h4_ppm\": 13.0,\n    \"c2h6_ppm\": 16.0\n  },\n  \"transformer_id\": \"T-014\"\n}"
+          }
+        },
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-001"
+          },
+          "call_id": "chatcmpl-tool-63a96b32c8104d9b824ad039cbd87a21",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"dga_label\": \"Partial discharge\",\n  \"description\": \"Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": [\n    \"H2\",\n    \"CH4\"\n  ],\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}"
+          }
+        },
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-014"
+          },
+          "call_id": "chatcmpl-tool-56a4d94a806740a2abc09cc96a5c6407",
+          "output": [
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The probable fault mode for T-014 is thermal fault, t < 300 \u00b0C. The closest matching failure mechanism in the catalogue is Partial Discharge (FM-001). The sensors that should be prioritized for ongoing monitoring are load_current_a, oil_temp_c, power_factor, voltage_hv_kv, voltage_lv_kv, and winding_temp_top_c.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 123.9848141670227,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

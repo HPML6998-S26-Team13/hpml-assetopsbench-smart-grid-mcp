@@ -1,8 +1,8 @@
 # NeurIPS 2026 Submission Packet
 
-*Last updated: 2026-05-03*
+*Last updated: 2026-05-05*
 *Owner: Alex Xin*
-*Issues: #5, #39, #47, #48*
+*Issues: #5, #39, #47, #48, #88, #181, #182*
 
 This packet is the deadline-facing control surface for the NeurIPS 2026
 Evaluations & Datasets submission. It summarizes what can already go into the
@@ -16,6 +16,7 @@ this submission lane.
 |---|---|
 | Venue | NeurIPS 2026 Evaluations & Datasets Track (formerly Datasets & Benchmarks) |
 | Abstract deadline | 2026-05-04 23:59 AOE |
+| Abstract submission status | External OpenReview receipt not stored in repo; verify receipt before full-paper upload. |
 | Full-paper deadline | 2026-05-06 23:59 AOE |
 | Overleaf project | https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 |
 | Template status | Official NeurIPS 2026 template ingested in Overleaf Git commit `7e361de` |
@@ -61,12 +62,13 @@ tool-using agents.
 | Tier | Claim | Evidence now | Paper stance |
 |---|---|---|---|
 | Safe | SmartGridBench adds a Smart Grid transformer-maintenance lane over AssetOpsBench. | `data/`, `mcp_servers/`, `data/scenarios/`, `docs/data_pipeline.tex` | Main contribution. |
-| Safe | The repo has direct-tool, MCP-baseline, and optimized-MCP AaT paths with committed artifacts. | A/B job `8979314`; C job `9071639`; Notebook 02 exports | Report as preliminary six-trial evidence until final reruns freeze. |
-| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | jobs `8998340` through `8998343`; `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, and `results/metrics/experiment_matrix_summary.csv` | Main orchestration result, with small-sample caveat. |
+| Safe | The repo has direct-tool, MCP-baseline, and optimized-MCP AaT paths with committed artifacts. | Post-PR175 paper-grade rows in `results/metrics/evidence_registry.csv`, `results/metrics/gcp_post175_core31_summary.csv`, and `results/metrics/gcp_post175_final_summary.csv` | Main 31-scenario core evidence for A/B/C. |
+| Safe | The repo has Plan-Execute, Verified PE, and PE-family Self-Ask follow-ons with judge outputs. | Post-PR175 paper-grade rows in `results/metrics/evidence_registry.csv`, `results/metrics/gcp_post175_core31_summary.csv`, and `results/metrics/gcp_post175_final_summary.csv` | Main 31-scenario orchestration result for Y/YS/Z/ZS, plus 15-scenario follow-on/extra rows. |
 | Safe | Failure analysis is artifact-backed. | `failure_evidence_table.csv`, taxonomy SVGs, mitigation inventory | Main reliability/evaluation contribution. |
-| Pending | Scenario floor reaches 30 validated scenarios. | `team13/main` has 11 main scenarios; PR #156 adds 10 hand-authored scenarios; Akshat generator acceptance remains needed for 30 floor | Mention as deadline blocker until merged/validated. |
-| Pending | Mitigation ladder improves outcomes. | Detection guard, repair/replan, and adjudication implementation landed; `mitigation_before_after.csv` has header only | Describe as implemented mitigation ladder pending rerun evidence. |
-| Optional | 70B and context-window appendix strengthens generality. | local branch evidence exists outside canonical main | Appendix only if published before final paper freeze. |
+| Safe | The LLM judge has a small manual sanity audit. | `results/metrics/manual_judge_audit.csv` has 12 stratified mitigation trajectories from the now-superseded post-PR180 cohort with 12/12 judge/manual pass-label agreement | Use only as a judge-calibration sanity check; current paper-grade mitigation evidence is the post-PR175 cohort. |
+| Safe | Scenario floor reaches 31 validated scenarios. | PR #175 merged over PR #180 at `team13/main@1913c6e4703425f735d8cb8297cb890ba66bbeff`; core rows cover 31 scenarios x 5 trials | Use "all validated scenarios" for core 8B claims. |
+| Safe with caveat | Mitigation ladder has post-PR175 before/after evidence. | `results/metrics/evidence_registry.csv` marks `mitigation15_4tier` rows as paper-grade; `results/metrics/gcp_post175_mitigation_4tier_summary.csv` has the matched 15-scenario x 5-trial ladder | Report mixed effects. The ladder is evidence-backed but does not support a universal mitigation-lift claim. |
+| Safe with caveat | Hosted WatsonX 70B rows strengthen generality. | `results/metrics/evidence_registry.csv` marks the post-PR175 70B rows as paper-grade; `results/metrics/gcp_post175_70b_summary.csv` summarizes 15-scenario main/top-up rows | Core scaling evidence exists for 15 scenarios; all-31 70B remains future extension work. |
 
 ## Section Plan
 
@@ -89,10 +91,10 @@ waiting for final reruns:
 2. Paste Introduction, Benchmark Extension, System Design, Experimental Design,
    Results Skeleton, Failure Analysis, Limitations, and Reproducibility from
    `docs/neurips_draft.md`.
-3. Insert the current results tables from this packet with captions labeled as
-   first six-trial captures. Use `notebook03_orchestration_comparison.csv` for
-   `B/Y/Z`, then `notebook03_self_ask_ablation.csv` or
-   `experiment_matrix_summary.csv` for `YS/ZS`.
+3. Insert the paper-final core table from
+   `results/metrics/gcp_post175_core31_summary.csv` for A/B/C/Y/YS/Z/ZS.
+   The earlier six-trial notebook tables can remain as preliminary calibration
+   or appendix material only, with explicit `n=6` disclosure.
 4. Add TODO markers for final scenario count, repeated transport distribution,
    mitigation before/after rows, references, checklist answers, and compile
    proof.
@@ -135,7 +137,11 @@ evidence and final-answer grounding.
 Source note: the core `B/Y/Z` rows trace to
 `results/metrics/notebook03_orchestration_comparison.csv`; the `YS/ZS`
 Self-Ask rows trace to `results/metrics/notebook03_self_ask_ablation.csv` and
-`results/metrics/experiment_matrix_summary.csv`.
+`results/metrics/experiment_matrix_summary.csv`. These are the legacy
+six-trial smoke/calibration rows. The paper-final orchestration table should
+lead with `results/metrics/gcp_post175_core31_summary.csv`, which aggregates
+the post-PR175 31-scenario x 5-trial core evidence: B `57/155` pass, Y
+`76/155`, YS `78/155`, Z `86/155`, and ZS `80/155`.
 
 ### Failure Taxonomy
 
@@ -149,8 +155,21 @@ Interpretation for draft prose: the largest failure class is not transport or
 execution plumbing; it is evidence verification and unsupported finalization.
 This justifies the implemented mitigation ladder as benchmark reliability work:
 detection first, repair/replan second, and explicit fault/risk adjudication
-third. Do not claim measured mitigation improvement until before/after rows
-exist.
+third. The post-PR175 mitigation cohort should be described as mixed evidence rather than a
+blanket mitigation win: `ZS_REPAIR` is the only row with a clear positive lift
+over its baseline in the post-PR175 paper-grade mitigation CSV.
+
+### Judge Sanity Audit
+
+The current manual audit samples 12 trajectories across baseline, guard,
+repair, and adjudication rows from the now-superseded post-PR180 mitigation
+cohort. Manual labels agree with the 6D judge pass/fail label on all 12 sampled
+rows (`7/12` pass, `5/12` fail). This is a judge-calibration sanity check, not
+claim-grade mitigation evidence; current mitigation claims should cite the
+post-PR175 paper-grade cohort in
+`results/metrics/gcp_post175_mitigation_4tier_summary.csv`.
+
+Source: `results/metrics/manual_judge_audit.csv`.
 
 ## Figure and Table Transfer Checklist
 
@@ -159,6 +178,7 @@ exist.
 - [ ] Insert PE-family follow-on figure from `results/figures/notebook03_pe_family_follow_on.png` if it fits the page budget.
 - [ ] Insert failure taxonomy count figure from `results/figures/failure_taxonomy_counts.svg`.
 - [ ] Insert failure stage heatmap from `results/figures/failure_stage_cell_heatmap.svg`.
+- [ ] Add manual judge audit table/footnote from `results/metrics/manual_judge_audit.csv`.
 - [ ] Add artifact ledger table using `docs/validation_log.md` and `results/metrics/experiment_matrix_summary.csv`.
 - [ ] Add scenario corpus table once PR #156 and generator-accepted scenarios settle.
 
@@ -170,7 +190,8 @@ exist.
 | Fill NeurIPS checklist | Alex + factual inputs from team | Must clear before full-paper upload. |
 | Reach and document 30 validated scenarios | Akshat/Tanisha, Alex shepherd | Must clear before final claims. |
 | Freeze final result table captions | Alex, Aaron, Akshat | Can use current six-trial captures if final reruns do not land. |
-| Decide whether to include mitigation rerun rows | Alex | Include only if `mitigation_before_after.csv` has real rows. |
+| Decide final wording for mitigation rerun rows | Alex | Include the post-PR175 rows only as mixed follow-on evidence; avoid universal-lift wording. |
+| Wire judge audit caveat into paper | Alex | Use `manual_judge_audit.csv` as a small sanity check, not a full human-eval claim. |
 | Final references and citations | Alex | Must clear before full-paper upload. |
 
 ## Teammate Fact Asks

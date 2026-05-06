@@ -1,0 +1,80 @@
+{
+  "question": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+  "answer": "The forecast RUL for transformer T-016 is currently 57 days, and the forecast suggests that it cannot safely operate for the next 180 days without major maintenance. The projected RUL is 0 days, and the confidence level is 60.8%. The method used for the forecast is the linear degradation baseline.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 1,
+  "usage": {
+    "input_tokens": 9437,
+    "output_tokens": 97,
+    "total_tokens": 9534,
+    "requests": 2
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "transformer_id": "T-016",
+            "horizon_days": "180"
+          },
+          "call_id": "chatcmpl-tool-bf7ded4b2eea0d67",
+          "output": {
+            "transformer_id": "T-016",
+            "current_rul_days": 57,
+            "forecast_date": "2024-07-29",
+            "projected_rul_days": 0,
+            "projected_health_index": 0.0,
+            "confidence": 0.608,
+            "method": "linear_degradation_baseline"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The forecast RUL for transformer T-016 is currently 57 days, and the forecast suggests that it cannot safely operate for the next 180 days without major maintenance. The projected RUL is 0 days, and the confidence level is 60.8%. The method used for the forecast is the linear degradation baseline.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 3.4768171310424805,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-005",
+    "type": "TSFM",
+    "text": "Forecast remaining useful life for transformer T-016 and state whether it can safely operate for the next 180 days without major maintenance.",
+    "category": "Remaining Useful Life",
+    "characteristic_form": "The answer should report an RUL estimate in days, compare it against the 180-day horizon, and provide a clear maintenance recommendation.",
+    "asset_id": "T-016",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "decision_window_days": 180,
+      "must_include": [
+        "rul_days_estimate",
+        "go/no-go recommendation"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

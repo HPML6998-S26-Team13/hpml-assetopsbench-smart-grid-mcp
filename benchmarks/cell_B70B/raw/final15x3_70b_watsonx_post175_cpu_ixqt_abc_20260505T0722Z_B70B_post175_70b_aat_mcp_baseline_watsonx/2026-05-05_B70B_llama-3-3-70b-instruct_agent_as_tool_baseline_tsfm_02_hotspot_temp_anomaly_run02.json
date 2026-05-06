@@ -1,0 +1,138 @@
+{
+  "question": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+  "answer": "The function call `{\"name\": \"detect_anomalies\", \"parameters\": {\"transformer_id\": \"T-019\", \"sensor_id\": \"winding_temp_top_c\", \"window_size\": \"168\", \"z_threshold\": \"3\"}}` returns the following result:\n\n`{\n  \"transformer_id\": \"T-019\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 168,\n  \"z_threshold\": 3.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 2,\n  \"anomaly_rate_pct\": 0.28,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-11 09:00:00\",\n      \"value\": 171.299,\n      \"z_score\": 3.025\n    },\n    {\n      \"timestamp\": \"2024-01-18 18:00:00\",\n      \"value\": 36.138,\n      \"z_score\": 3.637\n    }\n  ]\n}`\n\nThis indicates that there were 2 anomalies detected in the winding temperature readings for transformer T-019 over the past 7 days, with a total of 720 readings. The anomalies occurred on January 11, 2024, at 09:00:00 and January 18, 2024, at 18:00:00, with z-scores of 3.025 and 3.637, respectively. The anomaly rate is 0.28%.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 30648,
+    "output_tokens": 517,
+    "total_tokens": 31165,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "sensor_id": "winding_temp_c",
+            "transformer_id": "T-019",
+            "window_size": "168",
+            "z_threshold": "3"
+          },
+          "call_id": "chatcmpl-tool-486bb994719d490aad9dcd3c7be452ca",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings for transformer='T-019' sensor='winding_temp_c'.\"\n}"
+          }
+        },
+        {
+          "name": "get_sensor_readings",
+          "arguments": {
+            "sensor_id": "winding_temp_c",
+            "transformer_id": "T-019",
+            "start_time": "7 days ago",
+            "end_time": "now",
+            "limit": "1000"
+          },
+          "call_id": "chatcmpl-tool-70dae10a25444f2fbdf882004248a531",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings found for transformer='T-019' sensor='winding_temp_c'.\"\n}"
+          }
+        },
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-019"
+          },
+          "call_id": "chatcmpl-tool-22e7941fe7964127afd3236a9c181705",
+          "output": [
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            }
+          ]
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "transformer_id": "T-019",
+            "sensor_id": "winding_temp_top_c",
+            "window_size": "168",
+            "z_threshold": "3"
+          },
+          "call_id": "chatcmpl-tool-3d111a2d1ed140aca3eefb22c023d682",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-019\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 168,\n  \"z_threshold\": 3.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 2,\n  \"anomaly_rate_pct\": 0.28,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-11 09:00:00\",\n      \"value\": 171.299,\n      \"z_score\": 3.025\n    },\n    {\n      \"timestamp\": \"2024-01-18 18:00:00\",\n      \"value\": 36.138,\n      \"z_score\": 3.637\n    }\n  ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The function call `{\"name\": \"detect_anomalies\", \"parameters\": {\"transformer_id\": \"T-019\", \"sensor_id\": \"winding_temp_top_c\", \"window_size\": \"168\", \"z_threshold\": \"3\"}}` returns the following result:\n\n`{\n  \"transformer_id\": \"T-019\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 168,\n  \"z_threshold\": 3.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 2,\n  \"anomaly_rate_pct\": 0.28,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-11 09:00:00\",\n      \"value\": 171.299,\n      \"z_score\": 3.025\n    },\n    {\n      \"timestamp\": \"2024-01-18 18:00:00\",\n      \"value\": 36.138,\n      \"z_score\": 3.637\n    }\n  ]\n}`\n\nThis indicates that there were 2 anomalies detected in the winding temperature readings for transformer T-019 over the past 7 days, with a total of 720 readings. The anomalies occurred on January 11, 2024, at 09:00:00 and January 18, 2024, at 18:00:00, with z-scores of 3.025 and 3.637, respectively. The anomaly rate is 0.28%.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 24.873854875564575,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-006",
+    "type": "TSFM",
+    "text": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+    "category": "Anomaly Detection",
+    "characteristic_form": "The answer should identify abnormal intervals (if any), quantify severity or count of anomalies, and provide a concise interpretation of persistence.",
+    "asset_id": "T-019",
+    "expected_tools": [
+      "tsfm.detect_anomalies"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "anomaly window(s)",
+        "severity or count",
+        "summary interpretation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "question": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "effective_question": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 1
+  },
+  "answer": "The fault details for T-006 are: fault type \"Insulation Degradation\", location \"Substation Beta\", with an estimated repair downtime of 24 hours (typical). A corrective work order WO-A2CC55FA was opened but could not be updated or marked as in-progress due to a session error.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for the fault on T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "error": "Invalid severity 'High'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 7,
+      "task": "Update the work order WO-A2CC55FA to reflect the estimated downtime calculated in the previous step and mark it as in-progress.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "error": "Work order 'WO-A2CC55FA' not found in this session.",
+      "verifier_decision": "error"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dicts, including the recent fault event on T-006"
+    },
+    {
+      "step": 2,
+      "task": "Get the specific fault record for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A fault record dict for the recent fault event on T-006"
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for the fault on T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict with estimated downtime hours for the fault on T-006"
+    },
+    {
+      "step": 4,
+      "task": "Open a corrective work order for the fault on T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        2,
+        3
+      ],
+      "expected_output": "A work order dict for the corrective work order on T-006"
+    },
+    {
+      "step": 5,
+      "task": "Mark the work order as in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "An updated work order dict with the status changed to in-progress and the estimated duration recorded"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of fault record dicts, including the recent fault event on T-006"
+    },
+    {
+      "step": 2,
+      "task": "Get the specific fault record for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A fault record dict for the recent fault event on T-006"
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for the fault on T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A dict with estimated downtime hours for the fault on T-006"
+    },
+    {
+      "step": 4,
+      "task": "Open a corrective work order for the fault on T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {},
+      "dependencies": [
+        2,
+        3
+      ],
+      "expected_output": "A work order dict for the corrective work order on T-006"
+    },
+    {
+      "step": 5,
+      "task": "Mark the work order as in-progress with the estimated duration recorded",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "An updated work order dict with the status changed to in-progress and the estimated duration recorded"
+    },
+    {
+      "step": 6,
+      "task": "Recalculate the expected repair downtime for the fault on T-006 with the correct severity, which should be 'high' as per the fault type 'Insulation Degradation'.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Estimated downtime for the repair of the fault on T-006."
+    },
+    {
+      "step": 7,
+      "task": "Update the work order WO-A2CC55FA to reflect the estimated downtime calculated in the previous step and mark it as in-progress.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {},
+      "dependencies": [
+        6
+      ],
+      "expected_output": "Updated work order details with the estimated downtime and status changed to in-progress."
+    }
+  ],
+  "plan_normalization_warnings": [],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the fault details for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "list_fault_records",
+      "tool_args": {
+        "transformer_id": "T-006"
+      },
+      "response": "{\n  \"transformer_id\": \"T-006\",\n  \"fault_id\": \"F005\",\n  \"fault_type\": \"Insulation Degradation\",\n  \"location\": \"Substation Beta\",\n  \"voltage_v\": 11000,\n  \"current_a\": 306,\n  \"power_load_mw\": 54.89,\n  \"temperature_c\": 27.1,\n  \"wind_speed_kmh\": 20.5,\n  \"weather_condition\": \"Windy\",\n  \"maintenance_status\": \"Scheduled\",\n  \"component_health\": \"Normal\",\n  \"duration_hrs\": 2.0,\n  \"downtime_hrs\": 4\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step 1 completed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Get the specific fault record for the recent fault event on T-006",
+      "server": "wo",
+      "tool": "get_fault_record",
+      "tool_args": {
+        "fault_id": "F005"
+      },
+      "response": "{\n  \"transformer_id\": \"T-006\",\n  \"fault_id\": \"F005\",\n  \"fault_type\": \"Insulation Degradation\",\n  \"location\": \"Substation Beta\",\n  \"voltage_v\": 11000,\n  \"current_a\": 306,\n  \"power_load_mw\": 54.89,\n  \"temperature_c\": 27.1,\n  \"wind_speed_kmh\": 20.5,\n  \"weather_condition\": \"Windy\",\n  \"maintenance_status\": \"Scheduled\",\n  \"component_health\": \"Normal\",\n  \"duration_hrs\": 2.0,\n  \"downtime_hrs\": 4\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step executed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Estimate the expected repair downtime for the fault on T-006",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "severity": "High",
+        "fault_type": "Insulation Degradation"
+      },
+      "response": "{\n  \"error\": \"Invalid severity 'High'. Must be one of: ['critical', 'high', 'low', 'medium']\"\n}",
+      "executor_success": true,
+      "error": "Invalid severity 'High'. Must be one of: ['critical', 'high', 'low', 'medium']",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Invalid severity 'High'. Must be one of: ['critical', 'high', 'low', 'medium']"
+    },
+    {
+      "step": 4,
+      "task": "Open a corrective work order for the fault on T-006",
+      "server": "wo",
+      "tool": "create_work_order",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "issue_description": "Insulation Degradation fault",
+        "priority": "high",
+        "fault_type": "Insulation Degradation",
+        "estimated_downtime_hours": 4
+      },
+      "response": "{\n  \"work_order_id\": \"WO-A2CC55FA\",\n  \"transformer_id\": \"T-006\",\n  \"issue_description\": \"Insulation Degradation fault\",\n  \"priority\": \"high\",\n  \"fault_type\": \"Insulation Degradation\",\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 4.0,\n  \"created_at\": \"2026-05-05T08:37:42.841528Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "replan_suffix",
+      "verifier_reason": "Estimated downtime not calculated due to error in step 3",
+      "verifier_updated_focus": "Recalculate estimated downtime with correct severity",
+      "retries_used": 0,
+      "verifier_replan_raw_plan": [
+        {
+          "step": 1,
+          "task": "Recalculate the expected repair downtime for the fault on T-006 with the correct severity, which should be 'high' as per the fault type 'Insulation Degradation'.",
+          "server": "wo",
+          "tool": "estimate_downtime",
+          "tool_args": {},
+          "dependencies": [],
+          "expected_output": "Estimated downtime for the repair of the fault on T-006."
+        },
+        {
+          "step": 2,
+          "task": "Update the work order WO-A2CC55FA to reflect the estimated downtime calculated in the previous step and mark it as in-progress.",
+          "server": "wo",
+          "tool": "update_work_order",
+          "tool_args": {},
+          "dependencies": [
+            1
+          ],
+          "expected_output": "Updated work order details with the estimated downtime and status changed to in-progress."
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "task": "Recalculate the expected repair downtime for the fault on T-006 with the correct severity, which should be 'high' as per the fault type 'Insulation Degradation'.",
+      "server": "wo",
+      "tool": "estimate_downtime",
+      "tool_args": {
+        "transformer_id": "T-006",
+        "severity": "high",
+        "fault_type": "Insulation Degradation"
+      },
+      "response": "{\n  \"transformer_id\": \"T-006\",\n  \"severity\": \"high\",\n  \"fault_type\": \"Insulation Degradation\",\n  \"estimated_min_hours\": 16,\n  \"estimated_max_hours\": 48,\n  \"estimated_typical_hours\": 24,\n  \"source\": \"dataset_statistics_baseline\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Step executed successfully",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 7,
+      "task": "Update the work order WO-A2CC55FA to reflect the estimated downtime calculated in the previous step and mark it as in-progress.",
+      "server": "wo",
+      "tool": "update_work_order",
+      "tool_args": {
+        "work_order_id": "WO-A2CC55FA",
+        "status": "in-progress",
+        "priority": "high",
+        "assigned_technician": null,
+        "note": "Estimated downtime: 4 hours"
+      },
+      "response": "{\n  \"error\": \"Work order 'WO-A2CC55FA' not found in this session.\"\n}",
+      "executor_success": true,
+      "error": "Work order 'WO-A2CC55FA' not found in this session.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "Work order 'WO-A2CC55FA' not found in this session."
+    }
+  ],
+  "scenario": {
+    "id": "SGT-018",
+    "type": "WO",
+    "text": "A fault event was recently logged on T-006. Retrieve the fault details, estimate the expected repair downtime, open a corrective work order, and then mark it as in-progress with the estimated duration recorded.",
+    "category": "Work Order Lifecycle",
+    "characteristic_form": "The answer should retrieve the fault record, estimate downtime, create a corrective work order, and update its status to in-progress with the downtime noted.",
+    "asset_id": "T-006",
+    "expected_tools": [
+      "wo.list_fault_records",
+      "wo.get_fault_record",
+      "wo.estimate_downtime",
+      "wo.create_work_order",
+      "wo.update_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault record details",
+        "downtime estimate",
+        "corrective work order created",
+        "work order updated to in-progress"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "WO"
+    ]
+  }
+}

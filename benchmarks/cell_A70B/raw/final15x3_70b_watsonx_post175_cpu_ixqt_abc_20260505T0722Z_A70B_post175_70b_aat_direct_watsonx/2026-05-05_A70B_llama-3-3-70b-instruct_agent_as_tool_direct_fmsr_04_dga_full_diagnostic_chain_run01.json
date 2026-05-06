@@ -1,0 +1,46 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "answer": "",
+  "success": false,
+  "error": "BadRequestError: litellm.BadRequestError: WatsonxException - {\"errors\":[{\"code\":\"json_type_error\",\"message\":\"Json field type error: messages.content must be of type string\",\"more_info\":\"https://cloud.ibm.com/apidocs/watsonx-ai#text-chat\"}],\"trace\":\"b1390477cccae08d5356f62bbbdef1af\",\"status_code\":400}",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 3.260380744934082,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

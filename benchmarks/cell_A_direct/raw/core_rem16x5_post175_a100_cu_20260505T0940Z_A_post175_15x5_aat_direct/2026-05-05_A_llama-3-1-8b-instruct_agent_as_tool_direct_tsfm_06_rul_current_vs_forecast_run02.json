@@ -1,0 +1,97 @@
+{
+  "question": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+  "answer": "The current RUL estimate for T-011 is 1100 days, and the 180-day forecast projects a remaining life of 920 days. The comparison of these two estimates suggests that the transformer's health is expected to deteriorate over the next 180 days, but it is still within a healthy range. Therefore, the comparison supports deferring replacement, but it is recommended to monitor the transformer's condition closely and reassess the RUL estimate future.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 2,
+  "usage": {
+    "input_tokens": 14386,
+    "output_tokens": 224,
+    "total_tokens": 14610,
+    "requests": 3
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_rul",
+          "arguments": {
+            "transformer_id": "T-011"
+          },
+          "call_id": "chatcmpl-tool-bd26afc68c39673e",
+          "output": {
+            "transformer_id": "T-011",
+            "as_of_date": "2024-01-31",
+            "rul_days": 1100,
+            "health_index": 1.0,
+            "fdd_category": 2,
+            "confidence": 0.808,
+            "interpretation": "Healthy \u2014 no immediate action required."
+          }
+        },
+        {
+          "name": "forecast_rul",
+          "arguments": {
+            "transformer_id": "T-011",
+            "horizon_days": "180"
+          },
+          "call_id": "chatcmpl-tool-abd153ebc695a774",
+          "output": {
+            "transformer_id": "T-011",
+            "current_rul_days": 1100,
+            "forecast_date": "2024-07-29",
+            "projected_rul_days": 920,
+            "projected_health_index": 0.8417,
+            "confidence": 0.608,
+            "method": "linear_degradation_baseline"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The current RUL estimate for T-011 is 1100 days, and the 180-day forecast projects a remaining life of 920 days. The comparison of these two estimates suggests that the transformer's health is expected to deteriorate over the next 180 days, but it is still within a healthy range. Therefore, the comparison supports deferring replacement, but it is recommended to monitor the transformer's condition closely and reassess the RUL estimate future.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 5.195083856582642,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-026",
+    "type": "TSFM",
+    "text": "Capital planning needs a defensible RUL view for T-011 ahead of the next budget cycle. Pull the current RUL estimate and a 180-day forecast, compare the two, and state whether the comparison supports deferring replacement or argues for advancing it.",
+    "category": "RUL Current vs Forecast Comparison",
+    "characteristic_form": "The answer should report the current RUL estimate for T-011, the forecasted RUL at the 180-day horizon, and a recommendation on whether the comparison supports deferring or advancing replacement, citing the magnitude of any change.",
+    "asset_id": "T-011",
+    "expected_tools": [
+      "tsfm.get_rul",
+      "tsfm.forecast_rul"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "current RUL value",
+        "forecast RUL value",
+        "comparison",
+        "deferral or advance recommendation"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

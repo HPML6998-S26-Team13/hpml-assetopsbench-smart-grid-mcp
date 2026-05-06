@@ -1,0 +1,118 @@
+{
+  "question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "answer": "The failure mode that best matches the symptom of intermittent partial discharge is FM-001, \"Partial Discharge\". The sensor readings most useful for confirming and tracking its progression are:\n\n* Load current (in Amps)\n* Oil temperature (in degrees Celsius)\n* Power factor\n* High-voltage voltage (in kV)\n* Low-voltage voltage (in kV)\n* Winding temperature (top) (in degrees Celsius)",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 24889,
+    "output_tokens": 174,
+    "total_tokens": 25063,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-004"
+          },
+          "call_id": "chatcmpl-tool-98b0b58e073f2faf",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"failure_mode_id\": \"FM-004\",\n  \"name\": \"High-Temperature Overheating (> 700\u00b0C)\",\n  \"dga_label\": \"High-temperature overheating\",\n  \"description\": \"Severe winding conductor overheating. Very high C2H4 and C2H6.\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"T3\",\n  \"key_gases\": [\n    \"C2H4\",\n    \"C2H6\",\n    \"H2\"\n  ],\n  \"recommended_action\": \"Immediate de-energization required\"\n}"
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "partial discharge"
+          },
+          "call_id": "chatcmpl-tool-9b840cba5aa67e7d",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": \"H2,CH4\",\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}"
+          }
+        },
+        {
+          "name": "list_sensors",
+          "arguments": {
+            "transformer_id": "T-003"
+          },
+          "call_id": "chatcmpl-tool-950a3d3a8477e65f",
+          "output": [
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The failure mode that best matches the symptom of intermittent partial discharge is FM-001, \"Partial Discharge\". The sensor readings most useful for confirming and tracking its progression are:\n\n* Load current (in Amps)\n* Oil temperature (in degrees Celsius)\n* Power factor\n* High-voltage voltage (in kV)\n* Low-voltage voltage (in kV)\n* Winding temperature (top) (in degrees Celsius)",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 4.79665994644165,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-013",
+    "type": "FMSR",
+    "text": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+    "category": "Symptom-Driven Failure Mode Lookup",
+    "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+    "asset_id": "T-003",
+    "expected_tools": [
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "matched failure mode",
+        "rationale",
+        "correlated sensors"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

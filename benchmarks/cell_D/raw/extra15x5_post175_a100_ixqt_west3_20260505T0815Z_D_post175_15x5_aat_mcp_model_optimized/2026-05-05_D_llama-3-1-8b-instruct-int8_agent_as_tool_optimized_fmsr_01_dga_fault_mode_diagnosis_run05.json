@@ -1,0 +1,45 @@
+{
+  "question": "Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.",
+  "answer": "",
+  "success": false,
+  "error": "ModelBehaviorError: Tool get_failure_mode not found in agent smartgrid_aat",
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 0,
+  "tool_call_count": 0,
+  "history": [],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct-int8",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "unknown",
+    "duration_seconds": 4.544379949569702,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-003",
+    "type": "FMSR",
+    "text": "Use the latest DGA record for transformer T-012 to identify the most likely fault mode and explain the top two candidate failure mechanisms.",
+    "category": "Fault Diagnosis",
+    "characteristic_form": "The answer should map DGA evidence to a primary fault mode and provide at least one alternative candidate with rationale grounded in gas patterns or known fault mapping.",
+    "asset_id": "T-012",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "primary fault mode",
+        "secondary candidate",
+        "evidence-based justification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

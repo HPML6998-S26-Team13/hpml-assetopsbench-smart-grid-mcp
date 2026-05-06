@@ -1,0 +1,126 @@
+{
+  "question": "T-019 has just had a fresh oil sample analysed and the DGA record is now on file. Review that gas profile, identify the most likely failure mode it points to, and convert that finding into a corrective inspection work order whose priority reflects the implied severity.",
+  "answer": "This workflow uses the following functions:\n\n1. `get_dga_record`: Retrieves the most recent DGA record for transformer T-019.\n2. `search_failure_modes`: Searches for failure modes by keyword, in this case \"Arc discharge\".\n3. `create_work_order`: Creates a new maintenance work order for transformer T-019, with a priority reflecting the implied severity of the fault.\n\nThe output of `get_dga_record` is used to identify the most likely failure mode, which is then searched for using `search_failure_modes`. The result is used to create a corrective inspection work order with the appropriate priority using `create_work_order`.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 19659,
+    "output_tokens": 324,
+    "total_tokens": 19983,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-019"
+          },
+          "call_id": "chatcmpl-tool-98529f77c9f97944",
+          "output": {
+            "transformer_id": "T-019",
+            "sample_date": "2024-01-23T00:00:00",
+            "dissolved_h2_ppm": 232.18,
+            "dissolved_ch4_ppm": 60.42,
+            "dissolved_c2h2_ppm": 24.93,
+            "dissolved_c2h4_ppm": 146.38,
+            "dissolved_c2h6_ppm": 50.25,
+            "dissolved_co_ppm": 573.42,
+            "dissolved_co2_ppm": 3084.98,
+            "fault_label": "Arc discharge",
+            "source_dataset": "synthetic"
+          }
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "Arc discharge"
+          },
+          "call_id": "chatcmpl-tool-b4be3acfb519436c",
+          "output": [
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        },
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "transformer_id": "T-019",
+            "priority": "critical",
+            "issue_description": "Arc discharge fault",
+            "fault_type": "Arc Discharge"
+          },
+          "call_id": "chatcmpl-tool-9c2747e4c9fa2fd0",
+          "output": {
+            "work_order_id": "WO-3D4B1332",
+            "transformer_id": "T-019",
+            "issue_description": "Arc discharge fault",
+            "priority": "critical",
+            "fault_type": "Arc Discharge",
+            "status": "open",
+            "estimated_downtime_hours": 72,
+            "created_at": "2026-05-05T09:50:00.849210Z",
+            "assigned_technician": null,
+            "notes": []
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "This workflow uses the following functions:\n\n1. `get_dga_record`: Retrieves the most recent DGA record for transformer T-019.\n2. `search_failure_modes`: Searches for failure modes by keyword, in this case \"Arc discharge\".\n3. `create_work_order`: Creates a new maintenance work order for transformer T-019, with a priority reflecting the implied severity of the fault.\n\nThe output of `get_dga_record` is used to identify the most likely failure mode, which is then searched for using `search_failure_modes`. The result is used to create a corrective inspection work order with the appropriate priority using `create_work_order`.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.592175006866455,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-029",
+    "type": "Multi",
+    "text": "T-019 has just had a fresh oil sample analysed and the DGA record is now on file. Review that gas profile, identify the most likely failure mode it points to, and convert that finding into a corrective inspection work order whose priority reflects the implied severity.",
+    "category": "DGA Finding to Inspection Work Order",
+    "characteristic_form": "The answer should report the stored DGA values for T-019, name the matching failure mode and its severity tier, and create a work order whose priority and scope are explicitly justified by the DGA-derived severity.",
+    "asset_id": "T-019",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.search_failure_modes",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "DGA gas values",
+        "matching failure mode",
+        "severity tier",
+        "work order created",
+        "priority justification"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR",
+      "WO"
+    ]
+  }
+}

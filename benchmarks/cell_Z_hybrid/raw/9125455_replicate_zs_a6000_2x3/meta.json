@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-05-04T02:14:06.993190+00:00",
+  "run_name": "9125455_replicate_zs_a6000_2x3",
+  "benchmark_config_path": "configs/replication/zs_a6000_2x3.env",
+  "benchmark_summary_path": "benchmarks/cell_Z_hybrid/summary.json",
+  "experiment_cell": "Z",
+  "orchestration_mode": "verified_pe",
+  "mcp_mode": "baseline",
+  "model_id": "openai/Llama-3.1-8B-Instruct",
+  "experiment_family": "exp2_orchestration",
+  "vllm_dtype": "float16",
+  "vllm_extra_args": "--generation-config vllm",
+  "vllm_extra_args_list": [
+    "--generation-config",
+    "vllm"
+  ],
+  "finished_at": "2026-05-04T02:29:30.597282+00:00",
+  "pass": 6,
+  "fail": 0,
+  "total_runs": 6,
+  "run_status": "success",
+  "mcp_setup_seconds": null,
+  "wandb_run_url": "https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/903wuvk6"
+}

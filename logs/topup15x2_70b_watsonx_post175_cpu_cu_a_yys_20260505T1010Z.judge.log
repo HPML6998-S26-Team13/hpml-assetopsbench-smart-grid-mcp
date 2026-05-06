@@ -1,0 +1,2 @@
+JUDGE ; python scripts/judge_trajectory.py --run-dir  --scenario-dir data/scenarios --out results/metrics/scenario_scores.jsonl --log-dir results/judge_logs
+JUDGE ; python scripts/judge_trajectory.py --run-dir  --scenario-dir data/scenarios --out results/metrics/scenario_scores.jsonl --log-dir results/judge_logs

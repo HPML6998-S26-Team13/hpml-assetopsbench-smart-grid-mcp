@@ -1,0 +1,117 @@
+{
+  "question": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+  "answer": "Since there weren't any readings available for the specified time frame, please provide a time frame with readings for appropriate analysis.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 24196,
+    "output_tokens": 315,
+    "total_tokens": 24511,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "z_threshold": "3.0",
+            "window_size": "24",
+            "transformer_id": "T-019",
+            "sensor_id": "winding_temp_c"
+          },
+          "call_id": "chatcmpl-tool-8bcb60bd05a4d635",
+          "output": {
+            "error": "No readings for transformer='T-019' sensor='winding_temp_c'."
+          }
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "sensor_id": "winding_temp_c",
+            "transformer_id": "T-019",
+            "z_threshold": "3.0",
+            "window_size": "24"
+          },
+          "call_id": "chatcmpl-tool-8139dbf2b0981ebe",
+          "output": {
+            "error": "No readings for transformer='T-019' sensor='winding_temp_c'."
+          }
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "sensor_id": "winding_temp_c",
+            "transformer_id": "T-019",
+            "start_time": "2022-07-18T00:00:00Z",
+            "z_threshold": "3.0",
+            "window_size": "7"
+          },
+          "call_id": "chatcmpl-tool-9d8789e8fbe748cf",
+          "output": {
+            "error": "No readings for transformer='T-019' sensor='winding_temp_c'."
+          }
+        },
+        {
+          "name": "detect_anomalies",
+          "arguments": {
+            "sensor_id": "winding_temp_c",
+            "transformer_id": "T-019",
+            "start_time": "2022-07-11T00:00:00Z",
+            "end_time": "2022-07-18T00:00:00Z",
+            "z_threshold": "3.0",
+            "window_size": "24"
+          },
+          "call_id": "chatcmpl-tool-a0905fb6b7e1356f",
+          "output": {
+            "error": "No readings for transformer='T-019' sensor='winding_temp_c'."
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Since there weren't any readings available for the specified time frame, please provide a time frame with readings for appropriate analysis.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.655977725982666,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-006",
+    "type": "TSFM",
+    "text": "Run anomaly detection on transformer T-019 winding temperature for the past 7 days and summarize any persistent abnormal periods.",
+    "category": "Anomaly Detection",
+    "characteristic_form": "The answer should identify abnormal intervals (if any), quantify severity or count of anomalies, and provide a concise interpretation of persistence.",
+    "asset_id": "T-019",
+    "expected_tools": [
+      "tsfm.detect_anomalies"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "anomaly window(s)",
+        "severity or count",
+        "summary interpretation"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "TSFM"
+    ]
+  }
+}

@@ -154,6 +154,7 @@ Use this table to keep the draft aligned with what the repo can actually prove.
 | AaT Cell A/B canonical captures exist on the same scenario set, same model, same job | `benchmarks/cell_A_direct/summary.json` and `benchmarks/cell_B_mcp_baseline/summary.json` from job `8979314` (PR `#130`); 6 scenarios per side, `Llama-3.1-8B-Instruct`, scenario set `smartgrid_multi_domain` (hash `ca66cd16…2691e48`); both sides hit `success_rate=1.0`, `failure_count=0`, `tool_error_count=0` | safe now as a paired one-job baseline |
 | PE-family failures show recurring correctness/accounting issues worth classifying | `docs/failure_taxonomy_evidence.md`, committed Y/Z artifacts, `docs/validation_log.md` | safe now |
 | Official NeurIPS 2026 submission surface exists | Overleaf project `69f5a380e638a31066dc0bd1`, commit `7e361de`, official `neurips_2026` package and `checklist.tex` | safe now |
+| LLM judge has a small manual sanity audit | `results/metrics/manual_judge_audit.csv` samples 12 trajectories from the now-superseded post-PR180 mitigation cohort; manual pass/fail labels agree with judge pass/fail labels on 12/12 rows | safe only as a judge-calibration sanity check; current mitigation claims cite the post-PR175 paper-grade cohort |
 | Scenario corpus is on track for the 30-scenario floor | `team13/main` has 21 hand-crafted main scenarios after PR #156; PR #163 adds 5 generated review candidates under `data/scenarios/generated/first_review_20260502/`; generator acceptance in #53 still pending | pending; do not present 30 as complete until generated candidates are validated/promoted |
 | Indicative AaT MCP transport overhead (Cell B − Cell A) on the canonical scenario set | job `8979314` paired summaries: latency mean `+1.20s` (`+9.8%`), wall-clock total `+7.17s` (`+9.8%`), tool-call mean `+0.17` (`+5.0%`), zero tool errors | safe now as one-job, six-scenario evidence; **not** safe as a final transport-overhead distribution |
 | Full transport result across `A/B/C` | final comparable captures under `benchmarks/cell_A_direct/`, `cell_B_mcp_baseline/`, `cell_C_mcp_optimized/` with repeat trials and judge data | partial: one-job A/B pair exists from `8979314`; first Cell C capture/judge set exists from `9071639`; final 5-trial matched rerun still missing |
@@ -465,6 +466,17 @@ artifacts are available on the final comparable captures, the paper should keep
 quality claims modest and rely on concrete artifact-backed failure patterns
 rather than synthetic confidence.
 
+The current judge sanity audit samples 12 trajectories from the now-superseded
+post-PR180 mitigation cohort across baseline, guard, repair, and adjudication
+rows. Manual pass/fail labels agree with the 6D judge pass/fail label on all 12
+sampled rows (`7/12` pass, `5/12` fail), including both clean successes and
+failures caused by invalid tool arguments, unsupported finalization, a
+work-order lifecycle break, and a fault-mechanism mismatch. This is enough to
+cite the judge as a directional calibration signal, but not enough to claim a
+fully powered human-evaluation study or to substitute for the post-PR175
+paper-grade mitigation cohort.
+Source: `results/metrics/manual_judge_audit.csv`.
+
 #### Follow-on mitigation lane
 
 These should be described as follow-ons, not core conditions:
@@ -772,7 +784,8 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
 | Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
 | Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
-| Mitigation before/after figure | `results/metrics/mitigation_before_after.csv` and rendered figure |
+| Mitigation before/after figure | `results/metrics/gcp_post175_mitigation_4tier_summary.csv`; `results/metrics/mitigation_before_after.csv` is a superseded post-PR180 diagnostic table |
+| Manual judge audit table | `results/metrics/manual_judge_audit.csv` |
 | Recovery/adjudication mitigation spec | `docs/mitigation_recovery_adjudication.md` |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |
 

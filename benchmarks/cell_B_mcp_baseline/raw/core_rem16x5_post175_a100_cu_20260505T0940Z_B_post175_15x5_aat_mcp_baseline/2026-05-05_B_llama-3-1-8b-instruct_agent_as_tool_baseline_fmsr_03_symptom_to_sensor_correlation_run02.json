@@ -1,0 +1,98 @@
+{
+  "question": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+  "answer": "Based on the failure mode identified, the recommended sensors to monitor and track are DGA-H2-PPM and DGA-CH4-PPM.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 24632,
+    "output_tokens": 272,
+    "total_tokens": 24904,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_sensor_correlation",
+          "arguments": {
+            "failure_mode_id": "FM-001"
+          },
+          "call_id": "chatcmpl-tool-af9bd7a2be6a4148",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"dga_label\": \"Partial discharge\",\n  \"description\": \"Low-energy electrical discharge within insulation voids. Indicated by elevated H2 and CH4 with trace C2H2.\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": [\n    \"H2\",\n    \"CH4\"\n  ],\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}"
+          }
+        },
+        {
+          "name": "get_sensor_readings",
+          "arguments": {
+            "sensor_id": "dga_h2_ppm",
+            "transformer_id": "T-003"
+          },
+          "call_id": "chatcmpl-tool-b48fc0b63da17655",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings found for transformer='T-003' sensor='dga_h2_ppm'.\"\n}"
+          }
+        },
+        {
+          "name": "get_sensor_readings",
+          "arguments": {
+            "sensor_id": "dga_ch4_ppm",
+            "transformer_id": "T-003"
+          },
+          "call_id": "chatcmpl-tool-a4158cf84b2c8e27",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"error\": \"No readings found for transformer='T-003' sensor='dga_ch4_ppm'.\"\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Based on the failure mode identified, the recommended sensors to monitor and track are DGA-H2-PPM and DGA-CH4-PPM.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "baseline",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.106060266494751,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-013",
+    "type": "FMSR",
+    "text": "Field technicians on T-003 reported intermittent partial discharge symptoms during their last inspection. Identify the failure mode that best matches this symptom and list the sensor readings most useful for confirming and tracking its progression.",
+    "category": "Symptom-Driven Failure Mode Lookup",
+    "characteristic_form": "The answer should identify a specific failure mode matching the symptom, cite the match rationale, and list the sensors most correlated with tracking that mode.",
+    "asset_id": "T-003",
+    "expected_tools": [
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "matched failure mode",
+        "rationale",
+        "correlated sensors"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

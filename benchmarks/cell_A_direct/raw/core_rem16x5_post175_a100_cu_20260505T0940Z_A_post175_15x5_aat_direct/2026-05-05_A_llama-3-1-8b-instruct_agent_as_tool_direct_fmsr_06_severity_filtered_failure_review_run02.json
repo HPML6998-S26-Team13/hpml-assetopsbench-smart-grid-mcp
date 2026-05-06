@@ -1,0 +1,240 @@
+{
+  "question": "Operations is preparing a spare-parts and inspection plan focused on worst-case scenarios. From the failure mode catalogue, surface only the modes flagged at high or critical severity and pair each with its recommended maintenance action.",
+  "answer": "The list of failure modes flagged at high or critical severity are:\n\n* Partial Discharge (FM-001)\n* Low-Temperature Overheating (< 300\u00b0C) (FM-002)\n* Thermal Fault 300-700\u00b0C (FM-003)\n* High-Temperature Overheating (> 700\u00b0C) (FM-004)\n* Spark Discharge (FM-005)\n* Arc Discharge (FM-006)\n\nThe recommended maintenance actions for these failure modes are:\n\n* Monitor closely; schedule inspection within 90 days (FM-001)\n* Reduce load; inspect within 30 days (FM-002)\n* De-energize and inspect within 48 hours (FM-003 and FM-005)\n* Immediate de-energization required (FM-004)\n* Immediate de-energization and emergency inspection (FM-006)",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 4,
+  "usage": {
+    "input_tokens": 27196,
+    "output_tokens": 280,
+    "total_tokens": 27476,
+    "requests": 5
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "list_failure_modes",
+          "arguments": {
+            "severity": "high,critical"
+          },
+          "call_id": "chatcmpl-tool-8fbd53d254d6da36",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        },
+        {
+          "name": "list_failure_modes",
+          "arguments": {
+            "severity": "high,critical"
+          },
+          "call_id": "chatcmpl-tool-b4e59af20f559535",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        },
+        {
+          "name": "list_failure_modes",
+          "arguments": {
+            "severity": "high,critical"
+          },
+          "call_id": "chatcmpl-tool-86f491c08835fa8a",
+          "output": [
+            {
+              "failure_mode_id": "FM-001",
+              "name": "Partial Discharge",
+              "severity": "low",
+              "iec_code": "PD",
+              "key_gases": "H2,CH4",
+              "recommended_action": "Monitor closely; schedule inspection within 90 days"
+            },
+            {
+              "failure_mode_id": "FM-002",
+              "name": "Low-Temperature Overheating (< 300\u00b0C)",
+              "severity": "medium",
+              "iec_code": "T1",
+              "key_gases": "CH4,C2H4",
+              "recommended_action": "Reduce load; inspect within 30 days"
+            },
+            {
+              "failure_mode_id": "FM-003",
+              "name": "Thermal Fault 300-700\u00b0C",
+              "severity": "high",
+              "iec_code": "T2",
+              "key_gases": "C2H4,C2H6",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-004",
+              "name": "High-Temperature Overheating (> 700\u00b0C)",
+              "severity": "critical",
+              "iec_code": "T3",
+              "key_gases": "C2H4,C2H6,H2",
+              "recommended_action": "Immediate de-energization required"
+            },
+            {
+              "failure_mode_id": "FM-005",
+              "name": "Spark Discharge",
+              "severity": "high",
+              "iec_code": "D1",
+              "key_gases": "C2H2,H2",
+              "recommended_action": "De-energize and inspect within 48 hours"
+            },
+            {
+              "failure_mode_id": "FM-006",
+              "name": "Arc Discharge",
+              "severity": "critical",
+              "iec_code": "D2",
+              "key_gases": "C2H2,H2,C2H4",
+              "recommended_action": "Immediate de-energization and emergency inspection"
+            }
+          ]
+        },
+        {
+          "name": "search_failure_modes",
+          "arguments": {
+            "query": "high or critical"
+          },
+          "call_id": "chatcmpl-tool-b75fdb95595aff37",
+          "output": []
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "The list of failure modes flagged at high or critical severity are:\n\n* Partial Discharge (FM-001)\n* Low-Temperature Overheating (< 300\u00b0C) (FM-002)\n* Thermal Fault 300-700\u00b0C (FM-003)\n* High-Temperature Overheating (> 700\u00b0C) (FM-004)\n* Spark Discharge (FM-005)\n* Arc Discharge (FM-006)\n\nThe recommended maintenance actions for these failure modes are:\n\n* Monitor closely; schedule inspection within 90 days (FM-001)\n* Reduce load; inspect within 30 days (FM-002)\n* De-energize and inspect within 48 hours (FM-003 and FM-005)\n* Immediate de-energization required (FM-004)\n* Immediate de-energization and emergency inspection (FM-006)",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "direct",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.149958372116089,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-024",
+    "type": "FMSR",
+    "text": "Operations is preparing a spare-parts and inspection plan focused on worst-case scenarios. From the failure mode catalogue, surface only the modes flagged at high or critical severity and pair each with its recommended maintenance action.",
+    "category": "Severity-Filtered Failure Mode Review",
+    "characteristic_form": "The answer should list every failure mode whose severity is either high or critical, give the descriptive label or IEC code for each, and pair it with the recommended maintenance action drawn from the catalogue.",
+    "expected_tools": [
+      "fmsr.list_failure_modes"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "high severity modes",
+        "critical severity modes",
+        "recommended action per mode"
+      ]
+    },
+    "difficulty": "easy",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "question": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred.",
+  "effective_question": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred. What is the definition of 'elevated' load current readings? What is the recent baseline used for comparison?",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What is the definition of 'elevated' load current readings?",
+      "What is the recent baseline used for comparison?"
+    ],
+    "assumptions": [
+      "The sensor data is available and accessible",
+      "The peak recorded value and its occurrence time are to be flagged in the system",
+      "The recent baseline is representative of normal operating conditions"
+    ]
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "There are no recent sensor data or baseline readings available for T-005's load current sensor, so it is not possible to determine whether current readings are abnormally high or flag the peak recorded value and when it occurred.",
+  "success": false,
+  "failed_steps": [
+    {
+      "step": 1,
+      "task": "Retrieve the recent sensor data for T-005",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "error": "No readings found for transformer='T-005' sensor='load_current'.",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 2,
+      "task": "Determine the recent baseline for load current readings",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 3,
+      "task": "Flag the peak recorded value and when it occurred",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "verifier_decision": "error"
+    },
+    {
+      "step": 4,
+      "task": "Determine whether current readings are abnormally high relative to the recent baseline",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "verifier_decision": "error"
+    }
+  ],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the recent sensor data for T-005",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: timestamp, value, unit for load_current_a sensor"
+    },
+    {
+      "step": 2,
+      "task": "Determine the recent baseline for load current readings",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared"
+    },
+    {
+      "step": 3,
+      "task": "Flag the peak recorded value and when it occurred",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies (list of flagged readings with timestamp, value, z_score)"
+    },
+    {
+      "step": 4,
+      "task": "Determine whether current readings are abnormally high relative to the recent baseline",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies (list of flagged readings with timestamp, value, z_score)"
+    },
+    {
+      "step": 5,
+      "task": "Define 'elevated' load current readings",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Natural-language answer (omitted)"
+    },
+    {
+      "step": 6,
+      "task": "Define the recent baseline used for comparison",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Natural-language answer (omitted)"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve the recent sensor data for T-005",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of dicts with keys: timestamp, value, unit for load_current_a sensor"
+    },
+    {
+      "step": 2,
+      "task": "Determine the recent baseline for load current readings",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared"
+    },
+    {
+      "step": 3,
+      "task": "Flag the peak recorded value and when it occurred",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies (list of flagged readings with timestamp, value, z_score)"
+    },
+    {
+      "step": 4,
+      "task": "Determine whether current readings are abnormally high relative to the recent baseline",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies (list of flagged readings with timestamp, value, z_score)"
+    },
+    {
+      "step": 5,
+      "task": "Define 'elevated' load current readings",
+      "server": "iot",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "Natural-language answer (omitted)"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Normalized server for no-tool step 5 to iot.",
+    "Dropped terminal synthesis-only step 6; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve the recent sensor data for T-005",
+      "server": "iot",
+      "tool": "get_sensor_readings",
+      "tool_args": {
+        "transformer_id": "T-005",
+        "sensor_id": "load_current",
+        "start_time": null,
+        "end_time": null,
+        "limit": 100
+      },
+      "response": "{\n  \"error\": \"No readings found for transformer='T-005' sensor='load_current'.\"\n}",
+      "executor_success": true,
+      "error": "No readings found for transformer='T-005' sensor='load_current'.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "No readings found for transformer='T-005' sensor='load_current'."
+    },
+    {
+      "step": 2,
+      "task": "Determine the recent baseline for load current readings",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-005",
+        "sensor_id": "load_current",
+        "start_time": null,
+        "end_time": null
+      },
+      "response": "{\n  \"error\": \"No readings for transformer='T-005' sensor='load_current'.\"\n}",
+      "executor_success": true,
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "No readings for transformer='T-005' sensor='load_current'."
+    },
+    {
+      "step": 3,
+      "task": "Flag the peak recorded value and when it occurred",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-005",
+        "sensor_id": "load_current",
+        "window_size": 7,
+        "z_threshold": 2.0
+      },
+      "response": "{\n  \"error\": \"No readings for transformer='T-005' sensor='load_current'.\"\n}",
+      "executor_success": true,
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "No readings for transformer='T-005' sensor='load_current'."
+    },
+    {
+      "step": 4,
+      "task": "Determine whether current readings are abnormally high relative to the recent baseline",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-005",
+        "sensor_id": "load_current",
+        "window_size": 7,
+        "z_threshold": 2.0
+      },
+      "response": "{\n  \"error\": \"No readings for transformer='T-005' sensor='load_current'.\"\n}",
+      "executor_success": true,
+      "error": "No readings for transformer='T-005' sensor='load_current'.",
+      "success": false,
+      "verifier_decision": "error",
+      "verifier_reason": "No readings for transformer='T-005' sensor='load_current'."
+    },
+    {
+      "step": 5,
+      "task": "Define 'elevated' load current readings",
+      "server": "iot",
+      "tool": "none",
+      "tool_args": {},
+      "response": "Natural-language answer (omitted)",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No error in the current step, but previous steps failed due to lack of data.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-012",
+    "type": "IoT",
+    "text": "T-005 has been logging elevated load current readings over the past week. Retrieve the recent sensor data and determine whether current readings are abnormally high relative to the recent baseline, and flag the peak recorded value and when it occurred.",
+    "category": "Load Current Monitoring",
+    "characteristic_form": "The answer should retrieve load current readings for T-005, compute or reference a recent baseline, state whether readings are elevated above that baseline, and report the peak value and timestamp.",
+    "asset_id": "T-005",
+    "expected_tools": [
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "load current readings",
+        "baseline or mean reference",
+        "peak value and timestamp",
+        "elevated vs normal assessment"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT"
+    ]
+  }
+}

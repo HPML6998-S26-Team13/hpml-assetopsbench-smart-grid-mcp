@@ -1,0 +1,299 @@
+{
+  "question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "effective_question": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+  "self_ask": {
+    "enabled": false,
+    "needs_self_ask": false,
+    "clarifying_questions": [],
+    "assumptions": []
+  },
+  "answer": "Based on the results, the probable fault mode for T-014's most recent oil sample with elevated gas readings is a \"Low-Temperature Overheating (< 300\u00b0C)\" fault. The closest matching failure mechanism in the catalogue is also \"Low-Temperature Overheating (< 300\u00b0C)\" with a failure mode ID of FM-002.\n\nTo monitor the situation, the following sensors should be prioritized:\n\n1. Load current (load_current_a)\n2. Oil temperature (oil_temp_c)\n3. Winding temperature (winding_temp_top_c)\n\nThese sensors are most strongly associated with the failure mode and will provide valuable insights into the condition of the transformer.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label"
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios"
+    },
+    {
+      "step": 3,
+      "task": "Search the failure mode catalogue for a match",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dicts"
+    },
+    {
+      "step": 4,
+      "task": "Get the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A list of dicts with keys: failure_mode_id, name, severity, iec_code, key_gases, recommended_action"
+    },
+    {
+      "step": 5,
+      "task": "Get the sensors most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A dict with keys: failure_mode_id, name, key_gases (list), description, iec_code, recommended_action"
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings"
+    },
+    {
+      "step": 7,
+      "task": "Prioritize sensors for ongoing monitoring based on the failure mode",
+      "server": "None",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        5,
+        6
+      ],
+      "expected_output": "A list of prioritized sensor IDs"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A dictionary with gas concentrations (ppm) and the recorded fault label"
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "A dictionary with the most likely fault classification and the three diagnostic ratios"
+    },
+    {
+      "step": 3,
+      "task": "Search the failure mode catalogue for a match",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        2
+      ],
+      "expected_output": "A list of matching failure mode dicts"
+    },
+    {
+      "step": 4,
+      "task": "Get the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {},
+      "dependencies": [
+        3
+      ],
+      "expected_output": "A list of dicts with keys: failure_mode_id, name, severity, iec_code, key_gases, recommended_action"
+    },
+    {
+      "step": 5,
+      "task": "Get the sensors most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {},
+      "dependencies": [
+        4
+      ],
+      "expected_output": "A dict with keys: failure_mode_id, name, key_gases (list), description, iec_code, recommended_action"
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "A list of dicts with keys: sensor_id, unit, num_readings"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 7; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Retrieve T-014's most recent DGA record",
+      "server": "fmsr",
+      "tool": "get_dga_record",
+      "tool_args": {
+        "transformer_id": "T-014"
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"sample_date\": \"2024-01-30T00:00:00\",\n  \"dissolved_h2_ppm\": 16.17,\n  \"dissolved_ch4_ppm\": 33.46,\n  \"dissolved_c2h2_ppm\": 2.34,\n  \"dissolved_c2h4_ppm\": 13.51,\n  \"dissolved_c2h6_ppm\": 16.8,\n  \"dissolved_co_ppm\": 330.08,\n  \"dissolved_co2_ppm\": 2180.87,\n  \"fault_label\": \"Low-temperature overheating\",\n  \"source_dataset\": \"synthetic\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 2,
+      "task": "Analyze the DGA record to diagnose the probable fault mode",
+      "server": "fmsr",
+      "tool": "analyze_dga",
+      "tool_args": {
+        "h2": 16.17,
+        "ch4": 33.46,
+        "c2h2": 2.34,
+        "c2h4": 13.51,
+        "c2h6": 16.8,
+        "transformer_id": "T-014"
+      },
+      "response": "{\n  \"iec_code\": \"T1\",\n  \"diagnosis\": \"Thermal fault, t < 300 \\u00b0C\",\n  \"r1_ch4_h2\": 2.0693,\n  \"r2_c2h2_c2h4\": 0.1732,\n  \"r3_c2h4_c2h6\": 0.8042,\n  \"input_gases\": {\n    \"h2_ppm\": 16.17,\n    \"ch4_ppm\": 33.46,\n    \"c2h2_ppm\": 2.34,\n    \"c2h4_ppm\": 13.51,\n    \"c2h6_ppm\": 16.8\n  },\n  \"transformer_id\": \"T-014\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 3,
+      "task": "Search the failure mode catalogue for a match",
+      "server": "fmsr",
+      "tool": "search_failure_modes",
+      "tool_args": {
+        "query": "elevated gas readings in oil sample of transformer T-014"
+      },
+      "response": "",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 4,
+      "task": "Get the closest matching failure mechanism in the catalogue",
+      "server": "fmsr",
+      "tool": "list_failure_modes",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sample_date": "2024-01-30T00:00:00",
+        "dissolved_h2_ppm": 16.17,
+        "dissolved_ch4_ppm": 33.46,
+        "dissolved_c2h2_ppm": 2.34,
+        "dissolved_c2h4_ppm": 13.51,
+        "dissolved_c2h6_ppm": 16.8,
+        "dissolved_co_ppm": 330.08,
+        "dissolved_co2_ppm": 2180.87,
+        "fault_label": "Low-temperature overheating",
+        "source_dataset": "synthetic",
+        "iec_code": "T1",
+        "diagnosis": "Thermal fault, t < 300 \u00b0C",
+        "r1_ch4_h2": 2.0693,
+        "r2_c2h2_c2h4": 0.1732,
+        "r3_c2h4_c2h6": 0.8042,
+        "input_gases": {
+          "h2_ppm": 16.17,
+          "ch4_ppm": 33.46,
+          "c2h2_ppm": 2.34,
+          "c2h4_ppm": 13.51,
+          "c2h6_ppm": 16.8
+        }
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-001\",\n  \"name\": \"Partial Discharge\",\n  \"severity\": \"low\",\n  \"iec_code\": \"PD\",\n  \"key_gases\": \"H2,CH4\",\n  \"recommended_action\": \"Monitor closely; schedule inspection within 90 days\"\n}\n{\n  \"failure_mode_id\": \"FM-002\",\n  \"name\": \"Low-Temperature Overheating (< 300\u00b0C)\",\n  \"severity\": \"medium\",\n  \"iec_code\": \"T1\",\n  \"key_gases\": \"CH4,C2H4\",\n  \"recommended_action\": \"Reduce load; inspect within 30 days\"\n}\n{\n  \"failure_mode_id\": \"FM-003\",\n  \"name\": \"Thermal Fault 300-700\u00b0C\",\n  \"severity\": \"high\",\n  \"iec_code\": \"T2\",\n  \"key_gases\": \"C2H4,C2H6\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-004\",\n  \"name\": \"High-Temperature Overheating (> 700\u00b0C)\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"T3\",\n  \"key_gases\": \"C2H4,C2H6,H2\",\n  \"recommended_action\": \"Immediate de-energization required\"\n}\n{\n  \"failure_mode_id\": \"FM-005\",\n  \"name\": \"Spark Discharge\",\n  \"severity\": \"high\",\n  \"iec_code\": \"D1\",\n  \"key_gases\": \"C2H2,H2\",\n  \"recommended_action\": \"De-energize and inspect within 48 hours\"\n}\n{\n  \"failure_mode_id\": \"FM-006\",\n  \"name\": \"Arc Discharge\",\n  \"severity\": \"critical\",\n  \"iec_code\": \"D2\",\n  \"key_gases\": \"C2H2,H2,C2H4\",\n  \"\n...[truncated 75 chars]",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 5,
+      "task": "Get the sensors most strongly associated with the failure mode",
+      "server": "fmsr",
+      "tool": "get_sensor_correlation",
+      "tool_args": {
+        "failure_mode_id": "FM-002",
+        "sensor_correlation": true
+      },
+      "response": "{\n  \"failure_mode_id\": \"FM-002\",\n  \"name\": \"Low-Temperature Overheating (< 300\\u00b0C)\",\n  \"dga_label\": \"Low-temperature overheating\",\n  \"description\": \"Low-temperature thermal fault, typically in core laminations or due to overload. Elevated CH4 and C2H4.\",\n  \"severity\": \"medium\",\n  \"iec_code\": \"T1\",\n  \"key_gases\": [\n    \"CH4\",\n    \"C2H4\"\n  ],\n  \"recommended_action\": \"Reduce load; inspect within 30 days\"\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    },
+    {
+      "step": 6,
+      "task": "List all sensor IDs available for T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sample_date": "2024-01-30T00:00:00",
+        "dissolved_h2_ppm": 16.17,
+        "dissolved_ch4_ppm": 33.46,
+        "dissolved_c2h2_ppm": 2.34,
+        "dissolved_c2h4_ppm": 13.51,
+        "dissolved_c2h6_ppm": 16.8,
+        "dissolved_co_ppm": 330.08,
+        "dissolved_co2_ppm": 2180.87,
+        "fault_label": "Low-temperature overheating",
+        "source_dataset": "synthetic"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true
+    }
+  ],
+  "scenario": {
+    "id": "SGT-014",
+    "type": "FMSR",
+    "text": "T-014's most recent oil sample has returned elevated gas readings flagged during laboratory review. Diagnose the probable fault mode, identify the closest matching failure mechanism in the catalogue, and specify which sensors should be prioritized for ongoing monitoring.",
+    "category": "Full DGA Diagnostic Chain",
+    "characteristic_form": "The answer should state the DGA-derived fault mode, match it to a catalogue failure mechanism with rationale, and recommend a prioritized sensor monitoring list.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "fmsr.search_failure_modes",
+      "fmsr.get_sensor_correlation"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "fault mode from DGA",
+        "matched failure mechanism",
+        "sensors for ongoing monitoring"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR"
+    ]
+  }
+}

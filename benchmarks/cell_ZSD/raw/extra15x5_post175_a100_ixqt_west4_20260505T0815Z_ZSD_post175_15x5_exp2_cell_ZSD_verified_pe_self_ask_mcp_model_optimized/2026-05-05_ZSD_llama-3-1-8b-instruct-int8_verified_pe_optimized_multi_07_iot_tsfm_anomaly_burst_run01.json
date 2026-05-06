@@ -1,0 +1,191 @@
+{
+  "question": "Operators flagged a short window of unusual top-of-winding temperature readings on T-014 over the last few days. First identify the sensor channels installed on this asset, then run an anomaly check and trend analysis on the winding temperature channel (winding_temp_top_c) to determine whether the deviations form a single burst or a sustained shift.",
+  "effective_question": "Operators flagged a short window of unusual top-of-winding temperature readings on T-014 over the last few days. First identify the sensor channels installed on this asset, then run an anomaly check and trend analysis on the winding temperature channel (winding_temp_top_c) to determine whether the deviations form a single burst or a sustained shift. What is the definition of a 'short window'? Are there any known maintenance or operational changes on T-014 over the last few days?",
+  "self_ask": {
+    "enabled": true,
+    "needs_self_ask": true,
+    "clarifying_questions": [
+      "What is the definition of a 'short window'?",
+      "Are there any known maintenance or operational changes on T-014 over the last few days?"
+    ],
+    "assumptions": [
+      "The sensor channels installed on T-014 are standard and well-documented.",
+      "The anomaly check and trend analysis will be performed using a standard statistical method.",
+      "The winding temperature channel (winding_temp_top_c) is correctly calibrated and functioning properly."
+    ]
+  },
+  "verification": {
+    "max_replans": 2,
+    "max_retries_per_step": 1,
+    "replans_used": 0
+  },
+  "answer": "Based on the results, the unusual top-of-winding temperature readings on T-014 over the last few days appear to be a single burst of anomalies rather than a sustained shift. The anomaly check identified two readings with high z-scores (3.673 and 3.408) within a short window, indicating a brief deviation from the normal behavior. The trend analysis showed a stable trend with a slight positive slope, indicating no sustained shift in the winding temperature over the observed period.",
+  "success": true,
+  "failed_steps": [],
+  "raw_plan": [
+    {
+      "step": 1,
+      "task": "Identify sensor channels installed on T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of sensor IDs available for T-014"
+    },
+    {
+      "step": 2,
+      "task": "Run anomaly check on winding temperature channel",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies"
+    },
+    {
+      "step": 3,
+      "task": "Run trend analysis on winding temperature channel",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared"
+    },
+    {
+      "step": 4,
+      "task": "Determine whether the deviations form a single burst or a sustained shift",
+      "server": "none",
+      "tool": "none",
+      "tool_args": {},
+      "dependencies": [
+        2,
+        3
+      ],
+      "expected_output": "Natural-language answer describing the nature of the deviations"
+    }
+  ],
+  "plan": [
+    {
+      "step": 1,
+      "task": "Identify sensor channels installed on T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {},
+      "dependencies": [],
+      "expected_output": "List of sensor IDs available for T-014"
+    },
+    {
+      "step": 2,
+      "task": "Run anomaly check on winding temperature channel",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, total_readings, anomaly_count, anomaly_rate_pct, anomalies"
+    },
+    {
+      "step": 3,
+      "task": "Run trend analysis on winding temperature channel",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {},
+      "dependencies": [
+        1
+      ],
+      "expected_output": "Dict with keys: transformer_id, sensor_id, num_readings, start_time, end_time, mean_value, min_value, max_value, slope_per_day, direction, r_squared"
+    }
+  ],
+  "plan_normalization_warnings": [
+    "Dropped terminal synthesis-only step 4; final answer is summarized outside the plan."
+  ],
+  "history": [
+    {
+      "step": 1,
+      "task": "Identify sensor channels installed on T-014",
+      "server": "iot",
+      "tool": "list_sensors",
+      "tool_args": {
+        "transformer_id": "T-014"
+      },
+      "response": "{\n  \"sensor_id\": \"load_current_a\",\n  \"unit\": \"A\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"oil_temp_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"power_factor\",\n  \"unit\": \"\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_hv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"voltage_lv_kv\",\n  \"unit\": \"kV\",\n  \"num_readings\": 720\n}\n{\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"unit\": \"\u00b0C\",\n  \"num_readings\": 720\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Identified sensor channels as expected",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 2,
+      "task": "Run anomaly check on winding temperature channel",
+      "server": "tsfm",
+      "tool": "detect_anomalies",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sensor_id": "winding_temp_top_c",
+        "window_size": 720,
+        "z_threshold": 3.0
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"window_size\": 720,\n  \"z_threshold\": 3.0,\n  \"total_readings\": 720,\n  \"anomaly_count\": 2,\n  \"anomaly_rate_pct\": 0.28,\n  \"anomalies\": [\n    {\n      \"timestamp\": \"2024-01-13 22:00:00\",\n      \"value\": 136.394,\n      \"z_score\": 3.673\n    },\n    {\n      \"timestamp\": \"2024-01-16 05:00:00\",\n      \"value\": 131.905,\n      \"z_score\": 3.408\n    }\n  ]\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "Anomaly check indicates a short window of unusual readings, but no sustained shift.",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    },
+    {
+      "step": 3,
+      "task": "Run trend analysis on winding temperature channel",
+      "server": "tsfm",
+      "tool": "trend_analysis",
+      "tool_args": {
+        "transformer_id": "T-014",
+        "sensor_id": "winding_temp_top_c",
+        "start_time": "2024-01-13 00:00:00",
+        "end_time": "2024-01-17 00:00:00"
+      },
+      "response": "{\n  \"transformer_id\": \"T-014\",\n  \"sensor_id\": \"winding_temp_top_c\",\n  \"num_readings\": 97,\n  \"start_time\": \"2024-01-13 00:00:00\",\n  \"end_time\": \"2024-01-17 00:00:00\",\n  \"mean_value\": 79.4943,\n  \"min_value\": 51.148,\n  \"max_value\": 136.394,\n  \"slope_per_day\": 0.322452,\n  \"direction\": \"stable\",\n  \"r_squared\": 0.0006\n}",
+      "executor_success": true,
+      "error": null,
+      "success": true,
+      "verifier_decision": "continue",
+      "verifier_reason": "No indication that the remaining steps should change",
+      "verifier_updated_focus": "",
+      "retries_used": 0
+    }
+  ],
+  "scenario": {
+    "id": "SGT-025",
+    "type": "Multi",
+    "text": "Operators flagged a short window of unusual top-of-winding temperature readings on T-014 over the last few days. First identify the sensor channels installed on this asset, then run an anomaly check and trend analysis on the winding temperature channel (winding_temp_top_c) to determine whether the deviations form a single burst or a sustained shift.",
+    "category": "Anomaly Burst vs Trend Disambiguation",
+    "characteristic_form": "The answer should first surface the available sensor channels for T-014, then for the winding_temp_top_c channel report the anomaly findings and recent trend direction, and conclude whether the disturbance is an isolated burst or a sustained drift in the underlying signal.",
+    "asset_id": "T-014",
+    "expected_tools": [
+      "iot.list_sensors",
+      "tsfm.detect_anomalies",
+      "tsfm.trend_analysis"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "sensor channels available",
+        "winding_temp_top_c anomaly findings",
+        "winding_temp_top_c trend direction",
+        "burst vs sustained classification"
+      ]
+    },
+    "difficulty": "medium",
+    "domain_tags": [
+      "IoT",
+      "TSFM"
+    ]
+  }
+}

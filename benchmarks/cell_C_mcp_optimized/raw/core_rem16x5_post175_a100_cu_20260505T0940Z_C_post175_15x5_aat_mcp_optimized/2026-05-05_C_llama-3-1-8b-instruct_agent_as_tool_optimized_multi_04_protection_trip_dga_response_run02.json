@@ -1,0 +1,117 @@
+{
+  "question": "T-016 tripped on differential protection overnight. Review its DGA data and fault record history to determine what the available evidence supports, then issue a corrective work order with a priority level appropriate to the overall situation.",
+  "answer": "Based on the DGA data and fault record history, the available evidence supports a fault classification of \"Arc discharge\" and \"Overload Trip\". A corrective work order with a priority level of \"high\" is issued to address the faulty component and prevent further tripping. The estimated downtime is 24 hours.",
+  "success": true,
+  "failed_tools": [],
+  "max_turns_exhausted": false,
+  "turn_count": 2,
+  "tool_call_count": 3,
+  "usage": {
+    "input_tokens": 26053,
+    "output_tokens": 300,
+    "total_tokens": 26353,
+    "requests": 4
+  },
+  "history": [
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_dga_record",
+          "arguments": {
+            "transformer_id": "T-016"
+          },
+          "call_id": "chatcmpl-tool-a81d1c887ebbe9da",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"transformer_id\": \"T-016\",\n  \"sample_date\": \"2024-01-23T00:00:00\",\n  \"dissolved_h2_ppm\": 73.15,\n  \"dissolved_ch4_ppm\": 74.0,\n  \"dissolved_c2h2_ppm\": 24.4,\n  \"dissolved_c2h4_ppm\": 102.79,\n  \"dissolved_c2h6_ppm\": 46.79,\n  \"dissolved_co_ppm\": 674.11,\n  \"dissolved_co2_ppm\": 3133.28,\n  \"fault_label\": \"Arc discharge\",\n  \"source_dataset\": \"synthetic\"\n}"
+          }
+        },
+        {
+          "name": "list_fault_records",
+          "arguments": {
+            "transformer_id": "T-016",
+            "limit": "10"
+          },
+          "call_id": "chatcmpl-tool-b77019b91a5f01aa",
+          "output": [
+            {
+              "type": "text",
+              "text": "{\n  \"transformer_id\": \"T-016\",\n  \"fault_id\": \"F022\",\n  \"fault_type\": \"Overload Trip\",\n  \"location\": \"Substation Beta\",\n  \"voltage_v\": 11000,\n  \"current_a\": 142,\n  \"power_load_mw\": 47.01,\n  \"temperature_c\": 39.9,\n  \"wind_speed_kmh\": 16.9,\n  \"weather_condition\": \"Clear\",\n  \"maintenance_status\": \"Completed\",\n  \"component_health\": \"Faulty\",\n  \"duration_hrs\": 10.0,\n  \"downtime_hrs\": 56\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"transformer_id\": \"T-016\",\n  \"fault_id\": \"F023\",\n  \"fault_type\": \"Overload Trip\",\n  \"location\": \"Substation Delta\",\n  \"voltage_v\": 11000,\n  \"current_a\": 234,\n  \"power_load_mw\": 53.24,\n  \"temperature_c\": 45.2,\n  \"wind_speed_kmh\": 15.7,\n  \"weather_condition\": \"Clear\",\n  \"maintenance_status\": \"Scheduled\",\n  \"component_health\": \"Faulty\",\n  \"duration_hrs\": 6.0,\n  \"downtime_hrs\": 55\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"transformer_id\": \"T-016\",\n  \"fault_id\": \"F024\",\n  \"fault_type\": \"Overload Trip\",\n  \"location\": \"Substation Gamma\",\n  \"voltage_v\": 11000,\n  \"current_a\": 292,\n  \"power_load_mw\": 42.07,\n  \"temperature_c\": 48.9,\n  \"wind_speed_kmh\": 11.3,\n  \"weather_condition\": \"Rainy\",\n  \"maintenance_status\": \"Scheduled\",\n  \"component_health\": \"Faulty\",\n  \"duration_hrs\": 9.1,\n  \"downtime_hrs\": 70\n}"
+            },
+            {
+              "type": "text",
+              "text": "{\n  \"transformer_id\": \"T-016\",\n  \"fault_id\": \"F025\",\n  \"fault_type\": \"Line Breakage\",\n  \"location\": \"Substation Alpha\",\n  \"voltage_v\": 132000,\n  \"current_a\": 224,\n  \"power_load_mw\": 39.77,\n  \"temperature_c\": 44.0,\n  \"wind_speed_kmh\": 15.0,\n  \"weather_condition\": \"Clear\",\n  \"maintenance_status\": \"Completed\",\n  \"component_health\": \"Faulty\",\n  \"duration_hrs\": 8.1,\n  \"downtime_hrs\": 62\n}"
+            }
+          ]
+        },
+        {
+          "name": "create_work_order",
+          "arguments": {
+            "transformer_id": "T-016",
+            "issue_description": "Multiple overload trips and faulty component",
+            "priority": "high"
+          },
+          "call_id": "chatcmpl-tool-8b8f2ba2740e4f91",
+          "output": {
+            "type": "text",
+            "text": "{\n  \"work_order_id\": \"WO-7DA78D5B\",\n  \"transformer_id\": \"T-016\",\n  \"issue_description\": \"Multiple overload trips and faulty component\",\n  \"priority\": \"high\",\n  \"fault_type\": null,\n  \"status\": \"open\",\n  \"estimated_downtime_hours\": 24,\n  \"created_at\": \"2026-05-05T10:21:57.010882Z\",\n  \"assigned_technician\": null,\n  \"notes\": []\n}"
+          }
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "Based on the DGA data and fault record history, the available evidence supports a fault classification of \"Arc discharge\" and \"Overload Trip\". A corrective work order with a priority level of \"high\" is issued to address the faulty component and prevent further tripping. The estimated downtime is 24 hours.",
+      "tool_calls": []
+    }
+  ],
+  "runner_meta": {
+    "model_id": "openai/Llama-3.1-8B-Instruct",
+    "mcp_mode": "optimized",
+    "aob_prompt_sha": "933d2c8",
+    "max_turns": 30,
+    "parallel_tool_calls": false,
+    "sdk_version": "openai-agents==0.14.5",
+    "duration_seconds": 6.417697191238403,
+    "scenario_file": null
+  },
+  "scenario": {
+    "id": "SGT-020",
+    "type": "Multi",
+    "text": "T-016 tripped on differential protection overnight. Review its DGA data and fault record history to determine what the available evidence supports, then issue a corrective work order with a priority level appropriate to the overall situation.",
+    "category": "Protection Trip Response",
+    "characteristic_form": "The answer should retrieve and analyze DGA data (noting whether the result is diagnostic or inconclusive), reference prior fault history, and produce a corrective work order with a priority level justified by the combined evidence from the protection trip event, fault history, and component health.",
+    "asset_id": "T-016",
+    "expected_tools": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga",
+      "wo.list_fault_records",
+      "wo.create_work_order"
+    ],
+    "ground_truth": {
+      "must_include": [
+        "DGA retrieved and result noted",
+        "fault history cited",
+        "corrective work order issued",
+        "WO priority justified by protection trip and fault history"
+      ]
+    },
+    "difficulty": "hard",
+    "domain_tags": [
+      "FMSR",
+      "WO"
+    ]
+  }
+}

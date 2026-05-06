@@ -1,10 +1,10 @@
 Waiting for vLLM...
-(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299] 
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]
 (APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]        █     █     █▄   ▄█
 (APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.19.0
 (APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]   █▄█▀ █     █     █     █  model   /insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct
 (APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299] 
+(APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:299]
 (APIServer pid=353036) INFO 04-16 21:33:47 [utils.py:233] non-default args: {'host': '127.0.0.1', 'model': '/insomnia001/depts/edu/users/team13/hpml-assetopsbench-smart-grid-mcp/models/Llama-3.1-8B-Instruct', 'dtype': 'float16', 'max_model_len': 32768, 'served_model_name': ['Llama-3.1-8B-Instruct']}
 (APIServer pid=353036) INFO 04-16 21:33:47 [model.py:549] Resolved architecture: LlamaForCausalLM
 (APIServer pid=353036) WARNING 04-16 21:33:47 [model.py:2016] Casting torch.bfloat16 to torch.float16.
@@ -25,7 +25,7 @@ Waiting for vLLM...
 (EngineCore pid=354307) Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:10<00:03,  3.41s/it]
 (EngineCore pid=354307) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:11<00:00,  2.41s/it]
 (EngineCore pid=354307) Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:13<00:00,  3.28s/it]
-(EngineCore pid=354307) 
+(EngineCore pid=354307)
 (EngineCore pid=354307) INFO 04-16 21:34:24 [default_loader.py:384] Loading weights took 13.70 seconds
 (EngineCore pid=354307) INFO 04-16 21:34:24 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 23.096286 seconds
 (EngineCore pid=354307) INFO 04-16 21:34:32 [backends.py:1051] Using cache directory: /insomnia001/home/tr2828/.cache/vllm/torch_compile_cache/2d2207606e/rank_0_0/backbone for vLLM's torch.compile
@@ -90,17 +90,17 @@ vLLM ready after 137s
 (APIServer pid=353036) INFO:     127.0.0.1:54954 - "GET /health HTTP/1.1" 200 OK
 21:34:58  INFO      agent.plan_execute.runner  Discovering server capabilities...
 [04/16/26 21:34:58] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:34:59] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:35:00] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:35:01] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:01  INFO      agent.plan_execute.runner  Planning...
-[92m21:35:02 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:02 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:02  INFO      LiteLLM  
+21:35:02  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 [92m21:35:06 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
@@ -116,18 +116,18 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   return self.__pydantic_serializer__.to_python(
 (APIServer pid=353036) INFO 04-16 21:35:06 [loggers.py:259] Engine 000: Avg prompt throughput: 269.5 tokens/s, Avg generation throughput: 47.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
 [04/16/26 21:35:06] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:35:07] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:35:08] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 [04/16/26 21:35:09] INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:09  INFO      agent.plan_execute.executor  Step 1/8 [iot]: List all sensor IDs available for transformer T-015
 21:35:09  INFO      agent.plan_execute.executor  Step 1: calling LLM to resolve args.
-[92m21:35:09 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:09 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:09  INFO      LiteLLM  
+21:35:09  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 [92m21:35:09 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
@@ -137,16 +137,16 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:10] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:10  INFO      agent.plan_execute.executor  Step 1 OK.
 21:35:10  INFO      agent.plan_execute.executor  Step 2/8 [iot]: Get recent sensor readings for transformer T-015 and each sensor
 21:35:10  INFO      agent.plan_execute.executor  Step 2: calling LLM to resolve args.
-[92m21:35:10 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:10 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:10  INFO      LiteLLM  
+21:35:10  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 [92m21:35:12 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
 21:35:12  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
@@ -155,15 +155,15 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:12] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:13  INFO      agent.plan_execute.executor  Step 2 OK.
 21:35:13  INFO      agent.plan_execute.executor  Step 3/8 [tsfm]: Analyze sensor readings to detect anomalies
 21:35:13  INFO      agent.plan_execute.executor  Step 3: calling LLM to resolve args.
-[92m21:35:13 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:13 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:13  INFO      LiteLLM  
+21:35:13  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 [92m21:35:14 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
@@ -173,15 +173,15 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:15] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:15  INFO      agent.plan_execute.executor  Step 3 OK.
 21:35:15  INFO      agent.plan_execute.executor  Step 4/8 [fmsr]: List all failure modes
 21:35:15  INFO      agent.plan_execute.executor  Step 4: calling LLM to resolve args.
-[92m21:35:15 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:15 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:15  INFO      LiteLLM  
+21:35:15  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO 04-16 21:35:16 [loggers.py:259] Engine 000: Avg prompt throughput: 2673.3 tokens/s, Avg generation throughput: 9.8 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.4%
 (APIServer pid=353036) INFO 04-16 21:35:26 [loggers.py:259] Engine 000: Avg prompt throughput: 2752.1 tokens/s, Avg generation throughput: 132.7 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
@@ -193,15 +193,15 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:27] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:27  INFO      agent.plan_execute.executor  Step 4 OK.
 21:35:27  INFO      agent.plan_execute.executor  Step 5/8 [fmsr]: Search failure modes for probable fault mode
 21:35:27  INFO      agent.plan_execute.executor  Step 5: calling LLM to resolve args.
-[92m21:35:27 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:27 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:27  INFO      LiteLLM  
+21:35:27  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO 04-16 21:35:36 [loggers.py:259] Engine 000: Avg prompt throughput: 2796.9 tokens/s, Avg generation throughput: 110.9 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
@@ -212,15 +212,15 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:39] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:39  INFO      agent.plan_execute.executor  Step 5 OK.
 21:35:39  INFO      agent.plan_execute.executor  Step 6/8 [fmsr]: Get sensor correlation for probable fault mode
 21:35:39  INFO      agent.plan_execute.executor  Step 6: calling LLM to resolve args.
-[92m21:35:39 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:39 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:39  INFO      LiteLLM  
+21:35:39  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO 04-16 21:35:46 [loggers.py:259] Engine 000: Avg prompt throughput: 2797.0 tokens/s, Avg generation throughput: 110.4 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.3%, Prefix cache hit rate: 0.4%
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
@@ -231,16 +231,16 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:51] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:51  INFO      agent.plan_execute.executor  Step 6 OK.
 21:35:51  INFO      agent.plan_execute.executor  Step 7/8 [tsfm]: Estimate short-term risk over 30 days
 21:35:51  INFO      agent.plan_execute.executor  Step 7: calling LLM to resolve args.
-[92m21:35:51 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:51 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:51  INFO      LiteLLM  
+21:35:51  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 [92m21:35:53 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
 21:35:53  INFO      LiteLLM  Wrapper: Completed Call, calling success_handler
@@ -249,15 +249,15 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...one, 'token_ids': None}), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
 [04/16/26 21:35:54] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:54  INFO      agent.plan_execute.executor  Step 7 OK.
 21:35:54  INFO      agent.plan_execute.executor  Step 8/8 [wo]: Create maintenance work order recommendation
 21:35:54  INFO      agent.plan_execute.executor  Step 8: calling LLM to resolve args.
-[92m21:35:54 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:54 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:54  INFO      LiteLLM  
+21:35:54  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 [92m21:35:56 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
@@ -268,14 +268,14 @@ LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
   return self.__pydantic_serializer__.to_python(
 (APIServer pid=353036) INFO 04-16 21:35:56 [loggers.py:259] Engine 000: Avg prompt throughput: 5628.3 tokens/s, Avg generation throughput: 73.9 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.3%
 [04/16/26 21:35:56] INFO     Processing request of type            server.py:727
-                             CallToolRequest                                    
+                             CallToolRequest
                     INFO     Processing request of type            server.py:727
-                             ListToolsRequest                                   
+                             ListToolsRequest
 21:35:56  INFO      agent.plan_execute.executor  Step 8 OK.
 21:35:56  INFO      agent.plan_execute.runner  Summarising...
-[92m21:35:56 - LiteLLM:INFO[0m: utils.py:3889 - 
+[92m21:35:56 - LiteLLM:INFO[0m: utils.py:3889 -
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
-21:35:56  INFO      LiteLLM  
+21:35:56  INFO      LiteLLM
 LiteLLM completion() model= Llama-3.1-8B-Instruct; provider = openai
 (APIServer pid=353036) INFO:     127.0.0.1:54078 - "POST /v1/chat/completions HTTP/1.1" 200 OK
 [92m21:35:59 - LiteLLM:INFO[0m: utils.py:1629 - Wrapper: Completed Call, calling success_handler
