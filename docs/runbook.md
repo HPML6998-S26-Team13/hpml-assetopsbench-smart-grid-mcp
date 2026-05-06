@@ -296,8 +296,8 @@ to have written a `latencies.jsonl` row before counting it as resumable.
 
 Insomnia is the primary path again as of 2026-05-05 (see top-of-file
 status block); switch to this GCP path when Insomnia is unavailable,
-queue-saturated, or you need preemption-tolerant batching.
-spin up an A100 spot instance and run the *same* `scripts/run_experiment.sh`
+queue-saturated, or you need preemption-tolerant batching. Spin up an
+A100 spot instance and run the *same* `scripts/run_experiment.sh`
 entry point. The serving stack, configs, and artifact layout are
 identical — `gpu_type` in `summary.json` records whether each run landed
 on Insomnia A6000 vs GCP A100 vs etc. (PR #145 / `#132`).
