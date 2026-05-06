@@ -219,7 +219,7 @@ NO-HINT RULES — banned in the user-facing `text` field:
   fault. (Added v0.2 after SGT-GEN-005 violated this in the v0.1 batch.)
 - Pre-framed decisions ("you should create a work order")
 - Step-by-step instructions
-- Paraphrases of any of the 10 hand-crafted scenarios under data/scenarios/
+- Paraphrases of any canonical hand-crafted scenario under data/scenarios/
 
 PREFERRED:
 - Describe an operational event or condition naturally
