@@ -12,7 +12,7 @@
 - Real CSV SHA256: `42a845b029f86877d3e633aee2bc1eead993c545640e85cb45eed41a0a567665`
 - Real CSV MD5: `6443538fff0eeefc5dc0740e97f49ee1`
 - Rows / columns: 201 / ['NM', 'H2', 'CH4', 'C2H6', 'C2H4', 'C2H2', 'Type']
-- Script HEAD: `2da3846ae131a9b8f882a7673aeb910ca9650904` (working tree dirty)
+- Script HEAD: `eea6cb432b32328cce5a967c5641a2be9849aed4`
 - Exact command: `python data/scenarios/validate_realism_statistical.py --synthetic data/processed/dga_records.csv --real data/external/DGA-dataset-1.csv --real-source bantipatel20_dga --retrieved-date 2026-05-04 --report reports/realism_statistical_v1.md --json reports/realism_statistical_v1.json`
 - Real label counts (raw `Type` column):
   - `Arc discharge`: 54
