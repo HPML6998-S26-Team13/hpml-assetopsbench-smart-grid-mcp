@@ -784,7 +784,7 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
 | Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
 | Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
-| Mitigation before/after figure | `results/metrics/mitigation_before_after.csv` and rendered figure |
+| Mitigation before/after figure | `results/metrics/gcp_post175_mitigation_4tier_summary.csv`; `results/metrics/mitigation_before_after.csv` is a superseded post-PR180 diagnostic table |
 | Manual judge audit table | `results/metrics/manual_judge_audit.csv` |
 | Recovery/adjudication mitigation spec | `docs/mitigation_recovery_adjudication.md` |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |

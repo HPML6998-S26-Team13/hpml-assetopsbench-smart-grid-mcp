@@ -83,3 +83,6 @@ Before any Croissant or dataset-package upload, run a PII/path grep over the
 allow-listed export bundle. The committed logs in this PR scrub GCP operator
 home/cache prefixes to placeholders, and package scripts should preserve that
 scrubbed form rather than rebuilding from VM-local logs.
+
+For this artifact family, the minimum grep should include:
+`/home/wax|/Users/wax|wax1@|/insomnia001/home/wax1`.
