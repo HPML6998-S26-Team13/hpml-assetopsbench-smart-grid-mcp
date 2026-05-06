@@ -1,0 +1,268 @@
+{
+  "synthetic_path": "data/processed/dga_records.csv",
+  "real_path": "data/external/DGA-dataset-1.csv",
+  "n_synthetic": 20,
+  "n_real": 201,
+  "provenance": {
+    "real_source": "bantipatel20_dga",
+    "real_path": "data/external/DGA-dataset-1.csv",
+    "real_sha256": "42a845b029f86877d3e633aee2bc1eead993c545640e85cb45eed41a0a567665",
+    "real_md5": "6443538fff0eeefc5dc0740e97f49ee1",
+    "real_rows": 201,
+    "real_columns": [
+      "NM",
+      "H2",
+      "CH4",
+      "C2H6",
+      "C2H4",
+      "C2H2",
+      "Type"
+    ],
+    "real_label_column": "Type",
+    "real_label_counts_raw": {
+      "Arc discharge": 54,
+      "Spark discharge": 49,
+      "High-temperature overheating": 38,
+      "Low-temperature overheating": 19,
+      "Partial discharge": 16,
+      "Low/Middle-temperature overheating": 16,
+      "Middle-temperature overheating": 9
+    },
+    "real_label_counts_mapped": {
+      "D2": 54,
+      "D1": 49,
+      "T3": 38,
+      "T1": 19,
+      "PD": 16,
+      "T2": 25
+    },
+    "synthetic_path": "data/processed/dga_records.csv",
+    "retrieved_date": "2026-05-04",
+    "generated_date": "2026-05-06",
+    "script_sha": "eea6cb432b32328cce5a967c5641a2be9849aed4",
+    "script_dirty": false,
+    "command": "python data/scenarios/validate_realism_statistical.py --synthetic data/processed/dga_records.csv --real data/external/DGA-dataset-1.csv --real-source bantipatel20_dga --retrieved-date 2026-05-04 --report reports/realism_statistical_v1.md --json reports/realism_statistical_v1.json"
+  },
+  "tests": [
+    {
+      "name": "chi2_fault_prevalence",
+      "statistic": null,
+      "pvalue": null,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "reference=real (n_real=201, scaled to n_syn) has zero expected count for classes ['Normal'] but synthetic has rows there; chi-squared undefined. Acquire a real dataset covering those classes or apply a documented pseudocount."
+    },
+    {
+      "name": "ks_h2",
+      "statistic": 0.5621890547263682,
+      "pvalue": 5.920609452378412e-06,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ks_ch4",
+      "statistic": 0.6268656716417911,
+      "pvalue": 2.021223845449254e-07,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ks_c2h2",
+      "statistic": 0.5024875621890548,
+      "pvalue": 8.665833753823239e-05,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ks_c2h4",
+      "statistic": 0.5174129353233831,
+      "pvalue": 4.594399295662918e-05,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ks_c2h6",
+      "statistic": 0.39303482587064675,
+      "pvalue": 0.004627674034091792,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "emd_h2",
+      "statistic": 0.3593165887419692,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": false,
+      "detail": "raw_emd=3355.269, std_real=9337.918"
+    },
+    {
+      "name": "emd_ch4",
+      "statistic": 0.2923976491261463,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": false,
+      "detail": "raw_emd=2042.686, std_real=6985.987"
+    },
+    {
+      "name": "emd_c2h2",
+      "statistic": 0.24028332509312877,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": false,
+      "detail": "raw_emd=1221.439, std_real=5083.328"
+    },
+    {
+      "name": "emd_c2h4",
+      "statistic": 0.24933267296609588,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": false,
+      "detail": "raw_emd=2084.142, std_real=8358.881"
+    },
+    {
+      "name": "emd_c2h6",
+      "statistic": 0.14765339059993016,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": true,
+      "detail": "raw_emd=855.106, std_real=5791.306"
+    },
+    {
+      "name": "ad_h2",
+      "statistic": 15.73516542727843,
+      "pvalue": 0.001,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ad_ch4",
+      "statistic": 14.208841982023461,
+      "pvalue": 0.001,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ad_c2h2",
+      "statistic": 8.474705962151134,
+      "pvalue": 0.001,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ad_c2h4",
+      "statistic": 9.483606393140297,
+      "pvalue": 0.001,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ad_c2h6",
+      "statistic": 5.1319830656672085,
+      "pvalue": 0.003111394797779318,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "ks_T1_h2",
+      "statistic": 0.5263157894736842,
+      "pvalue": 0.17137210615471485,
+      "threshold": 0.05,
+      "passed": true,
+      "detail": "n_syn=5, n_real=19"
+    },
+    {
+      "name": "ks_T1_ch4",
+      "statistic": 0.37894736842105264,
+      "pvalue": 0.5113871635610766,
+      "threshold": 0.05,
+      "passed": true,
+      "detail": "n_syn=5, n_real=19"
+    },
+    {
+      "name": "ks_T1_c2h2",
+      "statistic": 0.9473684210526315,
+      "pvalue": 0.00028232636928289095,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=19"
+    },
+    {
+      "name": "ks_T1_c2h4",
+      "statistic": 0.6842105263157895,
+      "pvalue": 0.030914737436476564,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=19"
+    },
+    {
+      "name": "ks_T1_c2h6",
+      "statistic": 0.5263157894736842,
+      "pvalue": 0.17137210615471485,
+      "threshold": 0.05,
+      "passed": true,
+      "detail": "n_syn=5, n_real=19"
+    },
+    {
+      "name": "ks_D2_h2",
+      "statistic": 0.7592592592592593,
+      "pvalue": 0.003668514573187127,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=54"
+    },
+    {
+      "name": "ks_D2_ch4",
+      "statistic": 0.7777777777777778,
+      "pvalue": 0.0025559355591039134,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=54"
+    },
+    {
+      "name": "ks_D2_c2h2",
+      "statistic": 0.9074074074074074,
+      "pvalue": 0.00010067142245923506,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=54"
+    },
+    {
+      "name": "ks_D2_c2h4",
+      "statistic": 0.7777777777777778,
+      "pvalue": 0.0025559355591039134,
+      "threshold": 0.05,
+      "passed": false,
+      "detail": "n_syn=5, n_real=54"
+    },
+    {
+      "name": "ks_D2_c2h6",
+      "statistic": 0.5185185185185185,
+      "pvalue": 0.12121678192612392,
+      "threshold": 0.05,
+      "passed": true,
+      "detail": "n_syn=5, n_real=54"
+    },
+    {
+      "name": "corr_delta",
+      "statistic": 0.9188697887989605,
+      "pvalue": null,
+      "threshold": 0.2,
+      "passed": false,
+      "detail": "max abs(corr_syn - corr_real) over 5 gases"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "total": 27
+  }
+}

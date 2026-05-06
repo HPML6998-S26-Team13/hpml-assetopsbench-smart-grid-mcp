@@ -18,10 +18,17 @@ acceptance thresholds, and the ranked dataset list.
 
 Usage:
     python3 data/scenarios/validate_realism_statistical.py \\
-        --synthetic   data/processed/dga_records.csv \\
-        --real        data/external/ieee_dataport_dga.xlsx \\
-        --real-source ieee_dataport \\
-        --report      reports/realism_statistical_v1.md
+        --synthetic      data/processed/dga_records.csv \\
+        --real           data/external/DGA-dataset-1.csv \\
+        --real-source    bantipatel20_dga \\
+        --retrieved-date 2026-05-04 \\
+        --report         reports/realism_statistical_v1.md \\
+        --json           reports/realism_statistical_v1.json
+
+`--retrieved-date YYYY-MM-DD` is required whenever `--real` is set; it is
+the dataset acquisition date stamped into the report's provenance block
+(distinct from the report-generation date). See
+`data/external/README.md` for the acquisition log.
 
 If --real is absent, the script emits a stub report listing which
 dataset(s) need to be acquired and from where.
@@ -30,9 +37,12 @@ dataset(s) need to be acquired and from where.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 import sys
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 
 import numpy as np
@@ -92,7 +102,27 @@ REAL_LABEL_MAPS: dict[str, dict] = {
         6: "D2",
     },
     "kaggle_failure_analysis": {
-        # populate when the Kaggle CSV is acquired and field-encoded labels are confirmed
+        # Kaggle shashwatwork/failure-analysis-in-power-transformers-dataset is
+        # a re-upload of Mendeley rz75w3fkxy (Arias-Mejia Lara 2020) — health
+        # index regression, no fault-class column. Marginal-distribution tests
+        # only; fault-class tests fall back to TC10 reference.
+    },
+    "bantipatel20_dga": {
+        # Kaggle bantipatel20/dissolved-gas-analysis-of-transformer
+        # (DGA-dataset-1.csv, n=201). Descriptive Type-column labels mapped
+        # to IEC codes consistent with build_processed.py:286-345 and
+        # PROJECT_LABEL_TO_IEC. No Normal samples in this dataset.
+        "Partial discharge": "PD",
+        "Low-temperature overheating": "T1",
+        "Middle-temperature overheating": "T2",
+        # Composite label collapsed to T2 per build_processed.py:430-431.
+        "Low/Middle-temperature overheating": "T2",
+        "High-temperature overheating": "T3",
+        # build_processed.py:330 maps Spark discharge to IEC D1
+        # (low-energy electrical sparking) and Arc discharge to D2
+        # (high-energy arcing).
+        "Spark discharge": "D1",
+        "Arc discharge": "D2",
     },
     "duval_2001_tc10": {
         # Duval & dePablo 2001 IEC TC 10 reproduction uses IEC codes natively
@@ -161,6 +191,11 @@ class ReportCard:
     n_synthetic: int
     n_real: int | None
     tests: list[TestResult] = field(default_factory=list)
+    # Provenance manifest (PR #183 v2 H2): captures source slug, file hashes,
+    # row count, columns, label-column value-counts before/after PROJECT_LABEL_TO_IEC
+    # mapping, plus the script HEAD SHA and exact command. Populated in main();
+    # left as None for stub runs (no --real) so downstream consumers can detect.
+    provenance: dict | None = None
 
     @property
     def n_passed(self) -> int:
@@ -184,6 +219,7 @@ class ReportCard:
             "real_path": self.real_path,
             "n_synthetic": _scalar(self.n_synthetic),
             "n_real": _scalar(self.n_real),
+            "provenance": self.provenance,
             "tests": [
                 {
                     "name": t.name,
@@ -227,6 +263,23 @@ def _normalize_synthetic_label(raw: str) -> str | None:
     return PROJECT_LABEL_TO_IEC.get(str(raw).strip())
 
 
+def _read_raw_dataframe(path: Path) -> pd.DataFrame:
+    """Suffix-aware raw read for real DGA datasets (no normalization, no label
+    mapping). Shared between `load_real()` and `_compute_provenance()` so the
+    provenance manifest doesn't drift from what the statistical tests see
+    (PR #183 v3 H1).
+    """
+    suffix = path.suffix.lower()
+    if suffix == ".xlsx":
+        return pd.read_excel(path)
+    if suffix == ".xls":
+        raise ValueError(
+            f"Legacy .xls is not supported (requires `xlrd` which is not in "
+            f"requirements.txt). Convert {path} to .xlsx or .csv first."
+        )
+    return pd.read_csv(path)
+
+
 def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | None:
     """
     Load real DGA dataset.
@@ -245,16 +298,7 @@ def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | No
     """
     if path is None or not path.exists():
         return None
-    suffix = path.suffix.lower()
-    if suffix == ".xlsx":
-        df = pd.read_excel(path)
-    elif suffix == ".xls":
-        raise ValueError(
-            f"Legacy .xls is not supported (requires `xlrd` which is not in "
-            f"requirements.txt). Convert {path} to .xlsx or .csv first."
-        )
-    else:
-        df = pd.read_csv(path)
+    df = _read_raw_dataframe(path)
     df = _normalize_real_columns(df)
     if "fault_label" in df.columns:
         if source and source in REAL_LABEL_MAPS:
@@ -289,6 +333,8 @@ def _normalize_real_columns(df: pd.DataFrame) -> pd.DataFrame:
     Recognized shapes:
       - IEEE DataPort DGA Dataset (Dissanayake 2026, DOI 10.21227/27vy-h479)
       - Kaggle: shashwatwork/failure-analysis-in-power-transformers-dataset
+      - Kaggle: bantipatel20/dissolved-gas-analysis-of-transformer
+        (DGA-dataset-1.csv: H2/CH4/C2H6/C2H4/C2H2 + Type column)
       - GitHub: ahmedtariq71/Dataset1
       - IEC TC 10 derived (Duval & dePablo 2001 reproduction)
 
@@ -301,7 +347,7 @@ def _normalize_real_columns(df: pd.DataFrame) -> pd.DataFrame:
             if candidate.lower() in cols:
                 rename[cols[candidate.lower()]] = f"{gas}_ppm"
                 break
-    for label_col in ("fault_label", "fault", "label", "class", "actual_fault"):
+    for label_col in ("fault_label", "fault", "label", "class", "actual_fault", "type"):
         if label_col in cols:
             rename[cols[label_col]] = "fault_label"
             break
@@ -844,10 +890,59 @@ def render_markdown(rc: ReportCard) -> str:
         f"- Synthetic: `{rc.synthetic_path}` (n={rc.n_synthetic})",
         f"- Real: `{rc.real_path or '(none loaded)'}` (n={rc.n_real})",
         f"- Result: **{rc.n_passed}/{rc.n_total}** tests passed",
-        "",
-        "| Test | Statistic | p-value | Threshold | Pass | Detail |",
-        "|------|-----------|---------|-----------|------|--------|",
     ]
+    # Small-sample caveat (PR #183 v2 M1). KS guidance per the methodology
+    # doc § 5.1 / § 9 is unreliable below ≈30 per group; flag explicitly so
+    # the artifact most likely to be cited carries its own pre-tuning warning.
+    if rc.n_synthetic is not None and rc.n_synthetic < 30:
+        lines.extend(
+            [
+                "",
+                f"> **Caveat — directional/pre-tuning evidence.** Synthetic "
+                f"n={rc.n_synthetic} is below the ≈30/group rule of thumb for "
+                f"reliable KS / AD tests, and conditional-KS subsets shrink "
+                f"further. Treat this report as a v1 baseline that quantifies "
+                f"the synthesis-vs-real gap, not a final statistical-realism "
+                f"pass. See `docs/dga_realism_statistical_validation.md` § 9 / "
+                f"§ 12.4 for the v2 tuning plan.",
+            ]
+        )
+    if rc.provenance:
+        prov = rc.provenance
+        lines.extend(
+            [
+                "",
+                "## Provenance",
+                "",
+                f"- Real source: `{prov.get('real_source', '?')}` "
+                f"(retrieved {prov.get('retrieved_date', '?')}, "
+                f"report generated {prov.get('generated_date', '?')})",
+                f"- Real CSV SHA256: `{prov.get('real_sha256', '?')}`",
+                f"- Real CSV MD5: `{prov.get('real_md5', '?')}`",
+                f"- Rows / columns: {prov.get('real_rows', '?')} / "
+                f"{prov.get('real_columns', '?')}",
+                f"- Script HEAD: `{prov.get('script_sha', '?')}`"
+                + (" (working tree dirty)" if prov.get("script_dirty") else ""),
+                f"- Exact command: `{prov.get('command', '?')}`",
+            ]
+        )
+        raw_counts = prov.get("real_label_counts_raw")
+        if raw_counts:
+            lines.append("- Real label counts (raw `Type` column):")
+            for label, n in raw_counts.items():
+                lines.append(f"  - `{label}`: {n}")
+        mapped_counts = prov.get("real_label_counts_mapped")
+        if mapped_counts:
+            lines.append("- Real label counts (after IEC mapping):")
+            for label, n in mapped_counts.items():
+                lines.append(f"  - `{label}`: {n}")
+    lines.extend(
+        [
+            "",
+            "| Test | Statistic | p-value | Threshold | Pass | Detail |",
+            "|------|-----------|---------|-----------|------|--------|",
+        ]
+    )
     for t in rc.tests:
         stat = f"{t.statistic:.4f}" if t.statistic is not None else "—"
         pv = f"{t.pvalue:.4f}" if t.pvalue is not None else "—"
@@ -856,6 +951,96 @@ def render_markdown(rc: ReportCard) -> str:
             f"{'✅' if t.passed else '❌'} | {_md_cell(t.detail)} |"
         )
     return "\n".join(lines) + "\n"
+
+
+def _git_head() -> tuple[str | None, bool]:
+    """Return (HEAD SHA, dirty?) or (None, False) if not in a git repo.
+
+    "Dirty" counts only modifications to tracked files; untracked files
+    (e.g. local stackdumps, scratch artifacts) don't affect reproducibility
+    of the report and are ignored.
+    """
+    try:
+        sha = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        status = subprocess.check_output(
+            ["git", "status", "--porcelain", "--untracked-files=no"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+        return sha, bool(status.strip())
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None, False
+
+
+def _compute_provenance(
+    real_path: Path,
+    real_source: str | None,
+    synthetic_path: Path,
+    argv: list[str],
+    retrieved_date: str,
+) -> dict:
+    """Build the provenance manifest written into the JSON + report (v2 H2).
+
+    Hashes the real dataset, snapshots its row count, columns, and label-column
+    value-counts both before and after PROJECT_LABEL_TO_IEC translation so
+    later runs can detect dataset drift. Captures the script's git HEAD and
+    the argv used so the report is reproducible from a clean checkout. Uses
+    `_read_raw_dataframe()` for suffix dispatch so .xlsx datasets work
+    identically to .csv (PR #183 v3 H1).
+    """
+    raw = real_path.read_bytes()
+    df = _read_raw_dataframe(real_path)
+    label_col = None
+    for candidate in ("fault_label", "fault", "label", "class", "actual_fault", "type"):
+        for col in df.columns:
+            if col.lower() == candidate:
+                label_col = col
+                break
+        if label_col:
+            break
+    typed_counts = df[label_col].value_counts() if label_col else None
+    raw_counts = (
+        {str(k): int(v) for k, v in typed_counts.items()}
+        if typed_counts is not None
+        else None
+    )
+    mapped_counts = None
+    if typed_counts is not None and real_source and real_source in REAL_LABEL_MAPS:
+        smap = REAL_LABEL_MAPS[real_source]
+        mapped: dict[str, int] = {}
+        for raw_label, n in typed_counts.items():
+            # Mirror load_real() lookup chain so integer-keyed source maps
+            # (e.g. ieee_dataport: 0..6) resolve from typed value_counts
+            # keys, with stringified fallback for mixed-type sources, then
+            # REAL_LABEL_ALIASES for "N" -> "Normal" etc., then the identity
+            # PROJECT_LABEL_TO_IEC pass-through.
+            project = smap.get(raw_label, smap.get(str(raw_label), raw_label))
+            canonical = REAL_LABEL_ALIASES.get(project, project)
+            iec = PROJECT_LABEL_TO_IEC.get(canonical, canonical)
+            mapped[str(iec)] = mapped.get(str(iec), 0) + int(n)
+        mapped_counts = mapped
+    sha, dirty = _git_head()
+    return {
+        "real_source": real_source,
+        "real_path": Path(real_path).as_posix(),
+        "real_sha256": hashlib.sha256(raw).hexdigest(),
+        "real_md5": hashlib.md5(raw).hexdigest(),
+        "real_rows": len(df),
+        "real_columns": list(df.columns),
+        "real_label_column": label_col,
+        "real_label_counts_raw": raw_counts,
+        "real_label_counts_mapped": mapped_counts,
+        "synthetic_path": Path(synthetic_path).as_posix(),
+        "retrieved_date": retrieved_date,
+        "generated_date": date.today().isoformat(),
+        "script_sha": sha,
+        "script_dirty": dirty,
+        "command": "python " + " ".join(Path(a).as_posix() for a in argv),
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -875,22 +1060,64 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--json", type=Path, default=None, help="optional JSON dump of full ReportCard"
     )
+    parser.add_argument(
+        "--retrieved-date",
+        default=None,
+        help="ISO date (YYYY-MM-DD) the real dataset was acquired from its "
+        "source. Required when --real is set; recorded in the provenance "
+        "manifest as `retrieved_date` so it doesn't drift on re-runs (PR #183 "
+        "v3 M1). The `generated_date` field is always populated from "
+        "`date.today()` and reflects when the report was emitted.",
+    )
     args = parser.parse_args(argv)
+
+    if args.real and not args.retrieved_date:
+        parser.error(
+            "--retrieved-date YYYY-MM-DD is required when --real is set; this "
+            "is the date the real dataset was acquired (e.g. 2026-05-04 per "
+            "data/external/README.md). Without it the provenance manifest "
+            "would record only the report-generation date, not the source "
+            "retrieval date."
+        )
 
     syn = load_synthetic(args.synthetic)
     real = load_real(args.real, source=args.real_source)
 
     rc = run_tests(syn, real)
-    rc.synthetic_path = str(args.synthetic)
-    rc.real_path = str(args.real) if args.real else None
+    # Normalize to POSIX-style paths so the committed report doesn't carry
+    # OS-specific separators (PR #183 v2 L2).
+    rc.synthetic_path = Path(args.synthetic).as_posix()
+    rc.real_path = Path(args.real).as_posix() if args.real else None
+    if args.real and args.real.exists():
+        # Reconstruct an invocable command line: prepend the script path so
+        # the manifest's `command` actually runs (sys.argv[1:] alone omits
+        # the script name).
+        full_argv = (
+            ["data/scenarios/validate_realism_statistical.py", *argv]
+            if argv is not None
+            else sys.argv
+        )
+        rc.provenance = _compute_provenance(
+            args.real,
+            args.real_source,
+            args.synthetic,
+            full_argv,
+            args.retrieved_date,
+        )
 
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(render_markdown(rc))
+    # Pin UTF-8 so Windows (cp1252 default) can write the ✅/❌ glyphs in the
+    # rendered markdown.
+    args.report.write_text(render_markdown(rc), encoding="utf-8")
     if args.json:
         # allow_nan=False makes any future non-finite metric a hard error at
         # report-write time rather than silently emitting bare NaN (which
         # is not strict JSON and fails downstream consumers). v3 H1.
-        args.json.write_text(json.dumps(rc.to_dict(), indent=2, allow_nan=False))
+        # Trailing newline for POSIX-friendly diffs (PR #183 v2 L3).
+        args.json.write_text(
+            json.dumps(rc.to_dict(), indent=2, allow_nan=False) + "\n",
+            encoding="utf-8",
+        )
 
     print(f"Wrote {args.report}: {rc.n_passed}/{rc.n_total} tests passed")
     return 0 if rc.n_passed == rc.n_total else 1

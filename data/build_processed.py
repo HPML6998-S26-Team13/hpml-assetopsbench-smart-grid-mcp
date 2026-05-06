@@ -4,10 +4,13 @@ Data pipeline: raw Kaggle downloads → processed CSVs for MCP servers.
 Run from repo root:
     python3 data/build_processed.py
 
-Inputs  (data/raw/):
+Inputs  (data/raw/, gitignored):
     power-transformers-fdd-and-rul/     — 3000 per-transformer time-series + labels
     dissolved-gas-analysis-of-transformer/DGA-dataset-1.csv  — 201 raw DGA samples
+        kaggle: bantipatel20/dissolved-gas-analysis-of-transformer
     sample-power-transformers-health-condition-dataset/Health index2.csv  — 470 health records
+        kaggle: shashwatwork/failure-analysis-in-power-transformers-dataset
+        (re-upload of mendeley DOI 10.17632/rz75w3fkxy.1 — Arias-Mejia Lara 2020)
     ai-transformer-monitoring/          — real-time readings from one transformer
     power-system-faults-dataset/fault_data.csv  — 506 fault/maintenance events
 
