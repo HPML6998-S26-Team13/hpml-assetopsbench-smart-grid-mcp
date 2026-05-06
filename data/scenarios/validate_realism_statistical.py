@@ -257,6 +257,23 @@ def _normalize_synthetic_label(raw: str) -> str | None:
     return PROJECT_LABEL_TO_IEC.get(str(raw).strip())
 
 
+def _read_raw_dataframe(path: Path) -> pd.DataFrame:
+    """Suffix-aware raw read for real DGA datasets (no normalization, no label
+    mapping). Shared between `load_real()` and `_compute_provenance()` so the
+    provenance manifest doesn't drift from what the statistical tests see
+    (PR #183 v3 H1).
+    """
+    suffix = path.suffix.lower()
+    if suffix == ".xlsx":
+        return pd.read_excel(path)
+    if suffix == ".xls":
+        raise ValueError(
+            f"Legacy .xls is not supported (requires `xlrd` which is not in "
+            f"requirements.txt). Convert {path} to .xlsx or .csv first."
+        )
+    return pd.read_csv(path)
+
+
 def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | None:
     """
     Load real DGA dataset.
@@ -275,16 +292,7 @@ def load_real(path: Path | None, source: str | None = None) -> pd.DataFrame | No
     """
     if path is None or not path.exists():
         return None
-    suffix = path.suffix.lower()
-    if suffix == ".xlsx":
-        df = pd.read_excel(path)
-    elif suffix == ".xls":
-        raise ValueError(
-            f"Legacy .xls is not supported (requires `xlrd` which is not in "
-            f"requirements.txt). Convert {path} to .xlsx or .csv first."
-        )
-    else:
-        df = pd.read_csv(path)
+    df = _read_raw_dataframe(path)
     df = _normalize_real_columns(df)
     if "fault_label" in df.columns:
         if source and source in REAL_LABEL_MAPS:
@@ -901,7 +909,8 @@ def render_markdown(rc: ReportCard) -> str:
                 "## Provenance",
                 "",
                 f"- Real source: `{prov.get('real_source', '?')}` "
-                f"(retrieved {prov.get('retrieved_date', '?')})",
+                f"(retrieved {prov.get('retrieved_date', '?')}, "
+                f"report generated {prov.get('generated_date', '?')})",
                 f"- Real CSV SHA256: `{prov.get('real_sha256', '?')}`",
                 f"- Real CSV MD5: `{prov.get('real_md5', '?')}`",
                 f"- Rows / columns: {prov.get('real_rows', '?')} / "
@@ -966,16 +975,19 @@ def _compute_provenance(
     real_source: str | None,
     synthetic_path: Path,
     argv: list[str],
+    retrieved_date: str,
 ) -> dict:
     """Build the provenance manifest written into the JSON + report (v2 H2).
 
-    Hashes the real CSV, snapshots its row count, columns, and label-column
+    Hashes the real dataset, snapshots its row count, columns, and label-column
     value-counts both before and after PROJECT_LABEL_TO_IEC translation so
     later runs can detect dataset drift. Captures the script's git HEAD and
-    the argv used so the report is reproducible from a clean checkout.
+    the argv used so the report is reproducible from a clean checkout. Uses
+    `_read_raw_dataframe()` for suffix dispatch so .xlsx datasets work
+    identically to .csv (PR #183 v3 H1).
     """
     raw = real_path.read_bytes()
-    df = pd.read_csv(real_path)
+    df = _read_raw_dataframe(real_path)
     label_col = None
     for candidate in ("fault_label", "fault", "label", "class", "actual_fault", "type"):
         for col in df.columns:
@@ -1010,7 +1022,8 @@ def _compute_provenance(
         "real_label_counts_raw": raw_counts,
         "real_label_counts_mapped": mapped_counts,
         "synthetic_path": Path(synthetic_path).as_posix(),
-        "retrieved_date": date.today().isoformat(),
+        "retrieved_date": retrieved_date,
+        "generated_date": date.today().isoformat(),
         "script_sha": sha,
         "script_dirty": dirty,
         "command": "python " + " ".join(Path(a).as_posix() for a in argv),
@@ -1034,7 +1047,25 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--json", type=Path, default=None, help="optional JSON dump of full ReportCard"
     )
+    parser.add_argument(
+        "--retrieved-date",
+        default=None,
+        help="ISO date (YYYY-MM-DD) the real dataset was acquired from its "
+        "source. Required when --real is set; recorded in the provenance "
+        "manifest as `retrieved_date` so it doesn't drift on re-runs (PR #183 "
+        "v3 M1). The `generated_date` field is always populated from "
+        "`date.today()` and reflects when the report was emitted.",
+    )
     args = parser.parse_args(argv)
+
+    if args.real and not args.retrieved_date:
+        parser.error(
+            "--retrieved-date YYYY-MM-DD is required when --real is set; this "
+            "is the date the real dataset was acquired (e.g. 2026-05-04 per "
+            "data/external/README.md). Without it the provenance manifest "
+            "would record only the report-generation date, not the source "
+            "retrieval date."
+        )
 
     syn = load_synthetic(args.synthetic)
     real = load_real(args.real, source=args.real_source)
@@ -1054,7 +1085,11 @@ def main(argv: list[str] | None = None) -> int:
             else sys.argv
         )
         rc.provenance = _compute_provenance(
-            args.real, args.real_source, args.synthetic, full_argv
+            args.real,
+            args.real_source,
+            args.synthetic,
+            full_argv,
+            args.retrieved_date,
         )
 
     args.report.parent.mkdir(parents=True, exist_ok=True)
