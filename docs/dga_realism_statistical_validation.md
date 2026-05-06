@@ -650,15 +650,28 @@ mkdir -p data/external
 
 ### 12.3 What you need to source
 
+Aligned with the v1 acquisition path (§ 4 + § 6.1) — bantipatel20 is the
+labeled v1 source the committed report uses, Arias/Mendeley is the
+unlabeled marginal supplement, and IEEE DataPort is deferred to v2.
+
 - **IEC 60599:2022 PDF.** Standard is paywalled; sourcing it is on you.
   Use Columbia ILL (engineering library), ask Dhaval for an IBM-licensed
   copy, or check team-share for a licensed copy. Don't commit it to the
   repo regardless of source.
-- **IEEE DataPort DGA Dataset** (DOI 10.21227/27vy-h479) — primary target
-  per § 4. Columbia IEEE subscription should cover it; ask the engineering
-  library if not.
-- **Kaggle `failure-analysis-in-power-transformers-dataset`** — backstop
-  if IEEE DataPort is gated.
+- **Kaggle `bantipatel20/dissolved-gas-analysis-of-transformer`** —
+  **v1 primary** labeled source (n=201, fault `Type` column). No IEEE-PES
+  auth friction. Acquisition commands in `data/external/README.md`.
+  Land at `data/external/DGA-dataset-1.csv`.
+- **Mendeley `rz75w3fkxy` (Arias-Mejía Lara 2020)** = Kaggle
+  `shashwatwork/failure-analysis-in-power-transformers-dataset` — **marginal
+  supplement only** (n=471, no fault labels; CC-BY-4.0). Boosts KS / EMD /
+  AD on the five gases at larger n; cannot drive chi² fault prevalence or
+  conditional-KS. md5-confirmed identical to the Mendeley source. Land at
+  `data/external/transformer_dga_arias.csv`.
+- **IEEE DataPort DGA Dataset** (DOI 10.21227/27vy-h479) — **deferred to
+  v2.** Originally planned as primary; deferred for v1 in favour of
+  bantipatel20. Bring back if the canonical TC 10 benchmark becomes
+  load-bearing for the paper. Columbia IEEE subscription required.
 - **Bashir et al. 2024** ("Optimized Synthetic Data Integration with
   Transformer's DGA Data...") — the closest precedent paper for synthetic-
   vs-real DGA validation methodology. Cite in final paper.
