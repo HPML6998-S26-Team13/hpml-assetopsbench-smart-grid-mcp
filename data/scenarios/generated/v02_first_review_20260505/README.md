@@ -20,7 +20,7 @@ PR #178's review surfaced 9 distinct issues across the v0.1 batch. Here's how ea
 | 8 | SGT-GEN-005 missing `sensor_id` source for `iot.get_sensor_readings` | ❌ | ❌ **STILL VIOLATED** — same as v0.1; text doesn't pin a sensor and there's no `iot.list_sensors` discovery step. | **STILL VIOLATED** |
 | 9 | Data-grounding (`get_dga_record(T-NNN)` actually returns what?) | ❌ | ❌ **DEFERRED** — needs MCP runtime access at generation time; tracked for v0.3 in PR #185 PROMPT_VERSION changelog. | **DEFERRED** |
 
-**Net:** 4 fully fixed + 2 partial + 2 still violated + 1 deferred. Strong evidence v0.2 prompt iteration works on most fronts.
+**Net:** 4 fully fixed + 2 partial + 2 still violated + 1 deferred on a 5-scenario, `temperature=0.7` inspection-only batch. First concrete (small-sample) evidence that the v0.2 prompt iteration shifts most v0.1 violations; needs confirmation on a larger batch + Akshat's #53 rubric pass before generalising.
 
 ## What v0.3 still needs to fix
 
@@ -41,7 +41,7 @@ Option 2 is more robust and probably the right v0.3 direction — adds the rule 
 - `batch_manifest.json` — provenance roll-up + reproducibility caveat + `batch_status: inspection_only`
 - `README.md` — this audit document
 
-`prompts/` and `raw_responses/` from the generation run live on the Insomnia clone at `/insomnia001/depts/edu/users/af3623/exp1-clone/data/scenarios/generated/v02_first_review_20260505/{prompts,raw_responses}/`. Not committed here for the same reason as v0.1: they're debugging artifacts, not contract.
+`prompts/` and `raw_responses/` from the generation run are kept locally on the operator's Insomnia clone (not in a shared path). Not committed here for the same reason as v0.1: they're debugging artifacts, not contract. The `generator_commit_sha` + `generator_source_sha256` + `authoring_contract_sha256` fields in `batch_manifest.json` are the immutable provenance for re-derivation; reach out to the batch operator (af3623) if a reviewer needs the prompts/responses.
 
 ## Reproduction
 
@@ -63,4 +63,4 @@ The same caveat applies as v0.1: `temperature=0.7` means re-runs aren't text-det
 
 ## Hand-off
 
-`#53` validation rubric application now has **two batches to validate side-by-side** (v0.1 inspection-only at `first_review_20260503/` and v0.2 inspection-only at this dir). The v0.1↔v0.2 delta is the strongest available signal that prompt iteration works as a methodology — particularly relevant if the paper claims iterative prompt refinement as part of the PS B contribution.
+#53 validation rubric application now has **two batches to validate side-by-side** (v0.1 inspection-only at `first_review_20260503/` and v0.2 inspection-only at this dir). The v0.1↔v0.2 delta is the strongest available signal that prompt iteration works as a methodology — particularly relevant if the paper claims iterative prompt refinement as part of the PS B contribution.

@@ -8,6 +8,11 @@
   "prompt_version": "v0.2",
   "knowledge_plugin_version": "0eacec24441e",
   "generator_script": "scripts/generate_scenarios.py",
+  "generator_commit_sha": "8be6929f87ce5db7a1746a877a9ecb1296b252f8",
+  "generator_commit_sha_note": "Commit on aaron/issue68-prompt-v02 (PR #185, round-1 head) at the time of generation. PR #185 merged into main as a8db50de182d5cc3a96401902b36e9133b0030bb on 2026-05-06; the post-merge generator state is logically equivalent (only post-generation review tweaks).",
+  "generator_source_sha256": "d257cb8b20c53c20af8ece5a75b828089d320d4faca44090fb4adeb6c3281632",
+  "authoring_contract_sha256": "dd037caee6dd57ee2201199801a09c87a0fbff2fe9111d0ee63aa106a0071786",
+  "source_digest_note": "SHA-256 of scripts/generate_scenarios.py and docs/knowledge/generated_scenario_authoring_and_ground_truth.md as of generator_commit_sha. Re-derivable with: 'git cat-file blob 8be6929:<path> | sha256sum'.",
   "support_data": "docs/knowledge/scenario_generation_support.json",
   "handcrafted_corpus_size": 21,
   "scenarios_emitted": [
