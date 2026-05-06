@@ -82,22 +82,25 @@ and getting a fresh review.
 5. **Internal contradictions** — gas-rationale text and labeled fault code
    disagree (502/SGT-GEN-005, 503/SGT-GEN-001, 505/SGT-GEN-001).
 
-**Promotion-eligible subset:** the 5 `accept_with_edits` rows
-(`first_review_20260502/SGT-GEN-001`, `first_review_20260502/SGT-GEN-004`,
-`first_review_20260503/SGT-GEN-004`, `v02_first_review_20260505/SGT-GEN-003`,
-`v02_first_review_20260505/SGT-GEN-004`) are candidates for the canonical
-`data/scenarios/` corpus once the bounded edits in the CSV's `required_edit`
-column are applied with provenance retained (`source_type: generated`, batch
-metadata preserved, **and** `nearest_handcrafted_comparator.scenario_file`
-updated to the reviewer-selected comparator where it diverges from the
-embedded one — see CSV columns `nearest_handcrafted_scenario_id` vs
-`nearest_handcrafted_embedded`; all 5 promotion-eligible rows have a
-divergence that must be reconciled before promotion). At 5 promotions, the canonical
-floor moves from 31 → 36 — **insufficient to clear the issue #55 stretch goal
-of 50+ on its own.** Promotion lives in a separate PR per the issue #55 lane;
-no generated scenario is moved into top-level `data/scenarios/` by this PR.
+**Promotion outcome (this PR):** all 5 `accept_with_edits` rows have been
+promoted into top-level `data/scenarios/` with their bounded edits applied
+and provenance retained (`source_type: generated`, batch metadata preserved,
+`nearest_handcrafted_comparator.scenario_file` updated to the reviewer-
+selected comparator, and a `provenance.promotion` block recording the
+specific edits applied). The canonical corpus moves 31 → 36.
 
-**Recommendation for issue #55:** generated-scenario promotion alone cannot
-hit 50; combine with a hand-crafted batch of ≥14 new scenarios. Alternatively,
-defer #55 per its `post-class-defer` label and ship at 31 + 5 = 36 once the
-edits land in a follow-up PR.
+| Generated source | Promoted file | Canonical id |
+|---|---|---|
+| `first_review_20260502/SGT-GEN-001` | `data/scenarios/fmsr_07_normal_dga_confirmation.json` | SGT-031 |
+| `first_review_20260502/SGT-GEN-004` | `data/scenarios/iot_07_oil_temp_safe_range_check.json` | SGT-032 |
+| `first_review_20260503/SGT-GEN-004` | `data/scenarios/iot_08_winding_temp_safe_limit_check.json` | SGT-033 |
+| `v02_first_review_20260505/SGT-GEN-003` | `data/scenarios/wo_07_thermal_threshold_corrective_order.json` | SGT-034 |
+| `v02_first_review_20260505/SGT-GEN-004` | `data/scenarios/iot_09_pinned_oil_temp_check.json` | SGT-035 |
+
+The 10 `reject_duplicate` rows stay in this directory only — they are not
+promoted, and their `disposition_2026-05-06.csv` rows retain
+`promotion_decision=reject`.
+
+**#55 status after this promotion:** canonical floor is now 36, **still
+short of #55's 50+ stretch goal.** Either combine with a hand-crafted batch
+of ≥14 new scenarios, or defer #55 per its `post-class-defer` label.

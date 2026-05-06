@@ -1,0 +1,66 @@
+{
+  "id": "SGT-033",
+  "type": "IoT",
+  "text": "Transformer T-005 is operating near peak load. Check the winding temperature and determine if it is within safe limits.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer should report the latest winding-temperature reading with unit, compare it to a safe limit, and summarize the result — all from actual tool output.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.list_sensors",
+    "iot.get_sensor_readings"
+  ],
+  "domain_tags": [
+    "IoT"
+  ],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "decisive_intermediate_values": {
+      "sensor_id": "winding_temp_top_c"
+    },
+    "final_value": {
+      "threshold_comparison": "agent must report whether the latest winding_temp_top_c reading is within safe limits, based on actual sensor data"
+    },
+    "acceptance_criteria": [
+      "agent discovers the available sensors via iot.list_sensors before retrieving readings",
+      "agent retrieves winding_temp_top_c readings for T-005 via iot.get_sensor_readings",
+      "agent compares the actual reading to a stated safe limit",
+      "agent reports the resulting status"
+    ],
+    "must_include": [
+      "sensor_value_with_unit",
+      "threshold_comparison",
+      "status_summary"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-04T03:54:47.760089+00:00",
+    "batch_id": "first_review_20260503",
+    "manual_cleanup": false,
+    "promotion": {
+      "promoted_from": "data/scenarios/generated/first_review_20260503/SGT-GEN-004.json",
+      "disposition_csv": "data/scenarios/generated/disposition_2026-05-06.csv",
+      "applied_edits": [
+        "Added iot.list_sensors as the discovery step before iot.get_sensor_readings — both in expected_tools and in ground_truth.ideal_tool_sequence.",
+        "Dropped fabricated decisive_intermediate_values.winding_temp_top_c='80' (this was the fixture max, not a typical reading; T-005 winding_temp_top_c: min=21.2, max=80.0, mean=50.4 in data/processed/sensor_readings.csv).",
+        "Pinned sensor_id='winding_temp_top_c' so the rubric can verify the agent picked the right sensor without a deterministic numeric ground truth.",
+        "Updated nearest_handcrafted_comparator from iot_01_list_transformer_sensors (SGT-001) to iot_04_load_current_overload_check (SGT-012) per reviewer-selected comparator."
+      ]
+    }
+  },
+  "family": "IOT_SENSOR_ANALYSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-012",
+    "scenario_file": "data/scenarios/iot_04_load_current_overload_check.json",
+    "similarity_basis": "both ask for a point-in-time threshold check on a single transformer sensor.",
+    "novelty_note": "different sensor (winding_temp_top_c vs load_current_a) on the same asset; same single-shot threshold-check shape.",
+    "nearest_match_weak": false
+  }
+}

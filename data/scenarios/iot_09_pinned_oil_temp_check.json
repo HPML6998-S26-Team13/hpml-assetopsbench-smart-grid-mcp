@@ -1,0 +1,66 @@
+{
+  "id": "SGT-035",
+  "type": "IoT",
+  "text": "Transformer T-004 is operating near peak capacity. Check if its oil temperature is within normal range.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer should report the latest oil-temperature reading with unit, compare it to a documented normal range, and summarize the result — all from actual tool output.",
+  "asset_id": "T-004",
+  "expected_tools": [
+    "iot.list_sensors",
+    "iot.get_sensor_readings"
+  ],
+  "domain_tags": [
+    "IoT"
+  ],
+  "difficulty": "easy",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "iot.list_sensors",
+      "iot.get_sensor_readings"
+    ],
+    "decisive_intermediate_values": {
+      "sensor_id": "oil_temp_c"
+    },
+    "final_value": {
+      "threshold_comparison": "agent must report whether the latest oil_temp_c reading is within a documented normal range, based on actual sensor data"
+    },
+    "acceptance_criteria": [
+      "agent discovers the available sensors via iot.list_sensors before retrieving readings",
+      "agent retrieves oil_temp_c readings for T-004 via iot.get_sensor_readings",
+      "agent compares the actual reading to a stated normal range",
+      "agent reports the resulting status"
+    ],
+    "must_include": [
+      "sensor_value_with_unit",
+      "threshold_comparison",
+      "status_summary"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:45:06.796101+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false,
+    "promotion": {
+      "promoted_from": "data/scenarios/generated/v02_first_review_20260505/SGT-GEN-004.json",
+      "disposition_csv": "data/scenarios/generated/disposition_2026-05-06.csv",
+      "applied_edits": [
+        "Added iot.list_sensors as the discovery step before iot.get_sensor_readings — both in expected_tools and in ground_truth.ideal_tool_sequence (the v0.2 prompt fix pinned sensor_id but did not add the discovery step).",
+        "Dropped fabricated final_value.sensor_value_with_unit='70 deg C' and final_value.status_summary='normal operation' (T-004 oil_temp_c never reaches 70 in data/processed/sensor_readings.csv: min=13.9, max=69.8, mean=45.1).",
+        "Kept v0.2's decisive_intermediate_values.sensor_id='oil_temp_c' pin so the rubric verifies the agent picked the right sensor.",
+        "Updated nearest_handcrafted_comparator from iot_01_list_transformer_sensors (SGT-001) to iot_04_load_current_overload_check (SGT-012) per reviewer-selected comparator."
+      ]
+    }
+  },
+  "family": "IOT_SENSOR_ANALYSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-012",
+    "scenario_file": "data/scenarios/iot_04_load_current_overload_check.json",
+    "similarity_basis": "both ask for a point-in-time threshold check on a single transformer sensor.",
+    "novelty_note": "different asset (T-004) and different sensor (oil_temp_c vs load_current_a); v0.2 prompt fix pinned the sensor explicitly.",
+    "nearest_match_weak": false
+  }
+}
