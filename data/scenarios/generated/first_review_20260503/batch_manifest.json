@@ -1,0 +1,46 @@
+{
+  "batch_id": "first_review_20260503",
+  "batch_status": "inspection_only",
+  "batch_status_note": "Ground truth values are model-asserted, not validated against actual repo data fixtures or MCP tool outputs. Do NOT use these scenarios as benchmark inputs. See README.md in this directory for the full audit (5 issues across 5 scenarios per Alex's #178 review).",
+  "reproducibility_caveat": "The 'seed' field on each invocation controls only the generator's RNG for context/template selection. It is NOT passed to litellm.completion(), and the model runs at temperature=0.7, so re-running with the same seed will produce different scenario text. The committed SGT-GEN-NNN.json files plus the family/seed/model fields below capture what produced this batch; they do not let a re-runner re-derive the exact text from seed alone.",
+  "created_at": "2026-05-04T03:55:01.227687+00:00",
+  "last_updated_at": "2026-05-04T03:55:01.227687+00:00",
+  "prompt_version": "v0.1",
+  "knowledge_plugin_version": "0eacec24441e",
+  "generator_script": "scripts/generate_scenarios.py",
+  "support_data": "docs/knowledge/scenario_generation_support.json",
+  "handcrafted_corpus_size": 21,
+  "scenarios_emitted": [
+    "SGT-GEN-001",
+    "SGT-GEN-002",
+    "SGT-GEN-003",
+    "SGT-GEN-004",
+    "SGT-GEN-005"
+  ],
+  "invocations": [
+    {
+      "started_at": "2026-05-04T03:55:01.227687+00:00",
+      "model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+      "temperature": 0.7,
+      "seed": 42,
+      "families_requested": [
+        "FMSR_DGA_DIAGNOSIS",
+        "TSFM_RUL_FORECAST",
+        "WO_CREATION",
+        "IOT_SENSOR_ANALYSIS",
+        "MULTI_DOMAIN_INCIDENT"
+      ],
+      "n_per_family": 1,
+      "scenarios_emitted": [
+        "SGT-GEN-001",
+        "SGT-GEN-002",
+        "SGT-GEN-003",
+        "SGT-GEN-004",
+        "SGT-GEN-005"
+      ],
+      "starting_scenario_id": "SGT-GEN-001",
+      "dry_run": false,
+      "append": false
+    }
+  ]
+}
