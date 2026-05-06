@@ -388,6 +388,20 @@ That common artifact contract is one of the paper's quiet systems contributions.
 Without it, transport experiments, orchestration experiments, and mitigation
 reruns would each tend to invent their own logging shape, making it impossible
 to join scenario-level evidence, judge outputs, and profiling bundles later.
+
+The anonymous reviewer artifact is hosted at
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact, with
+Croissant metadata at
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/resolve/main/croissant.json.
+The OpenReview Code URL is
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/tree/main/code.
+The hosted artifact snapshot is
+`881f9f27fa216519f4af54336323609be31ae486`; it records the package source
+snapshot, anonymous executable-code snapshot, artifact import SHA, evidence
+capture floor SHA, CC BY 4.0 artifact license, MIT code license, file manifest,
+provenance notes, and validation notes. The final submission should also record
+the final paper PDF checksum and OpenReview full-submission URL once those
+exist.
 By forcing all lanes through one benchmark-facing directory and metadata shape,
 the repo turns "can we compare these conditions honestly?" into a tractable
 question instead of a manual forensics exercise.

@@ -10,6 +10,26 @@
   context/repair/decoding ablations, and hosted WatsonX 70B variants, with
   cohort TSV manifests and a catalog for runner scheduling.
 
+### Changed
+
+- Moved 9 superseded/completed docs into
+  `docs/archive/` with archive frontmatter explaining what each was superseded
+  by: `aob_pr_preread_notes.md` (pair session occurred + AOB PR #34 merged),
+  `compute_plan.md` (superseded by `execution_plan.md` + `insomnia_runbook.md`
+  + `gcp_fallback.md` + `runbook.md`), `lane2_int8_kv_status.md` (Lane 2 INT8/KV
+  phase complete; #29/#30 closed), `replay_phase_analysis.md` (Apr 27
+  investigation closed), `scenario_realism_validation.md` (superseded by
+  `scenarios_021_030_grounding.md` + `dga_realism_statistical_validation.md`),
+  plus `docs/archive/2026-04-24-aat-runner.md` (AAT runner shipped),
+  `docs/archive/aob-extraction.md` + `_spec.md` + `_deferred.md` (AOB extraction
+  Phase 0–3 complete, IBM-upstream PR work continues under AOB #27). Updated
+  all live references in `README.md`, `docs/README.md`, `docs/runbook.md`,
+  `docs/insomnia_runbook.md`, `docs/gcp_fallback.md`, `docs/project_synopsis.md`,
+  `docs/scenarios_021_030_grounding.md`, `docs/dga_realism_statistical_validation.md`,
+  `docs/knowledge/generated_scenario_authoring_and_ground_truth.md`,
+  `docs/neurips_overleaf_transfer_plan.md` to point at `archive/`. Historical
+  CHANGELOG mentions kept verbatim.
+
 ## 2026-05-04
 
 ### Changed
@@ -177,7 +197,7 @@
   `planning/2026-04-28_meeting_notes.md`,
   `planning/2026-04-28_post_meeting_action_plan.md`,
   `planning/2026-04-28_dhaval_shuxin_meeting_notes.md`,
-  `docs/plans/aob-extraction.md`, `docs/plans/aob-extraction_spec.md` —
+  `docs/archive/aob-extraction.md`, `docs/archive/aob-extraction_spec.md` —
   meeting notes now point at the GitHub Project board for current task
   status; plan docs point at the personal-repo coordination dir; CLAUDE.md
   documents the move and the new cross-repo location for future agents.
@@ -215,7 +235,7 @@
   the batch. Empty `prompts` and `trials < 1` rejected with
   `ValueError` before any MCP server is constructed.
 - D5 (cross-branch scenario validation) and D6 (team-AaT batch-mode
-  port) closed in `docs/plans/aob-extraction_deferred.md`.
+  port) closed in `docs/archive/aob-extraction_deferred.md`.
 - Branches local-only on fork; not pushed to `origin/eggrollofchaos`.
   Phase 4 (upstream PR(s) to `IBM/AssetOpsBench`) explicitly deferred.
 
@@ -643,11 +663,11 @@ re-run; v0 baseline preserved at `reports/realism_statistical_v0.{md,json}`.
   actual workload. Cell A/B/C behavior is unchanged (replay still fires).
   Cell Y/Z get an explicit "SKIPPED" message and rely on main-loop profiling
   for coverage. Resolves `pm/backlog.md` 2026-04-27 pin (c). Full design
-  rationale in `docs/replay_phase_analysis.md`.
+  rationale in `docs/archive/replay_phase_analysis.md`.
 
 ### Documentation
 
-- New `docs/replay_phase_analysis.md` — two-question investigation of the
+- New `docs/archive/replay_phase_analysis.md` — two-question investigation of the
   vLLM replay phase: (Q1) "first prefill repeats on warmup" is intentional
   steady-state capture by design; (Q2) replay-cell-awareness resolved by
   Option 1 — skip replay for non-AaT cells.
@@ -656,7 +676,7 @@ re-run; v0 baseline preserved at `reports/realism_statistical_v0.{md,json}`.
   fairness-contract caveat. Includes paper-ready paragraph with the
   interpreter-overhead-vs-model-time argument and TODOs for a strict-parity
   ablation.
-- New `docs/plans/aob-extraction.md` + companion `docs/plans/aob-extraction_spec.md`
+- New `docs/archive/aob-extraction.md` + companion `docs/archive/aob-extraction_spec.md`
   — 4-phase plan + spec for extracting Smart Grid Bench artifacts from the
   team repo into Alex's AssetOpsBench fork (`eggrollofchaos/AssetOpsBench`)
   with eventual upstream PR(s) to `IBM/AssetOpsBench`. Phase 1 covers
@@ -1357,7 +1377,7 @@ re-run; v0 baseline preserved at `reports/realism_statistical_v0.{md,json}`.
 - Meeting notes from Apr 1 team sync, roadmap with timeline and
   work distribution, team roles documented — #91, #92 closed (Alex)
 - NeurIPS framing and scenario count update (Alex)
-- Compute plan at `docs/compute_plan.md`: GPU needs per phase,
+- Compute plan at `docs/archive/compute_plan.md`: GPU needs per phase,
   Insomnia vs GCP decision framework, 4-week hardware map —
   #96 closed (Aaron)
 - Overleaf set up with problem statement, shared with Dhaval —

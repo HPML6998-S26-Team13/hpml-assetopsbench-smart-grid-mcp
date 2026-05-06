@@ -457,16 +457,18 @@ persistence + budget tracking.
 recipe): [insomnia_runbook.md](insomnia_runbook.md). Still relevant for
 the Apr 26-28 captures and for Insomnia returns post-CVE-fix.
 
-**Compute strategy** (which GPU for which phase, Insomnia vs GCP, budget
-math): [compute_plan.md](compute_plan.md).
+**Historical compute strategy** (which GPU for which phase, Insomnia vs GCP,
+budget math): [compute_plan.md](archive/compute_plan.md). Current execution
+guidance lives in `execution_plan.md`, `gcp_fallback.md`, `insomnia_runbook.md`,
+and this runbook.
 
 **WandB schema** (canonical field names used in `benchmarks/cell_<X>/config.json`
 and `summary.json`, including the new `vllm_extra_args` from PR #129 and
 `gpu_type` from PR #145): [wandb_schema.md](wandb_schema.md).
 
-**Lane 2 INT8 + KV-cache decision evidence** (smoke jobs `8979532` /
+**Historical Lane 2 INT8 + KV-cache decision evidence** (smoke jobs `8979532` /
 `8979660`, why `--enable-prefix-caching` ships and `--kv-cache-dtype fp8`
-+ INT8 are deferred): [lane2_int8_kv_status.md](lane2_int8_kv_status.md).
++ INT8 are deferred): [lane2_int8_kv_status.md](archive/lane2_int8_kv_status.md).
 
 **Validation log** (per-canonical-capture run IDs, WandB URLs, artifact
 paths, what each run actually proves): [validation_log.md](validation_log.md).

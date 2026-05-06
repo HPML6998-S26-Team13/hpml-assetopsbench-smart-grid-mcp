@@ -176,7 +176,7 @@ WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
 - [x] Research proposal drafted and shared with mentor via Overleaf; mentor endorsed NeurIPS 2026 Datasets & Benchmarks track
 - [x] GitHub repo scaffolded, WandB team created, **repo now public** (Apr 7)
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
-- [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/compute_plan.md`)
+- [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/archive/compute_plan.md`)
 - [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end - 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/reference/watsonx_access.md`)
 - [x] Data pipeline + tracked public-safe processed datasets landed (`data/processed/` with synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, and sensor readings - development-ready and safe to publish)
 - [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast, anomaly detection, work-order CRUD)

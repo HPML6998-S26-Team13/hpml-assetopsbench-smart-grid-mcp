@@ -1,5 +1,7 @@
 # AaT Runner (Cells A + B) Implementation Plan
 
+*Archived: 2026-05-05 — plan complete. `scripts/aat_runner.py` shipped and is the canonical AAT runner; #104 closed. Plan content preserved as historical record of the AAT runner build.*
+
 > Step-by-step build plan for issue #104. Each task has tests, code, and a single commit. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Ship `scripts/aat_runner.py` — a thin wrapper over the OpenAI Agents SDK with AOB's system prompt verbatim — wired to Cells A + B of Experiment 1 via two configs, proven by WatsonX 70B smoke runs on SGT-009.

@@ -4,6 +4,8 @@
 *Owner: Aaron Fan (af3623)*
 *Issues: [`#29`](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/29), [`#30`](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp/issues/30)*
 
+*Archived: 2026-05-05 — Lane 2 INT8/KV optimization phase complete; #29 and #30 closed. Cell C optimization bundle final answers now live in `docs/experiment_matrix.md` and `docs/experiment1_capture_plan.md`. Cell D revival hint preserved as a side-note in `Final_Project/notes/Notes.md` (personal repo).*
+
 Defensible answer to "what optimizations does Cell C bundle?" The Experiment 1
 capture plan ([`experiment1_capture_plan.md`](experiment1_capture_plan.md)) calls out three
 optimization tasks that feed Cell C:

@@ -4,6 +4,8 @@
 *Last updated: 2026-04-11*  
 *Owner: Alex Xin*
 
+*Archived: 2026-05-05 — superseded by `docs/scenarios_021_030_grounding.md` (canonical scenario grounding for SGT-021..SGT-030 via PR #175) and `docs/dga_realism_statistical_validation.md` (canonical DGA realism methodology). Issue #60 closed; the early-Apr realism note is preserved as historical context for the validation framework's evolution.*
+
 This note is the concrete realism-validation pack for issue #60. Its job is to
 turn "these scenarios are structurally valid" into a short, reviewable set of
 real-world transformer-maintenance questions for Dhaval.

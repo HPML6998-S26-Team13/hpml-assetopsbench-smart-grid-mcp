@@ -29,7 +29,7 @@ Completed review slices so far:
    - `benchmarks/README.md`
    - `data/README.md`
    - `mcp_servers/README.md`
-   - `docs/compute_plan.md`
+   - `docs/archive/compute_plan.md`
    - `docs/reference/watsonx_access.md`
 3. Personal repo live planning/docs slice
    - `notes/current_team_status.md`
@@ -439,7 +439,7 @@ Batch C - team repo live docs and planning surfaces
   Task: if Theme D policy requires removal/untracking, remove restricted-derived processed artifacts from Git tracking and update ignore rules accordingly. If Theme D policy is `regenerate public-safe outputs`, run the updated generation/build scripts and commit the resulting public-safe files to `data/processed/`.
   Acceptance: if removal/untracking is the chosen policy, `git ls-files data/processed/` no longer shows restricted-derived tracked files after the change and `git check-ignore` confirms the ignore rule is in place. If regeneration is the chosen policy, `git ls-files data/processed/` shows only the newly generated public-safe outputs after the change. If the Theme D decision says git-history purge is required, this plan must explicitly stop at forward-state cleanup and hand off to a separate approved history-rewrite flow before claiming the repo is fully clean, with that handoff explicitly documented in the remediation PR body.
 
-- [ ] `docs/compute_plan.md`
+- [ ] `docs/archive/compute_plan.md`
   Task: remove dead references and make cluster instructions teammate-portable and scheduler-accurate.
   Acceptance: compute instructions can be followed by any teammate without personal-path or stale-script failures.
 

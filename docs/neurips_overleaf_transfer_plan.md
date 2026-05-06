@@ -90,7 +90,7 @@ Source:
 
 - `docs/neurips_draft.md` section `2. Benchmark Extension`
 - `docs/data_pipeline.tex`
-- `docs/scenario_realism_validation.md`
+- `docs/archive/scenario_realism_validation.md`
 - `docs/knowledge/generated_scenario_authoring_and_ground_truth.md`
 
 Transfer:

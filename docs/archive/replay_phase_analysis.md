@@ -5,6 +5,8 @@
 1. *Why does "first prefill repeat on warmup" happen at all?*
 2. *Should the replay phase be cell-aware (PE for Cell Y, Verified PE for Cell Z) or stay AaT-only?*
 
+*Archived: 2026-05-05 — investigation closed (drafted Apr 27-29). Findings on first-prefill-repeat behavior and AaT-only scope decision are baked into the canonical Cell A/B/C runner code under `scripts/aat_runner.py` and `scripts/run_experiment.sh`. No active follow-up.*
+
 ## Where the replay phase lives
 
 | File | Lines | Role |
@@ -127,4 +129,4 @@ or replaced with the deferred Option-2 follow-up:
 
 > [ ] (Future) Add per-cell `REPLAY_RUNNER` config knob if cell-aware replay
 > traces become useful. Today, replay is skipped for non-AaT cells; main-loop
-> profiling covers Y/Z. Source: `docs/replay_phase_analysis.md`.
+> profiling covers Y/Z. Source: `docs/archive/replay_phase_analysis.md`.

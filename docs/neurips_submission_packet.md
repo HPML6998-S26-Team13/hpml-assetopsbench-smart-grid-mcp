@@ -1,6 +1,6 @@
 # NeurIPS 2026 Submission Packet
 
-*Last updated: 2026-05-05*
+*Last updated: 2026-05-06*
 *Owner: Alex Xin*
 *Issues: #5, #39, #47, #48, #88, #181, #182*
 
@@ -16,7 +16,7 @@ this submission lane.
 |---|---|
 | Venue | NeurIPS 2026 Evaluations & Datasets Track (formerly Datasets & Benchmarks) |
 | Abstract deadline | 2026-05-04 23:59 AOE |
-| Abstract submission status | External OpenReview receipt not stored in repo; verify receipt before full-paper upload. |
+| Abstract submission status | Submitted on OpenReview: https://openreview.net/forum?noteId=scKKXyNaQG |
 | Full-paper deadline | 2026-05-06 23:59 AOE |
 | Overleaf project | https://www.overleaf.com/project/69f5a380e638a31066dc0bd1 |
 | Template status | Official NeurIPS 2026 template ingested in Overleaf Git commit `7e361de` |
@@ -25,6 +25,42 @@ this submission lane.
 | LaTeX mode | anonymous `eandd` via `\usepackage[eandd]{neurips_2026}` |
 | Checklist | `checklist.tex` added to Overleaf; content still needs final answers |
 | Overleaf transfer plan | `docs/neurips_overleaf_transfer_plan.md` |
+| Reviewer artifact URL | https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact |
+| OpenReview Code URL | https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/tree/main/code |
+| Croissant metadata URL | https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/resolve/main/croissant.json |
+| Hosted artifact SHA | `881f9f27fa216519f4af54336323609be31ae486` |
+| Team repo SHA before artifact-ledger doc update | `c5e051ee751d3876d543395dc4887b3d7f7791d3` |
+| Artifact source snapshot SHA | `9dece6a16daa9b68398d140993e3b02d4dcd83e4` |
+| Anonymous code snapshot SHA | `64ce4792ab83ebebbc6c1c24013ed177c667ddef` |
+| Artifact import SHA | `4b3523cca79aa119ab7fccb51e4ce9ce0f868749` |
+| Evidence capture floor SHA | `1913c6e4703425f735d8cb8297cb890ba66bbeff` |
+| Artifact license | CC BY 4.0 for reviewer artifact data/docs/scenarios; project code remains MIT |
+| Final PDF SHA-256 | Pending final PDF export |
+| Full submission URL | Pending final full-paper upload |
+
+## Reviewer Artifact Record
+
+The anonymous reviewer artifact is hosted on Hugging Face at
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact. It
+contains the 31-scenario catalog, canonical scenario JSON files, negative
+schema fixtures, paper-grade evidence registry, 37-row-group summary tables,
+2,420 compact judge-score rows, the 12-row manual judge audit, a file manifest,
+provenance notes, validation notes, manual Croissant metadata, and an
+anonymized executable code package under
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/tree/main/code.
+
+Use the artifact SHA
+`881f9f27fa216519f4af54336323609be31ae486` as the hosted snapshot identifier in
+the submission ledger. The artifact package was assembled from source snapshot
+`9dece6a16daa9b68398d140993e3b02d4dcd83e4`, includes the artifact import commit
+`4b3523cca79aa119ab7fccb51e4ce9ce0f868749`, includes anonymous executable code
+from team snapshot `64ce4792ab83ebebbc6c1c24013ed177c667ddef`, and traces the
+main evidence captures to floor SHA `1913c6e4703425f735d8cb8297cb890ba66bbeff`.
+
+OpenReview Code URL to use during double-blind review:
+https://huggingface.co/datasets/garn-garn/smartgridbench-review-artifact/tree/main/code.
+Do not point reviewers at the non-anonymous Team 13 GitHub repo during
+double-blind review.
 
 ## Working Title
 

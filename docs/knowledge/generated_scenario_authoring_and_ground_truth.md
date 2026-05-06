@@ -7,7 +7,7 @@
 
 This document is the authoring contract for Problem Statement B generated
 scenarios. It turns Dhaval's no-hint guidance, the scenario realism report
-(`docs/scenario_realism_validation.md`), and the PS B evaluation methodology
+(`docs/archive/scenario_realism_validation.md`), and the PS B evaluation methodology
 (`docs/ps_b_evaluation_methodology.md`) into concrete rules that the generator
 and the validator (Akshat, issue #53) can apply directly.
 
@@ -332,5 +332,5 @@ before proceeding to the four-dimension rating in the evaluation methodology.
 | `data/knowledge/transformer_standards.json` | Source of IEC/IEEE facts; use to verify `decisive_intermediate_values` |
 | `docs/knowledge/scenario_generation_support.json` | Scenario family targets, operational context profiles, DGA trend templates, WO playbook |
 | `docs/ps_b_evaluation_methodology.md` | Validation workflow, four-dimension rating, acceptance criteria for the batch |
-| `docs/scenario_realism_validation.md` | Grounding for decision horizons, WO minimum fields, operating context must-haves |
+| `docs/archive/scenario_realism_validation.md` | Grounding for decision horizons, WO minimum fields, operating context must-haves |
 | `data/scenarios/` | Hand-crafted reference set; source of nearest-comparator IDs |

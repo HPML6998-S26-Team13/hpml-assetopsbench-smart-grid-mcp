@@ -4,6 +4,8 @@
 
 *Last updated: 2026-04-30 (D5 + D6 marked resolved; Phase 3c landed as `OpenAIAgentRunner.run_batch()`, post-v1-review hardening at `aob/sg-aat-batch-mode @ 6872cea`).*
 
+*Archived: 2026-05-05 — AOB extraction phase wound down. AOB PR #34 merged 2026-05-03; org-fork phase branches pushed; IBM-upstream PR work continues under AOB #27 (Cut scope: domain + SG_DATA_DIR + 30 scenarios + IEC/DGA correctness). Any Phase 4 deferred work that resumes will be tracked via fresh issues, not this registry. Preserved as historical record of what was deferred during Phase 0–3 execution.*
+
 ---
 
 ## Summary
@@ -213,7 +215,7 @@ Two reconciliation paths:
 
 ## D11 — Per-cell `REPLAY_RUNNER` config knob
 
-**What:** Currently `run_experiment.sh:1130` skips replay for non-AaT cells. If cell-aware replay traces become useful (per `docs/replay_phase_analysis.md` § Implementation sketch), add an opt-in `REPLAY_RUNNER=match-cell|aat|none` config knob so PE/Verified PE cells can produce per-cell-representative torch traces.
+**What:** Currently `run_experiment.sh:1130` skips replay for non-AaT cells. If cell-aware replay traces become useful (per `docs/archive/replay_phase_analysis.md` § Implementation sketch), add an opt-in `REPLAY_RUNNER=match-cell|aat|none` config knob so PE/Verified PE cells can produce per-cell-representative torch traces.
 
 **Gating:** None — design clarity question; nobody is currently asking for cell-aware replay traces.
 
@@ -251,7 +253,7 @@ Two reconciliation paths:
    - AOB fork `~/coding/AssetOpsBench` (check current branch — `aob/sg-{evaluation-adapter,domain-port,orchestration-runners}`)
 3. Verify last good state: `git log --oneline -3` on each branch.
 4. For ANY deferred item that needs LLM access, check Watsonx/Insomnia status before starting.
-5. Update `pm/backlog.md` AOB-extraction pin and the relevant phase status block in `docs/plans/aob-extraction.md` whenever a deferral resolves.
+5. Update `pm/backlog.md` AOB-extraction pin and the relevant phase status block in `docs/archive/aob-extraction.md` whenever a deferral resolves.
 
 ---
 
@@ -260,6 +262,6 @@ Two reconciliation paths:
 - Plan: [aob-extraction.md](aob-extraction.md)
 - Spec: [aob-extraction_spec.md](aob-extraction_spec.md)
 - Phase 1 parity report: `~/coding/AssetOpsBench/src/evaluation/adapters/parity_report.md` (on `aob/sg-evaluation-adapter` branch)
-- Replay-phase analysis (separate but related): `docs/replay_phase_analysis.md`
+- Replay-phase analysis (separate but related): `docs/archive/replay_phase_analysis.md`
 - Y-baseline 3.12 disclosure (separate but related): `docs/methods_python_version_disclosure.md`
 - Backlog pins: `pm/backlog.md` lines 5-9 (final 5×6 re-run + AOB-extraction-plan + replay knob + replay analysis)
