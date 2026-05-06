@@ -292,9 +292,11 @@ sbatch --mail-type=BEGIN,END,FAIL --mail-user="$MAIL_USER" \
 to have written a `latencies.jsonl` row before counting it as resumable.
 `SMARTGRID_FORCE_RERUN=1` overrides the skip and retries every trial.
 
-### 3.7 GCP A100 variant (canonical for new captures from 2026-05-03)
+### 3.7 GCP A100 variant (validated fallback)
 
-When Insomnia is unavailable or you need preemption-tolerant batching,
+Insomnia is the primary path again as of 2026-05-05 (see top-of-file
+status block); switch to this GCP path when Insomnia is unavailable,
+queue-saturated, or you need preemption-tolerant batching.
 spin up an A100 spot instance and run the *same* `scripts/run_experiment.sh`
 entry point. The serving stack, configs, and artifact layout are
 identical — `gpu_type` in `summary.json` records whether each run landed
@@ -443,7 +445,9 @@ diagnoses it.
 IDs + known limitations, sized for §3 System Design and the §infra
 paragraphs): [infra_profiling_serving_brief.md](infra_profiling_serving_brief.md).
 
-**GCP A100 path** — canonical for new captures from 2026-05-03 onward:
+**GCP A100 path** — validated fallback (proven during the 2026-05-03 → 05
+Insomnia CVE-fix downtime; now used when Insomnia is unavailable,
+queue-saturated, or for preemption-tolerant batching):
 [gcp_fallback.md](gcp_fallback.md). Day-to-day shape lives in §3.7
 above; this doc has spin-up + instance selection + preemption + artifact
 persistence + budget tracking.
