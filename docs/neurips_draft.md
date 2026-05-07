@@ -67,7 +67,7 @@ remain open.
 | System design | yes | final Cell C wording depends on Aaron's last fact bullet |
 | Experimental design | yes | keep follow-ons separate from core axes |
 | Results tables | yes as first-capture evidence | do not call repeat-rerun distribution final |
-| Failure taxonomy | yes | taxonomy counts are paper-backed; mitigation outcome rows pending |
+| Failure taxonomy | yes | taxonomy counts are paper-backed; mitigation outcome rows measured with mixed effects |
 | Limitations/reproducibility | yes | update after final scenario/rerun decisions |
 
 Use `docs/neurips_overleaf_transfer_plan.md` as the copy queue. The most useful
@@ -525,8 +525,10 @@ guard that detects unsupported finalization, then a recovery rung that gives
 the runner one bounded chance to repair missing evidence before final answer or
 work-order creation, then a structured fault/risk adjudication step that forces
 the runner to cite deciding tool evidence or refuse to finalize. The guard,
-recovery, and adjudication code paths are implemented; outcome claims wait for
-matched #66 reruns and judge rows.
+recovery, and adjudication code paths are implemented and measured in the
+post-PR175 #66 YS/ZS cohort. The result is mixed: the ladder improves
+accounting / refusal semantics and gives one bounded repair path, but it does
+not support a universal judge-score lift claim.
 
 ### 5. Evaluation and Analysis Plan
 
@@ -805,7 +807,7 @@ Keep the paper-writing lane tied to concrete repo outputs:
 | Failure taxonomy count figure | `results/metrics/failure_taxonomy_counts.csv` and `results/figures/failure_taxonomy_counts.svg` |
 | Failure stage heatmap | `results/metrics/failure_stage_cell_counts.csv` and `results/figures/failure_stage_cell_heatmap.svg` |
 | Mitigation priority table | `results/metrics/mitigation_run_inventory.csv` and `results/figures/mitigation_priority_table.svg` |
-| Mitigation before/after figure | `results/metrics/gcp_post175_mitigation_4tier_summary.csv`; `results/metrics/mitigation_before_after.csv` is a superseded post-PR180 diagnostic table |
+| Mitigation before/after figure | `results/metrics/mitigation_before_after.csv`, regenerated from `results/metrics/gcp_post175_mitigation_4tier_summary.csv` plus raw run metadata / latency logs / judge scores |
 | Manual judge audit table | `results/metrics/manual_judge_audit.csv` |
 | Recovery/adjudication mitigation spec | `docs/mitigation_recovery_adjudication.md` |
 | Artifact ledger table | `docs/validation_log.md` plus benchmark `summary.json` / `meta.json` references |

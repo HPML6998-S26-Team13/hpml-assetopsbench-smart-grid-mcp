@@ -52,7 +52,8 @@ Still pending before submission:
 - NeurIPS checklist answers
 - final references and citation cleanup
 - final scenario-count wording
-- final mitigation before/after disposition
+- final mitigation wording pass that preserves the measured mixed-effect
+  before/after result
 
 ## Copy Into Overleaf / Keep In Sync
 
@@ -188,14 +189,18 @@ Source:
 - `results/metrics/failure_taxonomy_counts.csv`
 - `results/figures/failure_taxonomy_counts.svg`
 - `results/figures/failure_stage_cell_heatmap.svg`
+- `results/metrics/mitigation_before_after.csv`
 
 Transfer:
 
 - Failure taxonomy class counts.
 - Evidence-resolution failure as the dominant paper discussion point.
-- Missing-evidence guard as implemented mitigation, with outcome rows pending.
+- Missing-evidence guard, retry/replan repair, and adjudication as the measured
+  post-PR175 #66 mitigation ladder, with mixed-effect outcome framing.
 
-Status: taxonomy ready; mitigation before/after rows pending.
+Status: taxonomy ready; mitigation before/after rows populated for the
+post-PR175 YS/ZS ladder. Keep claims to mixed effects rather than universal
+lift.
 
 ### Limitations and reproducibility
 

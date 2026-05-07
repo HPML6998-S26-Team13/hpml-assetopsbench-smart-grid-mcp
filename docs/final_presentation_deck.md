@@ -33,7 +33,7 @@ timed dry run.
 | Layout QA | pass with warnings | Artifact-tool checker: 0 errors / 7 padding or tight-text warnings; visual contact sheet reviewed. |
 | Build provenance | documented | `reports/build_notes/2026-05-03_final_presentation_smartgridbench_build.md` records the one-off artifact-tool command, integrity checks, and warning inventory. |
 | Scenario slide | gated | PR #156 is still open; keep 30 scenarios as the required floor, not a completed claim. |
-| Mitigation slide | gated | Treat as mitigation design unless before/after rerun rows land. |
+| Mitigation slide | ready | Post-PR175 before/after rows landed; keep the claim to mixed effects, not universal lift. |
 
 ## May 2 Deck Readiness
 
@@ -48,7 +48,7 @@ tables, source paths, and backup Q&A are in place. The remaining work is not
 | Transport result slide | draft-ready | caption as first six-trial capture |
 | Orchestration result slide | draft-ready | keep Self-Ask as follow-on, not core baseline |
 | Failure taxonomy slide | ready | figure placement and caption polish needed |
-| Mitigation ladder slide | draft-ready | before/after outcome rows pending |
+| Mitigation ladder slide | ready | post-PR175 before/after rows measured; mixed-effect framing |
 | Backup Q&A | draft-ready | add Cell D / 70B only if promoted before freeze |
 
 Recommended target: 10-12 minutes plus Q&A. If time compresses, keep Slides
@@ -401,19 +401,22 @@ Table:
 | Rung | Mitigation | Status |
 |---:|---|---|
 | 0 | Baseline PE-family runs | Captured |
-| 1 | Missing-evidence final-answer guard | Implemented, reruns pending |
-| 2 | Missing-evidence retry/replan guard | Implemented, reruns pending |
-| 3 | Explicit fault/risk adjudication step | Implemented, reruns pending |
+| 1 | Missing-evidence final-answer guard | Measured post-PR175 |
+| 2 | Missing-evidence retry/replan guard | Measured post-PR175 |
+| 3 | Explicit fault/risk adjudication step | Measured post-PR175 |
 
 Source:
 
 `docs/failure_visuals_mitigation.md`,
-`results/metrics/mitigation_run_inventory.csv`
+`results/metrics/mitigation_run_inventory.csv`,
+`results/metrics/mitigation_before_after.csv`
 
 Speaker note:
 
-"If reruns do not land, this remains an implemented mitigation-ladder design
-slide. If reruns land, we can promote it to a before/after result slide."
+"Post-PR175 reruns landed, so this can be a before/after result slide. Keep the
+claim narrow: the ladder improves accounting / refusal semantics and gives a
+bounded repair path, but the measured judge-score effects are mixed rather than
+a universal lift."
 
 ### Slide 12 - Reproducibility and Deliverables
 
