@@ -67,7 +67,7 @@ remain open.
 | System design | yes | final Cell C wording depends on Aaron's last fact bullet |
 | Experimental design | yes | keep follow-ons separate from core axes |
 | Results tables | yes as first-capture evidence | do not call repeat-rerun distribution final |
-| Failure taxonomy | yes | taxonomy counts are paper-backed; mitigation outcome rows pending |
+| Failure taxonomy | yes | taxonomy counts are paper-backed; mitigation outcome rows measured with mixed effects |
 | Limitations/reproducibility | yes | update after final scenario/rerun decisions |
 
 Use `docs/neurips_overleaf_transfer_plan.md` as the copy queue. The most useful
