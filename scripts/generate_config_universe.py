@@ -844,7 +844,7 @@ def write_readme(items: list[ConfigItem]) -> None:
         )
         note = {
             "local_smoke1x1_full": "one-scenario local 8B smoke for every local method row",
-            "local_all31x5_full": "full local 8B method cross-product over all 31 canonical scenarios",
+            "local_all31x5_full": "full local 8B method cross-product over the canonical scenario set",
             "local_generated5x5_full": "local 8B method cross-product over the latest reviewed generated-scenario batch",
             "mitigation_all31x5_full": "4-tier mitigation ladder crossed with every PE-family local method",
             "mitigation_generated5x5_full": "4-tier mitigation ladder over the latest reviewed generated-scenario batch",

@@ -30,7 +30,7 @@ fails, run the generator normally and inspect the resulting diff.
 |---|---:|---:|---|
 | `context_all31x3_full` | 60 | 6480 | 8K/16K/32K context ablations for every local method row |
 | `decoding_all31x3` | 14 | 1512 | temperature ablation on core local rows |
-| `local_all31x5_full` | 20 | 3600 | full local 8B method cross-product over all 31 canonical scenarios |
+| `local_all31x5_full` | 20 | 3600 | full local 8B method cross-product over the canonical scenario set |
 | `local_fmsr7_5x_full` | 20 | 800 | local 8B method cross-product on one canonical domain slice |
 | `local_generated5x5_full` | 20 | 500 | local 8B method cross-product over the latest reviewed generated-scenario batch |
 | `local_iot6_5x_full` | 20 | 900 | local 8B method cross-product on one canonical domain slice |
