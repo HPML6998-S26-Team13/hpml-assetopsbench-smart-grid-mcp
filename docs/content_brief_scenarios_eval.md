@@ -2,7 +2,7 @@
 
 *Last updated: 2026-05-06. Owner: Akshat (issue #42). Audience: Alex, for the paper's scenarios + eval sections.*
 
-This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in each bullet. Cross-checked against `evidence_registry.csv` (PR #188) and `scenario_scores.jsonl` on `team13/main@87a9b77` (post-PR191 disposition merge).
+This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in each bullet, all sourced from `team13/main@aa0aeee` (post-PR193 merge — `results/metrics/failure_taxonomy_current.csv` was added by PR #193 and the registry/judge artifacts come from PR #188). Sources by section: scenario counts from `data/scenarios/*.json` + `data/scenarios/generated/disposition_2026-05-06.csv` (PR #191); evidence counts from `results/metrics/evidence_registry.csv` (PR #188) + `results/metrics/scenario_scores.jsonl` (continuously updated, all paper-eligible rows on the PR #175 floor); failure-taxonomy counts from `results/metrics/failure_taxonomy_current.csv` (PR #193).
 
 ## Scenarios
 
@@ -28,7 +28,7 @@ This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in
 - **Models judged:** `openai/Llama-3.1-8B-Instruct` (1,835 paper-grade rows), `watsonx/meta-llama/llama-3-3-70b-instruct` (435), `openai/Llama-3.1-8B-Instruct-int8` (150).
 - **Pipeline entry:** `scripts/run_experiment.sh <config.env>` (Slurm-aware on Insomnia, Slurm-skipped on GCP). Configs in `configs/`. Resumable via `SMARTGRID_RUN_ID` + `SMARTGRID_RESUME` (PR #170).
 - **Artifacts per run:** `benchmarks/cell_<X>/raw/<run-id>/` with `meta.json`, `latencies.jsonl`, `harness.log`, `vllm.log` (if `LAUNCH_VLLM=1`), and one `<scenario>_t<n>.json` per scenario × trial. WandB run URL stamped in `meta.json` when `ENABLE_WANDB=1`.
-- **Compute provenance:** `gpu_type` in `summary.json` records Insomnia A6000 vs GCP A100 vs other (PR #145). Canonical 8B rows on Insomnia A6000 (Apr 26-28) + GCP A100 (`gcp_a100_final_20260503`).
+- **Compute provenance (paper-grade):** all paper-grade 8B rows are post-PR175 GCP A100 cohorts. The 6 paper-grade `cohort_id`s in `evidence_registry.csv` are `core15_broad`, `core16_extension`, `mitigation15_4tier`, `followon_extra15`, `watsonx70b_main15`, `watsonx70b_topup15` — every paper-grade run_name carries the `core15x5_post175_a100_*` / `core16_extension_post175_a100_*` / similar prefix. `gpu_type` in `summary.json` records the actual GPU (PR #145). **Historical / superseded** (do not cite as canonical): the Apr 26-28 Insomnia A6000 captures and `gcp_a100_final_20260503` are tracked in the registry as `status=superseded` under cohort `final6_legacy_a100_matrix` (11 rows) — preserved for provenance, not paper-eligible.
 
 ## Judge
 
