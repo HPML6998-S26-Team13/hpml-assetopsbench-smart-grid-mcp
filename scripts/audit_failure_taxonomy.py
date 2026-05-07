@@ -31,8 +31,11 @@ Subcommands:
                    augmented CSV plus
                    `data/audit/issue194_recurring_patterns.json` (also
                    committed) for the methodology paragraph, the
-                   Berkeley-mapping rule, the recurring-patterns
-                   section, and the v2->v3 tie-break-relabel callout.
+                   Berkeley-label tie-break rule, the failure-stage
+                   rule (separate from the Berkeley rule per
+                   `docs/failure_taxonomy_evidence.md:139-145` vs
+                   `:149-151`), the recurring-patterns section, and
+                   the v2->v3->v4 tie-break-relabel callout.
                    Reproducible: re-running render over committed
                    inputs is byte-identical to the committed doc.
 
@@ -426,11 +429,27 @@ def cmd_render(args: argparse.Namespace) -> int:
         out.append(methodology.get("body", ""))
         out.append("")
 
+    supersession = patterns_json.get("current_surface_supersession") or {}
+    if supersession:
+        out.append(
+            f"## {supersession.get('title', 'Current taxonomy surface and supersession')}"
+        )
+        out.append("")
+        out.append(supersession.get("body", ""))
+        out.append("")
+
     rule = patterns_json.get("berkeley_mapping_rule") or {}
     if rule:
         out.append(f"## {rule.get('title', 'Berkeley-label mapping rule')}")
         out.append("")
         out.append(rule.get("body", ""))
+        out.append("")
+
+    stage_rule = patterns_json.get("failure_stage_rule") or {}
+    if stage_rule:
+        out.append(f"## {stage_rule.get('title', 'Failure-stage rule')}")
+        out.append("")
+        out.append(stage_rule.get("body", ""))
         out.append("")
 
     out.append("## Decision counts")
@@ -492,28 +511,58 @@ def cmd_render(args: argparse.Namespace) -> int:
 
         relabels = patterns_json.get("tie_break_relabels") or {}
         if relabels.get("rows"):
-            out.append("## Tie-break relabels (v2 → v3)")
-            out.append("")
-            out.append(
-                "Six rows were relabeled in v3 to apply the team's tie-break rule "
-                "consistently (latest irreversible mistake). v2's labels reflected "
-                "the auditor's first-pass 'first irreversible mistake' reading; "
-                "v3 corrects this against `docs/failure_taxonomy_evidence.md:139-145`."
-            )
-            out.append("")
-            out.append(
-                "| cell | scenario | trial | v2 berkeley / stage | v3 berkeley / stage | rationale |"
-            )
-            out.append("|---|---|---:|---|---|---|")
-            for r in relabels["rows"]:
-                v2 = r["v2"]
-                v3 = r["v3"]
-                rationale = r["rationale"].replace("|", "\\|")
+            has_v4 = any("v4" in r for r in relabels["rows"])
+            if has_v4:
+                out.append("## Tie-break relabels (v2 → v3 → v4)")
+                out.append("")
                 out.append(
-                    f"| {r['cell']} | {r['scenario_id']} | {r['trial_index']} | "
-                    f"`{v2['berkeley']}` / `{v2['stage']}` | "
-                    f"`{v3['berkeley']}` / `{v3['stage']}` | {rationale} |"
+                    "Six rows where v2's first-pass labels needed re-evaluation. "
+                    "v3 changed the Berkeley labels per the latest-irreversible-mistake "
+                    "tie-break rule (correct) but also applied that rule to "
+                    "`failure_stage` (incorrect — stage uses earliest-unrecoverable "
+                    "per `docs/failure_taxonomy_evidence.md:149-151`). v4 keeps "
+                    "the v3 Berkeley relabels and re-evaluates each row's stage "
+                    "independently."
                 )
+                out.append("")
+                out.append(
+                    "| cell | scenario | trial | v2 berkeley / stage | v3 berkeley / stage | v4 berkeley / stage | rationale |"
+                )
+                out.append("|---|---|---:|---|---|---|---|")
+                for r in relabels["rows"]:
+                    v2 = r["v2"]
+                    v3 = r["v3"]
+                    v4 = r.get("v4", v3)
+                    rationale = r["rationale"].replace("|", "\\|")
+                    out.append(
+                        f"| {r['cell']} | {r['scenario_id']} | {r['trial_index']} | "
+                        f"`{v2['berkeley']}` / `{v2['stage']}` | "
+                        f"`{v3['berkeley']}` / `{v3['stage']}` | "
+                        f"`{v4['berkeley']}` / `{v4['stage']}` | {rationale} |"
+                    )
+            else:
+                out.append("## Tie-break relabels (v2 → v3)")
+                out.append("")
+                out.append(
+                    "Six rows were relabeled in v3 to apply the team's tie-break rule "
+                    "consistently (latest irreversible mistake). v2's labels reflected "
+                    "the auditor's first-pass 'first irreversible mistake' reading; "
+                    "v3 corrects this against `docs/failure_taxonomy_evidence.md:139-145`."
+                )
+                out.append("")
+                out.append(
+                    "| cell | scenario | trial | v2 berkeley / stage | v3 berkeley / stage | rationale |"
+                )
+                out.append("|---|---|---:|---|---|---|")
+                for r in relabels["rows"]:
+                    v2 = r["v2"]
+                    v3 = r["v3"]
+                    rationale = r["rationale"].replace("|", "\\|")
+                    out.append(
+                        f"| {r['cell']} | {r['scenario_id']} | {r['trial_index']} | "
+                        f"`{v2['berkeley']}` / `{v2['stage']}` | "
+                        f"`{v3['berkeley']}` / `{v3['stage']}` | {rationale} |"
+                    )
             out.append("")
 
     out.append("## Per-row audit table")
