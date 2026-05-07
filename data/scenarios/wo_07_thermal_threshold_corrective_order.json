@@ -1,0 +1,70 @@
+{
+  "id": "SGT-034",
+  "type": "WO",
+  "text": "T-003 substation main transformer temperature has exceeded threshold (severity: high) with spare procurement pending. Decide on maintenance and create a corrective work order, using historical fault context for the downtime estimate.",
+  "category": "Work Order Creation",
+  "characteristic_form": "A decision on work order creation with a derived priority and minimum playbook fields, using fault history to estimate downtime under a high-severity precondition.",
+  "asset_id": "T-003",
+  "expected_tools": [
+    "wo.list_fault_records",
+    "wo.estimate_downtime",
+    "wo.create_work_order"
+  ],
+  "domain_tags": [
+    "WO"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "wo.list_fault_records",
+      "wo.estimate_downtime",
+      "wo.create_work_order"
+    ],
+    "decisive_intermediate_values": {
+      "fault_type": "thermal",
+      "spare_status": "on_order",
+      "severity": "high"
+    },
+    "final_value": {
+      "work_order_type": "corrective",
+      "priority": "high",
+      "minimum_fields_from_playbook": true
+    },
+    "acceptance_criteria": [
+      "agent looks up T-003's historical fault records before estimating downtime",
+      "agent passes the prompt-stated severity ('high') into wo.estimate_downtime rather than guessing",
+      "agent creates a corrective work order at high priority with the minimum playbook fields"
+    ],
+    "must_include": [
+      "work_order_type",
+      "priority",
+      "minimum_fields_from_playbook"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.2",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-05T04:44:58.104378+00:00",
+    "batch_id": "v02_first_review_20260505",
+    "manual_cleanup": false,
+    "promotion": {
+      "promoted_from": "data/scenarios/generated/v02_first_review_20260505/SGT-GEN-003.json",
+      "disposition_csv": "data/scenarios/generated/disposition_2026-05-06.csv",
+      "applied_edits": [
+        "Pinned severity='high' explicitly in the prompt text and in decisive_intermediate_values. The v0.2 prompt fix added wo.list_fault_records before wo.estimate_downtime, but list_fault_records does not surface a severity field (data/processed/fault_records.csv schema has no severity/priority column — verified against mcp_servers/wo_server/server.py:94-128). Without an explicit severity in the prompt, estimate_downtime would have no source for its required severity argument.",
+        "Reordered ideal_tool_sequence so wo.list_fault_records is first (the v0.2 fix); kept it explicit in expected_tools.",
+        "Updated nearest_handcrafted_comparator from wo_04_fault_record_downtime_update (SGT-018) to wo_02_corrective_order_after_fault (SGT-008) per reviewer-selected comparator."
+      ]
+    }
+  },
+  "family": "WO_CREATION",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-008",
+    "scenario_file": "data/scenarios/wo_02_corrective_order_after_fault.json",
+    "similarity_basis": "both create a corrective work order downstream of a thermal incident on T-003.",
+    "novelty_note": "novel operational context: spare procurement pending (which constrains the downtime estimate) and a temperature-threshold trigger; v0.2 prompt fix introduced the list_fault_records precondition.",
+    "nearest_match_weak": false
+  }
+}

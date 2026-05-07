@@ -1,0 +1,74 @@
+{
+  "id": "SGT-031",
+  "type": "FMSR",
+  "text": "Transformer T-005 shows stable gas levels during routine monitoring. Confirm whether any fault is indicated and recommend the next monitoring step.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "A normal/no-fault confirmation with a routine-monitoring recommendation.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "domain_tags": [
+    "FMSR"
+  ],
+  "difficulty": "medium",
+  "ground_truth": {
+    "ideal_tool_sequence": [
+      "fmsr.get_dga_record",
+      "fmsr.analyze_dga"
+    ],
+    "decisive_intermediate_values": {
+      "iec_code": "N",
+      "final_sample_gases_ppm": {
+        "H2": 12.31,
+        "CH4": 8.03,
+        "C2H2": 0.17,
+        "C2H4": 2.07,
+        "C2H6": 0.71
+      },
+      "condition": "normal/background gas profile"
+    },
+    "final_value": {
+      "primary_fault": "Normal/no active fault",
+      "recommended_action": "Continue routine monitoring; no immediate inspection beyond the scheduled interval"
+    },
+    "acceptance_criteria": [
+      "agent identifies no active fault or an N/normal DGA profile",
+      "agent recommends continued routine monitoring or equivalent non-urgent follow-up",
+      "agent uses the background gas profile to justify the non-fault diagnosis"
+    ],
+    "must_include": [
+      "normal/no active fault",
+      "recommended monitoring action",
+      "background gas rationale"
+    ]
+  },
+  "provenance": {
+    "source_type": "generated",
+    "generator_prompt_version": "v0.1",
+    "knowledge_plugin_version": "0eacec24441e",
+    "generation_model": "watsonx/meta-llama/llama-3-3-70b-instruct",
+    "generation_date": "2026-05-03T03:25:40.482330+00:00",
+    "batch_id": "first_review_20260502",
+    "manual_cleanup": true,
+    "cleanup_notes": "Corrected generated ground truth from contradictory T3 diagnosis to N/normal based on the committed stable_normal prompt template and final-sample R1=0.056.",
+    "promotion": {
+      "promoted_from": "data/scenarios/generated/first_review_20260502/SGT-GEN-001.json",
+      "disposition_csv": "data/scenarios/generated/disposition_2026-05-06.csv",
+      "applied_edits": [
+        "Replaced fabricated decisive_intermediate_values.final_sample_gases_ppm with the actual T-005 DGA values from data/processed/dga_records.csv (h2=12.31, ch4=8.03, c2h2=0.17, c2h4=2.07, c2h6=0.71).",
+        "Dropped the fabricated R1/R2/R3 ratios — agent should derive these from analyze_dga rather than be scored against pre-computed values that may drift if the synthesis is re-run.",
+        "Updated nearest_handcrafted_comparator from fmsr_01_dga_fault_mode_diagnosis (SGT-003) to fmsr_05_dga_record_lookup_explain (SGT-023) per reviewer-selected comparator in disposition CSV."
+      ]
+    }
+  },
+  "family": "FMSR_DGA_DIAGNOSIS",
+  "nearest_handcrafted_comparator": {
+    "scenario_id": "SGT-023",
+    "scenario_file": "data/scenarios/fmsr_05_dga_record_lookup_explain.json",
+    "similarity_basis": "shares type='FMSR' and overlaps on fmsr.get_dga_record; both interpret a stored DGA record. This generated scenario is novel in asking for an explicit non-fault confirmation rather than mapping gases to a failure mode.",
+    "novelty_note": "promoted as accept_with_edits: distinct angle (Normal-confirmation) from fmsr_05's dominant-gas-to-failure-mode pattern.",
+    "nearest_match_weak": false
+  }
+}
