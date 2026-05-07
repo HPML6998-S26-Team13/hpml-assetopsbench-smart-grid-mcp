@@ -1,0 +1,81 @@
+{
+  "_doc": "Recurring failure patterns surfaced by the #194 stratified hand-audit. Consumed by scripts/audit_failure_taxonomy.py render. Update this sidecar when re-auditing; render emits the markdown section from this file.",
+  "lead": "These patterns recur across multiple audited rows and are the strongest paper-citable signals:",
+  "patterns": [
+    {
+      "title": "Wrong sensor name (`winding_temp_c` vs canonical `winding_temp_top_c`)",
+      "count": 6,
+      "description": "The 8B and 70B agents both pick a non-existent sensor name when asked about thermal trends. Tool returns 'no readings', but the agent then proceeds to outage-WO creation anyway.",
+      "cells": [
+        "B SGT-010 run01",
+        "B SGT-010 run03",
+        "A70B SGT-009 run02",
+        "A70B SGT-009 run03",
+        "B70B SGT-010 run02",
+        "C70B SGT-010 run03"
+      ],
+      "mitigation": "validate `sensor_id` against `iot.list_sensors` output before `iot.get_sensor_readings` / `tsfm.trend_analysis`, and hard-fail on unknown sensors instead of returning empty."
+    },
+    {
+      "title": "Low-temp + Arc Discharge contradiction",
+      "count": 5,
+      "description": "The agent diagnoses 'low-temperature overheating' (a thermal fault) and matches it to FM-006 'Arc Discharge' (a high-energy electrical fault) — physically incompatible classes. Now spans Y70B / YS_TP / YS70B / Z70B / ZS70B (every PE-family 70B variant on SGT-014).",
+      "cells": [
+        "Y70B SGT-014 run02",
+        "YS_TP SGT-014 run05",
+        "YS70B SGT-014 run01",
+        "Z70B SGT-014 run03",
+        "ZS70B SGT-014 run01"
+      ],
+      "mitigation": "enforce a fault-mode-class consistency check between `analyze_dga` output and `search_failure_modes` result; reject thermal-class diagnoses paired with electrical-class FM matches."
+    },
+    {
+      "title": "T-006 vs T-008 fault-record confusion",
+      "count": 2,
+      "description": "`get_fault_record(F006)` returns a T-008 record (since F006 belongs to T-008 in the fixture); the task asked about T-006; agent emits T-008 details as the answer.",
+      "cells": [
+        "B70B SGT-018 run03",
+        "C70B SGT-018 run01"
+      ],
+      "mitigation": "validate that the returned record's `transformer_id` matches the task's named asset before downstream tools consume it."
+    },
+    {
+      "title": "WO creation without preceding diagnostic",
+      "count": 7,
+      "description": "Agent jumps straight to `create_work_order` (or after a single shallow tool call), skipping the discover/analyze/correlate sequence. The WO carries either fabricated severity / priority / playbook fields or empty placeholders. Z70B SGT-007 run01 also emits the WO despite explicit 'invalid severity' + session errors.",
+      "cells": [
+        "A SGT-009 run03",
+        "A70B SGT-009 run02",
+        "B70B SGT-010 run02",
+        "C70B SGT-010 run03",
+        "YS_BASELINE SGT-007 run02",
+        "Y70B SGT-010 run02",
+        "Z70B SGT-007 run01"
+      ],
+      "mitigation": "gate `create_work_order` behind a 'minimum-evidence' precondition checker (analyze_dga and/or trend_analysis outcome present in the trajectory); refuse to mark an errored WO as success."
+    },
+    {
+      "title": "INT8 model emits invented failure-mode IDs",
+      "count": 2,
+      "description": "The INT8 8B variant on Cell D uses literal strings (`list_failure_modes`, `D2`, `FM-012`, `T1`) as `failure_mode_id` arguments, none of which exist.",
+      "cells": [
+        "D SGT-014 run02",
+        "D SGT-014 run05"
+      ],
+      "mitigation": "tool-input validation that rejects unknown IDs before the call dispatches."
+    },
+    {
+      "title": "Fleet-status snapshot covers only one representative unit",
+      "count": 4,
+      "description": "Task asks for healthy + degraded (or healthy + degraded + critical) representative samples; agent fully populates only one unit (typically T-005 or T-011) and asserts the breakdown without per-unit retrieval.",
+      "cells": [
+        "B70B SGT-022 run03",
+        "C70B SGT-022 run03",
+        "Z70B SGT-022 run01",
+        "ZS70B SGT-022 run02"
+      ],
+      "mitigation": "in PE/verified-PE planning, expand 'representative units' to a numbered list and require one `iot.get_sensor_readings` call per declared unit before final aggregation."
+    }
+  ],
+  "summary_note": "No `specification` Berkeley failures were observed in this 46-row sample. All audited-with-label rows split between `task_verification` (30) and `inter_agent_orchestration` (13). Possible reads: scenarios are well-specified; or specification-style failures map to dim flags (clarity / hallucinations) that don't dominate the auto-label tie-break."
+}
