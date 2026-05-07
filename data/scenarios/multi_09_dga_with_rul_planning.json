@@ -1,0 +1,26 @@
+{
+  "id": "SGT-046",
+  "type": "Multi",
+  "text": "T-017 has been flagged for an arc-discharge gas signature in the last DGA. Confirm the fault classification from the on-file record, then pull the current RUL estimate and combine the two views into a recommendation on whether to schedule replacement now or operate to a planned outage window.",
+  "category": "Comprehensive Health Assessment",
+  "characteristic_form": "The answer should confirm the DGA fault classification for T-017, report the current RUL estimate, and combine the two into a replace-now versus operate-to-window recommendation with a one-line rationale.",
+  "asset_id": "T-017",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "tsfm.get_rul"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA classification",
+      "current RUL value",
+      "combined recommendation",
+      "rationale"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR",
+    "TSFM"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "SGT-048",
+  "type": "WO",
+  "text": "Maintenance leadership wants a snapshot of currently open work orders. List them, identify any flagged at high severity or marked as overdue against expected closure, and surface which assets are most represented in the open queue.",
+  "category": "Pre-Maintenance Review",
+  "characteristic_form": "The answer should report the count of open work orders, list any high-severity or overdue entries, and surface the assets most represented in the open queue with their counts.",
+  "expected_tools": [
+    "wo.list_work_orders"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "open work order count",
+      "high-severity or overdue entries",
+      "per-asset distribution"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "WO"
+  ]
+}

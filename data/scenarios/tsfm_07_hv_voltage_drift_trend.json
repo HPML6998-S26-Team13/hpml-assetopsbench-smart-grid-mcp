@@ -1,0 +1,23 @@
+{
+  "id": "SGT-043",
+  "type": "TSFM",
+  "text": "Operations suspects T-007 has been showing slow voltage drift on the HV side. Run a trend analysis on the HV voltage channel and report the trend direction, the rate of change, and whether the drift is significant enough to schedule investigation.",
+  "category": "Sensor Trend Analysis",
+  "characteristic_form": "The answer should confirm trend analysis was run on T-007's HV voltage channel, report the trend direction, the rate of change with units, and a recommendation on whether to schedule investigation based on significance.",
+  "asset_id": "T-007",
+  "expected_tools": [
+    "tsfm.trend_analysis"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "HV voltage channel analyzed",
+      "trend direction",
+      "rate of change with units",
+      "investigation recommendation"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "TSFM"
+  ]
+}

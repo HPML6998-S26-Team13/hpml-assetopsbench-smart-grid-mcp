@@ -1,0 +1,24 @@
+{
+  "id": "SGT-037",
+  "type": "FMSR",
+  "text": "T-018 has been flagged for elevated acetylene in its latest dissolved-gas sample. Pull the on-file DGA record, run the analyzer, and identify the most likely fault mode together with the recommended next maintenance step.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "The answer should report the stored DGA gas concentrations for T-018, name the analyzer's fault code or label consistent with an arc-discharge pattern, and give the recommended maintenance action that follows from that finding.",
+  "asset_id": "T-018",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA gas values",
+      "analyzer fault code or label",
+      "arc-discharge interpretation",
+      "recommended maintenance action"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

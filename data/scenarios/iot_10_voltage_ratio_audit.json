@@ -1,0 +1,26 @@
+{
+  "id": "SGT-039",
+  "type": "IoT",
+  "text": "Operations is checking that T-008's measured voltage ratio matches its nameplate. Pull the available sensor channels, sample recent HV and LV voltage readings, compare the measured ratio against the metadata-declared voltage class, and flag any deviation worth investigating.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer should report T-008's nameplate voltage class, sampled HV and LV voltage readings, the computed measured ratio, a comparison against the nameplate ratio, and a deviation flag (or an explicit no-deviation finding).",
+  "asset_id": "T-008",
+  "expected_tools": [
+    "iot.get_asset_metadata",
+    "iot.list_sensors",
+    "iot.get_sensor_readings"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "nameplate voltage class",
+      "HV voltage sample",
+      "LV voltage sample",
+      "computed measured ratio",
+      "ratio comparison and deviation flag"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "IoT"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "SGT-042",
+  "type": "TSFM",
+  "text": "Recent reports suggest T-016 may be experiencing intermittent overcurrent excursions. Run anomaly detection on the load-current channel and report any detected events along with a brief characterization of their magnitude and timing.",
+  "category": "Anomaly Detection",
+  "characteristic_form": "The answer should confirm anomaly detection was run on the load_current_a channel for T-016, report the count and approximate timing of detected events, characterize the magnitude versus baseline, and state whether the unit looks anomalous.",
+  "asset_id": "T-016",
+  "expected_tools": [
+    "tsfm.detect_anomalies"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "load-current channel scanned",
+      "detected event count or window",
+      "magnitude and timing characterization",
+      "anomalous or normal finding"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "TSFM"
+  ]
+}

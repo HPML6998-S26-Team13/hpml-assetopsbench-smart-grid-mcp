@@ -1,0 +1,25 @@
+{
+  "id": "SGT-044",
+  "type": "TSFM",
+  "text": "T-019 has been flagged in poor health and capital is asking for an emergency-replacement assessment. Pull the current RUL estimate and a 30-day forecast, compare the two, and state whether the unit warrants accelerated replacement within the next month.",
+  "category": "Remaining Useful Life",
+  "characteristic_form": "The answer should report T-019's current RUL value, the forecasted RUL at the 30-day horizon, a numeric comparison of the two, and an explicit accelerate-replacement recommendation grounded in that comparison.",
+  "asset_id": "T-019",
+  "expected_tools": [
+    "tsfm.get_rul",
+    "tsfm.forecast_rul"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "current RUL value",
+      "30-day forecast RUL value",
+      "comparison",
+      "accelerate or defer recommendation",
+      "rationale grounded in comparison"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "TSFM"
+  ]
+}
