@@ -151,7 +151,7 @@ Say:
 | Gate | Owner | Deck effect |
 |---|---|---|
 | PR #156 and generated scenarios | Tanisha/Akshat, Alex shepherd | Slide 4 can claim 30 validated scenarios only after this settles. |
-| Mitigation rerun rows | Alex | Slide 10 can become results-bearing only if header-only `results/metrics/mitigation_before_after.csv` gets real rows. |
+| Mitigation rerun rows | Alex | Slide 10 can cite `results/metrics/mitigation_before_after.csv`; keep wording to mixed effects, not universal lift. |
 | Final paper figures | Alex + team inputs | Slides 7-9 should mirror the paper figures and captions. |
 | Overleaf/source paper freeze | Alex | Deck conclusion should match the final paper claim wording. |
 

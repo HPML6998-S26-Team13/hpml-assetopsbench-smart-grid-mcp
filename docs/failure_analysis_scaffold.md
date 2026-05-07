@@ -63,17 +63,15 @@ Since the Apr 26 refresh, the canonical `team13/main` lane has advanced:
 `results/metrics/failure_evidence_table.csv` is now populated with 35
 judge-failed rows from `results/metrics/scenario_scores.jsonl`. That clears
 the first fill target for `#35` and gives `#64` a concrete source table for
-taxonomy-count and stage-by-cell visuals. It does **not** make before/after
-mitigation claims comparison-ready; those still need matched after-side reruns
-and `mitigation_before_after.csv`.
+taxonomy-count and stage-by-cell visuals. The later post-PR175 #66 cohort
+populates `mitigation_before_after.csv` for the four-tier YS/ZS mitigation
+ladder; treat that as mixed-effect mitigation evidence, not a universal lift.
 
 The first mitigation planning table is also populated:
 `results/metrics/mitigation_run_inventory.csv`. This is a lane inventory, not
-a before/after result. It now records the implemented detector row as pending
-guarded Y+SA / Z+SA reruns, the implemented retry/replan recovery row as
-pending rerun, the explicit fault/risk adjudication row as spec-ready but not
-runnable, and two lower-priority candidates. No completed after-run claim
-exists yet.
+a before/after result. The completed #66 mitigation measurements live in
+`results/metrics/mitigation_before_after.csv`; the inventory remains useful for
+ranking and describing candidate mitigation lanes.
 
 ## May 1 guard and rerun scaffold status
 
@@ -91,9 +89,8 @@ Implementation surfaces:
   rerun template for the PE + Self-Ask lane.
 - `configs/mitigation/missing_evidence_guard_verified_pe_self_ask.env` —
   matched rerun template for the Verified PE + Self-Ask lane.
-- `results/metrics/mitigation_before_after.csv` — header-only comparison
-  export contract. It intentionally contains no data rows until real rerun
-  artifacts exist.
+- `results/metrics/mitigation_before_after.csv` — populated comparison export
+  contract for the post-PR175 YS/ZS four-tier mitigation cohort.
 
 The guard turns misleading clean completion into explicit mitigation metadata:
 `mitigation_guard.triggered`, `blocked_final_answer`, `blocked_work_order`,
@@ -209,6 +206,12 @@ added the canonical Cell A/B captures from job `8979314` on Llama-3.1-8B
 rows now seed the canonical "AaT transport baseline" lane. Mitigation
 reruns against this lane have not yet landed.
 
+The #66 paper-grade mitigation ledger is now the post-PR175 15-scenario x
+5-trial YS/ZS ladder in `results/metrics/mitigation_before_after.csv`,
+regenerated from `results/metrics/gcp_post175_mitigation_4tier_summary.csv`
+and tracked raw artifacts. The older pending rows below document the original
+first-capture scaffold, not the current paper-grade mitigation evidence.
+
 | lane | before run | after run | before status | after status | after metrics already committed | missing for full comparison |
 |---|---|---|---|---|---|---|
 | PE + Self-Ask (smoke) | `8850716_pe_self_ask_mcp_baseline_smoke` | `8857842_pe_self_ask_mcp_baseline_smoke` | integration proof with terminal `Unknown server 'none'` | clean `2/2` smoke success | `success_rate=1.0`, `failure_count=0`, `latency_seconds_mean=67.11`, `latency_seconds_p95=99.57`, `tool_call_count_mean=9.5` | before-side exported metrics in repo form; raw per-scenario outputs on canonical history |
@@ -270,15 +273,15 @@ read these tables, not the raw run JSON.
 - one row per mitigation lane
 - required columns: `lane`, `mitigation_name`, `before_run`, `after_run`,
   `before_status`, `after_status`, `notes`
-- current status: populated with five lanes: one implemented detector pending
-  guarded reruns, one implemented retry/replan recovery row pending rerun, one
-  spec-ready adjudication row deferred until evidence repair is measured, and
-  two lower-priority candidates; no completed after-run claims yet
+- current status: populated with five mitigation-priority lanes. Treat it as a
+  planning / ranking inventory; use `mitigation_before_after.csv` for completed
+  #66 measurement rows.
 
 `results/metrics/mitigation_before_after.csv`
 
 - one row per `(lane, phase, run_name)`
-- current status: schema/header exists; no after-run rows yet
+- current status: populated with 8 post-PR175 paper-grade rows: YS/ZS matched
+  baseline, detection guard, retry/replan repair, and explicit adjudication
 - required columns (organized by group; column order can stay flexible as
   long as every column appears):
 
@@ -356,7 +359,7 @@ validation log:
 
 ## Export targets
 
-When the rerun lane fills in, the clean metric surfaces should be:
+The clean metric surfaces are:
 
 - `results/metrics/failure_evidence_table.csv` (schema owned by `#36`
   export contract; populated rows produced under `#35`)
@@ -365,8 +368,8 @@ When the rerun lane fills in, the clean metric surfaces should be:
 - `results/figures/failure_taxonomy_counts.svg` (owned by `#64`)
 - `results/figures/failure_stage_cell_heatmap.svg` (owned by `#64`)
 - `results/figures/mitigation_priority_table.svg` (owned by `#64`)
-- future before/after mitigation figure once `mitigation_before_after.csv`
-  has real guarded rerun rows (`#36` supplies the table behind it)
+- before/after mitigation figure from the populated
+  `mitigation_before_after.csv` rows (`#36` supplies the table behind it)
 
 ## Minimum deliverable definition
 
@@ -423,11 +426,10 @@ If new artifacts arrive gradually, fill the exports in this order:
 
 1. `failure_evidence_table.csv` (done for the first judge-derived pass; needs
    refresh only if final reruns change judge rows)
-2. `mitigation_run_inventory.csv` (done for the first mitigation lane
-   selection and now marks the selected lane implemented pending rerun, the
-   recovery rung implemented pending rerun, and the adjudication rung spec-ready
-   but deferred until evidence repair is measured)
-3. `mitigation_before_after.csv` (schema exists; populate after guarded rerun)
+2. `mitigation_run_inventory.csv` (done for mitigation lane selection and
+   priority ranking; completed measurement rows belong in
+   `mitigation_before_after.csv`)
+3. `mitigation_before_after.csv` (populated for the post-PR175 #66 cohort)
 4. only then render before/after figures (`#64`'s lane)
 
 That order preserves the evidence trail even when the figure lane is still

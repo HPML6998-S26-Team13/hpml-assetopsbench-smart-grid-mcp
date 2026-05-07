@@ -7,7 +7,8 @@ canonical: true
 
 # Mitigation Rerun Operator Plan
 
-*Last updated: 2026-05-03*  
+*Last updated: 2026-05-07*
+
 *Issues: #35, #36, #64, #66*
 
 This is the runner-facing plan for the missing-evidence mitigation ladder.
@@ -34,12 +35,14 @@ This is evidence work, not new mitigation implementation. The baseline plus
 three post-baseline mitigation rungs are covered here: detection guard,
 retry/replan recovery, and explicit fault/risk adjudication.
 
-Status as of 2026-05-03: the GCP A100 four-tier cohort
-`mitigation_final6_4tier_a100_20260503T121709Z` completed and was judged for all
-8 rows, 240 trial JSONs, and 240 judge rows. The measured row inventory is in
-`results/metrics/gcp_a100_mitigation_4tier_summary.csv`; the before/after
-interpretation table remains a deliberate follow-up, not an automatic copy of
-the raw cohort summary.
+Status as of 2026-05-07: the paper-grade post-PR175 GCP A100 four-tier cohort
+`mitigation15x5_4tier_post175_a100_ixqt_west3_20260505T0845Z` completed and was
+judged for all 8 rows, 600 trial JSONs, 600 latency rows, and 600 judge rows.
+The measured row inventory is in
+`results/metrics/gcp_post175_mitigation_4tier_summary.csv`; the interpreted
+before/after comparison is regenerated into
+`results/metrics/mitigation_before_after.csv` by
+`scripts/render_mitigation_before_after.py`.
 
 Post-cohort interpretation: the first four-tier A100 run does **not** show a
 blanket mitigation lift. Guard and repair reduce measured pass rate in aggregate,
@@ -307,7 +310,7 @@ For each completed run, hand back:
 - vLLM version, CUDA version, and NVIDIA driver version
 - notes on any retry, preemption, restart, or dirty checkout
 
-The taxonomy lane will then populate:
+The taxonomy lane now populates:
 
 - `results/metrics/mitigation_before_after.csv`
 - mitigation before/after figure sources

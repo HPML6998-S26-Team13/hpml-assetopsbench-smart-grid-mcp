@@ -25,6 +25,13 @@ canonical: true
   personal class repo archive; the personal backlog remains the canonical
   follow-up queue per the existing project coordination contract.
 
+- Regenerated `results/metrics/mitigation_before_after.csv` from the
+  paper-grade post-PR175 #66 mitigation cohort, replacing superseded post-PR180
+  diagnostic rows with 8 matched YS/ZS baseline, guard, repair, and
+  adjudication rows. Added `scripts/render_mitigation_before_after.py` so the
+  comparison export can be rebuilt from the compact summary, raw run metadata,
+  latency logs, and judge scores.
+
 ## 2026-05-05
 
 ### Added

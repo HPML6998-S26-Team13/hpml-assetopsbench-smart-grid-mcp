@@ -96,11 +96,9 @@ Generated figures:
 - `results/figures/mitigation_priority_table.svg`
 
 `mitigation_run_inventory.csv` is a planning / control table, not an outcome
-claim. It now tracks five lanes: the implemented
-`missing_evidence_final_answer_guard` detector pending guarded reruns, the
-dependent `missing_evidence_retry_replan_guard` recovery implementation pending
-reruns, one spec-ready adjudication candidate, and two lower-priority
-candidates. Completed after-run claims stay absent until matched reruns exist.
+claim. It tracks the prioritized mitigation lanes and implementation status.
+Completed #66 outcome rows now live in
+`results/metrics/mitigation_before_after.csv`.
 
 ## May 1 mitigation implementation status
 
@@ -156,17 +154,19 @@ This avoids a combinatorial grid while preserving attribution.
 
 `docs/mitigation_recovery_adjudication.md` now defines the two follow-on rungs.
 Both the recovery rung and explicit fault/risk adjudication rung are implemented
-in the repo-local PE-family runners. Both remain pending matched reruns and
-judge rows before the paper can claim mitigation impact.
+in the repo-local PE-family runners. The post-PR175 #66 cohort has measured
+matched rows for baseline, guard, repair, and adjudication; the claim remains
+mixed effects rather than broad lift.
 
 | Rung | Status | Implementation point | First runnable lane |
 |---:|---|---|---|
-| 2 | implemented, pending rerun | public partial-history detector in `scripts/mitigation_guards.py`; bounded retry in `scripts/plan_execute_self_ask_runner.py`; retry plus detector-driven suffix replan in `scripts/verified_pe_runner.py` | `Y + Self-Ask`, then `Z + Self-Ask` |
-| 3 | implemented, pending rerun | structured pre-finalization adjudication in `scripts/mitigation_guards.py`; PE-family runners add `fault_risk_adjudication` metadata and block unsupported finalization | `Y + Self-Ask` and `Z + Self-Ask` after rung 1 / rung 2 evidence exists |
+| 2 | implemented, measured in post-PR175 cohort | public partial-history detector in `scripts/mitigation_guards.py`; bounded retry in `scripts/plan_execute_self_ask_runner.py`; retry plus detector-driven suffix replan in `scripts/verified_pe_runner.py` | `Y + Self-Ask` and `Z + Self-Ask` |
+| 3 | implemented, measured in post-PR175 cohort | structured pre-finalization adjudication in `scripts/mitigation_guards.py`; PE-family runners add `fault_risk_adjudication` metadata and block unsupported finalization | `Y + Self-Ask` and `Z + Self-Ask` |
 
 Recovery and adjudication configs are now available under `configs/mitigation/`.
-Do not interpret those configs as evidence of improvement until #66 produces
-matched artifacts and `mitigation_before_after.csv` has real rows.
+The post-PR175 #66 cohort now supplies matched artifacts and populated
+`mitigation_before_after.csv` rows. Interpret the ladder as mixed-effect
+evidence, not as a universal mitigation-lift claim.
 
 The key design decision: retry/replan is not a new experiment axis. It is a
 dependent recovery rung that must keep the detection guard on. Adjudication is
@@ -358,19 +358,20 @@ That keeps the story honest. Self-Ask or verifier improvements should read
 as measured follow-on fixes, not as something silently baked into the
 baseline.
 
-## Next fill targets
+## Current fill targets
 
-The artifact gap that still bounds this lane:
+The artifact gap that bounded this lane is now filled for the post-PR175
+15-scenario x 5-trial mitigation cohort:
 
-1. one matched mitigation rerun pair where both the before and after rows are
-   populated end-to-end on `mitigation_before_after.csv` so the comparison
-   figure is `comparison_ready` (per `#36` status labels)
-2. run either guarded config under the same model/scenario/trial shape as its
-   before-side baseline
-3. run the retry/replan recovery rung only after the detection-only rows exist,
-   keeping the guard active and recording repair attempts separately
-4. implement explicit adjudication only after evidence repair has at least one
-   measured row or after a detection-only row proves the deciding evidence is
-   already present
+1. keep `results/metrics/mitigation_before_after.csv` synchronized with
+   `results/metrics/gcp_post175_mitigation_4tier_summary.csv` via
+   `scripts/render_mitigation_before_after.py`
+2. render the before/after comparison figure from the populated comparison
+   table, preserving the mixed-effect interpretation
+3. use any future guard / repair / adjudication reruns only as explicit new
+   cohorts, not silent replacements for the post-PR175 evidence floor
+4. treat explicit adjudication as downstream of evidence repair whenever adding
+   a new measured row or when a detection-only row proves the deciding evidence
+   is already present
 5. refresh the rendered SVGs after any final scenario/rerun sweep changes the
    evidence table
