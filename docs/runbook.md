@@ -475,6 +475,10 @@ paths, what each run actually proves): [validation_log.md](validation_log.md).
 
 ### Eval / scenarios / judge (Akshat / Tanisha lanes)
 
+**Paper-bound 1-page fact pack** for scenarios + eval + judge (current
+counts, dispositions, pass criteria, safe paper claims, cite-points):
+[content_brief_scenarios_eval.md](content_brief_scenarios_eval.md).
+
 **Eval harness side** (Akshat's half of the runbook, covers scenario
 execution + judge + grading): [eval_harness_readme.md](eval_harness_readme.md).
 
@@ -489,9 +493,13 @@ ablations): [experiment2_capture_plan.md](experiment2_capture_plan.md).
 
 **PS B (auto-scenario generation) runbook**:
 [auto_scenario_generation_runbook.md](auto_scenario_generation_runbook.md).
-First inspection-only batch lands at
-`data/scenarios/generated/first_review_20260503/`; `#53` validation
-rubric application owns the official quality call.
+Three batches now live under `data/scenarios/generated/`
+(`first_review_20260502`, `first_review_20260503`,
+`v02_first_review_20260505`). The `#53` per-scenario disposition table at
+`data/scenarios/generated/disposition_2026-05-06.csv` (PR #191, merged)
+records the official quality call: 5/15 `accept_with_edits`,
+10/15 `reject_duplicate`. PR #195 promotes the 5 with bounded edits
+applied; on merge the canonical corpus moves 31 -> 36.
 
 ### Historical
 
