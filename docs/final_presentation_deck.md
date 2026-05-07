@@ -401,19 +401,22 @@ Table:
 | Rung | Mitigation | Status |
 |---:|---|---|
 | 0 | Baseline PE-family runs | Captured |
-| 1 | Missing-evidence final-answer guard | Implemented, reruns pending |
-| 2 | Missing-evidence retry/replan guard | Implemented, reruns pending |
-| 3 | Explicit fault/risk adjudication step | Implemented, reruns pending |
+| 1 | Missing-evidence final-answer guard | Measured post-PR175 |
+| 2 | Missing-evidence retry/replan guard | Measured post-PR175 |
+| 3 | Explicit fault/risk adjudication step | Measured post-PR175 |
 
 Source:
 
 `docs/failure_visuals_mitigation.md`,
-`results/metrics/mitigation_run_inventory.csv`
+`results/metrics/mitigation_run_inventory.csv`,
+`results/metrics/mitigation_before_after.csv`
 
 Speaker note:
 
-"If reruns do not land, this remains an implemented mitigation-ladder design
-slide. If reruns land, we can promote it to a before/after result slide."
+"Post-PR175 reruns landed, so this can be a before/after result slide. Keep the
+claim narrow: the ladder improves accounting / refusal semantics and gives a
+bounded repair path, but the measured judge-score effects are mixed rather than
+a universal lift."
 
 ### Slide 12 - Reproducibility and Deliverables
 

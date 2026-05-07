@@ -271,24 +271,114 @@ def validate_count(label: str, actual: int, expected: str, field: str) -> None:
         )
 
 
+def validate_close(
+    label: str,
+    actual: float,
+    expected: str,
+    field: str,
+    tolerance: float = 5e-6,
+) -> None:
+    if expected == "":
+        return
+    expected_float = float(expected)
+    if abs(actual - expected_float) > tolerance:
+        raise ValueError(
+            f"{label}: {field} mismatch, expected {expected_float}, got {actual}"
+        )
+
+
+def judge_metrics(scores: list[dict[str, Any]]) -> dict[str, Any]:
+    score_values = [float(row["score_6d"]) for row in scores]
+    pass_count = sum(1 for row in scores if bool(row["pass"]))
+    return {
+        "judge_pass_count": pass_count,
+        "judge_pass_rate": pass_count / len(scores),
+        "judge_score_mean": sum(score_values) / len(score_values),
+        "judge_score_p50": percentile(score_values, 0.50),
+        "judge_score_p95": percentile(score_values, 0.95),
+        "judge_score_p5": percentile(score_values, 0.05),
+    }
+
+
+def collect_judge_metrics(
+    source_rows: list[dict[str, str]],
+    scores_by_run: dict[str, list[dict[str, Any]]],
+) -> dict[str, dict[str, Any]]:
+    metrics_by_label: dict[str, dict[str, Any]] = {}
+    for source_row in source_rows:
+        label = source_row["row_group"]
+        scores = scores_by_run.get(source_row["run_name"], [])
+        validate_count(label, len(scores), source_row["judge_count"], "judge")
+        metrics = judge_metrics(scores)
+        validate_count(
+            label,
+            metrics["judge_pass_count"],
+            source_row["judge_pass_count"],
+            "judge pass",
+        )
+        validate_close(
+            label,
+            metrics["judge_pass_rate"],
+            source_row["judge_pass_rate"],
+            "judge pass rate",
+        )
+        validate_close(
+            label,
+            metrics["judge_score_mean"],
+            source_row["judge_score_mean"],
+            "judge score mean",
+        )
+        validate_close(
+            label,
+            metrics["judge_score_p50"],
+            source_row["judge_score_p50"],
+            "judge score p50",
+        )
+        metrics_by_label[label] = metrics
+
+    for source_row in source_rows:
+        label = source_row["row_group"]
+        baseline_label = source_row.get("baseline_row_group")
+        if not baseline_label or baseline_label == label:
+            continue
+        metrics = metrics_by_label[label]
+        baseline = metrics_by_label[baseline_label]
+        pass_lift = metrics["judge_pass_rate"] - baseline["judge_pass_rate"]
+        score_lift = metrics["judge_score_mean"] - baseline["judge_score_mean"]
+        validate_close(
+            label,
+            pass_lift,
+            source_row["pass_rate_lift_vs_baseline"],
+            "pass-rate lift vs baseline",
+        )
+        validate_close(
+            label,
+            score_lift,
+            source_row["score_mean_lift_vs_baseline"],
+            "score-mean lift vs baseline",
+        )
+        metrics["pass_rate_lift_vs_baseline"] = pass_lift
+        metrics["score_mean_lift_vs_baseline"] = score_lift
+
+    return metrics_by_label
+
+
 def build_row(
     source_row: dict[str, str],
-    scores_by_run: dict[str, list[dict[str, Any]]],
+    metrics_by_label: dict[str, dict[str, Any]],
 ) -> dict[str, str]:
     label = source_row["row_group"]
     run_name = source_row["run_name"]
     run_dir = ROOT / source_row["run_dir"]
     meta = load_json(run_dir / "meta.json")
     latencies = load_latencies(run_dir)
-    scores = scores_by_run.get(run_name, [])
     trials = iter_trial_json(run_dir)
 
     validate_count(label, len(trials), source_row["raw_json_count"], "raw JSON")
     validate_count(label, len(latencies), source_row["latency_count"], "latency")
-    validate_count(label, len(scores), source_row["judge_count"], "judge")
 
     aggregates = aggregate_trials(run_dir)
-    score_values = [float(row["score_6d"]) for row in scores]
+    metrics = metrics_by_label[label]
     lane = label.split("_", 1)[0]
     phase = PHASE_BY_ROW_GROUP[label]
     attempted = int(meta.get("total_runs") or source_row["raw_json_count"])
@@ -317,13 +407,13 @@ def build_row(
     ]
     if source_row.get("baseline_row_group") and phase != "baseline":
         notes_parts.append(f"baseline_row_group={source_row['baseline_row_group']}")
-    if source_row.get("pass_rate_lift_vs_baseline"):
+    if "pass_rate_lift_vs_baseline" in metrics:
         notes_parts.append(
-            f"pass_rate_lift_vs_baseline={source_row['pass_rate_lift_vs_baseline']}"
+            f"pass_rate_lift_vs_baseline={fmt(metrics['pass_rate_lift_vs_baseline'])}"
         )
-    if source_row.get("score_mean_lift_vs_baseline"):
+    if "score_mean_lift_vs_baseline" in metrics:
         notes_parts.append(
-            f"score_mean_lift_vs_baseline={source_row['score_mean_lift_vs_baseline']}"
+            f"score_mean_lift_vs_baseline={fmt(metrics['score_mean_lift_vs_baseline'])}"
         )
 
     row = {field: "" for field in FIELDNAMES}
@@ -360,11 +450,11 @@ def build_row(
                 aggregates["tool_call_count_total"] / attempted if attempted else None
             ),
             "tool_error_count": fmt(aggregates["tool_error_count"]),
-            "judge_score_mean": source_row["judge_score_mean"],
-            "judge_score_p50": source_row["judge_score_p50"],
-            "judge_score_p95": fmt(percentile(score_values, 0.95), 4),
-            "judge_score_p5": fmt(percentile(score_values, 0.05), 4),
-            "judge_pass_rate": source_row["judge_pass_rate"],
+            "judge_score_mean": fmt(metrics["judge_score_mean"]),
+            "judge_score_p50": fmt(metrics["judge_score_p50"], 4),
+            "judge_score_p95": fmt(metrics["judge_score_p95"], 4),
+            "judge_score_p5": fmt(metrics["judge_score_p5"], 4),
+            "judge_pass_rate": fmt(metrics["judge_pass_rate"]),
             "benchmark_run_dir": source_row["run_dir"],
             "mitigation_name": MITIGATION_BY_PHASE[phase],
             "mitigation_enabled": fmt(phase != "baseline"),
@@ -407,7 +497,8 @@ def main() -> None:
     with SOURCE_SUMMARY.open() as f:
         source_rows = sorted(csv.DictReader(f), key=lambda row: ORDER[row["row_group"]])
 
-    rows = [build_row(row, scores_by_run) for row in source_rows]
+    metrics_by_label = collect_judge_metrics(source_rows, scores_by_run)
+    rows = [build_row(row, metrics_by_label) for row in source_rows]
 
     with OUTPUT_CSV.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDNAMES, lineterminator="\n")
