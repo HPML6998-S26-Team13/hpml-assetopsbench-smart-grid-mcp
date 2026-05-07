@@ -8,37 +8,39 @@ Auditor walked each row's judge log under `results/judge_logs/<run_name>/<scenar
 
 | audit_decision | count |
 |---|---:|
-| `confirmed` | 36 |
+| `confirmed` | 42 |
 | `relabel_suggested` | 1 |
-| `evidence_thin` | 9 |
+| `evidence_thin` | 3 |
 
 ## Berkeley taxonomy distribution (audited rows)
 
 | berkeley_label | count |
 |---|---:|
-| `task_verification` | 24 |
+| `task_verification` | 30 |
 | `inter_agent_orchestration` | 13 |
 
 ## Failure-stage distribution (audited rows)
 
 | failure_stage | count |
 |---|---:|
-| `final_answer` | 14 |
-| `tool_execution` | 8 |
+| `final_answer` | 16 |
+| `tool_execution` | 10 |
 | `tool_selection` | 6 |
-| `verification` | 5 |
-| `planning` | 4 |
+| `verification` | 6 |
+| `planning` | 5 |
 
 ## Recurring failure patterns
 
 These patterns recur across multiple audited rows and are the strongest paper-citable signals:
 
-1. **Wrong sensor name (`winding_temp_c` vs canonical `winding_temp_top_c`)** — 6 rows. The 8B and 70B agents both pick a non-existent sensor name when asked about thermal trends. Tool returns "no readings", but the agent then proceeds to outage-WO creation anyway. Cells: B run01, B run03, A70B SGT-009 run02 + run03, B70B SGT-010 run02, C70B SGT-010 run03. Mitigation candidate: validate `sensor_id` against `iot.list_sensors` output before `iot.get_sensor_readings` / `tsfm.trend_analysis`, and hard-fail on unknown sensors instead of returning empty.
-2. **Low-temp + Arc Discharge contradiction** — 3 rows. The agent diagnoses "low-temperature overheating" (a thermal fault) and matches it to FM-006 "Arc Discharge" (a high-energy electrical fault) — physically incompatible classes. Cells: Y70B SGT-014 run02, YS_TP SGT-014 run05, YS70B SGT-014 run01. Mitigation candidate: enforce a fault-mode-class consistency check between `analyze_dga` output and `search_failure_modes` result.
+1. **Wrong sensor name (`winding_temp_c` vs canonical `winding_temp_top_c`)** — 6 rows. The 8B and 70B agents both pick a non-existent sensor name when asked about thermal trends. Tool returns 'no readings', but the agent then proceeds to outage-WO creation anyway. Cells: B SGT-010 run01, B SGT-010 run03, A70B SGT-009 run02, A70B SGT-009 run03, B70B SGT-010 run02, C70B SGT-010 run03. Mitigation candidate: validate `sensor_id` against `iot.list_sensors` output before `iot.get_sensor_readings` / `tsfm.trend_analysis`, and hard-fail on unknown sensors instead of returning empty.
+2. **Low-temp + Arc Discharge contradiction** — 5 rows. The agent diagnoses 'low-temperature overheating' (a thermal fault) and matches it to FM-006 'Arc Discharge' (a high-energy electrical fault) — physically incompatible classes. Now spans Y70B / YS_TP / YS70B / Z70B / ZS70B (every PE-family 70B variant on SGT-014). Cells: Y70B SGT-014 run02, YS_TP SGT-014 run05, YS70B SGT-014 run01, Z70B SGT-014 run03, ZS70B SGT-014 run01. Mitigation candidate: enforce a fault-mode-class consistency check between `analyze_dga` output and `search_failure_modes` result; reject thermal-class diagnoses paired with electrical-class FM matches.
 3. **T-006 vs T-008 fault-record confusion** — 2 rows. `get_fault_record(F006)` returns a T-008 record (since F006 belongs to T-008 in the fixture); the task asked about T-006; agent emits T-008 details as the answer. Cells: B70B SGT-018 run03, C70B SGT-018 run01. Mitigation candidate: validate that the returned record's `transformer_id` matches the task's named asset before downstream tools consume it.
-4. **WO creation without preceding diagnostic** — 6 rows. Agent jumps straight to `create_work_order` (or after a single shallow tool call), skipping the discover/analyze/correlate sequence. The WO carries either fabricated severity / priority / playbook fields or empty placeholders. Cells: A SGT-009 run03, A70B SGT-009 run02, B70B SGT-010 run02, C70B SGT-010 run03, YS_BASELINE SGT-007 run02, Y70B SGT-010 run02. Mitigation candidate: gate `create_work_order` behind a "minimum-evidence" precondition checker (analyze_dga and/or trend_analysis outcome present in the trajectory).
+4. **WO creation without preceding diagnostic** — 7 rows. Agent jumps straight to `create_work_order` (or after a single shallow tool call), skipping the discover/analyze/correlate sequence. The WO carries either fabricated severity / priority / playbook fields or empty placeholders. Z70B SGT-007 run01 also emits the WO despite explicit 'invalid severity' + session errors. Cells: A SGT-009 run03, A70B SGT-009 run02, B70B SGT-010 run02, C70B SGT-010 run03, YS_BASELINE SGT-007 run02, Y70B SGT-010 run02, Z70B SGT-007 run01. Mitigation candidate: gate `create_work_order` behind a 'minimum-evidence' precondition checker (analyze_dga and/or trend_analysis outcome present in the trajectory); refuse to mark an errored WO as success.
 5. **INT8 model emits invented failure-mode IDs** — 2 rows. The INT8 8B variant on Cell D uses literal strings (`list_failure_modes`, `D2`, `FM-012`, `T1`) as `failure_mode_id` arguments, none of which exist. Cells: D SGT-014 run02, D SGT-014 run05. Mitigation candidate: tool-input validation that rejects unknown IDs before the call dispatches.
-6. **No specification failures observed in this sample.** All 37 audited-with-label rows split between `task_verification` (24) and `inter_agent_orchestration` (13). The Berkeley `specification` category is unrepresented in this stratified sample — possibly because the scenario corpus is well-specified, or because specification-style failures map to higher-level dim flags (clarity / hallucinations) that didn't dominate the auto-label tie-break.
+6. **Fleet-status snapshot covers only one representative unit** — 4 rows. Task asks for healthy + degraded (or healthy + degraded + critical) representative samples; agent fully populates only one unit (typically T-005 or T-011) and asserts the breakdown without per-unit retrieval. Cells: B70B SGT-022 run03, C70B SGT-022 run03, Z70B SGT-022 run01, ZS70B SGT-022 run02. Mitigation candidate: in PE/verified-PE planning, expand 'representative units' to a numbered list and require one `iot.get_sensor_readings` call per declared unit before final aggregation.
+
+No `specification` Berkeley failures were observed in this 46-row sample. All audited-with-label rows split between `task_verification` (30) and `inter_agent_orchestration` (13). Possible reads: scenarios are well-specified; or specification-style failures map to dim flags (clarity / hallucinations) that don't dominate the auto-label tie-break.
 
 ## Per-row audit table
 
@@ -66,9 +68,9 @@ These patterns recur across multiple audited rows and are the strongest paper-ci
 | Y70B | `...0820Z_Y70B_post175_70b_exp2_cell_Y_pe_mcp_baseline_watsonx` | SGT-003 | 3 | `agent_sequence_correct` | `confirmed` | `task_verification` | `final_answer` | Final answer admits 'top two are not explicitly listed as two separate mechanisms' — task asked for two distinct candidates; agent emits one with hedge. |
 | Y70B | `...0820Z_Y70B_post175_70b_exp2_cell_Y_pe_mcp_baseline_watsonx` | SGT-012 | 1 | `generalized_result_verification` | `confirmed` | `task_verification` | `verification` | Final answer self-contradicts ('not abnormally high' + 'three anomalous readings') without resolving; task asked for elevated-vs-baseline assessment with peak. |
 | Y70B | `...0820Z_Y70B_post175_70b_exp2_cell_Y_pe_mcp_baseline_watsonx` | SGT-014 | 2 | `task_completion` | `confirmed` | `task_verification` | `final_answer` | Internal contradiction: 'low-temperature overheating' diagnosis matched against 'Arc Discharge' (FM-006); two failure mode classes are physically incompatible. |
-| Z70B | `...B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx` | SGT-007 | 1 | `task_completion` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit (likely missed during the post-PR175 evidence pull for the 70B Z cell). |
-| Z70B | `...B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx` | SGT-014 | 3 | `agent_sequence_correct` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit. |
-| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-022 | 2 | `data_retrieval_accuracy` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit. |
+| Z70B | `...B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx` | SGT-007 | 1 | `task_completion` | `confirmed` | `task_verification` | `tool_execution` | WO-20D523B9 created for T-013 with 'invalid severity level' and 'session issue' errors flagged in the trajectory; agent emits the WO as success rather than retrying or replanning. |
+| Z70B | `...B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx` | SGT-014 | 3 | `agent_sequence_correct` | `confirmed` | `task_verification` | `final_answer` | Same low-temp + Arc Discharge (FM-006) contradiction as Y70B / YS_TP / YS70B SGT-014 rows; the pattern recurs on Z70B as well. |
+| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-022 | 2 | `data_retrieval_accuracy` | `confirmed` | `task_verification` | `planning` | Fleet-status snapshot only fully populated T-011; healthy/degraded/critical counts asserted without per-unit retrieval — same shape as Z70B/B70B/C70B SGT-022 rows. |
 | A70B | `...xqt_abc_20260505T0722Z_A70B_post175_70b_aat_direct_watsonx` | SGT-003 | 3 | `agent_sequence_correct` | `evidence_thin` | `` | `` | Sequence is reasonable (get_dga_record -> analyze_dga -> search_failure_modes); judge cites grounding gap but trajectory looks standard, so the dim flag is weak. |
 | A70B | `...xqt_abc_20260505T0722Z_A70B_post175_70b_aat_direct_watsonx` | SGT-009 | 2 | `task_completion` | `confirmed` | `inter_agent_orchestration` | `tool_selection` | Called trend_analysis with sensor_id='dga_h2_ppm' (DGA isn't an IoT sensor); tried winding_temp_top_c after; created WO at the end despite error noise. |
 | A70B | `...xqt_abc_20260505T0722Z_A70B_post175_70b_aat_direct_watsonx` | SGT-009 | 3 | `data_retrieval_accuracy` | `confirmed` | `inter_agent_orchestration` | `tool_execution` | Same wrong-sensor pattern as run02 (winding_temp_c not winding_temp_top_c); list_sensors called as recovery but agent then proceeds to WO creation anyway. |
@@ -87,9 +89,9 @@ These patterns recur across multiple audited rows and are the strongest paper-ci
 | YS70B | `..._post175_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx` | SGT-010 | 1 | `agent_sequence_correct` | `confirmed` | `inter_agent_orchestration` | `verification` | DGA says 'Arc discharge' + thermal trend says 'no anomalies' = contradictory signals; agent picks Arc as decisive without resolving the conflict between domains. |
 | YS70B | `..._post175_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx` | SGT-014 | 1 | `task_completion` | `confirmed` | `task_verification` | `final_answer` | Same low-temp + Arc Discharge contradiction as Y70B run02 and YS_TP run05; failure mode pattern recurs across PE 70B variants. |
 | Z70B | `...B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx` | SGT-022 | 1 | `data_retrieval_accuracy` | `confirmed` | `task_verification` | `planning` | Fleet-status snapshot only covered T-011 representatively; healthy + degraded + critical breakdown is asserted without per-unit retrieval. |
-| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-012 | 2 | `generalized_result_verification` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit. |
-| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-014 | 1 | `agent_sequence_correct` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit. |
-| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-018 | 1 | `task_completion` | `evidence_thin` | `` | `` | Judge log not present in repo at expected path; cannot audit. |
+| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-012 | 2 | `generalized_result_verification` | `confirmed` | `task_verification` | `verification` | Same self-contradiction as Y70B SGT-012 run01 ('not abnormally high' + 'three anomalous readings'); peak value 324.335 A reported but timestamp omitted, so verification is incomplete. |
+| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-014 | 1 | `agent_sequence_correct` | `confirmed` | `task_verification` | `final_answer` | Same low-temp + Arc Discharge (FM-006) contradiction; recurs across Y70B / YS_TP / YS70B / Z70B / ZS70B SGT-014 — pattern now spans 5 cells. |
+| ZS70B | `...70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx` | SGT-018 | 1 | `task_completion` | `confirmed` | `task_verification` | `tool_execution` | Agent admits 'task execution unsuccessful' but still emits WO-480541FA with 24h estimated downtime; fault retrieval and update_work_order both errored — agent reports each error but doesn't replan. |
 
 ## Paper-cite candidates (top 10)
 

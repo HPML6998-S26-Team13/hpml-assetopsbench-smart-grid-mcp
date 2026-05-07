@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 from collections import Counter
 from pathlib import Path
@@ -39,6 +40,32 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TAXONOMY_CSV = REPO_ROOT / "results" / "metrics" / "failure_taxonomy_current.csv"
 JUDGE_LOGS_ROOT = REPO_ROOT / "results" / "judge_logs"
+DECISIONS_TSV = REPO_ROOT / "data" / "audit" / "issue194_decisions.tsv"
+PATTERNS_JSON = REPO_ROOT / "data" / "audit" / "issue194_recurring_patterns.json"
+
+
+def _long(p: Path) -> str:
+    """Return a Windows long-path-prefixed string for file ops.
+
+    Some `run_name` values push the absolute judge-log path past Windows'
+    260-character MAX_PATH limit, which makes `Path.exists()` and
+    `Path.read_text()` silently report not-found. The `\\\\?\\` prefix
+    bypasses MAX_PATH on Win32 file APIs. POSIX is unaffected.
+    """
+    if os.name != "nt":
+        return str(p)
+    s = str(p.resolve())
+    return s if s.startswith("\\\\?\\") else "\\\\?\\" + s
+
+
+def _exists(p: Path) -> bool:
+    return os.path.exists(_long(p))
+
+
+def _read_text(p: Path, encoding: str = "utf-8") -> str:
+    with open(_long(p), encoding=encoding) as f:
+        return f.read()
+
 
 AUDIT_COLUMNS = [
     "audit_decision",
@@ -148,25 +175,25 @@ def _row_brief(row: dict) -> dict:
     """Build a compact audit brief for one taxonomy row.
 
     Returns a dict with the source row plus extracted judge-log signals.
-    Missing judge log -> brief flagged `judge_log_present=False`.
+    Missing judge log -> brief flagged `judge_log_present=False`. Uses
+    `_exists` / `_read_text` so Windows long paths work the same as POSIX.
     """
     log_path = _judge_log_path(row["run_name"], row["scenario_id"], row["trial_index"])
+    present = _exists(log_path)
     out = {
         "source_row": row,
         "judge_log_path": (
-            str(log_path.relative_to(REPO_ROOT).as_posix())
-            if log_path.exists()
-            else None
+            str(log_path.relative_to(REPO_ROOT).as_posix()) if present else None
         ),
-        "judge_log_present": log_path.exists(),
+        "judge_log_present": present,
         "tool_calls": [],
         "final_answer": "",
         "judge_suggestions": "",
         "judge_parsed_dims": {},
     }
-    if not log_path.exists():
+    if not present:
         return out
-    log = json.loads(log_path.read_text(encoding="utf-8"))
+    log = json.loads(_read_text(log_path))
     out["tool_calls"] = _extract_tool_call_summary(log.get("prompt_user", ""))
     out["final_answer"] = _extract_final_answer(
         log.get("prompt_user", ""), log.get("raw_response", "")
@@ -180,7 +207,10 @@ def _row_brief(row: dict) -> dict:
 
 def cmd_briefs(args: argparse.Namespace) -> int:
     fields, rows = _load_taxonomy_rows()
-    sample = [r for r in rows if r["audit_status"] == "stratified_sample"]
+    statuses = (
+        {args.status} if args.status else {"stratified_sample", "manual_confirmed"}
+    )
+    sample = [r for r in rows if r["audit_status"] in statuses]
     if args.cell:
         sample = [r for r in sample if r["experiment_cell"] == args.cell]
     if args.label:
@@ -240,11 +270,19 @@ def cmd_add_columns(args: argparse.Namespace) -> int:
         <TAB>berkeley_label<TAB>failure_stage<TAB>audit_note
         <TAB>audit_decision_source
 
-    Only rows with audit_status == 'stratified_sample' are eligible to
-    receive audit columns; matching keys are (run_name, scenario_id,
-    int(trial_index)). For audited rows, audit_status is upgraded from
-    'stratified_sample' to 'manual_confirmed'. The other 1,920 rows
-    in the CSV are left alone.
+    Default sidecar path is `data/audit/issue194_decisions.tsv` (committed
+    so the audit is reproducible from inputs); override with --decisions.
+
+    Eligible rows: `audit_status` is `stratified_sample` (initial pass)
+    or `manual_confirmed` (re-merge from the same sidecar after the
+    initial flip). Matching keys are `(run_name, scenario_id,
+    int(trial_index))`. After merge, `audit_status` is set to
+    `manual_confirmed` (idempotent on re-runs). The other 1,920+ rows
+    are left alone.
+
+    Fails if the sidecar references a key that doesn't match any
+    eligible row, or if zero rows would be updated — silent no-op
+    re-runs were a v1 review-finding hazard.
     """
     fields, rows = _load_taxonomy_rows()
     if any(c not in fields for c in AUDIT_COLUMNS):
@@ -258,7 +296,7 @@ def cmd_add_columns(args: argparse.Namespace) -> int:
                 r.setdefault(new_col, "")
 
     # Load sidecar.
-    sidecar = Path(args.decisions)
+    sidecar = Path(args.decisions) if args.decisions else DECISIONS_TSV
     decisions: dict[tuple[str, str, int], dict[str, str]] = {}
     with sidecar.open(encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f, delimiter="\t")
@@ -266,9 +304,11 @@ def cmd_add_columns(args: argparse.Namespace) -> int:
             key = (row["run_name"], row["scenario_id"], int(row["trial_index"]))
             decisions[key] = row
 
+    eligible_statuses = {"stratified_sample", "manual_confirmed"}
     n_updated = 0
+    matched_keys: set[tuple[str, str, int]] = set()
     for r in rows:
-        if r["audit_status"] != "stratified_sample":
+        if r["audit_status"] not in eligible_statuses:
             continue
         key = (r["run_name"], r["scenario_id"], int(r["trial_index"]))
         d = decisions.get(key)
@@ -292,7 +332,22 @@ def cmd_add_columns(args: argparse.Namespace) -> int:
         for col in AUDIT_COLUMNS:
             r[col] = d.get(col, "") or ""
         r["audit_status"] = "manual_confirmed"
+        matched_keys.add(key)
         n_updated += 1
+
+    unmatched = set(decisions.keys()) - matched_keys
+    if unmatched:
+        raise ValueError(
+            f"sidecar has {len(unmatched)} key(s) that don't match any eligible "
+            f"row in {TAXONOMY_CSV.relative_to(REPO_ROOT)}: "
+            f"{sorted(unmatched)[:5]}"
+        )
+    if n_updated == 0:
+        raise ValueError(
+            f"sidecar at {sidecar} updated zero rows; either the sidecar is "
+            f"empty or no rows are in eligible audit_status "
+            f"{sorted(eligible_statuses)}."
+        )
 
     with TAXONOMY_CSV.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
@@ -358,6 +413,29 @@ def cmd_render(args: argparse.Namespace) -> int:
     for k, v in stages.most_common():
         out.append(f"| `{k}` | {v} |")
     out.append("")
+
+    if _exists(PATTERNS_JSON):
+        patterns = json.loads(_read_text(PATTERNS_JSON))
+        out.append("## Recurring failure patterns")
+        out.append("")
+        out.append(
+            patterns.get(
+                "lead",
+                "These patterns recur across multiple audited rows and are the "
+                "strongest paper-citable signals.",
+            )
+        )
+        out.append("")
+        for i, p in enumerate(patterns.get("patterns", []), 1):
+            cells = ", ".join(p.get("cells", []))
+            out.append(
+                f"{i}. **{p['title']}** — {p['count']} rows. {p['description']} "
+                f"Cells: {cells}. Mitigation candidate: {p['mitigation']}"
+            )
+        if "summary_note" in patterns:
+            out.append("")
+            out.append(patterns["summary_note"])
+        out.append("")
 
     out.append("## Per-row audit table")
     out.append("")
@@ -426,13 +504,28 @@ def main(argv: list[str] | None = None) -> int:
     pb.add_argument(
         "--label", type=str, default=None, help="filter by auto_taxonomy_label"
     )
+    pb.add_argument(
+        "--status",
+        type=str,
+        default=None,
+        choices=("stratified_sample", "manual_confirmed"),
+        help="filter by audit_status (default: include both)",
+    )
     pb.set_defaults(fn=cmd_briefs)
 
     pa = sp.add_parser(
         "add-columns",
         help="merge a hand-edited audit-decisions sidecar TSV into the taxonomy CSV",
     )
-    pa.add_argument("--decisions", type=str, required=True)
+    pa.add_argument(
+        "--decisions",
+        type=str,
+        default=None,
+        help=(
+            "path to the audit-decisions TSV; defaults to "
+            "data/audit/issue194_decisions.tsv (committed)"
+        ),
+    )
     pa.set_defaults(fn=cmd_add_columns)
 
     pr = sp.add_parser(
