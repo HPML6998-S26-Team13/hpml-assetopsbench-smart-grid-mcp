@@ -35,22 +35,22 @@ fails, run the generator normally and inspect the resulting diff.
 
 | Cohort | Rows | Expected trajectories | Notes |
 |---|---:|---:|---|
-| `context_all31x3_full` | 60 | 6480 | 8K/16K/32K context ablations for every local method row |
-| `decoding_all31x3` | 14 | 1512 | temperature ablation on core local rows |
-| `local_all31x5_full` | 20 | 3600 | full local 8B method cross-product over the canonical scenario set |
-| `local_fmsr7_5x_full` | 20 | 800 | local 8B method cross-product on one canonical domain slice |
+| `context_all31x3_full` | 60 | 9180 | 8K/16K/32K context ablations for every local method row |
+| `decoding_all31x3` | 14 | 2142 | temperature ablation on core local rows |
+| `local_all31x5_full` | 20 | 5100 | full local 8B method cross-product over the canonical scenario set |
+| `local_fmsr7_5x_full` | 20 | 1100 | local 8B method cross-product on one canonical domain slice |
 | `local_generated5x5_full` | 20 | 500 | local 8B method cross-product over the latest reviewed generated-scenario batch |
-| `local_iot6_5x_full` | 20 | 900 | local 8B method cross-product on one canonical domain slice |
-| `local_multi7_5x_full` | 20 | 700 | local 8B method cross-product on one canonical domain slice |
+| `local_iot6_5x_full` | 20 | 1200 | local 8B method cross-product on one canonical domain slice |
+| `local_multi7_5x_full` | 20 | 1000 | local 8B method cross-product on one canonical domain slice |
 | `local_smoke1x1_full` | 20 | 20 | one-scenario local 8B smoke for every local method row |
-| `local_tsfm5_5x_full` | 20 | 500 | local 8B method cross-product on one canonical domain slice |
-| `local_wo6_5x_full` | 20 | 700 | local 8B method cross-product on one canonical domain slice |
-| `mitigation_all31x5_full` | 64 | 11520 | 4-tier mitigation ladder crossed with every PE-family local method |
+| `local_tsfm5_5x_full` | 20 | 800 | local 8B method cross-product on one canonical domain slice |
+| `local_wo6_5x_full` | 20 | 1000 | local 8B method cross-product on one canonical domain slice |
+| `mitigation_all31x5_full` | 64 | 16320 | 4-tier mitigation ladder crossed with every PE-family local method |
 | `mitigation_generated5x5_full` | 64 | 1600 | 4-tier mitigation ladder over the latest reviewed generated-scenario batch |
-| `repair_depth_all31x3` | 24 | 2592 | repair/adjudication depth ablation on the main Self-Ask PE-family rows |
-| `watsonx70b_all31x5_full` | 11 | 1980 | hosted-70B all-31 core/transport PE-family expansion |
+| `repair_depth_all31x3` | 24 | 3672 | repair/adjudication depth ablation on the main Self-Ask PE-family rows |
+| `watsonx70b_all31x5_full` | 11 | 2805 | hosted-70B all-31 core/transport PE-family expansion |
 | `watsonx70b_generated5x5_full` | 11 | 275 | hosted-70B method cross-product over the latest reviewed generated-scenario batch |
-| `watsonx70b_mitigation_all31x5_full` | 32 | 5760 | hosted-70B mitigation ladder for hosted-compatible PE-family rows |
+| `watsonx70b_mitigation_all31x5_full` | 32 | 8160 | hosted-70B mitigation ladder for hosted-compatible PE-family rows |
 | `watsonx70b_mitigation_generated5x5_full` | 32 | 800 | hosted-70B mitigation ladder over the latest reviewed generated-scenario batch |
 | `watsonx70b_smoke1x1_full` | 11 | 11 | one-scenario hosted-70B smoke for every hosted-compatible method row |
 
