@@ -1,0 +1,237 @@
+{
+  "_doc": "Recurring failure patterns + methodology + Berkeley-mapping rule for the #194 stratified hand-audit. Consumed by scripts/audit_failure_taxonomy.py render. Update this sidecar when re-auditing; render emits the markdown sections from this file.",
+  "methodology": {
+    "title": "Sampling design — coverage, not prevalence",
+    "body": "The 46 audited rows are a `(experiment_cell, auto_taxonomy_label)` stratified sample produced by `scripts/build_failure_taxonomy.py:stratified_sample` — one row per non-empty stratum across the 1,276 paper-eligible failures, deterministic seed 20260506. **Counts in this doc measure coverage of strata, not prevalence over the failure population.** A line like 'task_verification appears in 34 of 43 audited-with-label rows' means the auditor labeled 34 strata as task_verification — it does NOT mean ~79% of the 1,276 failures are task_verification. For a prevalence estimate, run a separate random-sample audit weighted by stratum size, or extrapolate weighted counts from the per-stratum confirmed-rate scaled by auto-label prevalence in the full 1,276 rows. The recurring-pattern row counts below are rows-in-this-sample; the parenthetical 'across N distinct scenarios' is the orthogonal coverage measure that distinguishes 'one buggy scenario replicated across many cells/models' from 'a broad-distributional failure mode'."
+  },
+  "current_surface_supersession": {
+    "title": "Current taxonomy surface and supersession",
+    "body": "For paper-facing failure-taxonomy claims, `results/metrics/failure_taxonomy_current.csv` plus this PR #197 manual audit are the **current surfaces of record**. They supersede the preliminary PR #151 failure-evidence artifact chain and PR #189's 35-row audit, which remain historical checks over an older evidence table. Any tables, figures, or prose still derived from the older `failure_evidence_table.csv` / 35-row audit should be regenerated from `failure_taxonomy_current.csv` or explicitly caveated as preliminary/stale. This is closeout hygiene for HPML #35: after #197 lands, the issue closeout can name exactly what is current, what is historical, and which derived artifacts (if any) were refreshed versus intentionally caveated."
+  },
+  "berkeley_mapping_rule": {
+    "title": "Berkeley-label tie-break rule (this audit)",
+    "body": "Per `docs/failure_taxonomy_evidence.md:139-145` Berkeley tie-break rule, when more than one Berkeley label is plausible the auditor picks **the latest irreversible mistake visible in the artifact** and mentions upstream contributors in the audit_note. Concretely: (a) if the trajectory's tool-call sequence is materially wrong but the agent never reaches a final-answer-with-fabrication, the latest irreversible mistake is the failing tool-call → label as `inter_agent_orchestration`; (b) if the agent emits a final answer / WO / decision that depends on missing, empty, or wrong evidence (i.e. the upstream gap was not corrected before the final answer landed), the latest irreversible mistake is the unearned final answer → label as `task_verification`. (c) `specification` is reserved for cases where the agent misunderstood the task itself (per the team-doc definition); the auditor did not see this in the 46-row sample. Note: this rule governs ONLY the Berkeley label, NOT the failure_stage — see the separate failure-stage rule below."
+  },
+  "failure_stage_rule": {
+    "title": "Failure-stage rule (this audit)",
+    "body": "Per `docs/failure_taxonomy_evidence.md:149-151`, `failure_stage` uses **the earliest stage where the run becomes observably unrecoverable** — which is a separate question from the Berkeley tie-break rule above. Stage candidates are `planning` / `tool_selection` / `tool_execution` / `verification` / `final_answer`, evaluated in trajectory order. **The two rules can disagree.** Worked example: a SGT-022 fleet-status row may have Berkeley=`task_verification` (the unearned breakdown is the latest irreversible mistake) AND stage=`planning` (the plan never included per-unit retrieval, so the run was already unrecoverable from planning). v3 of this audit applied the latest-irreversible-mistake tie-break to six rows' Berkeley labels (correctly — though only four of the six had a v2→v3 Berkeley modification; the two Z70B/ZS70B SGT-022 rows already carried `task_verification` from v2), but then incorrectly carried that same rule into `failure_stage` — moving five rows whose v2 stage was already earliest-unrecoverable-compatible (`planning` for the four SGT-022 rows, `tool_execution` for A70B SGT-009 run03) to `final_answer`; v4 (this revision) re-evaluates each tie-break row's stage independently of its Berkeley label — see `tie_break_relabels` below for the per-row mapping after both rules are applied separately."
+  },
+  "tie_break_relabels": {
+    "_doc": "Six rows where v2's first-pass labels needed re-evaluation. v3 changed Berkeley labels per latest-irreversible-mistake (correct) but also applied that rule to failure_stage (incorrect — stage uses earliest-unrecoverable). v4 keeps the Berkeley relabels and re-evaluates each row's stage independently. See `berkeley_mapping_rule` and `failure_stage_rule` for the two separate rules.",
+    "rows": [
+      {
+        "cell": "A70B",
+        "scenario_id": "SGT-009",
+        "trial_index": 2,
+        "v2": {
+          "berkeley": "inter_agent_orchestration",
+          "stage": "tool_selection"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = WO emission with overheating diagnosis). Stage=tool_execution (earliest unrecoverable: the retry on canonical 'winding_temp_top_c' also errored with 'Invalid comparison between dtype=datetime64[ns] and Timestamp', so the trend pipeline was broken at that tool execution and never recovered — the upstream 'dga_h2_ppm' miss was the trigger but not the only failure). Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "tool_execution"
+        }
+      },
+      {
+        "cell": "A70B",
+        "scenario_id": "SGT-009",
+        "trial_index": 3,
+        "v2": {
+          "berkeley": "inter_agent_orchestration",
+          "stage": "tool_execution"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = unearned WO at end). Stage=tool_execution (earliest unrecoverable: wrong sensor name 'winding_temp_c' only PARTIALLY recovered via list_sensors, so run was unrecoverable from the failed tool execution). Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "tool_execution"
+        }
+      },
+      {
+        "cell": "B70B",
+        "scenario_id": "SGT-022",
+        "trial_index": 3,
+        "v2": {
+          "berkeley": "inter_agent_orchestration",
+          "stage": "planning"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = unearned 10-healthy/10-degraded breakdown). Stage=planning (earliest unrecoverable: no get_sensor_readings calls at all in trajectory, so plan was missing per-unit retrieval from start). Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        }
+      },
+      {
+        "cell": "C70B",
+        "scenario_id": "SGT-022",
+        "trial_index": 3,
+        "v2": {
+          "berkeley": "inter_agent_orchestration",
+          "stage": "planning"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = unearned 12/5/3 breakdown). Stage=planning (earliest unrecoverable: only T-005 fully populated; plan was missing per-unit retrieval). Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        }
+      },
+      {
+        "cell": "Z70B",
+        "scenario_id": "SGT-022",
+        "trial_index": 1,
+        "v2": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = unearned breakdown). Stage=planning (earliest unrecoverable: snapshot only covered T-011; plan missing per-unit retrieval). Same shape as B70B/C70B/ZS70B SGT-022. Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        }
+      },
+      {
+        "cell": "ZS70B",
+        "scenario_id": "SGT-022",
+        "trial_index": 2,
+        "v2": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        },
+        "v3": {
+          "berkeley": "task_verification",
+          "stage": "final_answer"
+        },
+        "rationale": "Berkeley=task_verification (latest mistake = unearned breakdown). Stage=planning (earliest unrecoverable: only T-011 fully populated; plan missing per-unit retrieval). Berkeley and stage diverge.",
+        "v4": {
+          "berkeley": "task_verification",
+          "stage": "planning"
+        }
+      }
+    ]
+  },
+  "lead": "These patterns recur across multiple audited rows and are the strongest paper-citable signals. Each row's count is rows-in-this-sample and 'across M distinct scenarios' to flag patterns where a single scenario reproduces across multiple cells/models (cross-model robustness signal) versus broad-distributional (corpus-coverage signal):",
+  "patterns": [
+    {
+      "title": "Wrong sensor name (`winding_temp_c` vs canonical `winding_temp_top_c`)",
+      "count": 6,
+      "distinct_scenarios_count": 2,
+      "distinct_scenarios": [
+        "SGT-009",
+        "SGT-010"
+      ],
+      "description": "The 8B and 70B agents both pick a non-existent sensor name when asked about thermal trends. Tool returns 'no readings', but the agent then proceeds to outage-WO creation anyway.",
+      "cells": [
+        "B SGT-010 run01",
+        "B SGT-010 run03",
+        "A70B SGT-009 run02",
+        "A70B SGT-009 run03",
+        "B70B SGT-010 run02",
+        "C70B SGT-010 run03"
+      ],
+      "mitigation": "validate `sensor_id` against `iot.list_sensors` output before `iot.get_sensor_readings` / `tsfm.trend_analysis`, and hard-fail on unknown sensors instead of returning empty."
+    },
+    {
+      "title": "Low-temp + Arc Discharge contradiction",
+      "count": 5,
+      "distinct_scenarios_count": 1,
+      "distinct_scenarios": [
+        "SGT-014"
+      ],
+      "description": "The agent diagnoses 'low-temperature overheating' (a thermal fault) and matches it to FM-006 'Arc Discharge' (a high-energy electrical fault) — physically incompatible classes. Now spans Y70B / YS_TP / YS70B / Z70B / ZS70B (every PE-family 70B variant on SGT-014).",
+      "cells": [
+        "Y70B SGT-014 run02",
+        "YS_TP SGT-014 run05",
+        "YS70B SGT-014 run01",
+        "Z70B SGT-014 run03",
+        "ZS70B SGT-014 run01"
+      ],
+      "mitigation": "enforce a fault-mode-class consistency check between `analyze_dga` output and `search_failure_modes` result; reject thermal-class diagnoses paired with electrical-class FM matches."
+    },
+    {
+      "title": "T-006 vs T-008 fault-record confusion",
+      "count": 2,
+      "distinct_scenarios_count": 1,
+      "distinct_scenarios": [
+        "SGT-018"
+      ],
+      "description": "`get_fault_record(F006)` returns a T-008 record (since F006 belongs to T-008 in the fixture); the task asked about T-006; agent emits T-008 details as the answer.",
+      "cells": [
+        "B70B SGT-018 run03",
+        "C70B SGT-018 run01"
+      ],
+      "mitigation": "validate that the returned record's `transformer_id` matches the task's named asset before downstream tools consume it."
+    },
+    {
+      "title": "WO creation without preceding diagnostic",
+      "count": 7,
+      "distinct_scenarios_count": 3,
+      "distinct_scenarios": [
+        "SGT-007",
+        "SGT-009",
+        "SGT-010"
+      ],
+      "description": "Agent jumps straight to `create_work_order` (or after a single shallow tool call), skipping the discover/analyze/correlate sequence. The WO carries either fabricated severity / priority / playbook fields or empty placeholders. Z70B SGT-007 run01 also emits the WO despite explicit 'invalid severity' + session errors.",
+      "cells": [
+        "A SGT-009 run03",
+        "A70B SGT-009 run02",
+        "B70B SGT-010 run02",
+        "C70B SGT-010 run03",
+        "YS_BASELINE SGT-007 run02",
+        "Y70B SGT-010 run02",
+        "Z70B SGT-007 run01"
+      ],
+      "mitigation": "gate `create_work_order` behind a 'minimum-evidence' precondition checker (analyze_dga and/or trend_analysis outcome present in the trajectory); refuse to mark an errored WO as success."
+    },
+    {
+      "title": "INT8 model emits invented failure-mode IDs",
+      "count": 2,
+      "distinct_scenarios_count": 1,
+      "distinct_scenarios": [
+        "SGT-014"
+      ],
+      "description": "The INT8 8B variant on Cell D uses literal strings (`list_failure_modes`, `D2`, `FM-012`, `T1`) as `failure_mode_id` arguments, none of which exist.",
+      "cells": [
+        "D SGT-014 run02",
+        "D SGT-014 run05"
+      ],
+      "mitigation": "tool-input validation that rejects unknown IDs before the call dispatches."
+    },
+    {
+      "title": "Fleet-status snapshot covers only one representative unit",
+      "count": 4,
+      "distinct_scenarios_count": 1,
+      "distinct_scenarios": [
+        "SGT-022"
+      ],
+      "description": "Task asks for healthy + degraded (or healthy + degraded + critical) representative samples; agent fully populates only one unit (typically T-005 or T-011) and asserts the breakdown without per-unit retrieval.",
+      "cells": [
+        "B70B SGT-022 run03",
+        "C70B SGT-022 run03",
+        "Z70B SGT-022 run01",
+        "ZS70B SGT-022 run02"
+      ],
+      "mitigation": "in PE/verified-PE planning, expand 'representative units' to a numbered list and require one `iot.get_sensor_readings` call per declared unit before final aggregation."
+    }
+  ],
+  "summary_note": "These 6 patterns span **23 distinct audit-table rows** with 26 pattern-occurrences (rows × patterns; §1∩§4 overlap = 3 rows that show both wrong-sensor-name AND WO-without-diagnostic). All clusters reduce to **6 distinct scenarios**: SGT-007, SGT-009, SGT-010, SGT-014, SGT-018, SGT-022. The `specification` Berkeley category was not assigned to any audited row in this sample, applying the team's narrow definition (agent misunderstanding the task itself). Reasonable readers may argue patterns §1 (wrong sensor name) and §3 (T-006 vs T-008) sit on the boundary between `task_verification` and a hypothetical `tool_environment_specification` sub-label — the auditor's read is that the task is precisely specified and the gap is in the agent's tool-environment surface (canonical sensor names, asset-record consistency), not in the task statement, but a methodology revisit could re-draw the boundary."
+}
