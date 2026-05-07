@@ -807,6 +807,13 @@ def write_readme(items: list[ConfigItem]) -> None:
     for item in items:
         by_cohort.setdefault(item.cohort, []).append(item)
     lines = [
+        "---",
+        "status: canonical-index",
+        "scope: team-repo",
+        "owner: Team 13",
+        "canonical: true",
+        "---",
+        "",
         "# Config Universe",
         "",
         "Generated SmartGridBench experiment configs for opportunistic compute waves.",

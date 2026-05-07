@@ -19,6 +19,8 @@ canonical: true
 
 - Labeled active Markdown surfaces with YAML frontmatter so canonical,
   active-draft, superseded, scratch, and archived status is explicit.
+- Updated config-universe README generation so `--check` preserves the
+  canonical-index frontmatter expected by the active Markdown docs convention.
 - Archived dated planning notes under `planning/archive/` and added README
   indexes for planning, docs subdirectories, report archives, and build notes.
 - Removed stale team-repo `pm/backlog.md` after preserving its contents in the
