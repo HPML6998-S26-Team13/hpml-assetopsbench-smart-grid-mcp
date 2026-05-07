@@ -195,27 +195,3 @@ def get_tools() -> list[ToolSpec]:
     _ensure_registry()
     assert _TOOLS is not None
     return list(_TOOLS)
-
-
-def get_tool(name: str) -> ToolSpec:
-    """Lookup a ToolSpec by its qualified name, e.g. ``iot.get_sensor_readings``."""
-    _ensure_registry()
-    assert _TOOLS_BY_NAME is not None
-    if name not in _TOOLS_BY_NAME:
-        raise KeyError(f"unknown tool {name!r}; available: {sorted(_TOOLS_BY_NAME)}")
-    return _TOOLS_BY_NAME[name]
-
-
-def list_tool_specs_for_llm() -> list[dict[str, Any]]:
-    """Return a compact, JSON-serializable list of tool descriptors suitable
-    for prompting an LLM. This is intentionally minimal — a ReAct runner can
-    enrich it further with few-shot examples if needed.
-    """
-    return [
-        {
-            "name": s.name,
-            "description": s.doc,
-            "parameters": s.parameters(),
-        }
-        for s in get_tools()
-    ]

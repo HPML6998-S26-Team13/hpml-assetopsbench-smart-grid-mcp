@@ -1,3 +1,10 @@
+---
+status: active-draft
+scope: team-repo deliverable drafting
+owner: Team 13
+canonical: true
+---
+
 # IEEE Class Final Report Draft
 
 *Last updated: 2026-05-03*

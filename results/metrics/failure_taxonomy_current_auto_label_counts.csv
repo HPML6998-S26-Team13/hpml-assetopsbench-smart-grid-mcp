@@ -1,0 +1,5 @@
+auto_taxonomy_label,display_label,rows,percent_of_paper_failures,source_rows,source_csv
+low_task_completion,Task completion,944,74.0,1276,results/metrics/failure_taxonomy_current.csv
+low_data_retrieval_accuracy,Data retrieval accuracy,182,14.3,1276,results/metrics/failure_taxonomy_current.csv
+low_agent_sequence_correct,Agent sequence correctness,78,6.1,1276,results/metrics/failure_taxonomy_current.csv
+low_generalized_result_verification,Result verification,72,5.6,1276,results/metrics/failure_taxonomy_current.csv

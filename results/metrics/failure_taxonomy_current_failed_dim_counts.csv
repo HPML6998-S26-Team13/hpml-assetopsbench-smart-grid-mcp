@@ -1,0 +1,6 @@
+failed_dim_count,rows,percent_of_paper_failures,source_rows,source_csv
+2,204,16.0,1276,results/metrics/failure_taxonomy_current.csv
+3,195,15.3,1276,results/metrics/failure_taxonomy_current.csv
+4,469,36.8,1276,results/metrics/failure_taxonomy_current.csv
+5,405,31.7,1276,results/metrics/failure_taxonomy_current.csv
+6,3,0.2,1276,results/metrics/failure_taxonomy_current.csv

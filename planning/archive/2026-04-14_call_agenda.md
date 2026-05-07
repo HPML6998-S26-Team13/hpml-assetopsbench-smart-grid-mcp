@@ -1,3 +1,10 @@
+---
+status: archived
+scope: team-repo archive
+owner: Team 13
+canonical: false
+---
+
 # Team 13 Call - April 14, 2026 (Tuesday, 2:45 PM ET)
 
 *Weekly team sync. Goal: acknowledge what landed on Apr 13, close the remaining W2 ambiguity, and turn W3 into a concrete execution week instead of another planning week.*

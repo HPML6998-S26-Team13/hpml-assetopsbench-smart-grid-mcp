@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # GCP A100 Final Evidence Pullback
 
 Pulled from `smartgrid-a100-spot-20260503-0217` in `us-central1-a` on 2026-05-03. VM was a Spot `a2-highgpu-1g` with `NVIDIA A100-SXM4-40GB`; boot disk `autoDelete=false`.

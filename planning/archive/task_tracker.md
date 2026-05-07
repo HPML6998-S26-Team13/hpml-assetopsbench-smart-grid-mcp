@@ -1,3 +1,10 @@
+---
+status: archived
+scope: team-repo archive
+owner: Team 13
+canonical: false
+---
+
 # SmartGridBench Task Tracker
 
 *Archived planning snapshot for the SmartGridBench project. Last updated: April 9, 2026.*

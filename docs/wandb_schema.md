@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # WandB Metrics Schema
 
 *Created: 2026-04-10*

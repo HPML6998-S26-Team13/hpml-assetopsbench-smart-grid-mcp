@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Failure Visuals + Mitigation Plan for `#64`
 
 *Last updated: 2026-05-02*

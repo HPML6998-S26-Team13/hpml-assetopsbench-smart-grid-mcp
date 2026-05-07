@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Design — `scripts/aat_runner.py` (Cells A + B)
 
 *Date: 2026-04-24*

@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # MCP-Based Industrial Agent Benchmarking for Smart Grid Operations
 
 **COMS E6998: High Performance Machine Learning -- Final Project**  

@@ -1,3 +1,10 @@
+---
+status: active-draft
+scope: team-repo deliverable drafting
+owner: Team 13
+canonical: true
+---
+
 # Final Presentation Deck Draft
 
 *Created: 2026-05-02*
@@ -264,7 +271,54 @@ Speaker note:
 in the first capture, but the p95 tail and judge score tell us not to oversell
 transport optimization as quality improvement."
 
-### Slide 8 - Result 2: Orchestration Quality Is Not Monotonic
+### Slide 8 - Profiling Evidence and Observability
+
+Claim:
+
+The current repo now has a profiling inventory that measures observability
+coverage, and the newest spot checks expose a real instrumentation gap rather
+than a run failure.
+
+Inventory:
+
+| Evidence surface | Count |
+|---|---:|
+| Run rows in profiling inventory | 104 |
+| W&B-linked rows | 63 |
+| Profiler-linked rows | 13 |
+| Rows with profiling summary stats | 6 |
+
+Spot-check evidence:
+
+| Row | Scope | W&B | `nvidia-smi` summary | Torch trace |
+|---|---|---|---|---|
+| `AT_M` | 1 scenario / 1 trial | yes | yes | yes |
+| `AT_T` | 1 scenario / 1 trial | yes | yes | yes |
+| `PE_S_M` | 1 scenario / 1 trial | yes | yes | no |
+| `V_S_M` | 1 scenario / 1 trial | yes | yes | no |
+
+Interpretation:
+
+- The new spot checks are profiling / observability evidence only.
+- They should not be used as judged task-quality evidence: no judge rows and no
+  evidence-registry promotion were performed.
+- `PE_S_M` and `V_S_M` completed W&B + `nvidia-smi` profiling, but did not emit
+  torch traces. Frame this as a profiling-hook coverage gap for PE / Verified
+  PE rows, not as a failed run.
+
+Source:
+
+`results/metrics/profiling_inventory.csv`
+
+Speaker note:
+
+"For the class framing, this is one of the most HPML-native artifacts: we are
+not just reporting task scores; we are showing which runs are observable, which
+are dashboard-linked, and where our profiler hooks still have coverage gaps.
+The performance interpretation should be human-reviewed against the raw traces
+and dashboard rows."
+
+### Slide 9 - Result 2: Orchestration Quality Is Not Monotonic
 
 Claim:
 
@@ -299,7 +353,7 @@ Speaker note addendum:
 is that structured orchestration needs clarification and verification to become
 competitive."
 
-### Slide 9 - Failure Taxonomy: Most Failures Are Evidence Failures
+### Slide 10 - Failure Taxonomy: Most Failures Are Evidence Failures
 
 Claim:
 
@@ -335,7 +389,7 @@ Transition:
 "Once we know the dominant failure mode, the mitigation space gets smaller and
 more disciplined."
 
-### Slide 10 - Mitigation Ladder
+### Slide 11 - Mitigation Ladder
 
 Claim:
 
@@ -361,7 +415,7 @@ Speaker note:
 "If reruns do not land, this remains an implemented mitigation-ladder design
 slide. If reruns land, we can promote it to a before/after result slide."
 
-### Slide 11 - Reproducibility and Deliverables
+### Slide 12 - Reproducibility and Deliverables
 
 Claim:
 
@@ -387,7 +441,7 @@ Speaker note:
 "This is the reproducibility promise: every claim on the results slides should
 point to a metric file, figure, or run ID."
 
-### Slide 12 - Conclusion
+### Slide 13 - Conclusion
 
 Claim:
 

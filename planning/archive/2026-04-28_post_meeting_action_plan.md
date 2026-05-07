@@ -1,3 +1,11 @@
+---
+status: archived
+scope: team-repo historical planning
+owner: Team 13
+canonical: false
+notes: "Historical post-meeting plan; current task truth lives in GitHub Issues/Projects and active docs."
+---
+
 # Apr 28 Post-Meeting Action Plan
 
 *Last updated: 2026-04-30*

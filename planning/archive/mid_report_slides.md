@@ -1,3 +1,10 @@
+---
+status: archived
+scope: team-repo archive
+owner: Team 13
+canonical: false
+---
+
 # Mid-Point Report -- Slide Content
 
 Template: HPML_Mid_Report_Template.pptx (5 slides)

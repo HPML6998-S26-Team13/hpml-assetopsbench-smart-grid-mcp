@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Project Reference
 
 *Last updated: April 18, 2026*

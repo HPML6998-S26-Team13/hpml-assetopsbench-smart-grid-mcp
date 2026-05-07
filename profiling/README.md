@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # profiling/
 
 *Last updated: 2026-04-28*

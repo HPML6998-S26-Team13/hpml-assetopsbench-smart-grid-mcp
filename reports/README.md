@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # reports/
 
 *Last updated: 2026-05-03*
@@ -6,10 +13,9 @@ Frozen deliverables and current rendered drafts - PDFs and PPTXs that have been
 submitted, emailed, or otherwise "shipped" should not be edited after the fact.
 Files marked `*_draft.*` at the top level are active working cuts until they are
 replaced by a final shipped artifact or invalidated. Living documentation
-(domain guides, architecture, setup) lives in [../docs/](../docs/); planning
-artifacts (roadmap, meeting agendas, working notes) live in
-[../planning/](../planning/). This directory is for durable rendered outputs,
-not source-of-truth prose.
+(domain guides, architecture, setup) lives in [../docs/](../docs/); historical
+planning records live in [../planning/archive/](../planning/archive/). This
+directory is for durable rendered outputs, not source-of-truth prose.
 
 ## Current Deliverables and Active Drafts
 

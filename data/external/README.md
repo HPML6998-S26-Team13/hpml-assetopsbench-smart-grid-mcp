@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # data/external/
 
 Real-world reference datasets used by `data/scenarios/validate_realism_statistical.py`

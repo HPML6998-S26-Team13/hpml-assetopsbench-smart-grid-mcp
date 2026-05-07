@@ -68,7 +68,4 @@ docs/plans/
 # Agents
 CLAUDE.md
 AGENTS.md
-*claude*
-*codex*
 review/
-.agent-sessions/

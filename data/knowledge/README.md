@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # data/knowledge/
 
 Structured standards artifacts for the PS B scenario generation pipeline. Issue #50.

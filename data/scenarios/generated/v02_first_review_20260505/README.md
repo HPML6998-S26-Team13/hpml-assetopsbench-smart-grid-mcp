@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # `v02_first_review_20260505` — INSPECTION-ONLY BATCH (prompt v0.2 evaluation)
 
 > **Do not use these scenarios as benchmark inputs.** Same inspection-only framing as `data/scenarios/generated/first_review_20260503/`: ground-truth values are model-asserted, not validated against actual repo data fixtures or MCP tool outputs. The point of this batch is to **evaluate whether the v0.2 prompt-template iteration (PR #185) materially fixes the v0.1 inspection findings.**

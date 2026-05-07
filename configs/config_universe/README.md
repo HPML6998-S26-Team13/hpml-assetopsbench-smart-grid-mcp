@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Config Universe
 
 Generated SmartGridBench experiment configs for opportunistic compute waves.

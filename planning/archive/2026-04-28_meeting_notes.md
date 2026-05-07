@@ -1,3 +1,11 @@
+---
+status: archived
+scope: team-repo historical planning
+owner: Team 13
+canonical: false
+notes: "Historical meeting artifact; current task truth lives in GitHub Issues/Projects and active docs."
+---
+
 # Apr 28, 2026 | HPML Final Project - Team 13 Sync
 
 Attendees: [Alex Xin](mailto:wax1@columbia.edu), [Akshat Bhandari](mailto:ab6174@columbia.edu), [Tanisha Rathod](mailto:tr2828@columbia.edu), [Aaron Fan](mailto:af3623@columbia.edu)

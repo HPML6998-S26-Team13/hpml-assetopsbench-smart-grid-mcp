@@ -1,0 +1,13 @@
+section,value,rows,percent_of_manual_sample,source_rows,source_csv
+audit_decision,confirmed,42,91.3,46,results/metrics/failure_taxonomy_current.csv
+audit_decision,evidence_thin,3,6.5,46,results/metrics/failure_taxonomy_current.csv
+audit_decision,relabel_suggested,1,2.2,46,results/metrics/failure_taxonomy_current.csv
+berkeley_label,task_verification,30,65.2,46,results/metrics/failure_taxonomy_current.csv
+berkeley_label,inter_agent_orchestration,13,28.3,46,results/metrics/failure_taxonomy_current.csv
+berkeley_label,blank,3,6.5,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,final_answer,16,34.8,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,tool_execution,10,21.7,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,tool_selection,6,13.0,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,verification,6,13.0,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,planning,5,10.9,46,results/metrics/failure_taxonomy_current.csv
+failure_stage,blank,3,6.5,46,results/metrics/failure_taxonomy_current.csv

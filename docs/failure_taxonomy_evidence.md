@@ -1,6 +1,13 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Failure Taxonomy + Evidence Table for `#35`
 
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-07*
 *Owner: Alex Xin (lane), Akshat Bhandari (Round 1 reassignment for evidence
 fill-in)*
 *Issue: `#35`*
@@ -21,14 +28,53 @@ This file used to live as one of three sections inside the combined
 - `benchmarks/cell_*/summary.json` — aggregate per-run metrics
 - `results/metrics/scenario_scores.jsonl` — judge score and pass-rate joins
   when populated
-- `results/metrics/failure_evidence_table.csv` — current classified failure
-  table, one row per judge-failed trial
+- `results/metrics/failure_taxonomy_current.csv` — current paper-grade
+  classified failure inventory: 1,966 failed judge rows total, 1,276
+  paper-eligible rows, and a 46-row stratified manual-audit overlay
+- `results/metrics/failure_taxonomy_current_auto_label_counts.csv` — current
+  paper-grade auto-label count source for paper/deck figures
+- `results/metrics/failure_evidence_table.csv` — historical 35-row
+  preliminary classified failure table, retained for provenance but superseded
+  for paper/deck counts
 - `docs/validation_log.md` — canonical proof runs and caveats
 - `notebooks/03_orchestration_comparison.ipynb` — orchestration-level failure
   summaries
 - `scripts/run_exp1_ab_capture.sh`, `scripts/replay_scenarios.sh` — A/B
   capture wrapper and profiler replay helper
 - W&B runs / artifacts — preserved run context and profiling linkage
+
+## May 7 status refresh
+
+The current failure-taxonomy surface supersedes the earlier 35-row
+`failure_evidence_table.csv` for paper and deck counts. Use
+`results/metrics/failure_taxonomy_current.csv` and the derived
+`failure_taxonomy_current_*.csv` tables as the current citation targets.
+
+Current paper-grade failure inventory:
+
+| Surface | Rows / status |
+|---|---:|
+| All failed judge rows in `failure_taxonomy_current.csv` | 1,966 |
+| Paper-eligible failed rows | 1,276 |
+| Excluded / superseded / diagnostic failed rows | 690 |
+| Stratified manual-audit rows | 46 |
+
+Auto-label distribution for the 1,276 paper-eligible failures:
+
+| Auto label | Rows | Percent |
+|---|---:|---:|
+| `low_task_completion` | 944 | 74.0 |
+| `low_data_retrieval_accuracy` | 182 | 14.3 |
+| `low_agent_sequence_correct` | 78 | 6.1 |
+| `low_generalized_result_verification` | 72 | 5.6 |
+
+The 46-row manual-audit overlay currently records 42 confirmed rows, 3
+evidence-thin rows, and 1 relabel suggestion. Berkeley top-level labels and
+failure-stage assignments from that overlay should be treated as PR #197
+surfaces until its review loop is clean. The rule distinction below remains
+canonical: Berkeley labels use the latest irreversible mistake, while
+failure-stage assignment uses the earliest stage where the run becomes
+observably unrecoverable.
 
 ## Apr 27 status refresh
 
@@ -69,7 +115,7 @@ not a hand-audited final paper table; its labels come from the six judge
 dimensions, judge suggestions, and representative trajectory checks where the
 failure class was ambiguous.
 
-Current top-level counts:
+Historical Apr 30 top-level counts:
 
 | Taxonomy label | Rows | Read |
 |---|---:|---|
@@ -77,7 +123,7 @@ Current top-level counts:
 | inter-agent / orchestration failure | 13 | tool sequencing, tool-argument, or routing contracts break the intended execution path |
 | specification failure | 4 | fault/risk adjudication remains under-specified even when some evidence is available |
 
-Current symptom counts:
+Historical Apr 30 symptom counts:
 
 | Symptom | Rows | Candidate mitigation |
 |---|---:|---|
@@ -86,7 +132,7 @@ Current symptom counts:
 | tool-call sequencing failure | 6 | require evidence acquisition before inference, risk estimation, or work-order creation |
 | under-constrained fault/risk adjudication | 4 | add an explicit adjudication step that cites the deciding tool evidence |
 
-Cell distribution in the current export:
+Cell distribution in the Apr 30 export:
 
 | Cell | Failed rows classified |
 |---|---:|
@@ -105,7 +151,7 @@ with missing evidence, wrong tool order, or under-justified fault
 adjudication. That is exactly the failure-analysis story this table should
 feed.
 
-The representative-row audit gate is accepted for the current scaffold: every
+The representative-row audit gate was accepted for the Apr 30 scaffold: every
 row has a concrete artifact path, and representative rows from each symptom
 class were checked against their judge-log artifacts before rendering the first
 summary figures. If final reruns add or replace judge rows, rerun the renderer
@@ -188,11 +234,11 @@ that show `n/a` for these columns are historical-only entries from
 `trial_index` as paper-citable, and any row with `n/a` as discussion-only
 until a matched canonical capture lands.
 
-The CSV target is `results/metrics/failure_evidence_table.csv` (schema owned
-by `#36` export contract; populated rows produced under `#35`; see
-`docs/failure_analysis_scaffold.md`). As of 2026-04-30 it contains 35
-judge-failed rows. The next pass should manually audit representative rows
-before the paper cites exact category counts.
+The current CSV target is `results/metrics/failure_taxonomy_current.csv`.
+As of 2026-05-07 it contains 1,966 failed rows, of which 1,276 are
+paper-eligible. The older `failure_evidence_table.csv` remains as the Apr 30
+35-row preliminary pass and should only be cited when discussing historical
+taxonomy development.
 
 ## Initial evidence pass (Apr 22)
 
@@ -236,7 +282,7 @@ actually shown:
 | recurring | at least two distinct artifact-backed examples with the same pattern | "a recurring failure mode was..." |
 | mitigated | a recurring pattern plus an explicit before/after rerun pair | "the mitigation reduced..." |
 
-Current grade by pattern:
+Apr 30 scaffold grade by pattern:
 
 - missing-evidence final answer: **recurring** (18 judge-failed rows)
 - tool routing or argument-contract failure: **recurring** (7 judge-failed rows)
@@ -244,11 +290,12 @@ Current grade by pattern:
 - under-constrained fault / risk adjudication: **recurring with cautious
   wording** (4 judge-failed rows)
 
-That means the paper can safely say the current scored artifact set shows
-repeated **evidence-grounding** and **orchestration-contract** failures. The
-specification/adjudication pattern is also repeated in the judge-derived table,
-but should still be phrased more cautiously than the dominant evidence-grounding
-pattern because it is lower-count and more interpretation-heavy.
+The current 1,276-row paper-grade failure inventory supports the stronger
+paper claim that failures are dominated by answer completion / grounding
+problems, with data-retrieval accuracy, sequence correctness, and result
+verification as smaller but material secondary classes. The Apr 30
+specification/adjudication pattern remains useful as historical color, but do
+not present its 35-row counts as current.
 
 ### Paper-safe wording guide
 
@@ -313,15 +360,16 @@ For `#35`:
 
 The artifact gap that still bounds this lane:
 
-1. keep `failure_evidence_table.csv` refreshed if final scenario/rerun sweeps
+1. keep `failure_taxonomy_current.csv` refreshed if final scenario/rerun sweeps
    add judge rows
-2. use `results/figures/failure_taxonomy_counts.svg` and
-   `results/figures/failure_stage_cell_heatmap.svg` for the first #64 figure
-   pass
+2. use `results/figures/failure_taxonomy_current_auto_label_counts.svg` for the
+   current paper/deck taxonomy count figure; keep
+   `results/figures/failure_taxonomy_counts.svg` as a legacy Apr 30 scaffold
+   figure only
 3. run and judge the guarded `Y + Self-Ask` and `Z + Self-Ask` reruns for
    `missing_evidence_final_answer_guard`, then populate the #66 before/after
    table
-4. refresh `failure_evidence_table.csv` only if new judged rows change the
+4. refresh `failure_taxonomy_current.csv` only if new judged rows change the
    taxonomy or paper examples
 5. after detection/recovery rows exist, decide whether to run the now-runnable
    `explicit_fault_risk_adjudication_step` configs before paper freeze

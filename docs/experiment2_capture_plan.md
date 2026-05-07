@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Experiment 2 Capture Plan
 
 *Last updated: 2026-05-03*
@@ -96,8 +103,10 @@ per-trial logs at `results/judge_logs/<run>/<scenario_id>_judge_log.json`.
 
 What remains for `#32` is the eventual 5×6 final canonical re-run across
 all cells once the team agrees on the final scenario set (likely 2 multi
-+ 4 single-domain reps, single-domain canonicalization pending). Pinned
-in `pm/backlog.md`.
++ 4 single-domain reps, single-domain canonicalization pending). Treat this
+as a post-deadline follow-up unless a live GitHub issue / Project item
+reactivates it; current evidence floor (post-PR175 multi-cohort) covers
+the science at heterogeneous depth across cells.
 
 ## Runner dispatch
 

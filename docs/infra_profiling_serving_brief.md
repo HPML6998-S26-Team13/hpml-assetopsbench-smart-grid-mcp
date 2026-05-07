@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Infrastructure / Profiling / Serving Brief (`#43`)
 
 *Last updated: 2026-05-05*

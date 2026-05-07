@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # DGA Statistical Realism Report
 
 - Synthetic: `data/processed/dga_records.csv` (n=20)

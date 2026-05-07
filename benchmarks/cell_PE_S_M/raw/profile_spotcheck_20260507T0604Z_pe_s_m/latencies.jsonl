@@ -1,0 +1,1 @@
+{"latency_seconds": 29.384866952896118, "output_path": "benchmarks/cell_PE_S_M/raw/profile_spotcheck_20260507T0604Z_pe_s_m/2026-05-07_PE_S_M_llama-3-1-8b-instruct_plan_execute_baseline_multi_02_dga_to_workorder_pipeline_run01.json", "scenario_file": "data/scenarios/multi_02_dga_to_workorder_pipeline.json", "trial_index": 1}

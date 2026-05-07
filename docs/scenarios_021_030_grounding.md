@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Grounding Notes — Scenarios SGT-021 through SGT-030
 
 *Owner: Akshat Bhandari | Created: 2026-05-03 | Issue: #33*

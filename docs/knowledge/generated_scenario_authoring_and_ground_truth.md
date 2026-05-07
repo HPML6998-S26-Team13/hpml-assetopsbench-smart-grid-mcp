@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Generated-Scenario Authoring and Ground-Truth Contract
 
 *Created: 2026-04-26*  

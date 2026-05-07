@@ -1,15 +1,21 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Content brief — Scenarios + Eval + Judge
 
-*Last updated: 2026-05-06. Owner: Akshat (issue #42). Audience: Alex, for the paper's scenarios + eval sections.*
+*Last updated: 2026-05-07. Owner: Akshat (issue #42). Audience: Alex, for the paper's scenarios + eval sections.*
 
-This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in each bullet, all sourced from `team13/main@aa0aeee` (post-PR193 merge — `results/metrics/failure_taxonomy_current.csv` was added by PR #193 and the registry/judge artifacts come from PR #188). Sources by section: scenario counts from `data/scenarios/*.json` + `data/scenarios/generated/disposition_2026-05-06.csv` (PR #191); evidence counts from `results/metrics/evidence_registry.csv` (PR #188) + `results/metrics/scenario_scores.jsonl` (continuously updated, all paper-eligible rows on the PR #175 floor); failure-taxonomy counts from `results/metrics/failure_taxonomy_current.csv` (PR #193).
+This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in each bullet, all sourced from `team13/main@f1309fd` plus the local final-evidence consolidation commit for the current taxonomy-audit figure sources. Sources by section: scenario counts from `data/scenarios/*.json` + `data/scenarios/generated/disposition_2026-05-06.csv` (PR #191) + the five PR #195 promotions; evidence counts from `results/metrics/evidence_registry.csv` (PR #188) + `results/metrics/scenario_scores.jsonl` (continuously updated, all paper-eligible rows on the PR #175 floor); failure-taxonomy counts from `results/metrics/failure_taxonomy_current.csv` (PR #193) and the 46-row audit overlay in PR #197.
 
 ## Scenarios
 
-- **Canonical corpus:** 31 hand-authored Smart Grid scenarios at `data/scenarios/*.json`. Validated by `python data/scenarios/validate_scenarios.py` (`Validation passed for 31 scenario files and 5 negative fixtures`). Closes HPML #15 (15+ floor) and HPML #33 (30+ stretch).
-- **Pending promotion:** PR #195 promotes 5 `accept_with_edits` generated rows into canonical (`SGT-031..SGT-035`). Validator passes 36+5 once #195 lands. Brief assumes pre-merge state of 31; bump to 36 on merge.
+- **Canonical corpus:** 36 validated Smart Grid scenarios at `data/scenarios/*.json`: 31 hand-authored rows plus 5 bounded-edit promotions from the generated-scenario review. Validated by `python3 data/scenarios/validate_scenarios.py` (`Validation passed for 36 scenario files and 5 negative fixtures`). Closes HPML #15 (15+ floor), HPML #33 (30+ stretch), and HPML #53 (generated-scenario disposition/promotion closeout).
 - **Negative fixtures:** 5 at `data/scenarios/negative_checks/*.json` covering single-/multi-domain mismatches, missing-domain coverage, and unknown-tool rejection.
-- **Domain mix (current 31):** FMSR 7 (incl. 1 AOB-style), IoT 6, Multi 8, TSFM 4, WO 6.
+- **Promotion provenance:** PR #195 added `SGT-031..SGT-035` as `fmsr_07`, `iot_07`, `iot_08`, `wo_07`, and `iot_09`, retaining source paths, disposition CSV references, applied-edits notes, and reviewer-selected comparators.
 - **Asset universe:** T-001..T-020 (`data/processed/asset_metadata.csv`). All scenario `asset_id`s validate against this list.
 - **Tool universe:** 19 canonical MCP tools across IoT/FMSR/TSFM/WO domains, defined in `data/scenarios/validate_scenarios.py:CANONICAL_TOOLS`. Validator rejects unknown tools and cross-domain tool use in single-domain scenarios.
 
@@ -17,8 +23,8 @@ This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in
 
 - **Three batches:** `data/scenarios/generated/{first_review_20260502, first_review_20260503, v02_first_review_20260505}/`. 5 SGT-GEN-* records each. Total **15 generated candidates** validated under the methodology in `docs/ps_b_evaluation_methodology.md`.
 - **Disposition outcome (PR #191, merged):** machine-readable table at `data/scenarios/generated/disposition_2026-05-06.csv`. **5 `accept_with_edits` / 10 `reject_duplicate` / 0 `reject_unusable` / 0 `reject_structural`.** Both methodology bars (≥70% accept-or-edits; <20% reject_duplicate) fail at 33% / 67%; no batch publishes as benchmark-ready, but the 5 `accept_with_edits` rows are bounded-edit candidates.
-- **Promotion path:** PR #195 ports the 5 with provenance retained (source path, disposition CSV reference, applied-edits list, and reviewer-selected comparator) under canonical names `fmsr_07`, `iot_07`, `iot_08`, `wo_07`, `iot_09`.
-- **#55 stretch (50+):** still short at 36 even after PR #195 — needs ≥14 hand-crafted companions or an explicit defer per the `post-class-defer` label.
+- **Promotion path:** complete for the 5 bounded-edit rows in PR #195.
+- **#55 stretch (50+):** still short at 36 after PR #195 — needs at least 14 additional scenarios or an explicit defer per the `post-class-defer` label.
 
 ## Eval harness
 
@@ -44,13 +50,13 @@ This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in
 - **Paper-grade subset:** 2,420 rows (37 paper-eligible run_names per `evidence_registry.csv`; `include_in_paper=true`).
 - **Paper-grade failures:** 1,276 (`pass=false` ↔ `score_6d < 0.6` align perfectly). Programmatically classified in PR #193's `results/metrics/failure_taxonomy_current.csv`. Auto-label distribution: `low_task_completion=944`, `low_data_retrieval_accuracy=182`, `low_agent_sequence_correct=78`, `low_generalized_result_verification=72`. (`low_hallucinations` and `low_clarity_and_justification` don't appear as the dominant label because they only co-occur with earlier-priority dim failures; they're visible in `failed_dims`.)
 - **Failed-dim co-occurrence:** failure rows fail 2-6 dims at once (4-dim mode is largest at 469 rows). `failed_dims` column in `failure_taxonomy_current.csv` carries the full pattern per row.
-- **Hand audit (#194):** 46-row stratified sample (one per non-empty (cell, auto-label) stratum, deterministic seed) flagged for manual review. Owner TBD.
+- **Hand audit (#194 / PR #197):** 46-row stratified sample (one per non-empty (cell, auto-label) stratum, deterministic seed) reviewed by hand. Current overlay in `failure_taxonomy_current.csv`: 42 confirmed, 3 evidence-thin, 1 relabel suggested. Treat the Berkeley-label and failure-stage counts as PR #197 surfaces until that PR clears review.
 - **Excluded rows:** 1,296 (3,716 − 2,420). Reasons in `evidence_registry.csv:reason` — most common: post-PR180 cohort superseded by post-PR175 clean floor (28 run_names); legacy final-six A100 matrix (11); pre-PR173/final-six mitigation diagnostic (8). All preserved (`status=superseded` / `diagnostic` / `invalid_tooling`) rather than expunged.
 
 ## Safe paper claims
 
-- "31 hand-authored validated scenarios across 5 task domains" — sourced from validator output. (Bump to 36 after PR #195.)
-- "All 31 scenarios passed schema validation, asset-id resolution, and tool-canonicality checks before inclusion."
+- "36 validated scenarios across the Smart Grid task domains" — sourced from validator output.
+- "All 36 scenarios passed schema validation, asset-id resolution, and tool-canonicality checks before inclusion."
 - "2,420 LLM-judge rows form the paper-grade evaluation cohort, drawn from a larger 3,716-row evaluation pool with 1,296 rows explicitly tracked as superseded or diagnostic."
 - "Of 1,276 paper-grade failures, 74% present `task_completion` as the highest-priority failed rubric dimension, with 4-5 dim co-occurring failures most common." (Source: `failure_taxonomy_current.csv` after PR #193 lands.)
 - "An auto-generated batch of 15 scenarios produced 5 bounded-edit promotions and 10 near-duplicate rejections under the methodology in `docs/ps_b_evaluation_methodology.md`." (PR #191 disposition; PR #195 promotion.)
@@ -60,7 +66,7 @@ This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in
 - ❌ "≥70% acceptance" on the generated batch — the methodology bar fails at 33%.
 - ❌ "Manual hand audit confirms the auto-taxonomy on every paper-grade failure" — only the 46-row stratified sample + paper-cited rows are slated for manual review (#194).
 - ❌ "All 19 MCP tools have been exercised across paper-grade rows" — no row-level coverage map yet; needs trajectory-walk to confirm.
-- ❌ "50+ scenarios" — corpus is 31 (36 after #195). #55 stretch deferred.
+- ❌ "50+ scenarios" — corpus is 36 after PR #195. #55 stretch remains deferred/future work.
 
 ## Pointers (for fact-checking this brief)
 

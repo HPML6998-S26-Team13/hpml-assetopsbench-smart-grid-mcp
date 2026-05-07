@@ -1,3 +1,11 @@
+---
+status: archived
+scope: team-repo historical planning
+owner: Team 13
+canonical: false
+notes: "Historical mentor-call artifact; current task truth lives in GitHub Issues/Projects and active docs."
+---
+
 # Apr 28, 2026 | SmartGridBench with Dhaval Patel and Shuxin Lin
 
 Attendees: Dr. Dhaval Patel (IBM Research), Shuxin Lin (IBM), Team 13: [Alex Xin](mailto:wax1@columbia.edu), [Akshat Bhandari](mailto:ab6174@columbia.edu), [Tanisha Rathod](mailto:tr2828@columbia.edu), [Aaron Fan](mailto:af3623@columbia.edu)

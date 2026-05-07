@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Project Synopsis -- Cold Start Guide
 
 *Last updated April 18, 2026. Read time: ~10 minutes.*

@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Failure-evidence audit — 2026-05-05
 
 Audit of `results/metrics/failure_evidence_table.csv` (35 rows from PR #151) against per-trial judge data in `results/metrics/scenario_scores.jsonl` and the mirrored trajectory files under `benchmarks/cell_*/raw/<run_name>/`.

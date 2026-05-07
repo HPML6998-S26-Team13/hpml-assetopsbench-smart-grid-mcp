@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 520">
+<rect width="100%" height="100%" fill="#fbf7ef"/>
+<text x="40" y="46" font-family="Georgia, serif" font-size="30" fill="#1b1b1b">Current paper-grade failure taxonomy</text>
+<text x="40" y="76" font-family="Verdana, sans-serif" font-size="14" fill="#5b5147">1,276 paper-eligible failed judge rows from failure_taxonomy_current.csv</text>
+<text x="40" y="98" font-family="Verdana, sans-serif" font-size="13" fill="#5b5147">Auto label is the highest-priority failed judge dimension; manual audit sample is tracked separately.</text>
+<text x="40" y="153" font-family="Verdana, sans-serif" font-size="16" fill="#26231f">Task completion</text>
+<rect x="390" y="118" width="540" height="56" rx="6" fill="#1f6f78"/>
+<text x="944" y="152" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#26231f">944 (74.0%)</text>
+<text x="40" y="233" font-family="Verdana, sans-serif" font-size="16" fill="#26231f">Data retrieval accuracy</text>
+<rect x="390" y="198" width="104" height="56" rx="6" fill="#c85a3a"/>
+<text x="508" y="232" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#26231f">182 (14.3%)</text>
+<text x="40" y="313" font-family="Verdana, sans-serif" font-size="16" fill="#26231f">Agent sequence correctness</text>
+<rect x="390" y="278" width="44" height="56" rx="6" fill="#6f7d2a"/>
+<text x="448" y="312" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#26231f">78 (6.1%)</text>
+<text x="40" y="393" font-family="Verdana, sans-serif" font-size="16" fill="#26231f">Result verification</text>
+<rect x="390" y="358" width="41" height="56" rx="6" fill="#5b6aa8"/>
+<text x="445" y="392" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#26231f">72 (5.6%)</text>
+</svg>

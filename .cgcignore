@@ -2,22 +2,29 @@
 # Default ignore patterns for binary/media files
 # Add your own patterns below
 
+# Build / install / runtime
 node_modules/
 venv/
 .venv/
+.venv*/
 env/
 .env/
 dist/
 build/
 target/
 out/
-.git/
-.agent-sessions/
-.claude/
-.codex/
-claude-worktrees/
-codex-worktrees/
+.next/
+.tox/
+coverage/
+*.egg-info/
 __pycache__/
+*.pyc
+*.pyo
+
+# Version control / editor / cache
+.git/
+.idea/
+.vscode/
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
 **/.ipynb_checkpoints/**
@@ -25,31 +32,80 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .DS_Store
+
+# Agent workspaces
+.agent-sessions/
+.claude/
+.codex/
+claude-worktrees/
+codex-worktrees/
+__unscoped__/
+
+# Project data + artifact dirs (not code)
+# Keep index focused on mcp_servers/, scripts/, tests/, root Python files,
+# notebooks/, plus a few code-adjacent configs. Everything below is
+# evidence/output/operator/PM material that doesn't need graph nodes.
+benchmarks/
+data/
+gcp_artifacts/
+logs/
+private/
+profiling/
+reports/
+results/
+review/
+
+# Project doc / planning surfaces (markdown, not code)
+docs/
+pm/
+planning/
+configs/
+data_docs/
+
+# Media / binary
 *.png
 *.jpg
 *.jpeg
 *.gif
 *.svg
+*.ico
 *.mp4
 *.mp3
+*.wav
+*.pdf
 *.zip
 *.tar
 *.gz
-
-# CodeGraphContext recommended baseline additions
-.venv*/
-.idea/
-.vscode/
-*.pyc
-*.pyo
-*.egg-info/
-.tox/
-coverage/
-.next/
-*.log
-*.sqlite*
 *.bz2
 *.xz
 *.zst
 *.7z
 *.rar
+
+# Logs / databases / large data files
+*.log
+*.sqlite*
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.h5
+*.hdf5
+
+# Project-specific generated CSVs (per CLAUDE.md gitignore convention)
+*.preflight.csv
+
+# Symlinks that resolve outside the repo (deployed from ai-coding-agents)
+# CGC follows symlinks and errors with "not in the subpath" — list each.
+.githooks/pre-push
+git-status.sh
+scripts/check_skill_frontmatter.py
+scripts/check_branch_base.py
+scripts/check_tiny_commit.py
+scripts/check_pr_scope.py
+scripts/review_scope_guard.py
+
+# Notebooks — keep code cells but skip checkpoint dirs
+# (notebooks/ itself stays indexed so analysis-side notebooks are visible)

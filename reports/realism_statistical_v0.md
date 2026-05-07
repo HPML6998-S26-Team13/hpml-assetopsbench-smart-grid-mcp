@@ -1,3 +1,11 @@
+---
+status: superseded
+scope: team-repo report artifact
+owner: Team 13
+canonical: false
+notes: "Superseded by realism_statistical_v1; kept for comparison."
+---
+
 # DGA Statistical Realism Report
 
 - Synthetic: `data/processed/dga_records.csv` (n=20)

@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # notebooks/
 
 Jupyter notebooks for exploratory analysis and figure generation. Notebooks are the **bridge** between raw measurements in `benchmarks/` and curated results in `results/`: they read from `benchmarks/`, transform, and write to `results/metrics/` and `results/figures/`.
@@ -59,7 +66,7 @@ Notebook 03 (Experiment 2 — orchestration comparison):
 
 - preflight checks Cells B / Y / Z under `benchmarks/cell_<X>_*/`
 - reads per-scenario JSONs for the `success` / `failed_steps` / `history` / `answer` shape that `scripts/run_experiment.sh` + the AOB PE client and the repo-local PE-Self-Ask / Verified-PE runners produce
-- catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False` (per Codex's 2026-04-20 finding)
+- catches JSON error-payload masking by scanning `history[*].response.error` in addition to `step.success=False`
 - computes success rate, mean failed steps, mean history length, mean tool-error count, recovery rate, and (when `results/metrics/scenario_scores.jsonl` is populated per `#17`) judge pass rate per orchestration
 - exports `notebook03_cell_availability.preflight.csv`, `notebook03_self_ask_run_inventory.preflight.csv`, `notebook03_orchestration_comparison.csv`, `notebook03_failure_breakdown.csv`, and `notebook03_orchestration_comparison.png`
 - staged usage:

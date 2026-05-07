@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # PS B Evaluation Methodology
 
 *Last updated: 2026-04-16*  

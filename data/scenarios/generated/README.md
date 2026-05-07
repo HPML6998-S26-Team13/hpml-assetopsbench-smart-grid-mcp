@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Generated Smart Grid scenario batches
 
 Output directory for `scripts/generate_scenarios.py` (PS B auto-generation prototype, `#2`).

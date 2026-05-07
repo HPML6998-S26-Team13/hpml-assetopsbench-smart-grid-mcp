@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Evaluation Harness Runbook (Local Windows + WatsonX)
 
 *Last updated: 2026-05-06. Owns the eval-harness half of issue #67 (runbook); see `docs/runbook.md` for the Insomnia/Slurm + GCP A100 production paths and `docs/content_brief_scenarios_eval.md` for current scenario/eval/judge facts.*

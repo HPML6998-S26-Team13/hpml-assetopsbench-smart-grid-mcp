@@ -1,6 +1,13 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Documentation Index
 
-Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Planning artifacts (roadmap, meeting agendas, working notes) live in [../planning/](../planning/). Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [reference/](reference/).
+Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Historical planning records live in [../planning/archive/](../planning/archive/); current task truth lives in GitHub Issues / Projects and active docs. Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [reference/](reference/).
 
 ## Document index
 
@@ -55,7 +62,7 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 - [../notebooks/README.md](../notebooks/README.md) - Analysis notebook contract.
 - [../results/README.md](../results/README.md) - Derived metrics / figures contract.
 - [../profiling/README.md](../profiling/README.md) - Profiling capture workflow and wrappers.
-- [../planning/](../planning/) - Meeting agendas, working notes, and archived planning snapshots. Current task state now lives in the [GitHub Project](https://github.com/orgs/HPML6998-S26-Team13/projects/1/views/1); historical tracker/spec snapshots live in [../planning/archive/task_tracker.md](../planning/archive/task_tracker.md) and [../planning/archive/task_specs.md](../planning/archive/task_specs.md).
+- [../planning/](../planning/) - Index for historical meeting agendas, working notes, and planning snapshots under [../planning/archive/](../planning/archive/). Current task state now lives in the [GitHub Project](https://github.com/orgs/HPML6998-S26-Team13/projects/1/views/1); historical tracker/spec snapshots live in [../planning/archive/task_tracker.md](../planning/archive/task_tracker.md) and [../planning/archive/task_specs.md](../planning/archive/task_specs.md).
 - [../reports/](../reports/) - Frozen deliverables (mid-point submission PDF, proposal PDFs, draft archive).
 - [governance/](governance/) - Small repo-truth governance artifacts, starting with the model/runtime registry for local vLLM and WatsonX naming/pinning.
 
@@ -67,6 +74,6 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 - **Low-churn reference docs live under `reference/`** - class requirements, mentor guidance, and setup references that change less often should live there rather than crowding the top-level index.
 - **Paper-ready content (LaTeX) lives here** - finished paper sections can be dropped into Overleaf as `.tex` files. Don't mix draft and final in the same file; use git history for versions.
 - **No shipped deliverables here** - if it's a frozen PDF/PPTX/Keynote export that was submitted or emailed, it belongs in `../reports/`, not `docs/`.
-- **No planning artifacts here** - the roadmap and meeting agendas belong in
-  `../planning/`; agent-coordination surfaces are no longer part of this team
-  repo's documentation tree.
+- **No active planning artifacts here** - historical planning records live in
+  `../planning/archive/`; agent-coordination surfaces are no longer part of this
+  team repo's documentation tree.

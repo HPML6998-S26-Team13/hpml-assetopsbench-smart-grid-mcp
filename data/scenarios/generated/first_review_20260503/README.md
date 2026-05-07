@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # `first_review_20260503` — INSPECTION-ONLY BATCH
 
 > **Do not use these scenarios as benchmark inputs.** Their `ground_truth` values are model-asserted, not validated against the actual repo data fixtures or MCP tool outputs. A correct tool-using agent would be scored wrong on at least three of the five scenarios.

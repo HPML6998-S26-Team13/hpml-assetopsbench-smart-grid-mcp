@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Final Presentation PPTX Draft Build Notes
 
 *Created: 2026-05-03*
@@ -20,20 +27,9 @@ a committed deterministic pipeline.
 
 ## Build Command
 
-The draft was generated with the bundled Codex artifact-tool deck builder:
-
-```bash
-/Users/wax/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node \
-  /Users/wax/.codex/plugins/cache/openai-primary-runtime/presentations/26.430.10722/skills/presentations/scripts/build_artifact_deck.mjs \
-  --workspace /tmp/codex-presentations/manual-20260503-smartgridbench-final \
-  --slides-dir /tmp/codex-presentations/manual-20260503-smartgridbench-final/slides \
-  --out /Users/wax/coding/hpml-assetopsbench-smart-grid-mcp/.codex/worktrees/codex-fnd-final-deck-artifact/reports/final_presentation_smartgridbench.pptx \
-  --preview-dir /tmp/codex-presentations/manual-20260503-smartgridbench-final/preview \
-  --layout-dir /tmp/codex-presentations/manual-20260503-smartgridbench-final/layout/final \
-  --contact-sheet /tmp/codex-presentations/manual-20260503-smartgridbench-final/preview/contact-sheet.png \
-  --manifest /tmp/codex-presentations/manual-20260503-smartgridbench-final/output/artifact-build-manifest.json \
-  --slide-count 12
-```
+The draft was generated with the local presentation artifact builder as a
+one-off editable PPTX export. Machine-local runtime paths are intentionally
+omitted from this public build note.
 
 After generation, the file was moved to:
 `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
@@ -50,16 +46,7 @@ After generation, the file was moved to:
 
 ## Layout QA
 
-Command:
-
-```bash
-/Users/wax/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node \
-  /Users/wax/.codex/plugins/cache/openai-primary-runtime/presentations/26.430.10722/skills/presentations/scripts/check_layout_quality.mjs \
-  --layout /tmp/codex-presentations/manual-20260503-smartgridbench-final/layout/final \
-  --warn-only
-```
-
-Result: `0 error(s), 7 warning(s)`.
+The local layout checker reported `0 error(s), 7 warning(s)`.
 
 Warnings accepted for this draft:
 

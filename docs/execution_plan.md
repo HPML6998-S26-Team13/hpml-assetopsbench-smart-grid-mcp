@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Execution Plan: W2-W5
 
 *Last updated: April 21, 2026*

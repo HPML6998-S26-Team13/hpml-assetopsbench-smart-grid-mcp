@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # configs/
 
 Experiment configs consumed by [scripts/run_experiment.sh](../scripts/run_experiment.sh).

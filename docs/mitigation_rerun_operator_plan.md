@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Mitigation Rerun Operator Plan
 
 *Last updated: 2026-05-03*  
@@ -195,7 +202,7 @@ manifest capture, and per-row judging stay consistent:
 export COHORT_TSV=configs/mitigation_final6_5x6/cohort_4tier.tsv
 export SMARTGRID_BATCH_ID=mitigation_final6_4tier_a100_<UTC>
 export PLAN_EXECUTE_REPO_LOCAL=1
-export AOB_PYTHON=/home/wax/AssetOpsBench/.venv/bin/python
+export AOB_PYTHON="${AOB_PYTHON:-${HOME}/AssetOpsBench/.venv/bin/python}"
 
 bash scripts/run_gcp_context_batch.sh --resume-batch "$SMARTGRID_BATCH_ID"
 ```

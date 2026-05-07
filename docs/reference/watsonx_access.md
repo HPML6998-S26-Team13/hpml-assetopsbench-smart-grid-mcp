@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # WatsonX.ai Access
 
 *Last updated: April 18, 2026*  
@@ -224,10 +231,10 @@ Technically yes - ~6s for a 500-token review is interactive-speed, and the quali
 test prompt was solid. But a few caveats:
 
 - **Usage-policy risk:** WatsonX access was granted for the project. If usage analytics
-  flag heavy non-project queries, Dhaval/IBM might pull access. Keep general-purpose
-  code review on Claude/Codex; reserve WatsonX for project work and occasional experiments.
+  flag heavy non-project queries, Dhaval/IBM might pull access. Reserve WatsonX for
+  project work and occasional experiments.
 - **Quality ceiling:** Maverick is strong for a 17B active-param model, but noticeably
-  below Claude Sonnet 4.6 / GPT-5 for deep architectural critique. Good as a second
+  below larger frontier models for deep architectural critique. Good as a second
   opinion, not as a primary reviewer.
 - **No tool use, no multi-turn:** The `generate_text` endpoint is single-shot completion.
   If you want agent-style iterative review, you'd need to build that harness yourself.

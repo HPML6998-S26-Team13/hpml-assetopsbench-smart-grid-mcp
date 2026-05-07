@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Slurm Cheatsheet
 
 *Created: 2026-04-12*  

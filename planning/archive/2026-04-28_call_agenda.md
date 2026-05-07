@@ -1,3 +1,11 @@
+---
+status: archived
+scope: team-repo historical planning
+owner: Team 13
+canonical: false
+notes: "Historical meeting artifact; current task truth lives in GitHub Issues/Projects and active docs."
+---
+
 # Team 13 Call - April 28, 2026 (Tuesday, 2:45 PM ET)
 
 *Draft agenda. Goal: freeze the evidence story, lock W5 writing / presentation ownership, and decide what still makes the final cut.*

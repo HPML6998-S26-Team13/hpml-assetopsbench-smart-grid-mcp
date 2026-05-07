@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Experiment Matrix and Follow-On Conditions
 
 *Last updated: 2026-05-03*  

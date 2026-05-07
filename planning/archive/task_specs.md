@@ -1,3 +1,10 @@
+---
+status: archived
+scope: team-repo archive
+owner: Team 13
+canonical: false
+---
+
 # SmartGridBench Task Specs
 
 *Archived companion to [task_tracker.md](./task_tracker.md). Last updated: April 9, 2026. Current canonical task state now lives in the GitHub Project and issue bodies.*

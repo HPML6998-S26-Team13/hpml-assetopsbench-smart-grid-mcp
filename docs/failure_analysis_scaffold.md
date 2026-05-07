@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Before/After Metric Pack for `#36`
 
 *Last updated: 2026-05-02*

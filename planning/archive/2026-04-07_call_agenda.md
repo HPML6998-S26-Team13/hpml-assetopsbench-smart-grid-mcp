@@ -1,3 +1,10 @@
+---
+status: archived
+scope: team-repo archive
+owner: Team 13
+canonical: false
+---
+
 # Team 13 Call — April 7, 2026 (Tuesday, 2:45 PM ET)
 
 *Weekly team sync. No mentor attending.*

@@ -1,3 +1,11 @@
+---
+status: archived
+scope: team-repo historical planning
+owner: Team 13
+canonical: false
+notes: "Historical meeting artifact; current task truth lives in GitHub Issues/Projects and active docs."
+---
+
 # Team 13 Call - April 21, 2026 (Tuesday, 2:45 PM ET)
 
 *Weekly team sync. Goal: convert the Apr 16 post-call decisions into a clean W4 execution contract instead of letting W3 drift forward unresolved.*

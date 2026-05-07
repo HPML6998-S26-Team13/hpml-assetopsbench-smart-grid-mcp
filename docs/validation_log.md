@@ -1,6 +1,13 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Validation Log
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-07*
 
 Canonical log for live serve / benchmark / profiling proofs. Use this file for
 concrete run records, not the runbooks.
@@ -17,6 +24,50 @@ For each proof entry, record:
 - primary artifacts
 - what the run proves
 - caveats / follow-ups
+
+## 2026-05-05 — Post-PR175 WatsonX 70B appendix / scale-sanity evidence (`#95`)
+
+- **Scope:** Hosted WatsonX Llama-3.3-70B scale-sanity runs for the post-PR175
+  clean-floor evidence set. This closes the exploratory 70B decision for `#95`:
+  70B is appendix / scale-sanity evidence, not part of the core 8B matrix claim.
+- **Model:** `watsonx/meta-llama/llama-3-3-70b-instruct`.
+- **Branch / git SHA:** `team13/main@1913c6e4703425f735d8cb8297cb890ba66bbeff`.
+- **Cohorts:** `watsonx70b_main15` plus `watsonx70b_topup15` in
+  `results/metrics/evidence_registry.csv`.
+- **Row groups:** `A70B`, `B70B`, `C70B`, `Y70B`, `YS70B`, `Z70B`, `ZS70B`.
+- **Coverage:** 11 registry rows; 435 raw trajectories; 435 judge rows. A/B/C
+  have 15 scenarios x 3 trials; Y/YS/Z/ZS have 15 scenarios x 5 trials after
+  topups.
+- **Primary artifacts:**
+  - `results/metrics/evidence_registry.csv`
+  - `results/metrics/gcp_post175_70b_summary.csv`
+  - `results/metrics/scenario_scores.jsonl`
+  - `benchmarks/cell_A70B/raw/final15x3_70b_watsonx_post175_cpu_ixqt_abc_20260505T0722Z_A70B_post175_70b_aat_direct_watsonx`
+  - `benchmarks/cell_B70B/raw/final15x3_70b_watsonx_post175_cpu_ixqt_abc_20260505T0722Z_B70B_post175_70b_aat_mcp_baseline_watsonx`
+  - `benchmarks/cell_C70B/raw/final15x3_70b_watsonx_post175_cpu_ixqt_abc_20260505T0722Z_C70B_post175_70b_aat_mcp_optimized_watsonx`
+  - `benchmarks/cell_Y70B/raw/final15x3_70b_watsonx_post175_cpu_cu_a_yys_envrepair_20260505T0820Z_Y70B_post175_70b_exp2_cell_Y_pe_mcp_baseline_watsonx`
+  - `benchmarks/cell_YS70B/raw/final15x3_70b_watsonx_post175_cpu_cu_a_yys_envrepair_20260505T0820Z_YS70B_post175_70b_exp2_cell_YS_pe_self_ask_mcp_baseline_watsonx`
+  - `benchmarks/cell_Z70B/raw/final15x3_70b_watsonx_post175_cpu_cu_b_zzs_envrepair_20260505T0820Z_Z70B_post175_70b_exp2_cell_Z_verified_pe_mcp_baseline_watsonx`
+  - `benchmarks/cell_ZS70B/raw/final15x3_70b_watsonx_post175_cpu_cu_b_zzs_envrepair_20260505T0820Z_ZS70B_post175_70b_exp2_cell_ZS_verified_pe_self_ask_mcp_baseline_watsonx`
+- **Aggregate judge summary:** 218 / 435 pass at threshold 0.6. Per-row
+  pass/mean score: A70B 23/45, mean 0.5444; B70B 23/45, mean 0.5704; C70B
+  22/45, mean 0.5815; Y70B 37/75, mean 0.6244; YS70B 34/75, mean 0.5867;
+  Z70B 40/75, mean 0.6200; ZS70B 39/75, mean 0.6444.
+
+What this proves:
+
+- The hosted 70B path can run and judge the same Smart Grid task surface under
+  the post-PR175 clean-floor code, with accepted rows registered as
+  `paper_grade`.
+- The scale-sanity trend does not overturn the 8B core story: 70B coverage is
+  narrower than the core all-scenario matrix and is best used as an appendix
+  cross-check rather than as a primary matrix claim.
+
+Caveats / follow-ups:
+
+- The core NeurIPS matrix remains the registry-backed 8B evidence set.
+- Full all-scenario / all-generated-scenario 70B expansion remains future work
+  and is not a blocker for `#95`.
 
 ## 2026-04-30 — Z + Self-Ask + D optimized PE-family ablation proof (`#85`, informs `#32`)
 
@@ -230,7 +281,7 @@ Caveats / follow-ups:
 - **Scenario:** `data/scenarios/multi_01_end_to_end_fault_response.json`
 - **Model:** self-hosted `openai/Llama-3.1-8B-Instruct` through local vLLM on
   Insomnia
-- **Current reachable PR branch:** `codex-fnd/aat-smoke-fix`
+- **Current reachable PR branch:** smoke-fix branch for `#104`
 - **Historical Slurm-recorded SHAs:** these jobs ran before the Apr 26
   author/committer attribution rewrite. The run `meta.json` files therefore
   record pre-rewrite hashes that are no longer reachable from the remote branch:
@@ -409,7 +460,7 @@ Caveats / follow-ups:
 ## 2026-04-21 — PE + Self-Ask clean smoke proof snapshot (`#24`)
 
 - **Scope:** repo-local PE + Self-Ask runner on Insomnia
-- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
+- **Branch / git SHA:** verified-PE/Self-Ask proof branch at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
 - **Config:** `configs/example_pe_self_ask.env`
 - **Run id / Slurm job id:** `8857842_pe_self_ask_mcp_baseline_smoke`
 - **W&B:** [otkt77pj](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/otkt77pj)
@@ -432,7 +483,7 @@ Caveats / follow-ups:
 ## 2026-04-21 — Verified PE clean smoke proof snapshot (`#23`)
 
 - **Scope:** repo-local Verified PE runner on Insomnia
-- **Branch / git SHA:** `codex-fnd/issue-23-24-verified-pe-self-ask` at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
+- **Branch / git SHA:** verified-PE/Self-Ask proof branch at `3a03ab83b7714c1d0f3aed2bc4899ef63fe5511c`
 - **Config:** `configs/example_verified_pe.env`
 - **Run id / Slurm job id:** `8857843_verified_pe_mcp_baseline_smoke`
 - **W&B:** [x65ej9e0](https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/runs/x65ej9e0)

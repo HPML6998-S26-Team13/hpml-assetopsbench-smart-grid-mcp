@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # benchmarks/
 
 Raw latency and throughput measurements from end-to-end experiment runs. Each subdirectory holds a distinct experimental condition. The raw outputs here are **not** transformed — use notebooks in `notebooks/` to derive curated metrics and write them to `results/`.

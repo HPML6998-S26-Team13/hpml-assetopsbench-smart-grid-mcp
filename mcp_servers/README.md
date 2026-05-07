@@ -1,3 +1,10 @@
+---
+status: canonical-index
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # mcp_servers/
 
 MCP (Model Context Protocol) servers wrapping the four AssetOpsBench tool domains. Each subdirectory is a standalone MCP server that can be launched independently or composed into a multi-server agent pipeline.

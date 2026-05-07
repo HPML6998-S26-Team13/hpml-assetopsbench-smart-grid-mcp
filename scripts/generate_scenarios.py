@@ -52,12 +52,11 @@ import datetime as dt
 import hashlib
 import json
 import logging
-import os
 import pathlib
 import random
 import re
 import sys
-from typing import Any, Optional
+from typing import Any
 
 # Allow running as `python scripts/generate_scenarios.py` from repo root.
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent

@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Methods-section disclosure: Python interpreter version skew across cells
 
 *Drafting note for the paper's Experimental Setup / Implementation Details section. Per backlog cleanup pin: "Y baseline 3.12 vs others 3.11 — fairness contract caveat documented; methods-section disclosure language needed."*

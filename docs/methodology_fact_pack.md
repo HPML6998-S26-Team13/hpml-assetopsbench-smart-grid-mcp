@@ -1,3 +1,10 @@
+---
+status: canonical
+scope: team-repo
+owner: Team 13
+canonical: true
+---
+
 # Methodology Fact Pack — SmartGridBench
 
 *Issue #41 deliverable. 1-page bullet fact pack for paper/report data, server, and methodology sections.*
