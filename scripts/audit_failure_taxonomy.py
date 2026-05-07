@@ -16,11 +16,25 @@ verdict, and emits a per-row brief the auditor reads to decide:
 Subcommands:
 
     briefs       — emit per-row briefs to stdout or --out for the auditor.
-    add-columns  — add the audit columns to the CSV (sets `audit_status`
-                   to `manual_confirmed` for rows with a non-empty
-                   `audit_decision`; leaves the other 1,920 rows alone).
-    render       — read the augmented CSV and write the Markdown audit
-                   summary, including the paper-cite candidate list.
+                   By default reads both `stratified_sample` and
+                   `manual_confirmed` rows; filter via `--status`.
+    add-columns  — merge a hand-edited audit-decisions sidecar TSV into
+                   the CSV (defaults to `data/audit/issue194_decisions.tsv`,
+                   which IS committed so the audit is reproducible from
+                   inputs). Sets `audit_status` to `manual_confirmed` for
+                   audited rows; idempotent on re-runs. Validates
+                   audit_decision / berkeley_label / failure_stage
+                   against the canonical vocab AND
+                   audit_decision_source against `<handle>:<YYYY-MM-DD>`.
+                   Fails loudly on unmatched keys or zero updates.
+    render       — write the Markdown audit summary by reading the
+                   augmented CSV plus
+                   `data/audit/issue194_recurring_patterns.json` (also
+                   committed) for the methodology paragraph, the
+                   Berkeley-mapping rule, the recurring-patterns
+                   section, and the v2->v3 tie-break-relabel callout.
+                   Reproducible: re-running render over committed
+                   inputs is byte-identical to the committed doc.
 
 Mirrors `scripts/audit_failure_evidence.py` (PR #189) but targets the
 new failure_taxonomy_current.csv schema instead of the preliminary
@@ -33,6 +47,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -88,6 +103,11 @@ FAILURE_STAGES = {
     "final_answer",
 }
 AUDIT_DECISIONS = {"confirmed", "relabel_suggested", "evidence_thin"}
+
+# `audit_decision_source` should be `<reviewer-handle>:<YYYY-MM-DD>` per the
+# audit-tooling docstring. Without validation, typos like `Akshat:2026-5-7`
+# silently merge and break later programmatic provenance walks.
+AUDIT_SOURCE_PATTERN = re.compile(r"^[a-z][a-z0-9_]*:\d{4}-\d{2}-\d{2}$")
 
 
 def _judge_log_path(run_name: str, scenario_id: str, trial_index: str) -> Path:
@@ -329,6 +349,12 @@ def cmd_add_columns(args: argparse.Namespace) -> int:
                 f"invalid failure_stage {d['failure_stage']!r} for {key}; "
                 f"must be one of {sorted(FAILURE_STAGES)}"
             )
+        src = d.get("audit_decision_source") or ""
+        if src and not AUDIT_SOURCE_PATTERN.match(src):
+            raise ValueError(
+                f"invalid audit_decision_source {src!r} for {key}; expected "
+                f"`<reviewer-handle>:<YYYY-MM-DD>` (lowercase handle, ISO date)"
+            )
         for col in AUDIT_COLUMNS:
             r[col] = d.get(col, "") or ""
         r["audit_status"] = "manual_confirmed"
@@ -387,6 +413,26 @@ def cmd_render(args: argparse.Namespace) -> int:
     )
     out.append("")
 
+    # Methodology + Berkeley mapping rule come from the patterns sidecar so
+    # the rendered doc is reproducible from committed inputs.
+    patterns_json = (
+        json.loads(_read_text(PATTERNS_JSON)) if _exists(PATTERNS_JSON) else {}
+    )
+
+    methodology = patterns_json.get("methodology") or {}
+    if methodology:
+        out.append(f"## {methodology.get('title', 'Methodology')}")
+        out.append("")
+        out.append(methodology.get("body", ""))
+        out.append("")
+
+    rule = patterns_json.get("berkeley_mapping_rule") or {}
+    if rule:
+        out.append(f"## {rule.get('title', 'Berkeley-label mapping rule')}")
+        out.append("")
+        out.append(rule.get("body", ""))
+        out.append("")
+
     out.append("## Decision counts")
     out.append("")
     decisions = Counter(r["audit_decision"] for r in audited if r["audit_decision"])
@@ -414,28 +460,61 @@ def cmd_render(args: argparse.Namespace) -> int:
         out.append(f"| `{k}` | {v} |")
     out.append("")
 
-    if _exists(PATTERNS_JSON):
-        patterns = json.loads(_read_text(PATTERNS_JSON))
+    if patterns_json:
         out.append("## Recurring failure patterns")
         out.append("")
         out.append(
-            patterns.get(
+            patterns_json.get(
                 "lead",
                 "These patterns recur across multiple audited rows and are the "
                 "strongest paper-citable signals.",
             )
         )
         out.append("")
-        for i, p in enumerate(patterns.get("patterns", []), 1):
+        for i, p in enumerate(patterns_json.get("patterns", []), 1):
             cells = ", ".join(p.get("cells", []))
+            distinct = p.get("distinct_scenarios_count")
+            distinct_ids = ", ".join(p.get("distinct_scenarios", []))
+            scope = (
+                f"{p['count']} rows across {distinct} distinct scenario{'s' if distinct != 1 else ''}"
+                f" ({distinct_ids})"
+                if distinct is not None
+                else f"{p['count']} rows"
+            )
             out.append(
-                f"{i}. **{p['title']}** — {p['count']} rows. {p['description']} "
+                f"{i}. **{p['title']}** — {scope}. {p['description']} "
                 f"Cells: {cells}. Mitigation candidate: {p['mitigation']}"
             )
-        if "summary_note" in patterns:
+        if "summary_note" in patterns_json:
             out.append("")
-            out.append(patterns["summary_note"])
+            out.append(patterns_json["summary_note"])
         out.append("")
+
+        relabels = patterns_json.get("tie_break_relabels") or {}
+        if relabels.get("rows"):
+            out.append("## Tie-break relabels (v2 → v3)")
+            out.append("")
+            out.append(
+                "Six rows were relabeled in v3 to apply the team's tie-break rule "
+                "consistently (latest irreversible mistake). v2's labels reflected "
+                "the auditor's first-pass 'first irreversible mistake' reading; "
+                "v3 corrects this against `docs/failure_taxonomy_evidence.md:139-145`."
+            )
+            out.append("")
+            out.append(
+                "| cell | scenario | trial | v2 berkeley / stage | v3 berkeley / stage | rationale |"
+            )
+            out.append("|---|---|---:|---|---|---|")
+            for r in relabels["rows"]:
+                v2 = r["v2"]
+                v3 = r["v3"]
+                rationale = r["rationale"].replace("|", "\\|")
+                out.append(
+                    f"| {r['cell']} | {r['scenario_id']} | {r['trial_index']} | "
+                    f"`{v2['berkeley']}` / `{v2['stage']}` | "
+                    f"`{v3['berkeley']}` / `{v3['stage']}` | {rationale} |"
+                )
+            out.append("")
 
     out.append("## Per-row audit table")
     out.append("")
