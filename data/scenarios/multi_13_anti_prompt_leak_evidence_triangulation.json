@@ -1,0 +1,38 @@
+{
+  "id": "SGT-060",
+  "type": "Multi",
+  "text": "T-019 has been flagged in poor condition by routine inspection. Review available evidence and recommend a maintenance action.",
+  "category": "Comprehensive Health Assessment",
+  "characteristic_form": "The answer should triangulate across multiple evidence sources for T-019 — at minimum nameplate metadata, DGA, RUL, and fault history — rather than relying on a single tool. The recommendation must cite each source it used and reconcile any disagreement between them.",
+  "asset_id": "T-019",
+  "expected_tools": [
+    "iot.get_asset_metadata",
+    "fmsr.get_dga_record",
+    "tsfm.get_rul",
+    "wo.list_fault_records"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "nameplate metadata referenced",
+      "DGA result referenced",
+      "RUL value referenced",
+      "fault history referenced",
+      "maintenance recommendation grounded in at least three of the four sources"
+    ],
+    "must_NOT_include": [
+      "recommendation grounded in only a single tool's output",
+      "evidence sources implied but not actually retrieved"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "IoT",
+    "FMSR",
+    "TSFM",
+    "WO"
+  ],
+  "benchmark_design": {
+    "target_capability": "anti_prompt_leak_evidence_triangulation",
+    "discrimination_hypothesis": "The prompt deliberately avoids naming a specific evidence source (no DGA mention, no thermal mention, no RUL mention). Weak models latch onto one tool based on the 'poor condition' wording and stop there. Strong models triangulate across nameplate / DGA / RUL / fault-history (T-019 fixture has signal in all four: rul_days=8, fdd_category=4, Arc-discharge DGA, 3 fault records)."
+  }
+}

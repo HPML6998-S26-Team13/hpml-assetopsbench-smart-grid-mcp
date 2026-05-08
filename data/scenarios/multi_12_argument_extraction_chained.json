@@ -1,0 +1,31 @@
+{
+  "id": "SGT-056",
+  "type": "Multi",
+  "text": "Find the in-service transformer with the most fault records on file, then surface that unit's available sensor channels for an inspection brief. Use the actual fault-record count to pick the asset — do not assume.",
+  "category": "Cross-Domain Planning",
+  "characteristic_form": "The answer should enumerate the fault-record counts per asset (or surface the top-faulted unit), explicitly name the highest-count asset, then list available sensor channels for that asset. Both the asset_id and the fault count must come from the tool output, not from prompt assumption.",
+  "expected_tools": [
+    "wo.list_fault_records",
+    "iot.list_sensors"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "per-asset fault count or top-faulted unit derived from tool output",
+      "highest-count asset named with its fault count",
+      "sensor channels listed for the named asset only"
+    ],
+    "must_NOT_include": [
+      "sensor channels listed for an asset that is not the top-faulted unit",
+      "fault count derived from prompt assumption rather than tool output"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "WO",
+    "IoT"
+  ],
+  "benchmark_design": {
+    "target_capability": "argument_extraction_across_tool_returns",
+    "discrimination_hypothesis": "Weak models hardcode an asset_id (often a frequently-cited one in the prompt-history) instead of extracting it from list_fault_records output. Strong models aggregate the fault-record list, identify T-017 (5 fault records, the highest) from tool output, and pass that asset_id to list_sensors."
+  }
+}

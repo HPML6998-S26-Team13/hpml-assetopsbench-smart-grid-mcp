@@ -1,0 +1,31 @@
+{
+  "id": "SGT-054",
+  "type": "IoT",
+  "text": "Across the in-service fleet, identify the single transformer with the worst current health rating (lowest RUL or worst fdd_category) and pull only that unit's available sensor channels for an inspection brief. Do not enumerate sensors for the rest of the fleet.",
+  "category": "Asset Discovery",
+  "characteristic_form": "The answer should report the in-service fleet roster, identify the single worst-health transformer by an explicit metric (lowest RUL_days and/or highest fdd_category), and list available sensor channels for that one unit only. Sensor enumeration for any other unit is incorrect.",
+  "expected_tools": [
+    "iot.list_assets",
+    "iot.get_asset_metadata",
+    "iot.list_sensors"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "in-service fleet enumerated",
+      "worst-health unit identified with explicit metric",
+      "sensor channels listed for only the worst-health unit"
+    ],
+    "must_NOT_include": [
+      "sensor channels listed for any unit other than the worst-health pick",
+      "sensor enumeration across all 20 transformers"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "IoT"
+  ],
+  "benchmark_design": {
+    "target_capability": "distractor_filtering_retrieval_discipline",
+    "discrimination_hypothesis": "Weak models pull list_sensors for every asset they touched, treating discovery and selection as a single step. Strong models filter to the worst-health asset (T-019 in this fixture: rul_days=8, fdd_category=4) before invoking list_sensors, and surface only that unit's channels."
+  }
+}

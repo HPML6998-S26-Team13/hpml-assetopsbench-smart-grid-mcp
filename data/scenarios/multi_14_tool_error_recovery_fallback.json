@@ -1,0 +1,33 @@
+{
+  "id": "SGT-059",
+  "type": "Multi",
+  "text": "Run anomaly detection on T-005's winding-temperature channel for the past month. If the tool returns an error, an empty result, or a degenerate output, fall back to a different sensor channel on the same asset, document what the first attempt produced, and surface the alternate-channel finding.",
+  "category": "Anomaly Detection",
+  "characteristic_form": "The answer should describe the initial attempt on T-005's winding_temp_top_c channel and what the tool returned (success, error, or empty). If the first attempt failed or returned nothing usable, the answer should report a fallback to an alternate sensor channel for T-005 (e.g. oil_temp_c, load_current_a) and surface that channel's anomaly result.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "iot.list_sensors",
+    "tsfm.detect_anomalies"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "initial attempt on T-005 winding_temp_top_c documented",
+      "outcome of the initial attempt (success, error, or empty) explicitly reported",
+      "fallback to an alternate sensor channel if the initial attempt did not produce a usable result",
+      "alternate-channel finding surfaced or explicit confirmation that the initial attempt succeeded"
+    ],
+    "must_NOT_include": [
+      "fabricated anomaly result in the absence of a successful tool return",
+      "silent abandonment without naming what the initial attempt produced"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "TSFM",
+    "IoT"
+  ],
+  "benchmark_design": {
+    "target_capability": "tool_error_recovery_and_fallback",
+    "discrimination_hypothesis": "Weak models either silently abandon when the first call returns an error or fabricate a plausible-looking anomaly result. Strong models document the first-attempt outcome, fall back to a sibling sensor channel, and surface what each step produced. T-005 winding_temp_top_c has previously hit a `dtype=datetime64[ns] vs Timestamp` error path in the harness, making this a realistic recovery test."
+  }
+}

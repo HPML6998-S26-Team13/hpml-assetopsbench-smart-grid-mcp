@@ -1,0 +1,34 @@
+{
+  "id": "SGT-055",
+  "type": "Multi",
+  "text": "T-001 — pull the current DGA record and the unit's fault history. The team is asking whether to log T-001 as a clean asset or flag it for follow-up given that operational records show a past incident. Reconcile the two views.",
+  "category": "Comprehensive Health Assessment",
+  "characteristic_form": "The answer should report T-001's current DGA result (Normal), enumerate the fault-history entries on file, explicitly reconcile the two signals (current DGA shows no active fault; history shows a past incident), and give a defensible classify-as-clean-or-flag recommendation grounded in that reconciliation.",
+  "asset_id": "T-001",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga",
+    "wo.list_fault_records"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "current DGA classified as Normal / no active fault",
+      "past fault entry on file enumerated",
+      "explicit reconciliation: historical fault versus current Normal DGA",
+      "classify-clean or flag-for-follow-up recommendation grounded in both signals"
+    ],
+    "must_NOT_include": [
+      "current DGA reported as showing an active fault on T-001",
+      "fault history reported as empty"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR",
+    "WO"
+  ],
+  "benchmark_design": {
+    "target_capability": "cross_tool_consistency_reconciliation",
+    "discrimination_hypothesis": "Weak models pick one signal and ignore the other (either over-weighting the Normal DGA and reporting clean, or over-weighting the historical fault and flagging for action). Strong models surface the apparent conflict explicitly and ground their recommendation in both signals (T-001 fixture: DGA=Normal, fault_records has 1 Line Breakage entry from prior cycle)."
+  }
+}

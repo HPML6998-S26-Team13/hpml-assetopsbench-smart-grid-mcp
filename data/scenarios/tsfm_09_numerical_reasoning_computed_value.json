@@ -1,0 +1,31 @@
+{
+  "id": "SGT-058",
+  "type": "TSFM",
+  "text": "For T-013, run trend analysis on the winding-temperature channel. Report the magnitude of change in degrees Celsius over the most recent two-week window, the per-day rate computed from that magnitude, and characterize whether that rate is consistent with the longer-term trend the tool reports.",
+  "category": "Sensor Trend Analysis",
+  "characteristic_form": "The answer should report a numeric two-week magnitude of change (with °C units), a numeric per-day rate computed by dividing that magnitude by 14 days, and an explicit consistency assessment relative to the longer-term trend the tool returns. Qualitative-only answers (without computed numbers) are insufficient.",
+  "asset_id": "T-013",
+  "expected_tools": [
+    "tsfm.trend_analysis"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "two-week magnitude of change in °C",
+      "per-day rate of change derived from the two-week magnitude",
+      "explicit consistency assessment versus the longer-term trend",
+      "winding-temperature channel named"
+    ],
+    "must_NOT_include": [
+      "qualitative-only trend description without any computed numbers",
+      "per-day rate reported without showing how it was derived from the two-week magnitude"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "TSFM"
+  ],
+  "benchmark_design": {
+    "target_capability": "numerical_reasoning_over_tool_outputs",
+    "discrimination_hypothesis": "Weak models report the trend qualitatively (rising / falling / flat) without computing a magnitude or rate. Strong models extract the two-week magnitude from the tool's trend output, divide by 14 to derive the per-day rate, and reconcile that rate with the longer-term trend."
+  }
+}

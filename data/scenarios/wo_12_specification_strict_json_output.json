@@ -1,0 +1,32 @@
+{
+  "id": "SGT-057",
+  "type": "WO",
+  "text": "Open a corrective work order on T-018 for the elevated-acetylene finding from the latest DGA. Return ONLY a single JSON object with the keys exactly `work_order_id`, `status`, and `asset_id` (no other keys, no surrounding prose, no markdown fences).",
+  "category": "Work Order Creation",
+  "characteristic_form": "The answer must be a single valid JSON object containing exactly the three keys `work_order_id`, `status`, and `asset_id` with `asset_id` equal to `T-018`. No prose, no commentary, no markdown code fences, no extra keys.",
+  "asset_id": "T-018",
+  "expected_tools": [
+    "wo.create_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "valid JSON object",
+      "exactly three keys: work_order_id, status, asset_id",
+      "asset_id value equals T-018"
+    ],
+    "must_NOT_include": [
+      "prose around the JSON object",
+      "markdown code-fence delimiters",
+      "extra keys beyond the three required",
+      "asset_id value other than T-018"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ],
+  "benchmark_design": {
+    "target_capability": "specification_compliance_format_strict",
+    "discrimination_hypothesis": "Weak models add explanatory prose, markdown fences, or extra keys (created_at, severity, description) despite the explicit no-prose constraint. Strong models emit exactly the requested JSON object."
+  }
+}
