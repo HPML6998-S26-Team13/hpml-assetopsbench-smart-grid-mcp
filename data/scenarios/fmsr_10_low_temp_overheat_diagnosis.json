@@ -1,7 +1,7 @@
 {
   "id": "SGT-038",
   "type": "FMSR",
-  "text": "DGA on T-013 shows methane and ethane elevated against a low CO2 background. Retrieve the on-file record, analyze it, and determine whether the gas signature is consistent with a low-temperature overheating pattern or a different thermal class.",
+  "text": "DGA on T-013 shows methane, ethylene, and ethane elevated alongside a routine CO2 background. Retrieve the on-file record, analyze it, and determine whether the gas signature is consistent with a low-temperature overheating pattern or a different thermal class.",
   "category": "Fault Diagnosis",
   "characteristic_form": "The answer should report the stored DGA gas concentrations for T-013, name the analyzer's thermal-pattern fault code or label, and state whether the signature matches low-temperature overheating with the supporting gas rationale.",
   "asset_id": "T-013",
