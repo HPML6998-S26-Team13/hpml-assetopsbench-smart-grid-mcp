@@ -1,9 +1,9 @@
 {
   "id": "SGT-038",
   "type": "FMSR",
-  "text": "DGA on T-013 shows methane, ethylene, and ethane elevated alongside a routine CO2 background. Retrieve the on-file record, analyze it, and determine whether the gas signature is consistent with a low-temperature overheating pattern or a different thermal class.",
+  "text": "T-013's on-file DGA record carries a stored fault_label of 'Low-temperature overheating'. Pull the record, run the analyzer (IEC 60599 / Rogers ratios), and reconcile any disagreement between the stored classification and the analyzer's output. Report both, name the disagreement (or confirmation) explicitly, and state what posture the maintenance team should adopt given the conflicting signals.",
   "category": "Fault Diagnosis",
-  "characteristic_form": "The answer should report the stored DGA gas concentrations for T-013, name the analyzer's thermal-pattern fault code or label, and state whether the signature matches low-temperature overheating with the supporting gas rationale.",
+  "characteristic_form": "The answer should report the stored DGA gas concentrations and stored fault_label for T-013, the analyzer's IEC 60599 classification (which on the current fixture sits below the thermal-row CH4/H2 ≥ 1.0 threshold and therefore returns N or no-match), explicitly name the disagreement between the stored 'Low-temperature overheating' label and the analyzer's output, and recommend a maintenance posture (e.g. resample-to-confirm, increased monitoring) grounded in both signals.",
   "asset_id": "T-013",
   "expected_tools": [
     "fmsr.get_dga_record",
@@ -11,13 +11,18 @@
   ],
   "ground_truth": {
     "must_include": [
-      "DGA gas values",
-      "analyzer thermal-pattern fault code",
-      "low-temperature overheating assessment",
-      "supporting gas rationale"
+      "DGA gas values from the on-file record",
+      "stored fault_label reported (Low-temperature overheating)",
+      "analyzer IEC 60599 classification reported",
+      "explicit reconciliation of stored-label vs analyzer disagreement",
+      "recommended maintenance posture grounded in both signals"
+    ],
+    "must_NOT_include": [
+      "claim that the analyzer confirmed T1/T2/T3 thermal-pattern fault on T-013's current fixture",
+      "stored fault_label reported as if it came from the analyzer"
     ]
   },
-  "difficulty": "medium",
+  "difficulty": "hard",
   "domain_tags": [
     "FMSR"
   ]

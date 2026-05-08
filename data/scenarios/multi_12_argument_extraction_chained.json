@@ -1,22 +1,24 @@
 {
   "id": "SGT-056",
   "type": "Multi",
-  "text": "Find the in-service transformer with the most fault records on file, then surface that unit's available sensor channels for an inspection brief. Use the actual fault-record count to pick the asset — do not assume.",
+  "text": "Find the in-service transformer with the most fault records on file, then surface that unit's available sensor channels for an inspection brief. Note that wo.list_fault_records defaults to limit=20 and the full set is 41 records — to count accurately, either request the full list (limit=100, the documented maximum) or query each in-service asset individually with the transformer_id filter. Use the actual fault-record count to pick the asset; do not assume from the default truncated output.",
   "category": "Cross-Domain Planning",
-  "characteristic_form": "The answer should enumerate the fault-record counts per asset (or surface the top-faulted unit), explicitly name the highest-count asset, then list available sensor channels for that asset. Both the asset_id and the fault count must come from the tool output, not from prompt assumption.",
+  "characteristic_form": "The answer should describe how the agent obtained complete fault-record coverage (limit=100 or per-asset filter), enumerate the fault-record counts per asset (or surface the top-faulted unit), explicitly name the highest-count asset, then list available sensor channels for that asset. Both the asset_id and the fault count must come from the tool output, not from prompt assumption nor from the default-truncated tool result.",
   "expected_tools": [
     "wo.list_fault_records",
     "iot.list_sensors"
   ],
   "ground_truth": {
     "must_include": [
-      "per-asset fault count or top-faulted unit derived from tool output",
+      "evidence of full fault-record coverage (limit=100 or per-asset filter, not default-truncated)",
+      "per-asset fault count or top-faulted unit derived from full tool output",
       "highest-count asset named with its fault count",
       "sensor channels listed for the named asset only"
     ],
     "must_NOT_include": [
       "sensor channels listed for an asset that is not the top-faulted unit",
-      "fault count derived from prompt assumption rather than tool output"
+      "fault count derived from prompt assumption rather than tool output",
+      "top-faulted unit derived from a default limit=20 list_fault_records call (which truncates the 41-row record set and excludes T-017 entirely)"
     ]
   },
   "difficulty": "hard",
@@ -26,6 +28,6 @@
   ],
   "benchmark_design": {
     "target_capability": "argument_extraction_across_tool_returns",
-    "discrimination_hypothesis": "Weak models hardcode an asset_id (often a frequently-cited one in the prompt-history) instead of extracting it from list_fault_records output. Strong models aggregate the fault-record list, identify T-017 (5 fault records, the highest) from tool output, and pass that asset_id to list_sensors."
+    "discrimination_hypothesis": "wo.list_fault_records defaults to limit=20 and the full set is 41 records; T-017's 5 records sit at indices 25-29 and are completely absent from the default tool output. Weak models accept the default-truncated list and report a different top-faulted unit (T-011 or T-012, tied at 3 records each in the default 20). Strong models notice the truncation, request limit=100 (the documented maximum) or iterate per asset with the transformer_id filter, and identify T-017 as the true top-faulted unit (5 records). The scenario tests both tool-argument discipline and skepticism toward truncated tool outputs."
   }
 }

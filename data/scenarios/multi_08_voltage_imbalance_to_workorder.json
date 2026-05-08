@@ -1,9 +1,9 @@
 {
   "id": "SGT-045",
   "type": "Multi",
-  "text": "An alert has flagged voltage imbalance on T-002. Pull the relevant sensor readings, look up which failure modes correlate with that symptom in the catalogue, and if the evidence supports a corrective action, open a work order capturing the finding.",
+  "text": "An alert has flagged voltage imbalance on T-002. Pull the relevant sensor readings, look up which failure modes correlate with that symptom in the catalogue, and open a work order documenting the sensor finding, the matching failure-mode candidates, and the recommended next inspection step.",
   "category": "Cross-Domain Planning",
-  "characteristic_form": "The answer should report a recent voltage sample for T-002, list the matching failure modes from the catalogue, state whether a corrective action is warranted, and include the work order identifier if one is opened.",
+  "characteristic_form": "The answer should report a recent voltage sample for T-002, list the matching failure modes from the catalogue, and report a newly-created work order identifier whose description ties the sensor finding to the matching failure-mode candidates and a recommended next inspection step.",
   "asset_id": "T-002",
   "expected_tools": [
     "iot.list_sensors",
@@ -15,8 +15,8 @@
     "must_include": [
       "voltage sensor sample",
       "matching failure modes",
-      "corrective decision",
-      "work order identifier or no-action justification"
+      "work order identifier",
+      "work order description ties sensor finding to failure-mode candidates and next inspection step"
     ]
   },
   "difficulty": "hard",

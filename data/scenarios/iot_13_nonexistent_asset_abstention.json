@@ -4,7 +4,6 @@
   "text": "Pull the recent winding-temperature readings for transformer T-099 and flag any thermal excursions over the last week.",
   "category": "Asset Discovery",
   "characteristic_form": "The answer should establish whether T-099 exists in the fleet inventory, and — finding that it does not — explicitly abstain from reporting fabricated readings, name the valid asset-ID range, and ask the requester to confirm the intended asset.",
-  "asset_id": "T-005",
   "expected_tools": [
     "iot.list_assets",
     "iot.get_asset_metadata"

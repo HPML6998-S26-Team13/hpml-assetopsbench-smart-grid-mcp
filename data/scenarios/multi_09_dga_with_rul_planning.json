@@ -1,9 +1,9 @@
 {
   "id": "SGT-046",
   "type": "Multi",
-  "text": "T-017 has been flagged for an arc-discharge gas signature in the last DGA. Confirm the fault classification from the on-file record, then pull the current RUL estimate and combine the two views into a recommendation on whether to schedule replacement now or operate to a planned outage window.",
+  "text": "T-017's on-file DGA record carries a stored fault_label of 'Arc discharge'. Pull the record and run the analyzer (IEC 60599 / Rogers ratios), reconcile any disagreement between the stored classification and the analyzer's output, then pull the current RUL estimate and combine all three views into a recommendation on whether to schedule replacement now or operate to a planned outage window.",
   "category": "Comprehensive Health Assessment",
-  "characteristic_form": "The answer should confirm the DGA fault classification for T-017, report the current RUL estimate, and combine the two into a replace-now versus operate-to-window recommendation with a one-line rationale.",
+  "characteristic_form": "The answer should report T-017's stored DGA fault_label, the analyzer's IEC 60599 classification (which on the current fixture falls outside the D1/D2 ranges), explicitly reconcile the disagreement, then report the current RUL estimate and combine the DGA reconciliation with the RUL view into a replace-now versus operate-to-window recommendation grounded in all three signals.",
   "asset_id": "T-017",
   "expected_tools": [
     "fmsr.get_dga_record",
@@ -12,10 +12,16 @@
   ],
   "ground_truth": {
     "must_include": [
-      "DGA classification",
+      "stored fault_label reported (Arc discharge)",
+      "analyzer IEC 60599 classification reported",
+      "explicit reconciliation of stored-label vs analyzer disagreement",
       "current RUL value",
-      "combined recommendation",
-      "rationale"
+      "combined replace-now or operate-to-window recommendation",
+      "rationale citing all three signals"
+    ],
+    "must_NOT_include": [
+      "claim that the analyzer confirmed Arc discharge / D1 / D2 on T-017's current fixture",
+      "recommendation grounded in only the stored fault_label or only the RUL"
     ]
   },
   "difficulty": "hard",
