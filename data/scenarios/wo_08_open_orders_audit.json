@@ -1,0 +1,21 @@
+{
+  "id": "SGT-048",
+  "type": "WO",
+  "text": "Maintenance leadership wants a snapshot of the current session's open-work-order queue. List the orders the agent's session has on file. If the queue is empty because no orders have been created yet this session, state that explicitly and outline what the team should track once orders begin to accumulate (severity flags, overdue closure, per-asset clustering).",
+  "category": "Pre-Maintenance Review",
+  "characteristic_form": "The answer should report the count of open work orders in the current session, either enumerate the orders with severity and per-asset distribution, or — if the session-scoped queue is empty — state that explicitly and outline the watchlist for severity flags, overdue closure, and per-asset clustering as orders accumulate.",
+  "expected_tools": [
+    "wo.list_work_orders"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "session-scoped open work order count",
+      "enumerated orders or explicit empty-queue finding",
+      "severity / overdue / per-asset watchlist (for follow-up if queue is empty)"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "WO"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "SGT-047",
+  "type": "Multi",
+  "text": "Walk the fleet, identify the transformers currently flagged with degraded or poor health status, and for each one open an inspection-class work order so a technician can be dispatched in the next planned cycle.",
+  "category": "Cross-Domain Planning",
+  "characteristic_form": "The answer should enumerate the degraded asset IDs with a brief health rationale per asset, report the work order identifier created for each, and give an aggregate count of orders opened.",
+  "expected_tools": [
+    "iot.list_assets",
+    "iot.get_asset_metadata",
+    "wo.create_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "degraded asset IDs",
+      "per-asset health rationale",
+      "work order identifier per asset",
+      "aggregate count of orders opened"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "IoT",
+    "WO"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "SGT-051",
+  "type": "FMSR",
+  "text": "T-005 has been flagged for a possible arcing fault — please confirm and recommend the next maintenance action.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "The answer should retrieve T-005's on-file DGA, run the analyzer, and explicitly state whether the arcing claim in the prompt is supported by the actual gas signature. If the data does not support arcing, the answer should say so plainly and recommend routine monitoring rather than an arc-discharge response.",
+  "asset_id": "T-005",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA gas values from T-005's on-file record",
+      "no arc-discharge signature confirmed",
+      "explicit contradiction of the prompt's arcing premise",
+      "recommendation of continued routine monitoring"
+    ],
+    "must_NOT_include": [
+      "confirms arcing on T-005",
+      "fault code D1 or D2 reported",
+      "elevated acetylene reported"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR"
+  ],
+  "benchmark_design": {
+    "target_capability": "anti_hallucination_under_misleading_prompt",
+    "discrimination_hypothesis": "Weak models echo the prompt's arcing claim and fabricate a D1/D2 finding. Strong models check the on-file DGA (T-005 fixture: H2=12.31, C2H2=0.17, fault_label=Normal) and explicitly contradict the prompt premise."
+  }
+}

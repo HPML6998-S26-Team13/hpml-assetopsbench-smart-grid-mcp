@@ -1,0 +1,24 @@
+{
+  "id": "SGT-049",
+  "type": "WO",
+  "text": "An operator has reported recurring trouble with T-011. Look up the fault records on file for this unit, surface any pattern in fault types, and identify a representative record by ID for follow-up.",
+  "category": "Pre-Maintenance Review",
+  "characteristic_form": "The answer should report the fault records on file for T-011, characterize any recurrence pattern in fault types, and name a representative fault record ID for follow-up.",
+  "asset_id": "T-011",
+  "expected_tools": [
+    "wo.list_fault_records",
+    "wo.get_fault_record"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "fault record list",
+      "recurrence pattern in fault types",
+      "representative fault record ID",
+      "follow-up note"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "SGT-040",
+  "type": "IoT",
+  "text": "T-014 has been flagged for possible reactive-load issues. Surface its available sensor channels and pull the recent power-factor readings, then summarize whether the values stay near a stable baseline or show variability and dips worth investigating.",
+  "category": "Sensor Analysis",
+  "characteristic_form": "The answer should identify the power-factor sensor channel for T-014, report a recent reading sample with min/max or representative values, summarize stability versus variability, and call out any dips worth follow-up (or note their absence).",
+  "asset_id": "T-014",
+  "expected_tools": [
+    "iot.list_sensors",
+    "iot.get_sensor_readings"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "power-factor sensor identified",
+      "recent power-factor readings",
+      "stability or variability summary versus a baseline window",
+      "dips worth follow-up or none observed"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "IoT"
+  ]
+}

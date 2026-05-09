@@ -1,0 +1,24 @@
+{
+  "id": "SGT-041",
+  "type": "IoT",
+  "text": "Capital planning needs a fleet inventory grouped by voltage class and rating. List every transformer currently in service, pull nameplate data for each, and produce a grouping that calls out the highest-rated unit and any voltage-class outliers.",
+  "category": "Asset Discovery",
+  "characteristic_form": "The answer should enumerate the in-service transformer IDs, group them by voltage class with per-asset rating, identify the highest-rated unit, and call out any voltage-class outliers (or note their absence).",
+  "expected_tools": [
+    "iot.list_assets",
+    "iot.get_asset_metadata"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "in-service transformer list",
+      "voltage-class grouping",
+      "rating per asset",
+      "highest-rated unit identified",
+      "voltage-class outliers or none"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "IoT"
+  ]
+}

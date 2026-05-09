@@ -1,0 +1,31 @@
+{
+  "id": "SGT-053",
+  "type": "WO",
+  "text": "Review the fault history on file for T-007 and characterize any recurring patterns over the last operating cycle.",
+  "category": "Pre-Maintenance Review",
+  "characteristic_form": "The answer should list the fault records on file for T-007, and — finding none — explicitly state that there are zero fault records, that no recurring pattern can be characterized from an empty record set, and recommend a posture (continue routine monitoring) consistent with that finding rather than fabricating fault entries.",
+  "asset_id": "T-007",
+  "expected_tools": [
+    "wo.list_fault_records"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "zero fault records on file for T-007",
+      "no recurring pattern can be characterized from an empty record set",
+      "continue routine monitoring posture consistent with empty history"
+    ],
+    "must_NOT_include": [
+      "fabricated fault entry for T-007",
+      "estimated fault count above zero",
+      "specific fault_type or fault_id attributed to T-007"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ],
+  "benchmark_design": {
+    "target_capability": "negative_result_calibration",
+    "discrimination_hypothesis": "Weak models invent plausible-sounding fault entries when the tool returns an empty list. Strong models call wo.list_fault_records, observe the empty result, and emit an explicit zero-faults finding (T-007 has zero rows in fault_records.csv)."
+  }
+}

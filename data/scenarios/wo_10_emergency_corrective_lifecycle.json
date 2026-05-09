@@ -1,0 +1,25 @@
+{
+  "id": "SGT-050",
+  "type": "WO",
+  "text": "T-016 has just tripped offline with a high-severity fault and the field team needs an immediate corrective work order. Open the corrective order, attach a high-severity downtime estimate, then update the order status to in-progress to reflect that field work has started.",
+  "category": "Work Order Lifecycle",
+  "characteristic_form": "The answer should report the newly created corrective work order identifier and its initial status, give a downtime estimate at the high severity tier with units, and confirm the status transition to an in-progress state.",
+  "asset_id": "T-016",
+  "expected_tools": [
+    "wo.create_work_order",
+    "wo.estimate_downtime",
+    "wo.update_work_order"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "corrective work order identifier",
+      "initial open status",
+      "high-severity downtime estimate with units",
+      "status updated to in-progress"
+    ]
+  },
+  "difficulty": "medium",
+  "domain_tags": [
+    "WO"
+  ]
+}

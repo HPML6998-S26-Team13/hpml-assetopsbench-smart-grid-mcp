@@ -1,0 +1,29 @@
+{
+  "id": "SGT-037",
+  "type": "FMSR",
+  "text": "T-018's on-file DGA record carries a stored fault_label of 'Arc discharge'. Pull the record, run the analyzer (IEC 60599 / Rogers ratios), and reconcile any disagreement between the stored classification and the analyzer's output. Report both, name the disagreement (or confirmation) explicitly, and recommend the next maintenance step grounded in both signals.",
+  "category": "Fault Diagnosis",
+  "characteristic_form": "The answer should report the stored DGA gas concentrations and stored fault_label for T-018, the analyzer's IEC 60599 classification (which on the current fixture falls outside the D1/D2 ranges and therefore returns N or no-match), explicitly name the disagreement between the stored 'Arc discharge' label and the analyzer's output, and recommend a maintenance action that accounts for both signals (e.g. resample-to-confirm).",
+  "asset_id": "T-018",
+  "expected_tools": [
+    "fmsr.get_dga_record",
+    "fmsr.analyze_dga"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "DGA gas values from the on-file record",
+      "stored fault_label reported (Arc discharge)",
+      "analyzer IEC 60599 classification reported",
+      "explicit reconciliation of stored-label vs analyzer disagreement",
+      "recommended maintenance action grounded in both signals"
+    ],
+    "must_NOT_include": [
+      "claim that the analyzer confirmed Arc discharge / D1 / D2 on T-018's current fixture",
+      "stored fault_label reported as if it came from the analyzer"
+    ]
+  },
+  "difficulty": "hard",
+  "domain_tags": [
+    "FMSR"
+  ]
+}

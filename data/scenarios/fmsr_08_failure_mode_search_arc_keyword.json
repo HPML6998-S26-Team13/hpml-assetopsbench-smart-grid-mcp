@@ -1,0 +1,23 @@
+{
+  "id": "SGT-036",
+  "type": "FMSR",
+  "text": "An incident report flagged arcing in T-018's last inspection. Search the failure-mode catalogue for any modes related to arcing or partial discharge, and for each one return its IEC code or descriptive label, severity tier, key symptoms, and recommended maintenance action.",
+  "category": "Symptom-Driven Failure Mode Lookup",
+  "characteristic_form": "The answer should list every catalogue failure mode that matches arcing-style keywords, give the IEC code or label, severity tier, key symptoms, and the recommended maintenance action for each.",
+  "expected_tools": [
+    "fmsr.search_failure_modes"
+  ],
+  "ground_truth": {
+    "must_include": [
+      "matched failure modes",
+      "IEC code or descriptive label",
+      "severity tier",
+      "key symptoms",
+      "recommended maintenance action"
+    ]
+  },
+  "difficulty": "easy",
+  "domain_tags": [
+    "FMSR"
+  ]
+}
