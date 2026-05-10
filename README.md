@@ -172,7 +172,9 @@ See:
 
 ## Experiment Tracking
 
-WandB dashboard: https://wandb.ai/assetopsbench-smartgrid
+WandB dashboard (final evidence): https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/reports/SmartGridBench-Final-Evidence-Dashboard--VmlldzoxNjgyODI4NA==
+
+W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 
 ## Current Status
 

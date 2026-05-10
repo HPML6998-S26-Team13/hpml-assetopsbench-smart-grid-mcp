@@ -53,6 +53,8 @@ results/
 ## Conventions
 
 - Every figure in `figures/` must trace back to a CSV in `metrics/`, which traces back to a run dir in `benchmarks/`. Keep that chain intact — reviewers need it.
+- **Final evidence dashboard:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/reports/SmartGridBench-Final-Evidence-Dashboard--VmlldzoxNjgyODI4NA==
+  — post-PR175 core runs, mitigation ladder, and profiling spot-checks. Source run inventory: `results/metrics/profiling_inventory.csv`.
 - The canonical WandB field definitions live in [../docs/wandb_schema.md](../docs/wandb_schema.md).
 - **Don't edit files in this dir by hand** — regenerate from notebooks. If you catch yourself tweaking a PDF directly, that's a smell.
 - WandB exports are snapshots in time. If a WandB run is deleted or the project is wiped, the exports here are the only remaining record.
