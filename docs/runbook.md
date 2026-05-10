@@ -488,6 +488,10 @@ counts, dispositions, pass criteria, safe paper claims, cite-points):
 
 **Eval harness side** (Akshat's half of the runbook, covers scenario
 execution + judge + grading): [eval_harness_readme.md](eval_harness_readme.md).
+The §13–§16 sections there are the current-main reproduction lane for #67:
+§13 judge scoring, §14 L3 statistical-fidelity, §15 result interpretation
+(JSONL + taxonomy CSV + evidence registry), §16 a teammate-cold proof note
+with SHA + commands run + observed stdout + artifact-path index.
 
 **Orchestration wiring** (what Plan-Execute / AaT / Hybrid look like today,
 and what's still upstream): [orchestration_wiring.md](orchestration_wiring.md).
