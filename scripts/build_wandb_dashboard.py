@@ -23,13 +23,25 @@ FAMILIES = [
     {
         "prefix": ["core15x5_post175", "core_rem16x5_post175"],
         "tags": ["smartgrid-final", "courseworks", "paper-grade", "post-pr175"],
-        "config": {"evidence_tier": "paper_grade", "submission_surface": "courseworks_2026"},
+        "config": {
+            "evidence_tier": "paper_grade",
+            "submission_surface": "courseworks_2026",
+        },
         "label": "core",
     },
     {
         "prefix": ["mitigation15x5_4tier_post175"],
-        "tags": ["smartgrid-final", "courseworks", "paper-grade", "post-pr175", "mitigation-ladder"],
-        "config": {"evidence_tier": "paper_grade", "submission_surface": "courseworks_2026"},
+        "tags": [
+            "smartgrid-final",
+            "courseworks",
+            "paper-grade",
+            "post-pr175",
+            "mitigation-ladder",
+        ],
+        "config": {
+            "evidence_tier": "paper_grade",
+            "submission_surface": "courseworks_2026",
+        },
         "label": "mitigation",
     },
     {
@@ -45,20 +57,48 @@ FAMILIES = [
     {
         "prefix": ["followon15x5_post175", "extra15x5_post175"],
         "tags": ["smartgrid-final", "courseworks", "paper-grade", "post-pr175"],
-        "config": {"evidence_tier": "paper_grade", "submission_surface": "courseworks_2026"},
+        "config": {
+            "evidence_tier": "paper_grade",
+            "submission_surface": "courseworks_2026",
+        },
         "label": "followon-extra",
     },
 ]
 
 EXCLUDE_PREFIXES = [
-    "smoke", "8848", "8850", "8851", "8852", "8853", "8854", "8857",
-    "local-20260413", "local-20260501",
+    "smoke",
+    "8848",
+    "8850",
+    "8851",
+    "8852",
+    "8853",
+    "8854",
+    "8857",
+    "local-20260413",
+    "local-20260501",
     "mitigation_final6_",
-    "final5x6_a100_20260503", "final5x6_extra_a100_20260503",
-    "full21x3_", "all21x3_", "final5x6_post174", "final5x6_followon",
-    "final5x6_extra_variants", "context_", "9125", "9097", "9106", "9108",
-    "9073", "9074", "9071", "8978", "8979", "8993", "8994", "8998",
-    "vq976ljq", "qejvnoug",
+    "final5x6_a100_20260503",
+    "final5x6_extra_a100_20260503",
+    "full21x3_",
+    "all21x3_",
+    "final5x6_post174",
+    "final5x6_followon",
+    "final5x6_extra_variants",
+    "context_",
+    "9125",
+    "9097",
+    "9106",
+    "9108",
+    "9073",
+    "9074",
+    "9071",
+    "8978",
+    "8979",
+    "8993",
+    "8994",
+    "8998",
+    "vq976ljq",
+    "qejvnoug",
 ]
 
 
@@ -108,6 +148,7 @@ print(f"Total newly tagged: {tagged_count}")
 # ---------------------------------------------------------------------------
 print("\nBuilding W&B Report...")
 
+
 def runset(name, tag):
     return wr.Runset(
         entity=ENTITY,
@@ -115,6 +156,7 @@ def runset(name, tag):
         name=name,
         filters=[Tags().isin([tag])],
     )
+
 
 report = wr.Report(
     project=PROJECT,
@@ -132,37 +174,41 @@ blocks = []
 
 # --- Overview ---
 blocks.append(wr.H1(text="Overview"))
-blocks.append(wr.MarkdownBlock(
-    text=(
-        "**SmartGridBench — HPML Spring 2026, Team 13**\n\n"
-        "This dashboard is the final evidence surface submitted to CourseWorks.\n\n"
-        "**Run families included:**\n"
-        "- **Core post-PR175** (`core15x5_post175`, `core_rem16x5_post175`): "
-        "cells A/B/C (transport) and B/Y/YS/Z/ZS (orchestration) on the 31-scenario evidence floor\n"
-        "- **Mitigation ladder** (`mitigation15x5_4tier_post175`): "
-        "4-tier (baseline → guard → repair → adjudication) on YS and ZS\n"
-        "- **Profiling spot-check** (`profile_spotcheck_20260507T0604Z`): "
-        "4 runs with W&B system metrics, nvidia-smi, and torch-trace — observability only\n"
-        "- **Follow-on/extra** (`followon15x5_post175`, `extra15x5_post175`): "
-        "transport follow-ons (YS-TP, ZS-TP) and INT8/BF16 KV variants (D, ZSD)\n\n"
-        "**Excluded:** smoke runs, pre-PR175 diagnostic cohorts, historical `mitigation_final6_*`.\n\n"
-        "**Source inventory:** `results/metrics/profiling_inventory.csv`\n"
-        "**Scenario corpus:** 36 canonical scenarios + 5 negative fixtures "
-        "(result tables use 31-scenario post-PR175 floor)"
+blocks.append(
+    wr.MarkdownBlock(
+        text=(
+            "**SmartGridBench — HPML Spring 2026, Team 13**\n\n"
+            "This dashboard is the final evidence surface submitted to CourseWorks.\n\n"
+            "**Run families included:**\n"
+            "- **Core post-PR175** (`core15x5_post175`, `core_rem16x5_post175`): "
+            "cells A/B/C (transport) and B/Y/YS/Z/ZS (orchestration) on the 31-scenario evidence floor\n"
+            "- **Mitigation ladder** (`mitigation15x5_4tier_post175`): "
+            "4-tier (baseline → guard → repair → adjudication) on YS and ZS\n"
+            "- **Profiling spot-check** (`profile_spotcheck_20260507T0604Z`): "
+            "4 runs with W&B system metrics, nvidia-smi, and torch-trace — observability only\n"
+            "- **Follow-on/extra** (`followon15x5_post175`, `extra15x5_post175`): "
+            "transport follow-ons (YS-TP, ZS-TP) and INT8/BF16 KV variants (D, ZSD)\n\n"
+            "**Excluded:** smoke runs, pre-PR175 diagnostic cohorts, historical `mitigation_final6_*`.\n\n"
+            "**Source inventory:** `results/metrics/profiling_inventory.csv`\n"
+            "**Scenario corpus:** 36 canonical scenarios + 5 negative fixtures "
+            "(result tables use 31-scenario post-PR175 floor)"
+        )
     )
-))
+)
 
 # --- Core benchmark runs ---
 blocks.append(wr.HorizontalRule())
 blocks.append(wr.H1(text="Core Benchmark Runs — post-PR175"))
-blocks.append(wr.MarkdownBlock(
-    text=(
-        "Transport axis (A/B/C) and orchestration axis (B/Y/YS/Z/ZS) "
-        "on the post-PR175 31-scenario evidence floor. "
-        "Both `core15x5_post175` and `core_rem16x5_post175` batches are shown. "
-        "Tag filter: `paper-grade`."
+blocks.append(
+    wr.MarkdownBlock(
+        text=(
+            "Transport axis (A/B/C) and orchestration axis (B/Y/YS/Z/ZS) "
+            "on the post-PR175 31-scenario evidence floor. "
+            "Both `core15x5_post175` and `core_rem16x5_post175` batches are shown. "
+            "Tag filter: `paper-grade`."
+        )
     )
-))
+)
 blocks.append(
     wr.PanelGrid(
         runsets=[runset("Core + follow-on runs", "paper-grade")],
@@ -198,13 +244,15 @@ blocks.append(
 # --- Mitigation ladder ---
 blocks.append(wr.HorizontalRule())
 blocks.append(wr.H1(text="Mitigation Ladder — post-PR175"))
-blocks.append(wr.MarkdownBlock(
-    text=(
-        "4-tier ladder (BASELINE → GUARD → REPAIR → ADJ) on YS (PE+Self-Ask) "
-        "and ZS (Verified PE+Self-Ask) cells. "
-        "Run family: `mitigation15x5_4tier_post175`. Tag: `mitigation-ladder`."
+blocks.append(
+    wr.MarkdownBlock(
+        text=(
+            "4-tier ladder (BASELINE → GUARD → REPAIR → ADJ) on YS (PE+Self-Ask) "
+            "and ZS (Verified PE+Self-Ask) cells. "
+            "Run family: `mitigation15x5_4tier_post175`. Tag: `mitigation-ladder`."
+        )
     )
-))
+)
 blocks.append(
     wr.PanelGrid(
         runsets=[runset("Mitigation ladder", "mitigation-ladder")],
@@ -230,14 +278,16 @@ blocks.append(
 # --- Profiling spot-check ---
 blocks.append(wr.HorizontalRule())
 blocks.append(wr.H1(text="Profiling Spot-Check"))
-blocks.append(wr.MarkdownBlock(
-    text=(
-        "4 runs (v\\_s\\_m, at\\_m, pe\\_s\\_m, at\\_t) with W&B system metrics, "
-        "nvidia-smi, and torch-trace profiling enabled. "
-        "Run family: `profile_spotcheck_20260507T0604Z`. Tag: `profiling-spotcheck`.\n\n"
-        "⚠️ **Caveat:** these rows are observability evidence — not judged task-quality results."
+blocks.append(
+    wr.MarkdownBlock(
+        text=(
+            "4 runs (v\\_s\\_m, at\\_m, pe\\_s\\_m, at\\_t) with W&B system metrics, "
+            "nvidia-smi, and torch-trace profiling enabled. "
+            "Run family: `profile_spotcheck_20260507T0604Z`. Tag: `profiling-spotcheck`.\n\n"
+            "⚠️ **Caveat:** these rows are observability evidence — not judged task-quality results."
+        )
     )
-))
+)
 blocks.append(
     wr.PanelGrid(
         runsets=[runset("Profiling spot-check", "profiling-spotcheck")],
@@ -264,18 +314,20 @@ blocks.append(
 # --- Reproducibility ---
 blocks.append(wr.HorizontalRule())
 blocks.append(wr.H1(text="Reproducibility"))
-blocks.append(wr.MarkdownBlock(
-    text=(
-        "- **GitHub repo:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp\n"
-        "- **Run inventory:** `results/metrics/profiling_inventory.csv`\n"
-        "- **Scenario corpus:** `data/scenarios/` "
-        "(36 canonical scenarios + 5 negative fixtures; result tables use 31-scenario floor)\n"
-        "- **Data generation:** `data/generate_synthetic.py` "
-        "(no proprietary CSVs shipped; public-safe synthetic outputs only)\n"
-        "- **Judge model:** Llama-4 Maverick 17B via WatsonX (separate family from task model)\n"
-        "- **Task model:** Llama-3.1-8B-Instruct via vLLM"
+blocks.append(
+    wr.MarkdownBlock(
+        text=(
+            "- **GitHub repo:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp\n"
+            "- **Run inventory:** `results/metrics/profiling_inventory.csv`\n"
+            "- **Scenario corpus:** `data/scenarios/` "
+            "(36 canonical scenarios + 5 negative fixtures; result tables use 31-scenario floor)\n"
+            "- **Data generation:** `data/generate_synthetic.py` "
+            "(no proprietary CSVs shipped; public-safe synthetic outputs only)\n"
+            "- **Judge model:** Llama-4 Maverick 17B via WatsonX (separate family from task model)\n"
+            "- **Task model:** Llama-3.1-8B-Instruct via vLLM"
+        )
     )
-))
+)
 
 report.blocks = blocks
 report.save()
