@@ -67,11 +67,9 @@ def _gcloud_command(
     *,
     project: str,
     account: str | None,
-    project_flag: bool = True,
 ) -> list[str]:
     command = ["gcloud", *args]
-    if project_flag:
-        command.append(f"--project={project}")
+    command.append(f"--project={project}")
     if account:
         command.append(f"--account={account}")
     command.extend(["--format=json", "--quiet"])
@@ -190,7 +188,8 @@ def collect_audit(
             nat_entries.append({"router": router_name, "region": region, **result})
         audit["resources"]["router_nats"] = {
             "ok": all(entry["ok"] for entry in nat_entries),
-            "command": [entry["command"] for entry in nat_entries],
+            "command": routers["command"],
+            "commands": [entry["command"] for entry in nat_entries],
             "items": nat_entries,
             "error": "; ".join(
                 entry["error"] for entry in nat_entries if entry.get("error")
@@ -199,7 +198,8 @@ def collect_audit(
     else:
         audit["resources"]["router_nats"] = {
             "ok": False,
-            "command": [],
+            "command": routers["command"],
+            "commands": [],
             "items": [],
             "error": f"routers list failed; router NAT audit skipped: {routers.get('error')}",
         }
@@ -339,7 +339,10 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print the read-only gcloud commands that would be run.",
+        help=(
+            "Record the read-only gcloud commands without executing them; "
+            "--out still writes the dry-run audit JSON."
+        ),
     )
     return parser.parse_args(argv)
 

@@ -70,7 +70,13 @@ def test_collect_audit_lists_cost_resources_and_router_nats() -> None:
     )
 
     assert audit["resources"]["instances"]["items"][0]["name"] == "smartgrid-a100-demo"
-    assert audit["resources"]["router_nats"]["command"][0][:4] == [
+    assert audit["resources"]["router_nats"]["command"][:4] == [
+        "gcloud",
+        "compute",
+        "routers",
+        "list",
+    ]
+    assert audit["resources"]["router_nats"]["commands"][0][:4] == [
         "gcloud",
         "compute",
         "routers",
@@ -203,6 +209,7 @@ def test_router_nat_status_follows_router_list_failure() -> None:
 
     router_nats = audit["resources"]["router_nats"]
     assert router_nats["ok"] is False
-    assert router_nats["command"] == []
+    assert router_nats["command"][:4] == ["gcloud", "compute", "routers", "list"]
+    assert router_nats["commands"] == []
     assert router_nats["items"] == []
     assert "router permission denied" in router_nats["error"]
