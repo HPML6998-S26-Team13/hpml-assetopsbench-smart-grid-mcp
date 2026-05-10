@@ -294,6 +294,25 @@ def render_profiling_timeseries() -> list[Path]:
         / "profile_spotcheck_20260507T0604Z_v_s_m_nvidia_smi"
         / "nvidia_smi.csv",
     }
+
+    # `profiling/traces/` is gitignored. Bail out before rewriting any committed
+    # figure if any required CSV is missing on this checkout, so a fresh-clone
+    # `python3 scripts/render_final_deck_visuals.py` neither crashes mid-write
+    # nor leaves a partially regenerated set of profiling figures on disk.
+    missing = [
+        f"{label}: {path}" for label, path in run_map.items() if not path.exists()
+    ]
+    if missing:
+        print(
+            "Skipping render_profiling_timeseries: "
+            "required nvidia_smi traces under profiling/traces/ are not present in "
+            "this checkout (the directory is gitignored). "
+            "Re-run after restoring the trace bundle.",
+        )
+        for entry in missing:
+            print(f"  missing: {entry}")
+        return []
+
     colors = [TEAL, BLUE, GREEN, ORANGE]
     fig, axes = plt.subplots(
         3, 1, figsize=(13.5, 7.6), sharex=True, constrained_layout=True

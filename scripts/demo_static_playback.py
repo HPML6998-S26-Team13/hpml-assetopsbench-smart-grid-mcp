@@ -24,6 +24,15 @@ CASES = [
         "cell": "ZS / Llama-3.1-8B-Instruct / verified PE + Self-Ask + MCP baseline",
         "trajectory": "benchmarks/cell_Z_hybrid/raw/9125463_replicate_zs_h100_2x3/2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_baseline_multi_01_end_to_end_fault_response_run01.json",
         "judge": "results/judge_logs/9125463_replicate_zs_h100_2x3/SGT-009_run01_judge_log.json",
+        "caveat": (
+            "8B run demonstrates full cross-domain tool use but OVERSTATES the "
+            "final diagnosis as `Thermal Fault 300-700°C`. Grounded answer: "
+            "probable low-temperature overheating, mixed DGA evidence, RUL "
+            "547 -> 517 days, high-priority inspection work order. The archived "
+            "70B run emits this grounded conclusion correctly. Do not present "
+            "this 8B output as an operational recommendation; see "
+            "`docs/demo/sgt009_all_domain_playback.md` for the full discussion."
+        ),
     },
     {
         "label": "SGT-010 | FMSR + TSFM decision",
@@ -208,6 +217,9 @@ def print_brief_case(case: dict, pause: float) -> None:
     print(f"Coverage: {case['domains']}")
     print("Playback: archived trajectory + archived WatsonX judge log; no live calls")
     print(f"Judge: score={judge.get('score_6d')} pass={judge.get('pass')}")
+    if case.get("caveat"):
+        print("\n!! CAVEAT")
+        print(wrap(case["caveat"], width=96, indent="   "))
     maybe_sleep(pause)
 
     print("\nTask")
@@ -231,6 +243,9 @@ def print_brief_case(case: dict, pause: float) -> None:
 
     print("\nFinal answer")
     print(wrap(trajectory.get("answer", ""), width=96))
+    if case.get("caveat"):
+        print("\n!! CAVEAT (final answer is not a grounded operational recommendation)")
+        print(wrap(case["caveat"], width=96, indent="   "))
     print("\nJudge dimensions")
     for key in (
         "task_completion",
@@ -256,6 +271,9 @@ def print_full_case(case: dict, pause: float) -> None:
     print(f"scenario_id: {scenario_id(trajectory, judge)}")
     print(f"trajectory_file: {case['trajectory']}")
     print(f"judge_log: {case['judge']}")
+    if case.get("caveat"):
+        print("\n!! CAVEAT")
+        print(wrap(case["caveat"], indent="   "))
     maybe_sleep(pause)
 
     print("\nTask:")
@@ -271,6 +289,9 @@ def print_full_case(case: dict, pause: float) -> None:
 
     print("\nFinal answer:")
     print(wrap(trajectory.get("answer", "")))
+    if case.get("caveat"):
+        print("\n!! CAVEAT (final answer is not a grounded operational recommendation)")
+        print(wrap(case["caveat"], indent="   "))
     maybe_sleep(pause)
     print_judge(judge)
 

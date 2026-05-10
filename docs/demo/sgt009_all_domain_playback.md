@@ -75,4 +75,3 @@ The 8B run demonstrates the full IoT -> FMSR -> TSFM -> WO workflow and receives
 The grounded answer should identify probable low-temperature overheating, note the mixed diagnostic evidence, report the 30-day forecast as RUL `547 -> 517` days with projected health index `0.473` and confidence `0.775`, and recommend a high-priority inspection work order with roughly 24 hours expected downtime.
 
 The archived 70B comparison run emits this grounded conclusion more cleanly. This is consistent with the expected production pattern: larger or frontier models are more likely to be used directly for high-stakes grid-operations decisions, while smaller models may be better suited to triage, routing, or assisted workflows.
-
