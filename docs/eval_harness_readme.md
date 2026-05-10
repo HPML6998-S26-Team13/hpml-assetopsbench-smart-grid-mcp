@@ -478,18 +478,25 @@ What it does:
    (newline-delimited JSON, schema v1).
 5. Writes per-call audit logs (prompt + raw response) to `--log-dir`.
 
-The runner deduplicates by `(run_name, scenario_id, trial_index, judge_prompt_version)` —
-re-running is cheap and idempotent; pass `--force` to override.
+The runner deduplicates by `(run_name, scenario_id, trial_index, judge_model, judge_prompt_version)` —
+re-running is cheap and idempotent; pass `--force` to override. `judge_model`
+is part of the key on purpose: re-scoring a run with a different judge model
+appends new rows rather than overwriting the prior judge's verdict.
 
 ### 13.2 Score a single trajectory
 
 ```bash
 python scripts/judge_trajectory.py \
   --trajectory benchmarks/cell_Y_plan_execute/raw/<run-id>/SGT-001_t1.json \
-  --scenario   data/scenarios/iot_01_asset_discovery_query.json \
+  --scenario   data/scenarios/iot_01_list_transformer_sensors.json \
   --run-meta   benchmarks/cell_Y_plan_execute/raw/<run-id>/meta.json \
   --out        results/metrics/scenario_scores.jsonl
 ```
+
+(`iot_01_list_transformer_sensors.json` is the file backing scenario
+`SGT-001`; pick whatever scenario JSON matches the trajectory you're
+scoring. The judge looks the trajectory's `scenario_id` up against the
+file you pass.)
 
 ### 13.3 Required env vars
 
@@ -584,7 +591,9 @@ acquisition date into the report's provenance block. Without `--real`, the
 script emits a stub naming the dataset(s) that still need to be acquired.
 
 The validator depends on `numpy` and `pandas`; install via
-`pip install -r requirements.txt` (or use the team venv that already has them).
+`uv pip install -r requirements.txt` (or use the team venv that already has
+them). Plain `pip install -r requirements.txt` works for non-`uv` Windows
+setups outside the repo's normal flow.
 
 ### 14.2 Version progression
 
@@ -689,9 +698,10 @@ sibling `failure_*_counts.csv` files.
 
 ### 15.3 `results/metrics/evidence_registry.csv` — what each capture proves
 
-92 rows (one per archived run + cohort), each labeled with what claim it
-backs in the paper. This is the authoritative list of paper-eligible
-experiment cells. New captures should append a row here before being cited.
+One row per archived run + cohort (91 data rows on current main, 92 lines
+including the header), each labeled with what claim it backs in the paper.
+This is the authoritative list of paper-eligible experiment cells. New
+captures should append a row here before being cited.
 
 ### 15.4 Result-interpretation rule of thumb
 
@@ -716,7 +726,7 @@ the most recent run-of-record at the top.
 
 | Field | Value |
 |---|---|
-| Repo SHA (branch tip) | (filled in by the commit that lands this section) |
+| Repo SHA (branch tip) | `07cf0cf62d44e356e0265963e85c7663818c37ee` (`akshat/issue67-runbook-eval-section` v1; the post-merge squash SHA on `main` will differ — refresh this row after #200 lands) |
 | Branch base | `origin/main` at `c726220` (W&B final evidence dashboard, #45) |
 | OS / shell | Windows 11, MSYS2 bash + system `python` |
 | Python | 3.x (system) — used only for the schema validator |
