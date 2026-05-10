@@ -7,7 +7,7 @@ canonical: true
 
 # scripts/
 
-*Last updated: 2026-05-03*
+*Last updated: 2026-05-10*
 
 Executable entrypoints and helper utilities for the repo. If you know roughly
 what you want to do but not which command to run, start here.

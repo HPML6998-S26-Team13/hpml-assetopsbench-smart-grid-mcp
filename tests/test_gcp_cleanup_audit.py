@@ -70,6 +70,12 @@ def test_collect_audit_lists_cost_resources_and_router_nats() -> None:
     )
 
     assert audit["resources"]["instances"]["items"][0]["name"] == "smartgrid-a100-demo"
+    assert audit["resources"]["router_nats"]["command"][0][:4] == [
+        "gcloud",
+        "compute",
+        "routers",
+        "nats",
+    ]
     assert audit["resources"]["router_nats"]["items"][0]["region"] == "us-central1"
     assert (
         audit["resources"]["router_nats"]["items"][0]["items"][0]["name"]
@@ -131,3 +137,72 @@ def test_main_writes_json_artifact_in_dry_run(tmp_path: Path, capsys) -> None:
         "instances",
         "list",
     ]
+
+
+def test_run_json_surfaces_failed_process_and_invalid_json() -> None:
+    failed = gcp_cleanup_audit._run_json(
+        ["gcloud", "bad"],
+        lambda command, **kwargs: subprocess.CompletedProcess(
+            command, 1, "", "permission denied"
+        ),
+        timeout_seconds=10,
+    )
+    invalid = gcp_cleanup_audit._run_json(
+        ["gcloud", "bad-json"],
+        lambda command, **kwargs: subprocess.CompletedProcess(command, 0, "{", ""),
+        timeout_seconds=10,
+    )
+
+    assert failed == {
+        "ok": False,
+        "command": ["gcloud", "bad"],
+        "items": [],
+        "error": "permission denied",
+    }
+    assert invalid["ok"] is False
+    assert invalid["command"] == ["gcloud", "bad-json"]
+    assert "invalid JSON from gcloud" in invalid["error"]
+
+
+def test_run_json_surfaces_timeout() -> None:
+    def timeout_runner(command, **kwargs):
+        raise subprocess.TimeoutExpired(command, timeout=kwargs["timeout"])
+
+    result = gcp_cleanup_audit._run_json(
+        ["gcloud", "slow"], timeout_runner, timeout_seconds=3
+    )
+
+    assert result["ok"] is False
+    assert result["command"] == ["gcloud", "slow"]
+    assert "timed out after 3s" in result["error"]
+
+
+def test_router_nat_status_follows_router_list_failure() -> None:
+    def failing_routers(command, **kwargs):
+        joined = " ".join(command)
+        if "compute routers list" in joined:
+            return subprocess.CompletedProcess(
+                command, 1, "", "router permission denied"
+            )
+        if "compute routers nats list" in joined:
+            raise AssertionError("NAT commands should be skipped when routers fail")
+        if (
+            "compute project-info describe" in joined
+            or "compute regions describe" in joined
+        ):
+            return subprocess.CompletedProcess(
+                command, 0, json.dumps({"quotas": []}), ""
+            )
+        return subprocess.CompletedProcess(command, 0, "[]", "")
+
+    audit = gcp_cleanup_audit.collect_audit(
+        project="p",
+        regions=["us-central1"],
+        runner=failing_routers,
+    )
+
+    router_nats = audit["resources"]["router_nats"]
+    assert router_nats["ok"] is False
+    assert router_nats["command"] == []
+    assert router_nats["items"] == []
+    assert "router permission denied" in router_nats["error"]

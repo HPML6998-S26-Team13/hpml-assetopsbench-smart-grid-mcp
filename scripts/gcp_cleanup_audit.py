@@ -38,6 +38,8 @@ QUOTA_MARKERS = (
     "ADDRESSES",
 )
 
+DEFAULT_GCLOUD_TIMEOUT_SECONDS = 120
+
 Runner = Callable[..., subprocess.CompletedProcess[str]]
 
 
@@ -76,8 +78,24 @@ def _gcloud_command(
     return command
 
 
-def _run_json(command: list[str], runner: Runner) -> dict[str, Any]:
-    result = runner(command, check=False, capture_output=True, text=True)
+def _run_json(
+    command: list[str], runner: Runner, *, timeout_seconds: int
+) -> dict[str, Any]:
+    try:
+        result = runner(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as exc:
+        return {
+            "ok": False,
+            "command": command,
+            "items": [],
+            "error": f"gcloud timed out after {timeout_seconds}s: {exc}",
+        }
     if result.returncode != 0:
         return {
             "ok": False,
@@ -120,6 +138,7 @@ def collect_audit(
     regions: Sequence[str] = DEFAULT_REGIONS,
     runner: Runner = subprocess.run,
     dry_run: bool = False,
+    timeout_seconds: int = DEFAULT_GCLOUD_TIMEOUT_SECONDS,
 ) -> dict[str, Any]:
     audit: dict[str, Any] = {
         "schema_version": 1,
@@ -138,7 +157,7 @@ def collect_audit(
         audit["resources"][name] = (
             {"ok": True, "command": command, "items": [], "error": ""}
             if dry_run
-            else _run_json(command, runner)
+            else _run_json(command, runner, timeout_seconds=timeout_seconds)
         )
 
     routers = audit["resources"]["routers"]
@@ -166,14 +185,24 @@ def collect_audit(
             result = (
                 {"ok": True, "command": command, "items": [], "error": ""}
                 if dry_run
-                else _run_json(command, runner)
+                else _run_json(command, runner, timeout_seconds=timeout_seconds)
             )
             nat_entries.append({"router": router_name, "region": region, **result})
-    audit["resources"]["router_nats"] = {
-        "ok": all(entry["ok"] for entry in nat_entries),
-        "items": nat_entries,
-        "error": "",
-    }
+        audit["resources"]["router_nats"] = {
+            "ok": all(entry["ok"] for entry in nat_entries),
+            "command": [entry["command"] for entry in nat_entries],
+            "items": nat_entries,
+            "error": "; ".join(
+                entry["error"] for entry in nat_entries if entry.get("error")
+            ),
+        }
+    else:
+        audit["resources"]["router_nats"] = {
+            "ok": False,
+            "command": [],
+            "items": [],
+            "error": f"routers list failed; router NAT audit skipped: {routers.get('error')}",
+        }
 
     preference_command = _gcloud_command(
         ("beta", "quotas", "preferences", "list"),
@@ -183,7 +212,7 @@ def collect_audit(
     audit["quota_preferences"] = (
         {"ok": True, "command": preference_command, "items": [], "error": ""}
         if dry_run
-        else _run_json(preference_command, runner)
+        else _run_json(preference_command, runner, timeout_seconds=timeout_seconds)
     )
 
     global_command = _gcloud_command(
@@ -194,7 +223,7 @@ def collect_audit(
     global_result = (
         {"ok": True, "command": global_command, "items": {}, "error": ""}
         if dry_run
-        else _run_json(global_command, runner)
+        else _run_json(global_command, runner, timeout_seconds=timeout_seconds)
     )
     audit["quota_snapshot"]["global"] = {
         **global_result,
@@ -210,7 +239,7 @@ def collect_audit(
         result = (
             {"ok": True, "command": command, "items": {}, "error": ""}
             if dry_run
-            else _run_json(command, runner)
+            else _run_json(command, runner, timeout_seconds=timeout_seconds)
         )
         audit["quota_snapshot"]["regions"][region] = {
             **result,

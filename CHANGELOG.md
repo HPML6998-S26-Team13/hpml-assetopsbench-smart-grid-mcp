@@ -7,7 +7,7 @@ canonical: true
 
 # Changelog
 
-## 2026-05-09
+## 2026-05-10
 
 ### Added
 
