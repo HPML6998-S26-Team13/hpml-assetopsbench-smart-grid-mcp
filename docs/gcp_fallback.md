@@ -329,6 +329,20 @@ gcloud compute instances list --project="$PROJECT"
 gcloud compute disks list --project="$PROJECT"   # persistent disks can outlive instances
 ```
 
+For a fuller read-only closeout audit, use the helper from the local trusted
+checkout:
+
+```bash
+python scripts/gcp_cleanup_audit.py \
+    --project "$PROJECT" \
+    --regions us-central1,us-east1,us-east4,us-west1,us-west3,us-west4 \
+    --out ".codex/tmp/gcp_cleanup_audit_${PROJECT}.json"
+```
+
+It lists instances, disks, snapshots, routers, router NATs, static IPs, active
+quota preferences, and selected GPU/address/disk quota snapshots. It does not
+stop or delete anything; use its output before declaring the fallback lane clean.
+
 Boot disks are normally deleted with the instance when
 `--instance-termination-action=DELETE` is set, but double-check. An idle
 200GB pd-ssd costs ~$34/month if you forget it.
@@ -373,8 +387,6 @@ artifact return over IAP. Remaining production-hardening items:
 
 - A launcher/helper that tries zones first, then regions, and writes the chosen
   project/zone/instance/run directory into a handoff file.
-- A cleanup/audit helper that lists instances, disks, snapshots, routers/NATs,
-  static IPs, and active quota preferences before the fallback lane is closed.
 
 ## 11. Budget tracking
 
