@@ -146,10 +146,27 @@ def render_mitigation_before_after() -> list[Path]:
     return save_figure(fig, "final_deck_mitigation_before_after")
 
 
+# Frozen torch-trace counts captured at the 20260507T0604Z profiling spot-check.
+# `profiling/traces/` is gitignored, so a fresh checkout cannot glob the trace
+# files live without re-running the profiling capture. The committed deliverable
+# figure must be reproducible from tracked sources, so the counts are pinned to
+# the captured evidence here. AT_M and AT_T emitted 2 torch trace files each
+# (rank0 + async_llm). PE_S_M and V_S_M did not enable the torch profiler.
+TORCH_TRACE_COUNTS_FROZEN = {
+    "profile_spotcheck_20260507T0604Z_at_m": 2,
+    "profile_spotcheck_20260507T0604Z_at_t": 2,
+    "profile_spotcheck_20260507T0604Z_pe_s_m": 0,
+    "profile_spotcheck_20260507T0604Z_v_s_m": 0,
+}
+
+
 def trace_count_for_run(run_name: str) -> int:
-    slug = run_name.removeprefix("profile_spotcheck_20260507T0604Z_")
-    trace_dir = PROFILING_DIR / f"profile_spotcheck_20260507T0604Z_{slug}_torch"
-    return len(list(trace_dir.glob("*.pt.trace.json.gz")))
+    if run_name not in TORCH_TRACE_COUNTS_FROZEN:
+        raise KeyError(
+            f"Unknown profiling run '{run_name}'. Update "
+            "TORCH_TRACE_COUNTS_FROZEN if a new spot-check capture was added."
+        )
+    return TORCH_TRACE_COUNTS_FROZEN[run_name]
 
 
 def render_profiling_summary() -> list[Path]:
