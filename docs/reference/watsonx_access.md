@@ -23,7 +23,7 @@ Current planning default:
 
 **Repo location:** Everything in this doc (`.env`, `.venv/`, `scripts/verify_watsonx.py`)
 lives in the canonical team repo at [HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp](https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp).
-Alex's personal repo is now only a mirror. If you have a different local checkout,
+Non-org mirrors are not source of truth. If you have a different local checkout,
 point it at the org repo `main` branch before treating it as source of truth.
 
 ## Setup

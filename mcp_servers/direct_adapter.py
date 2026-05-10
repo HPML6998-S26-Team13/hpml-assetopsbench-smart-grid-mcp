@@ -30,8 +30,10 @@ Layout
 ``TOOLS`` — ordered list of ``ToolSpec`` entries, one per exposed tool.
 ``TOOLS_BY_NAME`` — ``{qualified_name: ToolSpec}`` for O(1) dispatch from a
     ReAct agent given a tool name string like ``iot.get_sensor_readings``.
-``list_tool_specs_for_llm()`` — compact JSON-schema-ish list suitable for
-    prompting an LLM (name, description, parameters).
+``get_tools()`` — return the ordered ``ToolSpec`` registry; callers iterate
+    it to enumerate tools, derive the dispatch table, or build LLM-facing
+    descriptors via ``ToolSpec.name``, ``ToolSpec.doc``, and
+    ``ToolSpec.parameters()``.
 
 The canonical tool set matches the four ``@mcp.tool()``-decorated functions
 per server in ``mcp_servers/{iot,fmsr,tsfm,wo}_server/server.py``.

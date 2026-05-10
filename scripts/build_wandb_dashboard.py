@@ -190,8 +190,11 @@ blocks.append(
             "transport follow-ons (YS-TP, ZS-TP) and INT8/BF16 KV variants (D, ZSD)\n\n"
             "**Excluded:** smoke runs, pre-PR175 diagnostic cohorts, historical `mitigation_final6_*`.\n\n"
             "**Source inventory:** `results/metrics/profiling_inventory.csv`\n"
-            "**Scenario corpus:** 36 canonical scenarios + 5 negative fixtures "
-            "(result tables use 31-scenario post-PR175 floor)"
+            "**Scenario corpus:** 36 paper-grade canonical scenarios "
+            "(31 hand-authored + 5 promoted generated) + 5 negative fixtures; "
+            "result tables use 31-scenario post-PR175 floor. "
+            "Repo currently holds 61 scenario files because PR #199 added 25 "
+            "post-submission stretch scenarios that are NOT in paper claims."
         )
     )
 )
@@ -319,8 +322,11 @@ blocks.append(
         text=(
             "- **GitHub repo:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp\n"
             "- **Run inventory:** `results/metrics/profiling_inventory.csv`\n"
-            "- **Scenario corpus:** `data/scenarios/` "
-            "(36 canonical scenarios + 5 negative fixtures; result tables use 31-scenario floor)\n"
+            "- **Scenario corpus:** `data/scenarios/` paper-grade canonical "
+            "= 36 scenarios (31 hand-authored + 5 promoted generated) + 5 negative fixtures; "
+            "result tables use 31-scenario post-PR175 floor. "
+            "Repo currently holds 61 scenario files (PR #199 added 25 post-submission "
+            "stretch scenarios that are NOT in paper claims).\n"
             "- **Data generation:** `data/generate_synthetic.py` "
             "(no proprietary CSVs shipped; public-safe synthetic outputs only)\n"
             "- **Judge model:** Llama-4 Maverick 17B via WatsonX (separate family from task model)\n"

@@ -10,8 +10,15 @@ canonical: true
 **COMS E6998: High Performance Machine Learning -- Final Project**  
 Columbia University, Spring 2026
 
-**Team 13 / District 1101:** Akshat Bhandari (ab6174), Aaron Fan (af3623), Tanisha Rathod (tr2828), Wei Alexander Xin (wax1)  
+**Team 13 / District 1101:** Akshat Bhandari (ab6174) — LLM / eval harness; Aaron Fan (af3623) — EE / systems / Slurm; Tanisha Rathod (tr2828) — distributed systems / MCP; Wei Alexander Xin (wax1) — PM / data / Agent-as-Tool orchestration
 **Mentor:** Dr. Dhaval Patel, IBM Research
+
+## Submission
+
+- **GitHub repository:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp
+- **Final presentation (currently non-canonical pending formatting edits — see [`deliverables/README.md`](deliverables/README.md)):** [`deliverables/Team13_HPML_Final_Presentation.pptx`](deliverables/Team13_HPML_Final_Presentation.pptx) and [`deliverables/Team13_HPML_Final_Presentation.pdf`](deliverables/Team13_HPML_Final_Presentation.pdf)
+- **Final report:** [`deliverables/Team13_HPML_Final_Report.pdf`](deliverables/Team13_HPML_Final_Report.pdf)
+- **Experiment-tracking dashboard:** https://wandb.ai/assetopsbench-smartgrid
 
 ## Overview
 
@@ -23,7 +30,7 @@ This project extends IBM's [AssetOpsBench](https://github.com/IBM/AssetOpsBench)
 AI agent benchmark (467 scenarios across 6 HuggingFace subsets) by adding a 7th domain -- Smart
 Grid power transformers:
 
-1. Creating 30+ maintenance scenarios for **Smart Grid transformers** using public telemetry data
+1. Creating 36 paper-grade validated maintenance scenarios for **Smart Grid transformers** using public-safe synthetic telemetry data (the canonical corpus used for NeurIPS and CourseWorks claims; 25 additional scenarios added post-submission via PR #199 are present in `data/scenarios/` but excluded from paper claims)
 2. Wrapping four AssetOpsBench tool domains (IoT, TSFM, FMSR, WO) as **MCP servers**
 3. Profiling and optimizing the **LLM agent inference pipeline** when operating through MCP
 4. Comparing two **orchestration paradigms** (Agent-as-Tool vs Plan-Execute) on end-to-end multi-domain scenarios
@@ -64,8 +71,10 @@ via WatsonX API to assess scaling effects.
 ```
 .
 ├── README.md                     # This file - project overview, current status, structure
+├── LICENSE                       # MIT license
 ├── requirements.txt              # Python dependencies (ibm-watsonx-ai, pandas, etc)
 ├── .github/workflows/            # CI (Black formatting check)
+├── deliverables/                 # CourseWorks final report/deck files uploaded with the submission
 │
 ├── data/                         # Data pipeline + processed datasets - see data/README.md
 │   ├── build_processed.py        #   Downloads + joins 5 Kaggle datasets via synthesized transformer_id
@@ -104,7 +113,7 @@ via WatsonX API to assess scaling effects.
 ├── docs/                         # Living authored documentation - see docs/README.md
 │   └── reference/               #   Lower-churn class / mentor / setup reference docs
 ├── planning/                     # Meeting agendas + working notes
-└── reports/                      # Frozen deliverables (PDFs, PPTXs) - see reports/README.md
+└── reports/                      # Build notes, historical submissions, and report work products - see reports/README.md
     └── archive/                  #   Superseded drafts
 ```
 
@@ -205,7 +214,9 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 - [ ] `#7` / `#59` profiling wrappers and the first profiling-linked experiment capture path (Aaron)
 - [ ] `#15` / `#17` / `#18` / `#20` scenario-count, judge, and first trajectory artifacts (Akshat)
 
-**Current canonical scenario corpus:** 10 committed JSON scenarios under `data/scenarios/`. That is enough for smoke-proofing and early trajectories, but it is still below the intended benchmark corpus size for later experiment claims.
+**Paper-grade scenario corpus:** 36 validated SmartGridBench scenarios — 31 hand-authored + 5 promoted generated. This is the canonical count used for the final NeurIPS and CourseWorks claims (frozen at NeurIPS submission, 2026-05-07).
+
+**Current repo corpus:** 61 scenario files under `data/scenarios/` plus 5 negative validation fixtures. The 25 scenarios beyond the 36 paper-grade canonical were added post-submission via PR #199 (#55 batch A and B) to grow the repo corpus and are deliberately not part of any evaluated/judged claims.
 
 **Resolved during the Apr 16 post-call audit:**
 - [x] `#13` WO architecture review closed as a documented keep-vs-pivot decision
@@ -230,9 +241,10 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 | Date | Milestone |
 |---|---|
 | Mon Apr 6 | Mid-point report due (Courseworks, 11:59pm) |
-| Sun May 4 | Final presentation + project due |
-| Sun May 4 | NeurIPS 2026 Datasets & Benchmarks abstract deadline |
-| Wed May 6 | NeurIPS 2026 full submission deadline |
+| Tue May 5 | NeurIPS 2026 Datasets & Benchmarks abstract submitted |
+| Thu May 7 | NeurIPS 2026 full submission submitted |
+| Thu May 7 | Final class presentation delivered |
+| Sun May 10 | CourseWorks final report/package due (extended deadline) |
 
 ## References and Resources
 
@@ -246,9 +258,23 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 
 See also: [docs/reference/project_reference.md](docs/reference/project_reference.md) for class requirements, grading, and mentor guidance.
 
+## AI Use Disclosure
+
+Per the HPML AI Use Policy, Team 13 used AI assistance during this project.
+
+**Tools used:** Claude and Codex.
+
+**Specific purpose:** We used AI tools for brainstorming, debugging support, code navigation, runbook/checklist assistance, and prose polishing. Experimental design decisions, reported measurements, profiling interpretations, quantitative analysis, and final claims were checked by team members against committed code, experiment logs, dashboard records, and exported result artifacts.
+
+**Sections affected:** README/runbook wording, report and presentation polishing, checklist maintenance, and selected implementation/debugging workflows.
+
+**How we verified correctness:** We ran the reported experiments ourselves, preserved result artifacts under `benchmarks/`, `results/`, and `reports/`, cross-checked headline claims against the committed evidence tables, and manually reviewed final public-facing wording before submission.
+
+By submitting this project, the team confirms that the analysis, interpretations, and conclusions are our own, and that AI assistance is disclosed here. The same disclosure should appear in the final report appendix or footnote.
+
 ## Acknowledgments
 
-We acknowledge the use of AI tools, including ChatGPT and Claude, during the development of this project.
+We acknowledge the use of AI tools, including Claude and Codex, during the development of this project.
 
 ## License
 
