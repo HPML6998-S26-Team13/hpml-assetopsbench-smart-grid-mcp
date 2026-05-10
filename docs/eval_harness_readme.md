@@ -794,7 +794,7 @@ canonical command and provenance block are reproduced verbatim in:
 - `reports/realism_statistical_v1.md` (provenance block + 5/27 verdict)
 - `reports/realism_statistical_v1.json`
 
-To re-run from a clean checkout (requires `pip install -r requirements.txt`):
+To re-run from a clean checkout (requires `uv pip install -r requirements.txt` — see §14.1 for the convention):
 
 ```bash
 python data/scenarios/validate_realism_statistical.py \
