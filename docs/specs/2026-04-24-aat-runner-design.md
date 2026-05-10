@@ -128,22 +128,26 @@ The prompt text is copied **verbatim** from the pinned AOB commit at spec-write 
 ### `scripts/aat_tools_direct.py`
 
 ```python
-from typing import Callable
 from agents import function_tool
 from mcp_servers import direct_adapter
 
 def build_direct_tools() -> list:
     """Cell A: in-process callables wrapped as Agents SDK function_tools."""
     tools = []
-    for spec in direct_adapter.list_tool_specs_for_llm():
-        fn: Callable = direct_adapter.get_tool(spec["name"])
+    for spec in direct_adapter.get_tools():
         tools.append(function_tool(
-            fn,
-            name_override=spec["name"],
-            description_override=spec["description"],
+            spec.fn,
+            name_override=spec.name,
+            description_override=spec.doc,
         ))
     return tools
 ```
+
+Note: as of 2026-05-07 the `direct_adapter.get_tool(name)` and
+`direct_adapter.list_tool_specs_for_llm()` helpers were dropped (no callers in
+tracked code/tests). Iterate `direct_adapter.get_tools()` and use the
+`ToolSpec` fields directly (`spec.fn`, `spec.name`, `spec.doc`,
+`spec.parameters()`).
 
 Synchronous, no I/O. Tool errors raise Python exceptions which the Agents SDK catches and surfaces to the agent as tool-call error observations.
 

@@ -7,7 +7,30 @@ canonical: true
 
 # Content brief — Scenarios + Eval + Judge
 
-*Last updated: 2026-05-07. Owner: Akshat (issue #42). Audience: Alex, for the paper's scenarios + eval sections.*
+*Last updated: 2026-05-07. Stale-overlay refresh: 2026-05-10. Owner: Akshat (issue #42). Audience: Alex, for the paper's scenarios + eval sections.*
+
+> **Stale-overlay 2026-05-10 (post-PR #199):** Body below is the May 7 fact pack
+> — paper claims still hold and are frozen at NeurIPS submission 2026-05-07.
+> Repo state has moved since:
+>
+> - **Paper-grade canonical corpus stays at 36** (31 hand-authored + 5 promoted
+>   generated) + 5 negative fixtures. Frozen at 2026-05-07 NeurIPS submission.
+>   This is the load-bearing claim count.
+> - **Repo current corpus**: `data/scenarios/` now has **61 scenario files** plus
+>   5 negative fixtures because PR #199 (#55 batch A and B) ported in 25
+>   additional scenarios post-submission. Those 25 are NOT judged/validated and
+>   are deliberately excluded from paper, deck, and CourseWorks claims.
+> - **Result-table evidence floor stays 31 hand-authored, post-PR175**.
+> - **#55 stretch row in "Generated scenarios (PS B)" below**: PR #199 closed
+>   the repo-side stretch by porting 25 additional scenarios; paper still does
+>   not claim 50+.
+> - **Anti-claim "❌ 50+ scenarios"** below remains valid for paper/deck claims;
+>   the repo HAS 61 files but they are not paper-claimable.
+>
+> Do not edit the May 7 body to "update" the corpus number — keep the snapshot
+> intact for traceability and rely on this overlay for current truth.
+
+---
 
 This is a 1-page fact pack. Numbers are reproducible from the artifacts cited in each bullet, all sourced from `team13/main@f1309fd` plus the local final-evidence consolidation commit for the current taxonomy-audit figure sources. Sources by section: scenario counts from `data/scenarios/*.json` + `data/scenarios/generated/disposition_2026-05-06.csv` (PR #191) + the five PR #195 promotions; evidence counts from `results/metrics/evidence_registry.csv` (PR #188) + `results/metrics/scenario_scores.jsonl` (continuously updated, all paper-eligible rows on the PR #175 floor); failure-taxonomy counts from `results/metrics/failure_taxonomy_current.csv` (PR #193) and the 46-row audit overlay in PR #197.
 

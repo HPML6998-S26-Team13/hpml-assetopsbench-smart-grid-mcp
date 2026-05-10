@@ -7,9 +7,34 @@ canonical: true
 
 # NeurIPS 2026 Submission Packet
 
-*Last updated: 2026-05-07*
+*Last updated: 2026-05-07. Stale-overlay refresh: 2026-05-10.*
 *Owner: Alex Xin*
 *Issues: #5, #39, #47, #48, #88, #181, #182*
+
+> **Stale-overlay 2026-05-10 (post-NeurIPS submission, post-PR #199):** Body
+> below is the May 7 submission-packet snapshot. NeurIPS submission landed on
+> 2026-05-07 (OpenReview `scKKXyNaQG`; #182 closed). Repo state has moved
+> since:
+>
+> - **Paper-grade canonical corpus stays at 36** scenarios (31 hand-authored +
+>   5 promoted generated) + 5 negative fixtures. Frozen at 2026-05-07 NeurIPS
+>   submission. The submitted paper claims 36; the hosted reviewer artifact
+>   snapshot `d606d10765e1ec97e97e3683f6a3794ecf64bb17` matches the same
+>   paper-grade corpus.
+> - **Repo current corpus**: `data/scenarios/` now has 61 scenario files
+>   because PR #199 (#55 batch A and B) ported in 25 additional scenarios
+>   post-submission. Those 25 are NOT judged/validated and are deliberately
+>   excluded from paper, deck, and CourseWorks claims.
+> - **Result-table evidence floor stays 31 hand-authored, post-PR175** —
+>   unchanged from May 7.
+> - **Rows below that say "scenario floor reaches 36" / "use 36 validated
+>   scenarios"** still hold for the submitted paper; the additional 25 in the
+>   repo do not change submitted claims.
+>
+> Do not edit the May 7 body to "update" the corpus number — keep snapshot
+> intact and rely on this overlay for current truth.
+
+---
 
 This packet is the deadline-facing control surface for the NeurIPS 2026
 Evaluations & Datasets submission. It summarizes what can already go into the

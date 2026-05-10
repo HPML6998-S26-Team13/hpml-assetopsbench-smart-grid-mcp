@@ -24,16 +24,17 @@ Production companion: `docs/final_presentation_run_of_show.md`.
 
 The first editable PowerPoint draft has been generated from the current story
 spine. It is intentionally a draft, not the final submitted deck, because #44
-still depends on the 30-scenario floor, final mitigation/rerun decision, and a
-timed dry run.
+still needs the class template migration, current evidence freeze, IBM upstream
+PR status callout, and a timed dry run.
 
 | Artifact | Status | Notes |
 |---|---|---|
 | `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx` | built | 12-slide editable PPTX; dark technical visual system; issue remains open. |
+| Final HPML template rebuild | pending | Rebuild from this 13-slide scaffold into the required class template before submission. |
 | Layout QA | pass with warnings | Artifact-tool checker: 0 errors / 7 padding or tight-text warnings; visual contact sheet reviewed. |
 | Build provenance | documented | `reports/build_notes/2026-05-03_final_presentation_smartgridbench_build.md` records the one-off artifact-tool command, integrity checks, and warning inventory. |
-| Scenario slide | gated | PR #156 is still open; keep 30 scenarios as the required floor, not a completed claim. |
-| Mitigation slide | ready | Post-PR175 before/after rows landed; keep the claim to mixed effects, not universal lift. |
+| Scenario slide | current | 36 paper-grade canonical scenarios + 5 negative fixtures define the evaluated corpus (31 hand-authored + 5 promoted generated); repo currently has 61 scenario files because PR #199 added 25 post-submission stretch scenarios that are not in paper claims; result tables remain scoped to the 31-scenario post-PR175 floor unless explicitly refreshed. |
+| Mitigation slide | current | PR #198 landed the post-PR175 before/after rows; keep the claim to mixed effects, not universal lift. |
 
 ## May 2 Deck Readiness
 
@@ -44,16 +45,17 @@ tables, source paths, and backup Q&A are in place. The remaining work is not
 | Component | Status | Open caveat |
 |---|---|---|
 | Core deck spine | ready | final timing pass still needed |
-| Scenario status slide | draft-ready | 30-scenario claim waits for PR #156 + generated acceptance |
+| Scenario status slide | draft-ready | distinguish 36-scenario corpus from 31-scenario result floor |
 | Transport result slide | draft-ready | caption as first six-trial capture |
 | Orchestration result slide | draft-ready | keep Self-Ask as follow-on, not core baseline |
-| Failure taxonomy slide | ready | figure placement and caption polish needed |
-| Mitigation ladder slide | ready | post-PR175 before/after rows measured; mixed-effect framing |
-| Backup Q&A | draft-ready | add Cell D / 70B only if promoted before freeze |
+| Failure taxonomy slide | current | use PR #197 current audit surface, not the historical 35-row table |
+| Mitigation ladder slide | current | PR #198 post-PR175 before/after rows measured; mixed-effect framing |
+| Upstreaming callout | needs PPTX update | [IBM AssetOpsBench PR #287](https://github.com/IBM/AssetOpsBench/pull/287) is draft-open now and should be marked Ready once the draft/DCO gate clears. |
+| Backup Q&A | draft-ready | keep Cell D / 70B as closed exploratory context unless promoted in the main paper text |
 
 Recommended target: 10-12 minutes plus Q&A. If time compresses, keep Slides
-1-9 and 12; shorten Slide 10 (mitigation) rather than cutting Slide 9 (failure
-taxonomy).
+1-10 and 12-13; shorten Slide 11 (mitigation) rather than cutting Slide 10
+(failure taxonomy).
 
 ## Deck Spine
 
@@ -76,8 +78,8 @@ Run-of-show rule:
 - slides 1-3 establish the artifact
 - slides 4-6 establish why the experiment matrix is controlled rather than a
   full grid
-- slides 7-9 deliver the evidence
-- slides 10-12 convert evidence into the benchmark-design conclusion
+- slides 7-10 deliver transport, profiling, orchestration, and failure evidence
+- slides 11-13 convert evidence into mitigation, reproducibility, and conclusion
 
 ## Visual System Notes
 
@@ -139,8 +141,8 @@ still forces multi-tool evidence gathering."
 
 Claim:
 
-SmartGridBench extends AssetOpsBench with a Smart Grid transformer domain and
-four MCP-backed tool domains.
+SmartGridBench extends AssetOpsBench with a Smart Grid transformer domain,
+MCP-backed tools, and an upstream-ready AssetOpsBench integration path.
 
 Table:
 
@@ -154,36 +156,51 @@ Table:
 Source:
 
 `mcp_servers/`, `data/scenarios/README.md`, `docs/data_pipeline.tex`,
-`data/scenarios/*.json`, `data/scenarios/negative_checks/*.json`, PR #156.
+`data/scenarios/*.json`, `data/scenarios/negative_checks/*.json`, PR #195,
+[IBM AssetOpsBench PR #287](https://github.com/IBM/AssetOpsBench/pull/287).
 
 Speaker note:
 
 "The shared transformer key is what turns these into one benchmark trajectory
 instead of four unrelated toy tools."
 
-### Slide 4 - Scenario Corpus Status
+### Slide 4 - Workload / Dataset Overview
 
 Claim:
 
-The benchmark corpus is deadline-critical: the proposal floor is 30 validated
-scenarios, and the final set must distinguish merged facts from pending work.
+SmartGridBench is a controlled transformer-maintenance workload, not a
+scenario-count status report.
 
-Current status:
+Key facts:
 
-- Canonical `team13/main`: 11 positive scenarios + 5 negative validation fixtures.
-- PR #156: adds 10 hand-crafted scenarios, raising the hand-authored positive
-  set to 21 after merge.
-- Generator-accepted scenarios still need to clear the 30-scenario floor.
+- Paper-grade canonical: 36 positive scenarios + 5 negative validation fixtures
+  (frozen at NeurIPS submission, 2026-05-07).
+- Scenario provenance: 31 hand-authored scenarios plus 5 generated-source
+  scenarios accepted with edits and promoted in PR #195.
+- Repo current: 61 scenario files in `data/scenarios/`. The 25 beyond paper-grade
+  came post-submission via PR #199 (#55 batch A and B) and are deliberately
+  excluded from paper/CourseWorks claims.
+- Current result tables and failure evidence are still mostly post-PR175 /
+  31-scenario evidence; do not silently imply a full 36-scenario evaluation,
+  and never imply evaluation across the 61 repo total.
+- [IBM AssetOpsBench PR #287](https://github.com/IBM/AssetOpsBench/pull/287)
+  is open as a draft upstream cut for the 36-scenario Smart Grid
+  domain/data/test package.
 
 Visual:
 
-Progress bar: 11 merged -> 21 after PR #156 -> 30 required.
+Use the text-collision-fixed dataset overview from the release-owner asset
+bundle (committed locally to `results/figures/notebook01_dataset_overview.png`
+when included in the public package).
+Do not use a scenario-count progress/status bar.
 
 Speaker note:
 
-"This slide is intentionally honest. The proposal commitment is 30 validated
-scenarios, so the deck should distinguish what is merged from what is in
-review or acceptance."
+"This slide should orient the audience to the workload. The count caveat belongs
+in the caption or source footer: 36 paper-grade canonical scenarios define the
+evaluated corpus (31 hand-authored + 5 promoted generated); 25 additional
+scenarios from PR #199 sit in the repo but are not in paper claims; result
+tables use the 31-scenario post-PR175 evidence floor."
 
 ### Slide 5 - Architecture: One Artifact Contract Across Cells
 
@@ -357,32 +374,44 @@ competitive."
 
 Claim:
 
-The largest current failure class is task verification, not transport plumbing.
+Across the current paper-grade failure inventory, the dominant symptoms are
+missing or weak task completion and evidence grounding, not transport plumbing.
 
 Table:
 
-| Failure class | Rows | Percent |
+| Auto-label symptom | Rows | Percent of paper-grade failures |
 |---|---:|---:|
-| Task verification failure | 18 | 51.4% |
-| Inter-agent / orchestration failure | 13 | 37.1% |
-| Specification failure | 4 | 11.4% |
+| Task completion | 944 | 74.0% |
+| Data retrieval accuracy | 182 | 14.3% |
+| Agent sequence correctness | 78 | 6.1% |
+| Result verification | 72 | 5.6% |
+
+Manual audit overlay:
+
+| Surface | Current result |
+|---|---|
+| Paper-grade failures | 1,276 across 2,420 paper-grade judge rows |
+| PR #197 stratified audit | 46 rows, one per non-empty `(cell, auto-label)` stratum |
+| Audit decisions | 42 confirmed, 3 evidence-thin, 1 relabel suggested |
+| Recurring patterns | 6 patterns spanning 23 audit rows and 6 distinct scenarios |
 
 Visual:
 
-Use `results/figures/failure_taxonomy_counts.svg` and
-`results/figures/failure_stage_cell_heatmap.svg`.
+Use `results/figures/failure_taxonomy_current_auto_label_counts.svg`; keep the
+manual-audit pattern table as text or backup detail.
 
 Source:
 
-`results/metrics/failure_taxonomy_counts.csv`,
-`results/metrics/failure_stage_cell_counts.csv`,
-`results/figures/failure_taxonomy_counts.svg`,
-`results/figures/failure_stage_cell_heatmap.svg`
+`results/metrics/failure_taxonomy_current.csv`,
+`results/metrics/failure_taxonomy_current_auto_label_counts.csv`,
+`results/metrics/failure_taxonomy_current_manual_audit_counts.csv`,
+`docs/failure_taxonomy_audit_2026-05-07.md`, PR #197.
 
 Speaker note:
 
 "The important thing here is that a run can complete and still be semantically
-unsafe. That is why we treat failure accounting as part of the benchmark."
+unsafe. The 46-row manual audit is coverage-oriented, not prevalence-weighted,
+so use it for examples and recurring patterns rather than population rates."
 
 Transition:
 
@@ -396,7 +425,7 @@ Claim:
 We turn failure analysis into a bounded mitigation ladder instead of a
 combinatorial experiment grid.
 
-Table:
+Mitigation ladder:
 
 | Rung | Mitigation | Status |
 |---:|---|---|
@@ -404,6 +433,13 @@ Table:
 | 1 | Missing-evidence final-answer guard | Measured post-PR175 |
 | 2 | Missing-evidence retry/replan guard | Measured post-PR175 |
 | 3 | Explicit fault/risk adjudication step | Measured post-PR175 |
+
+Result snapshot:
+
+| Family | Baseline judge pass | Guard | Repair/replan | Adjudication | Read |
+|---|---:|---:|---:|---:|---|
+| YS | 40/75 | 36/75 | 36/75 | 31/75 | accounting/repair changes behavior, but not a quality lift |
+| ZS | 36/75 | 35/75 | 37/75 | 31/75 | repair gives the only small positive lift: +1 pass, +0.0089 mean score |
 
 Source:
 
@@ -413,10 +449,9 @@ Source:
 
 Speaker note:
 
-"Post-PR175 reruns landed, so this can be a before/after result slide. Keep the
-claim narrow: the ladder improves accounting / refusal semantics and gives a
-bounded repair path, but the measured judge-score effects are mixed rather than
-a universal lift."
+"PR #198 makes this a current before/after result slide. Keep the claim narrow:
+the ladder improves accounting/refusal semantics and gives a bounded repair
+path, but measured judge-score effects are mixed rather than a universal lift."
 
 ### Slide 12 - Reproducibility and Deliverables
 
@@ -432,8 +467,9 @@ Proof objects:
 - metrics under `results/metrics/`
 - figures under `results/figures/`
 - Overleaf NeurIPS project with official 2026 template
-- Team 13 AOB fork package/planning path in progress; IBM upstreaming remains
-  future work until an upstream PR is opened.
+- [IBM AssetOpsBench PR #287](https://github.com/IBM/AssetOpsBench/pull/287)
+  opened as a draft upstream cut for the Smart Grid domain/data/tests; mark it
+  Ready in the slide once the draft/DCO gate clears.
 
 Visual:
 
@@ -442,7 +478,7 @@ Artifact map from run ID -> metrics CSV -> figure -> paper/deck claim.
 Speaker note:
 
 "This is the reproducibility promise: every claim on the results slides should
-point to a metric file, figure, or run ID."
+point to a metric file, figure, run ID, or upstream PR."
 
 ### Slide 13 - Conclusion
 
@@ -460,11 +496,14 @@ Takeaways:
 3. Orchestration quality depends on evidence grounding and verification, not
    just plan structure.
 4. Failure taxonomy and mitigation should be first-class benchmark artifacts.
+5. The upstream path is now concrete: IBM AssetOpsBench PR #287 is open, with
+   follow-on orchestration/evaluation PRs deferred after the thin domain cut.
 
 Closing sentence:
 
 "The deliverable is not just a working demo; it is an auditable benchmark
-extension that lets us ask better questions about industrial tool-using agents."
+extension with a real upstreaming path for asking better questions about
+industrial tool-using agents."
 
 ## Backup / Q&A Slides
 
@@ -497,6 +536,7 @@ into the vanilla Plan-Execute baseline.
 
 Answer:
 
-The critical remaining work is the 30-scenario floor, final figure captions,
-Overleaf compile/checklist, guarded mitigation rerun decision, and final report
-back-port.
+The critical remaining work is class-template deck rebuild, final figure
+captions, Overleaf/report compile checklist, README/report back-port, and
+updating the IBM PR #287 badge once it moves from draft to Ready before the
+talk.

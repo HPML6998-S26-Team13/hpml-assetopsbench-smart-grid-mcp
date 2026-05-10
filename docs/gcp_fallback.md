@@ -255,7 +255,7 @@ option.
 export PROJECT=fleet-garage-490218-c8
 export ZONE=us-central1-a
 export INSTANCE=smartgrid-a100-YYYYMMDD-HHMM
-export LOCAL_REPO=/Users/wax/coding/hpml-assetopsbench-smart-grid-mcp
+export LOCAL_REPO=$(pwd)   # run from your local clone of this repo, or set to the absolute clone path
 
 gcloud compute scp --project="$PROJECT" --zone="$ZONE" --tunnel-through-iap \
     --recurse \

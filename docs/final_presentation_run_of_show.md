@@ -38,14 +38,14 @@ Target: 10-12 minutes plus Q&A.
 | Segment | Slides | Time | Job |
 |---|---|---:|---|
 | Setup | 1-3 | 2:00 | Name the artifact and why Smart Grid transformer maintenance matters. |
-| Experimental design | 4-6 | 2:00 | Explain scenario status, artifact contract, and A/B/C vs B/Y/Z split. |
-| Results | 7-9 | 3:30 | Show transport, orchestration, and failure-taxonomy evidence. |
-| Mitigation + reproducibility | 10-11 | 2:00 | Explain why failures become a mitigation ladder and how claims trace to artifacts. |
-| Close | 12 | 1:00 | Land the benchmark-design thesis. |
+| Experimental design | 4-6 | 2:00 | Explain workload scope, artifact contract, and A/B/C vs B/Y/Z split. |
+| Results | 7-10 | 4:00 | Show transport, profiling, orchestration, and failure-taxonomy evidence. |
+| Mitigation + reproducibility | 11-12 | 2:00 | Explain why failures become a mitigation ladder and how claims trace to artifacts. |
+| Close | 13 | 1:00 | Land the benchmark-design thesis and upstreaming status. |
 | Buffer | backup | 1:30 | In-envelope reserve; use only if asked about grid size, quality caveats, or remaining work. |
 
-If time is tight, cut Slide 10 down to one sentence and move mitigation details
-to backup. Do not cut Slide 9; the failure-taxonomy result is one of the
+If time is tight, cut Slide 11 down to one sentence and move mitigation details
+to backup. Do not cut Slide 10; the failure-taxonomy result is one of the
 strongest differentiators.
 
 ## Main Story Beats
@@ -69,11 +69,18 @@ Keep the artifact claim concrete:
 
 - four Smart Grid tool domains
 - shared transformer asset key
-- committed scenario artifacts
+- 36 paper-grade canonical scenarios (31 hand-authored + 5 promoted generated)
+  + 5 negative fixtures
 - common benchmark output contract
+- [IBM AssetOpsBench PR #287](https://github.com/IBM/AssetOpsBench/pull/287)
+  opened as the upstream thin domain cut
 
-Avoid claiming final scenario counts until the 30-scenario floor is merged and
-validated.
+The repo's `data/scenarios/` directory currently holds 61 scenario files
+because PR #199 added 25 post-submission stretch scenarios; those 25 are NOT
+judged or in paper claims. Avoid implying that all result tables have been
+regenerated over the 36-scenario corpus, and never imply evaluation across
+the 61 repo total. Most paper-grade evidence still uses the post-PR175
+31-scenario floor.
 
 ### Experiment split
 
@@ -94,16 +101,21 @@ Use conservative wording:
 
 - Transport: optimized MCP improves the first-capture p50, but C has a cold-tail
   p95 and does not improve judge quality.
+- Profiling: W&B / profiler inventory coverage is now a first-class result; PE
+  and Verified PE still have a torch-trace hook gap in the spot checks.
 - Orchestration: vanilla PE is weak, while Verified PE + Self-Ask is currently
   strongest on judged quality.
-- Failure taxonomy: evidence verification, not transport plumbing, is the
-  dominant failure class.
+- Failure taxonomy: current claims should cite the 1,276-failure PR #197 surface,
+  not the historical 35-row taxonomy scaffold.
+- Mitigation: PR #198 supports mixed before/after effects, not a universal lift.
 
 Avoid:
 
 - "MCP is faster" as a global claim.
 - "Plan-Execute is better" as a global claim.
-- "30 scenarios are complete" until merged/validated.
+- "All 36 scenarios were fully re-evaluated" unless a refreshed evidence pull
+  lands.
+- "IBM accepted/merged SmartGridBench" while PR #287 is only draft-open.
 
 ### Close
 
@@ -119,14 +131,15 @@ Say:
 | Slide | Proof object | Source |
 |---:|---|---|
 | 3 | Tool-domain table | `mcp_servers/`, `docs/data_pipeline.tex` |
-| 4 | Scenario-count status | `data/scenarios/`, `data/scenarios/validate_scenarios.py`, PR #156, generator acceptance status |
+| 4 | Workload / dataset overview | `data/scenarios/`, `data/scenarios/validate_scenarios.py`, PR #195, IBM PR #287, `paper_dataset_overview.png` |
 | 5 | Artifact-contract diagram | `scripts/run_experiment.sh`, `benchmarks/cell_<X>/` |
 | 6 | Experiment matrix | `docs/experiment_matrix.md` |
 | 7 | Transport table | `results/metrics/notebook02_latency_summary.csv`, `results/metrics/experiment_matrix_summary.csv` |
-| 8 | Orchestration table | `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, `results/metrics/experiment_matrix_summary.csv` |
-| 9 | Failure taxonomy | `results/metrics/failure_taxonomy_counts.csv`, `results/figures/failure_taxonomy_counts.svg` |
-| 10 | Mitigation ladder | `docs/mitigation_recovery_adjudication.md`, `results/metrics/mitigation_run_inventory.csv` |
-| 11 | Reproducibility map | `docs/validation_log.md`, `results/metrics/`, `results/figures/` |
+| 8 | Profiling inventory | `results/metrics/profiling_inventory.csv` |
+| 9 | Orchestration table | `results/metrics/notebook03_orchestration_comparison.csv`, `results/metrics/notebook03_self_ask_ablation.csv`, `results/metrics/experiment_matrix_summary.csv` |
+| 10 | Failure taxonomy | `results/metrics/failure_taxonomy_current.csv`, `results/metrics/failure_taxonomy_current_auto_label_counts.csv`, `docs/failure_taxonomy_audit_2026-05-07.md` |
+| 11 | Mitigation ladder | `docs/mitigation_recovery_adjudication.md`, `results/metrics/mitigation_before_after.csv` |
+| 12 | Reproducibility map | `docs/validation_log.md`, `results/metrics/`, `results/figures/`, IBM PR #287 |
 
 ## PowerPoint Build Checklist
 
@@ -136,12 +149,14 @@ Say:
       the class deck template before submission.
 - [ ] Use one claim per slide; move extra bullets into speaker notes.
 - [ ] Add source footer to every result slide.
-- [ ] Insert `results/figures/failure_taxonomy_counts.svg` and
-      `results/figures/failure_stage_cell_heatmap.svg`.
+- [ ] Mention IBM AssetOpsBench PR #287 on Slide 4 or Slide 12; update the badge
+      from draft to Ready if it leaves draft state before the talk.
+- [ ] Insert `results/figures/failure_taxonomy_current_auto_label_counts.svg`
+      or a current table derived from `failure_taxonomy_current*.csv`.
 - [ ] Decide whether `results/figures/notebook03_pe_family_follow_on.png` is a
       main slide or backup slide.
 - [ ] Keep Cell D / 70B context evidence in backup unless the paper promotes it
-      before deck freeze.
+      in main text; #95 is closed but exploratory.
 - [ ] Dry-run once against 10-12 minute timing.
 - [ ] Re-check every numeric slide against `results/metrics/` after any final
       rerun PR merges.
@@ -150,9 +165,9 @@ Say:
 
 | Gate | Owner | Deck effect |
 |---|---|---|
-| PR #156 and generated scenarios | Tanisha/Akshat, Alex shepherd | Slide 4 can claim 30 validated scenarios only after this settles. |
-| Mitigation rerun rows | Alex | Slide 10 can cite `results/metrics/mitigation_before_after.csv`; keep wording to mixed effects, not universal lift. |
-| Final paper figures | Alex + team inputs | Slides 7-9 should mirror the paper figures and captions. |
+| IBM AssetOpsBench PR #287 state | Alex | Slide should say draft-open now; change to Ready only after GitHub draft state flips and DCO is green. |
+| Current evidence freeze | Alex + team inputs | Slides 7-11 should cite PR #197/#198 current CSVs and captions, not stale notebook figures. |
+| Final paper figures | Alex + team inputs | Slides 7-11 should mirror the paper figures and captions. |
 | Overleaf/source paper freeze | Alex | Deck conclusion should match the final paper claim wording. |
 
 Until those gates clear, #44 should remain open.
