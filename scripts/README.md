@@ -47,6 +47,7 @@ what you want to do but not which command to run, start here.
 | [judge_trajectory.py](judge_trajectory.py) | LLM-as-Judge scoring helper for trajectory artifacts |
 | [gcp_resume_state.py](gcp_resume_state.py) | Resume-state helper used by `run_experiment.sh` for trial classification, manifest events, and latency-row upserts |
 | [gcp_pull_context_artifacts.sh](gcp_pull_context_artifacts.sh) | Pull GCP context-batch artifacts over IAP and merge judge score rows without duplicates |
+| [gcp_cleanup_audit.py](gcp_cleanup_audit.py) | Read-only GCP fallback closeout audit for instances, disks, snapshots, NATs, static IPs, and quota state |
 | [tmux_watch_run.sh](tmux_watch_run.sh) | Convenience watcher for long-running jobs or logs |
 
 ## Related indexes

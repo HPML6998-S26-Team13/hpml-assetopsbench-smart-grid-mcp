@@ -7,6 +7,15 @@ canonical: true
 
 # Changelog
 
+## 2026-05-09
+
+### Added
+
+- Added `scripts/gcp_cleanup_audit.py`, a read-only GCP fallback closeout
+  helper that audits instances, disks, snapshots, routers/NATs, static IPs,
+  active quota preferences, and selected quota snapshots before Issue #91 is
+  closed.
+
 ## 2026-05-07
 
 ### Added
