@@ -4,8 +4,8 @@
 
 This spec defines the scope, decision rules, and findings inventory for a consolidated remediation pass across:
 
-- team repo: `/Users/wax/coding/hpml-assetopsbench-smart-grid-mcp`
-- personal repo: `/Users/wax/coding/Classes/COMS-E6998/Final Project`
+- team repo: `<SMARTGRIDBENCH_REPO>`
+- personal repo: `<CLASS_REPO>/Final_Project`
 
 The intent is to avoid piecemeal teammate churn. Findings should be reviewed, deduplicated, and then addressed in one coherent implementation program rather than as scattered one-off fixes.
 
@@ -192,16 +192,16 @@ Field conventions:
 | F-20 | B | High | `mcp_servers/fmsr_server/server.py` | `#11`, `#58` | `#11 Open; #58 Open` | N/A | A | Reject invalid negative gas concentrations rather than returning misleading Rogers-ratio outputs. |
 | F-21 | F | High | `README.md`, `docs/README.md`, `docs/reference/project_reference.md`, `docs/project_synopsis.md`, `docs/repo_strategy.md`, `reports/README.md`, `benchmarks/README.md`, `mcp_servers/README.md` | no corresponding issue | `no corresponding issue — review-surfaced team-repo doc/planning drift that was never represented as a standalone issue` | N/A | A/C | Repair repo-level onboarding drift: remote naming, empty experiment instructions, malformed tree lines, stale doc-routing guidance, and missing benchmark/server-composition guidance. Note: the `mcp_servers/README.md` portion is handled alongside Batch A contract cleanup; the rest stays in Batch C. |
 | F-22 | F | Critical | `planning/2026-04-07_meeting_notes.md`, `planning/2026-04-14_call_agenda.md`, `planning/2026-04-14_call_prep.md`, `planning/2026-04-21_call_agenda.md`, `planning/2026-04-21_call_prep.md` | no corresponding issue | `no corresponding issue — live team planning drift surfaced during review, not previously tracked on the board` | N/A | C | Update live planning docs so they encode the correct execution state, Tier-1 fallback gate, and explicit artifact-based acceptance criteria. |
-| F-23 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-07_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Remove stale framing that still treats PS B as unresolved stretch work after the Apr 7 decisions. |
-| F-24 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-14_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Replace archived tracker references with the canonical GitHub Project and current team-repo sources. |
-| F-25 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/task_specs.md` | no corresponding issue | `no corresponding issue — personal-repo historical/supporting doc drift only` | N/A | N/A | Correct issue-number drift (`#68` vs `#55`) and any duplicated or stale IDs. |
-| F-26 | G | Critical | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/updates_20260409.md` | no corresponding issue | `no corresponding issue — outgoing teammate-draft note in personal repo` | N/A | N/A | Remove unsafe/incomplete teammate instructions, especially the wrong `reset --hard` guidance and unfinished message fragments. |
-| F-27 | G | Critical | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/agent_audit.md` | no corresponding issue | `no corresponding issue — personal-repo audit/support surface only` | N/A | N/A | Fix broken file paths, stale repo path assumptions, and missing scope in the audit prompt so it can actually execute. |
-| F-28 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/Dhaval_Email_Thread.md` | `#63` | `#63 Open` | N/A | N/A | Mark still-pending mentor questions explicitly and label unconfirmed NeurIPS dates as unverified until externally checked. |
-| F-29 | G | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/report_format_mapping.md` | no corresponding issue | `no corresponding issue — personal-repo report-support doc drift only` | N/A | N/A | Fix stale paths and specify how shared NeurIPS/IEEE sections should actually split during back-porting. |
-| F-30 | H | Critical | `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-neurips/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Add the required NeurIPS style file (or documented manual prerequisite) so the scaffold actually compiles. |
-| F-31 | H | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-ieee/main.tex`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-neurips/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Repair citation/bibliography scaffolding: real cite keys, no TODO bibitems, correct bibliography style, and a stable BibTeX path. |
-| F-32 | H | High | `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-ieee/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Rename the IEEE \"Training and Profiling Methodology\" framing so the scaffold reflects inference/profiling rather than nonexistent training work. |
+| F-23 | G | High | `<CLASS_REPO>/Final_Project/notes/2026-04-07_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Remove stale framing that still treats PS B as unresolved stretch work after the Apr 7 decisions. |
+| F-24 | G | High | `<CLASS_REPO>/Final_Project/notes/2026-04-14_call_prep.md` | no corresponding issue | `no corresponding issue — personal-repo support doc drift only` | N/A | N/A | Replace archived tracker references with the canonical GitHub Project and current team-repo sources. |
+| F-25 | G | High | `<CLASS_REPO>/Final_Project/notes/task_specs.md` | no corresponding issue | `no corresponding issue — personal-repo historical/supporting doc drift only` | N/A | N/A | Correct issue-number drift (`#68` vs `#55`) and any duplicated or stale IDs. |
+| F-26 | G | Critical | `<CLASS_REPO>/Final_Project/notes/updates_20260409.md` | no corresponding issue | `no corresponding issue — outgoing teammate-draft note in personal repo` | N/A | N/A | Remove unsafe/incomplete teammate instructions, especially the wrong `reset --hard` guidance and unfinished message fragments. |
+| F-27 | G | Critical | `<CLASS_REPO>/Final_Project/notes/agent_audit.md` | no corresponding issue | `no corresponding issue — personal-repo audit/support surface only` | N/A | N/A | Fix broken file paths, stale repo path assumptions, and missing scope in the audit prompt so it can actually execute. |
+| F-28 | G | High | `<CLASS_REPO>/Final_Project/notes/Dhaval_Email_Thread.md` | `#63` | `#63 Open` | N/A | N/A | Mark still-pending mentor questions explicitly and label unconfirmed NeurIPS dates as unverified until externally checked. |
+| F-29 | G | High | `<CLASS_REPO>/Final_Project/notes/report_format_mapping.md` | no corresponding issue | `no corresponding issue — personal-repo report-support doc drift only` | N/A | N/A | Fix stale paths and specify how shared NeurIPS/IEEE sections should actually split during back-porting. |
+| F-30 | H | Critical | `<CLASS_REPO>/Final_Project/resources/report-neurips/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Add the required NeurIPS style file (or documented manual prerequisite) so the scaffold actually compiles. |
+| F-31 | H | High | `<CLASS_REPO>/Final_Project/resources/report-ieee/main.tex`, `<CLASS_REPO>/Final_Project/resources/report-neurips/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Repair citation/bibliography scaffolding: real cite keys, no TODO bibitems, correct bibliography style, and a stable BibTeX path. |
+| F-32 | H | High | `<CLASS_REPO>/Final_Project/resources/report-ieee/main.tex` | no corresponding issue | `no corresponding issue — personal-repo report scaffold only` | N/A | N/A | Rename the IEEE \"Training and Profiling Methodology\" framing so the scaffold reflects inference/profiling rather than nonexistent training work. |
 
 ### Theme A - Scenario / harness contract correctness
 
@@ -365,13 +365,13 @@ Key issues:
 
 Primary affected files:
 
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/updates_20260409.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/agent_audit.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/Dhaval_Email_Thread.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-07_call_prep.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-14_call_prep.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/task_specs.md`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/report_format_mapping.md`
+- `<CLASS_REPO>/Final_Project/notes/updates_20260409.md`
+- `<CLASS_REPO>/Final_Project/notes/agent_audit.md`
+- `<CLASS_REPO>/Final_Project/notes/Dhaval_Email_Thread.md`
+- `<CLASS_REPO>/Final_Project/notes/2026-04-07_call_prep.md`
+- `<CLASS_REPO>/Final_Project/notes/2026-04-14_call_prep.md`
+- `<CLASS_REPO>/Final_Project/notes/task_specs.md`
+- `<CLASS_REPO>/Final_Project/notes/report_format_mapping.md`
 
 Primary affected issues:
 
@@ -391,8 +391,8 @@ Key issues:
 
 Primary affected files:
 
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-ieee/main.tex`
-- `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-neurips/main.tex`
+- `<CLASS_REPO>/Final_Project/resources/report-ieee/main.tex`
+- `<CLASS_REPO>/Final_Project/resources/report-neurips/main.tex`
 
 Primary affected issues:
 

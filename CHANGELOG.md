@@ -7,6 +7,18 @@ canonical: true
 
 # Changelog
 
+## 2026-05-11
+
+### Changed
+
+- Reorganized `README.md` around the HPML final-project template with explicit
+  course/team metadata, numbered project sections, reproducibility subsections,
+  result evidence links, and License/Citation/Contact notes. Removed the
+  redundant one-line AI acknowledgment after the fuller AI use disclosure.
+- Replaced machine-local home-directory paths in public notebook output,
+  benchmark logs, archive docs, and the evidence-registry grep guidance with
+  portable placeholders or environment-variable fallbacks.
+
 ## 2026-05-10
 
 ### Added

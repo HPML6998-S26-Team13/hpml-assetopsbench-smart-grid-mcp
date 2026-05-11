@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /home/wax/hpml-final-grid-git
+cd "${SMARTGRIDBENCH_REPO:-$PWD}"
 source .venv-insomnia/bin/activate
 export PATH="$HOME/.local/bin:$(dirname "$(g++ -print-prog-name=cc1plus)"):$PATH"
 export SMARTGRID_COMPUTE_PROVIDER=gcp

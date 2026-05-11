@@ -4,8 +4,8 @@
 
 Run a single, consolidated remediation cycle for the HPML SmartGridBench project across:
 
-- the team repo: `/Users/wax/coding/hpml-assetopsbench-smart-grid-mcp`
-- the personal planning repo: `/Users/wax/coding/Classes/COMS-E6998/Final Project`
+- the team repo: `<SMARTGRIDBENCH_REPO>`
+- the personal planning repo: `<CLASS_REPO>/Final_Project`
 
 The objective is to:
 
@@ -313,27 +313,27 @@ Update the personal repo only after the team repo remediation PR has passed the 
   Task: review for asks or prompts that are already rendered moot by resolved decisions, plus any outdated tracker references.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/updates_20260409.md`
+- [x] `<CLASS_REPO>/Final_Project/notes/updates_20260409.md`
   Task: review live teammate-update guidance against the canonical project state.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/report_format_mapping.md`
+- [x] `<CLASS_REPO>/Final_Project/notes/report_format_mapping.md`
   Task: review for stale report-structure assumptions.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/agent_audit.md`
+- [x] `<CLASS_REPO>/Final_Project/notes/agent_audit.md`
   Task: review for stale agent/process assumptions that affect current execution.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/Dhaval_Email_Thread.md`
+- [x] `<CLASS_REPO>/Final_Project/notes/Dhaval_Email_Thread.md`
   Task: review for mentor-decision facts that conflict with current live docs.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-ieee/main.tex`
+- [x] `<CLASS_REPO>/Final_Project/resources/report-ieee/main.tex`
   Task: review for stale structure/claim dependencies relative to current plan.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
-- [x] `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-neurips/main.tex`
+- [x] `<CLASS_REPO>/Final_Project/resources/report-neurips/main.tex`
   Task: review for stale structure/claim dependencies relative to current plan.
   Acceptance: spec captures any contradictions or confirms the file is consistent.
 
@@ -503,43 +503,43 @@ Batch C - team repo live docs and planning surfaces
   Task: do not begin personal-repo sync until the team repo remediation PR has passed the final `claude-pr-review` pass with no Critical/High findings and has merged.
   Acceptance: personal-repo sync starts only after the team repo remediation PR has merged into `main`.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/current_team_status.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/current_team_status.md`
   Task: sync the status doc with the merged team-repo reality and fix any stale helper references.
   Acceptance: the status doc correctly points to current files and canonical systems.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/roadmap.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/roadmap.md`
   Task: sync roadmap wording with the merged team-repo reality and current decision state.
   Acceptance: roadmap phases and blockers align with live project decisions.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-07_call_prep.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/2026-04-07_call_prep.md`
   Task: annotate or correct any pre-call language that now conflicts with final Apr 7 outcomes.
   Acceptance: the file cannot be misread as current unresolved guidance.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/2026-04-14_call_prep.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/2026-04-14_call_prep.md`
   Task: correct stale tracker/task-system references and any resolved questions that survived the template.
   Acceptance: the next-call prep points to the live board and current open decisions.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/mcp_comparison_experiment.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/mcp_comparison_experiment.md`
   Task: sync experiment framing with the chosen remediation decisions if needed, especially any canonical tool-name or benchmark-contract assumptions touched by the remediation.
   Acceptance: experiment framing does not contradict the remediated team-repo docs or the final canonical MCP contract.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/updates_20260409.md`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/report_format_mapping.md`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/agent_audit.md`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/Dhaval_Email_Thread.md`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-ieee/main.tex`, `/Users/wax/coding/Classes/COMS-E6998/Final Project/resources/report-neurips/main.tex`
+- [ ] `<CLASS_REPO>/Final_Project/notes/updates_20260409.md`, `<CLASS_REPO>/Final_Project/notes/report_format_mapping.md`, `<CLASS_REPO>/Final_Project/notes/agent_audit.md`, `<CLASS_REPO>/Final_Project/notes/Dhaval_Email_Thread.md`, `<CLASS_REPO>/Final_Project/resources/report-ieee/main.tex`, `<CLASS_REPO>/Final_Project/resources/report-neurips/main.tex`
   Task: apply or explicitly decline any follow-up generated by the Phase 0 remaining-slice reviews so those files do not get reviewed without a Phase 4 resolution path.
   Acceptance: each reviewed file in this group is either updated or recorded as requiring no change after the team repo remediation stabilizes.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/task_tracker.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/task_tracker.md`
   Task: preserve as historical/supporting reference only, with corrected issue/doc references if retained. This is a consistency check for a historical support doc rather than a response to a current Critical/High finding.
   Acceptance: the file cannot be mistaken for the live execution surface.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/notes/task_specs.md`
+- [ ] `<CLASS_REPO>/Final_Project/notes/task_specs.md`
   Task: preserve as historical/supporting reference only, with corrected issue/doc references if retained.
   Acceptance: the file cannot be mistaken for the live execution surface and all issue-number cross-references are correct.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/project_archive/2026-04-01_meeting_notes.md`
+- [ ] `<CLASS_REPO>/Final_Project/project_archive/2026-04-01_meeting_notes.md`
   Task: add any minimal archive note needed to avoid obvious factual drift without rewriting the archive.
   Acceptance: archived historical context remains readable and is not misleading on key facts.
 
-- [ ] `/Users/wax/coding/Classes/COMS-E6998/Final Project/project_archive/Dhaval_guest_lecture_insights.md`
+- [ ] `<CLASS_REPO>/Final_Project/project_archive/Dhaval_guest_lecture_insights.md`
   Task: confirm whether any archive annotation or no-op note is needed after the personal-repo sync review.
   Acceptance: the file is either intentionally unchanged with a recorded no-op rationale or minimally annotated to avoid misleading drift.
 

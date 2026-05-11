@@ -32,7 +32,7 @@ vLLM auto tool choice: enabled with parser 'llama3_json'
 wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
 wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
 wandb: Tracking run with wandb version 0.26.1
-wandb: Run data is saved locally in /home/wax/hpml-final-grid-git/wandb/run-20260503_154124-sp3ml5so
+wandb: Run data is saved locally in <SMARTGRIDBENCH_REPO>/wandb/run-20260503_154124-sp3ml5so
 wandb: Run `wandb offline` to turn off syncing.
 wandb: Syncing run final5x6_followon_transport_a100_20260503T142516Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized
 wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
@@ -66,14 +66,14 @@ Summary:   benchmarks/cell_Y_plan_execute/summary.json
 Raw dir:   benchmarks/cell_Y_plan_execute/raw/final5x6_followon_transport_a100_20260503T142516Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized
 Scoring 2026-05-03_Y_llama-3-1-8b-instruct_plan_execute_optimized_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<SMARTGRIDBENCH_REPO>/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
   Judge log saved → results/judge_logs/final5x6_followon_transport_a100_20260503T142516Z_YS_TP_final5x6_exp2_cell_YS_pe_self_ask_mcp_optimized/SGT-014_run01_judge_log.json
 Scoring 2026-05-03_Y_llama-3-1-8b-instruct_plan_execute_optimized_fmsr_04_dga_full_diagnostic_chain_run02.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<SMARTGRIDBENCH_REPO>/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -217,7 +217,7 @@ vLLM auto tool choice: enabled with parser 'llama3_json'
 wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
 wandb: Currently logged in as: eggrollofchaos (assetopsbench-smartgrid) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
 wandb: Tracking run with wandb version 0.26.1
-wandb: Run data is saved locally in /home/wax/hpml-final-grid-git/wandb/run-20260503_160222-z2nd6o0m
+wandb: Run data is saved locally in <SMARTGRIDBENCH_REPO>/wandb/run-20260503_160222-z2nd6o0m
 wandb: Run `wandb offline` to turn off syncing.
 wandb: Syncing run final5x6_followon_transport_a100_20260503T142516Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized
 wandb: ⭐️ View project at https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
@@ -250,7 +250,7 @@ Summary:   benchmarks/cell_Z_hybrid/summary.json
 Raw dir:   benchmarks/cell_Z_hybrid/raw/final5x6_followon_transport_a100_20260503T142516Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized
 Scoring 2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_optimized_fmsr_04_dga_full_diagnostic_chain_run01.json against fmsr_04_dga_full_diagnostic_chain.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<SMARTGRIDBENCH_REPO>/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{\n    "...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -284,7 +284,7 @@ Scoring 2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_optimized_iot_04_load_cur
   Judge log saved → results/judge_logs/final5x6_followon_transport_a100_20260503T142516Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized/SGT-012_run05_judge_log.json
 Scoring 2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_optimized_multi_01_end_to_end_fault_response_run01.json against multi_01_end_to_end_fault_response.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<SMARTGRIDBENCH_REPO>/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='{"task_c...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(
@@ -315,7 +315,7 @@ Scoring 2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_optimized_multi_02_dga_to
   Judge log saved → results/judge_logs/final5x6_followon_transport_a100_20260503T142516Z_ZS_TP_final5x6_exp2_cell_ZS_verified_pe_self_ask_mcp_optimized/SGT-010_run04_judge_log.json
 Scoring 2026-05-03_Z_llama-3-1-8b-instruct_verified_pe_optimized_multi_02_dga_to_workorder_pipeline_run05.json against multi_02_dga_to_workorder_pipeline.json...
   Calling judge (watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8)...
-/home/wax/hpml-assetopsbench-smart-grid-mcp/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+<SMARTGRIDBENCH_REPO>/.venv-insomnia/lib/python3.11/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
   PydanticSerializationUnexpectedValue(Expected 10 fields but got 5: Expected `Message` - serialized value may not be as expected [field_name='message', input_value=Message(content='```json\...er_specific_fields=None), input_type=Message])
   PydanticSerializationUnexpectedValue(Expected `StreamingChoices` - serialized value may not be as expected [field_name='choices', input_value=Choices(finish_reason='st...r_specific_fields=None)), input_type=Choices])
   return self.__pydantic_serializer__.to_python(

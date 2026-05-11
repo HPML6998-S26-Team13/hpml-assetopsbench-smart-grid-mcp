@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /home/wax/hpml-final-grid-git
+cd "${SMARTGRIDBENCH_REPO:-$PWD}"
 source .venv-insomnia/bin/activate
 export PATH="$HOME/.local/bin:$(dirname "$(g++ -print-prog-name=cc1plus)"):$PATH"
 export SMARTGRID_COMPUTE_PROVIDER=gcp
@@ -12,7 +12,7 @@ export SMARTGRID_RESUME=1
 export SMARTGRID_FORCE_RERUN=1
 export SMARTGRID_RESUME_REQUIRE_LATENCY=1
 export PLAN_EXECUTE_REPO_LOCAL=1
-export AOB_PYTHON=/home/wax/AssetOpsBench/.venv/bin/python
+export AOB_PYTHON="${AOB_PYTHON:-${ASSETOPSBENCH_REPO:-${HOME}/AssetOpsBench}/.venv/bin/python}"
 python3 - <<PY
 from pathlib import Path
 bad = {

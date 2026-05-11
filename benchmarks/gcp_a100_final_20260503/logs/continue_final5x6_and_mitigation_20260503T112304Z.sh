@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -uo pipefail
-cd /home/wax/hpml-final-grid-git
+cd "${SMARTGRIDBENCH_REPO:-$PWD}"
 
 log() { printf "[%s] %s\n" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"; }
 
@@ -13,7 +13,7 @@ setup_env() {
   export SMARTGRID_COMPUTE_INSTANCE=smartgrid-a100-spot-20260503-0217
   export GPU_TYPE="NVIDIA A100-SXM4-40GB"
   export PLAN_EXECUTE_REPO_LOCAL=1
-  export AOB_PYTHON=/home/wax/AssetOpsBench/.venv/bin/python
+  export AOB_PYTHON="${AOB_PYTHON:-${ASSETOPSBENCH_REPO:-${HOME}/AssetOpsBench}/.venv/bin/python}"
   export SMARTGRID_RESUME=1
   export PYTHON_BIN=python
   unset SMARTGRID_FORCE_RERUN

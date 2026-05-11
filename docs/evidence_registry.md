@@ -91,5 +91,6 @@ allow-listed export bundle. The committed logs in this PR scrub GCP operator
 home/cache prefixes to placeholders, and package scripts should preserve that
 scrubbed form rather than rebuilding from VM-local logs.
 
-For this artifact family, the minimum grep should include:
-`/home/wax|/Users/wax|wax1@|/insomnia001/home/wax1`.
+For this artifact family, the minimum grep should include user-home and UNI
+patterns such as `/home/<user>`, `/Users/<user>`, `<UNI>@`, and
+`<INSOMNIA_HOME>`.

@@ -86,7 +86,7 @@ upstream PRs to `IBM/AssetOpsBench`.
   `docs/insomnia_runbook.md`) — those are repo-cluster-specific.
 - Migrating coordination infrastructure (`pm/backlog.md`) — team-repo-only.
   Live agent-coordination state was moved to personal repo on 2026-04-30
-  (`/Users/wax/coding/Classes/COMS-E6998/docs/coordination/`).
+  (`<CLASS_REPO>/docs/coordination/`).
 - Renaming our team-repo cell directories or summary.json schemas.
 
 ## Phases

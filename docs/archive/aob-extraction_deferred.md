@@ -41,7 +41,7 @@ git switch aob/sg-evaluation-adapter
 uv run python -c "
 from pathlib import Path
 from evaluation.adapters import load_team_run_dir
-TEAM = Path('/Users/wax/coding/hpml-assetopsbench-smart-grid-mcp')
+TEAM = Path('<SMARTGRIDBENCH_REPO>')
 TARGETS = [
     TEAM / 'benchmarks/cell_A_direct/raw/8979314_aat_direct',
     TEAM / 'benchmarks/cell_B_mcp_baseline/raw/8979314_aat_mcp_baseline',
@@ -60,7 +60,7 @@ for t in TARGETS:
 # 2. Run AOB evaluator with LLM judge configured for Watsonx Maverick
 uv run evaluate \
     --trajectories /tmp/sg_trajectories \
-    --scenarios /Users/wax/coding/hpml-assetopsbench-smart-grid-mcp/data/scenarios \
+    --scenarios <SMARTGRIDBENCH_REPO>/data/scenarios \
     --judge-model meta-llama/llama-4-maverick-17b-128e-instruct-fp8 \
     --judge-backend watsonx \
     --output /tmp/aob_eval_report.json

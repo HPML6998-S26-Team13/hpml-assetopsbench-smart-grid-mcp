@@ -5,22 +5,34 @@ owner: Team 13
 canonical: true
 ---
 
-# MCP-Based Industrial Agent Benchmarking for Smart Grid Operations
+# HPML Final Project: MCP-Based Industrial Agent Benchmarking for Smart Grid Operations
 
-**COMS E6998: High Performance Machine Learning -- Final Project**  
-Columbia University, Spring 2026
+> **Course:** COMS E6998: High Performance Machine Learning
+> **Institution:** Columbia University
+> **Semester:** Spring 2026
+> **Instructor:** Dr. Kaoutar El Maghraoui
+> **Mentor:** Dr. Dhaval Patel, IBM Research
 
-**Team 13 / District 1101:** Akshat Bhandari (ab6174) — LLM / eval harness; Aaron Fan (af3623) — EE / systems / Slurm; Tanisha Rathod (tr2828) — distributed systems / MCP; Wei Alexander Xin (wax1) — PM / data / Agent-as-Tool orchestration
-**Mentor:** Dr. Dhaval Patel, IBM Research
+---
+
+## Team Information
+
+- **Team Name:** Team 13 / District 1101 (SmartGridBench)
+- **Members:**
+  - Akshat Bhandari (ab6174) — LLM / eval harness
+  - Aaron Fan (af3623) — EE / systems / Slurm
+  - Tanisha Rathod (tr2828) — distributed systems / MCP
+  - Wei Alexander Xin (wax1) — PM / data / Agent-as-Tool orchestration
+- **Mentor:** Dr. Dhaval Patel, IBM Research
 
 ## Submission
 
 - **GitHub repository:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp
 - **Final presentation:** [`deliverables/SmartGridBench-Final-Presentation.pptx`](deliverables/SmartGridBench-Final-Presentation.pptx) and [`deliverables/SmartGridBench-Final-Presentation.pdf`](deliverables/SmartGridBench-Final-Presentation.pdf)
 - **Final report:** [`deliverables/SmartGridBench_Final_Paper.pdf`](deliverables/SmartGridBench_Final_Paper.pdf)
-- **Experiment-tracking dashboard:** https://wandb.ai/assetopsbench-smartgrid
+- **Experiment-tracking dashboard:** https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/reports/SmartGridBench-Final-Evidence-Dashboard--VmlldzoxNjgyODI4NA
 
-## Overview
+## 1. Problem Statement
 
 <p align="center">
   <img src="docs/images/power-transformer-substation.jpg" alt="Power transformer substation" width="600">
@@ -35,10 +47,20 @@ Grid power transformers:
 3. Profiling and optimizing the **LLM agent inference pipeline** when operating through MCP
 4. Comparing two **orchestration paradigms** (Agent-as-Tool vs Plan-Execute) on end-to-end multi-domain scenarios
 
+## 2. Model/Application Description
+
 We serve Llama-3.1-8B-Instruct via vLLM, profile end-to-end with PyTorch Profiler, apply 2-3
 optimization techniques (INT8 quantization, KV-cache tuning, batched tool-call scheduling),
 and compare MCP-mediated tool calling against direct function calls to quantify protocol
 overhead. All experiments tracked with WandB.
+
+| Component | Project implementation |
+|---|---|
+| Base model | Llama-3.1-8B-Instruct served through vLLM; selected WatsonX Llama-3.3-70B spot checks |
+| Application | Industrial smart-grid maintenance benchmark extension for AssetOpsBench |
+| Tool interface | Four Smart Grid MCP servers: IoT, TSFM, FMSR, and work orders |
+| Orchestration variants | Agent-as-Tool, Plan-Execute, Verified PE, and Self-Ask follow-ons |
+| Profiling stack | PyTorch Profiler, `nvidia-smi` telemetry, W&B run metadata, and committed result tables |
 
 ### Datasets
 
@@ -66,11 +88,24 @@ an A6000 with room for KV-cache experiments, and INT8 quantization produces a me
 memory reduction. We optionally compare against Llama-3.3-70B (AssetOpsBench's default model)
 via WatsonX API to assess scaling effects.
 
-## Repository Structure
+## 3. Final Results Summary
+
+The final package is anchored by the submitted report, slide deck, W&B dashboard, and committed
+metrics under `results/metrics/`.
+
+| Result area | Evidence |
+|---|---|
+| Scenario corpus | Current repo contains 61 SmartGridBench scenario files plus 5 negative validation fixtures; the final paper/result claims preserve the paper-grade frozen scope described in the result tables and report. |
+| MCP transport benchmark | First-capture AaT runs show direct, MCP baseline, and optimized MCP paths in [`results/metrics/notebook02_latency_summary.csv`](results/metrics/notebook02_latency_summary.csv). |
+| Orchestration comparison | Verified PE + Self-Ask was the strongest first-capture PE-family row in the notebook export: 5/6 judge pass rate and 0.833 mean judge score in [`results/metrics/notebook03_self_ask_ablation.csv`](results/metrics/notebook03_self_ask_ablation.csv). |
+| Full judged floor | The post-PR175 31-scenario aggregate is summarized in [`results/metrics/gcp_post175_core31_summary.csv`](results/metrics/gcp_post175_core31_summary.csv). |
+| Profiling evidence | W&B-linked and profiler-linked run inventory is in [`results/metrics/profiling_inventory.csv`](results/metrics/profiling_inventory.csv). |
+
+## 4. Repository Structure
 
 ```
 .
-├── README.md                     # This file - project overview, current status, structure
+├── README.md                     # This file - project overview, submission links, reproducibility
 ├── LICENSE                       # MIT license
 ├── requirements.txt              # Python dependencies (ibm-watsonx-ai, pandas, etc)
 ├── .github/workflows/            # CI (Black formatting check)
@@ -99,10 +134,10 @@ via WatsonX API to assess scaling effects.
 │   ├── test_inference.sh         #   Sanity checks against a live vLLM endpoint
 │   └── benchmark_prompts/        #   Prompt templates for latency tests
 │
-├── benchmarks/                   # Raw latency/throughput runs - see benchmarks/README.md
-│   ├── cell_A_direct/            #   Direct-tool baseline (planned)
-│   ├── cell_B_mcp_baseline/      #   MCP baseline (planned)
-│   ├── cell_C_mcp_optimized/     #   Optimized MCP path (planned)
+├── benchmarks/                   # Raw latency/throughput/judge runs - see benchmarks/README.md
+│   ├── cell_A_direct/            #   Direct-tool baseline artifacts
+│   ├── cell_B_mcp_baseline/      #   MCP baseline artifacts
+│   ├── cell_C_mcp_optimized/     #   Optimized MCP path artifacts
 │   ├── cell_Y_plan_execute/      #   Plan-Execute proof path (WatsonX smoke landed)
 │   └── cell_Z_hybrid/            #   Optional third-method slot (Verified PE preferred over generic Hybrid)
 │
@@ -117,9 +152,11 @@ via WatsonX API to assess scaling effects.
     └── archive/                  #   Superseded drafts
 ```
 
-## Setup
+## 5. Reproducibility Instructions
 
-### Prerequisites
+### A. Environment Setup
+
+#### Prerequisites
 
 - Python 3.12+
 - Docker (for CouchDB)
@@ -127,7 +164,7 @@ via WatsonX API to assess scaling effects.
 - Access to Columbia Insomnia cluster or Google Cloud GPU instance
 - WatsonX API key (via [Codabench](https://www.codabench.org/competitions/10206/))
 
-### Installation
+#### Installation
 
 ```bash
 git clone https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp.git
@@ -152,7 +189,53 @@ dependencies (`litellm` and `mcp[cli]`) needed by the repo-local Self-Ask PE /
 Verified PE runners. The cluster overlay in `requirements-insomnia.txt` layers
 vLLM and CUDA-specific pins on top of that base.
 
-### Running Experiments
+### B. Experiment Tracking Dashboard
+
+- W&B dashboard (final evidence): https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/reports/SmartGridBench-Final-Evidence-Dashboard--VmlldzoxNjgyODI4NA==
+- W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid
+
+### C. Dataset
+
+The repo tracks public-safe synthetic processed data under `data/processed/` and
+AssetOpsBench-format Smart Grid scenarios under `data/scenarios/`. Raw Kaggle
+downloads remain gitignored under `data/raw/` and are not required to inspect
+the submitted results.
+
+```bash
+python data/generate_synthetic.py
+```
+
+### D. Training
+
+This project benchmarks inference and tool orchestration; it does not fine-tune
+the base Llama model. The model-serving path is configured through `vLLM`,
+WatsonX-compatible LiteLLM endpoints, and the `configs/*.env` experiment files.
+
+### E. Evaluation
+
+Judge outputs and summarized metrics are committed under `results/`. To score a
+new completed run directory, use the judge helper with the run directory and
+matching output path:
+
+```bash
+python scripts/judge_trajectory.py \
+  --run-dir benchmarks/cell_B_mcp_baseline/raw/<run-id> \
+  --scenario-dir data/scenarios \
+  --out results/metrics/scenario_scores.jsonl \
+  --log-dir results/judge_logs
+```
+
+### F. Profiling
+
+Profiling is enabled through the runner environment and summarized in
+`results/metrics/profiling_inventory.csv`.
+
+```bash
+ENABLE_WANDB=1 TORCH_PROFILE=1 bash scripts/run_experiment.sh configs/example_baseline.env
+python scripts/build_profiling_inventory.py
+```
+
+### G. Quickstart: Reproduce the Baseline Runner Path
 
 For the currently proven benchmark-facing path:
 
@@ -168,24 +251,16 @@ See:
 - [docs/insomnia_runbook.md](docs/insomnia_runbook.md) for the shared Insomnia
   self-hosted vLLM path
 
-## Where To Look
+## 6. Results and Observations
 
-- [docs/README.md](docs/README.md) - living docs index and runbook navigation
-- [scripts/README.md](scripts/README.md) - executable entrypoints and helper scripts
-- [configs/README.md](configs/README.md) - benchmark config schema and cell mapping
-- [data/README.md](data/README.md) - data pipeline and processed dataset policy
-- [data/scenarios/README.md](data/scenarios/README.md) - scenario authoring rules and validation
-- [mcp_servers/README.md](mcp_servers/README.md) - Smart Grid MCP server layout
-- [benchmarks/README.md](benchmarks/README.md) - raw benchmark artifact layout
-- [profiling/README.md](profiling/README.md) - profiling capture workflow
+- The AaT direct, MCP baseline, and optimized MCP latency comparison is
+  exported in `results/metrics/notebook02_latency_summary.csv`.
+- The first-capture orchestration and Self-Ask comparison is exported in
+  `results/metrics/notebook03_self_ask_ablation.csv`.
+- The final submitted claim set is backed by committed result tables, W&B run
+  links, benchmark artifacts, and exported report/deck deliverables.
 
-## Experiment Tracking
-
-WandB dashboard (final evidence): https://wandb.ai/assetopsbench-smartgrid/assetopsbench-smartgrid/reports/SmartGridBench-Final-Evidence-Dashboard--VmlldzoxNjgyODI4NA==
-
-W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
-
-## Current Status
+### Historical Status Snapshot
 
 *Last updated: Apr 18, 2026 - Apr 16 post-call audit resolved the WO architecture decision, closed the first-WandB-run milestone, and narrowed the active risk to overdue W2 closeout plus W3 profiling / PS B execution.*
 
@@ -236,7 +311,20 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 
 **Current default scope decision:** the working comparison is still **vanilla Agent-as-Tool vs vanilla Plan-Execute**. The repo now also has an active local mitigation stream for PE + Self-Ask and an optional Verified PE third-method prototype, but neither should muddy the honesty of the core AaT vs PE story. The primary local benchmark model remains self-hosted Llama-3.1-8B-Instruct with 70B reserved for selective WatsonX spot-checks.
 
-## Key Dates
+## 7. Notes
+
+### Repository Navigation
+
+- [docs/README.md](docs/README.md) - living docs index and runbook navigation
+- [scripts/README.md](scripts/README.md) - executable entrypoints and helper scripts
+- [configs/README.md](configs/README.md) - benchmark config schema and cell mapping
+- [data/README.md](data/README.md) - data pipeline and processed dataset policy
+- [data/scenarios/README.md](data/scenarios/README.md) - scenario authoring rules and validation
+- [mcp_servers/README.md](mcp_servers/README.md) - Smart Grid MCP server layout
+- [benchmarks/README.md](benchmarks/README.md) - raw benchmark artifact layout
+- [profiling/README.md](profiling/README.md) - profiling capture workflow
+
+### Key Dates
 
 | Date | Milestone |
 |---|---|
@@ -246,7 +334,7 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 | Thu May 7 | Final class presentation delivered |
 | Sun May 10 | CourseWorks final report/package due (extended deadline) |
 
-## References and Resources
+### References and Resources
 
 - [AssetOpsBench](https://github.com/IBM/AssetOpsBench) -- IBM's industrial AI agent benchmark
 - [AssetOpsBench on HuggingFace](https://huggingface.co/datasets/ibm-research/AssetOpsBench)
@@ -258,7 +346,7 @@ W&B project (all runs): https://wandb.ai/assetopsbench-smartgrid
 
 See also: [docs/reference/project_reference.md](docs/reference/project_reference.md) for class requirements, grading, and mentor guidance.
 
-## AI Use Disclosure
+### AI Use Disclosure
 
 Per the HPML AI Use Policy, Team 13 used AI assistance during this project.
 
@@ -270,12 +358,18 @@ Per the HPML AI Use Policy, Team 13 used AI assistance during this project.
 
 **How we verified correctness:** We ran the reported experiments ourselves, preserved result artifacts under `benchmarks/`, `results/`, and `reports/`, cross-checked headline claims against the committed evidence tables, and manually reviewed final public-facing wording before submission.
 
-By submitting this project, the team confirms that the analysis, interpretations, and conclusions are our own, and that AI assistance is disclosed here. The same disclosure should appear in the final report appendix or footnote.
+By submitting this project, the team confirms that the analysis, interpretations, and conclusions are our own, and that AI assistance is disclosed here.
 
-## Acknowledgments
+### License
 
-We acknowledge the use of AI tools, including Claude and Codex, during the development of this project.
+MIT; see [`LICENSE`](LICENSE).
 
-## License
+### Citation
 
-MIT
+If citing this course project, use:
+
+> SmartGridBench Team 13. "MCP-Based Industrial Agent Benchmarking for Smart Grid Operations." COMS E6998 High Performance Machine Learning Final Project, Columbia University, Spring 2026.
+
+### Contact
+
+For project questions, use the GitHub issue tracker or contact the Team 13 members listed above.
