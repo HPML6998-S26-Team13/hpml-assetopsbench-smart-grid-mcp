@@ -16,8 +16,8 @@ Columbia University, Spring 2026
 ## Submission
 
 - **GitHub repository:** https://github.com/HPML6998-S26-Team13/hpml-assetopsbench-smart-grid-mcp
-- **Final presentation (currently non-canonical pending formatting edits — see [`deliverables/README.md`](deliverables/README.md)):** [`deliverables/Team13_HPML_Final_Presentation.pptx`](deliverables/Team13_HPML_Final_Presentation.pptx) and [`deliverables/Team13_HPML_Final_Presentation.pdf`](deliverables/Team13_HPML_Final_Presentation.pdf)
-- **Final report:** [`deliverables/Team13_HPML_Final_Report.pdf`](deliverables/Team13_HPML_Final_Report.pdf)
+- **Final presentation:** [`deliverables/SmartGridBench-Final-Presentation.pptx`](deliverables/SmartGridBench-Final-Presentation.pptx) and [`deliverables/SmartGridBench-Final-Presentation.pdf`](deliverables/SmartGridBench-Final-Presentation.pdf)
+- **Final report:** [`deliverables/SmartGridBench_Final_Paper.pdf`](deliverables/SmartGridBench_Final_Paper.pdf)
 - **Experiment-tracking dashboard:** https://wandb.ai/assetopsbench-smartgrid
 
 ## Overview
