@@ -14,9 +14,9 @@ canonical: true
 
 This is the first reviewable slide-by-slide deck draft for the HPML final
 presentation. The Markdown remains the source-of-truth story scaffold so
-teammates and reviewers can comment on claims and wording, while the current
-editable PPTX build lives at
-`reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
+teammates and reviewers can comment on claims and wording, while the May 3
+editable PPTX build is archived at
+`reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
 
 Production companion: `docs/final_presentation_run_of_show.md`.
 
@@ -29,7 +29,7 @@ PR status callout, and a timed dry run.
 
 | Artifact | Status | Notes |
 |---|---|---|
-| `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx` | built | 12-slide editable PPTX; dark technical visual system; issue remains open. |
+| `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx` | archived | 12-slide editable PPTX; dark technical visual system; superseded/invalidated after final submission. |
 | Final HPML template rebuild | pending | Rebuild from this 13-slide scaffold into the required class template before submission. |
 | Layout QA | pass with warnings | Artifact-tool checker: 0 errors / 7 padding or tight-text warnings; visual contact sheet reviewed. |
 | Build provenance | documented | `reports/build_notes/2026-05-03_final_presentation_smartgridbench_build.md` records the one-off artifact-tool command, integrity checks, and warning inventory. |

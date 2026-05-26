@@ -7,6 +7,14 @@ canonical: true
 
 # Changelog
 
+## 2026-05-26
+
+### Changed
+
+- Archived the superseded May 3 final-presentation PPTX draft under
+  `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`
+  and updated report/deck provenance references to the archive path.
+
 ## 2026-05-11
 
 ### Changed
@@ -158,8 +166,8 @@ canonical: true
   knobs, trial-level resume manifests, atomic per-trial finalization,
   context-closeout batch manifests, and IAP artifact pullback with idempotent
   judge score merging.
-- Added the first editable final-presentation PPTX draft at
-  `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
+- Added the first editable final-presentation PPTX draft, now archived at
+  `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`,
   plus a `reports/build_notes/` provenance note, and refreshed the #44 deck
   docs / report inventory to record the May 3 build status, layout QA result, and
   remaining scenario, mitigation, and dry-run gates. Refs #44; issue remains

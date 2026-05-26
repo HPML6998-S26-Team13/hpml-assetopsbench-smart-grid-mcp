@@ -9,7 +9,7 @@ canonical: true
 
 *Created: 2026-05-03*
 *Issue: #44*
-*Artifact: `reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`*
+*Artifact: `reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`*
 
 This file records the first editable final-presentation PowerPoint draft build.
 The PPTX itself is the working deck artifact for subsequent manual edits. The
@@ -31,16 +31,17 @@ The draft was generated with the local presentation artifact builder as a
 one-off editable PPTX export. Machine-local runtime paths are intentionally
 omitted from this public build note.
 
-After generation, the file was moved to:
-`reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
+After generation, the file was moved to the top-level reports directory. It was
+later archived at:
+`reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
 
 ## Verification
 
 - `git diff --check team13/main...HEAD`
 - Artifact-tool build completed: 12 slides.
-- `file reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
+- `file reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   reported `Microsoft PowerPoint 2007+`.
-- `unzip -t reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`
+- `unzip -t reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`
   reported no compressed-data errors.
 - GitHub `black` check passed on PR #164.
 

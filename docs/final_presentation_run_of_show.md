@@ -15,10 +15,9 @@ This is the production companion for `docs/final_presentation_deck.md`. The deck
 already has slide-by-slide content; this file turns it into a presentation plan
 with timing, proof objects, and final build gates.
 
-Current editable PPTX draft:
-`reports/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
-It is a reviewable build, not the final submitted deck, until the open gates at
-the end of this file clear.
+Archived May 3 editable PPTX draft:
+`reports/archive/2026-05-03_final_presentation_smartgridbench_draft.pptx`.
+It was a reviewable build, not the final submitted deck.
 
 ## Presentation Goal
 
