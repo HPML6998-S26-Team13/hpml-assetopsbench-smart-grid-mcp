@@ -7,14 +7,14 @@ canonical: true
 
 # Documentation Index
 
-Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Historical planning records live in [../planning/archive/](../planning/archive/); current task truth lives in GitHub Issues / Projects and active docs. Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [reference/](reference/).
+Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Historical planning records live in [../planning/archive/](../planning/archive/); current task truth lives in GitHub Issues / Projects and active docs. Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [knowledge-base/reference/](knowledge-base/reference/).
 
 ## Document index
 
 | File | Purpose | Start here if… |
 |---|---|---|
 | [project_synopsis.md](project_synopsis.md) | Cold-start project overview with full domain background, problem statement, team roles, timeline, current status | You're new to the project and want the complete picture in ~10 minutes |
-| [reference/project_reference.md](reference/project_reference.md) | Class requirements, grading rubric, mentor guidance, course context, report templates | You need to know what HPML class/Dhaval expects as deliverables |
+| [knowledge-base/reference/2026-04-05_project_reference.md](knowledge-base/reference/2026-04-05_project_reference.md) | Class requirements, grading rubric, mentor guidance, course context, report templates | You need to know what HPML class/Dhaval expects as deliverables |
 | [execution_plan.md](execution_plan.md) | Task dependency map (Tier 1-5 critical path) + benchmarking operations (async batch workflow, 5-cell experimental grid, role clarifications) | You want to know what blocks what, who owns what, and what running experiments actually looks like operationally |
 | [runbook.md](runbook.md) | Canonical end-to-end reproducibility runbook for the infra side — preconditions, first-time setup, submitting benchmark cells, profiling workflow, troubleshooting decision tree, pointers to detailed runbooks | You need to stand up the serving / benchmark / profiling pipeline from scratch without verbal help |
 | [infra_profiling_serving_brief.md](infra_profiling_serving_brief.md) | One-page paper-bound fact pack for `#43`: model IDs + version pins + Slurm run shape + profiling instrumentation + WandB linkage + canonical run IDs + GCP A100 path + known limitations. Verbatim-quotable bullets, no narrative | You're filling §3 System Design or the §infra paragraphs of `#39` / `#40` and need concrete cite-by-job-id facts without rereading every detailed runbook |
@@ -42,7 +42,7 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 | [final_presentation_deck.md](final_presentation_deck.md) | Slide-by-slide final presentation draft for `#44`: deck spine, claims, proof objects, result tables, and backup Q&A prompts | You need to convert the current paper/report story into the class presentation deck |
 | [auto_scenario_generation_runbook.md](auto_scenario_generation_runbook.md) | Runbook for `scripts/generate_scenarios.py` (`#2` prototype): how the generator consumes the support data, output layout under `data/scenarios/generated/<batch_id>/`, dry-run vs live invocation, promotion path from generated to canonical, scope deferred to `#68` scale-up | You want to produce a candidate Smart Grid scenario batch or read what a generated scenario file actually contains |
 
-| [reference/watsonx_access.md](reference/watsonx_access.md) | WatsonX API setup walkthrough, available models, usage patterns, latency benchmark results (Maverick vs 70B) | You need to onboard your local `.venv` to hit the hosted Llama models |
+| [knowledge-base/reference/2026-04-06_watsonx_access.md](knowledge-base/reference/2026-04-06_watsonx_access.md) | WatsonX API setup walkthrough, available models, usage patterns, latency benchmark results (Maverick vs 70B) | You need to onboard your local `.venv` to hit the hosted Llama models |
 | [eval_harness_readme.md](eval_harness_readme.md) | End-to-end Windows runbook for AssetOpsBench harness, WatsonX setup, Docker path, `scenario-server` grading flow, **both CODS benchmark tracks** (`cods_track1`, `cods_track2`), smoke script (`../scripts/run_harness_smoke.cmd`), and proof expectations for canonical runs | You need to quickly prove harness execution is working this week and run new scenario prompts |
 | [data_pipeline.tex](data_pipeline.tex) | Paper-ready LaTeX section describing dataset schemas, shared-key strategy, output formats, reproducibility | You're writing the paper/report and need the data-pipeline section |
 | [dataset_visualization.png](dataset_visualization.png) | Historical 6-panel sample visualization of the processed datasets (static smoke test only; [../notebooks/01_data_exploration.ipynb](../notebooks/01_data_exploration.ipynb) is the reproducible successor) | You want to compare the old static smoke-test image with the new notebook-backed exploration path |
@@ -71,7 +71,7 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 - **One purpose per file** - if a doc is doing two things, split it.
 - **Date-stamped markdown updates** - every doc should have a `*Last updated: YYYY-MM-DD*` line near the top. Stale dates are a smell.
 - **Cross-reference other docs by relative path** - e.g. [compute plan](archive/compute_plan.md), not absolute URLs. Keeps the repo portable.
-- **Low-churn reference docs live under `reference/`** - class requirements, mentor guidance, and setup references that change less often should live there rather than crowding the top-level index.
+- **Low-churn reference docs live under `knowledge-base/reference/`** - class requirements, mentor guidance, and setup references that change less often should live there rather than crowding the top-level index.
 - **Paper-ready content (LaTeX) lives here** - finished paper sections can be dropped into Overleaf as `.tex` files. Don't mix draft and final in the same file; use git history for versions.
 - **No shipped deliverables here** - if it's a frozen PDF/PPTX/Keynote export that was submitted or emailed, it belongs in `../reports/`, not `docs/`.
 - **No active planning artifacts here** - historical planning records live in

@@ -78,7 +78,7 @@ The validator (`data/scenarios/validate_scenarios.py`) intentionally only globs 
   WATSONX_PROJECT_ID=...
   WATSONX_URL=https://us-south.ml.cloud.ibm.com
   ```
-  (Setup: [`docs/reference/watsonx_access.md`](reference/watsonx_access.md).)
+  (Setup: [`docs/knowledge-base/reference/2026-04-06_watsonx_access.md`](knowledge-base/reference/2026-04-06_watsonx_access.md).)
 
 ## Common invocations
 

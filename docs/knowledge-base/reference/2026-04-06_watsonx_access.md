@@ -1,7 +1,13 @@
 ---
+title: WatsonX.ai Access
+slug: watsonx_access
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-06
+updated: 2026-05-10
 owner: Team 13
+scope: project
+project: hpml-assetopsbench-smart-grid-mcp
 canonical: true
 ---
 

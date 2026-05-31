@@ -146,7 +146,7 @@ metrics under `results/metrics/`.
 ├── results/                      # Curated metrics + figures - see results/README.md
 │
 ├── docs/                         # Living authored documentation - see docs/README.md
-│   └── reference/               #   Lower-churn class / mentor / setup reference docs
+│   └── knowledge-base/reference/               #   Lower-churn class / mentor / setup reference docs
 ├── planning/                     # Meeting agendas + working notes
 └── reports/                      # Build notes, historical submissions, and report work products - see reports/README.md
     └── archive/                  #   Superseded drafts
@@ -270,7 +270,7 @@ See:
 - [x] GitHub repo scaffolded, WandB team created, **repo now public** (Apr 7)
 - [x] 5 Kaggle datasets identified, AssetOpsBench forked and reviewed
 - [x] Compute confirmed (Insomnia cluster + GCP credits) and compute plan committed (`docs/archive/compute_plan.md`)
-- [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end - 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/reference/watsonx_access.md`)
+- [x] WatsonX API access received from mentor (Apr 5) and verified end-to-end - 6 Llama models available; Llama-4-Maverick-17B and Llama-3.3-70B-instruct benchmarked (`docs/knowledge-base/reference/2026-04-06_watsonx_access.md`)
 - [x] Data pipeline + tracked public-safe processed datasets landed (`data/processed/` with synthetic asset metadata, DGA records, failure modes, fault records, RUL labels, and sensor readings - development-ready and safe to publish)
 - [x] MCP server skeletons landed for all four domains (IoT, FMSR, TSFM, WO) on a shared base class with substantive domain logic (IEC 60599 Rogers Ratio DGA analysis, RUL forecast, anomaly detection, work-order CRUD)
 - [x] `docs/data_pipeline.tex` paper section drafted
@@ -344,7 +344,7 @@ See:
 - [PyTorch Profiler](https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html)
 - [Weights & Biases](https://wandb.ai/site)
 
-See also: [docs/reference/project_reference.md](docs/reference/project_reference.md) for class requirements, grading, and mentor guidance.
+See also: [docs/knowledge-base/reference/2026-04-05_project_reference.md](docs/knowledge-base/reference/2026-04-05_project_reference.md) for class requirements, grading, and mentor guidance.
 
 ### AI Use Disclosure
 

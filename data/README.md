@@ -68,4 +68,4 @@ full harness-facing workflow lives in [../docs/eval_harness_readme.md](../docs/e
 - **Local benchmarking policy:** if you run `build_processed.py` against Kaggle data, treat those outputs as local-only working data unless the license has been explicitly cleared for redistribution.
 - **Upstream PR policy:** any contribution back to AssetOpsBench should use the synthetic/public-safe path by default so all four domains remain runnable without redistribution concerns.
 
-See [../docs/reference/project_reference.md](../docs/reference/project_reference.md) and the midpoint report for the project-level context around this licensing constraint.
+See [../docs/knowledge-base/reference/2026-04-05_project_reference.md](../docs/knowledge-base/reference/2026-04-05_project_reference.md) and the midpoint report for the project-level context around this licensing constraint.

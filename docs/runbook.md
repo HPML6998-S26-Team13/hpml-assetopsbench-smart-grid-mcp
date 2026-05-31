@@ -94,7 +94,7 @@ Shared team scratch directory (always work from here, not `$HOME`):
 ### WatsonX.ai (required only for the WatsonX serving path)
 
 Credentials live in `.env` at repo root (gitignored). Ask Alex if you don't
-have values. Full setup in [reference/watsonx_access.md](reference/watsonx_access.md).
+have values. Full setup in [knowledge-base/reference/2026-04-06_watsonx_access.md](knowledge-base/reference/2026-04-06_watsonx_access.md).
 
 ### WandB (required for `ENABLE_WANDB=1`)
 
@@ -182,7 +182,7 @@ From the team checkout:
 ```
 
 Expect six Llama models listed. Full walkthrough in
-[reference/watsonx_access.md](reference/watsonx_access.md).
+[knowledge-base/reference/2026-04-06_watsonx_access.md](knowledge-base/reference/2026-04-06_watsonx_access.md).
 
 ### 2.5 Set up email-notified Slurm submission
 

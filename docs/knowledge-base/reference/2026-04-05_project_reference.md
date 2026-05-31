@@ -1,7 +1,13 @@
 ---
+title: Project Reference
+slug: project_reference
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-05
+updated: 2026-05-07
 owner: Team 13
+scope: project
+project: hpml-assetopsbench-smart-grid-mcp
 canonical: true
 ---
 

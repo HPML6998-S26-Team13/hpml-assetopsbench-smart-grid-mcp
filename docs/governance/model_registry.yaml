@@ -64,7 +64,7 @@ model_contracts:
     role: primary_judge_model
     repo_model_id: watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8
     provider_model_id: meta-llama/llama-4-maverick-17b-128e-instruct-fp8
-    access_doc: docs/reference/watsonx_access.md
+    access_doc: docs/knowledge-base/reference/2026-04-06_watsonx_access.md
     notes:
       - Primary hosted judge path
       - Matches the current repo-side default in orchestration_utils.py
@@ -74,7 +74,7 @@ model_contracts:
     role: selective_scaling_spotcheck_model
     repo_model_id: watsonx/meta-llama/llama-3-3-70b-instruct
     provider_model_id: meta-llama/llama-3-3-70b-instruct
-    access_doc: docs/reference/watsonx_access.md
+    access_doc: docs/knowledge-base/reference/2026-04-06_watsonx_access.md
     notes:
       - Use for selective scaling datapoints, not the full local benchmark grid
 
@@ -83,7 +83,7 @@ model_contracts:
     role: fallback_only
     repo_model_id: watsonx/meta-llama/llama-3-1-8b
     provider_model_id: meta-llama/llama-3-1-8b
-    access_doc: docs/reference/watsonx_access.md
+    access_doc: docs/knowledge-base/reference/2026-04-06_watsonx_access.md
     notes:
       - Base model only, not instruction-tuned
       - Do not treat as a drop-in replacement for the local 8B Instruct path

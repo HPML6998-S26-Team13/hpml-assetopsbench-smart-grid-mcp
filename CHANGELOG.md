@@ -7,6 +7,24 @@ canonical: true
 
 # Changelog
 
+## 2026-05-30
+
+### Changed
+
+- Migrated the reference docs from `docs/reference/` into the knowledge base at
+  `docs/knowledge-base/reference/`: `project_reference.md` →
+  `2026-04-05_project_reference.md` and `watsonx_access.md` →
+  `2026-04-06_watsonx_access.md` (date prefix = first-commit date), with the
+  `docs/reference/README.md` canonical index becoming the `_index.md` sink.
+  Augmented each doc with the standard KB frontmatter (title/slug/type/created/
+  updated/project) while preserving the `owner: Team 13` / `status: canonical`
+  identity, and relinked every live reference (`README.md`, `data/README.md`,
+  `docs/project_synopsis.md`, `docs/runbook` material, `docs/governance/model_registry.yaml`,
+  `scripts/watsonx_env.py`). `CHANGELOG.md`, `docs/archive/`, and
+  `planning/archive/` keep their original paths as historical record. Added
+  `scripts/{verify_kb_migration,backfill_kb_frontmatter,check_kb_frontmatter}.py`
+  to validate the layout.
+
 ## 2026-05-26
 
 ### Changed

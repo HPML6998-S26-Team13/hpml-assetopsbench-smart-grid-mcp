@@ -1,6 +1,6 @@
 """Cross-call-site WatsonX env-var alias helper.
 
-The team's `.env` and `docs/reference/watsonx_access.md` document
+The team's `.env` and `docs/knowledge-base/reference/2026-04-06_watsonx_access.md` document
 `WATSONX_API_KEY` / `WATSONX_PROJECT_ID` / `WATSONX_URL`, but newer
 litellm WatsonX provider versions (≥ 1.81.x as observed in the team
 `.venv-insomnia`) read `WX_API_KEY` / `WX_PROJECT_ID` / `WX_URL` and
