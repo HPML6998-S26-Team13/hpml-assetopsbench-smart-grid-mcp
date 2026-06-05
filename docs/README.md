@@ -7,7 +7,7 @@ canonical: true
 
 # Documentation Index
 
-Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Historical planning records live in [../planning/archive/](../planning/archive/); current task truth lives in GitHub Issues / Projects and active docs. Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [knowledge-base/reference/](knowledge-base/reference/).
+Living, authored documentation for the SmartGridBench project. Everything in this directory is a doc that **evolves** with the project - domain background, setup guides, architecture notes, methodology. Historical planning records live in [../planning/archive/](../planning/archive/); current task truth lives in GitHub Issues / Projects and active docs. Frozen deliverables (shipped PDFs, slide decks) live in [../reports/](../reports/). Historical supporting notes that are no longer live move into [archive/](archive/). Lower-churn class / mentor / setup references now live under [knowledge-base/reference/](knowledge-base/reference/). Durable closeouts and extracted lessons live under [retrospectives/](retrospectives/) and [knowledge-base/](knowledge-base/).
 
 ## Document index
 
@@ -53,6 +53,8 @@ Living, authored documentation for the SmartGridBench project. Everything in thi
 ## Related directories
 
 - [knowledge/](knowledge/) - PS B generation support: scenario family matrix, operational context profiles, DGA trend templates, event/alarm templates, WO playbook, and scenario authoring contract with ground-truth field spec.
+- [knowledge-base/](knowledge-base/) - Curated project knowledge extracted from references, closeouts, and durable learnings. Current lower-churn references live in [knowledge-base/reference/](knowledge-base/reference/); project learnings live in [knowledge-base/learnings/](knowledge-base/learnings/).
+- [retrospectives/](retrospectives/) - Durable closeout records for completed historical work units and long-session backfills.
 - [../scripts/README.md](../scripts/README.md) - Executable entrypoints and helper scripts.
 - [../configs/README.md](../configs/README.md) - Benchmark config schema and cell naming.
 - [../data/README.md](../data/README.md) - Data pipeline and processed dataset policy.

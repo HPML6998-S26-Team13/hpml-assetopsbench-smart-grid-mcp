@@ -7,6 +7,23 @@ canonical: true
 
 # Changelog
 
+## 2026-06-05
+
+### Added
+
+- Added historical closeout retrospectives for the long `019d697e` coordination
+  session, split by initiative: coordination protocol and repo memory, project
+  board / communication governance, scenario realism / PS B knowledge,
+  experiment planning / notebook staging, and AaT runner smoke debugging.
+- Added project KB learnings for the coordination cascade pattern and the AaT
+  smoke-runtime preflight pattern, with links back to the new retrospectives and
+  validation evidence.
+
+### Changed
+
+- Updated the docs index to expose `docs/retrospectives/` and the broader
+  `docs/knowledge-base/` umbrella beyond the existing reference-doc migration.
+
 ## 2026-05-30
 
 ### Changed
