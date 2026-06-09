@@ -30,6 +30,13 @@ canonical: true
   Stateful cross-run audit intelligence with duplicate detection, high-water
   drift analysis, and report persistence.
 
+
+### Added
+
+- **`scripts/pm_audit.py`** — /pm-audit runner deployed from ai-coding-agents.
+  Stateful cross-run audit intelligence with duplicate detection, high-water
+  drift analysis, and report persistence.
+
 ## 2026-06-05
 
 ### Added
