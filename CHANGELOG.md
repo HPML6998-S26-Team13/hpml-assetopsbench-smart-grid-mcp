@@ -7,6 +7,22 @@ canonical: true
 
 # Changelog
 
+
+## 2026-06-09
+
+### Added
+
+- **`scripts/allocate_id.py`** — ID allocator deployed from ai-coding-agents.
+  Reserves governed WORK/IMP/PLAN IDs by bumping high-water marks in
+  `pm/governance.md`.
+
+
+### Added
+
+- **`scripts/allocate_id.py`** — ID allocator deployed from ai-coding-agents.
+  Reserves governed WORK/IMP/PLAN IDs by bumping high-water marks in
+  `pm/governance.md`.
+
 ## 2026-06-05
 
 ### Added
