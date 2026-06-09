@@ -12,6 +12,10 @@ canonical: true
 
 ### Added
 
+- Added PR #120 notebook review closeout at
+  `docs/retrospectives/2026-06-09_pr120-notebook-review-closeout.md`, recording
+  the Notebook 02/03 review fixes around paired MCP overhead, duplicate-row
+  handling, current-run judge joins, and trial-index scoping.
 - **`scripts/pm_audit.py`** — /pm-audit runner deployed from ai-coding-agents.
   Stateful cross-run audit intelligence with duplicate detection, high-water
   drift analysis, and report persistence.

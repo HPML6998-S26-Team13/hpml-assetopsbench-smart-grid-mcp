@@ -37,8 +37,6 @@ __pycache__/
 .agent-sessions/
 .claude/
 .codex/
-claude-worktrees/
-codex-worktrees/
 __unscoped__/
 
 # Project data + artifact dirs (not code)

@@ -69,3 +69,5 @@ docs/plans/
 CLAUDE.md
 AGENTS.md
 review/
+.agent-sessions/
+.codex/
