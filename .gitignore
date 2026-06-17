@@ -71,3 +71,9 @@ AGENTS.md
 review/
 .agent-sessions/
 .codex/
+scripts/allocate_id.py
+scripts/pm_audit.py
+scripts/repo_map
+scripts/scan_errors.py
+scripts/summarize_json.py
+scripts/compact_logs.py
