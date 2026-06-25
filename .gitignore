@@ -71,6 +71,7 @@ AGENTS.md
 review/
 .agent-sessions/
 .codex/
+.claude/
 scripts/allocate_id.py
 scripts/pm_audit.py
 scripts/repo_map
