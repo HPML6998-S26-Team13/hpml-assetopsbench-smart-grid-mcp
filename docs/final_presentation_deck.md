@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: team-repo deliverable drafting
+title: Final Presentation Deck Draft
+slug: final-presentation-deck
+type: reference
+status: live
+created: 2026-05-02
+updated: 2026-05-26
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

@@ -107,3 +107,25 @@ scripts/review_scope_guard.py
 
 # Notebooks — keep code cells but skip checkpoint dirs
 # (notebooks/ itself stays indexed so analysis-side notebooks are visible)
+
+# BEGIN cgcignore escaping-symlinks (managed by sync_cgcignore.py — do not edit between markers)
+.githooks/pre-commit
+.githooks/prepare-commit-msg
+scripts/allocate_id.py
+scripts/build_agents_mirror.py
+scripts/check_agents_rules_cap.py
+scripts/check_doctrine_grounding.py
+scripts/check_doctrine_mirror.py
+scripts/check_kb_frontmatter.py
+scripts/check_main_push.py
+scripts/check_mirror_equality.py
+scripts/check_pm_format.py
+scripts/compact_logs.py
+scripts/pm_audit.py
+scripts/repo_map
+scripts/review_core
+scripts/scan_errors.py
+scripts/sprint_project_root.py
+scripts/summarize_json.py
+scripts/sync_cgcignore.py
+# END cgcignore escaping-symlinks

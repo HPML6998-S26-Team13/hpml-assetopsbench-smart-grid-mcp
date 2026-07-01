@@ -1,7 +1,12 @@
 ---
+title: Judge Output Schema
+slug: judge-schema
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-21
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

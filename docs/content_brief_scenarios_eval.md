@@ -1,7 +1,12 @@
 ---
+title: Content brief — Scenarios + Eval + Judge
+slug: content-brief-scenarios-eval
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-06
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

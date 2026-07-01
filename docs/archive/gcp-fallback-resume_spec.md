@@ -1,3 +1,14 @@
+---
+title: "Spec: GCP fallback resume and artifact recovery"
+slug: gcp-fallback-resume-spec
+type: spec
+status: archived
+created: 2026-05-03
+updated: 2026-05-03
+owner: Team 13
+scope: team-repo
+---
+
 # Spec: GCP fallback resume and artifact recovery
 
 Companion to [gcp-fallback-resume.md](gcp-fallback-resume.md).

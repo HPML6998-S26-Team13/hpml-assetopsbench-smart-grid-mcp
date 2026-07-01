@@ -1,7 +1,12 @@
 ---
+title: Final Presentation Run of Show
+slug: final-presentation-run-of-show
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-03
+updated: 2026-05-26
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

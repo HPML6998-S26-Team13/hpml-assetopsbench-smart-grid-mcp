@@ -1,3 +1,14 @@
+---
+title: Failure taxonomy hand-audit — stratified sample (#194)
+slug: failure-taxonomy-audit-2026-05-07
+type: reference
+status: live
+created: 2026-05-07
+updated: 2026-05-07
+owner: Team 13
+scope: team-repo
+---
+
 # Failure taxonomy hand-audit — stratified sample (#194)
 
 *Audit pass over the 46-row stratified sample drawn by `scripts/build_failure_taxonomy.py` from PR #193's `results/metrics/failure_taxonomy_current.csv`. Audited rows: 46.*

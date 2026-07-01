@@ -1,3 +1,14 @@
+---
+title: "Lane 2: INT8 + KV-Cache Optimization Status (`#29`, `#30`)"
+slug: lane2-int8-kv-status
+type: archive
+status: archived
+created: 2026-04-28
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # Lane 2: INT8 + KV-Cache Optimization Status (`#29`, `#30`)
 
 *Last updated: 2026-04-26 (post-smoke; fp8 KV dropped, prefix caching kept)*

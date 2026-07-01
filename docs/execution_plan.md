@@ -1,7 +1,12 @@
 ---
+title: "Execution Plan: W2-W5"
+slug: execution-plan
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-07
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

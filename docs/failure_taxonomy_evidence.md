@@ -1,7 +1,12 @@
 ---
+title: Failure Taxonomy + Evidence Table for `#35`
+slug: failure-taxonomy-evidence
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-27
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

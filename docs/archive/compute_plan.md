@@ -1,3 +1,14 @@
+---
+title: Compute Plan
+slug: compute-plan
+type: archive
+status: archived
+created: 2026-04-05
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # Compute Plan
 
 *Last updated: April 5, 2026*

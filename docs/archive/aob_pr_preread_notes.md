@@ -1,3 +1,14 @@
+---
+title: "AOB #27 Pre-read Notes — IBM Upstream PR Body Pair Session"
+slug: aob-pr-preread-notes
+type: archive
+status: archived
+created: 2026-05-03
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # AOB #27 Pre-read Notes — IBM Upstream PR Body Pair Session
 
 *For Saturday May 3, ~10 AM ET pair session with Alex.*

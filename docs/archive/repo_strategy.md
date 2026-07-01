@@ -1,3 +1,14 @@
+---
+title: Repository Strategy
+slug: repo-strategy
+type: archive
+status: archived
+created: 2026-04-06
+updated: 2026-04-18
+owner: Team 13
+scope: team-repo
+---
+
 # Repository Strategy
 
 *Last updated: April 18, 2026 - org repo is canonical*

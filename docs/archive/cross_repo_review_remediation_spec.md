@@ -1,3 +1,14 @@
+---
+title: Cross-Repo Review Remediation Spec
+slug: cross-repo-review-remediation-spec
+type: spec
+status: archived
+created: 2026-04-10
+updated: 2026-05-11
+owner: Team 13
+scope: team-repo
+---
+
 # Cross-Repo Review Remediation Spec
 
 ## Overview

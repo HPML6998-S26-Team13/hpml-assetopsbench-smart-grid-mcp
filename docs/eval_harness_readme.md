@@ -1,7 +1,12 @@
 ---
+title: Evaluation Harness Runbook (Local Windows + WatsonX)
+slug: eval-harness-readme
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-07
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

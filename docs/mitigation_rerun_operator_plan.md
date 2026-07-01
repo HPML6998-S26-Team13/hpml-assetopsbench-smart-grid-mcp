@@ -1,7 +1,12 @@
 ---
+title: Mitigation Rerun Operator Plan
+slug: mitigation-rerun-operator-plan
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-03
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

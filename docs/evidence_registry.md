@@ -1,7 +1,12 @@
 ---
+title: Evidence Registry
+slug: evidence-registry
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-05
+updated: 2026-05-11
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

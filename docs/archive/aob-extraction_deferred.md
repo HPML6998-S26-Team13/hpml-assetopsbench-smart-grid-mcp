@@ -1,3 +1,14 @@
+---
+title: "AOB extraction: deferred-items registry"
+slug: aob-extraction-deferred
+type: archive
+status: archived
+created: 2026-04-29
+updated: 2026-05-11
+owner: Team 13
+scope: team-repo
+---
+
 # AOB extraction: deferred-items registry
 
 *Companion to [aob-extraction.md](aob-extraction.md) + [aob-extraction_spec.md](aob-extraction_spec.md). Captures every item that was DEFERRED (not done, not abandoned) during Phase 0/1/2/3a/3b/3c execution on 2026-04-28 → 2026-04-30. Each entry names the gating condition, owner, and resumption recipe so a future session can pick it up cold.*

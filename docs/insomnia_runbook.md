@@ -1,7 +1,12 @@
 ---
+title: Insomnia Runbook
+slug: insomnia-runbook
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-10
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

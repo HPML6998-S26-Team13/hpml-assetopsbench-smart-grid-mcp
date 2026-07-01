@@ -1,7 +1,12 @@
 ---
+title: GCP Fallback Setup
+slug: gcp-fallback
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-20
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

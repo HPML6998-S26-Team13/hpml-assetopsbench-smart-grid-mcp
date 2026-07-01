@@ -1,7 +1,12 @@
 ---
+title: Design — `scripts/aat_runner.py` (Cells A + B)
+slug: aat-runner-design
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-24
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

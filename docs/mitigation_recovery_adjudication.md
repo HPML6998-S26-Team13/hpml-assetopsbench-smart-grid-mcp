@@ -1,7 +1,12 @@
 ---
+title: Recovery and Adjudication Mitigation Spec
+slug: mitigation-recovery-adjudication
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-02
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

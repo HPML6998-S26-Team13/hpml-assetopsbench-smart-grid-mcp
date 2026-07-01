@@ -1,3 +1,14 @@
+---
+title: "Spec: extraction from team repo into Alex's AOB fork"
+slug: aob-extraction-spec
+type: spec
+status: archived
+created: 2026-04-29
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # Spec: extraction from team repo into Alex's AOB fork
 
 *Companion spec to [aob-extraction.md](aob-extraction.md). Captures design rationale, edge cases, decision rationale, and later-phase concerns. Plan stays lean; this carries the why.*

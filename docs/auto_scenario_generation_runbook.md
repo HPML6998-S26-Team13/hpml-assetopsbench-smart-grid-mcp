@@ -1,7 +1,12 @@
 ---
+title: Auto-scenario generation runbook (`#2`)
+slug: auto-scenario-generation-runbook
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-28
+updated: 2026-05-31
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

@@ -1,7 +1,12 @@
 ---
+title: Infrastructure / Profiling / Serving Brief (`#43`)
+slug: infra-profiling-serving-brief
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-06
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

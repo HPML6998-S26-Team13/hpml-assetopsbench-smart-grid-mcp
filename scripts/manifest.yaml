@@ -1,0 +1,530 @@
+schema-version: 1
+scripts:
+  scripts/aat_mcp_server_bootstrap.py:
+    title: Aat Mcp Server Bootstrap
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/aat_runner.py:
+    title: Aat Runner
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/aat_system_prompt.py:
+    title: Aat System Prompt
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/aat_tools_direct.py:
+    title: Aat Tools Direct
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/aat_tools_mcp.py:
+    title: Aat Tools Mcp
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/aat_upstream_openai_runner.py:
+    title: Aat Upstream Openai Runner
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/allocate_id.py:
+    title: Allocate Id
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/audit_failure_evidence.py:
+    title: Audit Failure Evidence
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/audit_failure_taxonomy.py:
+    title: Audit Failure Taxonomy
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/backfill_canonical_scenario.py:
+    title: Backfill Canonical Scenario
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/backfill_kb_frontmatter.py:
+    title: Backfill Kb Frontmatter
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/build_failure_taxonomy.py:
+    title: Build Failure Taxonomy
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/build_profiling_inventory.py:
+    title: Build Profiling Inventory
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/build_wandb_dashboard.py:
+    title: Build Wandb Dashboard
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_branch_base.py:
+    title: Check Branch Base
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_kb_frontmatter.py:
+    title: Check Kb Frontmatter
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_pr_scope.py:
+    title: Check Pr Scope
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_skill_frontmatter.py:
+    title: Check Skill Frontmatter
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_tiny_commit.py:
+    title: Check Tiny Commit
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/compact_logs.py:
+    title: Compact Logs
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/demo_recording_run.sh:
+    title: Demo Recording Run
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/demo_static_playback.py:
+    title: Demo Static Playback
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/gcp_cleanup_audit.py:
+    title: Gcp Cleanup Audit
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/gcp_followon_after_mitigation.sh:
+    title: Gcp Followon After Mitigation
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/gcp_pull_context_artifacts.sh:
+    title: Gcp Pull Context Artifacts
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/gcp_resume_state.py:
+    title: Gcp Resume State
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/generate_config_universe.py:
+    title: Generate Config Universe
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/generate_scenarios.py:
+    title: Generate Scenarios
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/insomnia_env.sh:
+    title: Insomnia Env
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/judge_trajectory.py:
+    title: Judge Trajectory
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/mitigation_guards.py:
+    title: Mitigation Guards
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/orchestration_utils.py:
+    title: Orchestration Utils
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/plan_execute_self_ask_runner.py:
+    title: Plan Execute Self Ask Runner
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/pm_audit.py:
+    title: Pm Audit
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/render_failure_taxonomy_current_figures.py:
+    title: Render Failure Taxonomy Current Figures
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/render_failure_taxonomy_figures.py:
+    title: Render Failure Taxonomy Figures
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/render_final_deck_visuals.py:
+    title: Render Final Deck Visuals
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/render_mitigation_before_after.py:
+    title: Render Mitigation Before After
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/replay_scenarios.sh:
+    title: Replay Scenarios
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/repo_map:
+    title: Repo Map
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/review_scope_guard.py:
+    title: Review Scope Guard
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/run_exp1_ab_capture.sh:
+    title: Run Exp1 Ab Capture
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/run_experiment.sh:
+    title: Run Experiment
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/run_gcp_context_batch.sh:
+    title: Run Gcp Context Batch
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/scan_errors.py:
+    title: Scan Errors
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/setup_insomnia.sh:
+    title: Setup Insomnia
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/summarize_json.py:
+    title: Summarize Json
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/test_inference.sh:
+    title: Test Inference
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/test_int8_smoke.sh:
+    title: Test Int8 Smoke
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/test_kv_cache_smoke.sh:
+    title: Test Kv Cache Smoke
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/tmux_watch_run.sh:
+    title: Tmux Watch Run
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/validate_llama_path.py:
+    title: Validate Llama Path
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/verified_pe_runner.py:
+    title: Verified Pe Runner
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/verify_kb_migration.py:
+    title: Verify Kb Migration
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/verify_watsonx.py:
+    title: Verify Watsonx
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/vllm_serve.sh:
+    title: Vllm Serve
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/watsonx_env.py:
+    title: Watsonx Env
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/build_agents_mirror.py:
+    title: Build Agents Mirror
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_agents_rules_cap.py:
+    title: Check Agents Rules Cap
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_doctrine_grounding.py:
+    title: Check Doctrine Grounding
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_doctrine_mirror.py:
+    title: Check Doctrine Mirror
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_main_push.py:
+    title: Check Main Push
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_mirror_equality.py:
+    title: Check Mirror Equality
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/check_pm_format.py:
+    title: Check Pm Format
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/sprint_project_root.py:
+    title: Sprint Project Root
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]
+  scripts/sync_cgcignore.py:
+    title: Sync Cgcignore
+    type: script
+    status: live
+    owner: Wei Alexander Xin
+    scope: project
+    project: hpml-assetopsbench-smart-grid-mcp
+    work-items: [WORK-AGT-492]

@@ -1,3 +1,14 @@
+---
+title: vLLM replay-phase analysis
+slug: replay-phase-analysis
+type: archive
+status: archived
+created: 2026-04-29
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # vLLM replay-phase analysis
 
 *Investigation drafted in response to user follow-up + `pm/backlog.md` 2026-04-27 pin (c). Two questions:*

@@ -1,7 +1,12 @@
 ---
+title: Generated-Scenario Authoring and Ground-Truth Contract
+slug: generated-scenario-authoring-and-ground-truth
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-26
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

@@ -1,7 +1,12 @@
 ---
-status: canonical-index
-scope: team-repo
+title: Documentation Index
+slug: readme
+type: index
+status: canonical
+created: 2026-04-07
+updated: 2026-06-05
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

@@ -1,7 +1,12 @@
 ---
-status: canonical-index
-scope: team-repo generated-scenario knowledge
+title: Generated Scenario Knowledge
+slug: readme
+type: index
+status: canonical
+created: 2026-05-07
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

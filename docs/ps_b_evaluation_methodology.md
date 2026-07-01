@@ -1,7 +1,12 @@
 ---
+title: PS B Evaluation Methodology
+slug: ps-b-evaluation-methodology
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-20
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

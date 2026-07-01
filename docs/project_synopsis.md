@@ -1,7 +1,12 @@
 ---
+title: Project Synopsis -- Cold Start Guide
+slug: project-synopsis
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-05
+updated: 2026-05-31
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

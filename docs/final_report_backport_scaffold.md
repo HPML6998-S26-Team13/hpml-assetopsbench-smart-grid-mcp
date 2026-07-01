@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: team-repo deliverable drafting
+title: Final Report Back-Port Scaffold
+slug: final-report-backport-scaffold
+type: reference
+status: live
+created: 2026-05-01
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

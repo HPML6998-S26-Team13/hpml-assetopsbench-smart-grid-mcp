@@ -1,7 +1,12 @@
 ---
-status: archive-index
-scope: team-repo historical docs
+title: Docs Archive
+slug: readme
+type: index
+status: archived
+created: 2026-05-07
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: false
 ---
 

@@ -1,3 +1,14 @@
+---
+title: Mid-Point Progress Report (Long-form notes) -- Team 13 / District 1101
+slug: mid-checkpoint-notes
+type: archive
+status: archived
+created: 2026-04-05
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # Mid-Point Progress Report (Long-form notes) -- Team 13 / District 1101
 
 **Project:** MCP-Based Industrial Agent Benchmarking for Smart Grid Operations  

@@ -1,3 +1,14 @@
+---
+title: AaT Runner (Cells A + B) Implementation Plan
+slug: aat-runner
+type: archive
+status: archived
+created: 2026-04-24
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # AaT Runner (Cells A + B) Implementation Plan
 
 *Archived: 2026-05-05 — plan complete. `scripts/aat_runner.py` shipped and is the canonical AAT runner; #104 closed. Plan content preserved as historical record of the AAT runner build.*

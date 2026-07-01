@@ -1,3 +1,14 @@
+---
+title: "Plan: extract docs/code from team repo into Alex's AOB fork"
+slug: aob-extraction
+type: archive
+status: archived
+created: 2026-04-29
+updated: 2026-05-11
+owner: Team 13
+scope: team-repo
+---
+
 # Plan: extract docs/code from team repo into Alex's AOB fork
 
 *Plan for Alex Xin (eggrollofchaos). Companion spec at [aob-extraction_spec.md](aob-extraction_spec.md).*

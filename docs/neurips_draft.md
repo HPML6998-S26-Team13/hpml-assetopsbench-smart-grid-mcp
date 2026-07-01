@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: team-repo deliverable drafting
+title: NeurIPS Draft Scaffold
+slug: neurips-draft
+type: reference
+status: live
+created: 2026-04-27
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

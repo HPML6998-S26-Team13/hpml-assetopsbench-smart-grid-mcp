@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: team-repo deliverable drafting
+title: NeurIPS 2026 Submission Packet
+slug: neurips-submission-packet
+type: reference
+status: live
+created: 2026-05-02
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

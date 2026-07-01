@@ -1,7 +1,12 @@
 ---
+title: Grounding Notes — Scenarios SGT-021 through SGT-030
+slug: scenarios-021-030-grounding
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-05-05
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

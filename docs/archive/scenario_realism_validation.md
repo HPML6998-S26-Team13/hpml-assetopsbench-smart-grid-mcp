@@ -1,3 +1,14 @@
+---
+title: Smart Grid Scenario Realism Validation Note
+slug: scenario-realism-validation
+type: archive
+status: archived
+created: 2026-04-11
+updated: 2026-05-06
+owner: Team 13
+scope: team-repo
+---
+
 # Smart Grid Scenario Realism Validation Note
 
 *Created: 2026-04-10*  

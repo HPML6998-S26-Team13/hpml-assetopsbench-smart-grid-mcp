@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: final presentation visual asset handoff
+title: Final Presentation Visual Assets
+slug: final-presentation-visual-assets
+type: reference
+status: live
+created: 2026-05-10
+updated: 2026-05-10
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

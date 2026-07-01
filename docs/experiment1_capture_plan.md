@@ -1,7 +1,12 @@
 ---
+title: Experiment 1 Capture Plan
+slug: experiment1-capture-plan
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-20
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

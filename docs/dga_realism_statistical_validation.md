@@ -1,7 +1,12 @@
 ---
+title: DGA Statistical Realism Validation
+slug: dga-realism-statistical-validation
+type: reference
 status: canonical
-scope: team-repo
+created: 2026-04-29
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

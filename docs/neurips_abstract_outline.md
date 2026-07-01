@@ -1,7 +1,12 @@
 ---
-status: active-draft
-scope: team-repo deliverable drafting
+title: NeurIPS Abstract Outline and Title Candidates
+slug: neurips-abstract-outline
+type: reference
+status: live
+created: 2026-04-20
+updated: 2026-05-07
 owner: Team 13
+scope: team-repo
 canonical: true
 ---
 

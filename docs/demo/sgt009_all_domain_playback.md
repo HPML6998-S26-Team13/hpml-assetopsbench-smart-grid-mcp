@@ -1,14 +1,19 @@
 ---
-title: "SGT-009 all-domain demo playback"
-scenario_id: "SGT-009"
-model: "Llama-3.1-8B-Instruct"
-cell: "ZS"
-artifact_type: "demo_playback"
-source: "archived trajectory + archived WatsonX judge log"
-created: "2026-05-10"
-presentation: "SmartGridBench HPML final presentation"
-status: "tracked-demo-artifact"
-caveat: "8B run demonstrates full tool use but overstates the final diagnosis; 70B archived run emits the grounded diagnosis."
+title: SGT-009 all-domain demo playback
+slug: sgt009-all-domain-playback
+type: reference
+status: live
+created: 2026-05-10
+updated: 2026-05-10
+owner: Team 13
+scope: team-repo
+artifact_type: demo_playback
+caveat: 8B run demonstrates full tool use but overstates the final diagnosis; 70B archived run emits the grounded diagnosis.
+cell: ZS
+model: Llama-3.1-8B-Instruct
+presentation: SmartGridBench HPML final presentation
+scenario_id: SGT-009
+source: archived trajectory + archived WatsonX judge log
 ---
 
 # SGT-009 All-Domain Demo Playback

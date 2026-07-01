@@ -1,3 +1,14 @@
+---
+title: "Plan: harden GCP fallback resume and artifact recovery"
+slug: gcp-fallback-resume
+type: archive
+status: archived
+created: 2026-05-03
+updated: 2026-05-03
+owner: Team 13
+scope: team-repo
+---
+
 # Plan: harden GCP fallback resume and artifact recovery
 
 *Plan for Alex Xin (eggrollofchaos). Companion spec at
